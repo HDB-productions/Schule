@@ -6,40 +6,19 @@
     <title>GHS-Quiz</title>
     <style>
         /* Flexbox-Layout für die Anzeige abhängig vom Seitenverhältnis */
-        .quiz-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .quiz-image {
-            max-width: 100%;
-            max-height: calc(100vh - 2rem); /* Berücksichtigen der Header-Höhe und des Abstands */
-            object-fit: contain; /* Bild im Container zentrieren und skalieren */
-        }
-
-        .quiz-details {
-            width: 100%;
-            margin-top: 1rem;
+        h1{
             text-align: center;
         }
-
-        /* Anpassungen für schmale Ansicht */
-        @media (max-aspect-ratio: 2/1) {
-            .quiz-container {
-                flex-direction: row;
-            }
-
-            .quiz-image {
-                max-height: 100vh;
-            }
-
-            .quiz-details {
-                flex: 1;
-                margin-top: 0;
-                text-align: left;
-            }
+        div{
+            text-align: center;
         }
+        
+        .quiz-image {
+            max-height: calc(50vh - 2rem); /* Berücksichtigen der Header-Höhe und des Abstands */
+            object-fit: contain; /* Bild im Container zentrieren und skalieren */
+        }
+     
+       
     </style>
 </head>
 <body>

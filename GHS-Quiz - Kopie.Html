@@ -34,7 +34,7 @@
             display: flex; /* Verwendet Flexbox */
             justify-content: center; /* Horizontal zentriert */
             align-items: center; /* Vertikal zentriert */
-            max-width: 50%; /* Begrenzt die Breite */
+            
         }
 
         /* Stil für den rechten Inhaltsbereich (Grün) */
@@ -49,14 +49,13 @@
             .content {
                 flex-direction: column; /* Bei kleinem Seitenverhältnis: übereinander */
             }
+            .content-left{
+                width: 50%; /* Begrenzt die Breite */
+            }
         }
         
         /* Stil für das Bild */
-        .image {
-            max-width: 100%; /* Bildgröße an die Box anpassen */
-            max-height: 100%; /* Bildgröße an die Box anpassen */
-            object-fit: contain; /* Skalierung, um das Bild in der Box zu halten */
-        }
+        
     </style>
 </head>
 <body>
@@ -65,7 +64,7 @@
     </div>
     <div class="content">
         <div class="content-left">
-            <img src="GHS-pictogram-acid.svg" alt="Beispielbild" class="image">
+            
         </div>
         <div class="content-right">
             <p>Inhalt rechts</p>
