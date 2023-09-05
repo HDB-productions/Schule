@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mein Taschenrechner</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 10px;
+            background-color: black;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid black;
+        }
+
+        #ergebnis {
+             color: white;
+   			font-size: 30px;
+            display: block;
+            margin: 0 auto 10px auto;
+            padding: 5px;
+            height: 50px;
+            width: 100%;
+            max-width: 800px;
+            text-align: right;
+            border: 1px solid black;
+            box-sizing: border-box; /* added to include padding in element width */
+        }
+
+        /* Klassen für die Knöpfe */
+        .rechenzeichen {
+            background-color: #666;
+            color: #fff;
+        }
+
+        .loeschen {
+            background-color: #ff0000;
+            color: #fff;
+        }
+
+        .ergebnis {
+            background-color: #00ff00;
+            color: #fff;
+        }
+
+        button {
+            display: block;
+            margin: 5px;
+            padding: 10px;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td colspan="5"><input type="text" id="ergebnis" disabled></td>
+        </tr>
+        <tr>
+            <td><button onclick="eingabe('1')">1</button></td>
+            <td><button onclick="eingabe('2')">2</button></td>
+            <td><button onclick="eingabe('3')">3</button></td>
+            <td><button class="loeschen" onclick="del()">DEL</button></td>
+            <td><button class="loeschen" onclick="loeschen()">C</button></td>
+        </tr>
+        <tr>
+            <td><button onclick="eingabe('4')">4</button></td>
+            <td><button onclick="eingabe('5')">5</button></td>
+            <td><button onclick="eingabe('6')">6</button></td>
+            <td><button class="rechenzeichen" onclick="eingabe('+')">+</button></td>
+            <td><button class="rechenzeichen" onclick="eingabe('-')">-</button></td>
+        </tr>
+        <tr>
+            <td><button onclick="eingabe('7')">7</button></td>
+            <td><button onclick="eingabe('8')">8</button></td>
+            <td><button onclick="eingabe('9')">9</button></td>
+            <td><button class="rechenzeichen" onclick="eingabe('*')">*</button></td>
+            <td><button class="rechenzeichen" onclick="eingabe('/')">/</button></td>
+        </tr>
+		<tr>
+			<td><button onclick="eingabe('0')">0</button></td>
+			<td><button onclick="eingabe('.')">.</button></td>
+		    <td><button class="rechenzeichen" onclick="eingabe('(')">(</button></td>
+            <td><button class="rechenzeichen" onclick="eingabe(')')">)</button></td>
+			<td><button class="ergebnis" onclick="ergebnis()">=</button></td>
+		</tr>
+		<tr>
+			
+		</tr>
+	</table>
+	<script>
+		function eingabe(zahl) {
+			document.getElementById("ergebnis").value += zahl;
+		}
+
+		function ergebnis() {
+			document.getElementById("ergebnis").value = eval(document.getElementById("ergebnis").value);
+		}
+
+		function loeschen() {
+			document.getElementById("ergebnis").value = "";
+		}
+        function del() {
+        var ergebnis = document.getElementById("ergebnis");
+        ergebnis.value = ergebnis.value.substring(0, ergebnis.value.length - 1);
+    }
+	</script>
+</body>
+</html>
