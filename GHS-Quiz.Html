@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GHS-Quiz</title>
     <style>
+        /* Anpassungen für die Mobilansicht */
+@media (max-width: 768px) {
+    .quiz-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .quiz-image {
+        max-width: 100%;
+    }
+
+    .quiz-details {
+        margin-top: 1rem;
+        text-align: center;
+    }
+}
+
+/* Anpassungen für die Desktopansicht */
+@media (min-width: 769px) {
+    .quiz-question {
+        display: flex;
+        align-items: center;
+    }
+
+    .quiz-image {
+        max-width: 50%;
+        margin-right: 1rem;
+    }
+
+    .quiz-details {
+        flex: 1;
+    }
+}
         .quiz-image {
             max-height: 80vh;
         }
@@ -19,16 +52,21 @@
     </div>
 
     <div class="quiz-question" id="question-container" style="display: none;">
-        <img src="" alt="Symbol" class="quiz-image">
-        <label for="answer">Was bedeutet dieses Symbol?</label>
-        <input type="text" id="answer" class="answer-input">
-        <button id="check-button" onclick="checkAnswer()">Bedeutung überprüfen</button>
+        <div class="quiz-content">
+            <img src="" alt="Symbol" class="quiz-image">
+            <div class="quiz-details">
+                <label for="answer">Was bedeutet dieses Symbol?</label>
+                <input type="text" id="answer" class="answer-input">
+                <button id="check-button" onclick="checkAnswer()">Bedeutung überprüfen</button>
+            </div>
+        </div>
         <p class="hint" id="hint"></p>
         <p class="correct-answer" id="correct-answer" style="display: none;"></p>
     </div>
     
     <button id="next-button" onclick="nextQuestion()" style="display: none;">Weiter</button>
     <button id="reset-button" onclick="resetQuiz()" style="display: none;">Quiz zurücksetzen</button>
+
 
 
     <script>
