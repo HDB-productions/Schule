@@ -15,15 +15,20 @@
         }
         
         .quiz-image {
-            height: 200px; /* Berücksichtigen der Header-Höhe und des Abstands */
+            max-height: calc(40vh - 2rem); /* Berücksichtigen der Header-Höhe und des Abstands */
             object-fit: contain; /* Bild im Container zentrieren und skalieren */
         }
      
-       
+       /* Zentrierte Buttons */
+.centered-button {
+    display: block;
+    margin: 0 auto; /* Zentrieren horizontal */
+    margin-top: 1rem; /* Abstand nach oben */
+}
     </style>
 </head>
 <body>
-    <h1>GHS-Quiz 3</h1>
+    <h1>GHS-Quiz</h1>
     
     <div id="start-container">
         <p>Mit diesem Quiz kannst du dein Wissen über die GHS-Symbole testen!</p>
@@ -36,15 +41,15 @@
             <div class="quiz-details">
                 <label for="answer">Was bedeutet dieses Symbol?</label>
                 <input type="text" id="answer" class="answer-input">
-                <button id="check-button" onclick="checkAnswer()">Bedeutung überprüfen</button>
+                <button id="check-button" class="centered-button" onclick="checkAnswer()">Bedeutung überprüfen</button>
             </div>
         </div>
         <p class="hint" id="hint"></p>
         <p class="correct-answer" id="correct-answer" style="display: none;"></p>
     </div>
     
-    <button id="next-button" onclick="nextQuestion()" style="display: none;">Weiter</button>
-    <button id="reset-button" onclick="resetQuiz()" style="display: none;">Quiz zurücksetzen</button>
+    <button id="next-button" class="centered-button" onclick="nextQuestion()" style="display: none;">Weiter</button>
+    <button id="reset-button" class="centered-button" onclick="resetQuiz()" style="display: none;">Quiz zurücksetzen</button>
 
 
 
