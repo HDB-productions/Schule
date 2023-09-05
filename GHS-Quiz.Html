@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHS-Quiz</title>
+    <style>
+        .quiz-image {
+            max-height: 80vh;
+        }
+    </style>
+</head>
+<body>
+    <h1>GHS-Quiz</h1>
+    
+    <div id="start-container">
+        <p>Mit diesem Quiz kannst du dein Wissen über die GHS-Symbole testen!</p>
+        <button id="start-button" onclick="startQuiz()">Quiz starten</button>
+    </div>
+
+    <div class="quiz-question" id="question-container" style="display: none;">
+        <img src="" alt="Symbol" class="quiz-image">
+        <label for="answer">Was bedeutet dieses Symbol?</label>
+        <input type="text" id="answer" class="answer-input">
+        <button id="check-button" onclick="checkAnswer()">Bedeutung überprüfen</button>
+        <p class="hint" id="hint"></p>
+        <p class="correct-answer" id="correct-answer" style="display: none;"></p>
+    </div>
+    
+    <button id="next-button" onclick="nextQuestion()" style="display: none;">Weiter</button>
+    <button id="reset-button" onclick="resetQuiz()" style="display: none;">Quiz zurücksetzen</button>
+
+
+    <script>
+        var questions = [
+            { image: "GHS-pictogram-explos.svg", answer: ["Explosionsgefährlich"], answeredCorrectly: false },
+            { image: "GHS-pictogram-flamme.svg", answer: ["Hochentzündlich", "Leichtentzündlich", "Entzündlich"], answeredCorrectly: false },
+            { image: "GHS-pictogram-rondflam.svg", answer: ["Brandfördernd"], answeredCorrectly: false },
+            { image: "GHS-pictogram-acid.svg", answer: ["Ätzend"], answeredCorrectly: false },
+            { image: "GHS-pictogram-skull.svg", answer: ["Sehr giftig", "Giftig"], answeredCorrectly: false },
+            { image: "GHS-pictogram-exclam.svg", answer: ["Reizend"], answeredCorrectly: false },
+            { image: "GHS-pictogram-silhouette.svg", answer: ["Gesundheitsschädlich"], answeredCorrectly: false },
+            { image: "GHS-pictogram-pollu.svg", answer: ["Umweltgefährlich"], answeredCorrectly: false }
+        ];
+
+        var remainingQuestions = [...questions];
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function showQuestion(question) {
+            var questionContainer = document.getElementById("question-container");
+            var img = questionContainer.querySelector("img");
+            var answerInput = questionContainer.querySelector("#answer");
+            var hint = questionContainer.querySelector("#hint");
+            var checkButton = document.getElementById("check-button");
+            var nextButton = document.getElementById("next-button");
+            var correctAnswer = document.getElementById("correct-answer");
+
+            img.src = question.image;
+            answerInput.value = "";
+            hint.textContent = "";
+            answerInput.disabled = false;
+            correctAnswer.style.display = "none";
+            checkButton.style.display = "block";
+            nextButton.style.display = "none";
+        }
+        function formatTime(seconds) {
+        var minutes = Math.floor(seconds / 60);
+        var remainingSeconds = Math.round(seconds % 60); 
+        return minutes + " Minuten " + remainingSeconds + " Sekunden";
+    }
+
+        function startQuiz() {
+            document.getElementById("start-container").style.display = "none";
+            document.getElementById("question-container").style.display = "block";
+            shuffle(remainingQuestions);
+            showQuestion(remainingQuestions[0]);
+            startTime = Date.now();
+            numErrors = 0;
+        }
+
+        function checkAnswer() {
+            var answerInput = document.getElementById("answer");
+            var hint = document.getElementById("hint");
+            var currentQuestion = remainingQuestions[0];
+            var checkButton = document.getElementById("check-button");
+
+            var cleanedInput = answerInput.value.trim().toLowerCase(); // Bereinigung und in Kleinbuchstaben umwandeln
+            var cleanedAnswers = currentQuestion.answer
+                .map(item => item.trim().toLowerCase()); // Korrekte Antworten in Kleinbuchstaben umwandeln
+
+            if (cleanedAnswers.includes(cleanedInput)) { // Prüfen, ob die Eingabe in den korrekten Antworten enthalten ist
+                hint.textContent = "Richtige Antwort!";
+                hint.style.color = "green";
+                currentQuestion.answeredCorrectly = true;
+                answerInput.disabled = true;
+                checkButton.style.display = "none";
+                document.getElementById("next-button").style.display = "block";
+            } else {
+                numErrors++; // Fehler erhöhen
+                hint.textContent = "Falsche Antwort. Versuche es erneut.";
+                hint.style.color = "red";
+                answerInput.disabled = true;
+                checkButton.style.display = "none";
+                var correctAnswer = document.getElementById("correct-answer");
+                correctAnswer.textContent = "Die richtigen Antworten sind: " + currentQuestion.answer.join(", ");
+                correctAnswer.style.display = "block";
+                document.getElementById("next-button").style.display = "block";
+            }
+        }
+
+        function nextQuestion() {
+        remainingQuestions = remainingQuestions.filter(question => !question.answeredCorrectly);
+        if (remainingQuestions.length > 0) {
+            shuffle(remainingQuestions);
+            showQuestion(remainingQuestions[0]);
+        } else {
+            document.getElementById("question-container").style.display = "none";
+            document.getElementById("next-button").style.display = "none";
+            document.getElementById("reset-button").style.display = "block";
+            endTime = Date.now();
+            var elapsedTime = (endTime - startTime) / 1000; // In Sekunden
+            var elapsedTimeFormatted = formatTime(elapsedTime);
+            var congratulationsMessage = "Glückwunsch! Du hast alle Fragen richtig beantwortet."
+            if (numErrors > 0) {
+                congratulationsMessage += " Du hast " + numErrors + " Fehler gemacht.";
+            }
+            congratulationsMessage += " Zeit: " + elapsedTimeFormatted + ".";
+            alert(congratulationsMessage);
+        }
+    }
+
+function resetQuiz() {
+    remainingQuestions = questions.map(question => ({ ...question, answeredCorrectly: false }));
+    shuffle(remainingQuestions);
+    showQuestion(remainingQuestions[0]);
+    document.getElementById("reset-button").style.display = "none";
+    document.getElementById("next-button").style.display = "none";
+    document.getElementById("question-container").style.display = "block";
+    startTime = Date.now();
+    numErrors = 0;
+}
+
+        // Start with a random question
+        shuffle(remainingQuestions);
+        showQuestion(remainingQuestions[0]);
+    </script>
+</body>
+</html>
