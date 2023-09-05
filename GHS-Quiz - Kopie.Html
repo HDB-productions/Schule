@@ -17,7 +17,7 @@
         /* Stil für den Überschriftsbereich */
         .header {
             background-color: red;
-            padding: 0px;
+            padding: 20px;
             text-align: center;
         }
 
@@ -29,23 +29,33 @@
 
         /* Stil für den linken Inhaltsbereich (Blau) */
         .content-left {
-            flex: 1; /* Teilt den Raum mit content-right */
             background-color: blue;
             padding: 20px;
+            display: flex; /* Verwendet Flexbox */
+            justify-content: center; /* Horizontal zentriert */
+            align-items: center; /* Vertikal zentriert */
+            max-width: 50%; /* Begrenzt die Breite */
         }
 
         /* Stil für den rechten Inhaltsbereich (Grün) */
         .content-right {
-            flex: 1; /* Teilt den Raum mit content-left */
             background-color: green;
             padding: 20px;
+            flex: 1; /* Füllt den übriggebliebenen Platz rechts aus */
         }
 
         /* Media Query für das Layout basierend auf Seitenverhältnis */
-        @media (max-aspect-ratio: 1.5/1) {
+        @media (max-aspect-ratio: 2/1) {
             .content {
                 flex-direction: column; /* Bei kleinem Seitenverhältnis: übereinander */
             }
+        }
+        
+        /* Stil für das Bild */
+        .image {
+            max-width: 100%; /* Bildgröße an die Box anpassen */
+            max-height: 100%; /* Bildgröße an die Box anpassen */
+            object-fit: contain; /* Skalierung, um das Bild in der Box zu halten */
         }
     </style>
 </head>
@@ -55,7 +65,7 @@
     </div>
     <div class="content">
         <div class="content-left">
-            <p>Inhalt links</p>
+            <img src="GHS-pictogram-acid.svg" alt="Beispielbild" class="image">
         </div>
         <div class="content-right">
             <p>Inhalt rechts</p>
