@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Beispiel</title>
+    <style>
+        /* Stil für den gesamten Inhalt */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Ausrichtung in Spaltenrichtung */
+            min-height: 100vh;
+        }
+
+        /* Stil für den Überschriftsbereich */
+        .header {
+            background-color: red;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Stil für den Inhaltsbereich */
+        .content {
+            flex: 1; /* Nimmt den übriggebliebenen Raum ein */
+            display: flex; /* Verwendet Flexbox */
+        }
+
+        /* Stil für den linken Inhaltsbereich (Blau) */
+        .content-left {
+            flex: 1; /* Teilt den Raum mit content-right */
+            background-color: blue;
+            padding: 20px;
+        }
+
+        /* Stil für den rechten Inhaltsbereich (Grün) */
+        .content-right {
+            flex: 1; /* Teilt den Raum mit content-left */
+            background-color: green;
+            padding: 20px;
+        }
+
+        /* Media Query für das Layout basierend auf Seitenverhältnis */
+        @media (max-aspect-ratio: 2/1) {
+            .content {
+                flex-direction: column; /* Bei kleinem Seitenverhältnis: übereinander */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Überschrift</h1>
+    </div>
+    <div class="content">
+        <div class="content-left">
+            <p>Inhalt links</p>
+        </div>
+        <div class="content-right">
+            <p>Inhalt rechts</p>
+        </div>
+    </div>
+</body>
+</html>

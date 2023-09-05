@@ -5,41 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GHS-Quiz</title>
     <style>
-        /* Anpassungen für die Mobilansicht */
-@media (max-width: 768px) {
-    .quiz-content {
-        flex-direction: column;
-        align-items: center;
-    }
+        /* Flexbox-Layout für die Anzeige abhängig vom Seitenverhältnis */
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    .quiz-image {
-        max-width: 100%;
-    }
-
-    .quiz-details {
-        margin-top: 1rem;
-        text-align: center;
-    }
-}
-
-/* Anpassungen für die Desktopansicht */
-@media (min-width: 769px) {
-    .quiz-question {
-        display: flex;
-        align-items: center;
-    }
-
-    .quiz-image {
-        max-width: 50%;
-        margin-right: 1rem;
-    }
-
-    .quiz-details {
-        flex: 1;
-    }
-}
         .quiz-image {
-            max-height: 80vh;
+            max-width: 100%;
+            max-height: calc(100vh - 2rem); /* Berücksichtigen der Header-Höhe und des Abstands */
+            object-fit: contain; /* Bild im Container zentrieren und skalieren */
+        }
+
+        .quiz-details {
+            width: 100%;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        /* Anpassungen für schmale Ansicht */
+        @media (max-aspect-ratio: 2/1) {
+            .quiz-container {
+                flex-direction: row;
+            }
+
+            .quiz-image {
+                max-height: 100vh;
+            }
+
+            .quiz-details {
+                flex: 1;
+                margin-top: 0;
+                text-align: left;
+            }
         }
     </style>
 </head>
