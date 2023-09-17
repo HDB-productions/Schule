@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Äquivalenzumformungen Übung</title>
+    <style>
+        /* CSS-Stil für die Ausrichtung und Abstände */
+        h1 {
+            text-align: center; /* Zentriert den Text horizontal */
+        }
+
+        button {
+            display: block; /* Ändert die Anzeige auf "block", um die volle Breite der Container zu nutzen */
+            margin: 0 auto; /* Zentriert den Button horizontal innerhalb seines Containers */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column; /* Die darin enthaltenen Elemente werden in einer Spalte angeordnet */
+            align-items: center; /* Zentriert die Elemente horizontal in der Spalte */
+ 
+        }
+
+        table {
+            border-collapse: collapse; /* Verhindert Abstand zwischen den Tabellenzellen */
+            line-height: 0.1; /* Verringert den Zeilenabstand in der Tabelle */
+        }
+        /* Feste Höhe für Tabellenzeilen */
+        tr {
+         height: 40px; /* Ändern Sie die Höhe nach Ihren Wünschen */
+            }
+        .text-right {
+            text-align: right; /* Rechtsbündige Ausrichtung */
+        }
+        table, th, td {
+            border: none; /* Entfernt die sichtbaren Tabellengrenzen */
+        }
+
+       
+
+        .separator-cell {
+            padding: 0 10px; /* Fügt horizontalen Abstand um das Trennzeichen hinzu */
+        }
+
+        /* Feste Breite für Spalten 1 und 3 */
+        .equation-cell:nth-child(1), .equation-cell:nth-child(3), .equation-cell:nth-child(5) {
+            width: 150px;
+        }
+
+        /* Verhindern Sie, dass die Höhe durch das Eingabefeld verändert wird */
+        input[type="text"] {
+            box-sizing: border-box;
+            height: auto;
+            margin: 0; /* Entfernt den äußeren Abstand */
+            padding: 0; /* Entfernt den Innenabstand */
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* Buttons in der Mitte horizontal zentrieren */
+            align-items: center; /* Buttons in der Mitte vertikal zentrieren */
+        }
+
+        /* CSS für die Buttons */
+        .button-container button {
+            margin: 0 10px; /* Einen Abstand zwischen den Buttons hinzufügen */
+        }
+    </style>
+</head>
+<body onload="erzeugeGleichung()">
+    <h1>Löse die Gleichung durch Äquivalenzumformungen</h1>
+    <div class="container">
+        <table>
+            <tr>
+                <td class="equation-cell text-right"><p id="gleichung1l"></p></td> <!-- Hier wird die linke Seite der Gleichung angezeigt -->
+                <td class="separator-cell">=</td> <!-- Hier wird das Trennzeichen "|" angezeigt -->
+                <td class="equation-cell"><p id="gleichung1r"></p></td> <!-- Hier wird die rechte Seite der Gleichung angezeigt -->
+                <td class="separator-cell">|</td> <!-- Hier wird das Gleichheitszeichen "=" angezeigt -->
+                <td class="equation-cell"><p id="umformung1"></p></td> <!-- Hier wird die Umformung angezeigt -->
+            </tr>
+            <tr>
+                <td class="equation-cell text-right"><p id="gleichung2l"></p></td> <!-- Hier wird die linke Seite der Gleichung angezeigt -->
+                <td class="separator-cell">=</td> <!-- Hier wird das Trennzeichen "|" angezeigt -->
+                <td class="equation-cell"><p id="gleichung2r"></p></td> <!-- Hier wird die rechte Seite der Gleichung angezeigt --> 
+                <td class="separator-cell">|</td> <!-- Hier wird das Gleichheitszeichen "=" angezeigt -->
+                <td class="equation-cell"><p id="umformung2"></p></td> <!-- Hier wird die Umformung angezeigt -->
+            </tr>
+            <tr>
+                <td class="equation-cell text-right"><p id="gleichung3l"></p></td> <!-- Hier wird die linke Seite der Gleichung angezeigt -->
+                <td class="separator-cell">=</td> <!-- Hier wird das Trennzeichen "|" angezeigt -->
+                <td class="equation-cell"><p id="gleichung3r"></p></td> <!-- Hier wird die rechte Seite der Gleichung angezeigt -->
+                <td class="separator-cell">|</td> <!-- Hier wird das Gleichheitszeichen "=" angezeigt -->
+                <td class="equation-cell"><p id="umformung3"></p></td> <!-- Hier wird die Umformung angezeigt -->            
+            </tr>
+            <tr>
+                <td class="equation-cell text-right"><p id="gleichung4l"></p></td> <!-- Hier wird die linke Seite der Gleichung angezeigt -->
+                <td class="separator-cell">=</td> <!-- Hier wird das Trennzeichen "|" angezeigt -->
+                <td class="equation-cell"><p id="gleichung4r"></p></td> <!-- Hier wird die rechte Seite der Gleichung angezeigt -->
+                <td class="separator-cell"></td> <!-- Hier wird das Trennzeichen "|" angezeigt -->
+                <td class="equation-cell"><p id="umformung4"></p></td> <!-- Hier wird die Umformung angezeigt -->            
+            </tr>
+        </table>
+    </div>
+    
+    <div class="button-container">
+        <button onclick="prüfen()">Prüfen</button>
+        <button onclick="neu()">Neue Aufgabe</button>
+    </div>
+
+
+    <script>
+        // Globale Variablen für a1, a2, a3, a4 und L
+        let a1, a2, a3, a4, L, gleichung1lText, gleichung2lText, gleichung3lText, gleichung4lText, gleichung1rText, gleichung2rText, gleichung3rText, gleichung4rText, umformung1Text, umformung2Text, umformung3Text;
+
+
+        let n = 1;
+         // Funktion zur Generierung von Zufallszahlen von -n bis n
+        function zufallszahl(n) {
+                return Math.floor(Math.random() * (2*n+1)) - n; /* Erzeugt eine Zufallszahl zwischen -n und n */
+            }
+        function erzeugeZufallszahlenfürGleichung(){ 
+
+            do {
+                a1 = zufallszahl(10);
+                a3 = zufallszahl(10);
+            } while (a1 === 0 ||a1 === 1 || a1 === -a3 || a3 === 0);/* Wiederholt, wenn a1 oder a2 gleich 0 ist oder a1 gleich -a3 ist */
+            do {
+                a2 = zufallszahl(10); /* Erzeugt eine Zufallszahl für a2 */
+            } while (a2 === 0 || a2 === -L * a1); /* Wiederholt, wenn a2 gleich 0 oder a2 gleich -La1 ist */
+
+            L = zufallszahl(10); /* Erzeugt eine Zufallszahl für L */}
+
+    
+           window.onload = function()
+           {erzeugeZufallszahlenfürGleichung();
+        
+            erzeugeGleichung(n)
+           }
+           
+           function erzeugeGleichung(n) {
+
+  
+
+    // Erzeugen Sie die Gleichungen und Umformungen
+    const oposit_rechenzeichen_a1 = a1 > 0 ? ":" : ":(-";
+    const rechenzeichen_a2 = a2 < 0 ? "-" : "+";
+    const oposit_rechenzeichen_a2 = a2 > 0 ? "-" : "+";
+    const rechenzeichen_a3 = a3 < 0 ? "-" : "+";
+    const oposit_rechenzeichen_a3 = a3 > 0 ? "-" : "+";
+
+    gleichung1lText = `${a1 + a3}x ${rechenzeichen_a2} ${Math.abs(a2)}`;
+    gleichung1rText = `${a1 * L + a2} ${rechenzeichen_a3} ${Math.abs(a3)}x`;
+    umformung1Text = `${oposit_rechenzeichen_a3} ${Math.abs(a3)}x`;
+
+    gleichung2lText = `${a1}x ${rechenzeichen_a2} ${Math.abs(a2)}`;
+    gleichung2rText = `${a1 * L + a2}`;
+    umformung2Text = `${oposit_rechenzeichen_a2}${Math.abs(a2)}`;
+
+    gleichung3lText = `${a1}x`;
+    gleichung3rText = `${a1 * L }`;
+    umformung3Text = `${oposit_rechenzeichen_a1}${Math.abs(a1)}`;
+    gleichung4lText = `x`;
+    gleichung4rText = `${L }`; 
+
+    // Gleichungen und Umformungen anzeigen
+    
+    
+    if (n === 1) {
+    document.getElementById("gleichung1l").textContent = gleichung1lText;
+    document.getElementById("gleichung1r").textContent = gleichung1rText;
+    document.getElementById("umformung1").innerHTML = '<input type="text" id="umformung1Input" placeholder="Bringe alle x nach links." style="width: 150px;">';
+    
+} else if (n === 2){
+    document.getElementById("umformung1").textContent = umformung1Text;
+    document.getElementById("gleichung2l").innerHTML = '<input type="text" id="umformung1Input" placeholder="Vereinfache." style="width: 150px;">';
+}else if (n === 3){
+    document.getElementById("gleichung2l").textContent = gleichung2lText;
+    document.getElementById("gleichung2r").innerHTML = '<input type="text" id="umformung1Input" placeholder="Vereinfache." style="width: 150px;">';
+}else if (n === 4){
+    document.getElementById("gleichung2r").textContent = gleichung2rText;
+    document.getElementById("umformung2").innerHTML = `<input type="text" id="umformung1Input" placeholder="${a2} von links entfernen." style="width: 150px;">`;
+
+}else if (n === 5){
+    document.getElementById("umformung2").textContent = umformung2Text;
+    document.getElementById("gleichung3l").innerHTML = '<input type="text" id="umformung1Input" placeholder="Vereinfache." style="width: 150px;">';
+}else if (n === 6){    
+    document.getElementById("gleichung3l").textContent = gleichung3lText;
+    document.getElementById("gleichung3r").innerHTML = '<input type="text" id="umformung1Input" placeholder="Vereinfache." style="width: 150px;">';
+}else if (n === 7){    
+    document.getElementById("gleichung3r").textContent = gleichung3rText;
+    document.getElementById("umformung3").innerHTML = '<input type="text" id="umformung1Input" placeholder="Vilefaches entfernen" style="width: 150px;">';
+
+}else if (n === 8){    
+    document.getElementById("umformung3").textContent = umformung3Text;
+    document.getElementById("gleichung4l").innerHTML = '<input type="text" id="umformung1Input" placeholder="Vereinfache." style="width: 150px;">';
+}else if (n === 9){    
+    document.getElementById("gleichung4l").textContent = gleichung4lText;
+    document.getElementById("gleichung4r").innerHTML = '<input type="text" id="umformung1Input" placeholder="Vereinfache." style="width: 150px;">';
+}else if (n === 10){    
+    document.getElementById("gleichung4r").textContent = gleichung4rText;
+    
+} else {}
+document.getElementById("umformung1Input").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        // Wenn die Enter-Taste gedrückt wurde, die "Prüfen"-Funktion aufrufen
+        prüfen();
+    }
+});     
+}
+   
+            
+  function prüfen() {
+      const eingabe = document.getElementById("umformung1Input").value;
+
+      let korrekteUmformung;
+      if (n === 1) korrekteUmformung = umformung1Text;
+
+      if (n === 2) korrekteUmformung = gleichung2lText;
+      if (n === 3) korrekteUmformung = gleichung2rText;
+      if (n === 4) korrekteUmformung = umformung2Text;
+      
+      if (n === 5) korrekteUmformung = gleichung3lText;
+      if (n === 6) korrekteUmformung = gleichung3rText;
+      if (n === 7) korrekteUmformung = umformung3Text;
+
+      if (n === 8) korrekteUmformung = gleichung4lText;
+      if (n === 9) korrekteUmformung = gleichung4rText;
+      
+
+
+      if (eingabe.replace(/\s+/g, '').toLowerCase() === korrekteUmformung.replace(/\s+/g, '').toLowerCase()) {
+      
+        n++;
+        erzeugeGleichung(n);
+        document.getElementById("umformung1Input").focus()
+        
+         
+      } else {
+        alert('Falsch');
+      }
+    } ;         
+    function neu(){window.location.reload()};
+    </script>
+</body>
+</html>
