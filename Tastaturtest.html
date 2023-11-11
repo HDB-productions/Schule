@@ -1,0 +1,70 @@
+<!-- In Ihrem anderen HTML-Dokument -->
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andere Seite</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Verlinkung zu Ihrem CSS-Stylesheet -->
+    <script src="eigeneTastatur.js"></script> <!-- Verlinkung zu Ihrer JavaScript-Datei -->
+</head>
+<body>
+    <!-- Container, in dem die Tabelle erstellt wird -->
+    <div id="tableContainer"></div>
+
+    <script>
+        // Eine Liste von zu erstellenden Buttons.
+        var buttonList = [
+            {
+                Zeile: 1,
+                Beschriftung: 'Button 1',
+                Funktion: 'buttonFunction1', //Der funktionswert, mit dem die Buttonfunktion beim klick ausgführt wird
+                Höhe: 1,
+                Breite: 1
+            },
+            {
+                Zeile: 1,
+                Beschriftung: 'Button 2',
+                Funktion: 'buttonFunction2',
+                Höhe: 1,
+                Breite: 2 //Dieser Button erstreckt sich über mehrere spalten
+            },
+       
+            {
+                Zeile: 2,
+                Beschriftung: 'Button 3',
+                Funktion: 'buttonFunction3',
+                Höhe: 1,
+                Breite: 2
+            },
+            {
+                Zeile: 2,
+                Beschriftung: 'Button 4',
+                Funktion: 'buttonFunction4',
+                Höhe: 2,
+                Breite: 1
+            },
+            {
+                Zeile: 3,
+                Beschriftung: 'Button 4',
+                Funktion: 'buttonFunction4',
+                Höhe: 1,
+                Breite: 1
+            },
+            {
+                Zeile: 3,
+                Beschriftung: 'Button 4',
+                Funktion: '4',
+                Höhe: 1,
+                Breite: 1
+            },
+
+
+        ];
+            function buttonFunction (n){
+            alert(n + ' wurde geklickt!');}
+        EigeneTastatur(buttonList,"tableContainer",buttonFunction,100); // Aufruf der Funktion, Erste Variable enthält die Buttons, zweite den ort, an dem erstellt werden soll, die dritte benennt die funktion, die beim auswählen durchgeführt wird, die letzte die größe der buttons
+    </script>
+</body>
+</html>
