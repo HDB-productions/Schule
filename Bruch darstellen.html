@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Brüche als Kreise</title>
+  <script src="Bruchrechnung Tools.js"></script>
+</head>
+<body>
+  <div>
+    <canvas id="fraction"></canvas>
+  </div>
+  <div>
+    Zähler: <input type="number" id="numeratorInput" value="2">
+    Nenner: <input type="number" id="denominatorInput" value="4">
+    Zoom: <input type="number" id="zoomInput" value="100">
+    <button onclick="drawFractionAsCircle(
+        parseInt(document.getElementById('numeratorInput').value),
+        parseInt(document.getElementById('denominatorInput').value),
+        'fraction',
+        parseInt(document.getElementById('zoomInput').value)
+      )">Zeichnen</button>
+  </div>
+</body>
+</html>
