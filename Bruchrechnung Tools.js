@@ -38,5 +38,36 @@ function drawFractionAsCircle(zähler, nenner, canvasId, canvasSize) {
       }
     }
   }
+  
+  function ggT(z1,z2) {
+    var m = z1;
+    var n = z2;
+    var r = 1;
+    while(r != 0) {
+      if(m < n) {
+        var h = m;
+        m = n;
+        n = h;
+      }
+      r = m - n;
+      m = n;
+      n = r;
+    }
+    return m;
+  }
+  function kgV(z1,z2) {
+    kgv = (z1 * z2 / ggT(z1,z2));
+    return kgv;
+  }
+  function calcGGT(zahl1, zahl2) {
+    
+    ggt = ggT(zahl1,zahl2);
+    $('.res').html('Der ggT von ' + zahl1 + ' und ' + zahl2 + ' ist: <b>' + ggt + '</b>');
+  }
+  function calcKGV(zahl1,zahl2) {
+     kgv = kgV(zahl1,zahl2);
+    $('.res').html('Das kgV von ' + zahl1 + ' und ' + zahl2 + ' ist: <b>' + kgv + '</b>');
+  }
+
 
   

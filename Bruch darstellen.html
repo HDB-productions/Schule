@@ -3,6 +3,8 @@
 <head>
   <title>Brüche als Kreise</title>
   <script src="Bruchrechnung Tools.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
   <div>
@@ -19,5 +21,12 @@
         parseInt(document.getElementById('zoomInput').value)
       )">Zeichnen</button>
   </div>
+
+  <br /><br />
+  <span class="res"></span><br /><br />
+  
+  <input type="button" name="ggt" value="ggT berechnen" onclick="calcGGT(parseInt(document.getElementById('numeratorInput').value), parseInt(document.getElementById('denominatorInput').value));" />
+  <input type="button" name="kgv" value="kgV berechnen" onclick="calcKGV(parseInt(document.getElementById('numeratorInput').value), parseInt(document.getElementById('denominatorInput').value));" />
+
 </body>
 </html>
