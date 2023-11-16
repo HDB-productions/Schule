@@ -5,7 +5,7 @@
   <script src="Bruchrechnung Tools.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
-    #plusZeichen {
+    .plusZeichen {
       font-size: 40px; /* Größe des Pluszeichens */
       margin: 0 10px; /* Abstand um das Pluszeichen */
     }
@@ -18,7 +18,7 @@
       font-size: 30px;
       text-align: center;
     }
-    #bruchVisualisierung {
+    .Visualisierung {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -42,19 +42,24 @@
     </math>
   </div>
 
-  <div  id="bruchVisualisierung">
+  <div  class="Visualisierung" id="bruchVisualisierung">
     <canvas id="canvasBruch1" width="200" height="200"></canvas>
-    <span id="plusZeichen">+</span>
+    <span class="plusZeichen">+</span>
     <canvas id="canvasBruch2" width="200" height="200"></canvas>
   </div>
 
   <div class="rechnung" id="aufgabe">
     <p>Finde den kleinsten gemeinsamen Nenner für die oben angezeigten Brüche.</p>
     <input type="text" id="kgnEingabe" placeholder="Geben Sie den KGN ein">
-    <button onclick="ueberpruefeAntwort()">Überprüfen</button>
-    <button onclick="neueAufgabe()">Neue Aufgabe</button>
+    <button id="ueberpruefenButton" onclick="ueberpruefeAntwort()">Überprüfen</button>
+
     <p id="antwort"></p>
   </div>
+
+  <div class="center rechnung" id="umgewandelteBrueche"></div>
+  <div class="Visualisierung" id="umgewandelteVisualisierung"></div>
+  <div class="center "> <button  onclick="neueAufgabe()">Neue Aufgabe</button></div>
+ 
 
   <script>
     let z1, n1, z2, n2;
@@ -82,6 +87,17 @@
 }
 
 function neueAufgabe() {
+  // Eingabefeld und Button wieder anzeigen und aktivieren
+  
+  const eingabeFeld = document.getElementById('kgnEingabe');
+  const ueberpruefenButton = document.getElementById('ueberpruefenButton');
+
+  eingabeFeld.style.display = 'inline-block'; // oder 'block', je nach Layout
+  ueberpruefenButton.style.display = 'inline-block'; // oder 'block', je nach Layout
+
+  eingabeFeld.disabled = false;
+  ueberpruefenButton.disabled = false;
+  
   n1 = generateRandomNumber(12); // Generiere n1
   z1 = generateRandomNumber(3 * n1); // Generiere z1 als maximal das Dreifache von n1
 
@@ -98,8 +114,12 @@ function neueAufgabe() {
 
   drawFractionAsCircle(z1, n1, 'canvasBruch1', 200);
   drawFractionAsCircle(z2, n2, 'canvasBruch2', 200);
+  // Setze die Inhalte der Lösungsanzeige zurück
+  document.getElementById('umgewandelteBrueche').innerHTML = '';
+  document.getElementById('umgewandelteVisualisierung').innerHTML = '';
 }
 function ueberpruefeAntwort() {
+  const eingabeFeld = document.getElementById('kgnEingabe'); // Definiere das Eingabefeld
   const eingabe = parseInt(document.getElementById('kgnEingabe').value);
 
   // Kürze die Brüche
@@ -114,19 +134,62 @@ function ueberpruefeAntwort() {
   const berechneterKGN = kgV(gekuerzterNenner1, gekuerzterNenner2);
   const urspruenglicherKGN = kgV(n1, n2);
 
+  let antwortText = document.getElementById('antwort').innerHTML; // Vorhandene Antworten holen
+
   if (eingabe === berechneterKGN) {
-    document.getElementById('antwort').innerHTML = 'Richtig! Der kleinste gemeinsame Nenner ist ' + berechneterKGN + '.';
+    antwortText += 'Richtig! Der kleinste gemeinsame Nenner ist ' + berechneterKGN + '.<br>';
+   
+    eingabeFeld.style.display = 'none';  // Verstecke das Eingabefeld
+    ueberpruefenButton.style.display = 'none';  // Verstecke den Button
+    eingabeFeld.disabled = true; // Deaktiviere das Eingabefeld
+    ueberpruefenButton.disabled = true; // Deaktiviere den Überprüfen-Button
+// Berechne die neuen Zähler für die umgewandelten Brüche
+let neuerZaehler1 = z1 * (berechneterKGN / n1);
+    let neuerZaehler2 = z2 * (berechneterKGN / n2);
+
+    // Zeige die umgewandelten Brüche an
+    document.getElementById('umgewandelteBrueche').innerHTML = 
+      
+      '<math xmlns="http://www.w3.org/1998/Math/MathML">' +
+        '<mrow>' +
+          '<mfrac>' +
+            '<mn>' + neuerZaehler1 + '</mn>' +
+            '<mn>' + berechneterKGN + '</mn>' +
+          '</mfrac>' +
+          '<mo>+</mo>' +
+          '<mfrac>' +
+            '<mn>' + neuerZaehler2 + '</mn>' +
+            '<mn>' + berechneterKGN + '</mn>' +
+          '</mfrac>' +
+        '</mrow>' +
+      '</math>';
+// Erstelle neue Canvas-Elemente für die umgewandelten Brüche
+let umgewandelteVisualisierung = document.getElementById('umgewandelteVisualisierung');
+    umgewandelteVisualisierung.innerHTML = `
+      <canvas id="canvasUmgewandelterBruch1" width="200" height="200"></canvas>
+      <span class="plusZeichen">+</span>
+      <canvas id="canvasUmgewandelterBruch2" width="200" height="200"></canvas>
+    `;
+
+    // Zeichne die umgewandelten Brüche auf den neuen Canvas-Elementen
+    drawFractionAsCircle(neuerZaehler1, berechneterKGN, 'canvasUmgewandelterBruch1', 200);
+    drawFractionAsCircle(neuerZaehler2, berechneterKGN, 'canvasUmgewandelterBruch2', 200);
+
+
   } else if (eingabe % gekuerzterNenner1 === 0 && eingabe % gekuerzterNenner2 === 0) {
     let zusaetzlicheNachricht = eingabe === urspruenglicherKGN ? " Beachte, dass sich die Brüche eventuell kürzen lassen." : "";
-    document.getElementById('antwort').innerHTML = 'Zum Teil richtig. ' + eingabe + ' ist ein gemeinsamer Nenner, aber es gibt noch einen kleineren.' + zusaetzlicheNachricht;
+    antwortText += 'Zum Teil richtig. ' + eingabe + ' ist ein gemeinsamer Nenner, aber es gibt noch einen kleineren.' + zusaetzlicheNachricht + '<br>';
   } else if (eingabe % gekuerzterNenner1 !== 0 && eingabe % gekuerzterNenner2 !== 0) {
-    document.getElementById('antwort').innerHTML = 'Falsch, keiner der Brüche lässt sich auf ' + eingabe + ' erweitern oder kürzen.';
+    antwortText += 'Falsch, keiner der Brüche lässt sich auf ' + eingabe + ' erweitern oder kürzen.<br>';
   } else if (eingabe % gekuerzterNenner1 !== 0) {
-    document.getElementById('antwort').innerHTML = 'Falsch, der erste Bruch lässt sich nicht auf ' + eingabe + ' erweitern oder kürzen.';
+    antwortText += 'Falsch, der erste Bruch lässt sich nicht auf ' + eingabe + ' erweitern oder kürzen.<br>';
   } else if (eingabe % gekuerzterNenner2 !== 0) {
-    document.getElementById('antwort').innerHTML = 'Falsch, der zweite Bruch lässt sich nicht auf ' + eingabe + ' erweitern oder kürzen.';
+    antwortText += 'Falsch, der zweite Bruch lässt sich nicht auf ' + eingabe + ' erweitern oder kürzen.<br>';
   }
+
+  document.getElementById('antwort').innerHTML = antwortText; // Aktualisiere das Antwort-Element mit dem neuen Text
 }
+
 
 
 
