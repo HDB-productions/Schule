@@ -68,6 +68,22 @@ function drawFractionAsCircle(zähler, nenner, canvasId, canvasSize) {
      kgv = kgV(zahl1,zahl2);
     $('.res').html('Das kgV von ' + zahl1 + ' und ' + zahl2 + ' ist: <b>' + kgv + '</b>');
   }
-
+  
+  function kuerzeBruch(zaehler, nenner) {
+    if (nenner === 0) {
+      return "Ungültiger Bruch (Nenner darf nicht 0 sein)";
+    }
+  
+    var ggt = ggT(zaehler, nenner);
+    zaehler /= ggt;
+    nenner /= ggt;
+  
+    if (nenner < 0) {
+      zaehler = -zaehler;
+      nenner = -nenner;
+    }
+  
+    return zaehler + "/" + nenner;
+  }
 
   

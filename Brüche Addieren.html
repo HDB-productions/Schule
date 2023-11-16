@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Brüche addieren</title>
+  <script src="Bruchrechnung Tools.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    #plusZeichen {
+      font-size: 40px; /* Größe des Pluszeichens */
+      margin: 0 10px; /* Abstand um das Pluszeichen */
+    }
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .rechnung {
+      font-size: 30px;
+      text-align: center;
+    }
+    #bruchVisualisierung {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="center rechnung">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="bruchMath">
+      <mrow>
+        <mfrac>
+          <mn id="z1"></mn>
+          <mn id="n1"></mn>
+        </mfrac>
+        <mo>+</mo>
+        <mfrac>
+          <mn id="z2"></mn>
+          <mn id="n2"></mn>
+        </mfrac>
+      </mrow>
+    </math>
+  </div>
+
+  <div  id="bruchVisualisierung">
+    <canvas id="canvasBruch1" width="200" height="200"></canvas>
+    <span id="plusZeichen">+</span>
+    <canvas id="canvasBruch2" width="200" height="200"></canvas>
+  </div>
+
+  <div class="rechnung" id="aufgabe">
+    <p>Finde den kleinsten gemeinsamen Nenner für die oben angezeigten Brüche.</p>
+    <input type="text" id="kgnEingabe" placeholder="Geben Sie den KGN ein">
+    <button onclick="ueberpruefeAntwort()">Überprüfen</button>
+    <button onclick="neueAufgabe()">Neue Aufgabe</button>
+    <p id="antwort"></p>
+  </div>
+
+  <script>
+    let z1, n1, z2, n2;
+
+   
+    function generateUniqueNumber(numbers) {
+        let randomNumber;
+        do {
+            randomNumber = generateRandomNumber();
+        } while (numbers.includes(randomNumber));
+        return randomNumber;
+    }
+
+    function generateUniqueLetterNumber(letters, numbers) {
+        let randomNumber;
+        do {
+            randomNumber = generateRandomNumber();
+        } while (numbers.includes(randomNumber) || letters[randomNumber - 1]);
+        letters[randomNumber - 1] = true;
+        return randomNumber;
+
+    }
+    function generateRandomNumber(max) {
+    return Math.floor(Math.random() * max) + 1;
+}
+
+function neueAufgabe() {
+  n1 = generateRandomNumber(12); // Generiere n1
+  z1 = generateRandomNumber(3 * n1); // Generiere z1 als maximal das Dreifache von n1
+
+  do {
+    n2 = generateRandomNumber(12); // Generiere n2 unabhängig, aber nicht gleich n1
+  } while (n2 === n1);
+
+  z2 = generateRandomNumber(3 * n2); // Generiere z2 als maximal das Dreifache von n2
+
+  document.getElementById('z1').innerHTML = z1;
+  document.getElementById('n1').innerHTML = n1;
+  document.getElementById('z2').innerHTML = z2;
+  document.getElementById('n2').innerHTML = n2;
+
+  drawFractionAsCircle(z1, n1, 'canvasBruch1', 200);
+  drawFractionAsCircle(z2, n2, 'canvasBruch2', 200);
+}
+function ueberpruefeAntwort() {
+  const eingabe = parseInt(document.getElementById('kgnEingabe').value);
+
+  // Kürze die Brüche
+  const gekuerzterBruch1 = kuerzeBruch(z1, n1).split('/');
+  const gekuerzterBruch2 = kuerzeBruch(z2, n2).split('/');
+
+  // Extrahiere die gekürzten Nenner
+  const gekuerzterNenner1 = parseInt(gekuerzterBruch1[1]);
+  const gekuerzterNenner2 = parseInt(gekuerzterBruch2[1]);
+
+  // Berechne das kgV der gekürzten und ursprünglichen Nenner
+  const berechneterKGN = kgV(gekuerzterNenner1, gekuerzterNenner2);
+  const urspruenglicherKGN = kgV(n1, n2);
+
+  if (eingabe === berechneterKGN) {
+    document.getElementById('antwort').innerHTML = 'Richtig! Der kleinste gemeinsame Nenner ist ' + berechneterKGN + '.';
+  } else if (eingabe % gekuerzterNenner1 === 0 && eingabe % gekuerzterNenner2 === 0) {
+    let zusaetzlicheNachricht = eingabe === urspruenglicherKGN ? " Beachte, dass sich die Brüche eventuell kürzen lassen." : "";
+    document.getElementById('antwort').innerHTML = 'Zum Teil richtig. ' + eingabe + ' ist ein gemeinsamer Nenner, aber es gibt noch einen kleineren.' + zusaetzlicheNachricht;
+  } else if (eingabe % gekuerzterNenner1 !== 0 && eingabe % gekuerzterNenner2 !== 0) {
+    document.getElementById('antwort').innerHTML = 'Falsch, keiner der Brüche lässt sich auf ' + eingabe + ' erweitern oder kürzen.';
+  } else if (eingabe % gekuerzterNenner1 !== 0) {
+    document.getElementById('antwort').innerHTML = 'Falsch, der erste Bruch lässt sich nicht auf ' + eingabe + ' erweitern oder kürzen.';
+  } else if (eingabe % gekuerzterNenner2 !== 0) {
+    document.getElementById('antwort').innerHTML = 'Falsch, der zweite Bruch lässt sich nicht auf ' + eingabe + ' erweitern oder kürzen.';
+  }
+}
+
+
+
+
+    window.onload = neueAufgabe;
+  </script>
+</body>
+</html>
