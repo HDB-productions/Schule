@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Brüche als Kreise</title>
+  <script src="Bruchrechnung Tools.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+  <div>
+    <canvas id="fraction"></canvas>
+  </div>
+  <div>
+    Zähler: <input type="number" id="numeratorInput" value="2"> <br/>
+    Nenner: <input type="number" id="denominatorInput" value="4"><br />
+    Zoom: <input type="number" id="zoomInput" value="100"><br />
+    Zeichenmethode: <select id="drawMethod">
+      <option value="Kreis">Kreis</option>
+      <option value="Quadrat">Quadrat</option>
+  </select><br />  
+Zerlegung: <input type="number" id="zerlegungInput1"><input type="number" id="zerlegungInput2"><br />
+Farbe: <select id="color">
+  <option value="red">Rot</option>
+  <option value="green">Grün</option>
+  <option value="blue">Blau</option>
+  <option value="yellow">Gelb</option>
+  </select>
+    
+  <button onclick="drawFraction(
+    parseInt(document.getElementById('numeratorInput').value),
+    parseInt(document.getElementById('denominatorInput').value),
+    'fraction',
+    parseInt(document.getElementById('zoomInput').value)
+    ,drawMethod.value
+    ,[zerlegungInput1.value,zerlegungInput2.value],
+    color.value
+  )">Zeichnen</button>  
+
+  </div>
+  <br />
+  <span class="res"></span><br /><br />
+  
+  <input type="button" name="ggt" value="ggT berechnen" onclick="calcGGT(parseInt(document.getElementById('numeratorInput').value), parseInt(document.getElementById('denominatorInput').value));" />
+  <input type="button" name="kgv" value="kgV berechnen" onclick="calcKGV(parseInt(document.getElementById('numeratorInput').value), parseInt(document.getElementById('denominatorInput').value));" />
+
+</body>
+</html>
