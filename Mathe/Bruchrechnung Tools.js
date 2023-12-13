@@ -165,3 +165,11 @@ function drawFractionAsSquare(zähler, nenner, canvasId, canvasSize, zerlegung =
     }
     return faktoren;
 }
+function downloadCanvasAsImage(canvasId, filename) {
+  var canvas = document.getElementById(canvasId);
+  var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+  var link = document.createElement('a');
+  link.download = filename;
+  link.href = image;
+  link.click();
+}
