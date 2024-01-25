@@ -1518,6 +1518,7 @@ function checkInputs () {
       a
         ? (showSolution(),
           (message.firstChild.nodeValue = 'Alle Eingaben sind richtig.'),
+          
           message.classList.remove('negative'),
           message.classList.add('positive'),
           document.getElementById('period-buttons-container') &&
@@ -1550,16 +1551,15 @@ PunktAusgabe.innerHTML = 'Du hast ' + (punkteFeld.value) + ' Punkte';
 // Ruft die Funktion markWrongInputs() auf
 markWrongInputs();
         
-    }
-    else{ // Wert des Eingabefelds erhöhen
-        var punkteFeld = document.getElementById('Punkte');
-        var punkte = parseInt(punkteFeld.value, 10);
-        punkteFeld.value = punkte + 1;
-        
-        // Text in "PunkteAusgabe" aktualisieren
-        var PunktAusgabe = document.getElementById('PunktAusgabe');
-        PunktAusgabe.innerHTML = 'Du hast ' + (punkteFeld.value) + ' Punkte';
-        }
+    }else{  // Wert des Eingabefelds erhöhen
+      var punkteFeld = document.getElementById('Punkte');
+      var punkte = parseInt(punkteFeld.value, 10);
+      punkteFeld.value = punkte + 3;
+      
+      // Text in "PunkteAusgabe" aktualisieren
+      var PunktAusgabe = document.getElementById('PunktAusgabe');
+      PunktAusgabe.innerHTML = 'Du hast ' + (punkteFeld.value) + ' Punkte';
+      }
 }
 
 function showSolution () {
