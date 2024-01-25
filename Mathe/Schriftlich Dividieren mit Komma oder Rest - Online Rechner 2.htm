@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Schriftlich Dividieren mit Komma oder Rest - Online Rechner</title>
+        <meta name="description" content="Dieser Rechner kann den Rechenweg der schriftlichen Division anzeigen oder man kann die Berechnung selber durchführen und überprüfen lassen.">
+        <link rel="canonical" href="https://schriftlich-rechnen.de/dividieren/">
+        <meta property="og:title" content="Schriftlich Dividieren mit Komma oder Rest - Online Rechner">
+        <meta property="og:description" content="Dieser Rechner kann den Rechenweg der schriftlichen Division anzeigen oder man kann die Berechnung selber durchführen und überprüfen lassen.">
+        <meta id="image-url" property="og:image" content="https://schriftlich-rechnen.de/media/opengraph/dividieren_komma.png">
+        <meta id="url" property="og:url" content="https://schriftlich-rechnen.de/dividieren/"><meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:description" content="Dieser Rechner kann den Rechenweg der schriftlichen Division anzeigen oder man kann die Berechnung selber durchführen und überprüfen lassen.">
+        <meta name="twitter:image" content="https://schriftlich-rechnen.de/media/opengraph/dividieren_komma.png">
+        <link href="https://schriftlich-rechnen.de/favicon.svg" rel="icon" type="image/svg+xml"><link href="https://schriftlich-rechnen.de/favicon.png" rel="icon" type="image/png">
+        <link rel="stylesheet" type="text/css" href="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/style.css" media="screen">
+        <script src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/divide.js" type="text/javascript"></script>
+       
+       <style>   /*Ausblenden von nicht benötigten dingen*/
+        #calculate-yourself-button-div, /*Ausblenden von möglichkeit nicht selber zu rechnen*/
+        #save-calculation-accordion, /*Ausblenden von der die URL zu einer Bestimmten Rechnung zu sichern*/
+        #social-sharing-container, /*Ausblenden von Teilen buttons für Social media*/
+        #select-rest-comma-flexdiv,  /*Ausblenden von der Auswahl zwischen dividieren mit Komma und mit Rest*/
+        #FalschesAnzeigen, /*Ausblenden von Button zum anzeigen falscher Eingaben*/
+        .number-input, /*Ausblenden von eingabemöglichkeit der zu dividierenden Zahlen*/
+        footer
+        { /*Ausblenden des Footers mit Datenschutz und Impressum*/
+        display: none;
+        }
+        </style>
+        <script>
+            function generateNewTask() {
+            // Generieren Sie eine zufällige Ganzzahl zwischen 1 und 99
+            var number1 = Math.floor(Math.random() * 99) + 1;
+            // Generieren Sie eine zufällige Ganzzahl zwischen 2 und 15
+            var number2 = Math.floor(Math.random() * 14) + 2;
+        
+            // Setzen Sie die Werte der Eingabefelder
+            document.getElementById('number1').value = number1;
+            document.getElementById('number2').value = number2;
+        
+            // Führen Sie die ursprüngliche Berechnung aus
+            var calcYourselfCheckbox = document.getElementById('calculate-yourself-checkbox');
+            if (calcYourselfCheckbox.checked) {
+                calculate(div_self, "dividieren");
+            } else {
+                calculate(div, "dividieren");
+        }
+  
+            }
+        </script>
+    </head>
+
+<body onload="divide_init(); generateNewTask();">
+    <!-- Den uhrsprünglichen Header Ausgeblendet indem er in Komentare gesetzt wurde
+    <div id="header-main-container">
+   
+    <div id="header-container">
+       
+        <header id="header"><a href="https://schriftlich-rechnen.de/">
+            <img alt="schriftlich rechnen Logo" id="logo" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/schriftlich-rechnen-logo.svg">
+        </a>
+        <nav id="nav"><ul>
+            <li id="nav-add"><a href="https://schriftlich-rechnen.de/addieren/">Addition</a></li>
+            <li id="nav-sub"><a href="https://schriftlich-rechnen.de/subtrahieren/">Subtraktion</a></li>
+            <li id="nav-mult"><a href="https://schriftlich-rechnen.de/multiplizieren/">Multiplikation</a>
+            </li><li id="nav-divide"><a href="https://schriftlich-rechnen.de/dividieren/">Division</a>
+            </li></ul>
+        </nav>
+       
+        <button aria-label="Navigation-Button" id="burger-menu-icon" onclick="burgerButtonClicked()">
+                <span></span></button>
+        </header>
+    </div>
+-->
+    <main>
+        <h1>Schriftlich Dividieren</h1>
+        <form>
+                    <input autocomplete="off" id="rest-select" name="rest-comma-selection" onchange="changeRestComma()" type="radio" class="hide"> 
+                    <input autocomplete="off" id="comma-select" name="rest-comma-selection" onchange="changeRestComma()" type="radio" class="hide" checked="checked">
+                    <div class="not-selectable" id="select-rest-comma-flexdiv">
+                        <div id="select-rest-comma" class="">
+                        <label for="comma-select" id="select-comma" class="active">mit Komma</label>
+                        <label for="rest-select" id="select-rest">mit Rest</label>
+                        </div>
+                    </div>
+                <div class="number-input">1. Zahl: <input autocomplete="off" id="number1" placeholder="Dividend" required="" value="3"></div>
+                <div class="number-input">2. Zahl: <input autocomplete="off" id="number2" placeholder="Divisor" required="" value="9"></div>
+                <div class="number-input">Punkte: <input autocomplete="off" id="Punkte" placeholder="Punkte" required="" value="0"></div>
+                <div class="number-input" id="decimals-input-div">Anzahl Nachkommastellen: <input autocomplete="off" id="decimals" aria-label="Anzahl Nachkommastellen" value="50"></div>
+                <div class="not-selectable" id="calculate-yourself-button-div">
+                    <label id="calculate-yourself-button-container">
+                        <input autocomplete="off" id="calculate-yourself-checkbox" name="calculate-yourself-checkbox" onchange="calculateYourselfChanged()" type="checkbox" checked="checked">
+                        <span id="calculate-yourself-button" class="checked"></span>
+                    </label>
+                    <label for="calculate-yourself-checkbox" id="calculate-yourself-label">selber rechnen</label>
+                </div>
+               
+            <!-- Uhrsprünglicher Button zum berechnen durch Kommentar entfernt um darauf folgend eigenen Button zu integieren, der eine Neue zufällige Aufgabe generiert
+                    <button onclick='calcYourselfCheckbox.checked?calculate(div_self,"dividieren"):calculate(div,"dividieren")' id="submit-button" type="button">Berechnen</button>
+            -->
+            <button onclick='generateNewTask()' id="submit-button" type="button">Neue Aufgabe</button>
+
+            </form>
+            <div class="notice-container">
+                <span id="shift_comma" class="hide notice"></span>
+            </div>
+            <div id="svg-container" class="center hide"></div>
+            <div class="notice-container">
+                <span id="cut_decimals" class="hide notice"></span>
+            </div>
+            <div class="center" id="exercise-container">
+                <table id="exercise" class="not-selectable">
+                    <tr>
+                        <td></td>
+                        <td>
+                            <span class="correct normal-character">3</span>
+                        </td>
+                        <td>
+                            <span class="correct normal-character">:</span>
+                        </td>
+                        <td>
+                            <span class="correct normal-character">9</span>
+                        </td>
+                        <td>
+                            <span class="correct normal-character">=</span>
+                        </td>
+                        <td class="relative">
+                            <input class="input-number input-solution" maxlength="1">
+                            <span class="point">,</span>
+                        </td>
+                        <td>
+                            <input class="input-number input-solution" maxlength="1"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="correct normal-character">-</span>
+                            </td>
+                            <td>
+                                <input class="input-number input-solution" maxlength="1">
+                            </td>
+                                <td>
+                                </td>
+                                <td></td><td></td><td></td><td></td></tr><tr>
+                                    <td class="line-top"></td>
+                                    <td class="line-top">
+                                        <input class="input-number input-solution" maxlength="1">
+                                    </td>
+                                    <td>
+                                        <input class="input-number input-solution" maxlength="1">
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="correct normal-character">-</span>
+                                    </td>
+                                    <td>
+                                        <input class="input-number input-solution" maxlength="1">
+                                    </td>
+                                    <td>
+                                        <input class="input-number input-solution" maxlength="1">
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr><tr>
+                                    <td class="line-top"></td>
+                                    <td class="line-top"></td>
+                                    <td class="line-top">
+                                        <input class="input-number input-solution" maxlength="1">
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr></table></div>
+                                <div class="hide" id="message-container">
+                                    <span id="message"></span>
+                                </div>
+                                <div class="not-selectable" id="period-buttons-container">
+                                    <span>Periodenstrich: </span>
+                                    <input autocomplete="off" id="change-period" name="change-period" onchange="changePeriodClicked()" type="checkbox"> 
+                                    <label for="change-period" class="exercise-button">
+                                        <span id="add-period-text" class="">Hinzufügen</span>
+                                        <span id="change-period-text" class="hide">Ändern</span>
+                                    </label> 
+                                    <button onclick="deletePeriodClicked()" class="exercise-button hide" id="delete-period-button">Löschen</button>
+                                </div>
+                                <div class="" id="exercise-buttons-div">
+                                    <button onclick="deactivatePeriodCheckbox(),checkInputs()" class="exercise-button">Eingaben prüfen</button>
+                                    <button id="FalschesAnzeigen" onclick="deactivatePeriodCheckbox(),markWrongInputs()" class="exercise-button">Falsche Eingaben markieren</button> 
+                                    <button onclick="showSolution()" class="exercise-button">Lösung anzeigen</button>
+                                </div>
+                            </main>
+                        </div>
+           <div>
+            <p id="PunktAusgabe">Du hast 0 Punkte</p>
+           </div>                     
+                                
+           <!--          Den Kompletten Erklärungsartikel ausblenden          
+                                <article><section id="about-the-calculator"><h2>Über den Rechner</h2><p>Dieser Online-Rechner kann auf 2 Arten verwendet werden:</p><ol><li><span class="bold">Ergebnis anzeigen:</span>
+ Mit diesem Online-Rechner lässt sich eine Zahl durch eine andere 
+dividieren (teilen). Das Ergebnis der Rechnung wird samt Rechenweg und 
+Übertrag angezeigt.</li><li><span class="bold">selber rechnen:</span> 
+Dieser Rechner kann genutzt werden, um das schriftliche Dividieren zu 
+üben. Man füllt selber die Felder für die Lösung und den Lösungsweg aus 
+und kann sich danach anzeigen lassen, ob man richtig gerechnet hat.</li></ol><p>Es
+ lässt sich auswählen, ob die Division mit Rest oder mit Komma 
+ausgeführt werden soll. Wenn "mit Rest" ausgewählt ist, müssen beide 
+Zahlen ganze Zahlen sein. Bei der Berechnung mit Komma dürfen die Zahlen
+ auch Kommazahlen sein. In beiden Fällen müssen die Zahlen positiv sein.</p><div id="calculator-images"><div class="img-container not-self"><a href="https://schriftlich-rechnen.de/media/dividieren/schriftliche-division-rechner.png"><img alt="Eine Zahl wird durch eine andere schriftlich geteilt. Lösung inklusive Rechenweg." src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/schriftliche-division-rechner.png" title="Schriftliche Division Rechner mit Komma"></a></div><div class="img-container self"><a href="https://schriftlich-rechnen.de/media/dividieren/schriftlich-dividieren-ueben.png"><img alt="Rechner, um die schriftliche Division mit Komma zu üben." src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/schriftlich-dividieren-ueben.png" title="Schriftliche Division üben mit Komma"></a></div></div></section><section><h2>Wie funktioniert die schriftliche Division?</h2><p>Als erstes Beispiel soll die Zahl 1392 durch 6 geteilt werden.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_ohne_komma_aufgabe.svg"><img alt="schriftlich dividieren - erster Schritt: Aufgabenstellung aufschreiben" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_ohne_komma_aufgabe.svg" title="Aufgabenstellung aufschreiben"></a></div><p>Jetzt
+ sieht man sich an, wie häufig die 6 in die erste Ziffer der ersten Zahl
+ passt. 6 passt 0 mal in die 1. Also sieht man sich an, wie häufig die 6
+ in die ersten beiden Ziffern, also die 13, passt. Das sind 2 mal, weil 2
+ * 6 = 12. Wenn man nicht sicher ist, ob die 6 nicht vielleicht auch 3 
+mal in die 13 passen würde, könnte man 6 * 3 berechnen. Das sind 18 (was
+ größer als 13 ist) und somit passt die 6 nicht 3 mal in die 13. Jetzt 
+schreibt man die Zahl, wie häufig die 6 in die 13 passt (also 2), in die
+ Lösung und das Ergebnis aus 6 * 2 (also 12) unter die 13.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_ohne_komma_schritt1.svg"><img alt="schriftlich dividieren - Schritt 1" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_ohne_komma_schritt1.svg" title="Dividieren Schritt 1"></a></div><p>Als nächstes wird die obere Zahl von der unteren abgezogen. Man berechnet also 13 - 12.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_ohne_komma_schritt2.svg"><img alt="schriftlich dividieren - Schritt 2" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_ohne_komma_schritt2.svg" title="Dividieren Schritt 2"></a></div><p>Neben diese Zahl schreibt man die nächste Ziffer der ersten Zahl. Das ist in diesem Fall die 9.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_ohne_komma_schritt3.svg"><img alt="schriftlich dividieren - Schritt 3" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_ohne_komma_schritt3.svg" title="Dividieren Schritt 3"></a></div><p>Jetzt
+ ermittelt man wie häufig die 6 in die 19 passt. Das tut sie 3 mal, weil
+ 6 * 3 = 18 (kleiner als 19) und 6 * 4 = 24 (größer als 19) gilt. Also 
+schreibt man wieder die 3 in die Lösung und die 18 unter die 19.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_ohne_komma_schritt4.svg"><img alt="schriftlich dividieren - Schritt 4" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_ohne_komma_schritt4.svg" title="Dividieren Schritt 4"></a></div><p>Danach führt man wieder die Subtraktion durch und schreibt die nächste Ziffer der ersten Zahl daneben.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_ohne_komma_schritt5.svg"><img alt="schriftlich dividieren - Schritt 5" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_ohne_komma_schritt5.svg" title="Dividieren Schritt 5"></a></div><p>Nun
+ sieht man sich wieder an, wie häufig die 6 in die 12 passt und das sind
+ genau 2 mal. Also schreibt man die 2 in die Lösung und die 12 unter die
+ 12.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_ohne_komma_schritt6.svg"><img alt="schriftlich dividieren - Schritt 6" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_ohne_komma_schritt6.svg" title="Dividieren Schritt 6"></a></div><p>Und ein weiteres mal zieht man die untere Zahl von der oberen ab.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_ohne_komma_ergebnis.svg"><img alt="schriftliche Division Berechnung" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_ohne_komma_ergebnis.svg" title="Schriftliche Division"></a></div><p>Bei der ersten Zahl sind keine Ziffern mehr übrig und da die Subtraktion 0 ergeben hat, ist man fertig. Das Ergebnis ist 232.</p><p>Aber
+ wie wird damit umgegangen, wenn alle Ziffern der ersten Zahl 
+aufgebraucht sind, aber im Rechenweg keine 0 herausgekommen ist?</p><p>In dem Fall hat man die Möglichkeit entweder das Ergebnis mit Rest oder mit Komma anzugeben.</p></section><section class="rest"><h3>schriftliche Division mit Rest</h3><p>Bei
+ der schriftlichen Division mit Rest wird in diesem Fall hinter die 
+Lösung noch ein "R" gefolgt von der letzten Zahl im Rechenweg 
+geschrieben.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/dividieren_mit_rest.svg"><img alt="schriftlich dividieren mit Rest" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/dividieren_mit_rest.svg" title="dividieren mit Rest"></a></div></section><section class="comma"><h3>schriftliche Division mit Komma</h3><p>Als
+ Beispiel soll 1395 durch 6 dividiert werden. Zuerst rechnet man wie 
+oben beschrieben bis zu der Stelle, wo von der ersten Zahl keine Ziffern
+ mehr übrig sind.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_mit_komma_schritt1.svg"><img alt="schriftlich dividieren mit Komma Schritt 1" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_mit_komma_schritt1.svg" title="Division mit Komma 1"></a></div><p>Hat man diese Stelle erreicht, wird an die Lösung ein Komma angehängt.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_mit_komma_schritt2.svg"><img alt="schriftlich dividieren mit Komma Schritt 2" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_mit_komma_schritt2.svg" title="Division mit Komma 2"></a></div><p>Anstatt von Ziffern aus der ersten Zahl hängt man nun eine 0 an die unterste Zahl im Rechenweg an.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_mit_komma_schritt3.svg"><img alt="schriftlich dividieren mit Komma Schritt 3" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_mit_komma_schritt3.svg" title="Division mit Komma 3"></a></div><p>Jetzt
+ macht man wieder genau das Gleiche, was man in den vorherigen Schritten
+ auch gemacht hat. Man berechnet, wie häufig die 6 in die 30 passt. Also
+ 5 mal.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_mit_komma_schritt4.svg"><img alt="schriftlich dividieren mit Komma Schritt 4" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_mit_komma_schritt4.svg" title="Division mit Komma 4"></a></div><p>Und führt dann wieder die Subtraktion durch.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_mit_komma_ergebnis.svg"><img alt="schriftliche Division mit Komma Lösung" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_mit_komma_ergebnis.svg" title="schriftliche Division Komma"></a></div><p>Das
+ macht man so lange, bis die Lösung der Subtraktion eine 0 ist. Das ist 
+in diesem Fall der Fall und somit ist 232,5 das Ergebnis.</p></section><section class="comma"><h3>schriftliche Division mit Komma und Periode</h3><p>In diesem Abschnitt soll 17 durch 11 geteilt werden. Möchte man die Berechnung durchführen, erhält man nach wenigen Schritten:</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_mit_periode_schritt1.svg"><img alt="schriftlich dividieren mit Periode Schritt 1" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_mit_periode_schritt1.svg" title="Division mit Periode 1"></a></div><p>Sieht
+ man sich den Rechenweg an, dann kam etwas weiter oben schon einmal eine
+ 6 heraus und an diese 6 wurde eine 0 angehängt, weil alle Ziffern von 
+Zahl 1 aufgebraucht waren.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_mit_periode_schritt2.svg"><img alt="schriftlich dividieren mit Periode Schritt 2" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_mit_periode_schritt2.svg" title="Division mit Periode 2"></a></div><p>Man
+ war also schonmal in der Situation, in der man sich jetzt wieder 
+befindet. Wenn man nun weiter rechnet, werden immer und immer wieder die
+ gleichen Zahlen heraus kommen. Die Lösung würde unendlich lang werden 
+und wie folgt aussehen:<br>1,5454545454545454545454545454....</p><p>Für 
+diesen Fall gibt es einen sogenannten Periodenstrich. Er zeigt an, dass 
+die Zahlenfolge, die unter diesem Strich steht, sich unendlich lange 
+wiederholt. Der Periodenstrich beginnt ab der Ziffer in der Lösung, ab 
+der sich die dazugehörige Zahl im Lösungsweg wiederholt.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division_mit_periode_ergebnis.svg"><img alt="schriftlich dividieren mit Periode" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division_mit_periode_ergebnis.svg" title="Division mit Periode Ergebnis"></a></div></section><section class="comma"><h3>Komma in der ersten Zahl</h3><p>Wenn
+ die erste Zahl ein Komma enthält, wird in dem Moment, in dem die erste 
+Nachkomma-Ziffer an eine Ziffer im Rechenweg gehängt wird, in der Lösung
+ ein Komma angehängt.</p><p>Als Beispiel soll 64,34 durch 2 geteilt werden.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/dividieren_dezimal_zahl1_schritt1.svg"><img alt="schriftlich dividieren mit Komma in Divident Schritt 1" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/dividieren_dezimal_zahl1_schritt1.svg" title="Division Komma Zahl1 1"></a></div><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/dividieren_dezimal_zahl1_schritt2.svg"><img alt="schriftlich dividieren mit Komma in Divident Schritt 2" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/dividieren_dezimal_zahl1_schritt2.svg" title="Division Komma Zahl1 2"></a></div><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/dividieren_dezimal_zahl1_ergebnis.svg"><img alt="schriftlich dividieren mit Komma in Divident Schritt 3" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/dividieren_dezimal_zahl1_ergebnis.svg" title="Division Komma Zahl1 3"></a></div></section><section class="comma"><h3>Komma in der zweiten Zahl</h3><p>Wenn
+ die zweite Zahl ein Komma enthält, werden beide Zahlen so lange mit 10 
+multipliziert, bis die zweite Zahl kein Komma mehr enthält.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/dividieren_dezimal_zahl2_vorher.svg"><img alt="schriftlich dividieren mit Komma in Divisor Schritt 1" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/dividieren_dezimal_zahl2_vorher.svg" title="Division Komma Zahl2 1"></a></div><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/dividieren_dezimal_zahl2_nachher.svg"><img alt="schriftlich dividieren mit Komma in Divisor Schritt 2" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/dividieren_dezimal_zahl2_nachher.svg" title="Division Komma Zahl2 2"></a></div></section><section><h2>Hinweise zum Rechner</h2><p>Im
+ Eingabefeld "Anzahl Nachkommastellen" kann festgelegt werden wie viele 
+Nachkommastellen das Ergebnis maximal haben soll. Der Rest wird einfach 
+abgeschnitten/abgerundet.<br>Wenn bei Erreichen der festgelegten Anzahl 
+an Nachkommastellen noch Ziffern der ersten Zahl übrig sind, wird 
+trotzdem weiter gerechnet, bis die Ziffern alle aufgebraucht sind. Somit
+ kann das Ergebnis mehr Nachkommastellen haben als vorher festgelegt 
+wurde.</p><h3>Variante "Ergebnis anzeigen":</h3><p>Wenn sich der Mauszeiger über einer Ziffer der Lösung befindet, wird die dazugehörige Zeile im Rechenweg markiert.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/schriftlich-dividieren.png"><img alt="schriftlich dividieren - zugehörige Zeile im Rechenweg zu Ziffer in der Lösung" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/schriftlich-dividieren.png" title="schriftlich dividieren mit Komma"></a></div><p>Wenn
+ sich der Mauszeiger über dem Periodenstrich vom Ergebnis befindet, wird
+ die Zeile im Lösungsweg markiert, ab der sich die Zwischenergebnisse 
+wiederholen.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/schriftliche-division-periode.png"><img alt="Schriftliche Division mit Periodenstrich - Zeile im Lösungsweg, ab der sich das Zwischenergebnis wiederholt" src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/schriftliche-division-periode.png" title="schriftlich dividieren periodisch"></a></div><h3>Variante "selber rechnen":</h3><p>Um
+ einen Periodenstrich zu setzen muss zuerst auf "Periodenstrich: 
+Hinzufügen" geklickt werden und dann auf das Feld der Lösung, ab dem der
+ Periodenstrich beginnen soll.</p><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/schriftlich-dividieren-periodenstrich.png"><img alt="Um einen Periodenstrich zu setzen, muss zuerst auf Hinzufügen geklickt werden." src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/schriftlich-dividieren-periodenstrich.png" title="schriftlich dividieren Periodenstrich hinzufügen"></a></div><div class="img-container"><a href="https://schriftlich-rechnen.de/media/dividieren/division-periodenstrich-setzen.png"><img alt="Um einen Periodenstrich zu setzen, muss auf das Feld geklickt werden, ab dem die Periode beginnen soll." src="Schriftlich%20Dividieren%20mit%20Komma%20oder%20Rest%20-%20Online%20Rechner-Dateien/division-periodenstrich-setzen.png" title="schriftlich dividieren Periode festlegen"></a></div></section><section><h2>gute Erklärvideos auf Youtube:</h2><ul class="link-list"><li><a href="https://www.youtube.com/watch?v=2A-9_-GCXrA" target="_blank">schriftliche Division ohne Komma</a><br></li><li><a href="https://www.youtube.com/watch?v=QpP7InGNX98" target="_blank">schriftlich dividieren mit Komma</a><br></li><li><a href="https://www.youtube.com/watch?v=X7-9msnnU-0" target="_blank">schriftlich dividieren mit Rest</a><br></li><li><a href="https://www.youtube.com/watch?v=PVHoyFOYtBs" target="_blank">Dezimalzahlen schriftlich dividieren</a></li></ul></section><section><h2>Ähnliche Themen</h2><ul class="link-list"><li><a href="https://schriftlich-rechnen.de/addieren/">schriftliche Addition</a></li><li><a href="https://schriftlich-rechnen.de/subtrahieren/">schriftliche Subtraktion</a></li><li><a href="https://schriftlich-rechnen.de/multiplizieren/">schriftliche Multiplikation</a></li></ul></section>
+</article>
+-->
+
+<details class="" id="save-calculation-accordion">
+    <summary id="save-calculation-summary">Berechnung speichern</summary>
+    <section>
+        <h2>URL der Berechnung:</h2>
+        <div id="url">
+            <span id="url-text">https://schriftlich-rechnen.de/dividieren/?z1=3&amp;z2=9&amp;komma=10&amp;selber=true</span>
+            <button onclick="copyURLToClipboard()" id="copyToClipboard">in Zwischenablage kopieren</button></div>
+    <h2 id="headline-download-image" class="hide">Berechnung als Bild downloaden:</h2>
+    <div id="download-image" class="hide"><input autocomplete="off" id="input-filename" placeholder="Dateiname"> 
+        <select id="data-format" name="data-format" value="png">
+            <option value="png" selected="selected">.png</option>
+            <option value="jpeg">.jpeg</option><option value="svg">.svg</option>
+        </select> <button onclick='downloadImage("Division")' id="download-button">Download</button></div></section></details>
+    
+    <div id="social-sharing-container">
+        <span>Seite teilen:</span>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://schriftlich-rechnen.de/dividieren/" id="facebook" target="_blank">Facebook</a>
+        <a href="https://twitter.com/intent/tweet?url=https://schriftlich-rechnen.de/dividieren/&amp;text=" id="twitter" target="_blank">Twitter</a>
+    </div>
+    <footer>
+        <a href="https://schriftlich-rechnen.de/datenschutz/">Datenschutz</a> 
+        <a href="https://schriftlich-rechnen.de/impressum/">Impressum</a>
+    </footer>
+
+
+</body></html>
