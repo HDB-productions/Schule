@@ -1505,63 +1505,69 @@ function resetCanvas () {
   )
     exerciseContainer.removeChild(exerciseContainer.firstChild)
 }
-function checkInputs () {
-  var a = canvas.checkInputs()
-  /*Zuerst wird die Methode checkInputs() des canvas-Objekts aufgerufen, die überprüft, ob die Benutzereingaben gültig sind. Das Ergebnis wird in der Variablen a gespeichert.*/
+function checkInputs() {
+  var a = canvas.checkInputs(); // Überprüft die Benutzereingaben und speichert das Ergebnis in 'a'
 
-  for (
-    a &&
-      'undefined' != typeof expectedInputPeriod &&
-      (a = canvas.period && canvas.period.checkInput()),
-      message.hasChildNodes() ||
-        message.appendChild(document.createTextNode('')),
-      a
-        ? (showSolution(),
-          (message.firstChild.nodeValue = 'Alle Eingaben sind richtig.'),
-          
-          message.classList.remove('negative'),
-          message.classList.add('positive'),
-          document.getElementById('period-buttons-container') &&
-            document
-              .getElementById('period-buttons-container')
-              .classList.add('hide'),
-          canvas.period && canvas.period.resize())
-        : ((message.firstChild.nodeValue =
-            'Es stimmen noch nicht alle Eingaben.'),
-          message.classList.add('negative'),
-          message.classList.remove('positive')),
-      messageContainer.classList.add('show');
-    0 < markedInputs.length;
+  // Initialisiert das Nachrichtenelement, falls es keine Kindknoten hat
+  if (!message.hasChildNodes()) {
+    message.appendChild(document.createTextNode(''));
+  }
 
-  )
-    markedInputs.shift().element.classList.remove('wrong')
-  canvas.period &&
-    'wrong' == canvas.period.state &&
-    canvas.period.changeState('normal')
-    if (!a) {
-      // Wert des Eingabefelds erhöhen
-var punkteFeld = document.getElementById('Punkte');
-var punkte = parseInt(punkteFeld.value, 10);
-punkteFeld.value = punkte - 1;
+  if (a) {
+    // Wenn alle Eingaben richtig sind
+    showSolution();
+    message.firstChild.nodeValue = 'Alle Eingaben sind richtig.';
+    message.classList.remove('negative');
+    message.classList.add('positive');
 
-// Text in "PunkteAusgabe" aktualisieren
-var PunktAusgabe = document.getElementById('PunktAusgabe');
-PunktAusgabe.innerHTML = 'Du hast ' + (punkteFeld.value) + ' Punkte';
+    // Verstecke den Perioden-Button-Container, falls vorhanden
+    var periodButtonsContainer = document.getElementById('period-buttons-container');
+    if (periodButtonsContainer) {
+      periodButtonsContainer.classList.add('hide');
+    }
 
-// Ruft die Funktion markWrongInputs() auf
-markWrongInputs();
-        
-    }else{  // Wert des Eingabefelds erhöhen
-      var punkteFeld = document.getElementById('Punkte');
-      var punkte = parseInt(punkteFeld.value, 10);
-      punkteFeld.value = punkte + 3;
-      
-      // Text in "PunkteAusgabe" aktualisieren
-      var PunktAusgabe = document.getElementById('PunktAusgabe');
-      PunktAusgabe.innerHTML = 'Du hast ' + (punkteFeld.value) + ' Punkte';
-      }
+    // Anpassung des Canvas, falls erforderlich
+    if (canvas.period) {
+      canvas.period.resize();
+    }
+
+    // Füge einen Punkt hinzu, da alle Eingaben richtig sind
+    adjustPoints(2);
+  } else {
+    // Wenn mindestens eine Eingabe falsch ist
+    message.firstChild.nodeValue = 'Es stimmen noch nicht alle Eingaben.';
+    message.classList.add('negative');
+    message.classList.remove('positive');
+
+    // Ziehe einen Punkt ab und markiere falsche Eingaben
+    adjustPoints(-1);
+    markWrongInputs();
+  }
+
+  // Zeige den Nachrichtencontainer an
+  messageContainer.classList.add('show');
+
+  // Entferne die Markierung von falschen Eingaben
+  while (markedInputs.length > 0) {
+    markedInputs.shift().element.classList.remove('wrong');
+  }
+
+  // Aktualisiere den Zustand des Canvas-Periodenobjekts, falls notwendig
+  if (canvas.period && canvas.period.state === 'wrong') {
+    canvas.period.changeState('normal');
+  }
 }
 
+// Funktion zum Anpassen der Punkte
+function adjustPoints(amount) {
+  var punkteFeld = document.getElementById('Punkte');
+  var punkte = parseInt(punkteFeld.value, 10) + amount;
+  punkteFeld.value = punkte;
+
+  // Aktualisiere den Text in "PunkteAusgabe"
+  var punktAusgabe = document.getElementById('PunktAusgabe');
+  punktAusgabe.innerHTML = 'Du hast ' + punkte + ' Punkte';
+}
 function showSolution () {
         // Wert des Eingabefelds erhöhen
 var punkteFeld = document.getElementById('Punkte');
