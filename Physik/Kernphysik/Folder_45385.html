@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+    <title>Edulo.com</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+ 
+    <style>
+      html, body {font-family:Roboto,Arial; margin:0; padding:0; height:100%; background:rgb(0,151,167); color:white; }
+      * {   box-sizing: border-box; }
+      .outer {
+        width:1024px;
+        height:100%;
+        margin:auto;
+        display:block;
+      }
+      .wrapper {
+        height:100%;
+        overflow-x:hidden;
+      }
+      .wrapper h1 {
+        margin:0;
+        padding:1em;
+        padding-left:8px;
+        padding-right:8px;
+      }
+      .frame {
+        background:white;
+        width:1024px;
+        border:0;
+        height:100%;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+      }
+      .listElement {
+        width: 236px;
+        height: 184px;
+        display: inline-block;
+        box-sizing: border-box;
+        vertical-align: top;
+      }
+      .card {
+        background:white;
+        border-radius:2px;
+        padding:8px;
+        margin: 8px;
+        box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+        cursor: pointer;
+      } 
+      .card img { 
+        position: relative;
+        width: 204px;
+        height: 152px;
+        display: inline-block;
+        margin: 0px;
+        vertical-align: middle;
+      }
+      .active{
+        border:2px solid #d0308a;
+      }
+      .backButton {
+        position:absolute;
+        cursor:pointer; 
+        width: 55px;
+        color: #007aff;
+        font-size: 42px;
+        font-weight: bold;
+        padding-left: 10px;
+        margin-top: -8px;
+        z-index:2;
+      }
+      .backButton:hover {
+        color: #209aff;
+      }
+    </style>
+  </head>
+
+  <body>
+
+   <div id="widgetFrame" style="display:none" class="outer">
+    <div class="wrapper" style="position:relative;overflow:hidden" >
+      <div onclick="closeWidget()" class="backButton">&lsaquo;</div>
+ 
+      <iframe id="widgetFrameConent" class="frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+    </div>
+   </div>
+
+   <div id="collectionFrame" style="display:block;overflow-x:hidden" class="outer">
+    <div class="wrapper" >
+      <div>
+        <h1>Isotope</h1>
+        <div id="collectionContent" style="padding-bottom:4em"></div>
+      </div>
+    </div>
+   </div>
+<script>
+///////////////////////////////////////////////////////////////////////////////////////////////////
+var folders = ["Widget_226147_Isotope.wdgt/","Widget_226148_Nuklidkarte.wdgt/"];
+
+// build collection table from folders
+
+var cc = document.getElementById("collectionContent");
+var s = "";
+for(var i=0; i < folders.length; i++){
+  s += '<div class="listElement"><div onclick="openWidget('+i+')" id="collectionWidget'+i+'" class="card"><img src="'+folders[i]+'Default.png" alt=""/></div></div>';
+}
+cc.innerHTML = s;
+
+var currentOpenWidget = -1;
+
+function openWidget(widget){
+  if(currentOpenWidget != -1){
+    var w = document.getElementById("collectionWidget"+currentOpenWidget);
+    w.className = "card";
+  }
+  currentOpenWidget = widget;
+  var d = document.getElementById("widgetFrameConent");
+  d.src = folders[widget]+"index.html";
+  var w = document.getElementById("widgetFrame");
+  w.style.display = "block";
+  var c = document.getElementById("collectionFrame");
+  c.style.display = "none";
+  var w = document.getElementById("collectionWidget"+widget);
+  w.className = "card active";
+}
+
+function closeWidget(){
+  var w = document.getElementById("widgetFrame");
+  w.style.display = "none";
+  var d = document.getElementById("widgetFrameConent");
+  d.src = ""; // unload widget
+  var c = document.getElementById("collectionFrame");
+  c.style.display = "block";
+}
+</script>
+</body>
+</html>
+
