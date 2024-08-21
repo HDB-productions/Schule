@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physik: Bewegung in Kraftfeldern</title>
+    <style>
+        /* Tipps standardmäßig verstecken */
+        .tip {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        /* Button inaktiv */
+        #tipButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: not-allowed;
+            background-color: #ccc;
+            border: none;
+            color: white;
+        }
+        /* Button aktiv */
+        #tipButton.active {
+            cursor: pointer;
+            background-color: #4CAF50;
+        }
+        /* Zentrierte und fettgedruckte Formeln */
+        .formula {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+    <!-- Einbindung von MathJax für mathematische Formeln -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <h1>Physik: Bewegung in Kraftfeldern</h1>
+    <p><strong>Aufgabe:</strong> Bestimme die Endgeschwindigkeit eines Gegenstandes der Masse m, welcher auf der Erde aus einer Höhe h fallengelassen wird.</p>
+
+    <!-- Bereich für Tipps -->
+    <div id="tipsContainer"></div>
+
+    <!-- Button zum Anzeigen der Tipps -->
+    <button id="tipButton" disabled>Warte 5 Sekunden...</button>
+
+    <script>
+        const baseWaitTime = 10000;
+        const tipsData = [
+            { text: "Tipp 1: Beim Herunterfallen wird potentielle Energie zu kinetischer Energie umgewandelt." },
+            { text: "Tipp 2: Wie lautet die Formel für potentielle Energie?" },
+            { text: "Tipp 3: Die Formel für potentielle Energie lautet:", formula: "\\( \\mathbf{W_{\\text{pot}} = m \\cdot g \\cdot h} \\)" },
+            { text: "Tipp 4: Wie lautet die Formel für kinetische Energie?" },
+            { text: "Tipp 5: Die Formel für kinetische Energie lautet:", formula: "\\( \\mathbf{W_{\\text{kin}} = \\frac{1}{2} \\cdot m \\cdot v^2} \\)" },
+            { text: "Tipp 6: Was passiert nach dem Energieerhaltungssatz mit diesen beiden Energien?" },
+            { text: "Tipp 7: Da die komplette Energie umgewandelt wird, gilt:", formula: "\\( \\mathbf{W_{\\text{pot}} = W_{\\text{kin}}} \\)" },
+            { text: "Tipp 8: Setze die beiden bekannten Formeln für die Energien in diese Gleichung ein." },
+            { text: "Tipp 9: Nach dem Einsetzen der Formeln erhältst du:", formula: "\\( \\mathbf{m \\cdot g \\cdot h = \\frac{1}{2} \\cdot m \\cdot v^2} \\)" },
+            { text: "Tipp 10: Welche Umformung musst du jetzt vornehmen, um \\( v \\) zu isolieren?" },
+            { text: "Tipp 11: Da die Masse \\( m \\) auf beiden Seiten vorkommt, kann sie gekürzt werden.", formula: "\\( \\mathbf{g \\cdot h = \\frac{1}{2} \\cdot v^2} \\)" },
+            { text: "Tipp 12: Multipliziere beide Seiten der Gleichung mit 2, um \\( v^2 \\) zu isolieren.", formula: "\\( \\mathbf{2 \\cdot g \\cdot h = v^2} \\)" },
+            { text: "Tipp 13: Ziehe die Quadratwurzel, um die Endgeschwindigkeit \\( v \\) zu erhalten.", formula: "\\( \\mathbf{v = \\sqrt{2 \\cdot g \\cdot h}} \\)" }
+        ];
+
+        let currentTip = 0;
+        let startTime;
+        let checkTimers;
+    
+        const button = document.getElementById('tipButton');
+
+        function generateTips() {
+            const tipsContainer = document.getElementById('tipsContainer');
+            tipsData.forEach((tip, index) => {
+                const tipElement = document.createElement('div');
+                tipElement.className = 'tip';
+                tipElement.id = `tip${index + 1}`;
+                tipElement.innerHTML = `<p>${tip.text}</p>`;
+                if (tip.formula) {
+                    tipElement.innerHTML += `<div class="formula">${tip.formula}</div>`;
+                }
+                tipsContainer.appendChild(tipElement);
+            });
+
+            // Informiere MathJax, dass neue Inhalte hinzugefügt wurden
+            MathJax.typesetPromise();
+        }
+
+        function startTimers() {
+            startTime = Date.now();
+
+            checkTimers = setInterval(() => {
+                const timeElapsed = Date.now() - startTime;
+                const nextTipTime = baseWaitTime * (currentTip + 1);
+                let timeLeft = Math.max(0, nextTipTime - timeElapsed);
+
+                if (timeElapsed >= nextTipTime && currentTip < tipsData.length) {
+                    button.textContent = "Tipp anzeigen";
+                    button.classList.add('active');
+                    button.disabled = false;
+                } else {
+                    button.textContent = `Warte ${Math.ceil(timeLeft / 1000)} Sekunden...`;
+                }
+            }, 1000);
+        }
+
+        function showNextTip() {
+            if (currentTip < tipsData.length) {
+                document.getElementById(`tip${currentTip + 1}`).style.display = 'block';
+                currentTip++;
+                button.disabled = true;
+                button.classList.remove('active');
+
+                if (currentTip < tipsData.length) {
+                    const nextTipTime = baseWaitTime * (currentTip + 1);
+                    const timeElapsed = Date.now() - startTime;
+                    let timeLeft = nextTipTime - timeElapsed;
+
+                    if (timeLeft <= 0) {
+                        button.textContent = "Tipp anzeigen";
+                        button.classList.add('active');
+                        button.disabled = false;
+                    } else {
+                        button.textContent = `Warte ${Math.ceil(timeLeft / 1000)} Sekunden...`;
+                    }
+                } else {
+                    button.textContent = "Fertig!";
+                    button.classList.add('active');
+                    button.disabled = true;
+                    clearInterval(checkTimers);
+                }
+            }
+        }
+
+        window.onload = () => {
+            generateTips();
+            startTimers();
+            button.addEventListener('click', showNextTip);
+        };
+    </script>
+
+</body>
+</html>

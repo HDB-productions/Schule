@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physik: Bewegung in Kraftfeldern 2 (Elektrisches Feld)</title>
+    <style>
+        /* Tipps standardmäßig verstecken */
+        .tip {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        /* Button inaktiv */
+        #tipButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: not-allowed;
+            background-color: #ccc;
+            border: none;
+            color: white;
+        }
+        /* Button aktiv */
+        #tipButton.active {
+            cursor: pointer;
+            background-color: #4CAF50;
+        }
+        /* Zentrierte und fettgedruckte Formeln */
+        .formula {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+    <!-- Einbindung von MathJax für mathematische Formeln -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Einbindung von html2pdf.js für den PDF-Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <h1>Physik: Bewegung in Kraftfeldern 2 (Elektrisches Feld)</h1>
+    <p><strong>Aufgabe:</strong> Berechne die Geschwindigkeit einer Ladung \( q \), die im elektrischen Feld eines Plattenkondensators über eine Strecke \( s \) beschleunigt wird.</p>
+
+    <!-- Bereich für Tipps -->
+    <div id="tipsContainer"></div>
+
+    <!-- Button zum Anzeigen der Tipps -->
+    <button id="tipButton" disabled>Warte 5 Sekunden...</button>
+
+    <script>
+        const baseWaitTime = 100;
+        const tipsData = [
+    { text: "Tipp 1: Die Ladung erfährt eine Beschleunigung im elektrischen Feld des Plattenkondensators." },
+    { text: "Tipp 2: Die elektrische Energie wird in kinetische Energie umgewandelt." },
+    { text: "Tipp 3: Wie lautet die Formel für die Arbeit \\( W \\), die durch die elektrische Kraft geleistet wird?" },
+    { text: "Tipp 4: Die Arbeit ist:", formula: "\\( W = F_{\\text{el}} \\cdot s \\)" },
+    { text: "Tipp 5: Wie lautet die Formel für die elektrische Kraft \\( F_{\\text{el}} \\)?" },
+    { text: "Tipp 6: Die elektrische Kraft ist:", formula: "\\( F_{\\text{el}} = E \\cdot q \\)" },
+    { text: "Tipp 7: Setze \\( F_{\\text{el}} = E \\cdot q \\) in die Gleichung für die Arbeit \\( W = F_{\\text{el}} \\cdot s \\) ein." },
+    { text: "Tipp 8: Nach dem Einsetzen erhältst du:", formula: "\\( W = E \\cdot q \\cdot s \\)" },
+    { text: "Tipp 9: Setze nun die elektrische Arbeit \\( W \\) mit der kinetischen Energie \\( W_{\\text{kin}} \\) gleich." },
+    { text: "Tipp 10: Die elektrische Energie wird vollständig in kinetische Energie umgewandelt, daher gilt:", formula: "\\( q \\cdot E \\cdot s = \\frac{1}{2} \\cdot m \\cdot v^2 \\)" },
+    { text: "Tipp 11: Um \\( v^2 \\) zu isolieren, multipliziere beide Seiten der Gleichung mit \\( \\frac{2}{m} \\)." },
+    { text: "Tipp 12: Die Gleichung nach dem Multiplizieren:", formula: "\\( v^2 = \\frac{2 \\cdot q \\cdot E \\cdot s}{m} \\)" },
+    { text: "Tipp 13: Um die Geschwindigkeit \\( v \\) zu berechnen, ziehe die Quadratwurzel." },
+    { text: "Tipp 14: Die Geschwindigkeit der Ladung ist:", formula: "\\( v = \\sqrt{\\frac{2 \\cdot q \\cdot E \\cdot s}{m}} \\)" }
+];
+
+;
+
+
+
+        let currentTip = 0;
+        let startTime;
+        let checkTimers;
+    
+        const button = document.getElementById('tipButton');
+
+        function generateTips() {
+            const tipsContainer = document.getElementById('tipsContainer');
+            tipsData.forEach((tip, index) => {
+                const tipElement = document.createElement('div');
+                tipElement.className = 'tip';
+                tipElement.id = `tip${index + 1}`;
+                tipElement.innerHTML = `<p>${tip.text}</p>`;
+                if (tip.formula) {
+                    tipElement.innerHTML += `<div class="formula">${tip.formula}</div>`;
+                }
+                tipsContainer.appendChild(tipElement);
+            });
+
+            // Informiere MathJax, dass neue Inhalte hinzugefügt wurden
+            MathJax.typesetPromise();
+        }
+
+        function startTimers() {
+            startTime = Date.now();
+
+            checkTimers = setInterval(() => {
+                const timeElapsed = Date.now() - startTime;
+                const nextTipTime = baseWaitTime * (currentTip + 1);
+                let timeLeft = Math.max(0, nextTipTime - timeElapsed);
+
+                if (timeElapsed >= nextTipTime && currentTip < tipsData.length) {
+                    button.textContent = "Tipp anzeigen";
+                    button.classList.add('active');
+                    button.disabled = false;
+                } else {
+                    button.textContent = `Warte ${Math.ceil(timeLeft / 1000)} Sekunden...`;
+                }
+            }, 1000);
+        }
+
+        function showNextTip() {
+            if (currentTip < tipsData.length) {
+                document.getElementById(`tip${currentTip + 1}`).style.display = 'block';
+                currentTip++;
+                button.disabled = true;
+                button.classList.remove('active');
+
+                if (currentTip < tipsData.length) {
+                    const nextTipTime = baseWaitTime * (currentTip + 1);
+                    const timeElapsed = Date.now() - startTime;
+                    let timeLeft = nextTipTime - timeElapsed;
+
+                    if (timeLeft <= 0) {
+                        button.textContent = "Tipp anzeigen";
+                        button.classList.add('active');
+                        button.disabled = false;
+                    } else {
+                        button.textContent = `Warte ${Math.ceil(timeLeft / 1000)} Sekunden...`;
+                    }
+                } else {
+                    button.textContent = "Fertig! Export als PDF";
+                    button.classList.add('active');
+                    button.disabled = false; // Button aktiv lassen für PDF-Export
+                    clearInterval(checkTimers);
+
+                    button.addEventListener('click', exportPDF); // PDF-Export beim Klick auf "Fertig"
+                }
+            }
+        }
+
+        function exportPDF() {
+            const element = document.body; // oder spezifischer Bereich: document.getElementById('tipsContainer')
+            html2pdf().from(element).save("Bewegung_in_Kraftfeldern 2 (Elektrisches Feld).pdf");
+        }
+
+        window.onload = () => {
+            generateTips();
+            startTimers();
+            button.addEventListener('click', showNextTip);
+        };
+    </script>
+
+</body>
+</html>
