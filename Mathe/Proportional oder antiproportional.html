@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Proportionale und Antiproportionale Zuordnungen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #problem {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .option {
+            margin-bottom: 10px;
+        }
+        #answer-section {
+            display: none;
+            margin-bottom: 20px;
+        }
+        #feedback {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #score {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        input[type="number"] {
+            padding: 5px;
+            font-size: 1em;
+            width: 100px;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 5px 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Teste dein Verständnis von Zuordnungen</h1>
+
+<div id="problem"></div>
+
+<div id="type-selection">
+    <div class="option">
+        <input type="radio" id="proportional" name="type" value="proportional">
+        <label for="proportional">Proportional</label>
+    </div>
+    <div class="option">
+        <input type="radio" id="antiproportional" name="type" value="antiproportional">
+        <label for="antiproportional">Antiproportional</label>
+    </div>
+    <div class="option">
+        <input type="radio" id="weder" name="type" value="weder">
+        <label for="weder">Weder noch</label>
+    </div>
+    <button id="submit-type">Auswählen</button>
+</div>
+
+<div id="answer-section">
+    <label for="answer">Deine Antwort:</label>
+    <input type="number" id="answer" step="any">
+    <button id="submit-answer">Antwort überprüfen</button>
+</div>
+
+<div id="feedback"></div>
+<div id="score">Punkte: 0</div>
+<button id="next-problem" style="display: none;">Nächste Aufgabe</button>
+
+<script>
+    let score = 0;
+    let currentProblem = {};
+    let selectedType = '';
+    let problemType = '';
+
+    const problemElement = document.getElementById('problem');
+    const feedbackElement = document.getElementById('feedback');
+    const scoreElement = document.getElementById('score');
+    const answerSection = document.getElementById('answer-section');
+    const answerInput = document.getElementById('answer');
+    const typeSelection = document.getElementById('type-selection');
+    const nextProblemButton = document.getElementById('next-problem');
+
+    document.getElementById('submit-type').addEventListener('click', checkType);
+    document.getElementById('submit-answer').addEventListener('click', checkAnswer);
+    nextProblemButton.addEventListener('click', () => {
+        nextProblemButton.style.display = 'none';
+        typeSelection.style.display = 'block';
+        generateProblem();
+    });
+
+    generateProblem();
+
+    function generateProblem() {
+        feedbackElement.innerHTML = '';
+        answerSection.style.display = 'none';
+        answerInput.value = '';
+        selectedType = '';
+
+        // Randomly choose problem type
+        const types = ['proportional', 'antiproportional', 'weder'];
+        problemType = types[Math.floor(Math.random() * types.length)];
+
+        if (problemType === 'proportional') {
+            currentProblem = generateProportionalProblem();
+        } else if (problemType === 'antiproportional') {
+            currentProblem = generateAntiproportionalProblem();
+        } else {
+            currentProblem = generateNeitherProblem();
+        }
+
+        problemElement.textContent = currentProblem.text;
+    }
+
+    function generateProportionalProblem() {
+    const contexts = [
+        // 1. Anzahl -> Kosten (bei konstantem Preis pro Stück)
+        function() {
+            const items = [
+                {
+                    name: 'Äpfel',
+                    minPrice: 1,
+                    maxPrice: 3
+                },
+                {
+                    name: 'Bananen',
+                    minPrice: 1,
+                    maxPrice: 2.5
+                },
+                {
+                    name: 'Bleistifte',
+                    minPrice: 0.5,
+                    maxPrice: 1
+                },
+                {
+                    name: 'Hefte',
+                    minPrice: 0.8,
+                    maxPrice: 2
+                }
+            ];
+            const item = items[Math.floor(Math.random() * items.length)];
+            const pricePerUnit = (Math.random() * (item.maxPrice - item.minPrice) + item.minPrice).toFixed(2);
+            const quantity1 = Math.floor(Math.random() * 10 + 1);
+            let quantity2;
+            do {
+                quantity2 = Math.floor(Math.random() * 10 + 1);
+            } while (quantity2 === quantity1);
+            const totalCost = (pricePerUnit * quantity1).toFixed(2);
+            const contextOptions = [
+                `${quantity1} ${item.name} kosten insgesamt ${totalCost} €. Wie viel kosten ${quantity2} ${item.name}?`,
+                `Wenn ${quantity1} ${item.name} ${totalCost} € kosten, was kosten dann ${quantity2} ${item.name}?`,
+                `Berechne den Preis für ${quantity2} ${item.name}, wenn ${quantity1} ${item.name} ${totalCost} € kosten.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const unitPrice = (totalCost / quantity1).toFixed(2);
+            const solution = (unitPrice * quantity2).toFixed(2);
+            const calculationSteps = [
+                ['Anzahl', 'Preis'],
+                [`${quantity1}`, `${totalCost} €`],
+                [`1`, `${unitPrice} €`],
+                [`${quantity2}`, `${solution} €`]
+            ];
+            const verbalExplanation = `1. Preis pro Stück berechnen: ${totalCost} € ÷ ${quantity1} = ${unitPrice} € pro Stück.<br>` +
+                `2. Kosten für ${quantity2} Stück berechnen: ${unitPrice} € × ${quantity2} = ${solution} €.`;
+            const explanation = `Wenn die Anzahl der ${item.name} vervielfacht wird, vervielfacht sich der Preis im gleichen Verhältnis.`;
+            return { text, solution, calculationSteps, explanation, verbalExplanation };
+        },
+        // 2. Zeit -> Strecke (bei konstanter Geschwindigkeit) 
+        function() {
+            const vehicles = [
+                {
+                    type: 'Auto',
+                    minSpeed: 60,
+                    maxSpeed: 130
+                },
+                {
+                    type: 'Zug',
+                    minSpeed: 80,
+                    maxSpeed: 300
+                },
+                {
+                    type: 'Fahrrad',
+                    minSpeed: 10,
+                    maxSpeed: 30
+                }
+            ];
+            const vehicle = vehicles[Math.floor(Math.random() * vehicles.length)];
+            const speed = Math.floor(Math.random() * (vehicle.maxSpeed - vehicle.minSpeed + 1)) + vehicle.minSpeed;
+            const time1 = Math.floor(Math.random() * 4 + 1); // 1 bis 4 Stunden
+            let time2;
+            do {
+                time2 = Math.floor(Math.random() * 4 + 1);
+            } while (time2 === time1);
+            const distance1 = speed * time1;
+            const distance2 = speed * time2;
+            const contextOptions = [
+                `Ein ${vehicle.type} fährt mit konstanter Geschwindigkeit von ${speed} km/h. Wie weit kommt es in ${time2} Stunden, wenn es in ${time1} Stunden ${distance1} km zurücklegt?`,
+                `Wenn ein ${vehicle.type} in ${time1} Stunden ${distance1} km fährt, wie weit fährt es in ${time2} Stunden?`,
+                `Berechne die Strecke, die ein ${vehicle.type} in ${time2} Stunden zurücklegt, wenn es mit ${speed} km/h fährt.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const solution = distance2.toString();
+            const calculationSteps = [
+                ['Zeit (h)', 'Strecke (km)'],
+                [`${time1}`, `${distance1}`],
+                [`1`, `${speed}`],
+                [`${time2}`, `${distance2}`]
+            ];
+            const verbalExplanation = `1. Geschwindigkeit ist konstant bei ${speed} km/h.<br>` +
+                `2. Strecke berechnen: ${speed} km/h × ${time2} h = ${distance2} km.`;
+            const explanation = `Die zurückgelegte Strecke ist proportional zur Zeit bei konstanter Geschwindigkeit. Verdoppelt sich die Zeit, verdoppelt sich auch die Strecke.`;
+            return { text, solution, calculationSteps, explanation, verbalExplanation };
+        },
+        // 3. Zutaten für Rezepte (bei konstanter Menge pro Portion)
+        function() {
+            const dishes = ['Kuchen', 'Pfannkuchen', 'Pizza', 'Brot'];
+            const dish = dishes[Math.floor(Math.random() * dishes.length)];
+            const ingredients = ['Mehl', 'Zucker', 'Milch', 'Butter'];
+            const ing = ingredients[Math.floor(Math.random() * ingredients.length)];
+            const amount1 = Math.floor(Math.random() * 300 + 100); // 100 bis 400 Gramm
+            const servings1 = Math.floor(Math.random() * 5 + 2); // 2 bis 6 Portionen
+            let servings2;
+            do {
+                servings2 = Math.floor(Math.random() * 5 + 2);
+            } while (servings2 === servings1);
+            const amount2 = Math.round((amount1 / servings1) * servings2);
+            const contextOptions = [
+                `Für ${servings1} Portionen ${dish} benötigt man ${amount1} Gramm ${ing}. Wie viel Gramm ${ing} benötigt man für ${servings2} Portionen?`,
+                `Wenn ${amount1} g ${ing} für ${servings1} Portionen ${dish} ausreichen, wie viel Gramm benötigt man für ${servings2} Portionen?`,
+                `Berechne die benötigte Menge an ${ing} für ${servings2} Portionen ${dish}, wenn ${servings1} Portionen ${amount1} g benötigen.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const amountPerServing = (amount1 / servings1).toFixed(2);
+            const solution = amount2.toString();
+            const calculationSteps = [
+                ['Portionen', `${ing} (g)`],
+                [`${servings1}`, `${amount1}`],
+                [`1`, `${amountPerServing}`],
+                [`${servings2}`, `${amount2}`]
+            ];
+            const verbalExplanation = `1. Menge pro Portion berechnen: ${amount1} g ÷ ${servings1} = ${amountPerServing} g pro Portion.<br>` +
+                `2. Benötigte Menge für ${servings2} Portionen: ${amountPerServing} g × ${servings2} = ${amount2} g.`;
+            const explanation = `Die benötigte Menge an Zutaten ist proportional zur Anzahl der Portionen.`;
+            return { text, solution, calculationSteps, explanation, verbalExplanation };
+        },
+        // 4. Arbeitszeit -> Gehalt (bei konstantem Stundenlohn)
+        function() {
+            const hourlyRate = Math.floor(Math.random() * 15 + 10); // 10 bis 24 €/h
+            const hours1 = Math.floor(Math.random() * 20 + 10); // 10 bis 29 Stunden
+            let hours2;
+            do {
+                hours2 = Math.floor(Math.random() * 20 + 10);
+            } while (hours2 === hours1);
+            const salary1 = hourlyRate * hours1;
+            const salary2 = hourlyRate * hours2;
+            const contextOptions = [
+                `Ein Mitarbeiter verdient ${hourlyRate} € pro Stunde. Wie viel verdient er für ${hours2} Stunden Arbeit, wenn er für ${hours1} Stunden ${salary1} € bekommt?`,
+                `Wenn jemand für ${hours1} Stunden Arbeit ${salary1} € erhält, wie viel bekommt er für ${hours2} Stunden?`,
+                `Berechne den Verdienst für ${hours2} Stunden bei einem Stundenlohn von ${hourlyRate} €.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const solution = salary2.toString();
+            const calculationSteps = [
+                ['Stunden', 'Gehalt (€)'],
+                [`${hours1}`, `${salary1}`],
+                [`1`, `${hourlyRate}`],
+                [`${hours2}`, `${salary2}`]
+            ];
+            const verbalExplanation = `1. Stundenlohn ist konstant bei ${hourlyRate} € pro Stunde.<br>` +
+                `2. Verdienst berechnen: ${hourlyRate} € × ${hours2} Stunden = ${salary2} €.`;
+            const explanation = `Der Verdienst ist proportional zur Arbeitszeit bei konstantem Stundenlohn.`;
+            return { text, solution, calculationSteps, explanation, verbalExplanation };
+        },
+        // 5. Anzahl von Kopien -> Gesamtkosten (bei konstantem Preis pro Kopie)
+        function() {
+            const pricePerCopy = (Math.random() * 0.05 + 0.05).toFixed(2); // 0,05 € bis 0,10 € pro Kopie
+            const copies1 = Math.floor(Math.random() * 100 + 50); // 50 bis 149 Kopien
+            let copies2;
+            do {
+                copies2 = Math.floor(Math.random() * 100 + 50);
+            } while (copies2 === copies1);
+            const cost1 = (pricePerCopy * copies1).toFixed(2);
+            const cost2 = (pricePerCopy * copies2).toFixed(2);
+            const contextOptions = [
+                `${copies1} Kopien kosten ${cost1} €. Wie viel kosten ${copies2} Kopien?`,
+                `Wenn ${copies1} Kopien ${cost1} € kosten, was kosten dann ${copies2} Kopien?`,
+                `Berechne die Kosten für ${copies2} Kopien bei einem Preis von ${pricePerCopy} € pro Kopie.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const solution = cost2;
+            const calculationSteps = [
+                ['Anzahl Kopien', 'Kosten (€)'],
+                [`${copies1}`, `${cost1}`],
+                [`1`, `${pricePerCopy}`],
+                [`${copies2}`, `${cost2}`]
+            ];
+            const verbalExplanation = `1. Preis pro Kopie ist konstant bei ${pricePerCopy} €.<br>` +
+                `2. Gesamtkosten berechnen: ${pricePerCopy} € × ${copies2} Kopien = ${cost2} €.`;
+            const explanation = `Die Gesamtkosten sind proportional zur Anzahl der Kopien bei konstantem Preis pro Kopie.`;
+            return { text, solution, calculationSteps, explanation, verbalExplanation };
+        },
+        // 7. Anzahl Personen -> Gesamt Eintrittspreise (bei konstantem Preis pro Person)
+        function() {
+            const attractions = [
+                {
+                    name: 'Museum',
+                    minPrice: 5,
+                    maxPrice: 15
+                },
+                {
+                    name: 'Freizeitpark',
+                    minPrice: 20,
+                    maxPrice: 50
+                },
+                {
+                    name: 'Kino',
+                    minPrice: 8,
+                    maxPrice: 15
+                },
+                {
+                    name: 'Zoo',
+                    minPrice: 10,
+                    maxPrice: 20
+                }
+            ];
+            const attraction = attractions[Math.floor(Math.random() * attractions.length)];
+            const pricePerPerson = Math.floor(Math.random() * (attraction.maxPrice - attraction.minPrice + 1)) + attraction.minPrice;
+            const people1 = Math.floor(Math.random() * 5 + 5); // 5 bis 9 Personen
+            let people2;
+            do {
+                people2 = Math.floor(Math.random() * 5 + 5);
+            } while (people2 === people1);
+            const cost1 = pricePerPerson * people1;
+            const cost2 = pricePerPerson * people2;
+            const contextOptions = [
+                `${people1} Personen bezahlen ${cost1} € Eintritt im ${attraction.name}. Wie viel bezahlen ${people2} Personen?`,
+                `Wenn der Eintritt für ${people1} Personen ${cost1} € kostet, was kostet er für ${people2} Personen?`,
+                `Berechne die Eintrittskosten für ${people2} Personen bei einem Preis von ${pricePerPerson} € pro Person im ${attraction.name}.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const solution = cost2.toString();
+            const calculationSteps = [
+                ['Anzahl Personen', 'Kosten (€)'],
+                [`${people1}`, `${cost1}`],
+                [`1`, `${pricePerPerson}`],
+                [`${people2}`, `${cost2}`]
+            ];
+            const verbalExplanation = `1. Preis pro Person ist konstant bei ${pricePerPerson} €.<br>` +
+                `2. Gesamtkosten berechnen: ${pricePerPerson} € × ${people2} Personen = ${cost2} €.`;
+            const explanation = `Die Gesamtkosten sind proportional zur Anzahl der Personen bei konstantem Preis pro Person.`;
+            return { text, solution, calculationSteps, explanation, verbalExplanation };
+        },
+        // 8. Länge -> Preis für Stoffe, Kabel, etc. (bei konstantem Preis pro Meter)
+        function() {
+            const items = ['Stoff', 'Kabel', 'Seil', 'Schlauch'];
+            const item = items[Math.floor(Math.random() * items.length)];
+            const pricePerMeter = (Math.random() * 5 + 1).toFixed(2); // 1 bis 6 €/m
+            const length1 = Math.floor(Math.random() * 5 + 5); // 5 bis 9 Meter
+            let length2;
+            do {
+                length2 = Math.floor(Math.random() * 5 + 5);
+            } while (length2 === length1);
+            const cost1 = (pricePerMeter * length1).toFixed(2);
+            const cost2 = (pricePerMeter * length2).toFixed(2);
+            const contextOptions = [
+                `${length1} Meter ${item} kosten ${cost1} €. Wie viel kosten ${length2} Meter?`,
+                `Wenn ${length1} m ${item} ${cost1} € kosten, was kosten dann ${length2} m?`,
+                `Berechne die Kosten für ${length2} m ${item} wenn ${length2} ${cost1} kosten.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const solution = cost2;
+            const calculationSteps = [
+                ['Länge (m)', 'Kosten (€)'],
+                [`${length1}`, `${cost1}`],
+                [`1`, `${pricePerMeter}`],
+                [`${length2}`, `${cost2}`]
+            ];
+            const verbalExplanation = `1. Preis pro Meter ist konstant bei ${pricePerMeter} €.<br>` +
+                `2. Gesamtkosten berechnen: ${pricePerMeter} € × ${length2} m = ${cost2} €.`;
+            const explanation = `Die Kosten sind proportional zur Länge bei konstantem Preis pro Meter.`;
+            return { text, solution, calculationSteps, explanation, verbalExplanation };
+        },
+        // 9. Druckzeit -> Anzahl Seiten (bei konstanter Druckgeschwindigkeit)
+        function() {
+            const pagesPerMinute = Math.floor(Math.random() * 20 + 10); // 10 bis 29 Seiten/Minute
+            const time1 = Math.floor(Math.random() * 5 + 1); // 1 bis 5 Minuten
+            let time2;
+            do {
+                time2 = Math.floor(Math.random() * 5 + 1);
+            } while (time2 === time1);
+            const pages1 = pagesPerMinute * time1;
+            const pages2 = pagesPerMinute * time2;
+            const contextOptions = [
+                `Ein Drucker druckt ${pages1} Seiten in ${time1} Minuten. Wie viele Seiten druckt er in ${time2} Minuten?`,
+                `Wenn ${pages1} Seiten in ${time1} Minuten gedruckt werden, wie viele Seiten werden in ${time2} Minuten gedruckt?`,
+                `Berechne die Anzahl der gedruckten Seiten in ${time2} Minuten bei einer Geschwindigkeit von ${pagesPerMinute} Seiten pro Minute.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const solution = pages2.toString();
+            const calculationSteps = [
+                ['Zeit (Minuten)', 'Anzahl Seiten'],
+                [`${time1}`, `${pages1}`],
+                [`1`, `${pagesPerMinute}`],
+                [`${time2}`, `${pages2}`]
+            ];
+            const verbalExplanation = `1. Druckgeschwindigkeit ist konstant bei ${pagesPerMinute} Seiten pro Minute.<br>` +
+                `2. Gedruckte Seiten berechnen: ${pagesPerMinute} Seiten/Minute × ${time2} Minuten = ${pages2} Seiten.`;
+            const explanation = `Die Anzahl der gedruckten Seiten ist proportional zur Zeit bei konstanter Druckgeschwindigkeit.`;
+            return { text, solution, calculationSteps, explanation, verbalExplanation };
+        },
+       // 10. Produktionsbänder in einer Fabrik-> Tägliche Produktion (bei konstanter Produktion pro Band)
+       function() {
+            const factories = [
+                {
+                    product: 'Autos',
+                    minLines: 2,
+                    maxLines: 5,
+                    minProductionPerLine: 100,
+                    maxProductionPerLine: 200
+                },
+                {
+                    product: 'Fahrräder',
+                    minLines: 3,
+                    maxLines: 6,
+                    minProductionPerLine: 50,
+                    maxProductionPerLine: 100
+                },
+                {
+                    product: 'Computer',
+                    minLines: 1,
+                    maxLines: 4,
+                    minProductionPerLine: 20,
+                    maxProductionPerLine: 50
+                }
+            ];
+            const factory = factories[Math.floor(Math.random() * factories.length)];
+            const lines1 = Math.floor(Math.random() * (factory.maxLines - factory.minLines + 1)) + factory.minLines;
+            let lines2;
+            do {
+                lines2 = Math.floor(Math.random() * (factory.maxLines - factory.minLines + 1)) + factory.minLines;
+            } while (lines2 === lines1);
+            const productionPerLine = Math.floor(Math.random() * (factory.maxProductionPerLine - factory.minProductionPerLine + 1)) + factory.minProductionPerLine;
+            const totalProduction1 = productionPerLine * lines1;
+            const totalProduction2 = productionPerLine * lines2;
+            const contextOptions = [
+                `In einer Fabrik werden ${factory.product} hergestellt. Mit ${lines1} Fließbändern werden pro Tag insgesamt ${totalProduction1} ${factory.product} produziert. Wie viele ${factory.product} werden mit ${lines2} Fließbändern pro Tag hergestellt?`,
+                `Eine Fabrik hat ${lines1} Produktionslinien und stellt damit täglich ${totalProduction1} ${factory.product} her. Wie groß ist die tägliche Produktion mit ${lines2} Produktionslinien?`,
+                `Berechne die tägliche Produktionsmenge, wenn die Anzahl der Fließbänder von ${lines1} auf ${lines2} erhöht wird. Aktuell werden mit ${lines1} Bändern ${totalProduction1} ${factory.product} pro Tag produziert.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const solution = totalProduction2.toString();
+            const calculationSteps = [
+                ['Anzahl Fließbänder', 'Produktion (Einheiten)'],
+                [`${lines1}`, `${totalProduction1}`],
+                [`1`, `${productionPerLine}`],
+                [`${lines2}`, `${totalProduction2}`]
+            ];
+            const verbalExplanation = `1. Produktion pro Fließband berechnen: ${totalProduction1} Einheiten ÷ ${lines1} Bänder = ${productionPerLine} Einheiten pro Band.<br>` +
+                `2. Gesamtproduktion mit ${lines2} Bändern berechnen: ${productionPerLine} Einheiten × ${lines2} Bänder = ${totalProduction2} Einheiten.`;
+            const explanation = `Die Gesamtproduktion ist proportional zur Anzahl der Fließbänder bei gleicher Leistung pro Band. Mehr Bänder führen zu höherer Gesamtproduktion im gleichen Verhältnis.`;
+            return { text, solution, calculationSteps, explanation, verbalExplanation };
+        }
+    ];
+    
+    const contextFunction = contexts[Math.floor(Math.random() * contexts.length)];
+    return contextFunction();
+}
+
+function generateAntiproportionalProblem() {
+    const contexts = [
+        // 1. Arbeiter -> Zeit 
+        function() {
+            const workers1 = Math.floor(Math.random() * 8 + 2); // 2 bis 9 Arbeiter
+            const days1 = Math.floor(Math.random() * 5 + 2); // 2 bis 6 Tage
+            const totalWork = workers1 * days1;
+
+            // Mögliche Werte für workers2 finden, sodass days2 ganzzahlig ist
+            let possibleWorkers2 = [];
+            for (let i = 2; i <= totalWork; i++) {
+                if (totalWork % i === 0 && i !== workers1) {
+                    possibleWorkers2.push(i);
+                }
+            }
+
+            if (possibleWorkers2.length === 0) {
+                return arguments.callee();
+            }
+
+            const workers2 = possibleWorkers2[Math.floor(Math.random() * possibleWorkers2.length)];
+            const days2 = totalWork / workers2;
+
+            const contextOptions = [
+                `${workers1} Arbeiter benötigen ${days1} Tage, um eine Aufgabe zu erledigen. Wie viele Tage benötigen ${workers2} Arbeiter?`,
+                `Wenn ${workers1} Maschinen ${days1} Stunden brauchen, wie lange brauchen ${workers2} Maschinen?`,
+                `Ein Team von ${workers1} Personen schafft eine Arbeit in ${days1} Stunden. Wie lange braucht ein Team von ${workers2} Personen?`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const calculationSteps = [
+                ['Anzahl Arbeiter', 'Zeit (Tage)'],
+                [`${workers1}`, `${days1}`],
+                [`1`, `${totalWork}`],
+                [`${workers2}`, `${days2}`]
+            ];
+            const verbalExplanation = `1. Gesamtarbeit berechnen: ${workers1} Arbeiter × ${days1} Tage = ${totalWork} Arbeiter-Tage.<br>` +
+                `2. Benötigte Zeit für ${workers2} Arbeiter: ${totalWork} Arbeiter-Tage ÷ ${workers2} Arbeiter = ${days2} Tage.`;
+            const explanation = `Wenn die Anzahl der Arbeiter erhöht wird, verkürzt sich die benötigte Zeit im gleichen Verhältnis.`;
+            return { text, solution: days2.toString(), calculationSteps, explanation, verbalExplanation };
+        },
+        // 2. Geschwindigkeit -> Zeit (feste Strecke) (bereits vorhanden)
+        function() {
+            const time1 = Math.floor(Math.random() * 8 + 2); // 2 bis 9 Stunden
+            const speed1 = Math.floor(Math.random() * 81 + 20); // 20 bis 100 km/h
+            const distance = speed1 * time1;
+
+            // Mögliche Geschwindigkeiten für speed2 finden, sodass die neue Zeit ganzzahlig ist
+            let possibleSpeeds = [];
+            for (let i = 20; i <= 100; i++) {
+                if (distance % i === 0 && i !== speed1) {
+                    possibleSpeeds.push(i);
+                }
+            }
+
+            if (possibleSpeeds.length === 0) {
+                return arguments.callee();
+            }
+
+            const speed2 = possibleSpeeds[Math.floor(Math.random() * possibleSpeeds.length)];
+            const time2 = distance / speed2;
+
+            const contextOptions = [
+                `Ein Auto fährt ${distance} km mit ${speed1} km/h und benötigt ${time1} Stunden. Wie lange dauert die Fahrt mit ${speed2} km/h?`,
+                `Wenn ein Zug ${distance} km mit ${speed1} km/h in ${time1} Stunden fährt, wie lange braucht er bei ${speed2} km/h?`,
+                `Berechne die Fahrzeit für ${distance} km bei ${speed2} km/h, wenn bei ${speed1} km/h ${time1} Stunden benötigt werden.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const calculationSteps = [
+                ['Geschwindigkeit (km/h)', 'Zeit (h)'],
+                [`${speed1}`, `${time1}`],
+                [`1`, `${distance}`],
+                [`${speed2}`, `${time2}`]
+            ];
+            const verbalExplanation = `1. Gesamtstrecke berechnen: ${speed1} km/h × ${time1} h = ${distance} km.<br>` +
+                `2. Neue Fahrzeit berechnen: ${distance} km ÷ ${speed2} km/h = ${time2} Stunden.`;
+            const explanation = `Wenn die Geschwindigkeit erhöht wird, verringert sich die benötigte Zeit im gleichen Verhältnis.`;
+            return { text, solution: time2.toString(), calculationSteps, explanation, verbalExplanation };
+        },
+        // 3. Anzahl Maschinen -> Zeit (feste Produktionsmenge)
+        function() {
+            const productionAmount = Math.floor(Math.random() * 500 + 500); // 500 bis 999 Einheiten
+            const machines1 = Math.floor(Math.random() * 5 + 1); // 1 bis 5 Maschinen
+            const time1 = Math.floor(Math.random() * 8 + 2); // 2 bis 9 Stunden
+            const totalMachineHours = machines1 * time1;
+
+            // Mögliche Werte für machines2 finden, sodass time2 ganzzahlig ist
+            let possibleMachines2 = [];
+            for (let i = 1; i <= totalMachineHours; i++) {
+                if (totalMachineHours % i === 0 && i !== machines1) {
+                    possibleMachines2.push(i);
+                }
+            }
+
+            if (possibleMachines2.length === 0) {
+                return arguments.callee();
+            }
+
+            const machines2 = possibleMachines2[Math.floor(Math.random() * possibleMachines2.length)];
+            const time2 = totalMachineHours / machines2;
+
+            const contextOptions = [
+                `Eine Fabrik produziert ${productionAmount} Einheiten in ${time1} Stunden mit ${machines1} Maschinen. Wie lange dauert die Produktion mit ${machines2} Maschinen?`,
+                `Wenn ${machines1} Maschinen ${productionAmount} Produkte in ${time1} Stunden herstellen, wie lange brauchen ${machines2} Maschinen für die gleiche Menge?`,
+                `Berechne die benötigte Zeit, um ${productionAmount} Einheiten mit ${machines2} Maschinen zu produzieren, wenn ${machines1} Maschinen dafür ${time1} Stunden benötigen.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const calculationSteps = [
+                ['Anzahl Maschinen', 'Zeit (h)'],
+                [`${machines1}`, `${time1}`],
+                [`1`, `${totalMachineHours}`],
+                [`${machines2}`, `${time2}`]
+            ];
+            const verbalExplanation = `1. Gesamtmaschinenstunden berechnen: ${machines1} Maschinen × ${time1} Stunden = ${totalMachineHours} Maschinenstunden.<br>` +
+                `2. Benötigte Zeit mit ${machines2} Maschinen: ${totalMachineHours} Maschinenstunden ÷ ${machines2} Maschinen = ${time2} Stunden.`;
+            const explanation = `Bei fester Produktionsmenge verringert sich die benötigte Zeit antiproportional zur Anzahl der Maschinen.`;
+            return { text, solution: time2.toString(), calculationSteps, explanation, verbalExplanation };
+        },
+        // 4. Anzahl Personen -> Zeit (Aufgabe erledigen)
+        function() {
+            const task = ['einen Zaun streichen', 'einen Raum reinigen', 'einen Garten umgraben'];
+            const selectedTask = task[Math.floor(Math.random() * task.length)];
+            const people1 = Math.floor(Math.random() * 5 + 1); // 1 bis 5 Personen
+            const time1 = Math.floor(Math.random() * 8 + 2); // 2 bis 9 Stunden
+            const totalPersonHours = people1 * time1;
+
+            // Mögliche Werte für people2 finden, sodass time2 ganzzahlig ist
+            let possiblePeople2 = [];
+            for (let i = 1; i <= totalPersonHours; i++) {
+                if (totalPersonHours % i === 0 && i !== people1) {
+                    possiblePeople2.push(i);
+                }
+            }
+
+            if (possiblePeople2.length === 0) {
+                return arguments.callee();
+            }
+
+            const people2 = possiblePeople2[Math.floor(Math.random() * possiblePeople2.length)];
+            const time2 = totalPersonHours / people2;
+
+            const contextOptions = [
+                `${people1} Personen benötigen ${time1} Stunden, um ${selectedTask}. Wie lange benötigen ${people2} Personen für die gleiche Aufgabe?`,
+                `Wenn ${people1} Helfer ${selectedTask} in ${time1} Stunden erledigen, wie lange brauchen ${people2} Helfer?`,
+                `Berechne die benötigte Zeit, um ${selectedTask}, wenn statt ${people1} Personen ${people2} Personen helfen.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const calculationSteps = [
+                ['Anzahl Personen', 'Zeit (h)'],
+                [`${people1}`, `${time1}`],
+                [`1`, `${totalPersonHours}`],
+                [`${people2}`, `${time2}`]
+            ];
+            const verbalExplanation = `1. Gesamtpersonenstunden berechnen: ${people1} Personen × ${time1} Stunden = ${totalPersonHours} Personenstunden.<br>` +
+                `2. Benötigte Zeit mit ${people2} Personen: ${totalPersonHours} Personenstunden ÷ ${people2} Personen = ${time2} Stunden.`;
+            const explanation = `Mehr Personen verkürzen die benötigte Zeit antiproportional bei gleicher Arbeitsleistung pro Person.`;
+            return { text, solution: time2.toString(), calculationSteps, explanation, verbalExplanation };
+        },
+        // 5. Anzahl Wasserhähne -> Zeit zum Füllen eines Beckens
+        function() {
+            const volume = Math.floor(Math.random() * 900 + 100); // 100 bis 999 Liter
+            const taps1 = Math.floor(Math.random() * 4 + 1); // 1 bis 4 Wasserhähne
+            const time1 = Math.floor(Math.random() * 8 + 2); // 2 bis 9 Minuten
+            const totalTapMinutes = taps1 * time1;
+
+            // Mögliche Werte für taps2 finden, sodass time2 ganzzahlig ist
+            let possibleTaps2 = [];
+            for (let i = 1; i <= totalTapMinutes; i++) {
+                if (totalTapMinutes % i === 0 && i !== taps1) {
+                    possibleTaps2.push(i);
+                }
+            }
+
+            if (possibleTaps2.length === 0) {
+                return arguments.callee();
+            }
+
+            const taps2 = possibleTaps2[Math.floor(Math.random() * possibleTaps2.length)];
+            const time2 = totalTapMinutes / taps2;
+
+            const contextOptions = [
+                `Mit ${taps1} Wasserhähnen wird ein Becken in ${time1} Minuten gefüllt. Wie lange dauert es mit ${taps2} Wasserhähnen?`,
+                `Wenn ${taps1} Schläuche ein Becken in ${time1} Minuten füllen, wie lange brauchen ${taps2} Schläuche?`,
+                `Berechne die Füllzeit eines Beckens mit ${taps2} Hähnen, wenn es mit ${taps1} Hähnen ${time1} Minuten dauert.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const calculationSteps = [
+                ['Anzahl Hähne', 'Zeit (Minuten)'],
+                [`${taps1}`, `${time1}`],
+                [`1`, `${totalTapMinutes}`],
+                [`${taps2}`, `${time2}`]
+            ];
+            const verbalExplanation = `1. Gesamtfluss berechnen: ${taps1} Hähne × ${time1} Minuten = ${totalTapMinutes} Hahn-Minuten.<br>` +
+                `2. Benötigte Zeit mit ${taps2} Hähnen: ${totalTapMinutes} Hahn-Minuten ÷ ${taps2} Hähne = ${time2} Minuten.`;
+            const explanation = `Je mehr Hähne gleichzeitig das Becken füllen, desto kürzer dauert es, das Becken zu füllen. Dies ist ein antiproportionaler Zusammenhang.`;
+            return { text, solution: time2.toString(), calculationSteps, explanation, verbalExplanation };
+        },
+        // 6. Anzahl Fahrzeuge -> Fahrten (Personentransport)
+        function() {
+            const totalPeople = Math.floor(Math.random() * 100 + 50); // 50 bis 149 Personen
+            const capacityPerVehicle = Math.floor(Math.random() * 20 + 20); // 20 bis 39 Personen pro Fahrzeug
+
+            // Berechne die minimal benötigte Anzahl Fahrten für eine Fahrzeuganzahl
+            const vehicles1 = Math.floor(Math.random() * 3 + 1); // 1 bis 3 Fahrzeuge
+            const trips1 = Math.ceil(totalPeople / (vehicles1 * capacityPerVehicle));
+
+            const totalCapacity = vehicles1 * capacityPerVehicle * trips1;
+
+            // Mögliche Werte für vehicles2 finden, sodass trips2 ganzzahlig ist
+            let possibleVehicles2 = [];
+            for (let i = 1; i <= totalPeople; i++) {
+                if ((vehicles1 * trips1 * capacityPerVehicle) % (i * capacityPerVehicle) === 0 && i !== vehicles1) {
+                    possibleVehicles2.push(i);
+                }
+            }
+
+            if (possibleVehicles2.length === 0) {
+                return arguments.callee();
+            }
+
+            const vehicles2 = possibleVehicles2[Math.floor(Math.random() * possibleVehicles2.length)];
+            const trips2 = (vehicles1 * trips1 * capacityPerVehicle) / (vehicles2 * capacityPerVehicle);
+
+            const contextOptions = [
+                `${totalPeople} Personen sollen transportiert werden. Mit ${vehicles1} Fahrzeug(en) und ${trips1} Fahrt(en) pro Fahrzeug gelingt dies. Wie viele Fahrten pro Fahrzeug sind mit ${vehicles2} Fahrzeug(en) nötig?`,
+                `Wenn ${vehicles1} Bus(se) mit ${trips1} Fahrt(en) ${totalPeople} Personen befördern, wie viele Fahrten benötigt ein Bus bei Einsatz von ${vehicles2} Bussen?`,
+                `Berechne die Anzahl der Fahrten pro Fahrzeug bei ${vehicles2} Fahrzeug(en), um ${totalPeople} Personen zu transportieren, wenn mit ${vehicles1} Fahrzeug(en) ${trips1} Fahrt(en) nötig sind.`
+            ];
+            const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+            const calculationSteps = [
+                ['Anzahl Fahrzeuge', 'Anzahl Fahrten'],
+                [`${vehicles1}`, `${trips1}`],
+                [`1`, `${vehicles1 * trips1}`],
+                [`${vehicles2}`, `${trips2}`]
+            ];
+            const verbalExplanation = `1. Gesamtfahrten berechnen: ${vehicles1} Fahrzeuge × ${trips1} Fahrten = ${vehicles1 * trips1} Fahrten.<br>` +
+                `2. Benötigte Fahrten pro Fahrzeug mit ${vehicles2} Fahrzeug(en): Gesamtfahrten (${vehicles1 * trips1}) ÷ ${vehicles2} Fahrzeuge = ${trips2} Fahrten.`;
+            const explanation = `Je mehr Fahrzeuge eingesetzt werden, desto weniger Fahrten muss jedes Fahrzeug machen. Dies ist ein antiproportionaler Zusammenhang.`;
+            return { text, solution: trips2.toString(), calculationSteps, explanation, verbalExplanation };
+        }
+    ];
+
+    const contextFunction = contexts[Math.floor(Math.random() * contexts.length)];
+    return contextFunction();
+}
+
+
+    function generateNeitherProblem() {
+        const contexts = [
+            // Wachstum von Kindern
+            function() {
+                const age1 = Math.floor(Math.random() * 3 + 5); // Alter zwischen 5 und 7
+                const height1 = (Math.random() * 0.2 + 1).toFixed(2); // Größe zwischen 1.00m und 1.20m
+                const age2 = age1 + Math.floor(Math.random() * 3 + 1); // Alter 1 bis 3 Jahre älter
+                const contextOptions = [
+                    `Ein Kind ist mit ${age1} Jahren ${height1} m groß. Wie groß ist es mit ${age2} Jahren?`,
+                    `Wenn ein Kind mit ${age1} Jahren ${height1} m misst, welche Größe hat es dann mit ${age2} Jahren?`,
+                    `Berechne die Größe eines Kindes mit ${age2} Jahren, wenn es mit ${age1} Jahren ${height1} m groß ist.`
+                ];
+                const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+                const yearsDifference = age2 - age1;
+                const growthFactors = [0.05, 0.06, 0.07]; // Durchschnittliches Wachstum pro Jahr in m
+                const averageGrowthPerYear = growthFactors[Math.floor(Math.random() * growthFactors.length)];
+                const totalGrowth = (averageGrowthPerYear * yearsDifference).toFixed(2);
+                const solution = (parseFloat(height1) + parseFloat(totalGrowth)).toFixed(2);
+                const calculationSteps = [
+                    ['Alter (Jahre)', 'Größe (m)'],
+                    [`${age1}`, `${height1}`],
+                    [`+${yearsDifference}`, `+${totalGrowth}`],
+                    [`${age2}`, `${solution}`]
+                ];
+                const verbalExplanation = `1. Gesamtes Wachstum berechnen: ${averageGrowthPerYear} m/Jahr × ${yearsDifference} Jahre = ${totalGrowth} m.<br>` +
+                    `2. Endgröße berechnen: ${height1} m + ${totalGrowth} m = ${solution} m.`;
+                const explanation = `Das Wachstum von Kindern ist nicht immer gleich und hängt von vielen Faktoren ab. Deshalb ist der Zusammenhang nicht proportional oder antiproportional.`;
+                return { text, solution, calculationSteps, explanation, verbalExplanation };
+            },
+            // Mäusepopulation ohne den Begriff "exponentiell"
+            function() {
+                const initialPairs = 1; // Ein Mäusepaar
+                const offspringPerPairPerYear = Math.floor(Math.random() * 3 + 2); // 2 bis 4 Nachkommen pro Jahr
+                const years = Math.floor(Math.random() * 3 + 1); // 1 bis 3 Jahre
+                const contextOptions = [
+                    `Ein Mäusepaar bekommt pro Jahr ${offspringPerPairPerYear} Nachkommen. Wie viele Mäuse sind nach ${years} Jahren im Haus?`,
+                    `Wenn ein Mäusepaar jährlich ${offspringPerPairPerYear} Babys bekommt, wie groß ist die Mäusepopulation nach ${years} Jahren?`,
+                    `Berechne die Anzahl der Mäuse nach ${years} Jahren, wenn ein Paar pro Jahr ${offspringPerPairPerYear} Nachkommen hat.`
+                ];
+                const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+                let totalMice = initialPairs;
+                let calculationSteps = [
+                    ['Jahr', 'Neue Mäuse', 'Gesamtmäuse']
+                ];
+                for (let i = 1; i <= years; i++) {
+                    const newMice = totalMice * offspringPerPairPerYear;
+                    totalMice += newMice;
+                    calculationSteps.push([i, newMice, totalMice]);
+                }
+                const solution = totalMice.toFixed(0);
+                const verbalExplanation = `In jedem Jahr vermehrt sich die Mäusepopulation stärker, weil es mehr Mäuse gibt, die Nachwuchs bekommen können.`;
+                const explanation = `Die Anzahl der Mäuse wächst jedes Jahr stärker, weil nicht nur die ursprünglichen Mäuse Nachwuchs bekommen, sondern auch deren Kinder. Daher ist der Zusammenhang nicht proportional oder antiproportional.`;
+                return { text, solution, calculationSteps, explanation, verbalExplanation };
+            },
+            // Grundgebühr + variable Kosten
+            function() {
+                const services = [
+                    {
+                        name: 'Taxi',
+                        baseFee: (Math.random() * 3 + 2).toFixed(2),
+                        minPerKm: 0.5,
+                        maxPerKm: 1
+                    },
+                    {
+                        name: 'Lieferdienst',
+                        baseFee: (Math.random() * 2 + 1).toFixed(2),
+                        minPerKm: 0.3,
+                        maxPerKm: 0.8
+                    }
+                ];
+                const service = services[Math.floor(Math.random() * services.length)];
+                const perKm = (Math.random() * (service.maxPerKm - service.minPerKm) + service.minPerKm).toFixed(2);
+                const distance = Math.floor(Math.random() * 20 + 1);
+                const contextOptions = [
+                    `Ein ${service.name} kostet ${service.baseFee} € Grundgebühr plus ${perKm} € pro Kilometer. Wie viel kostet eine Fahrt über ${distance} Kilometer?`,
+                    `Ein ${service.name} berechnet ${service.baseFee} € Pauschale und ${perKm} € pro km. Wie hoch sind die Kosten für ${distance} km?`,
+                    `Die Fahrt mit dem ${service.name} kostet ${service.baseFee} € Startgebühr und ${perKm} € je km. Was zahlt man für ${distance} km?`
+                ];
+                const text = contextOptions[Math.floor(Math.random() * contextOptions.length)];
+                const variableCost = (perKm * distance).toFixed(2);
+                const totalCost = (parseFloat(service.baseFee) + parseFloat(variableCost)).toFixed(2);
+                const calculationSteps = [
+                    ['Leistung', 'Kosten'],
+                    [`Grundgebühr`, `${service.baseFee} €`],
+                    [`${distance} km × ${perKm} €`, `${variableCost} €`],
+                    [`Gesamtkosten`, `${totalCost} €`]
+                ];
+                const verbalExplanation = `1. Variable Kosten berechnen: ${perKm} € × ${distance} km = ${variableCost} €.<br>` +
+                    `2. Gesamtkosten berechnen: ${service.baseFee} € + ${variableCost} € = ${totalCost} €.`;
+                const explanation = `Da es eine Grundgebühr gibt, ist der Zusammenhang nicht proportional. Wenn die Strecke verdoppelt wird, verdoppeln sich die Gesamtkosten nicht exakt, da die Grundgebühr konstant bleibt.`;
+                return { text, solution: totalCost, calculationSteps, explanation, verbalExplanation };
+            }
+        ];
+
+        const contextFunction = contexts[Math.floor(Math.random() * contexts.length)];
+        return contextFunction();
+    }
+
+    function checkType() {
+        const radios = document.getElementsByName('type');
+        for (const radio of radios) {
+            if (radio.checked) {
+                selectedType = radio.value;
+                break;
+            }
+        }
+
+        if (!selectedType) {
+            alert('Bitte wähle eine Zuordnung aus.');
+            return;
+        }
+
+        if (selectedType === problemType) {
+            feedbackElement.innerHTML = 'Richtig!<br>' + getExplanation();
+            if (problemType === 'proportional' || problemType === 'antiproportional') {
+                answerSection.style.display = 'block';
+                typeSelection.style.display = 'none';
+            } else {
+                score++;
+                scoreElement.textContent = `Punkte: ${score}`;
+                typeSelection.style.display = 'none';
+                nextProblemButton.style.display = 'block';
+            }
+        } else {
+            feedbackElement.innerHTML = 'Falsch.<br>' + getExplanation();
+            score--;
+            scoreElement.textContent = `Punkte: ${score}`;
+            typeSelection.style.display = 'none';
+            nextProblemButton.style.display = 'block';
+        }
+    }
+
+    function checkAnswer() {
+        const userAnswer = parseFloat(answerInput.value.replace(',', '.'));
+
+        if (isNaN(userAnswer)) {
+            alert('Bitte gib eine gültige Zahl ein.');
+            return;
+        }
+
+        const correctAnswer = parseFloat(currentProblem.solution);
+        if (Math.abs(userAnswer - correctAnswer) < 0.01) {
+            feedbackElement.innerHTML = 'Richtig!<br>' + getCalculationExplanation();
+            score++;
+            scoreElement.textContent = `Punkte: ${score}`;
+        } else {
+            feedbackElement.innerHTML = `Falsch. Die richtige Antwort ist ${currentProblem.solution}.<br>` + getCalculationExplanation();
+            score--;
+            scoreElement.textContent = `Punkte: ${score}`;
+        }
+
+        answerSection.style.display = 'none';
+        nextProblemButton.style.display = 'block';
+    }
+
+    function getExplanation() {
+        return currentProblem.explanation;
+    }
+
+    function getCalculationExplanation() {
+        let explanation = 'Schrittweise Berechnung:<br>' + currentProblem.verbalExplanation;
+        explanation += '<br>Berechnungstabelle:<br>';
+        if (Array.isArray(currentProblem.calculationSteps)) {
+            explanation += createTable(currentProblem.calculationSteps);
+        }
+        return explanation;
+    }
+
+    function createTable(data) {
+        let table = '<table>';
+        for (let i = 0; i < data.length; i++) {
+            table += '<tr>';
+            for (let j = 0; j < data[i].length; j++) {
+                if (i === 0) {
+                    table += `<th>${data[i][j]}</th>`;
+                } else {
+                    table += `<td>${data[i][j]}</td>`;
+                }
+            }
+            table += '</tr>';
+        }
+        table += '</table>';
+        return table;
+    }
+</script>
+
+</body>
+</html>
