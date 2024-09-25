@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Vokabeltrainer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f0f8ff;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+        }
+        .word {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 18px;
+            height: 24px;
+        }
+        .counter {
+            margin-top: 30px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vokabeltrainer</h1>
+        <div class="word" id="germanWord">Lade Wörter...</div>
+        <input type="text" id="englishInput" placeholder="Englische Übersetzung eingeben">
+        <br>
+        <button id="checkButton" onclick="checkAnswer()">Überprüfen</button>
+        <button id="nextButton" onclick="zeigeNaechstesWort()" style="display: none;">Weiter</button>
+        <div class="feedback" id="feedback"></div>
+        <div class="counter">Punkte: <span id="points">0</span></div>
+    </div>
+
+    <script>
+        const vokabeln = [
+            { deutsch: "Hamster", englisch: "hamster" },
+            { deutsch: "Katze", englisch: "cat" },
+            { deutsch: "Spinne", englisch: "spider" },
+            { deutsch: "Fisch", englisch: "fish" },
+            { deutsch: "Hund", englisch: "dog" },
+            { deutsch: "Meerschweinchen", englisch: "guinea pig" },
+            { deutsch: "Pony", englisch: "pony" },
+            { deutsch: "Kaninchen", englisch: "rabbit" },
+            { deutsch: "Schildkröte", englisch: "turtle" },
+            { deutsch: "Maus/Mäuse", englisch: "mouse/mice" },
+            { deutsch: "Schlange", englisch: "snake" },
+            { deutsch: "Wellensittich", englisch: "budgie" },
+            { deutsch: "ich habe eine Maus", englisch: "I have a mouse" },
+            { deutsch: "er hat eine Katze", englisch: "he has a cat" },
+            { deutsch: "es ist 2 Jahre alt", englisch: "it is two years old" },
+            { deutsch: "ist 11 Monate alt", englisch: "is eleven months old" },
+            { deutsch: "er ist 5 Wochen alt", englisch: "he is five weeks old" },
+            { deutsch: "die Kaninchen mögen Karotten", englisch: "the rabbits like carrots" },
+            { deutsch: "hast du ein Haustier", englisch: "do you have a pet" },
+            { deutsch: "ja, habe ich", englisch: "yes, I do" },
+            { deutsch: "nein, habe ich nicht", englisch: "no, I don't" },
+            { deutsch: "Was ist es", englisch: "What is it" },
+            { deutsch: "Welche Farbe hat es", englisch: "What color is it" },
+            { deutsch: "Wie alt ist es", englisch: "How old is it" }
+        ];
+
+        let aktuelleVokabeln = [];
+        let punkte = 0;
+        let aktuellesWort = null;
+
+        function mischeArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function starteNeuesRunde() {
+            aktuelleVokabeln = mischeArray([...vokabeln]);
+            punkte = 0;
+            document.getElementById("points").textContent = punkte;
+            zeigeNaechstesWort();
+        }
+
+        function zeigeNaechstesWort() {
+            if (aktuelleVokabeln.length === 0) {
+                alert("Alle Vokabeln wurden richtig beantwortet! Starte eine neue Runde.");
+                starteNeuesRunde();
+                return;
+            }
+            aktuellesWort = aktuelleVokabeln.shift();
+            document.getElementById("germanWord").textContent = aktuellesWort.deutsch;
+            document.getElementById("englishInput").value = "";
+            document.getElementById("feedback").textContent = "";
+            document.getElementById("checkButton").style.display = "inline-block";
+            document.getElementById("nextButton").style.display = "none";
+            document.getElementById("englishInput").disabled = false;
+            document.getElementById("englishInput").focus();
+        }
+
+        function checkAnswer() {
+            const benutzerEingabe = document.getElementById("englishInput").value.trim().toLowerCase();
+            const richtigeAntwort = aktuellesWort.englisch.toLowerCase();
+
+            if (benutzerEingabe === richtigeAntwort) {
+                document.getElementById("feedback").textContent = "Richtig!";
+                punkte++;
+                document.getElementById("points").textContent = punkte;
+            } else {
+                document.getElementById("feedback").innerHTML = `Falsch! Richtig wäre: <strong>${aktuellesWort.englisch}</strong>`;
+                // Wort erneut zur Liste hinzufügen
+                aktuelleVokabeln.push(aktuellesWort);
+            }
+
+            // Disable input and check button, show next button
+            document.getElementById("checkButton").style.display = "none";
+            document.getElementById("nextButton").style.display = "inline-block";
+            document.getElementById("englishInput").disabled = true;
+        }
+
+        // Initialisierung
+        window.onload = starteNeuesRunde;
+    </script>
+</body>
+</html>
