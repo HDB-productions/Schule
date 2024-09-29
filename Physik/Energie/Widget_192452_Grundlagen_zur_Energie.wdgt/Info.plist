@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AllowNetworkAccess</key>
+	<true/>
+	<key>CFBundleDisplayName</key>
+	<string>192452_Grundlagen_zur_Energie</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.edulo.widget192452_Grundlagen_zur_Energie</string>
+	<key>Width</key>
+	<integer>1024</integer>
+	<key>Height</key>
+	<integer>768</integer>
+	<key>MainHTML</key>
+	<string>index.html</string>
+</dict>
+</plist>
