@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inhaltsverzeichnis</title>
-    <style>
+       <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -15,27 +15,41 @@
             color: #333;
         }
         .category {
-            margin: 20px 0;
+            margin: 20px 20px;
             padding: 20px;
             border: 2px solid #ccc;
             border-radius: 10px;
             background-color: #ffffff;
-            display: inline-block;
+            width: calc(100% - 40px);
+            box-sizing: border-box;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+       
         }
         .button {
-            display: inline-block;
-            padding: 15px 25px;
-            margin: 10px;
+            padding: 15px 5px;
+            margin: 1px;
             font-size: 16px;
             text-decoration: none;
             border-radius: 8px;
             color: white;
             transition: background-color 0.3s ease;
+            cursor: pointer;
+            border: none;
+            flex: 1 1 calc(100% / 4 - 20px); /* Ensure buttons are responsive */
+            max-width: 200px;
+            box-sizing: border-box;
         }
         .mathe-button {
             background-color: #FF8C00;
         }
         .mathe-button:hover {
+            background-color: #e67e00;
+        }
+        .mathe-button.active {
             background-color: #e67e00;
         }
         .physik-button {
@@ -62,7 +76,42 @@
         .tool-button:hover {
             background-color: #0b7dda;
         }
+        .link-list {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+        details {
+            margin-top: 10px;
+        }
     </style>
+    <script>
+        function toggleLinks(buttonId, listId) {
+            const button = document.getElementById(buttonId);
+            const list = document.getElementById(listId);
+
+            // Hide all link lists
+            const allLists = document.querySelectorAll('.link-list');
+            allLists.forEach(item => {
+                item.style.display = "none";
+            });
+
+            // Remove active class from all buttons
+            const allButtons = document.querySelectorAll('.button');
+            allButtons.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Toggle visibility of the selected list
+            if (list.style.display === "none" || list.style.display === "") {
+                list.style.display = "block";
+                button.classList.add("active");
+            } else {
+                list.style.display = "none";
+                button.classList.remove("active");
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Willkommen auf HDB's Seite</h1>
@@ -71,17 +120,89 @@
 
     <div class="category" id="faecher">
         <h2>Fächer</h2>
-        <a href="Mathe/MatheIndex.html" class="button mathe-button">Mathe</a>
-        <a href="Physik/PhysikIndex.html" class="button physik-button">Physik</a>
-        <a href="Chemie/ChemieIndex.html" class="button chemie-button">Chemie</a>
-        <a href="Bio/BioIndex.html" class="button bio-button">Biologie</a>
+        <div class="button-container">
+            <button id="mathe-button" class="button mathe-button" onclick="toggleLinks('mathe-button', 'mathe-links')">Mathe</button>
+            <button id="physik-button" class="button physik-button" onclick="toggleLinks('physik-button', 'physik-links')">Physik</button>
+            <button id="chemie-button" class="button chemie-button" onclick="toggleLinks('chemie-button', 'chemie-links')">Chemie</button>
+            <button id="bio-button" class="button bio-button" onclick="toggleLinks('bio-button', 'bio-links')">Biologie</button>
+        </div>
+
+        <div id="mathe-links" class="link-list">
+            <ul>
+                <h2> Mathe </h2>
+                <li><a href="https://www.geogebra.org/m/b9cu3ddk">Schriftliches Rechnen (+ und -) üben</a></li>
+                <li><a href="https://www.geogebra.org/m/zkq75c3d">Runden, Balkendiagramme und Stellenwerttafel üben</a></li>
+                <li><a href="https://www.geogebra.org/m/mkxpqssp">Längen, Flächen und Volumina üben</a></li>
+                <li><a href="https://www.geogebra.org/m/ac7knnpn">Senkrecht und Parallel üben</a></li>
+                <li><a href="Mathe/Online-Rechner zum Lösen von Gleichungen.html">Äquivalenzumformungen üben</a></li>
+                <details>
+                    <summary>Bruchrechnung</summary>
+                    <ul>
+                        <li><a href="https://www.alice.edu.tum.de/bruchrechnen.html#">Buch: Bruchrechnung TU-München</a></li>
+                        <li><a href="https://www.geogebra.org/m/Fa8jjyk9">Buch(GGB): Bruchrechnung Wolfgang Wengler</a></li>
+                        <li><a href="https://www.geogebra.org/m/wpd732cy">Gemischte Zahl in unechten Bruch umwandeln</a></li>
+                        <li><a href="https://www.geogebra.org/m/Fa8jjyk9#material/bnakbejz">Brüche Kürzen</a></li>
+                        <li><a href="Mathe/Brüche Addieren.html">Brüche Addieren</a></li>
+                        <li><a href="https://www.geogebra.org/m/rjmufxgn">Rechnen mit Brüchen</a></li>
+                        <li><a href="https://www.geogebra.org/m/jexewg5q">Bruch zu Dezimal</a></li>
+                        <li><a href="Mathe/Bruch darstellen.html">Brüche darstellen</a></li>
+                    </ul>
+                </details>
+                <li><a href="Mathe/Schriftlich Dividieren mit Komma.htm">Schriftliche Division</a></li>
+                <li><a href="Mathe/Proportional oder antiproportional.html">Proportional oder antiproportional</a></li>
+            </ul>
+        </div>
+
+        <div id="physik-links" class="link-list">
+            <ul>
+                <h2> Physik </h2>
+                <li><a href="Physik/Taschenrechner.html">Basis HTML-Taschenrechner</a></li>
+                <li><a href="https://phet.colorado.edu/sims/html/circuit-construction-kit-ac-virtual-lab/latest/circuit-construction-kit-ac-virtual-lab_de.html">Schaltkreis Labor</a></li>
+                <li><a href="https://www.geogebra.org/m/dy2pvatq">Schaltungsanalyse</a></li>
+                <li><a href="Physik/edulo E-LehreII/start.html">Buch E-LehreII(JG9/10)</a></li>
+                <li><a href="Physik/Kernphysik/start.html">Buch Kernphysik(JG9/10)</a></li>
+                <li><a href="Physik/Edulo Mechanik/start.html">Buch Mechanik 7/8</a></li>
+                <li><a href="Physik/Energie/start.html">Buch Energie 7/8</a></li>
+                <details>
+                    <summary>Bewegungslehre</summary>
+                    <ul>
+                        <li><a href="https://www.geogebra.org/m/zum6cgxk">Gleichförmige Bewegung in Diagrammen Dargestellt</a></li>
+                        <li><a href="https://www.geogebra.org/m/wbjtce3t">Bewegungsgleichung aus Diagramm ablesen Übung</a></li>
+                        <li><a href="https://www.geogebra.org/m/hadax75z">t-v und t-s Diagramm Gleichförmige Bewegung</a></li>
+                        <li><a href="https://www.geogebra.org/m/xswe7nkf">Formelzeichen und Einheiten zuordnen s,v,a,t</a></li>
+                    </ul>
+                </details>
+                <li><a href="Physik/Bewegung_in_Kraftfeldern 1(Gravitationsfeld).html">Bewegung in Kraftfeldern 1 (Gravitationsfeld)</a></li>
+                <li><a href="Physik/Bewegung_in_Kraftfeldern 2 (Elektrisches Feld).html">Bewegung in Kraftfeldern 2 (Elektrisches Feld)</a></li>
+            </ul>
+        </div>
+
+        <div id="chemie-links" class="link-list">
+            <ul>
+                <h2>Chemie</h2>
+                <li><a href="Chemie/GHS-Quiz.html">Hier geht's zum GHS-Quiz</a></li>
+                <li><a href="Chemie/Edulo Laborführerschen/start.html">Edulo Laborführerschein</a></li>
+                <li><a href="Chemie/Edulo Stoffeigenschaften/start.html">Stoffeigenschaften</a></li>
+            </ul>
+        </div>
+
+        <div id="bio-links" class="link-list">
+            <ul>
+                <h2>Bio</h2>
+                <li><a href="Bio/Edulo Bio/start.html">Buch Bio 5/6</a></li>
+            </ul>
+        </div>
     </div>
 
     <div class="category" id="tools">
+        
         <h2>Tools</h2>
+        <div class="button-container">
         <a href="Taschenrechner.html" class="button tool-button">Einfacher Taschenrechner</a>
+        <a href="https://www.geogebra.org/cas?lang=de" class="button tool-button">Geogebra CAS</a>
         <a href="Gleichungen Handschriftlich.html" class="button tool-button">Gleichungseditor (Mathematisch)</a>
         <a href="Chemische Gleichungen schreiben.html" class="button tool-button">Gleichungseditor (Chemisch)</a>
+    </div>
     </div>
 </body>
 </html>
