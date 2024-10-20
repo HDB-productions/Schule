@@ -1,0 +1,59 @@
+/* style.css */
+
+
+
+/* Stil für die Quadrate, die die Erde repräsentieren */
+.square {
+    width: 50px; /* oder eine Größe Ihrer Wahl */
+    height: 50px;
+    background-color: #3e3e3e; /* Dunkelgrau für Erde */
+    border: 1px solid #2e2e2e; /* Etwas dunklerer Rand für Definition */
+}
+
+/* Stil für die Quadrate, die die Wurzeln repräsentieren */
+.black {
+    background-color: #a67c52; /* Hell- bis Mittelbraun für Wurzeln */
+}
+
+/* Optional: Stil für die hervorgehobenen Grenzlinien */
+.border-highlight {
+    box-shadow: 0 0 3px 1px #blue; /* Hellblaue Schattierung für Hervorhebung */
+}
+
+/* Stil für die Pfeile, die auf die Grenzfläche zeigen */
+.arrow {
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid #00BFFF; /* Hellblau für das Pfeilsymbol */
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+#game-container {
+    position: relative;
+    width: 250px; /* Oder die Breite Ihres Spielfelds */
+    height: 580px
+}
+
+#flower-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px; /* Anpassen basierend auf der gewünschten Größe */
+    height: 15
+    0px; /* Anpassen basierend auf der gewünschten Größe */
+    object-fit: cover; /* Zuschneiden, um die Größe zu erfüllen */
+}
+
+
+#grid {
+    top: 300px; /* Platz für das Bild oben lassen */
+    display: grid;
+    grid-template-columns: repeat(5, 50px);
+    grid-template-rows: repeat(5, 50px);
+    gap: 2px;
+    position: relative;
+}
