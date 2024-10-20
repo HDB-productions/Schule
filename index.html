@@ -4,28 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inhaltsverzeichnis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .category {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #ffffff;
+            display: inline-block;
+        }
+        .button {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .mathe-button {
+            background-color: #FF8C00;
+        }
+        .mathe-button:hover {
+            background-color: #e67e00;
+        }
+        .physik-button {
+            background-color: #4682B4;
+        }
+        .physik-button:hover {
+            background-color: #3b6b8e;
+        }
+        .chemie-button {
+            background-color: #FF1493;
+        }
+        .chemie-button:hover {
+            background-color: #e01383;
+        }
+        .bio-button {
+            background-color: #32CD32;
+        }
+        .bio-button:hover {
+            background-color: #2cab2c;
+        }
+        .tool-button {
+            background-color: #2196F3;
+        }
+        .tool-button:hover {
+            background-color: #0b7dda;
+        }
+    </style>
 </head>
 <body>
     <h1>Willkommen auf HDB's Seite</h1>
     <p>Hier findest du Links der von mir im Unterricht genutzten (zum Teil selbst erstellten) Materialien nach Fächern sortiert.</p>
-    <p>Sollte Interesse bestehen kann ich die Link-Sammlung bei Zeiten erweitern</p> 
-    <p></p>
-    <a href="Mathe/MatheIndex.html">Hier geht's zur Mathe-Seite</a>
-    <p></p>
-    <a href="Physik/PhysikIndex.html">Hier geht's zur Physik-Seite</a>
-    <p></p>
-    <a href="Chemie/ChemieIndex.html">Hier geht's zur Chemie-Seite</a>
-    <p></p>
-    <a href="Bio/BioIndex.html">Hier geht's zur Bio-Seite</a>
-    <p></p>
-    <a href="Taschenrechner.html">Einfacher Taschenrechner</a>
-    <p></p>
-    <a href="Gleichungen Handschriftlich.html">Gleichungseditor mit Handschrifterkennung (Mathematisch)</a>
-    <p></p>
-    <a href="Chemische Gleichungen schreiben.html">Gleichungseditor mit Handschrifterkennung (Chemisch)</a>
+    <p>Sollte Interesse bestehen, kann ich die Link-Sammlung bei Zeiten erweitern.</p>
 
-    
- 
+    <div class="category" id="faecher">
+        <h2>Fächer</h2>
+        <a href="Mathe/MatheIndex.html" class="button mathe-button">Mathe</a>
+        <a href="Physik/PhysikIndex.html" class="button physik-button">Physik</a>
+        <a href="Chemie/ChemieIndex.html" class="button chemie-button">Chemie</a>
+        <a href="Bio/BioIndex.html" class="button bio-button">Biologie</a>
+    </div>
 
+    <div class="category" id="tools">
+        <h2>Tools</h2>
+        <a href="Taschenrechner.html" class="button tool-button">Einfacher Taschenrechner</a>
+        <a href="Gleichungen Handschriftlich.html" class="button tool-button">Gleichungseditor (Mathematisch)</a>
+        <a href="Chemische Gleichungen schreiben.html" class="button tool-button">Gleichungseditor (Chemisch)</a>
+    </div>
 </body>
 </html>
