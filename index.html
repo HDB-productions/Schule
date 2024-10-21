@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inhaltsverzeichnis</title>
-       <style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -27,11 +27,10 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-       
         }
         .button {
             padding: 15px 5px;
-            margin: 1px;
+            margin: 5px;
             font-size: 16px;
             text-decoration: none;
             border-radius: 8px;
@@ -39,7 +38,7 @@
             transition: background-color 0.3s ease;
             cursor: pointer;
             border: none;
-            flex: 1 1 calc(100% / 4 - 20px); /* Ensure buttons are responsive */
+            flex: 1 1 200px;
             max-width: 200px;
             box-sizing: border-box;
         }
@@ -121,93 +120,94 @@
     <div class="category" id="faecher">
         <h2>Fächer</h2>
         <div class="button-container">
-            <button id="mathe-button" class="button mathe-button" onclick="toggleLinks('mathe-button', 'mathe-links')">Mathe</button>
-            <button id="physik-button" class="button physik-button" onclick="toggleLinks('physik-button', 'physik-links')">Physik</button>
-            <button id="chemie-button" class="button chemie-button" onclick="toggleLinks('chemie-button', 'chemie-links')">Chemie</button>
-            <button id="bio-button" class="button bio-button" onclick="toggleLinks('bio-button', 'bio-links')">Biologie</button>
+            <a id="mathe-button" class="button mathe-button" onclick="toggleLinks('mathe-button', 'mathe-links')" href="javascript:void(0)">Mathe</a>
+            <a id="physik-button" class="button physik-button" onclick="toggleLinks('physik-button', 'physik-links')" href="javascript:void(0)">Physik</a>
+            <a id="chemie-button" class="button chemie-button" onclick="toggleLinks('chemie-button', 'chemie-links')" href="javascript:void(0)">Chemie</a>
+            <a id="bio-button" class="button bio-button" onclick="toggleLinks('bio-button', 'bio-links')" href="javascript:void(0)">Biologie</a>
         </div>
 
         <div id="mathe-links" class="link-list">
+            <h2>Mathe</h2>
             <ul>
-                <h2> Mathe </h2>
-                <li><a href="https://www.geogebra.org/m/b9cu3ddk">Schriftliches Rechnen (+ und -) üben</a></li>
-                <li><a href="https://www.geogebra.org/m/zkq75c3d">Runden, Balkendiagramme und Stellenwerttafel üben</a></li>
-                <li><a href="https://www.geogebra.org/m/mkxpqssp">Längen, Flächen und Volumina üben</a></li>
-                <li><a href="https://www.geogebra.org/m/ac7knnpn">Senkrecht und Parallel üben</a></li>
-                <li><a href="Mathe/Online-Rechner zum Lösen von Gleichungen.html">Äquivalenzumformungen üben</a></li>
+                <li><a href="https://www.geogebra.org/m/b9cu3ddk" target="_blank">Schriftliches Rechnen (+ und -) üben</a></li>
+                <li><a href="https://www.geogebra.org/m/zkq75c3d" target="_blank">Runden, Balkendiagramme und Stellenwerttafel üben</a></li>
+                <li><a href="https://www.geogebra.org/m/mkxpqssp" target="_blank">Längen, Flächen und Volumina üben</a></li>
+                <li><a href="https://www.geogebra.org/m/ac7knnpn" target="_blank">Senkrecht und Parallel üben</a></li>
+                <li><a href="mathe/Online-Rechner zum Lösen von Gleichungen.html">Äquivalenzumformungen üben</a></li>
                 <details>
                     <summary>Bruchrechnung</summary>
                     <ul>
-                        <li><a href="https://www.alice.edu.tum.de/bruchrechnen.html#">Buch: Bruchrechnung TU-München</a></li>
-                        <li><a href="https://www.geogebra.org/m/Fa8jjyk9">Buch(GGB): Bruchrechnung Wolfgang Wengler</a></li>
-                        <li><a href="https://www.geogebra.org/m/wpd732cy">Gemischte Zahl in unechten Bruch umwandeln</a></li>
-                        <li><a href="https://www.geogebra.org/m/Fa8jjyk9#material/bnakbejz">Brüche Kürzen</a></li>
-                        <li><a href="Mathe/Brüche Addieren.html">Brüche Addieren</a></li>
-                        <li><a href="https://www.geogebra.org/m/rjmufxgn">Rechnen mit Brüchen</a></li>
-                        <li><a href="https://www.geogebra.org/m/jexewg5q">Bruch zu Dezimal</a></li>
-                        <li><a href="Mathe/Bruch darstellen.html">Brüche darstellen</a></li>
+                        <li><a href="https://www.alice.edu.tum.de/bruchrechnen.html#" target="_blank">Buch: Bruchrechnung TU-München</a></li>
+                        <li><a href="https://www.geogebra.org/m/Fa8jjyk9" target="_blank">Buch(GGB): Bruchrechnung Wolfgang Wengler</a></li>
+                        <li><a href="https://www.alice.edu.tum.de/bruchrechnen.html#" target="_blank">Buch: Bruchrechnung TU-München</a></li>
+                        <li><a href="https://www.geogebra.org/m/wpd732cy" target="_blank">Gemischte Zahl in unechten Bruch umwandeln</a></li>
+                        <li><a href="https://www.geogebra.org/m/Fa8jjyk9#material/bnakbejz" target="_blank">Brüche kürzen</a></li>
+                        <li><a href="mathe/Brüche Addieren.html" target="_blank">Brüche addieren</a></li>
+                        <li><a href="https://www.geogebra.org/m/rjmufxgn" target="_blank">Rechnen mit Brüchen</a></li>
+                        <li><a href="https://www.geogebra.org/m/jexewg5q" target="_blank">Bruch zu Dezimal</a></li>
+                        <li><a href="mathe/Bruch%20darstellen.html" target="_blank">Brüche darstellen</a></li>
                     </ul>
                 </details>
-                <li><a href="Mathe/Schriftlich Dividieren mit Komma.htm">Schriftliche Division</a></li>
-                <li><a href="Mathe/Proportional oder antiproportional.html">Proportional oder antiproportional</a></li>
+                <li><a href="mathe/Schriftlich Dividieren mit Komma.htm" target="_blank">Schriftliche Division</a></li>
+                <li><a href="mathe/Proportional oder antiproportional.html" target="_blank">Proportional oder antiproportional</a></li>
             </ul>
         </div>
 
         <div id="physik-links" class="link-list">
+            <h2>Physik</h2>
             <ul>
-                <h2> Physik </h2>
-                <li><a href="Physik/Taschenrechner.html">Basis HTML-Taschenrechner</a></li>
-                <li><a href="https://phet.colorado.edu/sims/html/circuit-construction-kit-ac-virtual-lab/latest/circuit-construction-kit-ac-virtual-lab_de.html">Schaltkreis Labor</a></li>
-                <li><a href="https://www.geogebra.org/m/dy2pvatq">Schaltungsanalyse</a></li>
-                <li><a href="Physik/edulo E-LehreII/start.html">Buch E-LehreII(JG9/10)</a></li>
-                <li><a href="Physik/Kernphysik/start.html">Buch Kernphysik(JG9/10)</a></li>
-                <li><a href="Physik/Edulo Mechanik/start.html">Buch Mechanik 7/8</a></li>
-                <li><a href="Physik/Energie/start.html">Buch Energie 7/8</a></li>
+                <li><a href="Physik/Taschenrechner.html" target="_blank">Basis HTML-Taschenrechner</a></li>
+                <li><a href="https://phet.colorado.edu/sims/html/circuit-construction-kit-ac-virtual-lab/latest/circuit-construction-kit-ac-virtual-lab_de.html" target="_blank">Schaltkreis Labor</a></li>
+                <li><a href="https://www.geogebra.org/m/dy2pvatq" target="_blank">Schaltungsanalyse</a></li>
+                <li><a href="Physik/edulo E-LehreII/start.html" target="_blank">Buch E-LehreII(JG9/10)</a></li>
+                <li><a href="Physik/Kernphysik/start.html" target="_blank">Buch Kernphysik(JG9/10)</a></li>
+                <li><a href="Physik/Edulo Mechanik/start.html" target="_blank">Buch Mechanik 7/8</a></li>
+                <li><a href="Physik/Energie/start.html" target="_blank">Buch Energie 7/8</a></li>
                 <details>
                     <summary>Bewegungslehre</summary>
                     <ul>
-                        <li><a href="https://www.geogebra.org/m/zum6cgxk">Gleichförmige Bewegung in Diagrammen Dargestellt</a></li>
-                        <li><a href="https://www.geogebra.org/m/wbjtce3t">Bewegungsgleichung aus Diagramm ablesen Übung</a></li>
-                        <li><a href="https://www.geogebra.org/m/hadax75z">t-v und t-s Diagramm Gleichförmige Bewegung</a></li>
-                        <li><a href="https://www.geogebra.org/m/xswe7nkf">Formelzeichen und Einheiten zuordnen s,v,a,t</a></li>
+                        <li><a href="https://www.geogebra.org/m/zum6cgxk" target="_blank">Gleichförmige Bewegung in Diagrammen dargestellt</a></li>
+                        <li><a href="https://www.geogebra.org/m/wbjtce3t" target="_blank">Bewegungsgleichung aus Diagramm ablesen Übung</a></li>
+                        <li><a href="https://www.geogebra.org/m/hadax75z" target="_blank">t-v und t-s Diagramm Gleichförmige Bewegung</a></li>
+                        <li><a href="https://www.geogebra.org/m/xswe7nkf" target="_blank">Formelzeichen und Einheiten zuordnen s,v,a,t</a></li>
                     </ul>
                 </details>
-                <li><a href="Physik/Bewegung_in_Kraftfeldern 1(Gravitationsfeld).html">Bewegung in Kraftfeldern 1 (Gravitationsfeld)</a></li>
-                <li><a href="Physik/Bewegung_in_Kraftfeldern 2 (Elektrisches Feld).html">Bewegung in Kraftfeldern 2 (Elektrisches Feld)</a></li>
+                <li><a href="Physik/Bewegung_in_Kraftfeldern 1(Gravitationsfeld).html" target="_blank">Bewegung in Kraftfeldern 1 (Gravitationsfeld)</a></li>
+                <li><a href="Physik/Bewegung_in_Kraftfeldern 2 (Elektrisches Feld).html" target="_blank">Bewegung in Kraftfeldern 2 (Elektrisches Feld)</a></li>
             </ul>
         </div>
 
         <div id="chemie-links" class="link-list">
+            <h2>Chemie</h2>
             <ul>
-                <h2>Chemie</h2>
-                <li><a href="Chemie/GHS-Quiz.html">Hier geht's zum GHS-Quiz</a></li>
-                <li><a href="Chemie/Edulo Laborführerschen/start.html">Edulo Laborführerschein</a></li>
-                <li><a href="Chemie/Edulo Stoffeigenschaften/start.html">Stoffeigenschaften</a></li>
+                <li><a href="Chemie/GHS-Quiz.html" target="_blank">GHS-Quiz</a></li>
+                <li><a href="Edulo Laborführerschen/start.html" target="_blank">Edulo Laborführerschein</a></li>  
+                <li><a href="Edulo Stoffeigenschaften/start.html" target="_blank">Stoffeigenschaften</a> </li>
             </ul>
         </div>
 
         <div id="bio-links" class="link-list">
+            <h2>Bio</h2>
             <ul>
-                <h2>Bio</h2>
-                <li><a href="Bio/Edulo Bio/start.html">Buch Bio 5/6</a></li>
+                <li><a href="Bio/Edulo Bio/start.html" target="_blank">Buch Bio 5/6</a></li>
             </ul>
         </div>
     </div>
 
     <div class="category" id="tools">
-        
         <h2>Tools</h2>
         <div class="button-container">
-        <a href="Taschenrechner.html" class="button tool-button">Einfacher Taschenrechner</a>
-        <a href="https://www.geogebra.org/cas?lang=de" class="button tool-button">Geogebra CAS</a>
-        <a href="Gleichungen Handschriftlich.html" class="button tool-button">Gleichungseditor (Mathematisch)</a>
-        <a href="Chemische Gleichungen schreiben.html" class="button tool-button">Gleichungseditor (Chemisch)</a>
-    </div>
+            <a href="Taschenrechner.html" class="button tool-button" target="_blank">Einfacher Taschenrechner</a>
+            <a href="https://www.geogebra.org/" class="button tool-button" target="_blank">Geogebra</a>
+            <a href="https://www.geogebra.org/cas?lang=de" class="button tool-button" target="_blank">Geogebra CAS</a>
+            <a href="Gleichungen Handschriftlich.html" class="button tool-button">Gleichungseditor (Mathematisch)</a>
+            <a href="Chemische Gleichungen schreiben.html" class="button tool-button">Gleichungseditor (Chemisch)</a>
+            <a href="https://www.edulo.com/" class="button tool-button" target="_blank">Edulo</a>
+            <a href="https://chatgpt.com" class="button tool-button" target="_blank">ChatGPT</a>
+        </div>
     </div>
     <div class="category">
-        <h2 ><a href="https://www.youtube.com/@HDB-AES" target="_blank">Youtube Kanal</a></h2>
-     
-        
+        <h2><a href="https://www.youtube.com/@HDB-AES" target="_blank">Youtube Kanal</a></h2>
     </div>
 </body>
 </html>
