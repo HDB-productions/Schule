@@ -4,16 +4,14 @@
     <title>Mein Taschenrechner</title>
     <style>
         table {
-            border:none;
+            border: none;
             border-collapse: collapse;
             margin: 10px;
             padding: 10px;
             background-color: black;
             border-radius: 10px;
-
-            
         }
-
+		input { background-color: grey;}
         td {
             padding: 10px;
             text-align: center;
@@ -22,7 +20,7 @@
 
         #ergebnis {
             color: white;
-   			font-size: 30px;
+            font-size: 30px;
             display: block;
             margin: 0 auto 10px auto;
             padding: 5px;
@@ -31,7 +29,7 @@
             max-width: 800px;
             text-align: right;
             border: 1px solid rgb(139, 137, 137);
-            box-sizing: border-box; /* added to include padding in element width */
+            box-sizing: border-box;
         }
 
         /* Klassen für die Knöpfe */
@@ -67,7 +65,7 @@
 <body>
     <table>
         <tr>
-            <td colspan="5"><input type="text" id="ergebnis" disabled></td>
+            <td colspan="5"><input type="text" id="ergebnis" readonly></td>
         </tr>
         <tr>
             <td><button onclick="eingabe('1')">1</button></td>
@@ -90,33 +88,36 @@
             <td><button class="rechenzeichen" onclick="eingabe('*')">*</button></td>
             <td><button class="rechenzeichen" onclick="eingabe('/')">/</button></td>
         </tr>
-		<tr>
-			<td><button onclick="eingabe('0')">0</button></td>
-			<td><button onclick="eingabe('.')">.</button></td>
-		    <td><button class="rechenzeichen" onclick="eingabe('(')">(</button></td>
+        <tr>
+            <td><button onclick="eingabe('0')">0</button></td>
+            <td><button onclick="eingabe('.')">.</button></td>
+            <td><button class="rechenzeichen" onclick="eingabe('(')">(</button></td>
             <td><button class="rechenzeichen" onclick="eingabe(')')">)</button></td>
-			<td><button class="ergebnis" onclick="ergebnis()">=</button></td>
-		</tr>
-		<tr>
-			
-		</tr>
-	</table>
-	<script>
-		function eingabe(zahl) {
-			document.getElementById("ergebnis").value += zahl;
-		}
+            <td><button class="ergebnis" onclick="ergebnis()">=</button></td>
+        </tr>
+    </table>
+    <script>
+        function eingabe(zahl) {
+            document.getElementById("ergebnis").value += zahl;
+        }
 
-		function ergebnis() {
-			document.getElementById("ergebnis").value = eval(document.getElementById("ergebnis").value);
-		}
+        function ergebnis() {
+            try {
+                let ausdruck = document.getElementById("ergebnis").value;
+                document.getElementById("ergebnis").value = eval(ausdruck);
+            } catch (e) {
+                document.getElementById("ergebnis").value = "Fehler";
+            }
+        }
 
-		function loeschen() {
-			document.getElementById("ergebnis").value = "";
-		}
+        function loeschen() {
+            document.getElementById("ergebnis").value = "";
+        }
+
         function del() {
-        var ergebnis = document.getElementById("ergebnis");
-        ergebnis.value = ergebnis.value.substring(0, ergebnis.value.length - 1);
-    }
-	</script>
+            var ergebnis = document.getElementById("ergebnis");
+            ergebnis.value = ergebnis.value.slice(0, -1);
+        }
+    </script>
 </body>
 </html>
