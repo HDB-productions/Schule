@@ -11,7 +11,6 @@
             text-align: center;
             border: 1px solid black;    
         }
-          
         
         canvas {
             border: 1px solid black;
@@ -19,6 +18,7 @@
             margin: 0 auto;
             background-color: #f0f0f0;
             user-select: none; /* Textauswahl verhindern */
+            touch-action: none; /* Standard-Touch-Gesten deaktivieren */
         }
         body {
             text-align: center;
@@ -68,14 +68,13 @@
     // Hauptzeichenfunktion
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-       // Zeichnen des Textes 'HDB 2024' unten rechts im Canvas
+        // Zeichnen des Textes 'HDB 2024' unten rechts im Canvas
         ctx.save(); // Zustand des Kontextes speichern
         ctx.font = '16px Arial'; // Schriftgröße und -art festlegen
         ctx.fillStyle = 'black'; // Füllfarbe festlegen
-        ctx.fillText('HDB 2024', 520, 390); // Text an Position (550, 390) zeichnen
+        ctx.fillText('HDB 2024', 520, 390); // Text an Position (520, 390) zeichnen
         ctx.restore(); // Zustand des Kontextes wiederherstellen
 
-        
         // Zeichnen des Power-Buttons
         ctx.save();
         ctx.translate(powerButton.x, powerButton.y);
@@ -92,7 +91,7 @@
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(0, -powerButton.radius + 8);
-        ctx.lineTo(0, -powerButton.radius + 15);
+        ctx.lineTo(0, -powerButton.radius + 20);
         ctx.stroke();
         ctx.restore();
 
@@ -164,10 +163,10 @@
 
             if (isReversed) {
                 // Umgekehrte Polung: Elektronen fließen von oben nach unten
-                angle = Math.atan2(dy, dx) + Math.PI / 2;
+                angle = Math.atan2(dy, dx) + Math.PI / 2 + Math.PI;
             } else {
                 // Normale Polung: Elektronen fließen von unten nach oben
-                angle = Math.atan2(dy, dx) + Math.PI / 2 + Math.PI;
+                angle = Math.atan2(dy, dx) + Math.PI / 2;
             }
 
             // Zeichnen der Polungssymbole an den gewünschten Positionen
@@ -219,18 +218,19 @@
         requestAnimationFrame(draw);
     }
 
-    // Event Listener für die Interaktivität des 'x' Markers und der Buttons
-    canvas.addEventListener('mousedown', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    // Funktion zur Erkennung der Berührungspunkte
+    function getTouchPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: e.touches[0].clientX - rect.left,
+            y: e.touches[0].clientY - rect.top
+        };
+    }
 
-        let rect = canvas.getBoundingClientRect();
-        let mouseX = e.clientX - rect.left;
-        let mouseY = e.clientY - rect.top;
-
-        // Prüfen, ob der Power-Button geklickt wurde
-        let dx = mouseX - powerButton.x;
-        let dy = mouseY - powerButton.y;
+    // Event Listener für Maus- und Touch-Ereignisse
+    function handlePointerStart(x, y) {
+        let dx = x - powerButton.x;
+        let dy = y - powerButton.y;
         if (Math.sqrt(dx * dx + dy * dy) <= powerButton.radius) {
             voltageOn = !voltageOn;
             if (!voltageOn) {
@@ -239,19 +239,27 @@
             return;
         }
 
-        // Prüfen, ob der Polungsknopf geklickt wurde
-        if (voltageOn) {
-            if (mouseX >= polarityButton.x && mouseX <= polarityButton.x + polarityButton.width &&
-                mouseY >= polarityButton.y && mouseY <= polarityButton.y + polarityButton.height) {
-                isReversed = !isReversed;
-                return;
-            }
+        if (voltageOn && x >= polarityButton.x && x <= polarityButton.x + polarityButton.width &&
+            y >= polarityButton.y && y <= polarityButton.y + polarityButton.height) {
+            isReversed = !isReversed;
+            return;
         }
 
         // 'x' Marker ist immer interaktiv
-        if (Math.hypot(mouseX - xMarker.x, mouseY - xMarker.y) < xMarker.size * 2) {
+        if (Math.hypot(x - xMarker.x, y - xMarker.y) < xMarker.size * 2) {
             xMarker.isDragging = true;
         }
+    }
+
+    canvas.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let rect = canvas.getBoundingClientRect();
+        let mouseX = e.clientX - rect.left;
+        let mouseY = e.clientY - rect.top;
+
+        handlePointerStart(mouseX, mouseY);
     });
 
     canvas.addEventListener('mousemove', function(e) {
@@ -272,14 +280,42 @@
     canvas.addEventListener('mouseup', function(e) {
         e.preventDefault();
         e.stopPropagation();
-
         xMarker.isDragging = false;
     });
 
     canvas.addEventListener('mouseout', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        xMarker.isDragging = false;
+    });
 
+    // Touch-Event-Handling für Tablets
+    canvas.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let touchPos = getTouchPos(e);
+        handlePointerStart(touchPos.x, touchPos.y);
+    });
+
+    canvas.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (xMarker.isDragging) {
+            let touchPos = getTouchPos(e);
+            let mouseX = touchPos.x - ellipseCenter.x;
+            let mouseY = touchPos.y - ellipseCenter.y;
+
+            // Berechnen des Winkels basierend auf der Touchposition und Ellipsenradien
+            xMarkerAngle = Math.atan2(mouseY / ellipseRadiusY, mouseX / ellipseRadiusX);
+            updateXMarkerPosition();
+        }
+    });
+
+    canvas.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         xMarker.isDragging = false;
     });
 
