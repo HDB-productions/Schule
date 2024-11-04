@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Magnetfeld eines stromdurchflossenen Leiters</title>
+    <style>
+        h1 {
+            font-size: 26px;
+            width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            border: 1px solid black;    
+        }
+          
+        
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 0 auto;
+            background-color: #f0f0f0;
+            user-select: none; /* Textauswahl verhindern */
+        }
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Magnetfeld eines stromdurchflossenen Leiters</h1>
+<canvas id="canvas" width="600" height="400"></canvas>
+
+<script>
+    // Variablen für Spannung und Polung
+    let voltageOn = false; // Anfangszustand: Spannung aus
+    let isReversed = false; // Anfangszustand: normale Polung
+
+    // Holen des Canvas und Kontextes
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Initialisierung der Elektronenpositionen
+    let electronPositions = [];
+    for (let i = 0; i < 50; i++) {
+        electronPositions.push({ y: Math.random() * canvas.height });
+    }
+
+    // Initialisierung der Ellipse und des 'x' Markers
+    const ellipseCenter = { x: canvas.width / 2, y: canvas.height / 2 };
+    const ellipseRadiusX = 150;
+    const ellipseRadiusY = 50;
+    let xMarkerAngle = 0; // Startwinkel des 'x' auf der Ellipse
+
+    // Funktion zur Aktualisierung der xMarker-Position basierend auf dem Winkel
+    function updateXMarkerPosition() {
+        xMarker.x = ellipseCenter.x + ellipseRadiusX * Math.cos(xMarkerAngle);
+        xMarker.y = ellipseCenter.y + ellipseRadiusY * Math.sin(xMarkerAngle);
+    }
+
+    let xMarker = { x: 0, y: 0, size: 10, isDragging: false };
+    updateXMarkerPosition(); // Initiale Position des xMarkers
+
+    // Definition der Buttons im Canvas
+    const powerButton = { x: 30, y: 30, radius: 20 };
+    const polarityButton = { x: powerButton.x + powerButton.radius + 10, y: powerButton.y - 15, width: 130, height: 30 };
+
+    // Hauptzeichenfunktion
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+       // Zeichnen des Textes 'HDB 2024' unten rechts im Canvas
+        ctx.save(); // Zustand des Kontextes speichern
+        ctx.font = '16px Arial'; // Schriftgröße und -art festlegen
+        ctx.fillStyle = 'black'; // Füllfarbe festlegen
+        ctx.fillText('HDB 2024', 520, 390); // Text an Position (550, 390) zeichnen
+        ctx.restore(); // Zustand des Kontextes wiederherstellen
+
+        
+        // Zeichnen des Power-Buttons
+        ctx.save();
+        ctx.translate(powerButton.x, powerButton.y);
+        // Hintergrund des Buttons
+        ctx.beginPath();
+        ctx.arc(0, 0, powerButton.radius, 0, Math.PI * 2);
+        ctx.fillStyle = voltageOn ? 'green' : 'gray';
+        ctx.fill();
+        // Symbol des Buttons
+        ctx.beginPath();
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 3;
+        ctx.arc(0, 0, powerButton.radius - 8, -Math.PI / 2, Math.PI * 1.5);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, -powerButton.radius + 8);
+        ctx.lineTo(0, -powerButton.radius + 15);
+        ctx.stroke();
+        ctx.restore();
+
+        // Zeichnen des Polungsknopfes, wenn Spannung an ist
+        if (voltageOn) {
+            ctx.save();
+            ctx.fillStyle = 'lightgray';
+            ctx.fillRect(polarityButton.x, polarityButton.y, polarityButton.width, polarityButton.height);
+            ctx.strokeStyle = 'black';
+            ctx.strokeRect(polarityButton.x, polarityButton.y, polarityButton.width, polarityButton.height);
+            ctx.fillStyle = 'black';
+            ctx.font = 'bold 12px Arial';
+            ctx.fillText('Polung vertauschen', polarityButton.x + 10, polarityButton.y + 20);
+            ctx.restore();
+        }
+
+        // Zeichnen der hinteren Hälfte der Ellipse (oberer Teil)
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(ellipseCenter.x, ellipseCenter.y, ellipseRadiusX, ellipseRadiusY, 0, Math.PI, Math.PI * 2);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'gray';
+        ctx.stroke();
+        ctx.restore();
+
+        // Zeichnen des vertikalen Leiters
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2, 0);
+        ctx.lineTo(canvas.width / 2, canvas.height);
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = 'black';
+        ctx.stroke();
+
+        // Zeichnen des 'x' auf der Ellipse (immer sichtbar)
+        ctx.beginPath();
+        ctx.moveTo(xMarker.x - xMarker.size, xMarker.y - xMarker.size);
+        ctx.lineTo(xMarker.x + xMarker.size, xMarker.y + xMarker.size);
+        ctx.moveTo(xMarker.x + xMarker.size, xMarker.y - xMarker.size);
+        ctx.lineTo(xMarker.x - xMarker.size, xMarker.y + xMarker.size);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        let angle; // 'angle' außerhalb des 'if (voltageOn)' Blocks deklarieren
+
+        if (voltageOn) {
+            // Aktualisieren der Elektronenpositionen
+            electronPositions.forEach(pos => {
+                if (isReversed) {
+                    pos.y += 2; // Elektronen fließen von oben nach unten
+                    if (pos.y > canvas.height) pos.y = 0;
+                } else {
+                    pos.y -= 2; // Elektronen fließen von unten nach oben
+                    if (pos.y < 0) pos.y = canvas.height;
+                }
+            });
+
+            // Zeichnen der Elektronen
+            electronPositions.forEach(pos => {
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, pos.y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = 'blue';
+                ctx.fill();
+            });
+
+            // Berechnen des Tangentenwinkels an der Ellipse
+            let dx = -ellipseRadiusX * Math.sin(xMarkerAngle);
+            let dy = ellipseRadiusY * Math.cos(xMarkerAngle);
+
+            if (isReversed) {
+                // Umgekehrte Polung: Elektronen fließen von oben nach unten
+                angle = Math.atan2(dy, dx) + Math.PI / 2;
+            } else {
+                // Normale Polung: Elektronen fließen von unten nach oben
+                angle = Math.atan2(dy, dx) + Math.PI / 2 + Math.PI;
+            }
+
+            // Zeichnen der Polungssymbole an den gewünschten Positionen
+            ctx.font = 'bold 30px Arial';
+            if (isReversed) {
+                // Umgekehrte Polung: '+' unten, '-' oben
+                ctx.fillStyle = 'red';
+                ctx.fillText('+', canvas.width / 2 - 50, ellipseCenter.y + canvas.width / 3);
+                ctx.fillStyle = 'blue';
+                ctx.fillText('-', canvas.width / 2 - 50, ellipseCenter.y - canvas.width / 3.5);
+            } else {
+                // Normale Polung: '+' oben, '-' unten
+                ctx.fillStyle = 'red';
+                ctx.fillText('+', canvas.width / 2 - 50, ellipseCenter.y - canvas.width / 3.5);
+                ctx.fillStyle = 'blue';
+                ctx.fillText('-', canvas.width / 2 - 50, ellipseCenter.y + canvas.width / 3);
+            }
+        }
+
+        // Zeichnen der vorderen Hälfte der Ellipse (unterer Teil)
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(ellipseCenter.x, ellipseCenter.y, ellipseRadiusX, ellipseRadiusY, 0, 0, Math.PI);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'gray';
+        ctx.stroke();
+        ctx.restore();
+
+        // Zeichnen des Magnetfeldpfeils nach allen anderen Elementen
+        if (voltageOn) {
+            // Zeichnen des Magnetfeldpfeils
+            let arrowLength = 50;
+            ctx.save();
+            ctx.translate(xMarker.x, xMarker.y);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, -arrowLength);
+            ctx.moveTo(-5, -arrowLength + 10);
+            ctx.lineTo(0, -arrowLength);
+            ctx.lineTo(5, -arrowLength + 10);
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // Aufruf der nächsten Frame
+        requestAnimationFrame(draw);
+    }
+
+    // Event Listener für die Interaktivität des 'x' Markers und der Buttons
+    canvas.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let rect = canvas.getBoundingClientRect();
+        let mouseX = e.clientX - rect.left;
+        let mouseY = e.clientY - rect.top;
+
+        // Prüfen, ob der Power-Button geklickt wurde
+        let dx = mouseX - powerButton.x;
+        let dy = mouseY - powerButton.y;
+        if (Math.sqrt(dx * dx + dy * dy) <= powerButton.radius) {
+            voltageOn = !voltageOn;
+            if (!voltageOn) {
+                isReversed = false; // Polung zurücksetzen
+            }
+            return;
+        }
+
+        // Prüfen, ob der Polungsknopf geklickt wurde
+        if (voltageOn) {
+            if (mouseX >= polarityButton.x && mouseX <= polarityButton.x + polarityButton.width &&
+                mouseY >= polarityButton.y && mouseY <= polarityButton.y + polarityButton.height) {
+                isReversed = !isReversed;
+                return;
+            }
+        }
+
+        // 'x' Marker ist immer interaktiv
+        if (Math.hypot(mouseX - xMarker.x, mouseY - xMarker.y) < xMarker.size * 2) {
+            xMarker.isDragging = true;
+        }
+    });
+
+    canvas.addEventListener('mousemove', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (xMarker.isDragging) {
+            let rect = canvas.getBoundingClientRect();
+            let mouseX = e.clientX - rect.left - ellipseCenter.x;
+            let mouseY = e.clientY - rect.top - ellipseCenter.y;
+
+            // Berechnen des Winkels basierend auf der Mausposition und Ellipsenradien
+            xMarkerAngle = Math.atan2(mouseY / ellipseRadiusY, mouseX / ellipseRadiusX);
+            updateXMarkerPosition();
+        }
+    });
+
+    canvas.addEventListener('mouseup', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        xMarker.isDragging = false;
+    });
+
+    canvas.addEventListener('mouseout', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        xMarker.isDragging = false;
+    });
+
+    // Starten der Zeichenschleife
+    draw();
+</script>
+
+</body>
+</html>
