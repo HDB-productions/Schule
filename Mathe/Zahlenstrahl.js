@@ -220,7 +220,16 @@ function markiereZahl(KontainerID, zahl, farbe = 'black', sichtbar = true, beweg
     group.dataset.value = gerundeterWert;
 
     // Erstellen des "×" Symbols
-    const crossSize = 10; // Größe des "×"
+    const crossSize = 10; // Basisgröße des "×"
+
+    // Ermitteln des minimal erforderlichen Abstands, um die Pfeilspitze nicht zu überdecken
+    const minLineLength = crossSize * 4; // Da mindestens ein Viertel der Linie sichtbar bleiben soll
+
+    // Berechnung der tatsächlichen Pfeillinienlänge
+    // In diesem Kontext ist es nicht ganz klar, was der Abstand eines Kreuzes ist.
+    // Da Kreuze nur Symbole sind, bleibt die Anpassung des Kreuz-Symbols möglicherweise nicht relevant.
+    // Falls der Kreuz-Symbol-Offset zu klein ist, hier könnte eine Anpassung vorgenommen werden.
+    // Aktuell wird das Kreuz einfach als zwei Linien über der Hauptlinie gezeichnet.
 
     // Erstes Linie des "×"
     const line1 = document.createElementNS(svgNS, 'line');
@@ -338,6 +347,20 @@ function markierePfeil(KontainerID, start, operator, value, farbe = 'black', sic
     markerCounter++;
     const markerId = `arrowhead-${markerCounter}`;
 
+    // Dynamische Skalierung der Pfeilspitze basierend auf der Pfeillinienlänge
+    const arrowLineLength = Math.abs(end - start) * pixelsPerUnit;
+    let arrowHeadSize = 10; // Basisgröße des Pfeilkopfs
+
+    // Berechnung der maximalen Pfeillinienlänge, die nicht von der Pfeilspitze überdeckt wird
+    const minVisibleLine = arrowLineLength * 0.25; // Mindestens 25% der Linie sichtbar
+
+    if (arrowLineLength < 4 * arrowHeadSize) { // Wenn die Linie weniger als 4 * Basisgröße ist
+        arrowHeadSize = arrowLineLength / 4; // Skalieren der Pfeilspitze
+        if (arrowHeadSize < 3) { // Mindestgröße der Pfeilspitze
+            arrowHeadSize = 3;
+        }
+    }
+
     // Definieren des Pfeilkopfs
     const svgNS = "http://www.w3.org/2000/svg";
     const defs = svg.querySelector('defs') || (() => {
@@ -348,28 +371,28 @@ function markierePfeil(KontainerID, start, operator, value, farbe = 'black', sic
 
     const marker = document.createElementNS(svgNS, 'marker');
     marker.setAttribute('id', markerId);
-    marker.setAttribute('markerWidth', '10');
-    marker.setAttribute('markerHeight', '7');
-    marker.setAttribute('refX', '10');
-    marker.setAttribute('refY', '3.5');
+    marker.setAttribute('markerWidth', arrowHeadSize);
+    marker.setAttribute('markerHeight', arrowHeadSize / 2);
+    marker.setAttribute('refX', arrowHeadSize);
+    marker.setAttribute('refY', (arrowHeadSize / 4));
     marker.setAttribute('orient', 'auto');
     marker.setAttribute('markerUnits', 'strokeWidth');
 
     const arrowPath = document.createElementNS(svgNS, 'path');
-    arrowPath.setAttribute('d', 'M0,0 L10,3.5 L0,7 Z');
+    arrowPath.setAttribute('d', `M0,0 L${arrowHeadSize},${arrowHeadSize / 2} L0,${arrowHeadSize} Z`);
     arrowPath.setAttribute('fill', farbe);
     marker.appendChild(arrowPath);
     defs.appendChild(marker);
 
     // Erstellen der Pfeillinie
-    const line = document.createElementNS(svgNS, 'line');
-    line.setAttribute('x1', 0);
-    line.setAttribute('y1', lineY);
-    line.setAttribute('x2', (end - start) * pixelsPerUnit);
-    line.setAttribute('y2', lineY);
-    line.setAttribute('stroke', farbe);
-    line.setAttribute('stroke-width', '2');
-    line.setAttribute('marker-end', `url(#${markerId})`);
+    const lineElem = document.createElementNS(svgNS, 'line');
+    lineElem.setAttribute('x1', 0);
+    lineElem.setAttribute('y1', lineY);
+    lineElem.setAttribute('x2', (end - start) * pixelsPerUnit);
+    lineElem.setAttribute('y2', lineY);
+    lineElem.setAttribute('stroke', farbe);
+    lineElem.setAttribute('stroke-width', '2');
+    lineElem.setAttribute('marker-end', `url(#${markerId})`);
 
     // Erstellen eines Gruppen-Elements
     const group = document.createElementNS(svgNS, 'g');
@@ -394,7 +417,7 @@ function markierePfeil(KontainerID, start, operator, value, farbe = 'black', sic
     group.dataset.start = gerundeterStart;
     group.dataset.change = gerundeterChange;
 
-    group.appendChild(line);
+    group.appendChild(lineElem);
 
     // Optional: Beschriftung der Veränderung
     if (sichtbar) {
@@ -555,23 +578,85 @@ function loescheMarkierung(markID) {
 }
 
 /**
- * Funktion zum Auflisten aller Markierungen in einem Container
- * @param {string} containerID - Die ID des Containers
+ * Grundlegende Funktion zum Abrufen aller Markierungen in einem Container.
+ * @param {string} containerID - Die ID des Containers.
+ * @returns {Array} - Ein Array von Markierungsobjekten.
  */
-function listeMarkierungen(containerID) {
+function getMarkierungen(containerID) {
     const container = document.getElementById(containerID);
     if (!container) {
-        alert('Kontainer mit der angegebenen ID nicht gefunden.');
-        return;
+        console.error(`Kontainer mit der ID "${containerID}" nicht gefunden.`);
+        return [];
     }
 
     const svg = container.querySelector('svg');
     if (!svg) {
-        alert('Es wurde kein SVG-Zahlenstrahl im angegebenen Container gefunden.');
-        return;
+        console.error(`Es wurde kein SVG-Zahlenstrahl im Container "${containerID}" gefunden.`);
+        return [];
     }
 
     const markierungen = svg.querySelectorAll('g[id^="mark-"]');
+    const markierungenArray = [];
+
+    markierungen.forEach(mark => {
+        const markID = mark.id;
+        const classes = mark.classList;
+        let typ = 'Unbekannt';
+        if (classes.contains('cross')) typ = 'Kreuz';
+        if (classes.contains('arrow')) typ = 'Pfeil';
+
+        const transform = parseTransform(mark.getAttribute('transform'));
+        const posX = transform.x;
+        const posY = transform.y;
+
+        // Farbe extrahieren
+        let farbe = 'Unbekannt';
+        if (typ === 'Kreuz') {
+            const line1 = mark.querySelector('line:nth-child(1)');
+            farbe = line1 ? line1.getAttribute('stroke') : 'Unbekannt';
+        } else if (typ === 'Pfeil') {
+            const line = mark.querySelector('line');
+            farbe = line ? line.getAttribute('stroke') : 'Unbekannt';
+        }
+
+        // Weitere Daten je nach Typ sammeln
+        let weitereDaten = {};
+        if (typ === 'Kreuz') {
+            const value = mark.dataset.value;
+            weitereDaten = {
+                value: parseFloat(value)
+            };
+        } else if (typ === 'Pfeil') {
+            const start = mark.dataset.start;
+            const change = mark.dataset.change;
+            weitereDaten = {
+                start: parseFloat(start),
+                change: parseFloat(change)
+            };
+        }
+
+        // Bewegbarkeit
+        const bewegbar = classes.contains('movable');
+
+        markierungenArray.push({
+            id: markID,
+            typ: typ,
+            farbe: farbe,
+            position: { x: posX, y: posY },
+            bewegbar: bewegbar,
+            ...weitereDaten
+        });
+    });
+
+    return markierungenArray;
+}
+
+/**
+ * Funktion zum Auflisten aller Markierungen in einem Container
+ * @param {string} containerID - Die ID des Containers
+ */
+function listeMarkierungen(containerID) {
+    const markierungen = getMarkierungen(containerID);
     if (markierungen.length === 0) {
         alert('Keine Markierungen im angegebenen Container gefunden.');
         return;
@@ -589,52 +674,25 @@ function listeMarkierungen(containerID) {
                     <th>Farbe</th>
                     <th>Position (x)</th>
                     <th>Position (y)</th>
+                    <th>Bewegbar</th>
                 </tr>
             </thead>
             <tbody>
     `;
 
     markierungen.forEach(mark => {
-        const markID = mark.id;
-        const classes = mark.classList;
-        let typ = 'Unbekannt';
-        if (classes.contains('cross')) typ = 'Kreuz';
-        if (classes.contains('arrow')) typ = 'Pfeil';
-
-        const transform = parseTransform(mark.getAttribute('transform'));
-        const posX = transform.x.toFixed(2);
-        const posY = transform.y.toFixed(2);
-
-        // Farbe extrahieren
-        let farbe = 'Unbekannt';
-        if (typ === 'Kreuz') {
-            const line1 = mark.querySelector('line:nth-child(1)');
-            farbe = line1 ? line1.getAttribute('stroke') : 'Unbekannt';
-        } else if (typ === 'Pfeil') {
-            const line = mark.querySelector('line');
-            farbe = line ? line.getAttribute('stroke') : 'Unbekannt';
-        }
-
-        // Weitere Daten je nach Typ sammeln
-        let weitereDaten = '';
-        if (typ === 'Kreuz') {
-            const value = mark.dataset.value;
-            weitereDaten = `Wert: ${value}`;
-        } else if (typ === 'Pfeil') {
-            const start = mark.dataset.start;
-            const change = mark.dataset.change;
-            weitereDaten = `Start: ${start}, Änderung: ${change}`;
-        }
+        const { id, typ, farbe, position, bewegbar, value, start, change } = mark;
 
         tableHTML += `
             <tr>
-                <td>${markID}</td>
+                <td>${id}</td>
                 <td>${typ}</td>
-                <td>${typ === 'Pfeil' ? mark.dataset.start : mark.dataset.value}</td>
-                <td>${typ === 'Pfeil' ? mark.dataset.change : '—'}</td>
+                <td>${typ === 'Pfeil' ? start : value}</td>
+                <td>${typ === 'Pfeil' ? change : '—'}</td>
                 <td style="background-color: ${farbe};">${farbe}</td>
-                <td>${posX}</td>
-                <td>${posY}</td>
+                <td>${position.x.toFixed(2)}</td>
+                <td>${position.y.toFixed(2)}</td>
+                <td>${bewegbar ? 'Ja' : 'Nein'}</td>
             </tr>
         `;
     });
@@ -651,6 +709,27 @@ function listeMarkierungen(containerID) {
     } else {
         console.error('Bereich zur Anzeige der Markierungen (ID: markierungenAnzeige) nicht gefunden.');
     }
+}
+
+/**
+ * Grundlegende Funktion zur Überprüfung, ob ein bestimmter Punkt markiert ist.
+ * @param {string} containerID - Die ID des Containers.
+ * @param {number} zahl - Die Zahl, die überprüft werden soll.
+ * @returns {Array} - Ein Array von Markierungsobjekten, die den Punkt repräsentieren.
+ */
+function checkMarkierung(containerID, zahl) {
+    const markierungen = getMarkierungen(containerID);
+    const passendeMarkierungen = markierungen.filter(mark => {
+        if (mark.typ === 'Kreuz') {
+            return mark.value === zahl;
+        } else if (mark.typ === 'Pfeil') {
+            // Für Pfeile könnte man definieren, welche Eigenschaft überprüft werden soll
+            // Zum Beispiel ob die Startzahl oder die Endzahl gleich der gesuchten Zahl ist
+            return mark.start === zahl || (mark.start + mark.change) === zahl;
+        }
+        return false;
+    });
+    return passendeMarkierungen;
 }
 
 /**
@@ -757,5 +836,28 @@ function initializeEventListeners() {
     }
 }
 
-// Initialisiert die Event-Listener, sobald das DOM vollständig geladen ist
+/**
+ * Grundlegende Funktion zur Überprüfung, ob ein bestimmter Punkt markiert ist.
+ * @param {string} containerID - Die ID des Containers.
+ * @param {number} zahl - Die Zahl, die überprüft werden soll.
+ * @returns {Array} - Ein Array von Markierungsobjekten, die den Punkt repräsentieren.
+ */
+function checkMarkierung(containerID, zahl) {
+    const markierungen = getMarkierungen(containerID);
+    const passendeMarkierungen = markierungen.filter(mark => {
+        if (mark.typ === 'Kreuz') {
+            return mark.value === zahl;
+        } else if (mark.typ === 'Pfeil') {
+            // Hier kannst du festlegen, welche Eigenschaft du überprüfen möchtest
+            // Zum Beispiel ob die Startzahl oder die Endzahl gleich der gesuchten Zahl ist
+            return mark.start === zahl || (mark.start + mark.change) === zahl;
+        }
+        return false;
+    });
+    return passendeMarkierungen;
+}
+
+/**
+ * Initialisiert die Event-Listener, sobald das DOM vollständig geladen ist.
+ */
 document.addEventListener('DOMContentLoaded', initializeEventListeners);
