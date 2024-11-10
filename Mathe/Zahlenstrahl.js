@@ -222,15 +222,6 @@ function markiereZahl(KontainerID, zahl, farbe = 'black', sichtbar = true, beweg
     // Erstellen des "×" Symbols
     const crossSize = 10; // Basisgröße des "×"
 
-    // Ermitteln des minimal erforderlichen Abstands, um die Pfeilspitze nicht zu überdecken
-    const minLineLength = crossSize * 4; // Da mindestens ein Viertel der Linie sichtbar bleiben soll
-
-    // Berechnung der tatsächlichen Pfeillinienlänge
-    // In diesem Kontext ist es nicht ganz klar, was der Abstand eines Kreuzes ist.
-    // Da Kreuze nur Symbole sind, bleibt die Anpassung des Kreuz-Symbols möglicherweise nicht relevant.
-    // Falls der Kreuz-Symbol-Offset zu klein ist, hier könnte eine Anpassung vorgenommen werden.
-    // Aktuell wird das Kreuz einfach als zwei Linien über der Hauptlinie gezeichnet.
-
     // Erstes Linie des "×"
     const line1 = document.createElementNS(svgNS, 'line');
     line1.setAttribute('x1', -crossSize / 2);
@@ -450,39 +441,62 @@ function markierePfeil(KontainerID, start, operator, value, farbe = 'black', sic
 
 /**
  * Funktion zum Starten des Dragging.
- * @param {MouseEvent} evt - Das Mausereignis.
+ * @param {MouseEvent | TouchEvent} evt - Das Maus- oder Touchereignis.
  */
 function startDrag(evt) {
-    const target = evt.target.closest('g.movable');
+    let event = evt;
+    if (evt.type.startsWith('touch')) {
+        event = evt.touches[0];
+    }
+
+    const target = event.target.closest('g.movable');
     if (target) {
         selectedElement = target;
         selectedSVG = target.ownerSVGElement;
-        const mousePos = getMousePosition(evt, selectedSVG);
+        const mousePos = getPointerPosition(event, selectedSVG);
         const transform = selectedElement.getAttribute('transform');
         const translate = parseTransform(transform);
         offsetX = mousePos.x - translate.x;
-        document.addEventListener('mousemove', onDrag);
-        document.addEventListener('mouseup', endDrag);
+
+        if (evt.type.startsWith('touch')) {
+            document.addEventListener('touchmove', onDrag, { passive: false });
+            document.addEventListener('touchend', endDrag);
+        } else {
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('mouseup', endDrag);
+        }
         evt.preventDefault();
     }
 }
 
 /**
  * Funktion zum Beenden des Dragging.
- * @param {MouseEvent} evt - Das Mausereignis.
+ * @param {MouseEvent | TouchEvent} evt - Das Maus- oder Touchereignis.
  */
 function endDrag(evt) {
     selectedElement = null;
     selectedSVG = null;
-    document.removeEventListener('mousemove', onDrag);
-    document.removeEventListener('mouseup', endDrag);
+    if (evt.type.startsWith('touch')) {
+        document.removeEventListener('touchmove', onDrag);
+        document.removeEventListener('touchend', endDrag);
+    } else {
+        document.removeEventListener('mousemove', onDrag);
+        document.removeEventListener('mouseup', endDrag);
+    }
 }
 
 /**
  * Funktion zum Bewegen des Elements während des Dragging.
- * @param {MouseEvent} evt - Das Mausereignis.
+ * @param {MouseEvent | TouchEvent} evt - Das Maus- oder Touchereignis.
  */
 function onDrag(evt) {
+    evt.preventDefault(); // Verhindert das Scrollen auf Touch-Geräten
+
+    let event = evt;
+    if (evt.type.startsWith('touch')) {
+        event = evt.touches[0];
+    }
+
     if (selectedElement && selectedSVG) {
         const containerID = selectedSVG.parentElement.id;
         const container = document.getElementById(containerID);
@@ -496,7 +510,7 @@ function onDrag(evt) {
         const canvasWidth = parseFloat(container.dataset.canvasWidth);
         const decimalPlaces = parseInt(container.dataset.decimalPlaces, 10);
 
-        const mousePos = getMousePosition(evt, selectedSVG);
+        const mousePos = getPointerPosition(event, selectedSVG);
         let newX = mousePos.x - offsetX;
 
         // Begrenzung auf den Zahlenstrahl
@@ -547,12 +561,12 @@ function onDrag(evt) {
 }
 
 /**
- * Hilfsfunktion zum Berechnen der Mausposition relativ zum SVG.
- * @param {MouseEvent} evt - Das Mausereignis.
+ * Hilfsfunktion zum Berechnen der Maus- oder Touchposition relativ zum SVG.
+ * @param {MouseEvent | Touch} evt - Das Maus- oder Touchereignis.
  * @param {SVGSVGElement} svg - Das SVG-Element.
  * @returns {object} - Ein Objekt mit x und y Koordinaten.
  */
-function getMousePosition(evt, svg) {
+function getPointerPosition(evt, svg) {
     const CTM = svg.getScreenCTM();
     return {
         x: (evt.clientX - CTM.e) / CTM.a,
@@ -560,8 +574,9 @@ function getMousePosition(evt, svg) {
     };
 }
 
-// Event-Listener für Dragging starten
+// Event-Listener für Dragging starten (Mouse und Touch)
 document.addEventListener('mousedown', startDrag);
+document.addEventListener('touchstart', startDrag, { passive: false });
 
 /**
  * Funktion zum Löschen einer Markierung anhand ihrer ID
