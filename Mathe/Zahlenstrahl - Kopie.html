@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Zahlenstrahl</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            position: relative;
+            width: 900px;
+            height: 200px; /* Erhöht, um Platz für Markierungen und Containername zu bieten */
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        svg {
+            border: 1px solid black;
+            display: block; /* Verhindert unerwünschte Abstände */
+            margin: 0 auto; /* Zentriert das SVG innerhalb des Containers */
+        }
+        /* Stil für Container-Namen */
+        .container-name {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+        }
+        /* Stil für Formulare */
+        .forms-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            width: 100%;
+            max-width: 1800px;
+            margin: 10px auto;
+            flex-wrap: wrap;
+        }
+        .form-container {
+            flex: 1;
+            min-width: 250px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-container h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .form-group label {
+            width: 200px;
+            margin-right: 5px;
+            text-align: right;
+        }
+        .form-group input, .form-group select {
+            flex: 1;
+            padding: 5px; /* Abstand um den Text herum */
+            width: 100%; /* Füllt den verfügbaren Platz */
+            min-width: 50px; /* Mindestbreite für kleine Bildschirme */
+        }
+
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-left: 0;
+        }
+        .form-group button {
+            padding: 5px 10px;
+            cursor: pointer;
+            position: relative;
+            margin:auto;  
+        }
+        @media (max-width: 600px) {
+            .forms-container {
+                flex-direction: column;
+                width: 100%;
+            }
+            .form-group label {
+                width: 100%;
+                text-align: left;
+                margin-bottom: 5px;
+            }
+            .form-group input, .form-group select, .form-group button {
+                width: 100%;
+                margin-left: 0;
+            }
+            .form-group button {
+                margin-left: 0;
+            }
+        }
+        /* Stil für die Markierungsauflistung */
+        #markierungenTabelle {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        #markierungenTabelle th, #markierungenTabelle td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: left;
+        }
+        #markierungenTabelle th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Zahlenstrahl mit Markierung</h2>
+
+<!-- Container für die Formulare -->
+<div class="forms-container">
+    <!-- Formular zum Zeichnen eines Zahlenstrahls -->
+    <div class="form-container">
+        <h3>Zahlenstrahl zeichnen</h3>
+        <form id="zahlenstrahlForm">
+            <div class="form-group">
+                <label for="min">Min:</label>
+                <input type="number" id="min" name="min" step="any" value="0" required>
+            </div>
+            <div class="form-group">
+                <label for="max">Max:</label>
+                <input type="number" id="max" name="max" step="any" value="100" required>
+            </div>
+            <div class="form-group">
+                <label for="skalierung">Skalierung (z.B. -4 für 10⁻⁴):</label>
+                <input type="number" id="skalierung" name="skalierung" step="1" value="1" required>
+            </div>
+            <div class="form-group">
+                <label for="containerID">Container ID:</label>
+                <input type="text" id="containerID" name="containerID" value="kontainer" required>
+            </div>
+            <div class="form-group">
+                <label for="farbe">Farbe der Beschriftung:</label>
+                <input type="color" id="farbe" name="farbe" value="#000000">
+            </div>
+            <div class="form-group">
+                <button type="submit">Zeichne Zahlenstrahl</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Formular zum Markieren einer Zahl (Kreuz) -->
+    <div class="form-container">
+        <h3>Zahl markieren (Kreuz)</h3>
+        <form id="kreuzForm">
+            <div class="form-group">
+                <label for="kreuzContainerID">Container ID:</label>
+                <input type="text" id="kreuzContainerID" name="kreuzContainerID" value="kontainer" required>
+            </div>
+            <div class="form-group">
+                <label for="kreuzZahl">Zahl:</label>
+                <input type="number" id="kreuzZahl" name="kreuzZahl" step="any" value="50" required>
+            </div>
+            <div class="form-group">
+                <label for="kreuzFarbe">Farbe:</label>
+                <input type="color" id="kreuzFarbe" name="kreuzFarbe" value="#ff0000">
+            </div>
+            <div class="form-group">
+                <label for="kreuzSichtbar">Zahlenwert anzeigen:</label>
+                <input type="checkbox" id="kreuzSichtbar" name="kreuzSichtbar" checked>
+            </div>
+            <div class="form-group">
+                <label for="kreuzBewegbar">Bewegbar:</label>
+                <input type="checkbox" id="kreuzBewegbar" name="kreuzBewegbar" checked>
+            </div>
+            <div class="form-group">
+                <button type="submit">Markiere Kreuz</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Formular zum Erstellen eines Pfeils -->
+    <div class="form-container">
+        <h3>Pfeil erstellen</h3>
+        <form id="pfeilForm">
+            <div class="form-group">
+                <label for="pfeilContainerID">Container ID:</label>
+                <input type="text" id="pfeilContainerID" name="pfeilContainerID" value="kontainer" required>
+            </div>
+            <div class="form-group">
+                <label for="pfeilStart">Startzahl:</label>
+                <input type="number" id="pfeilStart" name="pfeilStart" step="any" value="50" required>
+            </div>
+            <div class="form-group">
+                <label for="pfeilOperator">Operator:</label>
+                <select id="pfeilOperator" name="pfeilOperator" required>
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="pfeilWert">Wert:</label>
+                <input type="number" id="pfeilWert" name="pfeilWert" step="any" value="10" required>
+            </div>
+            <div class="form-group">
+                <label for="pfeilFarbe">Farbe:</label>
+                <input type="color" id="pfeilFarbe" name="pfeilFarbe" value="#0000FF">
+            </div>
+            <div class="form-group">
+                <label for="pfeilSichtbar">Beschriftung anzeigen:</label>
+                <input type="checkbox" id="pfeilSichtbar" name="pfeilSichtbar" checked>
+            </div>
+            <div class="form-group">
+                <label for="pfeilBewegbar">Bewegbar:</label>
+                <input type="checkbox" id="pfeilBewegbar" name="pfeilBewegbar" checked>
+            </div>
+            <div class="form-group">
+                <button type="submit">Erstelle Pfeil</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Formular zum Löschen einer Markierung -->
+    <div class="form-container">
+        <h3>Markierung löschen</h3>
+        <form id="loescheMarkierungForm">
+            <div class="form-group">
+                <label for="markID">Markierungs-ID:</label>
+                <input type="text" id="markID" name="markID" placeholder="z.B. mark-1" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Lösche Markierung</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Formular zum Auflisten der Markierungen -->
+    <div class="form-container">
+        <h3>Markierungen auflisten</h3>
+        <form id="listeMarkierungenForm">
+            <div class="form-group">
+                <label for="listeContainerID">Container ID:</label>
+                <input type="text" id="listeContainerID" name="listeContainerID" value="kontainer" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Liste Markierungen</button>
+            </div>
+        </form>
+        <!-- Bereich zur Anzeige der Markierungen -->
+        <div id="markierungenAnzeige">
+            <!-- Tabelle zur Anzeige der Markierungen wird hier eingefügt -->
+        </div>
+    </div>
+</div>
+
+<!-- Container für die Zahlenstrahlen -->
+<div id="kontainer" class="container">
+    <div class="container-name">ID: kontainer</div>
+</div>
+<div id="andererKontainer" class="container">
+    <div class="container-name">ID: andererKontainer</div>
+</div>
+
+<!-- Einbinden des externen JavaScript-Dokuments -->
+<script src="Zahlenstrahl.js"></script>
+
+</body>
+</html>

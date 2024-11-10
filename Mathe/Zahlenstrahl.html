@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Zahlenstrahl Übung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #kontainer {
+            position: relative;
+            width: 900px;
+            margin: auto;
+        }
+        #zahlenstrahlCanvas {
+            border: 1px solid black;
+            touch-action: none;
+        }
+        .marker {
+            position: absolute;
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            touch-action: none;
+            color: black;
+            z-index: 10; /* Sicherstellen, dass Marker oben liegen */
+        }
+        .marker.correct {
+            color: green;
+            cursor: default;
+            pointer-events: none; /* Blockiert keine Ereignisse */
+        }
+        .marker.incorrect {
+            color: red;
+            cursor: default;
+            pointer-events: none; /* Verhindert Blockierung der Hauptmarker */
+        }
+        .label {
+            position: absolute;
+            font-size: 14px;
+            transform: translateX(-50%);
+            user-select: none;
+            pointer-events: none;
+        }
+        button {
+            display: block; /* Sicherstellen, dass der Button als Block-Element dargestellt wird */
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="kontainer"></div>
+
+<script>
+function erzeugeZahlenstrahl(Min, Max, Skalierung, KontainerID, Aufgabe) {
+    // Hauptskalierungseinheit berechnen (Zehnerpotenz)
+    var HauptskalierungEinheit = Math.pow(10, Skalierung);
+    var FeinskalaEinheit = HauptskalierungEinheit / 10;
+    //Funktion zur Bestimmung der Anzahl der Dezimalstellen basierend auf FeinskalaEinheit
+    function getDecimalPlaces(feinskalaEinheit) {
+        if (1- Skalierung >= 0) {
+            return 1- Skalierung;
+        } else {
+            return 0;
+        }
+    }
+
+    var decimalPlaces = getDecimalPlaces(FeinskalaEinheit);
+
+    // Kontainer Element
+    var kontainer = document.getElementById(KontainerID);
+    kontainer.innerHTML = ''; // Inhalt leeren
+    kontainer.style.position = 'relative';
+
+    // Aufgabe parsen
+    var aufgabeTeile = Aufgabe.split(',');
+    var aufgabenTyp = aufgabeTeile[0].trim().toLowerCase(); // Kleinbuchstaben für bessere Vergleichbarkeit
+
+    // Variablen für die Aufgabe
+    var aufgabenParameter, startZahl, operand, yStr, zahl, endZahl;
+
+    if (aufgabenTyp === "markiere") {
+        if (aufgabeTeile.length < 2) {
+            alert('Für den Aufgabentyp "markiere" müssen 2 Parameter angegeben werden: markiere, x');
+            return;
+        }
+        aufgabenParameter = parseFloat(aufgabeTeile[1].trim()).toFixed(decimalPlaces);
+    } else if (aufgabenTyp === "berechne") {
+        if (aufgabeTeile.length < 4) {
+            alert('Für den Aufgabentyp "berechne" müssen 4 Parameter angegeben werden: berechne, x, o, y');
+            return;
+        }
+        startZahl = parseFloat(aufgabeTeile[1].trim());
+        operand = aufgabeTeile[2].trim();
+        yStr = aufgabeTeile[3].trim();
+        zahl = parseFloat(yStr);
+
+        // Berechne das Endergebnis basierend auf dem Operator
+        if (operand === '+') {
+            endZahl = startZahl + zahl;
+        } else if (operand === '-') {
+            endZahl = startZahl - zahl;
+        } else {
+            alert('Ungültiger Operator. Bitte verwenden Sie "+" oder "-".');
+            return;
+        }
+
+        // Runde endZahl auf die entsprechende Dezimalstelle
+        endZahl = parseFloat(endZahl.toFixed(decimalPlaces));
+    } else {
+        alert('Unbekannter Aufgabentyp. Bitte verwenden Sie "Markiere" oder "Berechne".');
+        return;
+    }
+
+    // Überschrift hinzufügen
+    var aufgabenText = document.createElement('h3');
+    if (aufgabenTyp === "markiere") {
+        aufgabenText.innerText = "Markiere " + parseFloat(aufgabenParameter).toFixed(decimalPlaces) + " auf dem Zahlenstrahl";
+    } else if (aufgabenTyp === "berechne") {
+        // Wenn yStr beginnt mit + oder -, setze es in Klammern
+        if (yStr.startsWith('+') || yStr.startsWith('-')) {
+            aufgabenText.innerText = `Berechne: ${startZahl} ${operand} (${yStr})`;
+        } else {
+            aufgabenText.innerText = `Berechne: ${startZahl} ${operand} ${yStr}`;
+        }
+    }
+    kontainer.appendChild(aufgabenText);
+
+    // Canvas für den Zahlenstrahl erstellen
+    var canvas = document.createElement('canvas');
+    canvas.id = 'zahlenstrahlCanvas';
+    canvas.width = 800;
+    canvas.height = 100;
+    kontainer.appendChild(canvas);
+
+    var ctx = canvas.getContext('2d');
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'black';
+    ctx.strokeStyle = 'black';
+
+    // Zahlenstrahl zeichnen
+    var paddingLeft = 50;
+    var paddingRight = 50;
+    var lineY = 50;
+
+    // Zeichne die Hauptlinie
+    ctx.beginPath();
+    ctx.moveTo(paddingLeft, lineY);
+    ctx.lineTo(canvas.width - paddingRight, lineY);
+    ctx.stroke();
+
+    var totalWidth = canvas.width - paddingLeft - paddingRight;
+    var range = Max - Min;
+    var pixelsPerUnit = totalWidth / range;
+
+    // Hauptskalierung zeichnen mit integer-basierter Schleife zur Vermeidung von Fließkomma-Fehlern
+    var startHaupt = Math.ceil(Min / HauptskalierungEinheit) * HauptskalierungEinheit;
+    var numSteps = Math.round((Max - startHaupt) / HauptskalierungEinheit);
+
+    for (var i = 0; i <= numSteps; i++) {
+        var x = startHaupt + i * HauptskalierungEinheit;
+        // Fixieren von kleinen Fließkommaabweichungen
+        x = parseFloat(x.toFixed(decimalPlaces));
+        if (x > Max) x = Max;
+
+        var xpos = paddingLeft + (x - Min) * pixelsPerUnit;
+        ctx.beginPath();
+        ctx.moveTo(xpos, lineY - 10);
+        ctx.lineTo(xpos, lineY + 10);
+        ctx.stroke();
+
+        // Labels 
+            ctx.fillText(x.toFixed(decimalPlaces), xpos, lineY + 25); // Dynamisch gerundet
+        
+    }
+
+    // Feinskala zeichnen
+    var startFein = Math.ceil(Min / FeinskalaEinheit) * FeinskalaEinheit;
+    var numFeinSteps = Math.round((Max - startFein) / FeinskalaEinheit);
+
+    for (var j = 0; j <= numFeinSteps; j++) {
+        var xFein = startFein + j * FeinskalaEinheit;
+        // Fixieren von kleinen Fließkommaabweichungen
+        xFein = parseFloat(xFein.toFixed(decimalPlaces));
+        if (xFein > Max) xFein = Max;
+
+        var xposFein = paddingLeft + (xFein - Min) * pixelsPerUnit;
+        ctx.beginPath();
+        ctx.moveTo(xposFein, lineY - 5);
+        ctx.lineTo(xposFein, lineY + 5);
+        ctx.stroke();
+    }
+
+   
+
+    // Funktion zur Positionsberechnung basierend auf x-Koordinate
+    function berechneWert(xPixel) {
+        var value = Min + ((xPixel - paddingLeft) / pixelsPerUnit);
+        // Snap to FeinskalaEinheit
+        value = Math.round(value / FeinskalaEinheit) * FeinskalaEinheit;
+        // Begrenzen innerhalb Min und Max
+        value = Math.max(Min, Math.min(Max, value));
+        return parseFloat(value.toFixed(decimalPlaces)); // Dynamisch gerundet
+    }
+
+    // Marker-Variablen
+    var marker, markerStart, markerEnd;
+    var dragging = false;
+    var aktuellerMarker = null;
+
+    // Array zur Speicherung von Fehlermarkierungen
+    var fehlerMarkierungen = [];
+
+    // Funktion zur Erstellung eines Markers
+    function createMarker(id, initialValue) {
+        var marker = document.createElement('div');
+        marker.className = 'marker';
+        marker.innerText = '×';
+        marker.id = id;
+        // Initialposition setzen
+        var xpos = paddingLeft + (initialValue - Min) * pixelsPerUnit;
+        marker.style.top = (canvas.offsetTop + lineY - 12) + 'px';
+        marker.style.left = (xpos - 6) + 'px';
+        marker.style.zIndex = '10'; // Sicherstellen, dass Marker oben liegen
+        kontainer.appendChild(marker);
+        return marker;
+    }
+
+    // Funktion zum Setzen der Marker-Position
+    function setMarkerPosition(markerElement, x) {
+        // Snap to FeinskalaEinheit
+        var value = berechneWert(x);
+        var snappedX = paddingLeft + (value - Min) * pixelsPerUnit;
+        markerElement.style.left = (snappedX - 6) + 'px';
+        return value;
+    }
+
+    // Funktion zum Hinzufügen von Drag-Events zu einem Marker
+    function addDragEvents(markerElement) {
+        markerElement.addEventListener('touchstart', function(e) {
+            if (markerElement.classList.contains('correct')) return;
+            dragging = true;
+            aktuellerMarker = markerElement;
+            e.preventDefault();
+        });
+
+        markerElement.addEventListener('mousedown', function(e) {
+            if (markerElement.classList.contains('correct')) return;
+            dragging = true;
+            aktuellerMarker = markerElement;
+        });
+    }
+
+    // Marker erstellen basierend auf Aufgabentyp
+    if (aufgabenTyp === "markiere") {
+        // Bestehende Marker-Erstellung
+        marker = createMarker('markerMain', parseFloat(aufgabenParameter));
+        addDragEvents(marker);
+    } else if (aufgabenTyp === "berechne") {
+        // Erstellung der beiden Marker für Start und Ende
+        markerStart = createMarker('markerStart', startZahl);
+        markerEnd = createMarker('markerEnd', startZahl); // Anfangs auf Startzahl setzen
+        addDragEvents(markerStart);
+        addDragEvents(markerEnd);
+    }
+
+    // Event-Listener für Mausbewegungen
+    document.addEventListener('mousemove', function(e) {
+        if (dragging && aktuellerMarker) {
+            var rect = canvas.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            // Begrenzung des Bewegungsbereichs
+            x = Math.max(paddingLeft, Math.min(canvas.width - paddingRight, x));
+            setMarkerPosition(aktuellerMarker, x);
+        }
+    });
+
+    // Event-Listener für Touchbewegungen
+    document.addEventListener('touchmove', function(e) {
+        if (dragging && aktuellerMarker) {
+            var touch = e.touches[0];
+            var rect = canvas.getBoundingClientRect();
+            var x = touch.clientX - rect.left;
+            // Begrenzung des Bewegungsbereichs
+            x = Math.max(paddingLeft, Math.min(canvas.width - paddingRight, x));
+            setMarkerPosition(aktuellerMarker, x);
+        }
+    });
+
+    // Event-Listener für das Beenden des Dragging
+    document.addEventListener('mouseup', function(e) {
+        if (dragging) {
+            dragging = false;
+            aktuellerMarker = null;
+        }
+    });
+
+    document.addEventListener('touchend', function(e) {
+        if (dragging) {
+            dragging = false;
+            aktuellerMarker = null;
+        }
+    });
+
+    // Prüfungs Button hinzufügen
+    var pruefenButton = document.createElement('button');
+    pruefenButton.innerText = 'Prüfen';
+    kontainer.appendChild(pruefenButton);
+
+    pruefenButton.addEventListener('click', function() {
+        if (aufgabenTyp === "markiere") {
+            var markerX = parseFloat(marker.style.left) + 6; // center of marker
+            var value = berechneWert(markerX);
+
+            // Toleranz festlegen
+            var toleranz = FeinskalaEinheit / 2;
+
+            if (Math.abs(value - aufgabenParameter) <= toleranz) {
+                // Richtig
+                marker.classList.add('correct');
+                marker.classList.remove('incorrect');
+
+                // Anzeige des korrekten Wertes
+                var korrektText = document.createElement('div');
+                korrektText.className = 'label';
+                korrektText.style.top = (canvas.offsetTop + lineY - 25) + 'px';
+                korrektText.style.left = (paddingLeft + (aufgabenParameter - Min) * pixelsPerUnit) + 'px';
+                korrektText.style.color = 'green';
+                korrektText.innerText = parseFloat(aufgabenParameter).toFixed(decimalPlaces);
+                kontainer.appendChild(korrektText);
+
+                // "Prüfen"-Button ausblenden
+                pruefenButton.style.display = 'none';
+
+                alert('Richtig!');
+                // Hier können Sie eine Funktion aufrufen oder einen Wert zurückgeben
+
+            } else {
+                // Falsch
+                // Prüfen, ob dieser Fehler bereits markiert wurde
+                var bereitsGefunden = fehlerMarkierungen.some(function(fehler) {
+                    return Math.abs(fehler.value - value) <= toleranz;
+                });
+                if (!bereitsGefunden) {
+                    // Neue Fehlermarkierung hinzufügen
+                    var fehlerMarker = document.createElement('div');
+                    fehlerMarker.className = 'marker incorrect';
+                    fehlerMarker.innerText = '×';
+                    fehlerMarker.style.top = (canvas.offsetTop + lineY - 12) + 'px';
+                    fehlerMarker.style.left = (paddingLeft + (value - Min) * pixelsPerUnit - 6) + 'px';
+                    kontainer.appendChild(fehlerMarker);
+
+                    // Fehlerbeschriftung hinzufügen
+                    var fehlerLabel = document.createElement('div');
+                    fehlerLabel.className = 'label';
+                    fehlerLabel.style.top = (canvas.offsetTop + lineY + 15) + 'px';
+                    fehlerLabel.style.left = (paddingLeft + (value - Min) * pixelsPerUnit) + 'px';
+                    fehlerLabel.style.color = 'red';
+                    fehlerLabel.innerText = value.toFixed(decimalPlaces); // Dynamisch gerundet
+                    kontainer.appendChild(fehlerLabel);
+
+                    // Fehler speichern
+                    fehlerMarkierungen.push({value: value, marker: fehlerMarker, label: fehlerLabel});
+                }
+
+                // Richtigstellung für den Benutzer
+                alert('Falsch, versuche es noch einmal.');
+            }
+        } else if (aufgabenTyp === "berechne") {
+            var markerStartX = parseFloat(markerStart.style.left) + 6; // center of start marker
+            var markerEndX = parseFloat(markerEnd.style.left) + 6; // center of end marker
+
+            var startValue = berechneWert(markerStartX);
+            var endValue = berechneWert(markerEndX);
+
+            // Toleranz festlegen
+            var toleranz = FeinskalaEinheit / 2;
+
+            // Überprüfen der Startposition
+            var korrektStartCheck = Math.abs(startValue - startZahl) <= toleranz;
+            // Überprüfen der Endposition
+            var korrektEndCheck = Math.abs(endValue - endZahl) <= toleranz;
+
+            if (korrektStartCheck && korrektEndCheck) {
+                // Beide Positionen sind korrekt
+                markerStart.classList.add('correct');
+                markerStart.classList.remove('incorrect');
+                markerEnd.classList.add('correct');
+                markerEnd.classList.remove('incorrect');
+
+                // Anzeige der korrekten Start- und Endwerte
+                var korrektStartText = document.createElement('div');
+                korrektStartText.className = 'label';
+                korrektStartText.style.top = (canvas.offsetTop + lineY - 25) + 'px';
+                korrektStartText.style.left = (paddingLeft + (startZahl - Min) * pixelsPerUnit) + 'px';
+                korrektStartText.style.color = 'green';
+                korrektStartText.innerText = startZahl.toFixed(decimalPlaces); // Dynamisch gerundet
+                kontainer.appendChild(korrektStartText);
+
+                var korrektEndText = document.createElement('div');
+                korrektEndText.className = 'label';
+                korrektEndText.style.top = (canvas.offsetTop + lineY - 25) + 'px';
+                korrektEndText.style.left = (paddingLeft + (endZahl - Min) * pixelsPerUnit) + 'px';
+                korrektEndText.style.color = 'green';
+                korrektEndText.innerText = endZahl.toFixed(decimalPlaces); // Dynamisch gerundet
+                kontainer.appendChild(korrektEndText);
+
+                // Zeichne grünen Pfeil
+                var startXPos = paddingLeft + (startZahl - Min) * pixelsPerUnit;
+                var endXPos = paddingLeft + (endZahl - Min) * pixelsPerUnit;
+                var arrowY = lineY - 30; // Position über dem Zahlenstrahl
+
+                // Zeichne den Pfeil auf dem Canvas
+                ctx.beginPath();
+                ctx.strokeStyle = 'green';
+                ctx.lineWidth = 2;
+                ctx.moveTo(startXPos, arrowY);
+                ctx.lineTo(endXPos, arrowY);
+                // Pfeilspitze je nach Richtung
+                if (endXPos > startXPos) {
+                    // Pfeil nach rechts
+                    ctx.moveTo(endXPos, arrowY);
+                    ctx.lineTo(endXPos - 10, arrowY - 5);
+                    ctx.moveTo(endXPos, arrowY);
+                    ctx.lineTo(endXPos - 10, arrowY + 5);
+                } else if (endXPos < startXPos) {
+                    // Pfeil nach links
+                    ctx.moveTo(endXPos, arrowY);
+                    ctx.lineTo(endXPos + 10, arrowY - 5);
+                    ctx.moveTo(endXPos, arrowY);
+                    ctx.lineTo(endXPos + 10, arrowY + 5);
+                }
+                ctx.stroke();
+
+                // Operation über dem Pfeil anzeigen
+                var operationLabel = getOperationLabel(operand, yStr);
+                ctx.fillStyle = 'black';
+                ctx.font = '16px Arial';
+                ctx.fillText(operationLabel, (startXPos + endXPos) / 2, arrowY - 10);
+
+                // "Prüfen"-Button ausblenden
+                pruefenButton.style.display = 'none';
+
+                alert('Richtig!');
+            } else {
+                // Falsch
+                if (!korrektStartCheck) {
+                    // Prüfen, ob dieser Fehler bereits markiert wurde
+                    var bereitsGefundenStart = fehlerMarkierungen.some(function(fehler) {
+                        return Math.abs(fehler.value - startValue) <= toleranz;
+                    });
+                    if (!bereitsGefundenStart) {
+                        // Neue Fehlermarkierung hinzufügen
+                        var fehlerMarkerStart = document.createElement('div');
+                        fehlerMarkerStart.className = 'marker incorrect';
+                        fehlerMarkerStart.innerText = '×';
+                        fehlerMarkerStart.style.top = (canvas.offsetTop + lineY - 12) + 'px';
+                        fehlerMarkerStart.style.left = (paddingLeft + (startValue - Min) * pixelsPerUnit - 6) + 'px';
+                        kontainer.appendChild(fehlerMarkerStart);
+
+                        // Fehlerbeschriftung hinzufügen
+                        var fehlerLabelStart = document.createElement('div');
+                        fehlerLabelStart.className = 'label';
+                        fehlerLabelStart.style.top = (canvas.offsetTop + lineY + 15) + 'px';
+                        fehlerLabelStart.style.left = (paddingLeft + (startValue - Min) * pixelsPerUnit) + 'px';
+                        fehlerLabelStart.style.color = 'red';
+                        fehlerLabelStart.innerText = startValue.toFixed(decimalPlaces); // Dynamisch gerundet
+                        kontainer.appendChild(fehlerLabelStart);
+
+                        // Fehler speichern
+                        fehlerMarkierungen.push({value: startValue, marker: fehlerMarkerStart, label: fehlerLabelStart});
+                    }
+                }
+
+                if (!korrektEndCheck) {
+                    // Prüfen, ob dieser Fehler bereits markiert wurde
+                    var bereitsGefundenEnd = fehlerMarkierungen.some(function(fehler) {
+                        return Math.abs(fehler.value - endValue) <= toleranz;
+                    });
+                    if (!bereitsGefundenEnd) {
+                        // Neue Fehlermarkierung hinzufügen
+                        var fehlerMarkerEnd = document.createElement('div');
+                        fehlerMarkerEnd.className = 'marker incorrect';
+                        fehlerMarkerEnd.innerText = '×';
+                        fehlerMarkerEnd.style.top = (canvas.offsetTop + lineY - 12) + 'px';
+                        fehlerMarkerEnd.style.left = (paddingLeft + (endValue - Min) * pixelsPerUnit - 6) + 'px';
+                        kontainer.appendChild(fehlerMarkerEnd);
+
+                        // Fehlerbeschriftung hinzufügen
+                        var fehlerLabelEnd = document.createElement('div');
+                        fehlerLabelEnd.className = 'label';
+                        fehlerLabelEnd.style.top = (canvas.offsetTop + lineY + 15) + 'px';
+                        fehlerLabelEnd.style.left = (paddingLeft + (endValue - Min) * pixelsPerUnit) + 'px';
+                        fehlerLabelEnd.style.color = 'red';
+                        fehlerLabelEnd.innerText = endValue.toFixed(decimalPlaces); // Dynamisch gerundet
+                        kontainer.appendChild(fehlerLabelEnd);
+
+                        // Fehler speichern
+                        fehlerMarkierungen.push({value: endValue, marker: fehlerMarkerEnd, label: fehlerLabelEnd});
+                    }
+                }
+
+                // Richtigstellung für den Benutzer
+                alert('Falsch, versuche es noch einmal.');
+            }
+        }
+    });
+
+    // Funktion zum Generieren des Operation-Labels über dem Pfeil
+    function getOperationLabel(operand, yStr) {
+        var y = parseFloat(yStr);
+        if (operand === '+') {
+            if (yStr.startsWith('+')) {
+                return `+${Math.abs(y).toFixed(decimalPlaces)}`;
+            } else if (yStr.startsWith('-')) {
+                return `-${Math.abs(y).toFixed(decimalPlaces)}`;
+            } else {
+                return `+${y.toFixed(decimalPlaces)}`;
+            }
+        } else if (operand === '-') {
+            if (yStr.startsWith('+')) {
+                return `-${Math.abs(y).toFixed(decimalPlaces)}`;
+            } else if (yStr.startsWith('-')) {
+                return `+${Math.abs(y).toFixed(decimalPlaces)}`;
+            } else {
+                return `-${y.toFixed(decimalPlaces)}`;
+            }
+        }
+        return '';
+    }
+}
+    
+// Beispielaufrufe der Funktion
+// Für "Markiere"-Aufgabe
+ erzeugeZahlenstrahl(0, 100, 1, 'kontainer', 'Markiere, 8');
+
+// Für "Berechne"-Aufgabe
+//erzeugeZahlenstrahl(-100, 100, 2, 'kontainer', 'berechne, 1, +, -0.22'); // Erwartetes Ergebnis: Start=0.5, Ende=0.28
+// Weitere Testfälle:
+</script>
+</body>
+</html>
