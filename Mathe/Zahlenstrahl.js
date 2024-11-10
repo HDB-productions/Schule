@@ -365,20 +365,22 @@ function markierePfeil(KontainerID, start, operator, value, farbe = 'black', sic
     marker.setAttribute('markerWidth', arrowHeadSize);
     marker.setAttribute('markerHeight', arrowHeadSize / 2);
     marker.setAttribute('refX', arrowHeadSize);
-    marker.setAttribute('refY', (arrowHeadSize / 4));
+    marker.setAttribute('refY', 0); // Spitze auf der Achse ausrichten
+    marker.setAttribute('viewBox', `0 -${arrowHeadSize / 2} ${arrowHeadSize} ${arrowHeadSize}`); // ViewBox hinzufügen
     marker.setAttribute('orient', 'auto');
     marker.setAttribute('markerUnits', 'strokeWidth');
 
     const arrowPath = document.createElementNS(svgNS, 'path');
-    arrowPath.setAttribute('d', `M0,0 L${arrowHeadSize},${arrowHeadSize / 2} L0,${arrowHeadSize} Z`);
+    arrowPath.setAttribute('d', `M0,-${arrowHeadSize / 2} L${arrowHeadSize},0 L0,${arrowHeadSize / 2} Z`);
+
     arrowPath.setAttribute('fill', farbe);
     marker.appendChild(arrowPath);
     defs.appendChild(marker);
 
     // Erstellen der Pfeillinie
-    const lineElem = document.createElementNS(svgNS, 'line');
-    lineElem.setAttribute('x1', 0);
-    lineElem.setAttribute('y1', lineY);
+    const lineElem = document.createElementNS(svgNS, 'line'); 
+    lineElem.setAttribute('x1', 0); 
+    lineElem.setAttribute('y1', lineY); 
     lineElem.setAttribute('x2', (end - start) * pixelsPerUnit);
     lineElem.setAttribute('y2', lineY);
     lineElem.setAttribute('stroke', farbe);
