@@ -39,7 +39,7 @@ function zeichneZahlenstrahl(Min, Max, Skalierung, KontainerID, farbe = 'black')
         console.error(`Kontainer mit der ID "${KontainerID}" nicht gefunden.`);
         return;
     }
-    kontainer.innerHTML = `<div class="container-name">ID: ${KontainerID}</div>`; // Inhalt leeren und Containername hinzufügen
+    //kontainer.innerHTML = `<div class="container-name">ID: ${KontainerID}</div>`; // Inhalt leeren und Containername hinzufügen
     kontainer.style.position = 'relative';
 
     // SVG erstellen
@@ -590,9 +590,9 @@ function loescheMarkierung(markID) {
     const mark = document.getElementById(markID);
     if (mark) {
         mark.parentNode.removeChild(mark);
-        alert(`Markierung ${markID} wurde gelöscht.`);
+        console.log(`Markierung ${markID} wurde gelöscht.`);
     } else {
-        alert(`Markierung mit ID ${markID} nicht gefunden.`);
+        console.log(`Markierung mit ID ${markID} nicht gefunden.`);
     }
 }
 
@@ -677,7 +677,7 @@ function getMarkierungen(containerID) {
 function listeMarkierungen(containerID) {
     const markierungen = getMarkierungen(containerID);
     if (markierungen.length === 0) {
-        alert('Keine Markierungen im angegebenen Container gefunden.');
+        console.log('Keine Markierungen im angegebenen Container gefunden.');
         return;
     }
 
@@ -968,13 +968,285 @@ function generiereZufallszahlAufZahlenstrahl(KontainerID) {
 }
 
 
-// Beispielaufruf der Funktion
-erstelleZufälligenZahlenstrahl('kontainer')
-const zufallsZahl = generiereZufallszahlAufZahlenstrahl('kontainer');
-if (zufallsZahl !== null) {
-    console.log(`Generierte Zufallszahl: ${zufallsZahl}`);
-    // Optional: Markieren Sie die Zufallszahl auf dem Zahlenstrahl
-    markiereZahl('kontainer', zufallsZahl, 'blue', true, true); // Beispiel: Markiert die Zahl in Blau und beweglich
-} else {
-    console.log('Die Zufallszahl konnte nicht generiert werden.');
+
+/**
+ * Erstellt eine Aufgabe, bei der der Nutzer den Wert eines markierten Punktes auf dem Zahlenstrahl ablesen muss.
+ * @param {string} containerID - Die ID des Containers, in dem die Aufgabe erstellt wird.
+ * @param {function} onTaskSolved - Eine Callback-Funktion, die aufgerufen wird, wenn die Aufgabe gelöst wurde.
+ */
+function erstelleAbleseAufgabe(containerID, onTaskSolved) {
+    const container = document.getElementById(containerID);
+    if (!container) {
+        console.error(`Container mit ID "${containerID}" nicht gefunden.`);
+        return;
+    }
+
+    // Erstelle einen neuen Untercontainer für die Aufgabe
+    const taskContainer = document.createElement('div');
+    const taskID = `task-${Date.now()}`; // Einzigartige ID basierend auf Timestamp
+    taskContainer.setAttribute('id', taskID);
+    taskContainer.classList.add('aufgabe');
+    container.appendChild(taskContainer);
+
+    // Füge die Aufgabenstellung hinzu
+    const aufgabenText = document.createElement('p');
+    aufgabenText.textContent = 'Lies den Wert der Blau markierten Position (×) auf dem Zahlenstrahl ab:';
+    taskContainer.appendChild(aufgabenText);
+
+    // Erstelle einen Untercontainer für den Zahlenstrahl
+    const zahlenstrahlContainerID = `${taskID}-zahlenstrahl`;
+    const zahlenstrahlContainer = document.createElement('div');
+    zahlenstrahlContainer.setAttribute('id', zahlenstrahlContainerID);
+    taskContainer.appendChild(zahlenstrahlContainer);
+
+    // Erstelle einen zufälligen Zahlenstrahl
+    erstelleZufälligenZahlenstrahl(zahlenstrahlContainerID);
+
+    // Generiere eine zufällige Zahl auf dem Zahlenstrahl
+    const zufallsZahl = generiereZufallszahlAufZahlenstrahl(zahlenstrahlContainerID);
+    if (zufallsZahl !== null) {
+        // Markiere die Zahl auf dem Zahlenstrahl
+        markiereZahl(zahlenstrahlContainerID, zufallsZahl, 'blue', false, false);
+    } else {
+        console.error('Konnte keine Zufallszahl auf dem Zahlenstrahl generieren.');
+        return;
+    }
+
+    // Füge ein Eingabeformular hinzu
+    const form = document.createElement('form');
+    form.setAttribute('onsubmit', 'return false;'); // Verhindert das Neuladen der Seite
+    taskContainer.appendChild(form);
+
+    const input = document.createElement('input');
+    input.setAttribute('type', 'number');
+    input.setAttribute('step', 'any');
+    input.setAttribute('placeholder', 'Deine Antwort');
+    form.appendChild(input);
+
+    const button = document.createElement('button');
+    button.textContent = 'Prüfen';
+    form.appendChild(button);
+
+    // Fehlerzähler und falsche Eingaben initialisieren
+    let fehlerAnzahl = 0;
+    let falscheEingaben = [];
+
+    // Ereignislistener für den "Prüfen"-Button
+    button.addEventListener('click', () => {
+        const userAnswer = parseFloat(input.value);
+        if (isNaN(userAnswer)) {
+            console.log('Gib eine gültige Zahl ein.');
+            return;
+        }
+
+        const decimalPlaces = parseInt(document.getElementById(zahlenstrahlContainerID).dataset.decimalPlaces, 10);
+        const gerundeteAntwort = parseFloat(userAnswer.toFixed(decimalPlaces));
+        const gerundeteZufallsZahl = parseFloat(zufallsZahl.toFixed(decimalPlaces));
+
+
+        if (gerundeteAntwort === gerundeteZufallsZahl) {
+            // Korrekte Antwort
+            console.log('Richtig!');
+    
+            // Eingabemöglichkeit entfernen
+            form.remove();
+    
+            // Lösche die blaue Markierung und ersetze sie durch eine grüne Markierung mit Zahlenanzeige
+            const markID = `mark-${markCounter}`;
+            loescheMarkierung(markID);
+            markiereZahl(zahlenstrahlContainerID, zufallsZahl, 'green', true, false);
+    
+            // Info und Fehleranzahl anzeigen
+            const erfolgsText = document.createElement('p');
+            if (falscheEingaben.length > 0) {
+                erfolgsText.textContent = `Aufgabe gelöst! Anzahl der Fehler: ${fehlerAnzahl} (${falscheEingaben.join(', ')})`;
+            } else {
+                erfolgsText.textContent = `Aufgabe gelöst! Anzahl der Fehler: ${fehlerAnzahl}`;
+            }
+            taskContainer.appendChild(erfolgsText);
+    
+            // Callback-Funktion aufrufen und Punkte übergeben
+            onTaskSolved(1 - fehlerAnzahl); // Ein Punkt für richtige Antwort, minus Fehler
+        } else {
+            // Falsche Antwort
+            fehlerAnzahl++;
+            falscheEingaben.push(gerundeteAntwort);
+            console.log(`Falsch: Anzahl der Fehler: ${fehlerAnzahl} (${falscheEingaben.join(', ')})`);
+    
+            // Prüfen, ob die falsche Eingabe auf dem Zahlenstrahl darstellbar ist
+            const containerElem = document.getElementById(zahlenstrahlContainerID);
+            const min = parseFloat(containerElem.dataset.min);
+            const max = parseFloat(containerElem.dataset.max);
+            const skalierung = parseInt(containerElem.dataset.skalierung, 10);
+    
+            // Überprüfen, ob die falsche Eingabe im Bereich des Zahlenstrahls liegt
+            if (gerundeteAntwort >= min && gerundeteAntwort <= max) {
+                // Markiere die falsche Zahl rot und unbeweglich mit Zahlenanzeige
+                markiereZahl(zahlenstrahlContainerID, gerundeteAntwort, 'red', true, false);
+            }
+        }
+    });
 }
+
+/**
+ * Erstellt eine Aufgabe, bei der der Nutzer eine gegebene Zahl auf dem Zahlenstrahl markieren muss.
+ * @param {string} containerID - Die ID des Containers, in dem die Aufgabe erstellt wird.
+ * @param {function} onTaskSolved - Eine Callback-Funktion, die aufgerufen wird, wenn die Aufgabe gelöst wurde.
+ */
+function erstelleMarkierungsAufgabe(containerID, onTaskSolved) {
+    const container = document.getElementById(containerID);
+    if (!container) {
+        console.error(`Container mit ID "${containerID}" nicht gefunden.`);
+        return;
+    }
+
+    // Erstelle einen neuen Untercontainer für die Aufgabe
+    const taskContainer = document.createElement('div');
+    const taskID = `task-${Date.now()}`; // Einzigartige ID basierend auf Timestamp
+    taskContainer.setAttribute('id', taskID);
+    taskContainer.classList.add('aufgabe');
+    container.appendChild(taskContainer);
+
+   // Erstelle einen Untercontainer für den Zahlenstrahl
+   const zahlenstrahlContainerID = `${taskID}-zahlenstrahl`;
+   const zahlenstrahlContainer = document.createElement('div');
+   zahlenstrahlContainer.setAttribute('id', zahlenstrahlContainerID);
+   taskContainer.appendChild(zahlenstrahlContainer);
+
+    // Erstelle einen zufälligen Zahlenstrahl
+    erstelleZufälligenZahlenstrahl(zahlenstrahlContainerID);
+    const zufallsZahl = generiereZufallszahlAufZahlenstrahl(zahlenstrahlContainerID);
+    
+    // Füge die Aufgabenstellung hinzu
+    const aufgabenText = document.createElement('p');
+    aufgabenText.textContent = `Markiere die Zahl ${zufallsZahl} auf dem Zahlenstrahl:`;
+    taskContainer.appendChild(aufgabenText);
+    
+    // Ermittle das Minimum auf dem Zahlenstrahl
+    const min = parseFloat(zahlenstrahlContainer.dataset.min);
+    
+    // Füge eine blaue, bewegbare Markierung auf dem Zahlenstrahl hinzu
+    markiereZahl(zahlenstrahlContainerID, min, 'blue', false, true);
+   
+    // Fehlerzähler und falsche Markierungen initialisieren
+    let fehlerAnzahl = 0;
+    let falscheMarkierungen = [];
+
+    // Füge einen "Prüfen"-Button hinzu
+    const button = document.createElement('button');
+    button.textContent = 'Prüfen';
+    taskContainer.appendChild(button);
+
+    // Markiere die Zielzahl (optional als Referenz, kann entfernt werden)
+    // markiereZahl(zahlenstrahlContainerID, zufallsZahl, 'gray', false, false);
+
+    // Event-Listener für den "Prüfen"-Button
+    button.addEventListener('click', () => {
+        // Prüfe, ob der Nutzer die richtige Zahl markiert hat
+        const markierungen = getMarkierungen(zahlenstrahlContainerID);
+
+        // Suche nach einem beweglichen 'Kreuz'
+        const userMark = markierungen.find(mark => mark.typ === 'Kreuz' && mark.bewegbar);
+
+        if (userMark) {
+            const decimalPlaces = parseInt(document.getElementById(zahlenstrahlContainerID).dataset.decimalPlaces, 10);
+            const gerundeteUserValue = parseFloat(userMark.value.toFixed(decimalPlaces));
+            const gerundeteZufallsZahl = parseFloat(zufallsZahl.toFixed(decimalPlaces));
+
+            if (gerundeteUserValue === gerundeteZufallsZahl) {
+                // Korrekte Markierung
+                console.log('Richtig!');
+
+                // Eingabemöglichkeit entfernen
+                button.remove();
+
+                // Lösche die blaue Markierung und ersetze sie durch eine grüne Markierung mit Zahlenanzeige
+                loescheMarkierung(userMark.id);
+                markiereZahl(zahlenstrahlContainerID, zufallsZahl, 'green', true, false);
+
+                // Info und Fehleranzahl anzeigen
+                const erfolgsText = document.createElement('p');
+                erfolgsText.textContent = `Aufgabe gelöst! Anzahl der Fehler: ${fehlerAnzahl} (${falscheMarkierungen.join(', ')})`;
+                taskContainer.appendChild(erfolgsText);
+
+                // Callback-Funktion aufrufen und Punkte übergeben
+                onTaskSolved(1 - fehlerAnzahl); // Ein Punkt für richtige Antwort, minus Fehler
+            } else {
+                // Falsche Markierung
+                console.log('Falsch markiert, versuche es erneut.');
+                fehlerAnzahl++;
+                falscheMarkierungen.push(gerundeteUserValue);
+
+                // Falsche Markierung rot färben und unbeweglich machen
+                loescheMarkierung(userMark.id);
+                markiereZahl(zahlenstrahlContainerID, gerundeteUserValue, 'red', true, false);
+                markiereZahl(zahlenstrahlContainerID, min, 'blue', false, true);
+            }
+        } else {
+            console.log('Markiere eine Zahl auf dem Zahlenstrahl.');
+        }
+    });
+}
+
+/**
+ * Startet den Aufgabenfluss und verwaltet die Punkte.
+ * @param {string} hauptContainerID - Die ID des Hauptcontainers, in dem die Aufgaben erstellt werden.
+ */
+function starteAufgaben(hauptContainerID) {
+    const hauptContainer = document.getElementById(hauptContainerID);
+    if (!hauptContainer) {
+        console.error(`Hauptcontainer mit ID "${hauptContainerID}" nicht gefunden.`);
+        return;
+    }
+
+    // Initialisiere die Punktezahl
+    let punkte = 0;
+
+    // Erstelle einen Container für die Punkteanzeige
+    const punkteAnzeige = document.createElement('p');
+    punkteAnzeige.textContent = `Punkte: ${punkte}`;
+    punkteAnzeige.setAttribute('id', 'punkteAnzeige');
+    hauptContainer.appendChild(punkteAnzeige);
+
+    // Funktion zum Aktualisieren der Punkteanzeige
+    function aktualisierePunkte(änderung) {
+        punkte += änderung;
+        punkteAnzeige.textContent = `Punkte: ${punkte}`;
+    }
+
+    // Funktion zum Erstellen einer neuen Aufgabe
+    function neueAufgabe() {
+        // Erstelle einen neuen Task-Container
+        const taskContainerID = `task-container-${Date.now()}`;
+        const taskContainer = document.createElement('div');
+        taskContainer.setAttribute('id', taskContainerID);
+        hauptContainer.appendChild(taskContainer);
+
+        // Wähle zufällig eine der beiden Aufgabenarten
+        const aufgabenTyp = Math.random() < 0.5 ? 'ablesen' : 'markieren';
+
+        if (aufgabenTyp === 'ablesen') {
+            erstelleAbleseAufgabe(taskContainerID, punkteÄnderung => {
+                aktualisierePunkte(punkteÄnderung);
+                neueAufgabe();
+            });
+        } else {
+            erstelleMarkierungsAufgabe(taskContainerID, punkteÄnderung => {
+                aktualisierePunkte(punkteÄnderung);
+                neueAufgabe();
+            });
+        }
+    }
+
+    // Starte mit der ersten Aufgabe
+    neueAufgabe();
+}
+
+// Beispielaufruf der Funktion
+// Stelle sicher, dass ein Hauptcontainer mit der ID 'hauptcontainer' existiert
+// <div id="hauptcontainer"></div>
+
+// Starte den Aufgabenfluss
+document.addEventListener('DOMContentLoaded', () => {
+    starteAufgaben('kontainer');
+});
