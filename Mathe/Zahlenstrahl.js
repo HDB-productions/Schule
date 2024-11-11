@@ -100,6 +100,7 @@ function zeichneZahlenstrahl(Min, Max, Skalierung, KontainerID, farbe = 'black')
         text.style.fontSize = '14px';
         text.textContent = x.toFixed(decimalPlaces);
         svg.appendChild(text);
+               
     }
 
     // Feinskala zeichnen
@@ -242,6 +243,14 @@ function markiereZahl(KontainerID, zahl, farbe = 'black', sichtbar = true, beweg
     line2.setAttribute('stroke', farbe);
     line2.setAttribute('stroke-width', '2');
     group.appendChild(line2);
+    
+    //Erweitere die Trefferzone beim Erstellen der Markierung in markiereZahl und markierePfeil
+    const hitArea = document.createElementNS(svgNS, 'circle');
+    hitArea.setAttribute('r', 20); // Toleranzradius
+    hitArea.setAttribute('fill', 'transparent');
+    //y-Koordinate der Trefferzone
+    hitArea.setAttribute('cy', lineY);
+    group.appendChild(hitArea);
 
     // Optional: Beschriftung der Zahl
     if (sichtbar) {
@@ -387,6 +396,8 @@ function markierePfeil(KontainerID, start, operator, value, farbe = 'black', sic
     lineElem.setAttribute('stroke', farbe);
     lineElem.setAttribute('stroke-width', '2');
     lineElem.setAttribute('marker-end', `url(#${markerId})`);
+
+    //hier sollte vermutlich eine Hit Area hinzugefügt werden (wie bei den Kreuzen)
 
     // Erstellen eines Gruppen-Elements
     const group = document.createElementNS(svgNS, 'g');
@@ -990,7 +1001,7 @@ function erstelleAbleseAufgabe(containerID, onTaskSolved) {
 
     // Füge die Aufgabenstellung hinzu
     const aufgabenText = document.createElement('p');
-    aufgabenText.textContent = 'Lies den Wert der Blau markierten Position (×) auf dem Zahlenstrahl ab:';
+    aufgabenText.textContent = 'Lies den Wert der blau markierten Position (×) auf dem Zahlenstrahl ab:';
     taskContainer.appendChild(aufgabenText);
 
     // Erstelle einen Untercontainer für den Zahlenstrahl
