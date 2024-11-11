@@ -253,7 +253,41 @@
             <!-- Tabelle zur Anzeige der Markierungen wird hier eingefügt -->
         </div>
     </div>
+    <!-- Formular zum Prüfen einer Markierung -->
+<div class="form-container">
+    <h3>Markierung prüfen</h3>
+    <form id="prueferForm">
+        <div class="form-group">
+            <label for="prueferContainerID">Container ID:</label>
+            <input type="text" id="prueferContainerID" name="prueferContainerID" value="kontainer" required>
+        </div>
+        <div class="form-group">
+            <label for="prueferTyp">Typ:</label>
+            <select id="prueferTyp" name="prueferTyp" required>
+                <option value="cross">Kreuz</option>
+                <option value="arrow">Pfeil</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="prueferStart">Startwert:</label>
+            <input type="number" id="prueferStart" name="prueferStart" step="any" required>
+        </div>
+        <div class="form-group">
+            <label for="prueferEnd">Endwert (nur für Pfeil):</label>
+            <input type="number" id="prueferEnd" name="prueferEnd" step="any">
+        </div>
+        <div class="form-group">
+            <button type="submit">Prüfe Markierung</button>
+        </div>
+    </form>
+    <!-- Bereich zur Anzeige des Prüfergebnisses -->
+    <div id="prueferErgebnis">
+        <!-- Das Ergebnis wird hier angezeigt -->
+    </div>
 </div>
+</div>
+
+
 
 <!-- Container für die Zahlenstrahlen -->
 <div id="kontainer" class="container">
@@ -264,7 +298,8 @@
 </div>
 
 <!-- Einbinden des externen JavaScript-Dokuments -->
-<script src="zahlenstrahl.js"></script>
-
+<script src="Zahlenstrahl.js"></script>
+<script src="EventlistenersZahlenstrahlTest.js"></script>
+<script>document.addEventListener('DOMContentLoaded', initializeEventListeners);</script>
 </body>
 </html>

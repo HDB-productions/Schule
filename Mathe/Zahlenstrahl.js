@@ -212,6 +212,7 @@ function markiereZahl(KontainerID, zahl, farbe = 'black', sichtbar = true, beweg
         group.classList.add('movable', 'cross');
     } else {
         group.classList.add('cross');
+        group.style.pointerEvents = 'none'; // Fixierte Kreuze ignorieren Mausereignisse
     }
 
     // Runden des Wertes entsprechend decimalPlaces
@@ -246,7 +247,7 @@ function markiereZahl(KontainerID, zahl, farbe = 'black', sichtbar = true, beweg
     if (sichtbar) {
         const text = document.createElementNS(svgNS, 'text');
         text.setAttribute('x', 0);
-        text.setAttribute('y', lineY + crossSize + 25); // Position unterhalb des "×"
+        text.setAttribute('y', lineY + crossSize - 35); // Position unterhalb des "×"
         text.setAttribute('text-anchor', 'middle');
         text.setAttribute('fill', farbe);
         text.style.fontSize = '14px';
@@ -400,6 +401,7 @@ function markierePfeil(KontainerID, start, operator, value, farbe = 'black', sic
         group.classList.add('movable', 'arrow');
     } else {
         group.classList.add('arrow');
+        group.style.pointerEvents = 'none'; // Fixierte pfeile ignorieren Mausereignisse
     }
 
     // Runden der Start- und Änderungswerte entsprechend decimalPlaces
@@ -728,153 +730,251 @@ function listeMarkierungen(containerID) {
     }
 }
 
+
+
 /**
- * Grundlegende Funktion zur Überprüfung, ob ein bestimmter Punkt markiert ist.
- * @param {string} containerID - Die ID des Containers.
- * @param {number} zahl - Die Zahl, die überprüft werden soll.
- * @returns {Array} - Ein Array von Markierungsobjekten, die den Punkt repräsentieren.
+ * Prüft, ob eine bestimmte Markierung vorhanden ist.
+ * 
+ * @param {string} containerID - Die ID des Container-Elements, das den Zahlenstrahl enthält.
+ * @param {string} typ - Der Typ der Markierung ('cross' oder 'arrow').
+ * @param {number} start - Der Startwert der Markierung.
+ * @param {number} [end=null] - Der Endwert der Markierung (nur für 'arrow' erforderlich).
+ * @returns {boolean} - Gibt true zurück, wenn die Markierung korrekt ist, sonst false.
  */
-function checkMarkierung(containerID, zahl) {
+function pruefer(containerID, typ, start, end = null) {
     const markierungen = getMarkierungen(containerID);
-    const passendeMarkierungen = markierungen.filter(mark => {
-        if (mark.typ === 'Kreuz') {
-            return mark.value === zahl;
-        } else if (mark.typ === 'Pfeil') {
-            // Für Pfeile könnte man definieren, welche Eigenschaft überprüft werden soll
-            // Zum Beispiel ob die Startzahl oder die Endzahl gleich der gesuchten Zahl ist
-            return mark.start === zahl || (mark.start + mark.change) === zahl;
+    console.log(`Prüfe Markierung im Container "${containerID}" für Typ "${typ}" mit Startwert ${start} und Endwert ${end}.`);
+
+    if (typ === 'cross') {
+        // Filtere alle beweglichen 'Kreuz'-Markierungen
+        const beweglicheCross = markierungen.filter(mark => mark.typ === 'Kreuz' && mark.bewegbar);
+        console.log(`Gefundene bewegliche 'Kreuz'-Markierungen:`, beweglicheCross);
+
+        // Suche nach einem 'Kreuz' an der korrekten Position
+        const korrektesCross = beweglicheCross.find(mark => mark.value === start);
+        if (korrektesCross) {
+            console.log(`Passendes 'Kreuz' gefunden:`, korrektesCross);
+            // Lösche das gefundene 'Kreuz'
+            loescheMarkierung(korrektesCross.id);
+            // Erstelle ein neues grünes, unbewegliches 'Kreuz' mit Zahlenanzeige
+            markiereZahl(containerID, start, 'green', true, false);
+            console.log(`Neues grünes, unbewegliches 'Kreuz' bei ${start} erstellt.`);
+            return true;
+        } else if (beweglicheCross.length > 0) {
+            console.log(`Keine passenden 'Kreuze' gefunden, aber bewegliche 'Kreuze' existieren.`);
+            // Erstelle rote, unbewegliche 'Kreuze' an den Positionen der beweglichen 'Kreuze' mit Zahlenanzeige
+            beweglicheCross.forEach(mark => {
+                markiereZahl(containerID, mark.value, 'red', true, false);
+                console.log(`Rotes, unbewegliches 'Kreuz' bei ${mark.value} erstellt.`);
+            });
+            return false;
+        } else {
+            console.log(`Keine beweglichen 'Kreuze' vorhanden.`);
+            return false;
         }
-        return false;
-    });
-    return passendeMarkierungen;
-}
-
-/**
- * Initialisiert alle Event-Listener für die Formulare.
- * Diese Funktion wird aufgerufen, sobald das DOM vollständig geladen ist.
- */
-function initializeEventListeners() {
-    // Event-Listener für das Zeichnen des Zahlenstrahls
-    const zahlenstrahlForm = document.getElementById('zahlenstrahlForm');
-    if (zahlenstrahlForm) {
-        zahlenstrahlForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Verhindert das Neuladen der Seite
-
-            // Werte aus dem Formular holen
-            const min = parseFloat(document.getElementById('min').value);
-            const max = parseFloat(document.getElementById('max').value);
-            const skalierung = parseFloat(document.getElementById('skalierung').value);
-            const containerID = document.getElementById('containerID').value.trim();
-            const farbe = document.getElementById('farbe').value || '#000000';
-
-            // Validierung der Eingaben
-            if (min >= max) {
-                alert('Min muss kleiner als Max sein.');
-                return;
-            }
-
-            // Zeichne den Zahlenstrahl
-            zeichneZahlenstrahl(min, max, skalierung, containerID, farbe);
-        });
-    }
-
-    // Event-Listener für das Markieren eines Kreuzes
-    const kreuzForm = document.getElementById('kreuzForm');
-    if (kreuzForm) {
-        kreuzForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Verhindert das Neuladen der Seite
-
-            // Werte aus dem Formular holen
-            const markContainerID = document.getElementById('kreuzContainerID').value.trim();
-            const zahl = parseFloat(document.getElementById('kreuzZahl').value); // Nutzung von parseFloat statt parseInt
-            const markFarbe = document.getElementById('kreuzFarbe').value || '#000000';
-            const sichtbar = document.getElementById('kreuzSichtbar').checked;
-            const bewegbar = document.getElementById('kreuzBewegbar').checked;
-
-            // Markiere die Zahl als Kreuz und erhalte die Markierungs-ID
-            const markID = markiereZahl(markContainerID, zahl, markFarbe, sichtbar, bewegbar);
-            if (markID) {
-                console.log(`Kreuz ID: ${markID}`);
-            }
-        });
-    }
-
-    // Event-Listener für das Erstellen eines Pfeils
-    const pfeilForm = document.getElementById('pfeilForm');
-    if (pfeilForm) {
-        pfeilForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Verhindert das Neuladen der Seite
-
-            // Werte aus dem Formular holen
-            const pfeilContainerID = document.getElementById('pfeilContainerID').value.trim();
-            const start = parseFloat(document.getElementById('pfeilStart').value);
-            const operator = document.getElementById('pfeilOperator').value;
-            const value = parseFloat(document.getElementById('pfeilWert').value);
-            const pfeilFarbe = document.getElementById('pfeilFarbe').value || '#000000';
-            const sichtbar = document.getElementById('pfeilSichtbar').checked;
-            const bewegbar = document.getElementById('pfeilBewegbar').checked;
-
-            // Markiere den Pfeil und erhalte die Markierungs-ID
-            const markID = markierePfeil(pfeilContainerID, start, operator, value, pfeilFarbe, sichtbar, bewegbar);
-            if (markID) {
-                console.log(`Pfeil ID: ${markID}`);
-            }
-        });
-    }
-
-    // Event-Listener für das Löschen einer Markierung
-    const loescheMarkierungForm = document.getElementById('loescheMarkierungForm');
-    if (loescheMarkierungForm) {
-        loescheMarkierungForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Verhindert das Neuladen der Seite
-
-            const markID = document.getElementById('markID').value.trim();
-            if (markID) {
-                loescheMarkierung(markID);
-            } else {
-                alert('Bitte gib eine gültige Markierungs-ID ein.');
-            }
-        });
-    }
-
-    // Event-Listener für das Auflisten der Markierungen
-    const listeMarkierungenForm = document.getElementById('listeMarkierungenForm');
-    if (listeMarkierungenForm) {
-        listeMarkierungenForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Verhindert das Neuladen der Seite
-
-            const containerID = document.getElementById('listeContainerID').value.trim();
-            if (containerID) {
-                listeMarkierungen(containerID);
-            } else {
-                alert('Bitte gib eine gültige Container-ID ein.');
-            }
-        });
-    }
-}
-
-/**
- * Grundlegende Funktion zur Überprüfung, ob ein bestimmter Punkt markiert ist.
- * @param {string} containerID - Die ID des Containers.
- * @param {number} zahl - Die Zahl, die überprüft werden soll.
- * @returns {Array} - Ein Array von Markierungsobjekten, die den Punkt repräsentieren.
- */
-function checkMarkierung(containerID, zahl) {
-    const markierungen = getMarkierungen(containerID);
-    const passendeMarkierungen = markierungen.filter(mark => {
-        if (mark.typ === 'Kreuz') {
-            return mark.value === zahl;
-        } else if (mark.typ === 'Pfeil') {
-            // Hier kannst du festlegen, welche Eigenschaft du überprüfen möchtest
-            // Zum Beispiel ob die Startzahl oder die Endzahl gleich der gesuchten Zahl ist
-            return mark.start === zahl || (mark.start + mark.change) === zahl;
+    } else if (typ === 'arrow') {
+        if (end === null) {
+            console.error(`Endwert für 'arrow'-Markierung nicht angegeben.`);
+            return false;
         }
+
+        // Filtere alle beweglichen 'Pfeil'-Markierungen
+        const beweglicheArrow = markierungen.filter(mark => mark.typ === 'Pfeil' && mark.bewegbar);
+        console.log(`Gefundene bewegliche 'Pfeil'-Markierungen:`, beweglicheArrow);
+
+        // Suche nach einem 'Pfeil' mit passendem Start- und Endwert
+        const korrekterPfeil = beweglicheArrow.find(mark => mark.start === start && mark.change === (end - start));
+
+
+        if (korrekterPfeil) {
+            console.log(`Passender 'Pfeil' gefunden:`, korrekterPfeil);
+            // Lösche den gefundene 'Pfeil'
+            
+            // Erstelle einen neuen grünen, unbeweglichen 'Pfeil' mit Beschriftung
+            if (end > start) {
+                markierePfeil(containerID, start, '+',end-start, 'green', true, false);
+            }else {
+                markierePfeil(containerID, start, '-',start-end, 'green', true, false);
+            }
+            loescheMarkierung(korrekterPfeil.id);
+          
+            console.log(`Neuer grüner, unbeweglicher 'Pfeil' von ${start} nach ${end} erstellt.`);
+            return true;
+        } else if (beweglicheArrow.length > 0) {
+            console.log(`Keine passenden 'Pfeile' gefunden, aber bewegliche 'Pfeile' existieren.`);
+            // Erstelle rote, unbewegliche 'Pfeile' für alle beweglichen 'Pfeile' ohne Zahlenanzeige
+            beweglicheArrow.forEach(mark => {
+                markierePfeil(containerID, mark.start,'+', mark.change, 'red', false, false);
+                console.log(`Roter, unbeweglicher 'Pfeil' von ${mark.start} nach ${mark.start + mark.change} erstellt.`);
+            });
+            return false;
+        } else {
+            console.log(`Keine beweglichen 'Pfeile' vorhanden.`);
+            return false;
+        }
+    } else {
+        console.error(`Unbekannter Typ: "${typ}".`);
         return false;
-    });
-    return passendeMarkierungen;
+    }
 }
 
 /**
- * Initialisiert die Event-Listener, sobald das DOM vollständig geladen ist.
+ * Erstellt einen zufälligen Zahlenstrahl innerhalb des angegebenen Containers.
+ *
+ * @param {string} KontainerID - Die ID des Container-Elements, das den Zahlenstrahl enthalten soll.
  */
-document.addEventListener('DOMContentLoaded', initializeEventListeners);
+function erstelleZufälligenZahlenstrahl(KontainerID) {
+    // Schritt 1: Generiere eine zufällige Skalierung zwischen -3 und 3
+    const skalierung = getRandomIntInclusive(-2, 3);
+    console.log(`Skalierung: ${skalierung}`);
+    
+    // Schritt 2: Generiere eine zufällige ganze Zahl zwischen -10 und -1 für den Min-Multiplikator
+    const zufaelligerMinMultiplikator = getRandomIntInclusive(-10, -1);
+    
+    // Berechne den Faktor basierend auf der Skalierung
+    const faktor = Math.pow(10, skalierung);
+    console.log(`Faktor basierend auf Skalierung (${skalierung}): ${faktor}`);
+    
+    // Berechne den Min-Wert
+    let min = zufaelligerMinMultiplikator * faktor;
+    // Rundung entsprechend der Skalierung (Anzahl der Dezimalstellen)
+    min = parseFloat(min.toFixed(getDecimalPlaces(skalierung)));
+    console.log(`Min-Wert: ${min}`);
+    
+    // Schritt 3: Generiere eine zufällige ganze Zahl zwischen 11 und 20 für den Max-Multiplikator
+    const zufaelligerMaxMultiplikator = getRandomIntInclusive(1, 10);
+    
+    // Berechne den Max-Zuwachs
+    const maxZuwachs = zufaelligerMaxMultiplikator * faktor;
+    console.log(`Max-Zuwachs (11-20 * Faktor): ${maxZuwachs}`);
+    
+    // Berechne den Max-Wert
+    let max = maxZuwachs;
+    // Rundung entsprechend der Skalierung (Anzahl der Dezimalstellen)
+    max = parseFloat(max.toFixed(getDecimalPlaces(skalierung)));
+    console.log(`Max-Wert: ${max}`);
+    
+    // Schritt 4: Rufe die Zeichnungsfunktion auf
+    zeichneZahlenstrahl(min, max, skalierung, KontainerID, 'black');
+    
+    /**
+     * Generiert eine zufällige ganze Zahl zwischen min und max (inklusive).
+     *
+     * @param {number} min - Der minimale Wert.
+     * @param {number} max - Der maximale Wert.
+     * @returns {number} - Eine zufällige ganze Zahl zwischen min und max.
+     */
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    /**
+     * Bestimmt die Anzahl der Dezimalstellen basierend auf der Skalierung.
+     *
+     * @param {number} skalierung - Die Skalierung des Zahlenstrahls.
+     * @returns {number} - Die Anzahl der Dezimalstellen.
+     */
+    function getDecimalPlaces(skalierung) {
+        // Wenn skalierung -1 negativ ist, gibt es Dezimalstellen
+        // Anzahl der Dezimalstellen entspricht dem Absolutwert von (skalierung - 1)
+        const dezimalstellen = Math.max(0, -(skalierung - 1));
+        return dezimalstellen;
+    }
+}
+/**
+ * Generiert eine zufällige Zahl, die an einer zufälligen Position auf dem Zahlenstrahl liegt.
+ * Berücksichtigt die Skalierung als Genauigkeit.
+ *
+ * @param {string} KontainerID - Die ID des Containers, der den Zahlenstrahl enthält.
+ * @returns {number|null} - Die generierte Zufallszahl, die auf dem Zahlenstrahl liegt, oder null bei Fehler.
+ */
+function generiereZufallszahlAufZahlenstrahl(KontainerID) {
+    const container = document.getElementById(KontainerID);
+    if (!container) {
+         
+        console.error(`Container mit ID "${KontainerID}" nicht gefunden.`);
+        return null;
+    }
+
+    // Extrahiere die Datenattribute
+    const min = parseFloat(container.dataset.min);
+    
+    const max = parseFloat(container.dataset.max);
+    
+    const skalierung = parseInt(container.dataset.skalierung, 10);
+   
+
+    if (isNaN(min) || isNaN(max) || isNaN(skalierung)) {
+        console.error(`Datenattribute 'min', 'max' oder 'skalierung' sind nicht korrekt gesetzt.`,min,max,container.dataset.scalierung);
+        return null;
+    }
+
+    console.log(`Min: ${min}, Max: ${max}, Skalierung: ${skalierung}`);
+
+    // Bestimme die Schrittgröße basierend auf der Skalierung
+    const step = Math.pow(10, skalierung - 1);
+    console.log(`Schrittgröße basierend auf Skalierung (${skalierung}): ${step}`);
+
+    // Berechne die Anzahl der Schritte
+    const numberOfSteps = Math.floor((max - min) / step);
+    console.log(`Anzahl der Schritte: ${numberOfSteps}`);
+
+    if (numberOfSteps <= 0) {
+        console.error(`Ungültige Schrittzahl (${numberOfSteps}). Überprüfen Sie 'min', 'max' und 'skalierung'.`);
+        return null;
+    }
+
+    // Generiere eine zufällige Schrittzahl
+    const randomStep = getRandomIntInclusive(0, numberOfSteps);
+    console.log(`Zufällige Schrittzahl: ${randomStep}`);
+
+    // Berechne die Zufallszahl
+    let zufallsZahl = min + (randomStep * step);
+    console.log(`Ungerundete Zufallszahl: ${zufallsZahl}`);
+
+    // Bestimme die Anzahl der Dezimalstellen
+    const decimalPlaces = getDecimalPlaces(skalierung);
+    zufallsZahl = parseFloat(zufallsZahl.toFixed(decimalPlaces));
+    console.log(`Gerundete Zufallszahl: ${zufallsZahl}`);
+
+    return zufallsZahl;
+
+    /**
+     * Generiert eine zufällige ganze Zahl zwischen min und max (inklusive).
+     *
+     * @param {number} min - Der minimale Wert.
+     * @param {number} max - Der maximale Wert.
+     * @returns {number} - Eine zufällige ganze Zahl zwischen min und max.
+     */
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    /**
+     * Bestimmt die Anzahl der Dezimalstellen basierend auf der Skalierung.
+     *
+     * @param {number} skalierung - Die Skalierung des Zahlenstrahls.
+     * @returns {number} - Die Anzahl der Dezimalstellen.
+     */
+    function getDecimalPlaces(skalierung) {
+        // Anzahl der Dezimalstellen entspricht dem Absolutwert von (skalierung - 1)
+        const dezimalstellen = Math.max(0, -(skalierung - 1));
+        return dezimalstellen;
+    }
+}
+
+
+// Beispielaufruf der Funktion
+erstelleZufälligenZahlenstrahl('kontainer')
+const zufallsZahl = generiereZufallszahlAufZahlenstrahl('kontainer');
+if (zufallsZahl !== null) {
+    console.log(`Generierte Zufallszahl: ${zufallsZahl}`);
+    // Optional: Markieren Sie die Zufallszahl auf dem Zahlenstrahl
+    markiereZahl('kontainer', zufallsZahl, 'blue', true, true); // Beispiel: Markiert die Zahl in Blau und beweglich
+} else {
+    console.log('Die Zufallszahl konnte nicht generiert werden.');
+}
