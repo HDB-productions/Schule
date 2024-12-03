@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Zahlenstrahl</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            position: relative;
+            width: 900px;
+            height: auto; /* Erhöht, um Platz für Markierungen und Containername zu bieten */
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        svg {
+            border: 1px solid black;
+            display: block; /* Verhindert unerwünschte Abstände */
+            margin: 0 auto; /* Zentriert das SVG innerhalb des Containers */
+        }
+        /* Stil für Container-Namen */
+        .container-name {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+        }
+        /* Stil für Formulare */
+        .forms-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            width: 100%;
+            max-width: 1800px;
+            margin: 10px auto;
+            flex-wrap: wrap;
+        }
+        .form-container {
+            flex: 1;
+            min-width: 250px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-container h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .form-group label {
+            width: 200px;
+            margin-right: 5px;
+            text-align: right;
+        }
+        .form-group input, .form-group select {
+            flex: 1;
+            padding: 5px; /* Abstand um den Text herum */
+            width: 100%; /* Füllt den verfügbaren Platz */
+            min-width: 50px; /* Mindestbreite für kleine Bildschirme */
+        }
+
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-left: 0;
+        }
+        .form-group button {
+            padding: 5px 10px;
+            cursor: pointer;
+            position: relative;
+            margin:auto;  
+        }
+        @media (max-width: 600px) {
+            .forms-container {
+                flex-direction: column;
+                width: 100%;
+            }
+            .form-group label {
+                width: 100%;
+                text-align: left;
+                margin-bottom: 5px;
+            }
+            .form-group input, .form-group select, .form-group button {
+                width: 100%;
+                margin-left: 0;
+            }
+            .form-group button {
+                margin-left: 0;
+            }
+        }
+        /* Stil für die Markierungsauflistung */
+        #markierungenTabelle {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        #markierungenTabelle th, #markierungenTabelle td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: left;
+        }
+        #markierungenTabelle th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Container für die Zahlenstrahlen -->
+    <div id="kontainer" class="container">
+        <!--<div class="container-name">ID: kontainer</div>-->
+    </div>
+
+    <!-- Einbinden des externen JavaScript-Dokuments -->
+    <script src="Zahlenstrahl.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        
+            // Funktion zum Aktualisieren des Eltern-Textfelds
+            function updateParentTextField() {
+                const kontainer = document.getElementById('kontainer');
+                if (kontainer) {
+                    // Entscheide, ob du innerHTML oder textContent verwenden möchtest
+                    // innerHTML beinhaltet HTML-Tags, textContent nur den Text
+                    const content = kontainer.innerHTML; // oder kontainer.textContent
+                    const textInput = window.parent.document.getElementById('vermittler');
+                    if (textInput) {
+                        textInput.value = content;
+                    }
+                }
+            }
+
+            // Initiales Update beim Laden der Seite
+            updateParentTextField();
+
+            // Erstelle einen MutationObserver
+            const observer = new MutationObserver(function(mutationsList, observer) {
+                // Bei jeder Mutation das Eltern-Textfeld aktualisieren
+                updateParentTextField();
+            });
+
+            // Konfiguriere den Observer: überwache Änderungen an Kindelementen und Textinhalt
+            const kontainer = document.getElementById('kontainer');
+            if (kontainer) {
+                observer.observe(kontainer, {
+                    childList: true,    // Überwache Hinzufügen/Entfernen von Kindelementen
+                    subtree: true,      // Überwache den gesamten DOM-Baum unter dem Container
+                    characterData: true // Überwache Änderungen an Textknoten
+                });
+            } else {
+                console.error('Das Element mit der ID "kontainer" wurde nicht gefunden.');
+            }
+        });
+    </script>
+</body>
+</html>
