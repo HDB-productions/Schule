@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Multiplikation mit Negativen Zahlen Veranschaulichen</title>
+    <style>
+        /* CSS-Styling */
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 60%;
+            margin: 0 auto 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 80%;
+            padding: 5px;
+            font-size: 1em;
+        }
+
+        select {
+            width: 90%;
+            padding: 5px;
+            font-size: 1em;
+        }
+
+        #output {
+            width: 60%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #description {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        #rechnung {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        #erklärung p {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+
+        .color1 {
+            color: blue;
+            font-weight: bold;
+        }
+
+        .color2 {
+            color: red;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            table, #output {
+                width: 90%;
+            }
+
+            input[type="number"], select {
+                width: 100%;
+            }
+        }
+
+        /* Reset-Button Styling */
+        #resetButton {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #resetButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Multiplikation mit Negativen Zahlen Veranschaulichen</h1>
+    <table id="inputTable">
+        <thead>
+            <tr>
+                <th>Betrag</th>
+                <th>Vorzeichen</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="number" id="betrag1" value="4" min="0"></td>
+                <td>
+                    <select id="vorzeichen1">
+                        <option value="+">Bekommen (+)</option>
+                        <option value="-">Verlieren (-)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="number" id="betrag2" value="3" min="0"></td>
+                <td>
+                    <select id="vorzeichen2">
+                        <option value="+">Guthaben (+)</option>
+                        <option value="-">Schulden (-)</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button id="resetButton">Zurücksetzen</button>
+
+    <div id="output">
+        <p id="description"></p>
+        <p id="rechnung"></p>
+        <div id="erklärung">        
+        </div>
+    </div>
+
+    <script>
+        // JavaScript-Funktionalität
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elemente abrufen
+            const betrag1 = document.getElementById('betrag1');
+            const vorzeichen1 = document.getElementById('vorzeichen1');
+            const betrag2 = document.getElementById('betrag2');
+            const vorzeichen2 = document.getElementById('vorzeichen2');
+
+            const description = document.getElementById('description');
+            const rechnung = document.getElementById('rechnung');
+            const erklärung = document.getElementById('erklärung');
+
+            const resetButton = document.getElementById('resetButton');
+
+            // Funktion zur Aktualisierung der Ausgabe
+            function updateOutput() {
+                const val1 = parseInt(betrag1.value);
+                const sign1 = vorzeichen1.value;
+                const val2 = parseInt(betrag2.value);
+                const sign2 = vorzeichen2.value;
+
+                // Sicherstellen, dass die Eingaben gültig sind
+                if (isNaN(val1) || isNaN(val2)) {
+                    description.textContent = "Bitte geben Sie gültige Zahlen ein.";
+                    rechnung.textContent = "";
+                    erklärung.innerHTML = "";
+                    return;
+                }
+
+                // Berechnung der numerischen Werte
+                const num1 = sign1 === '+' ? val1 : -val1;
+                const num2 = sign2 === '+' ? val2 : -val2;
+                const product = num1 * num2;
+
+                // Generierung der Beschreibung
+                let action1 = sign1 === '+' ? 'bekommst' : 'verlierst';
+                let noun1 = sign2 === '+' ? 'Guthaben' : 'Schulden';
+
+            
+
+                let descriptionText = `Du <span class="color1">${action1} ${Math.abs(num1)}</span> mal <span class="color2">${Math.abs(num2)}€ ${noun1}</span>.`;
+                description.innerHTML = descriptionText;
+
+    // Formatierung der zweiten Zahl mit Klammern, wenn negativ
+                let displayNum2 = num2 < 0 ? `(${num2})` : num2;
+
+                // Anzeige der Rechnung mit Klammern bei negativen Zahlen
+                let displayNum1 = num1;
+                let displayNum2Calc = num2 < 0 ? `(${num2})` : num2;
+                let rechnungText = `<span class="color1">${num1}</span> &middot <span class="color2">${displayNum2Calc}</span> = ${product}`;
+                rechnung.innerHTML = rechnungText;
+
+              // Generierung der Erklärung
+let erklärungText1 = `Die Rechnung lässt sich aufteilen in Zwei Überlegungen <br><br>
+1. Betrag: <span class="color1">${Math.abs(num1)}</span> &middot <span class="color2">${Math.abs(num2)}</span> = ${Math.abs(product)}`;
+
+let erklärungText2 = "";
+
+if (sign1 === '+' && sign2 === '+') {
+    // Bekommen (+) und Guthaben (+)
+    erklärungText2 = `2. Vorzeichen: <span class="color2">Guthaben</span> <span class="color1">bekommen</span> bedeutet, wird mehr, also +.`;
+} else if (sign1 === '+' && sign2 === '-') {
+    // Bekommen (+) und Schulden (-)
+    erklärungText2 = `2. Vorzeichen: <span class="color2">Schulden</span> <span class="color1">bekommen</span> bedeutet, es wird weniger, also -.`;
+} else if (sign1 === '-' && sign2 === '+') {
+    // Verlieren (-) und Guthaben (+)
+    erklärungText2 = `2. Vorzeichen: <span class="color2">Guthaben</span> <span class="color1">verlieren</span> bedeutet, es wird weniger, also -.`;
+} else if (sign1 === '-' && sign2 === '-') {
+    // Verlieren (-) und Schulden (-)
+    erklärungText2 = `2. Vorzeichen: <span class="color2">Schulden</span> <span class="color1">verlieren</span> bedeutet, es wird mehr, also +.`;
+}
+
+// Setze Erklärung mit Farben
+erklärung.innerHTML = `
+    <p>${erklärungText1}</p>
+    <p>${erklärungText2}</p>
+`;
+
+
+                // Setze Erklärung mit Farben
+                erklärung.innerHTML = `
+                    <p>${erklärungText1}</p>
+                    <p>${erklärungText2}</p>
+                `;
+            }
+
+            // Funktion zum Zurücksetzen der Eingaben
+            function resetInputs() {
+                betrag1.value = 4;
+                vorzeichen1.value = '+';
+                betrag2.value = 3;
+                vorzeichen2.value = '+';
+                updateOutput();
+            }
+
+            // Event Listener hinzufügen für alle Eingabefelder und Dropdowns
+            betrag1.addEventListener('input', updateOutput);
+            vorzeichen1.addEventListener('change', updateOutput);
+            betrag2.addEventListener('input', updateOutput);
+            vorzeichen2.addEventListener('change', updateOutput);
+
+            // Event Listener für den Reset-Button
+            resetButton.addEventListener('click', resetInputs);
+
+            // Initiale Ausgabe beim Laden der Seite
+            updateOutput();
+        });
+    </script>
+</body>
+</html>
