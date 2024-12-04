@@ -179,10 +179,16 @@
 
                 // Sicherstellen, dass die Eingaben gültig sind
                 if (isNaN(val1) || isNaN(val2)) {
-                    description.textContent = "Bitte geben Sie gültige Zahlen ein.";
+                    description.textContent = "Bitte gib gültige Zahlen ein.";
                     rechnung.textContent = "";
                     erklärung.innerHTML = "";
                     return;
+                }
+                if (val1 < 0 || val2 < 0) {
+                description.textContent = "Bitte gib nur positive Zahlen im Betragsfeld ein. Nutze das Vorzeichenfeld, um Guthaben oder Schulden anzugeben.";
+                 rechnung.textContent = "";
+                  erklärung.innerHTML = "";
+                 return;
                 }
 
                 // Berechnung der numerischen Werte
