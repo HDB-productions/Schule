@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DnD Character Sheet</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #1c1c1c;
+      color: #ddd;  /* helle Schrift für Dark Theme */
+      font-family: sans-serif;
+    }
+
+    /* Header fix oben */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #444;
+      padding: 0.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-left,
+    .header-center,
+    .header-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-center {
+      flex-direction: column;
+    }
+
+    .app-header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #f2c94c; /* goldene Farbe */
+    }
+
+    .app-header p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    /* Portrait */
+    .portrait-section {
+      background-color: #2c2c2c;
+      text-align: center;
+      padding: 1rem;
+    }
+    .portrait-img {
+      max-width: 150px;
+      border-radius: 50%;
+      opacity: 0.6; /* Silhouette-Style */
+    }
+
+    /* Hauptinhalt zum Scrollen */
+    .content {
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    /* Sektionen */
+    .block {
+      margin-bottom: 1.5rem;
+    }
+
+    .block h2 {
+      color: #f2c94c;
+      border-bottom: 1px solid #555;
+      margin: 0 0 0.5rem;
+      font-weight: normal;
+    }
+
+    /* Beispiel: Health Bars */
+    .health-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+    }
+    .health-bar .label {
+      flex: 0 0 100px;
+    }
+    .health-bar .value {
+      flex: 1;
+      text-align: right;
+      color: #fff;
+      padding: 0.2rem 0.5rem;
+      border-radius: 5px;
+    }
+    .green-bar {
+      background-color: #219653; /* Grün */
+    }
+    .blue-bar {
+      background-color: #2f80ed; /* Blau */
+    }
+
+    /* Beispiel: Stats Row */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.25rem 0;
+    }
+    .stat-box {
+      flex: 1;
+      margin: 0 0.5rem;
+      text-align: center;
+      border: 1px solid #555;
+      border-radius: 5px;
+      padding: 0.5rem;
+    }
+    .stat-box .label {
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+      color: #ccc;
+    }
+    .stat-box .value {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    /* Navigationsleiste (unten) */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #333;
+      padding: 0.5rem 0;
+      position: sticky;
+      bottom: 0;
+      z-index: 1000;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: #f2c94c; /* Goldene Icons */
+      font-size: 1.4rem;
+      padding: 0.5rem;
+    }
+
+    /* Beispiel: Ausblendbares Seitenmenü */
+    .side-menu {
+      position: absolute;
+      top: 0; right: 0;
+      width: 200px;
+      height: 100%;
+      background-color: #222;
+      border-left: 1px solid #555;
+      transition: transform 0.3s ease;
+    }
+    .side-menu.hidden {
+      transform: translateX(100%);
+    }
+
+    /* Buttons */
+    button {
+      cursor: pointer;
+      font: inherit;
+    }
+    .btn-home,
+    .btn-menu {
+      background: none;
+      border: none;
+      color: #f2c94c;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+    }
+
+    /************************************************
+     * Layout und Farben für den Health-Balken
+     ************************************************/
+    .healthbar-container {
+      position: relative;
+      width: 100%;
+      height: 24px;
+      background-color: #700;   /* dunkles Rot als "Leerer" Bereich */
+      border-radius: 6px;
+      overflow: hidden;         
+      margin-bottom: 1rem;
+    }
+    .healthbar-inner {
+      height: 100%;
+      background-color: #0a0;   /* Grün */
+      transition: width 0.3s ease;
+    }
+    .healthbar-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none; 
+    }
+    .hp-clickable {
+      pointer-events: auto;  
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: underline; 
+      margin: 0 4px;
+    }
+
+    /* "Leerer" Bereich (dunkles Blau) */
+    .bluebar-container {
+      position: relative;
+      width: 100%;
+      height: 24px;
+      background-color: #1d3359; /* dunkleres Blau */
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    /* Gefüllter Bereich (helleres Blau) */
+    .bluebar-inner {
+      height: 100%;
+      background-color: #2f80ed;
+      transition: width 0.3s ease;
+      border-radius: 6px;
+    }
+
+    /************************************************
+     * Modale Fenster (Pop-ups)
+     ************************************************/
+    .modal {
+      position: fixed;
+      top: 0; 
+      left: 0; 
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 999;  
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .modal-content {
+      background-color: #333;
+      color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #fff;
+      cursor: pointer;
+    }
+    #charDropdown {
+  position: absolute;
+  background-color: #444;
+  border: 1px solid #555;
+  padding: 0.5rem;
+  min-width: 120px;
+  /* usw. je nach Geschmack */
+}
+#charDropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#charDropdown li {
+  margin: 0.3rem 0;
+  cursor: pointer;
+  color: #f2c94c; 
+}
+#charDropdown li:hover {
+  text-decoration: underline;
+}
+details summary {
+  display: block;           /* Macht summary ganzflächig klickbar */
+  margin: 0 0 0.5rem;       /* Abstand nach unten */
+  font-size: 1.5rem;        /* wie deine H2 */
+  font-weight: normal;      /* falls H2 normal ist */
+  color: #f2c94c;           /* goldene Schrift */
+  border-bottom: 1px solid #555; /* Linie darunter */
+  padding: 0.5rem 0;        /* etwas Innenabstand */
+  cursor: pointer;          /* Zeigt Mauszeiger an */
+  outline: none;            /* Verhindert ggf. Rahmen bei Klick in manchen Browsern */
+}
+details summary:focus {
+  outline: none; /* Falls gewünscht, damit kein Fokus-Rahmen erscheint */
+}
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <button class="btn-home">Home</button>
+    </div>
+    <div class="header-center">
+      <!-- Name aus JSON -->
+      <h1 id="charName" style="cursor:pointer;">NamePlaceholder</h1>
+      <div id="charDropdown" class="hidden">
+        <ul id="charList"></ul> 
+      </div>
+      
+      <!-- Klasse aus JSON -->
+      <p id="charClass">KlassePlaceholder</p>
+    </div>
+    <div class="header-right">
+      <button class="btn-menu">&#9776;</button>
+    </div>
+  </header>
+
+  <!-- Bild / Portrait -->
+  <section class="portrait-section">
+    <img src="path_to_placeholder.png" alt="Character Portrait" class="portrait-img" />
+  </section>
+
+  <!-- Hauptinhalte (scrollbar) -->
+  <main class="content">
+    
+    <!-- Health / Conditions -->
+    <details open>
+        <summary>Leben</summary>
+    <section class="block">
+
+      <div class="health-bar">
+        <div class="label">Hit Points</div>
+         <!-- Fortschrittsbalken -->
+         <div class="healthbar-container">
+            <!-- Der grüne Anteil des Balkens -->
+            <div class="healthbar-inner" id="healthbarInner"></div>
+            
+            <!-- Text in der Mitte des Balkens -->
+            <div class="healthbar-text">
+              <!-- Aktuelle HP anklickbar -->
+              <span id="currentHp" class="hp-clickable">0</span>
+              /
+              <!-- Maximale HP anklickbar -->
+              <span id="maxHp" class="hp-clickable">0</span>
+            </div>
+          </div>
+      </div>
+      <div class="health-bar">
+        <div class="label">Hit Dice</div>
+        <!-- Blauer Balken -->
+        <div class="bluebar-container">
+          <div class="bluebar-inner" id="hitDiceInner"></div>
+          <div class="healthbar-text">
+            <span id="hitDiceCurrent" class="hp-clickable">0</span>
+            /
+            <span id="hitDiceMax" class="hp-clickable">0</span>
+            <span id="hitDiceArt">d??</span>
+          </div>
+        </div>
+      </div>
+    </section>
+</details >
+    <section class="block">
+      <h2>Zustände</h2>
+      <!-- … -->
+    </section>
+
+    <!-- Statistics -->
+    <details open>
+        <summary>Attribute</summary>
+    <section class="block">
+   
+      <div class="stats-row">
+        <!-- Stärke -->
+        <div class="stat-box">
+          <div class="label">Stärke</div>
+          <div class="value" id="str-bonus">+0</div>
+          <div class="value" id="str-wert">10</div>
+        </div>
+    
+        <!-- Geschicklichkeit -->
+        <div class="stat-box">
+          <div class="label">Geschicklichkeit</div>
+          <div class="value" id="dex-bonus">+0</div>
+          <div class="value" id="dex-wert">10</div>
+        </div>
+    
+        <!-- Konstitution -->
+        <div class="stat-box">
+          <div class="label">Konstitution</div>
+          <div class="value" id="con-bonus">+0</div>
+          <div class="value" id="con-wert">10</div>
+        </div>
+      </div>
+    
+      <div class="stats-row">
+        <!-- Intelligenz -->
+        <div class="stat-box">
+          <div class="label">Intelligenz</div>
+          <div class="value" id="int-bonus">+0</div>
+          <div class="value" id="int-wert">10</div>
+        </div>
+    
+        <!-- Weisheit -->
+        <div class="stat-box">
+          <div class="label">Weisheit</div>
+          <div class="value" id="wis-bonus">+0</div>
+          <div class="value" id="wis-wert">10</div>
+        </div>
+    
+        <!-- Charisma -->
+        <div class="stat-box">
+          <div class="label">Charisma</div>
+          <div class="value" id="cha-bonus">+0</div>
+          <div class="value" id="cha-wert">10</div>
+        </div>
+      </div>
+    </section>
+</details>
+<details open>
+    <summary>Statistics</summary>
+    <!-- Statistics -->
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="label">Armor Class</div>
+          <div class="value">14</div>
+        </div>
+        <div class="stat-box">
+          <div class="label">Initiative</div>
+          <div class="value">+3</div>
+        </div>
+        <div class="stat-box">
+          <div class="label">Speed</div>
+          <div class="value">30 ft</div>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="label">Passive Perception</div>
+          <div class="value">12</div>
+        </div>
+        <div class="stat-box">
+          <div class="label">Proficiency</div>
+          <div class="value">+2</div>
+        </div>
+        <div class="stat-box">
+          <div class="label">Inspiration</div>
+          <div class="value">0</div>
+        </div>
+      </div>
+    </section>
+</details>
+   
+    <!-- usw. ... (Abilities, Skills, Spells, Equipment, Notes etc.) -->
+  </main>
+
+  <!-- Navigationsleiste (unten) -->
+  <nav class="bottom-nav">
+    <button class="nav-btn" data-tab="stats">⚔</button>
+    <button class="nav-btn" data-tab="movement">🏃</button>
+    <button class="nav-btn" data-tab="spells">📖</button>
+    <button class="nav-btn" data-tab="inventory">📦</button>
+    <button class="nav-btn" data-tab="features">≡</button>
+  </nav>
+
+  <!-- Optional: ausklappbares Seitenmenü, Modales Menü, etc. -->
+  <aside class="side-menu hidden">
+    <!-- … -->
+  </aside>
+
+  <!-- Pop-up für aktuellen HP (Damage) -->
+  <div id="damageModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn" id="closeDamageModal">&times;</span>
+      <h3>Damage</h3>
+      <p>Hier kommt später die Logik für Schaden rein</p>
+    </div>
+  </div>
+
+  <!-- Pop-up für maximale HP -->
+  <div id="maxHealthModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn" id="closeMaxHealthModal">&times;</span>
+      <h3>Max Health</h3>
+      <p>Hier kommt später die Logik für maximale HP rein</p>
+    </div>
+  </div>
+
+  <script>
+    /************************************************
+     * ZENTRALE FUNKTIONEN
+     ************************************************/
+
+    /**
+     * Aktualisiert die grüne HP-Bar.
+     */
+    function updateHealthBar(current, max) {
+      const ratio = Math.max(0, Math.min(current / max, 1));
+      const pct   = Math.round(ratio * 100) + "%";
+
+      // HTML-Elemente
+      const healthbarInner = document.getElementById("healthbarInner");
+      const currentHpEl    = document.getElementById("currentHp");
+      const maxHpEl        = document.getElementById("maxHp");
+
+      healthbarInner.style.width = pct;
+      currentHpEl.textContent = current;
+      maxHpEl.textContent     = max;
+    }
+
+    /**
+     * Aktualisiert die blaue Hit-Dice-Bar.
+     */
+    function updateHitDice(current, max, diceArt) {
+      const ratio = Math.max(0, Math.min(current / max, 1));
+      const pct   = Math.round(ratio * 100) + "%";
+
+      const hitDiceInner   = document.getElementById("hitDiceInner");
+      const hitDiceCurrent = document.getElementById("hitDiceCurrent");
+      const hitDiceMax     = document.getElementById("hitDiceMax");
+      const hitDiceArtEl   = document.getElementById("hitDiceArt");
+
+      hitDiceInner.style.width = pct;
+      hitDiceCurrent.textContent = current;
+      hitDiceMax.textContent     = max;
+      hitDiceArtEl.textContent   = diceArt;
+    }
+
+    /**
+     * Lädt die Daten eines Charakters (z. B. "Diundriel") 
+     * aus dem JSON-Objekt und trägt sie ins UI ein.
+     */
+    function loadCharacter(allData, characterName) {
+      const sc = allData.Charaktäre.Spielercharaktere;
+      if (!sc) {
+        console.error("Keine Spielercharaktere in JSON gefunden!");
+        return;
+      }
+      const charData = sc[characterName];
+      if (!charData) {
+        console.error("Charakter '" + characterName + "' nicht gefunden!");
+        return;
+      }
+
+      // 1) Name
+      document.getElementById("charName").textContent = characterName;
+
+      // 2) Klasse
+      // z. B. { "Paladin (Lichtbringer)": 8 }
+      const klasseObj = charData.Klasse;
+      let klasseName = "";
+      let klasseLevel = 0;
+      for (let k in klasseObj) {
+        klasseName  = k;              // "Paladin (Lichtbringer)"
+        klasseLevel = klasseObj[k];   // 8
+      }
+      document.getElementById("charClass").textContent = klasseName + " Lvl " + klasseLevel;
+
+      // 3) HP
+      const hpData = charData.Attribute.Leben;
+      const hpCurrent = hpData.Wert; 
+      const hpMax     = hpData.Max + (hpData["Temp Bonus"] || 0);
+      updateHealthBar(hpCurrent, hpMax);
+
+      // 4) Hit Dice
+      const hdData = charData.Attribute.HD;
+      updateHitDice(hdData.Wert, hdData.Maximal, hdData.Art);
+        
+      // 4) Attribute
+      const attr = charData.Attribute;
+      updateAttributes(attr);
+
+    }
+
+    /************************************************
+     * SONSTIGER CODE (z. B. Tabs, Modals etc.)
+     ************************************************/
+
+    // Tab-Logik (falls du Sections hast, die ein/ausgeblendet werden)
+    const tabs = document.querySelectorAll('.nav-btn');
+    const sections = document.querySelectorAll('main section');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabToShow = btn.dataset.tab; 
+        sections.forEach(sec => {
+          // Falls du 'id' in den Sections definieren würdest...
+          if (sec.id === tabToShow) {
+            sec.style.display = 'block';
+          } else {
+            sec.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Modal-Events
+    const damageModal        = document.getElementById('damageModal');
+    const maxHealthModal     = document.getElementById('maxHealthModal');
+    const closeDamageModal   = document.getElementById('closeDamageModal');
+    const closeMaxHealthModal= document.getElementById('closeMaxHealthModal');
+
+    document.getElementById('currentHp').addEventListener('click', () => {
+      damageModal.classList.remove('hidden');
+    });
+    document.getElementById('maxHp').addEventListener('click', () => {
+      maxHealthModal.classList.remove('hidden');
+    });
+    closeDamageModal.addEventListener('click', () => {
+      damageModal.classList.add('hidden');
+    });
+    closeMaxHealthModal.addEventListener('click', () => {
+      maxHealthModal.classList.add('hidden');
+    });
+
+    /************************************************
+     * DATEN LADEN
+     ************************************************/
+    fetch("DnDKalender.JSON")
+      .then(r => r.json())
+      .then(allData => {
+        // Charakter "Diundriel" laden (Beispiel)
+        loadCharacter(allData, "Diundriel");
+        // Falls du später "Saphira" o.ä. laden willst, 
+        // rufst du loadCharacter(allData, "Saphira") an.
+      })
+      .catch(err => {
+        console.error("Fehler beim Laden von DnDKalender.JSON", err);
+      });
+      let allDataGlobal = null; // damit wir darauf zugreifen können
+
+fetch("DnDKalender.JSON")
+  .then(r => r.json())
+  .then(jsonData => {
+    allDataGlobal = jsonData;
+
+    // 1) Dropdown befüllen
+    const sc = allDataGlobal.Charaktäre.Spielercharaktere; 
+    const charListEl = document.getElementById("charList");
+    
+    // Schleife: alle Schlüssel in sc durchgehen
+    for (const charName in sc) {
+      const li = document.createElement("li");
+      li.textContent = charName; // z.B. "Diundriel", "Saphira", ...
+      
+      // Klick auf eine Zeile => loadCharacter
+      li.addEventListener("click", () => {
+        loadCharacter(allDataGlobal, charName);
+        // Dropdown schließen
+        dropdownEl.classList.add("hidden");
+      });
+      
+      charListEl.appendChild(li);
+    }
+    
+    // 2) Standard-Charakter beim Laden
+    loadCharacter(allDataGlobal, "Diundriel");
+  })
+  .catch(err => {
+    console.error("Fehler beim Laden JSON:", err);
+  });
+
+// Klick auf charName => Toggle Dropdown
+const charNameEl = document.getElementById("charName");
+const dropdownEl = document.getElementById("charDropdown");
+charNameEl.addEventListener("click", () => {
+  dropdownEl.classList.toggle("hidden");
+});
+/**
+ * Bonusberechnung:
+ * finalVal = Basiswert + Temp
+ * bonus = Math.floor((finalVal - 10) / 2)
+ */
+ function calcBonus(value, temp) {
+  const finalVal = value + temp;
+  return Math.floor((finalVal - 10) / 2);
+}
+const attributeMapping = [
+  { name: "Stärke",          idPrefix: "str" },
+  { name: "Geschicklichkeit",idPrefix: "dex" },
+  { name: "Konstitution",    idPrefix: "con" },
+  { name: "Intelligenz",     idPrefix: "int" },
+  { name: "Weisheit",        idPrefix: "wis" },
+  { name: "Charisma",        idPrefix: "cha" },
+];
+
+function updateAttributes(attrData) {
+  attributeMapping.forEach(map => {
+    const base = attrData[map.name].Wert;
+    const temp = attrData[map.name]["Temp Mod"];
+    const finalVal = base + temp;
+    const bonus = calcBonus(base, temp);
+
+    // z. B. #str-wert oder #dex-wert ...
+    document.getElementById(`${map.idPrefix}-wert`).textContent  = finalVal;
+    document.getElementById(`${map.idPrefix}-bonus`).textContent = (bonus >= 0 ? "+" : "") + bonus;
+  });
+}
+
+
+  </script>
+</body>
+</html>
