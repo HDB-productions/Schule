@@ -1,0 +1,257 @@
+{"Diundriel": {
+                "Rollenspiel":{
+                "Spieler":"Finn",
+                "Spezies": "Halfelf",
+                "Alter": 14,
+                "Gößenkategorie": "Groß",
+                "Größe":"1,60m",
+                "Gewicht": "54kg",
+                "Statur:": "schlank",
+                "Augen": "Blau",
+                "Haut": "Hell",
+                "Haar": "Blond, Kurz",
+                "Geschlecht":"Männlich",
+                "Hintergrundinformationen": "Wurde als Baby von Ames im Wald gefunden und von ihm in Leet aufgezogen. Hatte glückliche Kindheit in Leet, bis er mit 13 Jahren Thoralf kennenlernt und die Vermutung aufkommt, dass er ein Lichtbringer ist. Ziet mit Toralf los um sein Schicksal zu erfüllen."
+              },
+              "Klasse":{"Paladin (Lichtbringer)":8
+                    },
+            "Attribute":{
+                    "Leben":{
+                        "Abkürzung": "HP",
+                        "Wert":80,
+                        "Max":89,
+                        "Temp Bonus": 3
+                    },
+                    "HD":{
+                        "Art":"d10",
+                        "Wert":2,
+                        "Maximal":8         
+                    },
+                    "Stärke": {
+                  "Abkürzung": "ST",
+                  "Wert": 18,
+                  "Bonus": 4,
+                  "Temp Mod": 0,
+                  "Grund für Mod": "na",
+                  "Temp Wert": 18,
+                  "Temp Bonus": 4,
+                  "Rettungswurfbonus":"na"
+                    },
+                    "Geschicklichkeit": {
+                  "Abkürzung": "GE",
+                  "Wert": 12,
+                  "Bonus": 1,
+                  "Temp Mod": 0,
+                  "Grund für Mod": "na",
+                  "Temp Wert": 12,
+                  "Temp Bonus": 1,
+                  "Rettungswurfbonus":"na"
+                    },
+                    "Konstitution": {
+                    "Abkürzung": "KO",
+                    "Wert": 18,
+                    "Bonus": 4,
+                    "Temp Mod": 0,
+                    "Grund für Mod": "na",
+                    "Temp Wert": 18,
+                    "Temp Bonus": 4,
+                    "Rettungswurfbonus":"na"
+                    },
+                    "Intelligenz": {
+                    "Abkürzung": "IN",
+                    "Wert": 13,
+                    "Bonus": 1,
+                    "Temp Mod": 0,
+                    "Grund für Mod": "na",
+                    "Temp Wert": 13,
+                    "Temp Bonus": 1,
+                    "Rettungswurfbonus":"na"
+                    },
+                    "Weisheit": {
+                    "Abkürzung": "WE",
+                    "Wert": 10,
+                    "Bonus": 0,
+                    "Temp Mod": 2,
+                    "Grund für Mod": "+2 Saphira",
+                    "Temp Wert": 12,
+                    "Temp Bonus": 1,
+                    "Rettungswurfbonus":"na"
+                    },
+                    "Charisma": {
+                    "Abkürzung": "CH",
+                    "Wert": 16,
+                    "Bonus": 3,
+                    "Temp Mod": 2,
+                    "Grund für Mod": "+2 Saphira",
+                    "Temp Wert": 18,
+                    "Temp Bonus": 4,
+                    "Rettungswurfbonus":"na"
+                    }
+              },
+              "Fertigkeitenboni":{
+            
+              },
+                  
+              "Gegenstände": [
+    {"name": "Rucksack",
+      "beschreibung": "Ein stabiler Rucksack mit vielen Fächern.",
+      "gewicht": 5.0,
+      "wert": 2.0,
+      "equipped": false,
+      "gegenstandsTyp": {
+        "Behälter": {
+          "ignoreInhaltGewicht": false,
+          "maxInhaltGewicht": 50,
+          "maxInhaltVolumenKubikfuss": 10,
+          "container": []
+        },
+        "Alltäglich": {}
+      }
+    },
+    {"name": "Tasche des Haltens",
+      "beschreibung": "Diese Tasche hat einen Innenraum, der wesentlich größer ist als ihre Außenmaße: etwa 60 cm Durchmesser an der Öffnung und 120 cm Tiefe. Die Tasche kann bis zu 500 Pfund fassen, wobei ein Volumen von 64 Kubikfuß nicht überschritten wird. Die Tasche wiegt unabhängig von ihrem Inhalt stets 15 Pfund. Das Herausnehmen eines Gegenstands erfordert eine Aktion.\n\nWird die Tasche überladen, durchstochen oder zerrissen, zerreißt sie und wird zerstört; ihr Inhalt wird in der Astralebene verstreut. Wenn die Tasche umgedreht wird, strömt ihr gesamter Inhalt unversehrt heraus, aber die Tasche muss wieder in Ordnung gebracht werden, bevor sie erneut benutzt werden kann. Atmende Kreaturen im Inneren der Tasche können bis zu einer Anzahl von Minuten überleben, die gleich 10 geteilt durch die Anzahl der Kreaturen ist (mindestens 1 Minute); nach dieser Zeit beginnen sie zu ersticken. Wird eine Tasche des Haltens in einen extradimensionalen Raum gelegt, der durch einen 'Handlichen Rucksack', ein 'Tragbares Loch' oder einen ähnlichen Gegenstand entsteht, werden beide Gegenstände sofort zerstört und ein Tor zur Astralebene geöffnet. Das Tor entsteht dort, wo der eine Gegenstand in den anderen gelegt wurde. Jede Kreatur im Umkreis von 3 Metern (10 Fuß) um das Tor wird durch das Tor an einen zufälligen Ort in der Astralebene gesaugt. Dann schließt sich das Tor. Das Tor ist nur in eine Richtung offen und kann nicht wieder geöffnet werden.",     
+      "gewicht": 15,
+      "wert": 4000,
+      "equipped": false,
+      "seltenheit": "Ungewöhnlich",
+      "gegenstandsTyp": {
+        "Magisch": {
+          "modifikatoren": [],
+          "erfordertEinstimmung": false
+        },
+        "Behälter": {
+          "ignoreInhaltGewicht": true,
+          "maxInhaltGewicht": 500,
+          "maxInhaltVolumenKubikfuss": 64,
+          "container": []
+        }
+      }
+    },
+    {"name": "Seil (50ft)",
+      "beschreibung": "Ein 50 Fuß langes Seil aus Hanf.",
+      "gewicht": 10.0,
+      "wert": 1.0,
+      "equipped": false,
+      "gegenstandsTyp": {
+        "Alltäglich": {}
+      }
+    },
+    {"name": "Fackel",
+      "beschreibung": "Eine einfache Fackel.",
+      "gewicht": 1.0,
+      "wert": 0.1,
+      "equipped": false,
+      "gegenstandsTyp": {
+        "Alltäglich": {}
+      }
+    },
+    {"name": "Bastartschwert",
+      "beschreibung": "Ein Schwert, dass sich einhändig und zweihändig führen lässt.",
+      "gewicht": 3.0,
+      "wert": 15.0,
+      "equipped": false,
+      "seltenheit": "Gewöhnlich",
+      "gegenstandsTyp": {
+        "Waffe": {
+          "typ": "Kriegswaffe",
+          "Mastery": "Sap",
+                      "1.Hand":{ 
+                              "Aktiv": false,
+                              "treffen": {"Geschick Faktor":0,"Stärke Faktor":1,"Proficiency Faktor":1, "Waffenbonus":0, "Andere Boni":0},  
+                              "schaden": {"physisch": {"Würfel":{"Typ":"d10", "Anzahl":1},"Bonus":{"Geschick Faktor":0, "Stärke Faktor":1,"Proficiency Faktor":0, "Waffenbonus":0,"Andere Boni":0}}},
+                              "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                              "kritisch": {"Schwelle": 19,"Multiplikator": 2}
+                            },
+                      "2.Hand":{ 
+                              "Aktiv": false,
+                              "treffen": {"Geschick Faktor":0,"Stärke Faktor":1,"Proficiency Faktor":0, "Waffenbonus":0, "Andere Boni":0},  
+                              "schaden": {"physisch": {"Würfel":{"Typ":"d10", "Anzahl":1},"Bonus":{"Geschick Faktor":0, "Stärke Faktor":1,"Proficiency Faktor":0, "Waffenbonus":0,"Andere Boni":0}}},
+                              "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                              "kritisch": {"Schwelle": 19,"Multiplikator": 2}
+                            },
+                      "Beidhändig":{
+                              "Aktiv": false,
+                              "treffen": {"Geschick Faktor":0, "Stärke Faktor":1,"Proficiency Faktor":1, "Waffenbonus":0, "Andere Boni":0},  
+                              "schaden": {"physisch": {"Würfel":{"Typ":"d10", "Anzahl":1},"Bonus":{"Geschick Faktor":0, "Stärke Faktor":1.5,"Proficiency Faktor":0, "Waffenbonus":0,"Andere Boni":0}}},
+                              "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                              "kritisch": {"Schwelle": 19,"Multiplikator": 2}
+                            }
+                      }
+
+}},
+{"name": "testgegenstand",
+      "beschreibung": "der gegenstand soll testen ob modifikatoren klappen",
+      "gewicht": 10.0,
+      "wert": 1.0,
+      "equipped": true,
+      "gegenstandsTyp": {
+        "Magisch": {
+          "modifikatoren": [{"Stärke":"+2","Geschicklichkeit":"+1"}],
+          "erfordertEinstimmung": false
+        }
+      }
+    },
+{"name": "Zeremonieller Weihrauchhalter (Devotee’s Censer)",
+  "beschreibung": "Ein magischer Morgenstern, der zusätzlich strahungsschaden verursacht und als heiliges Symbol benutzt werden kann. Als Bonusaktion lässt er einmal pro Tag eine Weihrauchwolke entstehen, die verbündete Kreaturen heilt.",
+  "gewicht": 4.0,
+  "wert": 5000,
+  "equipped": false,
+  "seltenheit": "Ungewöhnlich",
+  "heiligesSymbol": true,
+  "gegenstandsTyp": {
+    "Waffe": {
+      "typ": "Kriegswaffe",
+      "Mastery": "Topple",
+      "1.Hand": {"Aktiv": true,
+                  "treffen": {"Geschick Faktor": 0,"Stärke Faktor": 1,"Proficiency Faktor": 1,"Waffenbonus": 0,"Andere Boni": 0},
+                  "schaden": {"physisch": {"Würfel": {"Typ": "d8","Anzahl": 1},"Bonus": {"Geschick Faktor": 0,"Stärke Faktor": 1,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0}},
+                              "strahlung": {"Würfel": {"Typ": "d8","Anzahl": 1},"Bonus": {  "Geschick Faktor": 0,"Stärke Faktor": 0,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0}}
+                              },
+                  "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                  "kritisch": {"Schwelle": 20,"Multiplikator": 2}
+                },
+                "2.Hand": {"Aktiv": false,
+                  "treffen": {"Geschick Faktor": 0,"Stärke Faktor": 1,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0},
+                  "schaden": {"physisch": {"Würfel": {"Typ": "d8","Anzahl": 1},"Bonus": {"Geschick Faktor": 0,"Stärke Faktor": 1,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0}},
+                              "strahlung": {"Würfel": {"Typ": "d8","Anzahl": 1},"Bonus": {  "Geschick Faktor": 0,"Stärke Faktor": 0,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0}}
+                              },
+                  "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                  "kritisch": {"Schwelle": 20,"Multiplikator": 2}
+                }
+    },
+    "Magisch": {
+      "passive modifikatoren": [],
+      "erfordertEinstimmung": true,
+      "eingestimmt": false,
+      "aktive Zauber": {"Weihrauchwolke":{
+        "beschreibung": "Als Bonusaktion kann der Anwender eine duftende Wolke freisetzen (10-Fuß-Radius, hält 1 Minute). Zu Beginn jedes Zuges erhalten Anwender und andere Kreaturen in der Wolke je 1d4 Trefferpunkte zurück.",
+        "aufladungen": {"Max":1,"Current":1,"recharge":{"Anzahl":{"Würfel": {"Typ": "d8","Anzahl": 0},"Bonus": 1},"Zeit":"Morgengrauen"}}
+        }}
+    }
+  }
+},
+
+
+
+
+    {"name": "Magische Elfenrüstung",
+      "beschreibung": "Eine Rüstung aus Elfenstahl, die sich leicht und geschmeidig anfühlt und dennoch den Schutz einer Vollplattenrüstung bietet. (Halbplatte 15, Magisch+3)",
+      "gewicht": 30.0,
+      "wert": 20000.0,
+      "equipped": true,
+      "seltenheit": "Legendary", 
+      "gegenstandsTyp": {
+        "Rüstung": {
+          "AC": 18,
+          "Rüstungstyp": "Schwer",
+          "Nachteil beim Schleichen": true,
+          "maxDexBonus": 2
+        },
+        "Magisch": {
+          "modifikatoren": [],
+          "erfordertEinstimmung": false
+        }
+      }
+    }
+  ]
+}}

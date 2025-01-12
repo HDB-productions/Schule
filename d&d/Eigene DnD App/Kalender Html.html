@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Inhalt Anzeiger</title>
+    <style>
+        #jsonTree ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        #jsonTree li {
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        #jsonTree li ul {
+            display: none;
+        }
+
+        #jsonTree li.open > ul {
+            display: block;
+        }
+
+        #jsonTree li::before {
+    content: '\25B6'; /* Unicode für den rechten Pfeil */
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+#jsonTree li.open::before {
+    content: '\25BC'; /* Unicode für den abwärts gerichteten Pfeil */
+}
+    </style>
+</head>
+<body>
+    <select id="categorySelector" onchange="showDetails()">
+        <!-- Dropdown-Optionen werden durch JS gefüllt -->
+    </select>
+    <div id="details">
+        <!-- Baumansicht der ausgewählten Kategorie wird hier angezeigt -->
+        <div id="jsonTree"></div>
+    </div>
+
+    <script>
+        let jsonData = {};
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('DnDKalender.JSON')
+                .then(response => response.json())
+                .then(data => {
+                    jsonData = data;
+                    loadCategories(jsonData);
+                })
+                .catch(error => {
+                    console.error('Fehler beim Laden der JSON-Datei: ', error);
+                });
+        });
+
+        function loadCategories(jsonData) {
+            const selector = document.getElementById("categorySelector");
+            for (const category in jsonData) {
+                const option = document.createElement("option");
+                option.value = category;
+                option.textContent = category;
+                selector.appendChild(option);
+            }
+        }
+
+        function showDetails() {
+            const selectedCategory = document.getElementById("categorySelector").value;
+            const detailsDiv = document.getElementById("jsonTree");
+            detailsDiv.innerHTML = '';
+            createTree(detailsDiv, jsonData[selectedCategory]);
+        }
+
+        function createTree(container, data) {
+            container.appendChild(buildElement(data));
+        }
+
+        function buildElement(obj) {
+            if (typeof obj === 'object' && obj !== null) {
+                const ul = document.createElement("ul");
+                for (const key in obj) {
+                    const li = document.createElement("li");
+                    li.textContent = key + ': ';
+                    li.appendChild(buildElement(obj[key])); // Rekursiver Aufruf für Unterelemente
+                    ul.appendChild(li);
+                }
+                return ul;
+            } else {
+                return document.createTextNode(obj);
+            }
+        }
+
+        document.getElementById('details').addEventListener('click', function(event) {
+            if (event.target.tagName === 'LI') {
+                event.target.classList.toggle('open');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,961 @@
+{
+    
+    
+        "Zauber": {
+          "Tanzende [Lichter]": {
+            "Zauberklasse": "Evokation [Licht]",
+            "Level": "Brd 0, Hex/Zau 0",
+            "Komponenten": "V, S",
+            "Zauberzeit": "1 Standard-Aktion",
+            "Reichweite": "Mittel (100 Ft. + 10 Ft./Level)",
+            "Effekt": "Bis zu vier Lichter, alle innerhalb eines 10-Ft.-Radius",
+            "Dauer": "1 Minute (D)",
+            "Rettungswurf": "Keiner",
+            "Zauberresistenz": "Nein",
+            "Beschreibung": "Erschafft bis zu vier Lichter, die Laternen oder Fackeln ähneln, bis zu vier leuchtende Kugeln oder eine schwach leuchtende, vage menschenähnliche Gestalt. Die Lichter können sich innerhalb eines festgelegten Bereichs bewegen und erlöschen, wenn sie sich zu weit vom Zauberer entfernen."
+          },
+          "Benommenheit [Daze]": {
+            "Zauberklasse": "Verzauberung (Zwang) [Geistesbeeinflussend]",
+            "Level": "Brd 0, Hex/Zau 0",
+            "Komponenten": "V, S, M",
+            "Zauberzeit": "1 Standard-Aktion",
+            "Reichweite": "Nah (25 Ft. + 5 Ft./2 Level)",
+            "Ziel": "Ein humanoides Wesen mit 4 oder weniger TW",
+            "Dauer": "1 Runde",
+            "Rettungswurf": "Willenskraft, wirkungslos",
+            "Zauberresistenz": "Ja",
+            "Beschreibung": "Vernebelt den Geist eines humanoiden Wesens mit 4 oder weniger TW, sodass es keine Aktionen durchführen kann. Humanoiden mit 5 oder mehr TW sind nicht betroffen.",
+            "Materialkomponente": "Eine Prise Wolle oder ähnliches Material."
+          },
+          "Magie Entdecken [Detect Magic]": {
+            "Zauberklasse": "Divination",
+            "Level": "Brd 0, Clr 0, Drd 0, Hex/Zau 0",
+            "Komponenten": "V, S",
+            "Zauberzeit": "1 Standard-Aktion",
+            "Reichweite": "60 Ft.",
+            "Effekt": "Kegelförmige Ausstrahlung",
+            "Dauer": "Konzentration, bis zu 1 Min./Level (D)",
+            "Rettungswurf": "Keiner",
+            "Zauberresistenz": "Nein",
+            "Beschreibung": "Ermöglicht das Entdecken magischer Auren. Die Menge an Informationen hängt davon ab, wie lange ein bestimmtes Gebiet oder Objekt untersucht wird. Beginnend mit der bloßen Anwesenheit oder Abwesenheit magischer Auren, bis hin zur Stärke und dem Standort jeder Aura."
+          },
+          "Lichtblitz[Flare]": {
+            "Zauberklasse": "Evokation [Licht]",
+            "Level": "Brd 0, Drd 0, Hex/Zau 0",
+            "Komponenten": "V",
+            "Zauberzeit": "1 Standard-Aktion",
+            "Reichweite": "Nah (25 Ft. + 5 Ft./2 Level)",
+            "Effekt": "Lichtblitz",
+            "Dauer": "Sofort",
+            "Rettungswurf": "Zähigkeit negiert",
+            "Zauberresistenz": "Ja",
+            "Beschreibung": "Erzeugt einen Lichtblitz. Bei direkter Konfrontation eines Wesens mit diesem Lichtblitz, wird das Wesen für 1 Minute geblendet, sofern es keinen erfolgreichen Zähigkeitsrettungswurf absolviert. Wesen ohne Sehvermögen und bereits geblendete Wesen sind von diesem Zauber nicht betroffen."
+          },
+          
+            "Geistergeräusch [Ghost Sound]": {
+              "Zauberklasse": "Illusion (Trugbild)",
+              "Level": "Brd 0, Hex/Zau 0",
+              "Komponenten": "V, S, M",
+              "Zauberzeit": "1 Standard-Aktion",
+              "Reichweite": "Nah (25 Ft. + 5 Ft./2 Level)",
+              "Effekt": "Illusionäre Geräusche",
+              "Dauer": "1 Runde/Level (D)",
+              "Rettungswurf": "Willenskraft, Unglaube (bei Interaktion)",
+              "Zauberresistenz": "Nein",
+              "Beschreibung": "Der Zauber Geistergeräusch ermöglicht es, verschiedene illusionäre Geräusche zu erschaffen, die vom Zaubernden gewählt werden und während der Dauer des Zaubers nicht verändert werden können. Die Lautstärke der durch den Zauber Geistergeräusch erzeugten Geräusche hängt vom Level des Zaubernden ab. Es ist möglich, Geräusche zu erzeugen, die der Lautstärke von bis zu vier normalen Menschen pro Zauberlevel entsprechen, mit einem Maximum von zwanzig Personen. Die Art der Geräusche kann vielfältig sein, einschließlich Sprechen, Singen, Schreien und Laufgeräusche. Der Zauber kann auch die Wirksamkeit von Silent Image verstärken und kann mit einem Permanency-Zauber permanent gemacht werden.",
+              "Materialkomponente": "Ein Stück Wolle oder ein kleiner Klumpen Wachs."
+            }
+          }        
+          ,
+      
+    "Orte/Fraktionen":{
+        "Orte": {
+            "Leet": "Leet ist ein kleines Dorf",
+            "Brimur'Dur": "Brimur'Dur ist die Hauptstadt der Zwerge. In den Bergen nahe Leet.",
+            "Bornin":"Bornin ist das erste Dorf etwa 2 Stunden Fußmarsch südlich von Leet. Es noch kleiner als Leet und besteht ansonsten nur aus ein paar Bauernhäusern, einer Taverne und Anazazis Laden, der sich etwas außerhalb des Dorfes befindet.",
+            "alte Akademie": "Etwa 25 Fußmarsch westlich von Bornin befinden sich die Ruinen einer alten Akademie. Sie wurde zum ende des Drachenkrieges vor etwa 150 Jahren zerstört. Die Ruinen sind von einem Wald umgeben und werden von Imps bewohnt. Die Akademie Liegt im Zentrum von Magischen Energieflüssen, wesshalb sie in alten Zeiten einen Wichtigen Portalknotenpunkt darstellte. Die Portale wurden jedoch am ende des Drachenkrieges verschlossen. Um einen Schnellen Vormarsch der Dunklen Armeen zu verhindern.",
+            "Feylanor": "Feylanor, die Hauptstadt der Waldelfen, liegt etwa 300 km südwestlich von Leet. Die Reise von Leet aus würde ohne das Portal in der alten Akademie etwa vier Tagesritte oder 1,5 bis 2 Wochen zu Fuß dauern. Am Fuße eines majestätischen Berges gelegen und umgeben von einem von Elfen bewachten Wald, besteht Feylanor hauptsächlich aus in den Bäumen erbauten Strukturen, die sich über mehrere Ebenen erstrecken. Der Große Weiße Palast, das einzige steinerne Gebäude, erhebt sich am Berghang. Er ist umgeben von einer Kette an kristallklaren Seen, die aus den Gebirgsbächen entspringen und durch Kalkablagerungen geformt wurden. Diese Seen bilden natürliche, stufenförmige Wasserfälle, die eine verträumte und malerische Landschaft erschaffen.",
+            "Bara'Dur": "Seit 1231 Jahren verlassen Zwergen hauptstatt, die in den Bergen Zwischen Felanor und Liegt",
+            "Arcanalor":"Die Hauptsadt der Hochelfen. Ist von Feylanor durch das Große gebirge von Bara'Dur getrennt."
+        },
+
+        "Fraktionen": {
+            "Rokmarn": "Rokmarn ist ein Troggstamm in den Bergen in der Nähe von Leet.",
+            "Zul": "Die Zul sind ein Orkstamm aus den Orksümpfen in der Nähe von Leet stammt. Unter der führung Bakh'naraks haben sie sich and den Schatten Mor'zul binden lassen, Leet überfallen und kurzzeitig eingenommen, das Portal in der alten Akademie geöffnet und die Elfen Angegriffen. Nachdem Diundriel Bakh'narak und Mor'zul besiegt hat, haben sie sich in den Bergen dem Clan der Warg'algos angeschlossen.",
+            "Waldelfen": "Die Waldelfen sind ein Elfenvolk, das sich der Natur verschrieben hat. Verglichen mit den Menschen verfügen sie über stärkere Magische kräfte, die sie vorallem aus der Natur beziehn. Sie verachten alle, die die Natur zerstören.",
+            "Wargh'algos": "Die Wargh'algos oder auch Frostwölfe sind ein Orkklan, der in den Bergen nahe der Waldelfen Lebt, sie sind eher friedlich und leben im einklang mit ihrem Sutzpatron dem Frostwolf, einem mächtigen Naturgeist. Dennoch haben sie mit den Wargh Reitern mächtige Krieger und es gibt eine Gruppierung, die nach dem fall von Mor'zul versucht mithilfe der freigewordenen Korrumpierten Seelen die Macht an sich zu reißen und den Clan auf einen Dunklen Pfad zu führen.",
+            "Diundriel'or": "Diundriel'or ist der Clan den Garez mit seiner Ernennung zum Narakh aus dem Zusammenschluss aus Zul und Warg'algos ausgerufen hat. Die Endung 'or bedeutet auf Orkisch Diener, auf Elfisch Behüteroder Beschützer. Der Name hat eine Doppelte Bedeutung, einerseits unterwirft sich der Clan damit Diundriel als Person, andererseits kann man es aufgrund der Elfischen Bedeutung des Namens Diundriel als eine Bekenntnis zum Licht interpretieren. Da Garez als Narakh auf Abenteuern die Ehre des Clans mehren muss wird der Klan in seiner Abwesenheit von Garona seiner Marak geführt. Sie baut die Arena in den Bergen weiter aus, damit die Orks zum erlangen von Ehre keine anderen Völker angreifen müssen und sie Gleichzeitig für eine Bevorstehende Schlacht an Diundriels seite gegen das Böse gerüstet sind.",
+            "Hochelfen":""            
+        
+        }},
+    "Legenden":{
+        "Lichtbringer":"Ein Lichtbringer ist ein Wesen ohne Eltern, das angeblich vom Licht selbst erschaffen wird, wenn der Untergang einer Spezies droht. Der Lichtbringer gehört der untergehenden Spezies an, sein Erfolg bestimmt, ob die Spezies den Untergang abwenden kann. Lichtbringer könne Göttliche Magie wie Paladine oder Priester Wirken, allerdings muss er nicht wie diese zu den Göttern beten, damit sie ihm Beistand geben, er kann die Göttliche Magie aus sich selbst heraus wirken. Ein Lichtbringer der sein Volk erfolgreich vor dem Untergang bewahrt kann zu einer Gottheit des Volkes werden",
+            "Schattenbringer":"Ein Schattenbringer ist ein Wesen ohne Eltern, das angeblich von der Dunkelheit selbst erschaffen wird um eine anere Spezies auszulöschen und die bestehende Ordnug der Weld zu Zerstören.",
+            "Drachen":"Es Gibt Gute und Böse Drachen, die den Ewigen Kampf der Götter austragen. Drachen können aus sich heraus göttliche Magie Wirken, Ausgewachsene Drachen haben ein enormes Magisches Potenzial. Abgesehen von seltenen, zufälligen Situationen können sie auf dieses Potenzial jedoch nicht zugreifen und sind auf Simple Zauber wie Feuerspeien oder Gestaltwandlungen angewiesen.  Die Bösen Drachen vernichten oder versklaven alle anderen Völker, die Guten Drachen versuchen dies zu verhindern.  Beim schützen der Vöker wurde den guten Drachen Bewusst, dass sie durch die Verbindung mit Wesen ihr magisches Potenzial besser ausschöpfen können. Während die Drachen die Macht der Magie beiseteuert kann ein mit ihm verbundenes Wesen die Magie lenken und kontrollieren. Dieses Wesen wird zum Drachenreiter.  Je Früher ein Drache diese Verbindung mit einem Wesen eingeht, desto stärker wird diese Verbindung. Aus diesem Grund wurden vielversprechende Kinder von den Drachen Drachenreiter zu werden.  Diesen Kindern vertrauten die Drachen ihre Eier an, sodass sie mit den Jungen Drachen aufwuchsen und eine starke Verbindung zu ihnen aufbauten.     Mithilfe der Drachenreiter gelang es den Guten Drachen fast die Bösen Drachen zu besiegen es war ein friedliches Zeitalter und nur selten wagten die Bösen Drachen einen Angriff.  Doch die bsen Drachen verstanden Bald, dass die Macht der Guten Drachen auf den Drachenreitern beruhte und nutzten die von ihnen versklavten Völker un eigene Drachenreiter auszubilden. Gleichzeitig Gelang es ihnen einen Schattenbringer unter die Guten Drachen zu schleusen, der auserwält wurde ein Drachenreiter zu werden. Diesem Gelang es einige der eigentlich guten Drachen und Reiter sowie seinen Eigenen Drachen in die Dunkelheit zu ziehen und sie zu verderben. Es kam zu einem erneuten erbitterten Krieg zwischen den Guten und den Bösen Drachen der als Drachenkrieg in die Geschichte einging und den am Ende scheinbar kein Drache überlebte. Wenige eingeweihte Paladine wissen, dass die guten Drachen die Letzen Eier mit Zaubern belegt haben, sodass sie nur für einen Lichtbringer schlüpfen können,  um sicherzustellen, dass sie nicht von den Bösen Drachen ausgenutzt werden und im Wichstigsten Moment zur Stelle sind."
+        },
+    "Charaktäre":{
+        "Spielercharaktere":{
+            "Diundriel": {
+                "Rollenspiel":{
+                "Spieler":"Finn",
+                "Spezies": "Halfelf",
+                "Alter": 14,
+                "Gößenkategorie": "Groß",
+                "Größe":"1,60m",
+                "Gewicht": "54kg",
+                "Statur:": "schlank",
+                "Augen": "Blau",
+                "Haut": "Hell",
+                "Haar": "Blond, Kurz",
+                "Geschlecht":"Männlich",
+                "Hintergrundinformationen": "Wurde als Baby von Ames im Wald gefunden und von ihm in Leet aufgezogen. Hatte glückliche Kindheit in Leet, bis er mit 13 Jahren Thoralf kennenlernt und die Vermutung aufkommt, dass er ein Lichtbringer ist. Ziet mit Toralf los um sein Schicksal zu erfüllen."
+              },
+              "Klasse":{"Paladin (Lichtbringer)":8
+                    },
+            "Attribute":{
+                    "Leben":{
+                        "Abkürzung": "HP",
+                        "Wert":80,
+                        "Max":89,
+                        "Temp Bonus": 3
+                    },
+                    "HD":{
+                        "Art":"d10",
+                        "Wert":2,
+                        "Maximal":8         
+                    },
+                    "Stärke": {
+                  "Abkürzung": "ST",
+                  "Wert": 18,
+                  "Bonus": 4,
+                  "Temp Mod": 0,
+                  "Grund für Mod": "na",
+                  "Temp Wert": 18,
+                  "Temp Bonus": 4,
+                  "Rettungswurfbonus":"na"
+                    },
+                    "Geschicklichkeit": {
+                  "Abkürzung": "GE",
+                  "Wert": 12,
+                  "Bonus": 1,
+                  "Temp Mod": 0,
+                  "Grund für Mod": "na",
+                  "Temp Wert": 12,
+                  "Temp Bonus": 1,
+                  "Rettungswurfbonus":"na"
+                    },
+                    "Konstitution": {
+                    "Abkürzung": "KO",
+                    "Wert": 18,
+                    "Bonus": 4,
+                    "Temp Mod": 0,
+                    "Grund für Mod": "na",
+                    "Temp Wert": 18,
+                    "Temp Bonus": 4,
+                    "Rettungswurfbonus":"na"
+                    },
+                    "Intelligenz": {
+                    "Abkürzung": "IN",
+                    "Wert": 13,
+                    "Bonus": 1,
+                    "Temp Mod": 0,
+                    "Grund für Mod": "na",
+                    "Temp Wert": 13,
+                    "Temp Bonus": 1,
+                    "Rettungswurfbonus":"na"
+                    },
+                    "Weisheit": {
+                    "Abkürzung": "WE",
+                    "Wert": 10,
+                    "Bonus": 0,
+                    "Temp Mod": 2,
+                    "Grund für Mod": "+2 Saphira",
+                    "Temp Wert": 12,
+                    "Temp Bonus": 1,
+                    "Rettungswurfbonus":"na"
+                    },
+                    "Charisma": {
+                    "Abkürzung": "CH",
+                    "Wert": 16,
+                    "Bonus": 3,
+                    "Temp Mod": 2,
+                    "Grund für Mod": "+2 Saphira",
+                    "Temp Wert": 18,
+                    "Temp Bonus": 4,
+                    "Rettungswurfbonus":"na"
+                    }
+              },
+              "Fertigkeitenboni":{
+            
+              },
+                  
+              "Gegenstände": [
+    {"name": "Rucksack",
+      "beschreibung": "Ein stabiler Rucksack mit vielen Fächern.",
+      "gewicht": 5.0,
+      "wert": 2.0,
+      "equipped": false,
+      "gegenstandsTyp": {
+        "Behälter": {
+          "ignoreInhaltGewicht": false,
+          "maxInhaltGewicht": 50,
+          "maxInhaltVolumenKubikfuss": 10,
+          "container": []
+        },
+        "Alltäglich": {}
+      }
+    },
+    {"name": "Tasche des Haltens",
+      "beschreibung": "Diese Tasche hat einen Innenraum, der wesentlich größer ist als ihre Außenmaße: etwa 60 cm Durchmesser an der Öffnung und 120 cm Tiefe. Die Tasche kann bis zu 500 Pfund fassen, wobei ein Volumen von 64 Kubikfuß nicht überschritten wird. Die Tasche wiegt unabhängig von ihrem Inhalt stets 15 Pfund. Das Herausnehmen eines Gegenstands erfordert eine Aktion.\n\nWird die Tasche überladen, durchstochen oder zerrissen, zerreißt sie und wird zerstört; ihr Inhalt wird in der Astralebene verstreut. Wenn die Tasche umgedreht wird, strömt ihr gesamter Inhalt unversehrt heraus, aber die Tasche muss wieder in Ordnung gebracht werden, bevor sie erneut benutzt werden kann. Atmende Kreaturen im Inneren der Tasche können bis zu einer Anzahl von Minuten überleben, die gleich 10 geteilt durch die Anzahl der Kreaturen ist (mindestens 1 Minute); nach dieser Zeit beginnen sie zu ersticken. Wird eine Tasche des Haltens in einen extradimensionalen Raum gelegt, der durch einen 'Handlichen Rucksack', ein 'Tragbares Loch' oder einen ähnlichen Gegenstand entsteht, werden beide Gegenstände sofort zerstört und ein Tor zur Astralebene geöffnet. Das Tor entsteht dort, wo der eine Gegenstand in den anderen gelegt wurde. Jede Kreatur im Umkreis von 3 Metern (10 Fuß) um das Tor wird durch das Tor an einen zufälligen Ort in der Astralebene gesaugt. Dann schließt sich das Tor. Das Tor ist nur in eine Richtung offen und kann nicht wieder geöffnet werden.",     
+      "gewicht": 15,
+      "wert": 4000,
+      "equipped": false,
+      "seltenheit": "Ungewöhnlich",
+      "gegenstandsTyp": {
+        "Magisch": {
+          "modifikatoren": [],
+          "erfordertEinstimmung": false
+        },
+        "Behälter": {
+          "ignoreInhaltGewicht": true,
+          "maxInhaltGewicht": 500,
+          "maxInhaltVolumenKubikfuss": 64,
+          "container": []
+        }
+      }
+    },
+    {"name": "Seil (50ft)",
+      "beschreibung": "Ein 50 Fuß langes Seil aus Hanf.",
+      "gewicht": 10.0,
+      "wert": 1.0,
+      "equipped": false,
+      "gegenstandsTyp": {
+        "Alltäglich": {}
+      }
+    },
+    {"name": "Fackel",
+      "beschreibung": "Eine einfache Fackel.",
+      "gewicht": 1.0,
+      "wert": 0.1,
+      "equipped": false,
+      "gegenstandsTyp": {
+        "Alltäglich": {}
+      }
+    },
+    {"name": "Bastartschwert",
+      "beschreibung": "Ein Schwert, dass sich einhändig und zweihändig führen lässt.",
+      "gewicht": 3.0,
+      "wert": 15.0,
+      "equipped": false,
+      "seltenheit": "Gewöhnlich",
+      "gegenstandsTyp": {
+        "Waffe": {
+          "typ": "Kriegswaffe",
+          "Mastery": "Sap",
+                      "1.Hand":{ 
+                              "Aktiv": false,
+                              "treffen": {"Geschick Faktor":0,"Stärke Faktor":1,"Proficiency Faktor":1, "Waffenbonus":0, "Andere Boni":0},  
+                              "schaden": {"physisch": {"Würfel":{"Typ":"d10", "Anzahl":1},"Bonus":{"Geschick Faktor":0, "Stärke Faktor":1,"Proficiency Faktor":0, "Waffenbonus":0,"Andere Boni":0}}},
+                              "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                              "kritisch": {"Schwelle": 19,"Multiplikator": 2}
+                            },
+                      "2.Hand":{ 
+                              "Aktiv": false,
+                              "treffen": {"Geschick Faktor":0,"Stärke Faktor":1,"Proficiency Faktor":0, "Waffenbonus":0, "Andere Boni":0},  
+                              "schaden": {"physisch": {"Würfel":{"Typ":"d10", "Anzahl":1},"Bonus":{"Geschick Faktor":0, "Stärke Faktor":1,"Proficiency Faktor":0, "Waffenbonus":0,"Andere Boni":0}}},
+                              "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                              "kritisch": {"Schwelle": 19,"Multiplikator": 2}
+                            },
+                      "Beidhändig":{
+                              "Aktiv": false,
+                              "treffen": {"Geschick Faktor":0, "Stärke Faktor":1,"Proficiency Faktor":1, "Waffenbonus":0, "Andere Boni":0},  
+                              "schaden": {"physisch": {"Würfel":{"Typ":"d10", "Anzahl":1},"Bonus":{"Geschick Faktor":0, "Stärke Faktor":1.5,"Proficiency Faktor":0, "Waffenbonus":0,"Andere Boni":0}}},
+                              "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                              "kritisch": {"Schwelle": 19,"Multiplikator": 2}
+                            }
+                      }
+
+}},
+{"name": "testgegenstand",
+      "beschreibung": "der gegenstand soll testen ob modifikatoren klappen",
+      "gewicht": 10.0,
+      "wert": 1.0,
+      "equipped": true,
+      "gegenstandsTyp": {
+        "Magisch": {
+          "modifikatoren": [{"Stärke":"+2","Geschicklichkeit":"+1"}],
+          "erfordertEinstimmung": false
+        }
+      }
+    },
+{"name": "Zeremonieller Weihrauchhalter (Devotee’s Censer)",
+  "beschreibung": "Ein magischer Morgenstern, der zusätzlich strahungsschaden verursacht und als heiliges Symbol benutzt werden kann. Als Bonusaktion lässt er einmal pro Tag eine Weihrauchwolke entstehen, die verbündete Kreaturen heilt.",
+  "gewicht": 4.0,
+  "wert": 5000,
+  "equipped": false,
+  "seltenheit": "Ungewöhnlich",
+  "heiligesSymbol": true,
+  "gegenstandsTyp": {
+    "Waffe": {
+      "typ": "Kriegswaffe",
+      "Mastery": "Topple",
+      "1.Hand": {"Aktiv": true,
+                  "treffen": {"Geschick Faktor": 0,"Stärke Faktor": 1,"Proficiency Faktor": 1,"Waffenbonus": 0,"Andere Boni": 0},
+                  "schaden": {"physisch": {"Würfel": {"Typ": "d8","Anzahl": 1},"Bonus": {"Geschick Faktor": 0,"Stärke Faktor": 1,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0}},
+                              "strahlung": {"Würfel": {"Typ": "d8","Anzahl": 1},"Bonus": {  "Geschick Faktor": 0,"Stärke Faktor": 0,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0}}
+                              },
+                  "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                  "kritisch": {"Schwelle": 20,"Multiplikator": 2}
+                },
+                "2.Hand": {"Aktiv": false,
+                  "treffen": {"Geschick Faktor": 0,"Stärke Faktor": 1,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0},
+                  "schaden": {"physisch": {"Würfel": {"Typ": "d8","Anzahl": 1},"Bonus": {"Geschick Faktor": 0,"Stärke Faktor": 1,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0}},
+                              "strahlung": {"Würfel": {"Typ": "d8","Anzahl": 1},"Bonus": {  "Geschick Faktor": 0,"Stärke Faktor": 0,"Proficiency Faktor": 0,"Waffenbonus": 0,"Andere Boni": 0}}
+                              },
+                  "Rechweite": {"Nahkampf":"5ft", "Fernkampf":false},
+                  "kritisch": {"Schwelle": 20,"Multiplikator": 2}
+                }
+    },
+    "Magisch": {
+      "passive modifikatoren": [],
+      "erfordertEinstimmung": true,
+      "eingestimmt": false,
+      "aktive Zauber": {"Weihrauchwolke":{
+        "beschreibung": "Als Bonusaktion kann der Anwender eine duftende Wolke freisetzen (10-Fuß-Radius, hält 1 Minute). Zu Beginn jedes Zuges erhalten Anwender und andere Kreaturen in der Wolke je 1d4 Trefferpunkte zurück.",
+        "aufladungen": {"Max":1,"Current":1,"recharge":{"Anzahl":{"Würfel": {"Typ": "d8","Anzahl": 0},"Bonus": 1},"Zeit":"Morgengrauen"}}
+        }}
+    }
+  }
+},
+
+
+
+
+    {"name": "Magische Elfenrüstung",
+      "beschreibung": "Eine Rüstung aus Elfenstahl, die sich leicht und geschmeidig anfühlt und dennoch den Schutz einer Vollplattenrüstung bietet. (Halbplatte 15, Magisch+3)",
+      "gewicht": 30.0,
+      "wert": 20000.0,
+      "equipped": true,
+      "seltenheit": "Legendary", 
+      "gegenstandsTyp": {
+        "Rüstung": {
+          "AC": 18,
+          "Rüstungstyp": "Schwer",
+          "Nachteil beim Schleichen": true,
+          "maxDexBonus": 2
+        },
+        "Magisch": {
+          "modifikatoren": [],
+          "erfordertEinstimmung": false
+        }
+      }
+    }
+  ]
+            },
+              
+            
+            
+            
+        
+            "Saphira":{
+                "Spieler":"Finn",
+                "Rasse":"Drache",
+                "Klasse":"Begleiter von Finn",
+                "Geschlecht":"weiblich",
+                "Alter":"0",
+                "Größe":"0,70m",
+                "Gewicht":"50kg",
+                "Augenfarbe":"Blau",
+                "Suppenfarbe":"Gold",
+                "Charaktereigenschaften":"freundlich, hilfsbereit, neugierig",
+                "Hintergrundinformationen":"Wurde von Diundriel als Ei gefunden und von ihm aufgezogen."
+            },
+            "Thoralf":{
+                "Rollenspiel":{"Spieler":"Lisa",
+                "Rasse":"Zwerg",
+                "Geschlecht":"männlich",
+                "Alter":"50",
+                "Größe":"1,40m",
+                "Gewicht":"60kg",
+                "Haarfarbe":"Rotbraun",
+                "Augenfarbe":"braun",
+                "Hautfarbe":"dunkel",
+                "Statur":"breit",
+                "Charaktereigenschaften":"stur, frech, loyal",
+                "Hintergrundinformationen":"Thoralf litt in seiner Kindheit unter der schlechten Behandlung am Hofe. Als Sohn des Königs vorherigen Königs wurde er nicht so schlecht behandelt wie Marut und durfte anders als sie die Gemächer verslassen, doch die Anschuldigungen gegen seine Mutter und die Politische Stimmung sorgten dafür, dass er stets abfällige Bemerkungen ertragen musste. Da er zur Zeit des Umsturzes noch sehr Jung war und Marut ihn zu seinem eigenen Schutz in dem Glauben belassen hat glaubt er selbst, das seine Mutter tatsächlich nur eine Konkubine war. Er verbrachte seit jeher seine Zeit am liebsten außerhalb des Palastes und sogar außerhalb der Zwergenstädte und lernte so die anderen Völker kennen. Was ihn bald zu einem guten Geschichtenerzähler machte."
+            },"Klasse":{"Barde":8},            "Attribute":{
+                "Leben":{
+                    "Abkürzung": "HP",
+                    "Wert":69,
+                    "Max":70,
+                    "Temp Bonus": 0
+                },
+                "HD":{
+                    "Art":"d8",
+                    "Wert":2,
+                    "Maximal":8         
+                },
+                "Stärke": {
+              "Abkürzung": "ST",
+              "Wert": 18,
+              "Bonus": 4,
+              "Temp Mod": 0,
+              "Grund für Mod": "na",
+              "Temp Wert": 18,
+              "Temp Bonus": 4,
+              "Rettungswurfbonus":"na"
+                },
+                "Geschicklichkeit": {
+              "Abkürzung": "GE",
+              "Wert": 14,
+              "Bonus": 2,
+              "Temp Mod": 0,
+              "Grund für Mod": "na",
+              "Temp Wert": 14,
+              "Temp Bonus": 2,
+              "Rettungswurfbonus":"na"
+                },
+                "Konstitution": {
+                "Abkürzung": "KO",
+                "Wert": 18,
+                "Bonus": 4,
+                "Temp Mod": 0,
+                "Grund für Mod": "na",
+                "Temp Wert": 18,
+                "Temp Bonus": 4,
+                "Rettungswurfbonus":"na"
+                },
+                "Intelligenz": {
+                "Abkürzung": "IN",
+                "Wert": 16,
+                "Bonus": 3,
+                "Temp Mod": 0,
+                "Grund für Mod": "na",
+                "Temp Wert": 16,
+                "Temp Bonus": 3,
+                "Rettungswurfbonus":"na"
+                },
+                "Weisheit": {
+                "Abkürzung": "WE",
+                "Wert": 16,
+                "Bonus": 3,
+                "Temp Mod": 0,
+                "Grund für Mod": "na",
+                "Temp Wert": 16,
+                "Temp Bonus": 3,
+                "Rettungswurfbonus":"na"
+                },
+                "Charisma": {
+                "Abkürzung": "CH",
+                "Wert": 16,
+                "Bonus": 3,
+                "Temp Mod": 2,
+                "Grund für Mod": "+2 Saphira",
+                "Temp Wert": 18,
+                "Temp Bonus": 4,
+                "Rettungswurfbonus":"na"
+                }
+          },
+          "Fertigkeitenboni":{
+        
+          }},
+
+
+
+            "Falinor":{
+                "Spieler":"Micha (als Gastspieler)",
+                "Rasse":"Elf",
+                "Fraktionen":"Waldelfen",
+                "Klasse":"Waldläufer",
+                "Geschlecht":"männlich",
+                "Alter":"?",
+                "Größe":"1,90m",
+                "Gewicht":"80kg",
+                "Haarfarbe":"blond",
+                "Augenfarbe":"blau",
+                "Hautfarbe":"hell",
+                "Statur":"schlank",
+                "Charaktereigenschaften":["freundlich", "hilfsbereit", "neugierig", "ehrenhaft","loyal","naturverbunden"],
+                "Hintergrundinformationen":"Falinor ist ein Elf, der in Feylanor aufgewachsen ist. Er ist ein Waldläufer und begnadeter Fährtenleser, Begleitet wird er von einem Falken den er als Ei vor dem sicheren Tot bewahrte und per hand aufgezogen hat. Bei seinen Streifzügen durch die entlegensten Winkel der Elfenwälder hat er auch erfahrung im Kampf gegen Orks gesammelt, die immer wieder versuchen in die Wälder einzudringen."
+            }
+            }
+            ,
+        "Nichtspielercharaktere":{
+            "Hauptcharaktere":{
+                "Adelina":{
+                    "Rasse":"Mensch",
+                    "Klasse":"Hexe",
+                    "Geschlecht":"weiblich",
+                    "Alter":"15",
+                    "Größe":"1,65m",
+                    "Gewicht":"55kg",
+                    "Haarfarbe":"blond",
+                    "Augenfarbe":"blau",
+                    "Hautfarbe":"hell",
+                    "Statur":"schlank",
+                    "Charaktereigenschaften":["freundlich", "hilfsbereit", "neugierig"]},
+                "Balduin":{
+                    "Rasse":"Mensch",
+                    "Klasse":"Räuber",
+                    "Geschlecht":"männlich",
+                    "Alter":"22",
+                    "Größe":"1,80m",
+                    "Gewicht":"80kg",
+                    "Haarfarbe":"braun",
+                    "Augenfarbe":"braun",
+                    "Hautfarbe":"hell",
+                    "Statur":"durchschnittlich",
+                    "Charaktereigenschaften":["freundlich", "hilfsbereit", "neugierig"]},
+                "Garez":{
+                    "Rasse":"Ork",
+                    "Klasse":"",
+                    "Geschlecht":"männlich",
+                    "Alter":"25",
+                    "Größe":"1,80m",
+                    "Gewicht":"80kg",
+                    "Haarfarbe":"",
+                    "Augenfarbe":"",
+                    "Hautfarbe":"",
+                    "Statur":"",
+                    "Fraktionen":["Diundriel'or","Zul"],
+                    "Charaktereigenschaften":"",
+                    "Hintergrundinformationen":"Lebte in den Orksüpfen mit seiner Frau Garona bis Bakh'Narak kam und die anseesigen Orks Zwang sich ihm anzuschließen und ihre Seele Mor'Zul zu versprechen. Garez weigerte sich und forderte Bakh heraus. Damit war er ein Narik. Er verlor den Kampf, da Bakh von Mor'zuls Zaubern unterstützt wurde. Als zeichen der Demütigung tötete er Garona und ihr ungeborenes Kind und fürte Mor'zul ihre Seelen zu. Durch die Niederlage im Kampf und das genommene wurde Garez zum Gor, einem Ork, der verpflichtet ist zu dienen und keine Herschaftsansprüche stellen darf. Mit dem sieg Diundriels über Bakh wurde er zu seinem Gor, anders als bei Bakh diesmal jedoch auch aus überzeugung. Als es Diundriel und Adelina gelang Garonas Seele zu retten und in einen Seelenlosen Körper zu setzen war seine Ehre wider hergestellt und er verlor seinen Status als Gor. Damit konnte er von diundriel, der bisher selbst zum narak ernannt werden sollte zum narak ernannt werden. Als Narak benannte er seinen Klan Diundrielor und Folgte weiterhin Diundriel auf seinen Abentuern."
+                }
+                },
+        "Nebencharaktere":{
+            "Menschen":{
+                "Tomat":{
+                    "Klasse":"Händler",
+                    "Geschlecht":"männlich",
+                    "Alter":"40",
+                    "Größe":"1,80m",
+                    "Gewicht":"80kg",
+                    "Haarfarbe":"braun",
+                    "Augenfarbe":"braun",
+                    "Hautfarbe":"hell",
+                    "Statur":"durchschnittlich",
+                    "Charaktereigenschaften":["freundlich", "hilfsbereit", "neugierig"]},
+                "Ames":{
+                    "Klasse":"Schmied",
+                    "Geschlecht":"männlich",
+                    "Alter":"35",
+                    "Größe":"1,80m",
+                    "Gewicht":"80kg",
+                    "Haarfarbe":"braun",
+                    "Augenfarbe":"braun",
+                    "Hautfarbe":"hell",
+                    "Statur":"durchschnittlich",
+                    "Charaktereigenschaften":["freundlich", "hilfsbereit", "neugierig"]},
+                "Leunand":{
+                    "Klasse":"Krieger",
+                    "Geschlecht":"männlich",
+                    "Alter":"30",
+                    "Größe":"1,80m",
+                    "Gewicht":"80kg",
+                    "Haarfarbe":"braun",
+                    "Augenfarbe":"braun",
+                    "Hautfarbe":"hell",
+                    "Statur":"durchschnittlich",
+                    "Charaktereigenschaften":["freundlich", "hilfsbereit", "neugierig"]}
+            },
+            "Zwerge":{
+                "Marut":{
+                    "Geschlecht":"weiblich",
+                    "Alter":"98",
+                    "Größe":"1,52m",
+                    "Gewicht":"80kg",
+                    "Haarfarbe":"braun",
+                    "Augenfarbe":"braun",
+                    "Hautfarbe":"dunkel",
+                    "Statur":"breit",
+                    "Charaktereigenschaften":["verbittert", "misstrauisch", "liebevoll gegenüber vertrauten Personen"],
+                    "Hintergrundinformationen":"Geliebte des ehemaligen Zwergenkönigs. Aus Politischen Gründen wurde im Zusammenhang mit den Drachenkriegs Protesten nicht sie zur Königin (die sich für den Beistand zu anderen Völkern aussprach) sondern Nerga (die sich für eine Abschottung der Zwerge im Berg einsetzte, wie ein Großteil der Zwergischen Bevölkerung) Es ist nicht unüblich, das Könige neben der Königin mehrere geliebte haben. Solange die Königin keine Kinder hat wäre der erstgeborene Bastart Thronfolger. Der König Liebte nur Marut und es sah so aus, als würde er mit Nerga keine Kinder bekommen, sodass Thoralf Thronerbe wäre.  Eines Tages wurde Nerga jedoch schwanger mit Durik Balror (dem aktuellen König der Zwerge).  Kurze Zeit später kam der König ums Leben. Marut vermutete, dass das Kind nicht vom König stammte und Negra ihre Finger beim Tod ihres Mannes im Spiel gehabt haben könnte. Durch Intrigen beschmutzte Nerga jedoch schnell den Ruf von Marut, bis sie am Hofe nicht mehr willkommen war und als Konkurbine die den König mit Magie in ihren Bann gezogen hatte angesehen wurde. Mit der unterstützung von Dvanin'or der ein enger Vertrauter des Königs war, handelte sie ein Abkommen mit Negra aus, um ihr Leben und das Leben ihres Sohnes zu schützen. Sie selbst fügte sich ihrem schicksahl als geächtete und bestritt die Lügen über ihren Status nicht. Sie leistete einen Schwur den thronanspruch Durik's niemals in Frage zu stellen ihre Anschuldigungen zur Verschwörung Nergas niemals öffentlich öffentlich zu machen. Um der Kontrolle Negras nicht entgehen zu können durfte sie die Gemächer der niederen Bedinsteten wo sie Fortan mit Thoralf lebte nicht verlassen. Abgesehen von Davin'or und Negra sprach sie mit niemandem über diese Geschichte, sodass selbst Thoralf Glaubt, sie sei nur eine Niedere Konkurbine seines Vaters gewesen."
+                },
+                "Dvanin'or Ignis":{
+                    "Klasse":"Paladin",
+                    "Geschlecht":"männlich",
+                    "Alter":"213",
+                    "Größe":"1,62m",
+                    "Gewicht":"88kg",
+                    "Haarfarbe":"blond",
+                    "Augenfarbe":"Graublau",
+                    "Hautfarbe":"hell",
+                    "Statur":"breit",
+                    "Charaktereigenschaften":["stur", "loyal", "gerecht", "hart", "humorlos"],
+                    "Hintergrundinformationen":"Dvanin'or ist der Anführer des Paladinordens der Zwerge und damit engster Berater des Königs."
+                    },
+                "Durik Balror":{
+                        "Geschlecht":"männlich",
+                        "Alter":"48",
+                        "Größe":"1,42m",
+                        "Gewicht":"66kg",
+                        "Haarfarbe":"Rotbraun",
+                        "Augenfarbe":"braun",
+                        "Hautfarbe":"dunkel",
+                        "Statur":"breit",
+                        "Charaktereigenschaften":["stur", "arrogant", "fleißig", "diszipliniert", "hart", "humorlos"],
+                        "Hintergrundinformationen":"Durik ist der aktuelle König der Zwerge. Er ist der Sohn von Nerga und dem ehemaligen König. Er ist ein guter König, der sich für das Wohl seines Volkes einsetzt.  Er ist jedoch auch sehr stur und lässt sich nur schwer von seiner Meinung abbringen.  Er stellt das Wohl der Zwerge über das Wohl anderer Völker und ist der Meinung, dass die Zwerge sich nicht in die Angelegenheiten anderer Völker einmischen sollten. Er lässt Thoralf viel gewähren, da er mitleid mit ihm hat und ihn nicht als gefahr ansieht. Er versteht nicht wesshalb Negra Marut und Thoralf so sehr hasst und ist der Meinung, dass sie sich nicht so anstellen sollten."
+                    },
+                    "Nerga Balror":{
+                        "Geschlecht":"weiblich",
+                        "Alter":"128",
+                        "Größe":"1,42m",
+                        "Gewicht":"66kg",
+                        "Haarfarbe":"Schwarz",
+                        "Augenfarbe":"braun",
+                        "Hautfarbe":"dunkel",
+                        "Statur":"breit",
+                        "Charaktereigenschaften":  ["stur", "arrogant", "intrigant", "diszipliniert", "hart", "humorlos"],
+                        "Hintergrundinformationen":"Nerga war die Königin der Zwerge bis Durik im Alter von 30 Jahren den Thron bestieg. Sie ist die Tochter eines mächtigen Zwergenfürsten und hat sich durch ihre Heirat mit dem König an die Macht gebracht. Sie war schon immer Politisch sehr aktiv und hat sich für eine Abschottung der Zwerge eingesetzt. Sie hat sich und ihren Sohn durch Intrigen und Lügen an die Macht gebracht und interessiert sich nur für das Wohl von sich und ihrem Sohn."
+                    },
+                    "Dig'Raff'Da'Grad":{
+                        "Geschlecht":"Männlich",
+                        "Alter":"88",
+                        "Größe":"1,35m",
+                        "Gewicht":"66kg",
+                        "Haarfarbe":"Schwarz",
+                        "Augenfarbe":"braun",
+                        "Hautfarbe":"dunkel",
+                        "Statur":"breit",
+                        "Charaktereigenschaften":  ["stur", "arrogant", "gierig"],
+                        "Hintergrundinformationen":"Ist der Gruppe in den Mienen begegnet, wo er ausversehen..."
+                    }
+
+                },
+                "Waldelfen":{
+                    "Aerendir":{
+                        "Klasse":"Paladin",
+                        "Geschlecht":"männlich",
+                        "Alter":"unbekannt",
+                        "Größe":"1,90m",
+                        "Gewicht":"80kg",
+                        "Haarfarbe":"blond",
+                        "Augenfarbe":"blau",
+                        "Hautfarbe":"hell",
+                        "Statur":"durchschnittlich",
+                        "Charaktereigenschaften":["freundlich", "hilfsbereit", "weise", "stolz", "ehrenhaft","loyal"],
+                        "Hintergrundinformationen":"Anführer des Paladinordens der Waldelfen."},
+                    "Elysia Illyandera":{
+                        "Geschlecht":"weiblich",
+                        "Alter":"unbekannt",
+                        "Größe":"1,85m",
+                        "Gewicht":"80kg",
+                        "Haarfarbe":"türkis",
+                        "Augenfarbe":"Grün",
+                        "Hautfarbe":"hell",
+                        "Statur":"schlank",
+                        "Charaktereigenschaften":["freundlich", "hilfsbereit", "weise", "stolz", "ehrenhaft","loyal", "anmutig"],
+                        "Hintergrundinformationen":"Königin der Waldelfen. Auch Herrin Ilandera genannt."}
+            },
+            "Orks":{
+                "Gorg'Garakh":{
+                    "Fraktionen":["Warg'algos","Diundriel'or"],
+                    "Geschlecht":"männlich",
+                    "Klasse":"Schamane",
+                    "Alter":"unbekannt",
+                    "Größe":"2,10m",
+                    "Gewicht":"120kg",
+                    "Haarfarbe":"Glatze",
+                    "Augenfarbe":"Schwarz",
+                    "Hautfarbe":"grün",
+                    "Statur":"breit",
+                    "Charaktereigenschaften":["hart", "weise", "stolz", "ehrenhaft"],
+                    "Hintergrundinformationen":"Gorg'Garakh ist der Oberste Schmane der der Warg'algos. Er unterstützt Diundriel und Später Garez dabei Narak zu werden"
+                },
+                "Mok'rah":{
+                    "Fraktionen":["Warg'algos","Diundriel'or"],
+                    "Geschlecht":"männlich",
+                    "Klasse":"Krieger",
+                    "Alter":"unbekannt",
+                    "Größe":"2,00m",
+                    "Gewicht":"120kg",
+                    "Haarfarbe":"Glatze",
+                    "Augenfarbe":"Schwarz",
+                    "Hautfarbe":"grün",
+                    "Statur":"breit",
+                    "Charaktereigenschaften":["hart", "stolz", "ehrenhaft"],
+                    "Hintergrundinformationen":"Mok'rah ist der ein Wachposten der Warg'algos. Er hat eine Tochter, die Diundriel einen Ogerhoden schenkt"
+                },
+                "Bakh'narak":{
+                    "Fraktionen":["Zul"],
+                    "Geschlecht":"männlich",
+                    "Klasse":"Krieger",
+                    "Alter":"unbekannt",
+                    "Größe":"2,00m",
+                    "Gewicht":"120kg",
+                    "Haarfarbe":"Glatze",
+                    "Augenfarbe":"Schwarz",
+                    "Hautfarbe":"grün",
+                    "Statur":"breit",
+                    "Charaktereigenschaften":["hart", "stolz", "ehrenhaft"],
+                    "Hintergrundinformationen":"Bakh'narak war der Anführer der Zul. Er hat sich mit Mor'zul verbündet die Seelen der Lebenden und Toten Zul an Morzul Gebunden. Er ließ Leet überfallen und hhat die Zul zu den Elfen geführt. Er wurde von Diundriel bei den Waldelfen besiegt gefangen, entkam aber wieder."
+                },
+                "Mor'zul":{
+                    "Fraktionen":["Zul"],
+                    "Geschlecht":"männlich",
+                    "Klasse":"Schatten",
+                    "Alter":"unbekannt",
+                    "Größe":"2,00m",
+                    "Gewicht":"120kg",
+                    "Haarfarbe":"Glatze",
+                    "Augenfarbe":"Schwarz",
+                    "Hautfarbe":"Grau",
+                    "Statur":"dünn",
+                    "Charaktereigenschaften":["hart"],
+                    "Hintergrundinformationen":"Mor'zul ist ein Schatten der Zul. Er korrumpiert die Geister von verstorbenen und nimmt sie in sich auf, wodurch er an Macht gewinnt. Mit Bak'Narakhs hilfe konnte er auch die Geister der Lebenden Zul an sich binden, sodass diese nach ihrem Tod automatisch teil von ihm wurden. Als diundriel ihn Besiegte befreite er die Zul damit von ihrer Bindung an ihn. Die Korumpierten Geister aus seinem Körper verschwanden in den Wäldern und Korumpierten dor wiederum Geister und Lebewesen, sodass die Wälder von Diundriel gereinigt werden mussten. Er hat die meisten Geister gefunden und in einem Gefäß gefangen. Einige der Geister darunter Garona konnte Adelina Reinigen, die anderen Geister stellen jedoch nach wie vor eine bedrohung dar, da sie permanent versuchen lebewesen ihrer Umgebung ihrem willen zu unterwerfen."
+                }
+                }, 
+                "Drachen und Drachengeborene":{
+                    "Aljax Jadeschuppe":{
+                        "Geschlecht":"männlich",
+                        "Spezies":"Drachengeborener",
+                        "Alter":"unbekannt",
+                        "Größe":"1,86m",
+                        "Gewicht":"100kg",
+                        "Augenfarbe":"grün",
+                        "Hautfarbe":"grün",
+                        "Statur":"muskulös",
+                        "Charaktereigenschaften":["freundlich", "hilfsbereit", "weise", "stolz", "ehrenhaft","loyal"],
+                        "Hintergrundinformationen":"Wirt des in plain sight War mit Annayrax zusammen und hat saphiras ei lange zeit gehütet"}
+                },
+                "Annazazi":{
+                    "Geschlecht":"weiblich",
+                    "Spezies":"Drache",
+                    "Alter":"unbekannt",
+                    "Größe":"unbekannt",
+                    "Gewicht":"unbekannt",
+                    "Augenfarbe":"unbekannt",
+                    "Hautfarbe":"Gold",
+                    "Statur":"unbekannt",
+                    "Charaktereigenschaften":["freundlich", "hilfsbereit", "weise", "stolz", "ehrenhaft","loyal","intelligent","verschlossen"],
+                    "Hintergrundinformationen":"Annazazi ist unter verschiedenen Namen in der Welt unterwes (Annazyrax, Annazariel,...) sie hat sich verteckt und lebt annonym unter den völkern um die geschehnisse zu beeinflussen"
+                }}
+            
+            
+            
+            
+               
+            }},
+    "Geschichte":{
+    "Kapitel1": {
+        "DetailLink": "",
+        "Tag1":{ 
+            "Kurzzusammenfassung": "Diundriel lernt Thoralf kennen. Sie machen sich auf die Suche nach dem verschollenen Tomat.  Sie entdecken und heilen eine verletzte Wölfin im Wald.  Sie finden den von Räubern überfallenen Tomat.  Sie Retten mit Ames und Leunand die von Räubern entführte Adelina Nur ein Räuber namens Balduin überlebt und wird gefangen.",
+            "Charaktere": ["Diundriel", "Thoralf", "Tomat", "Adelina", "Ames", "Leunand", "Balduin"],
+            "Orte/Fraktionen": ["Leet"]
+        },
+        "Tag2":{
+            "Kurzzusammenfassung": "Tribunal über Balduins Strafe (wird auf Diundriels Bitte verschont). Suche nach Schätzen im Gebirge, Besiegt durch Troggs Anführer",
+            "Charaktere": ["Diundriel", "Tomat", "Adelina", "Ames", "Leunand", "Balduin"],
+            "Orte/Fraktionen": ["Leet", "Rokmarn"]
+        },
+        "Tag3":{
+            "Kurzzusammenfassung": "Gruppe konfrontiert Trogg Anführer, Friedliche Einigung. Besiegen Oger. Kampf gegen 3 Orks. Einer entkommt. Gefahr, dass dieser Verstärkung holt.",
+            "Charaktere": ["Diundriel", "Thoralf"],
+            "Orte/Fraktionen": ["Leet", "Rokmarn", "Oger"]
+        },
+        "Tag4":{
+            "Kurzzusammenfassung":"Gruppe lockt Oger in Orklager, um Dorf und Troggs vor Orkangriff zu schützen, Balduin dient als Köder und verdient sich so Freiheit und Vertrauen der Gruppe.", 
+            "Charaktere": ["Diundriel", "Thoralf", "Tomat", "Balduin"],
+            "Orte/Fraktionen": ["Leet", "Rokmarn", "Oger", "Zul"]
+        },
+        "Tag5":{
+            "Kurzzusammenfassung":"Thoralf vermutet, Diundriel könnte ein Lichtbringer sein. Thoralf schlägt vor Diundriel zur Ausbildung nach zu den Zwergenpaladinen in Brimur'Dur zu bringen. Er sagt noch nichts von seiner vermutung, sondern spricht davon, dass Diundriel Paladin werden könnte.Ames willigt ein",
+            "Charaktere": ["Diundriel", "Thoralf", "Ames"],
+            "Orte/Fraktionen": ["Leet"]
+        },
+        "Tag6 und 7":{
+            "Kurzzusammenfassung":"Weg nach Brimur'Dur.  Thoralf unterrichtet Diundriel in sprache und Kultur von Zwergen und Elfen.",
+            "Charaktere": ["Diundriel", "Thoralf"],
+            "Orte/Fraktionen": ["Wildnis zuwischen Leet und Brimur'Dur"]
+        },
+        "Tag8":{
+            "Kurzzusammenfassung":"Ankunft bei den Zwergen. Dvanin'or Ignis, stellt Diundriel auf Probe.  Diundriel besteht und Bekommt Drachenei. Es ist nun Klar, dass er Lichtbringer ist. Diundriel wird über Lichtbringer aufgeklährt. Thoralf besucht seine Mutter Marut.",
+            "Charaktere": ["Diundriel", "Thoralf", "Darvin'or Ignis", "Marut"],
+            "Orte/Fraktionen": ["Brimur'Dur"]
+        },
+        "Tag9":{
+            "Kurzzusammenfassung":"Diundriel erhält Kampftraining und Ausrüstung von Davin'or, muss Zwerge aber verlassen, soll statdessen bei Elfen ausgebildet werden. Diundriel erhält magischen Ring, mit dem er Davin'or im Notfall kontaktieren kann. Streit Zwischen Thoralf und Davin'or, Gruppe erhält Information über Diundriels Aura.",
+            "Charaktere": ["Diundriel", "Thoralf"],
+            "Orte/Fraktionen": ["Brimur'Dur"]
+        },
+        "Tag10 und 11":{
+            "Kurzzusammenfassung":"Weg nach Leet. Thoralf unterrichtet Diundriel in sprache und Kultur von Zwergen und Elfen.",
+            "Charaktere": ["Diundriel", "Thoralf"],
+            "Orte/Fraktionen": ["Wildnis zuwischen Leet und Brimur'Dur"]
+        },
+        "Tag12": {
+            "Kurzzusammenfassung": "Diundriel und Thoralf treffen Balduin kurz vor Leet. Leet wurde von Orks überrannt, zuvor aber durch Warnung von Balduin evakuiert. Die Gruppe rettet mehrere Dorfbewohner, die nicht bis nach Bornin fliehen konnten. In Bornin erzählt Diundriel Ames, dass er Lichtbringer ist und kontaktiert mit seinem Ring Davin'or, der bei der Befreiung von Leet helfen soll.",
+            "Charaktere": ["Diundriel", "Thoralf", "Balduin","Ames","Davin'or"],
+            "Orte/Fraktionen": ["Leet", "Bornin"]
+        },
+        "Tag13": {
+            "Kurzzusammenfassung": "Diundriel, Thoralf und Balduin machen sich auf, den Weg zu den Elfen. Sie Finden ein kleines Orklager, wo sie Tomat befreien. Adelina wurde eine Höle in den Bergen verschleppt, in der Diundriel eine Böse Präsenz spürt,  da darin ein Grüner drachen Wyrmling ist. Sie rasten mit wechselnden Wachposten in Sichtweite des Höhleneingangs um Adelina bei Tagesanbruch zu retten",
+            "Charaktere": ["Diundriel", "Thoralf", "Balduin", "Tomat"],
+            "Orte/Fraktionen": ["Wald", "Berge", "Bornin"]
+        },
+        "Tag14": {
+            "Kurzzusammenfassung": "Gruppe konfrontiert und besiegt den grünen Drachenwyrmling, der Diundriel als Lichtbringer erkennt . Sie retten Adelina, die von Alpträumen während der Gefangenschaft berichtet. Sie Plündern den Schatz und kehren nach Bornin zurück, um zu rasten und sich zu erholen.",
+            "Charaktere": ["Diundriel", "Thoralf", "Balduin", "Adelina", "Tomat"],
+            "Orte/Fraktionen": ["Berge", "Bornin"]
+        },
+        "Tag15": {
+            "Kurzzusammenfassung": "Diundriel kämpft zusammen mit den eingetroffenen Paladinen unter führung Davin'ors gegen die Orks in Leet und befreit es. Balduin kauft von seinem Anteil des Drachenschatzes in Bornin ein Pferd, während Thoralf Inazea Annazazi und die Wehrkatze Maut trifft. Sie planen, die verfallene Akademie zu erkunden um alte Portale zu reaktivieren. Balduin schließt sich für Gold der Expedition an. Ames soll Messer aus Drachenzähnen herstellen und Rüstungsmodifikationen vornehmen.",
+            "Charaktere": ["Diundriel", "Thoralf", "Balduin", "Davin'or", "Inazea Annazazi", "Maut", "Ames"],
+            "Orte/Fraktionen": ["Leet", "Bornin"]
+        },
+        "Tag16": {
+            "Kurzzusammenfassung": "In der alten Akademie beisegen Diundriel, Thoralf, Annazazi  und Balduin eine Orkhorde, die durch ein offenes Portal strömt und schließen das Portal.  Sie bitten die Zwergen-Paladine, das Portal zu bewachen. Annazazi soll einen Weg finden das Portal zu den Elfen zu öffnen.",
+            "Charaktere": ["Diundriel", "Thoralf", "Annazazi", "Balduin","Davin'or"],
+            "Orte/Fraktionen": ["alte Akademie", "Bornin"]
+        }},
+        "Kapitel2": {
+        "Tag17": {
+            "Kurzzusammenfassung": "Die Gruppe durchschreitet das Portal und trifft auf Elfen, die mit weiteren Orks gerechnet haben. Thoralf erforscht Drachen und Lichtbringer in der Bibliothek und lernt über die historischen Kämpfe zwischen guten und bösen Drachen. Diundriel gerät mit dem elfischen Aerendir in einen Hinterhalt und rettet ihn. Zusammen mit Falinor nimmt Diundriel Garez'gor gefangen und erfährt dass Back'narakh sich die Macht eines Schattens  namens Mor'zul zunutze macht. Diundriel stellt mithilfe von informationen von Gerez'Gor Bak'narak und nimmt ihn ebenfalls gefangen. Garez'gor bietet Diundriel seine Dienste an, da dieser durch den Sieg über Bakh'narak seine Loyalität verdient hat",
+            "Charaktere": ["Diundriel", "Thoralf", "Balduin", "Tomat", "Annazazi", "Aerendir", "Falinor", "Back'narakh","Garez"],
+            "Orte/Fraktionen": ["Feylanor","Waldelfen","Zul"]
+        },
+        "Tag18": {
+            "Kurzzusammenfassung": "Am nächsten Morgen setzen Diundriel, Thoralf, Balduin und Falinor rüsten Garez'gor mit der Ausrüstung von Back'narakh und stellen einen Kleinen Teil der Orks um sie zu überzeugen sich von Mor'zul loszusagen. Um den wahrheitsgehalt der von Garez'gor vorgetragenen lobpreisung von Diundriels Stärke zu prüfen fordert der ranghöchste der 5 Orks Diundriel zu einem fairen Zweikampf ohne Magie heraus. Sollte Diundriel gewinnen werden die Orks im Kampf gegen den Schatten helfen, um so eine Chance zu haben sich von diesem Loszulösen, wenn er verliert hat der Ork den Befehl über die Gruppe. Obwohl der rest der Gruppe den Bedingungen nicht zustimmt nimmt Diundriel diese an und kämpft. Der kampf ist hart aber Fair, es wird keinerlei Magie eingesetzt, Diundriel gewinnt knapp. Während Thoralf diundriel nach dem Kampf magisch heilt verblutet der besiegte Ork anführer und Mor'zul Manifestiert sich an der Leiche. Die Orks halten zu ihrem Wort und gemeinsam mit der Gruppe überweltigen sie den Schatten. Den tötlichen Hieb ins Herz fürt einer der Orks. Nach kurzem jubel über den sieg entbrennt unter den Orcs ein Streit übder die Führerschaft, da der Ork der den Schatten bezwungen hat der meinung ist er seie dadurch legitimer Anführer. Die Gruppe hält sich aus dem Streit heraus und zieht sich zurück als ein Duell zwischen 2 der verbliebenen 4 Orks beginnt. Anschließend begibt sich die Gruppe zur hauptstreitmacht der Elfen, welche die verbliebenen 25 Orks wie vorgesehen am verlassen der Höhlen gehindert hat. Auch dort versucht Diundriel eine fridliche Lösung zu finden. Die Orks haben bemerkt, das der Fluch des Schattens von ihnen abgefallen ist und glauben daher den berichten Diundriels, allerdings sind sich die beiden Ranghöchsten Orks uneinig ob der Schatten Fluch oder segen war. Es folgt ein erneutes Duell. Bei diesem Duell greift Thoralf durch seine magisch demoralisierenden Beleidigungen jedoch in den Kampf ein ohne, dass die Orks es bemerken, sodass der Ork gewinnt, der mehr Sympathien zur darstellung der Gruppe hegt. Der verlierer wir dises mal nicht sterben gelassen sondern von Diundriel geheilt. Nach dem Kampf verhandelt Diundriel, den der Sieger als Kriegshäuptling anspricht (da Diundriel Bak'narakh besiegt und Mor'zul getötet hat) mit dem nun führenden Ork was mit den verbliebenen Orks geschehen soll.  Der wunsch sich im Kapf zu beweisen macht es schwirig eine Lösung zu finden, doch am Ende einigt man sich dass die Orks Eine Kampfarena in den Bergen gründen sollen in der sie untereinander Kämpfen, allerdings nicht wie sonst üblich bis zum Tod und dass es ihnen erlaubt ist ihre Tapferkeit im Kampf gegen einige der Wildesten Tiere in der Arena zu beweisen. Auch die Clans die in den Bergen leben sollen nach möglichkeit überzeugt werden ihre Ehre in kämpfen in der Arena zu beweisen anstatt die Elfen zu überfallen. Als die Gruppe in die Hauptstadt zurückkehrt ist Backnarakh geflohen, da die wächter nicht Magischen fähigkeiten gerechnet hatten. Am nächsten Tag ist dennoch ein Fest mit einer Audienz bei der Königin geplant, um den Sieg über den Schatten und das friedliche abziehen der Orcs zu feiern. Garez'gor bietet an vor Diundriels Tür zu wachen während der Rest schläft und selbst zu schlafen wenn alle auf dem fest sind. In der Nacht wacht Diundriel von einem Lauten scheppern auf, Garez'gor stürmt ebenfalls in sein zimmer und beide sehen, dass Diundriels Rucksack in die Rüstung gefallen ist und dort der Drache geschlüpft ist. Diundriel schickt Garez'gor jedoch schnell heraus, in der hoffnung, dass er nicht erkannt hat, das es sich um einen Drachen handelt. Thoralf der inzwischen auch aufgewacht ist holt dem Drachen essen und schickt Garez'gor in sein Bett. Er erfindet eine Geschichte von einer Eidechse die Diundriel von zuhause mitgebracht habe.",
+            "Charaktere": ["Diundriel", "Thoralf", "Balduin", "Falinor","Garez"],
+            "Orte/Fraktionen": ["Waldelfen","Zul"]
+        },
+        "Tag19": {
+            "Kurzzusammenfassung": "Am nächsten Tag überreicht der Oberste Elfen Paladin Diundriel eine Magische Ordensrüstung als Zeichen seiner Dankbarkeit und ist begeistert von dem neugeschlüpften Drachen. Diundriel zeigt Saphira, die sich auf Thoralfs drängen in eine Eidechse verwandelt hat, die Schönheit der Welt (Sonnenaufgang über den See, das kalte klare Wasser, die weichen Pflanzen des Waldes). Tomat, der das mitbekommt und verwundert ist, wo diese Eidechse herkommt, wird von Diundriel in das Geheimnis eingeweiht und ist begeistert. Er würde es gerne Adelina erzählen, verspricht aber, dass er damit wartet, bis es kein Geheimnis mehr ist. Auch Balduin und Garez'Gor sind verwirrt ob des plötzlichen Erscheinens der Eidechse, sie lassen sich aber von Thoralf überzeugen, dass es nicht weiter beachtenswert sei. In diesem Zusammenhang berichtet Garez'Gor von dem Anführer hinter Mor'zul und Backnarakh, der eine Kreatur bei sich hat, die von Garez'Gors Beschreibung zu urteilen ein Junger Schwarzdrache zu sein scheint. Garez'Gor verweist mehrmals darauf, wie ähnlich, die 'Eidechse' im Moment in der Nacht (als Saphira noch nicht verwandelt war) diesem Monster sah, wird aber von Thoralf immer wieder vom Thema abgebracht. Auf dem Fest hat Diundriel Saphira in Form der Eidechse auf der Schulter und füttert sie bis sie satt ist mit Fleisch. Im vertraulichen Gespräch mit der Königin Elysia Illyandera offenbaren Diundriel und Thoralf, dass die Eidechse der geschlüpfte Drache ist und erzählen ihr vom Gerücht über den Schwarzdrachen. Außerdem bitten sie die Königin um Hilfe mit dem Portal. Die Königin bietet an, einen ihrer Magier nach Leet zu schicken, der dort die Reisen ins Elfenland überwacht und kontrolliert. Gleichzeitig bittet sie die beiden sich darum zu kümmern, dass sowohl Menschen als auch Zwerge ihre Portale öffnen, um gemeinsam gegen die Bedrohung kämpfen zu können. Auch die Hochelfen, von denen sie persönlich nicht viel hält, würde sie trotzdem gerne an ihrer Seite wissen. Dennoch kann sie verstehen, dass Diundriel das Portal vorerst nicht öffnen will, und stattdessen eine Weile mit seinem frisch geschlüpften Drachen im Schutz des nun sicheren Elfenwaldes verbleiben will.",
+            "Charaktere": ["Diundriel", "Thoralf", "Tomat", "Balduin", "Garez'Gor", "Saphira", "Elysia Illyandera", "Aerendir"],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]},
+            
+        "Tag20": {
+            "Kurzzusammenfassung": "Am nächsten Tag übt Diundriel mit Saphira das Fliegen, und es gelingt ihr, eine kurze Zeit in der Luft zu bleiben. Sie lernen, dass sie die Welt durch die Augen des jeweils anderen wahrnehmen können und dass Saphira eine Art Infrarotsicht beherrscht. Saphira soll die meiste Zeit in verwandelter Form bleiben, was sie jedoch nicht mag. Diundriel verbringt Zeit mit Garez'Gor, um mehr über die Orks zu lernen, und erfährt, dass er den Titel 'Diundriel'Narakh-Zul' beanspruchen kann. Er plant, täglich mit Saphira zu fliegen und zu jagen, von Thoralf und Garez'Gor das Lesen zu lernen, mehr über die Orks zu erfahren und mit Garez'Gor und Aerendir an seinen Kampffähigkeiten zu trainieren.",
+            "Charaktere": ["Diundriel", "Saphira", "Garez'Gor", "Thoralf", "Aerendir"],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]
+            },
+            
+        
+        "Tag21": {
+            "Kurzzusammenfassung": "Training",
+            "Charaktere": ["Diundriel", "Saphira", "Garez'Gor", "Thoralf", "Aerendir"],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]
+        },
+        "Tag22": {
+            "Kurzzusammenfassung": "Training, Vorbereitung der Reise. Diundriel und Thoralf haben beschlossen als erstes zu den Hochelfen weiterzureisen. Sie wählen dafür den Weg durch die alten Mienen der Einstigen Zwergen Hauptstadt Bara'Dur, der seit 1231 Jahren verlassenen alten Zwergen hauptstatt. In der Bibliothek und über Kommunikation mit den Zwergen (über Diundriels Ring) erfahren sie, dass die Stadt damals vom Amtierenden König Durin dem dem 4 und einigen getreuen teilweise gesprengt werden musste, da die Zwerge zu tief gegraben hatten und einen Zugang zur Unterwelt geschaffen hatten aus dem Horden von Monstern an die Oberfläche gelangten. Bevor die Abenteurer sich auf den Weg machen verzaubert der Elfenpaladin Aerendir  Diundriels Ring, sodass dieser auch mit ihm kommunizieren kann. Wenn die Gruppe aus Balduin, Diundriel Garez'Gor und Thoralf sich auf den Weg macht soll das Portal geöffnet werden und Tomat nach Leet zu Adelina zurückkehren. Um den Ausbau der Handelsbeziehungen voran zu treiben.",
+            "Charaktere": [],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]
+        },
+        "Tag23": {
+            "Kurzzusammenfassung": "Auf dem Weg zum Tunnel entscheiden Diundriel und Saphira sich die Mitreisen einzuwiehen, dass Saphira ein Drache ist. Nach einiger Zeit im Haupttunnel durch den Berg hören sie Schritte aus einem Seitengang und entdecken einen Zwerg namens Dig'Raff'Da'Grad.  Es stellt sich heraus, dass dieser zu einer Gruppe Schatzjägern gehörte, die die Schätze des untergegangenen Zwergenkönigreiches bergen wollte und dabei scheinbar ausversehen den Zugang zur unterwelt wieder geöffnet hat. Nach kurzer Rücksprache mit den Elfen (Ring) beschließen sie so schnell wie möglich zu versuchen den Zugang zu schließen, da es bis die Elfischen Truppen ankommen eventuell schon zu spät wäre. Dig zeigt ihnen wo das Unglück passiert ist und die Gruppe begibt sich in den Kampf mit einigen Schlangen und Yuan-Ti. Mithilfe von Diundrieles Fähigkeit Böses zu entdecken, Thoralfs fähigkeit Magie zu entdecken und dem Wissen über die Lage bestimmter Gaänge von Dig ortet die Gruppe die richtung von zwei Magischen Auren der Quelle der Yuan-Ti und der Schatzkammer. Zunächst widmen sie sich dem aufspüren der Quelle der nächsten Aura und finden eine Alte Grabkammer die scheinbar einem  Zwergenkönig vergangener Zeiten gehört. In der Kammer finden sie  Gold, eine Krone und eine magische Schriftrolle. Mithilfe der Schriftrolle kann Thoralf ermitteln, e, dass es sich um die Krone (Dor) von Ba'Thul handelt. Ebenfalls wird der Zorn (Grim) von Ba'Thul erwähnt. Aus seinen Nachforschungen über Lichtbringer in der Bibliothek der Elfen kennt Thoralf den König, der als wortgewandter Diplomat galt und es schaffte aus vielen Feinden der Zwerge Verbündete zu machen. Der Legende nach war er ein Lichtbringer, der die Zwerge durch seinen Diplomatisches Geschick aber auch durch extreme Kampfkraft vor dem Untergang bewahrte. Er Öffnete die Zwergischen Tunnel erstmals für außenstehende wodurch ein Großer Kultureller Austausch und wohlstand seine Regentschaft prägten. Sein Sohn verfolgte diesen offenen Diplomatischen Weg jedoch nicht. Wobei die Elfischen Quellen angedeuten, dass die Übergabe der Macht von Ba'Thul auf seinen Sohn nicht gewatlfrei ablief. Ba'thuls Sohn sah den austausch mit anderen Völkern als Verrat an der eigenen Kultur und versuchte das Reich der Zwerge wieder im Berg von außenweldlichen Einflüssen zu verschließen, was ihm aufgrund der entstandenen wirtschaftlichen Verflechtungen allerdings nur teilweise gelang. Während die Bündnisse mit den verschiedenen Völkern langsam zerbrachen blieben beispielsweise die Handelsbeziehungen zu den Elfen seit dieser Zeit ein konstanter Wirtschaftsfaktor. Nachdem sie die Kammer Geplündert haben werden sie Erneut von Yuan-Ti angegriffen. Als die Gruppe bemerkt, dass scheinbar unerschöpflicher Nachschub an Yuan-Ti aus einem der Stollen quillt entschließen sie sich die Holzbrücke, die diesen Stollen begehbar macht mit Hilfe von Saphiras Drachenfeuer zu zerstören. Als Dig Saphira in ihrer Drachengestalt sieht schlägt Thoralf ihn kurzerhand mitten im Kampf gegen die Yuan-Ti Bewusstlos. Das entzünden der Brücke gelingt, sodass keine Yuan-Ti nachkommen können. Gerade als die Brücke einstürzt wird jedoch aus den Tiefen des Tunnels ein mächtiger Feuerelementar heraufbeschworen, gegen den die Gruppe nichts ausrichten kann. Als letzten ausweg fliehen sie sehr zum Missfallen Thoralfs in einen der kleinen Seen im Stollen in denen der Feuerelementar sie nicht erreichen kann und harren aus, bis die Beschwörung bricht und der Elementar in seine Ursprüngliche Ebene zurückgeschickt wird.  Nach dieser Begegnung wecken die Helden Dig und bitten ihn, den Elfen entgegen zu gehen um ihnen zu zeigen wo sie sich befinden. Dig bricht gerne auf um sich aus dem Gefahrenbereich zu verdrücken. Er scheint sich nicht an die gegebenheit mit Saphira zu erinnern. bei weiteren Erkundungen  in Richtung der Zweiten Aura entdecken Sie eine versteckte Kammer mit Lava. Thoralf springt mithilfe seines magischen ringes über die Lava und rezitiert mit der Zwergenkrone auf dem Kopf den Vers der zuvor gefundenen Schriftrolle:„Blut der Ahnen fließt durch meine Adern,  Mach' aus Feinden Verbündete, ohne zu hadern,  Mein Wort schenkt Kraft, Feinde zu bezwingen,  Den geschmolzenen Stein konnt‘ ich überspringen.  Die Krone Dor'Ba'Thuls ist schon mein,  würdig für Grim'Ba'Thul muss ich sein.  Zum Wohl der Völker, durch Taten nicht Schein,  Will ich rechte Hand des Lichts sein.“ Woraufhin sich die Schatztruhe öffnet und einen magischen Hammer Preis gibt den Thoralf an sich nimmt. Da der ring ihm nur einmal täglich gestattet weit zu springen hält Thoralf in seiner verzweiflung den hammer über seinen Kopf und sagt „Lava erstarre“ und zu der Verwunderung aller erstarrt die Lava.  Nun geht die Gruppe den Gang der zur Schatzkammer führen sollte weiter. Sie finden eine verborgenen Zugang, doch als sie diesen öffnen wollen werden die Yuan Ti auf sie aufmerksam und beginnen zu versuchen den Abgrund der sie von den Helden trennt zu überwinden. Während Saphira durch einen Spalt in die Schatzkammer eindringt und damit beginnt Edelsteine herauszutragen positionieren sich Die Helden am Abgrund um den Vorstoß der Yuan Ti zu verhindern. Dies gelingt zu Beginn gut, doch bald erscheint ein Magier der Yuan Ti und ermöglicht es den anderen ungehindert die Schlucht zu passieren. Der einzige Grund weshalb sie nicht sofort von den Schir unerschöpflichen Mengen an nachströmenden Yuan Ti überrant werden ist die enge des Ganges, die es den angreifern schwer macht ihre Zahlenmäßige überlegenheit auszuspielen. Als Garezgor schon einmal bewusstlos zu boden gegangen ist und Thoralf die Heilzauber ausgehen und  die Yuan Ti kurz davor sind die Helden zu überrennen kommen im letzten Augenblick die Elfen angeführt von ihnrem Paladin Aerendir den Helden zurhilfe. Gemeinsam gelingt es ihnen die Yuan Ti in ein Größeres Gewölbe zurückzudrengen. Duch den Boden des Gewöbes schein sich ein Riesiges Monster pressen zu wollen, zumindest Presst sich ein Riesiges auge von mehreren Metern durchmesser durch den Boden. Einer der Yuan Ti Magier ist außerdem damit beschäftigt ein Ritual abzuhalten. Die Gruppe erkennt, dass dieses Ritual unbedingt unterbrochen werden muss und es gelingt ihnen im letzten Moment den Ritualisierenden Magier zu Töten bevor das Ritual abgeschlossen ist. Thoralf schlägt mit seinem in der Kammer gefundenen Hammer der mittlerweile hell Magisch Leuchtet auf das Auge, sodass es vom Boden verschwindet, gleichzeitig jedoch ein Erdbeben auslöst, dass droht die ganze höle zum einsturz zu bringen. Anstatt sich selbst schnellstmöglich in sicherheit zu bringen riskiert die Gruppe ihr Leben um einige der Bewusstlos geschlagenen Elfenkrieger zu heilen, damit diese eine Chance haben die Höle zu verlassen. An der Schlucht angekommen fliegt Saphira mit einem Seil herrüber damit die Kämpfer sich herüberhangeln können. Leider stürzen mehrere elfenkrieger und ihr Aerendir Anführer in die Tiefe. Und wieder entscheiden sich Diundriel und Saphira nicht ihre eigene Haut zu retten sondern den Gestürzten zu helfen. Auch Thoralf der sich vor verletzungen kaum noch selbst auf den Beinen halten kann bleibt bis der letzte elf aus der schlucht geklettert ist um sie mit Magischem Gesang unterstützen zu können. Kurz nachdem alle sich schwer verletzt in sicherheit gebracht haben stürzt die Höhle komlett ein und die Gruppe entscheidet lieber erstmal mit den Elfen in die Hauptsadt zurückzukehren. Dort angekommen ziehen sie sich erschöpft in ihre Gemächer zurück.",
+            "Charaktere": ["Diundriel", "Saphira", "Garez'Gor", "Thoralf", "Dig'Raff'Da'Grad", "Aerendir"],
+            "Orte/Fraktionen": ["Bara'Dur","Yuan-Ti","Waldelfen"]
+        },
+        
+        "Tag24": {
+            "Kurzzusammenfassung": "Die gruppe beschließt ihren erneuten Aufbruch zu den Hochelfen noch etwas hinauszuzögern bis ihre Verletzungen komplett verheilt sind. Bleiben sie Gäste der Waldelfen.",
+            "Charaktere": [],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]
+        },
+        "Tag25": {
+            "Kurzzusammenfassung": "Zu seiner Überraschung sieht Diundriel Tomat und Adelina aus der Ferne, die sich zu streiten scheinen. Adelina rennt weinend davon und Tomat berichtet Diundriel was sich zugetragen hat. Adelina hat in ihrer Zeit bei Annazazi herausgefunden, dass sie angeborene Magische Fähigkeiten hat. Annazazi hat sie unterwiesen, wie diese zu kontrollieren sind und Adelina möchte nun eine Ausbildung zur Hexe machen. Tomat ist außer sich vor zorn. Er möchte nicht, dass seine Tochter eine Hexe wird. Er sagt sie würde dann keinen vernünftigen Mann finden, der für sie sorgt und überhaupt sei es zu gefährlich, da die Inquisition Jagt auf Hexen und deren Blutlinie macht. Adelina solle nicht auf einem Scheiterhaufen enden. Er bittet diundriel Adelina zu überzeugen die Hexerei zu vergessen und sich stattdessen in ein paar Jahren mit einem anständigen Mann verheiraten zu lassen. Diundriel stimmt zu mit Adelina zu reden, damit sie nicht fortläuft, will sich aber zunächst Adelinas Sicht anhören.  Er findet die weinende Adelina im Wald. Sie berichtet ihm unter Tränen, wie stolz sie auf sich war, als sie ihre Magischen Fähigkeiten entdeckt hat und dass sie nicht mit irgendeinem schnösel verheiratet werden will der dann über sie bestimmen kann. Sie will auf sich selbst aufpassen können, und hatte das erste Mal nach den vergangenen Entführungen das Gefühl die Kontrolle über ihr eigenes Leben und ihre Unversehrtheit zurück zu bekommen. Sie beschreibt den Moment als ihr klar wurde, dass sie Magisches Blut in ihren Adern hat und Zaubern kann als den glücklichsten ihres Lebens und sagt, dass sie sich dies nicht nehmen lassen wird. Diundriel, der sich erinnert wie es war, als er seine Magie entdeckt hat kann ihre Gefühle und Argumente sehr gut verstehen und verspricht ihr mit Tomat zu reden.  Diundriel versucht Tomat zu überzeugen, indem er die Parallelen zu seinem eigenen schicksal aufzeigt, Tomat jedoch findet, dass Hexerei nicht mit Lichtmagie zu vergleichen sei. Er erzählt, das seine Mutter eine Hexe war, dass sie von ihrem eigenen Mann an die Inquisition verraten wurde und so schließlich ihr Leben auf dem Scheiterhaufen verlor. Ein sloches schicksahl will er Adelina ersparen. Diundriel jedoch sagt, dass die Inquisition keinen unterschied macht, ob sie ausgebildet ist oder nicht, dass sie sie so oder so verbrennen würden, sofern sie auch nur vermuten würden, dass Hexenblut durch ihre Adern fließen könnte. Das sie demnach ausgebildet sogar sicherer ist, da sie sich dann verteidigen kann. Außerdem macht diundriel Tomat klar, dass Adelina den wunsch nach ausbildung nicht aufgeben wird und vermutlich im zweifelsfall abhauen wird, wenn Tomat versucht es ihr zu verbieten, was deutlich gefärlicher wäre. Unter tränen und sehr unzufrieden mit der Situation gibt Tomat klein bei. Er lässt diundriel schwören, dass er auf Adelina acht gibt und erlaubt unter dieser Bedingung, dass Adelina die gruppe zu den Hochelfen zu begleiten um dort eventuell weitere Ausbildung zu erhalten. Als Diundriel schwört die verantwortung für Adelinas sicherheit persönlich zu übernehmen ist Tomat zufrieden. Als diundriel Adelina davon erzählt ist diese überglücklich und fällt ihm um den Hals.  Diundriel geht anschießend mit Saphira in den Wald, wo Diundriel ihr verschiedene Kräuter und Beeren zeigt, die sie zusammen sammeln. Saphira wechseld dabei ihre gestalt und stellt fest, dass die Dinge abhängig von ihrer Gestalt unterschiedlich schmecken. Als sie gerade in ihrer Drachen Gestalt ist laufen sie plötzlich Adelina über den weg, die Gerade dabei war einen Blumenstrauß für Diundriel zu pflücken. Adelina überreicht diundriel den Strauß welcher ihr Saphira vorstellt. Adelina ist begeistert von Saphira und verabredet sich mit diundriel den Morgigen Feiertag der Frühlingsblüte gemeinsam zu feiern.",
+            "Charaktere": [],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]
+        },
+        "Tag26": {
+            "Kurzzusammenfassung": "Am Tag der Frühlingsblüte ist der Elfenwald reich geschmückt und es gibt viele Verzauberte Attraktionen. Und köstliche Speisen wo man auch hinschaut Diundriel und Adelina verbringen den ganzen Tag zusammen. Sie Fahren zusammen in den verzauberten Boten der Elfen vor dem Palast und teilen sich einige der angeboten Speisen. Während der gemeinsamen Zeit erzählt Adelina viel über das Gefühlschahos, dass in ihr herrschte seit Tomat ihr verboten hatte der Hexerei nachzugehen und wie dankbar sie Diundriel ist, dass dieser ihr ermöglicht hat dem weiter nachgehen zu können. Sie sagt, dass sie sich niemanden vorstellen könnte mit dem sie diese Abenteuer lieber angehen würde und wie sehr sie sich auf die gemeinsame Reise zu den Elfen freuht. Diundriel vertraut ihr an, dass er ein Lichtbringer ist und erklärt ihr die bedeutung seiner Aufgabe. Am späten Abend schauen sie gemeinsam das Magische Feuerwerk der Elfen an und verabreden sich mit auch den Nächsten Tag gemeinsam zu verbringen. ",
+            "Charaktere": [],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]
+        },
+        "Tag27": {
+            "Kurzzusammenfassung": "Zusammen mit Adelina und Saphira begibt sich Diundriel zu den heißen Quellen Flussaufwärts. Als Saphira im Fluss badet und  berichtet, wie angenehm das Wasser ist entschließen sich Diundriel und Adelina auch im Fluss zu Baden, obwohl sie keine passende Kleidung haben. Als sie Nackt sind fragt Adelina Diundriel verwundert und sehr interessiert, wie es kommt, das dieser einen so markellosen Körper ohne Narben hat, obwohl er andauernd in Kämfe verwickelt ist und schon einige schwere Wunden davongetragen hat. Diundriel erzält ihr, dass es wohl an der magischen Heilung liegt und erklärt ihr wie er durch Handauflegungen Wunden heilen kann. Adelina ist Fasziniert und sagt, dass sie wünschte ihre Magischen Fähigkeiten würden auch Heilung einschließen und zeigt ihm ein paar Tricks. Sie lässt die Blüten der umherstehenden Bäume Muster im Wind formen und verändert dabei ihre Farbe. Etwas enttäuscht erklährt sie, dass sie bisher nur leichte illusionen und telekinese beherrscht aber entschlossen sei zu lernen um Diundriel bei seiner Aufgabe als Lichtbringer zu helfen.  Nachdem sie eine Weile im Wasser geplanscht und herumgealbert haben nutzen sie den aus dem Bassin herausführenden Fluss als eine art wildwasser Rutsche und verlassen ihn kurz vor der Stadt. Das Rutschen hat beiden so viel Spass gemacht, dass sie den Weg zum einstiegspunkt nackt wieder hochflitzen und noch einige Male Rutschen, bis adelina sich an einem Spitzen Stein den Rücken und den Oberschenkel verletzt. Diese Wunden heilt Diundriel durch Handauflegung bevor sie sich entschließen sich wieder anzuziehen um zur Stadt zurückzukehren. Am Abend verabscheiden sich die beiden und Adelina sagt, dass sie sich an ihrem morgigen Geburtstag vorgenommen hat sich mit ihrem Vater zu versöhnen, bevor die Gruppe aufbricht.",
+            "Charaktere": [],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]
+        },
+        "Tag28": {
+            "Kurzzusammenfassung": "Zu ihrem Geburtstag schenkt Diundriel Adelina eine Reihe geschnitzter Holz Figuren die er bei seinen Waldausflügen mit Saphira erstellt hat. Darunter sind Figuren der Gruppe und der wichtigsten Bösewichte.",
+            "Charaktere": [],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]
+        },
+        "Tag29": {
+            "Kurzzusammenfassung": "Als Diundriel mit Saphira an einem der Seen sitzt steigen Plötzlich Humanoide Tiefseemonster aus den Gewässern Empor. Eine Magiewirkende Hydra, ein Haifischköpfiger Humanoid, ein Mon Kalar, ein Krokodilköpfiger Humanoid und ein mit Krustentieren und Seesternen überzogener Humanoid. Gemeinsam mit Falinor, der auf Befehl der Königin Sichtungen der Moster überprüfen will bekämpfen die Beiden die Monster. Durch Magie kann Falinor die Monster zunächst daran hindern zu ihm zu gelangen. Doch die Hydra ist ebenfalls magiekundig und lässt das Wasser schnell steigen, welches die wurzeln von Falinors Zauber löst und Diundriel beginnt in die Tiefe zu ziehen. Kurz bevor Diundriel jedoch den Boden unter den Füßen verliert gelingt es den beiden die Hydra zu bezwingen, wodurch ihr Zauber gebrochen wird, sodass sie die Monster knapp besiegen können. Diundriel nimmt der Hydra eine Perle der Macht ab, die Heilige Zauber aufnehmen kann. Im anschliezenden gespräch mit der Königin deutet diese an, dass die Monster vermutlich von Diundriel angezogen werden, da dieser nun schon zu lange an einem Ort verweilt. ",
+            "Charaktere": [],
+            "Orte/Fraktionen": ["Feylanor", "Waldelfen"]
+        },
+        "Tag30": {
+            "Kurzzusammenfassung": "Bevor sie Aufbrechen bittet Thoralf um eine Audienz bei der Königin um um Ausrüstung zu bitten. Bei den Wachen verlangt er als König von Bara'Dur Einlass. Die Königin ist entsetzt und warnt Thoralf, er solle nicht mit seiner Krone pralen. Er solle sie versteckt und geheim halten. Auf die Frage warum antwortet sie, er müsse darüber mit seiner Mutter sprechen, mit der sie gut befreundet gewesen sei. Thoralf, ist verwundert, woher seine Mutter, die als Konkurbine und niedere Bedinstete keinen guten Stand am Hofe hat und seines Wisssen die Zwegenhauptstadt nie verlassen hat eine Elfenkönigin kennen sollte, doch die Königin verweigert jegliche weitere auskunft und macht lediglich andeutungen, dass er mit seinem Verhalten sich und seine Mutter in große Gefahr bringe.  Als Geschenk für die Reise gibt sie Thoralf ein Tragbares Loch mit, in dem er die Krone Verstecken soll.  Direkt im Anschluss nimmt Thoralf über Diundriels Ring Kontakt zu Davin'or Igniz auf. Auch ihm gegenüber bezeichnet er sich als König und verlangt seine Mutter zu sprechen. Davin'or, der sehr verwirrt ist hält dies für einen schlechten Witz, zumal er wie Thoralf wissen sollte nicht in der Zwergenhauptstadt sondern in der Gegend um Leet ist, um das Portal zu schützen. Als Thoralf Davin'or weiter nervt und dabei sogar die Krone aufsetzt (was Davin'or durch den Ring natürlich nicht mitbekommt) sagt Davin'or genervt, er könne einen Boten mit seinem Ring zu Thoralfs Mutter schicken, wenn Diundriel damit einverstanden ist dann könne Thoralf mit ihr sprechen, dies würde jedoch mindestens drei Tage dauern. Diundriel ist zwar ebensowenig wie Davin'or von davon begeistert, stimmt jedoch zu, damit Thoralf endlich Ruhe gibt. Die Gruppe aus Diundriel, Thoralf, Balduin und Adelina wählt diesmal den Weg über die Berge um zu den hochelfen zu kommen. Da Adelina sich Tomats Pferd leihen darf haben alle außer Garez'gor ein Reittier. Garez'Gor zieht sich die Rüstung aus und rennt neben den Pferden her. Nach einiger zeit Erreichen sie die ersten Späher der orks, Mok'rah ein Späher der ihnen freundlcih gegenübertritt bittet Diundriel seiner Tochter ein Paket mitzugeben. Als die Gruppe ankommt gibt sucht diundriel die tochter und gibt ihr das Packet, in dem ein Ogerhoden verpackt war, die tochter erzählt, dass es üblich sei, dass die Orks trophäen als zeichen ihrer Tapferkeit an ihre Frauen und kinder im dorf schicken, so erhalten sie die ehre der Familie. Ein anderer Ork kommt auf die Gruppe zu und beleidigt diundriel und die anderen, sie würden nichts von ehre verstehen, sie seien nur schwache würmer, es sei eine Frechheit, das diunriel sich angemaßt hat ihnen zu befehlen in die berge zu ziehen und eine Arena zu bauen, er seie nicht narak, er müsse erstmal ihn besiegen, denn es gäbe keinen zeugen, dass Bak'narak im Fairen zweikampf ohne magie unterlegen war. Di ebeiden machen einen Kamp aus. Diundriel soll um die führerschaft mit ihm kämpfen. In der Arena. Auch garezgor lässt sich auf einen kampf ein, er fordert einen Warg reiter zum kampf um sein warg heraus, der übliche weg sich eines warges würdig zu erweisen. Der Kapf verläuft gut, es gelingt dem unbewaffneten Garez'narak den wargreiter vom warg zu holen und das, das warg selbst zu besteigen und den reiter zu besigen. in dem moment in dem eigentlich der todesbiss folgt lässt diunriel ihn stoppen, der bewusstlose Ork krieger wird von ihm geheilt. Er sagt es sei eine Schande, er warum er nicht in ehre im kampf sterben konnte. Diunriel erklärt er habe in ehre gekämpft und seinen mut bewiesen, sein leben zu geben sei unnötig, da er noch in weiteren schlachte ehre ansammel könne. einige orks stimmen zu, doch andere sind verstört. Der kampf zwischen diuriel und seinem herausvorderer verläuft unglaublich schnell. Diundiel hat sich vor dem kampf heiligenr magie des lichtes und segen gestärkt und slägt dem gnadenlos unterlegenen ork mit einem streich die hand ab, sodass dieser seine Waffe verliert und diundriels schwert an der kehle spürt. er verlangt von diundriel getötet zu werden, da er das duell verloren hat und ansonsten sein dasein als unwürdiger gor verbringen müsse. Diundriel verneint dies, das leben eines so tapferen kriegers sinnlos zu nehmen wäre falsch, er habe seine ehre nicht verloren, nur weil es jemanden gibt der über ihm stehe. der Ork ist bedrückt. Als diundriel ihm die hand magisch heilen will verneit er wehement, er sagt er wolle seine verletzung mit würde tragen, sie zeige seine ehre und dass er die niderlage im kampf anerkenne. Als zeichen der ehrung soll diundriel die Hand als trophäe an sich nehmen. diundriel will verwigern, doch garez'gor flüster ihm zu er solle annehmen, da dies ein weg für den Ork sei seine ehre zu beweisen und er sich sonst in seiner ehre verletzt fühlen würde. diundriel nimmt die hand an. Die orks sind gespalten, auch wenn alle von seiner Kampfeskraft beeindruckt sind, sind manche empört, dass er sich gegen das töten im ring ausspricht. Doch der Besiegte spricht laut zum rest. Die Götter haben entschieden, wenn dies der wille der götter ist, dann sollen die Orks in der Arena nicht mehr Töten. Er sticht mit seinem dolch ein loch in seine Hand, fädelt seine Kette hindurch und legt sie diundriel um den hals. As Zeichen meiner gefolgschaft sollst du meine Hand tragen sie wird zeigen, dass du ehre besitzt, dass du XYZ im Kampf besigt hast und somit anrecht auf den Titel des Naraks. Diundriel und Garez'gor werden von den orks in ihr lager eingeladen. Balduin, der den gesammten besitz auf den sieg von diundriel gewettet hat reibt sich die hände und sammelt seine gewinne ein unter anderem ein weiteren Warg, der sich jedoch weigert von ihm bestiegen zu werden. Als adelina ich über seinen Gewinn der ihn gleich auffressen wird lustig macht sagt er erbost: bitte, ich schenke ihn dir wenn du es besser kannst du neunmalkluge kleine hexe. zu seiner Empörung bedankt sich adelina beruhigt den wargh und reitet eine runde mit ihm bevor sie ihn zu den restlichen wargs stellt. ",
+            "Charaktere": [],
+            "Orte/Fraktionen": []
+        },
+        "Tag31": {
+            "Kurzzusammenfassung": "Am nächsten Morgen hat Adelina köstliches Frühstück für die Gruppe herbegezaubert. Als alle beim Frühstück sind sucht der Oberste Schamane der Frostwölfe Gorg'Garakh (Garak=Oberster Schamane/in) Diundriel auf und will ihn unter 4 Augen Sprechen. Er sagt, dass er und die anderen Schamanen die Magie, die Diundriel vor dem Kampf gewirkt hat gespürt haben. Er Selbst und die meisten der Anderen Schamanen stört das nicht, da er damit neben Stärke auch intelligenz bewisen hat, da er nicht explizit gegen die Regeln Verstoßen hat indem er vor dem Kampf magie gewirkt hat. Seiner Meinung nach ist Intelligenz sogar noch wichtiger als mut und Stärke, die von den meisten anderen Orks als wichtigste Attribute eines Anführers angesehen werden.  Die Tatsache, dass sein handeln als betrug angesehen werden könnte stellt jedoch auch eine Große Gefahr dar, da sie seinen Herrschaftsanspruch untergraben könnte. Einige der dunklen Schamanen der Zul haben bereits damit begonnen gerüchte über seinen Betrug szu streuen um das Volk gegen ihn aufzubringen. Diese Gruppe genießt unter den Frostwölfen jedoch zum Glück kein hohes ansehen, da sie aufgrund ihrer Schwarzmagischen exzesse schon oft kurz vor der Verbannung aus dem Klan standen. Sie Waren es auch, die Kontakt zu Mor'Zul aufgenommen hatten und versuchten die Frostwölfe ebenfalls dem Schatten zu unterwerfen. Grog befürchtet, dass sie, da sie Mitbekommen haben, dass Diundriel sich für das Licht stark macht, sogar den Klan nach dem Licht benennen Will die im Wald umherirrenden Geister Morzuls nutzen könnten um den Schutzpatron des Klans, den Heiligen Frostwolf mit dunkler Magie zu besudeln. Sollte der Frostwolf sich der Dunkelheit hingeben wäre es undenkbar, dass sein ehemaliger Klan sich mit Diundriel dem Licht verschreibt. Schlimmer noch alle Schamanen der Frostwölfe beziehen ihre Macht von einer Geistigen Verbindung zum Frostwolf. Sollte der Frostwolf korrumpiert werden wären alle Schamanen betroffen. Die Gruppe versucht mehr über die Bösen Schamanen zu erfahren um ihre Pläne zu vereiteln. Dabei erfahren sie im Schankhaus, dass tatsächlich gerüchte über den Betrug im Umlauf sind. Durch weitere nachforschungen erfahren sie, wo der Heilige Ort ist, an dem die Orks dem Frostwolf huldigen. Außerdem erfahren sie, das ein Menschlicher Barde namen Rittersporn vor Kurzem eingetroffen ist und Thoralf zu einem Bardenwettbewerb in der Arena Herausfordert. Die Gruppe schmiedet einen Plan: Falls die Schamanen den Frostwolf korrumpiert haben, wofür Grog mittlerweile erste anzeichen spürt soll diundriel diese Geister durch einen Exzorzismus austreiben und Adelina sie mit einem Gefäß, das sie von Grog bekommen hat einfangen. Die Gruppe (bis auf Balduin)  geht zu dem Heiligen Ort in die Berge und findet dort 3 Schamanen und Zwei wachposten, die ein Dunkles Ritual abhalten. Gemeinsam gelingt es ihnen sie zu überwältigen, Saphira, die zunächst als Pferd getarnt war hilf schlißlich Feuerspeiend gegen die eismagie eines der Schamanen. Sie lassen die Orks und Schamanen bis auf den anführer den sie Retten verbluten und widmen sich dem Korrumpierten Frostwolf, den sie nach abbruch des Rituals auf einer Gefrohrenen Fläche entdecken. Saphiras Feuer lässt ihn im eis einbrechen, sodass Garezgor ihn unter kontrolle halten kann während Diundriel das Exzorzismus Ritual durchführt. Als der Exzorzismus vollendet ist entweichen die Dunklen Geister aus dem Körper des Wolfes in die Phiole von Adelina und er nimmt wieder seine Weißblaue Farbe. Der Wolf Dankt der gruppe und sagt dass er für immer in ihrer schuld stehen wird bevor er sich in die Berge zurückzieht.  Die gruppe trägt  die Leichen der Orks und den Bewusstlosen Anführer in das Lager der Orks zurück. Der oberste Schamane dankt ihnen. Er versichert, dass sie den schamanen gut verwaren werden. ",
+            "Charaktere": [],
+            "Orte/Fraktionen": []
+        },
+        "Tag32": {
+            "Kurzzusammenfassung": "Die Gruppe vermutet, dass weitere geister von morzul in der gegend ihr unwesend treiben und kreaturen ihren Willen aufzwingen. Sie beschließen die weiteren geister ebenfalls zu fangen. Adelina soll anschließend versuchen sie zu reinigen. Da sie jedoch noch geschwächt von den Kämpfen am vortag sind beschließen sie das Lager heute nicht zu verlassen und statdessen beginnt Adelina damit zu versuchen die Seelen zu Reinigen und der rest der Gruppe micht sich unter die Orks um mehr zu erfahren und eventuell eine potenzielle Marak zu finden. In der schenke trifft Toralf auf einen Elfischen Bareden namens Rittersporn, der ihn zu einem Bardenwettstreit am abend herausfordert. Durch Gespräche mit Balduin scheint er viel (evtl.) zu viel über die Gruppe zu wissen. Thoralf stellt Balduin später und droht ihm unter nutzung von gewalt nie wieder von dingen wie der Krone, dem Hammer oder dem Lichtbringer mit fremden zu sprechen wenn ihm sein Leben lieb ist. Am abend berichtet Adelina Stolz, dass sie die ersten 3 Seelen reinigen konnte, es aber auch einige Seelen gibt, die sie nicht reinigen kann, da sie von anfang an böse waren. Die gruppe ist ratlos, was sie damit tun soll. Thoralf weiß von mächtigen artefaktwaffen der alten elfischen Paladinen, die geister bannen können. Als sie Grom von dem Problem berichten sagt er, mächtige Hexenmeister könnten ebenfalls geister bannen. Da beides nicht zur verfügung steht muss die Gruppe die Seelen vorerst aicher verwahren. Am abend begibt sich die Gruppe in die Arena. Dort wird als erstes der Bardenwettbewerb ausgetragen. Rittersporn fordert als Preis den Gammer von Thoralf und bietet als wetteinsatz seine Laute. Thoralf gewinnt den wettbewerb. Anschließend kämpft diundriel zusammen mit Thoralf und Garezgor gegen drei Orkbrüder und gewinnen. Im anschluss folgt der kampf um den posten der crush marik (crush=Kampf,Marik=anwärterin auf den titel Marak) die siegerin über mehrere andere Orkfrauen ist die Tochter des gefangenen orks hamanem. Garezgor ist beeindruckt von ihrer körperlichen stärke und schönheit und sagt sie sei eine gute marik, doch grom klärt die gruppe über ihre herkunft und ihren schlichten charakter auf. Adelina schlagt vor gegen sie zu kämpfen um selbst marik zu werden, dich die gruppe hält sie von der idee ab. Garezgor sagt sie könne nicht gewinnen, sie solle wenn gal marik werden (gal=geister, magie, weisheit) es gäbe drei marik neben den beiden erwähnten gibt es noch die des schicksahls (z.b wenn diundriel das leben gerettet wird oder er sich verliebt) solange keine zwei titel auf sich vereinen kann darf diundriel frei wählen. Wenn es einer geling 2 Titel zu beanspruchen steht ihr der Titel Marak zu. Thoralf harkt nach ib nicht auch jemand anderes Beispielsweise Garezgor natak werden kann. Dies ist möglich, wenn diundriel ihn ernennt, aber nicht garezgor. Gor steht für den dienenden, der nicht narak werden darf, da er geschlafen wurde. Garezgor berichtet unter tränen wie er sich gegen Baknarak gestellt hatte da er nicht mit einem schtten ziehen wollte, wie dieser ihn besiegt und das wichtigste genommen hatte. Seine Frau und sein ungeborenes kind. Die seelen hatte er besudelt und morzul zugefügt. Wenn soetwas genommen wurde kann man nicht narak werden man muss dienen, ähnlich der Hand die diundriel bekommen hat.",
+            "Charaktere": [],
+            "Orte/Fraktionen": []
+        },
+        "Tag33": {
+            "Kurzzusammenfassung": "Diundriel, Garez'gor und adelina (um einen Tag Pause von den Geistern zu machen, sie hat erste fortschritte erielt) suchen im wald nach weiteren verderbten kreaturen, diundriel findet eine mächtige aura und mehrere schwach. Sie entschließen sich zumächst der mächtigen zu folgen. Es ist ein korumpierter oger. Sie besiegen ihn und es gelingt ihnen die geister in der phiole zu fangen. Der oger ist dankbar und willigt ein für sie in der arena zu kämpfen, auch wenn nicht ganz klar ist ob er genau versteht wozu er zustimmt, da er recht primitiv ist. Allerdings scheint er freude am kampf gegen orks zu haben. Die orks sind begeistert über diundriels fang. Am Abend Findet in der Arena ein Kampf Statt, bei dem die Chrsh narik ermittelt wird (Crush=Kampf) marik=Anwärtetrin auf den titel der Marak. Eine Orkfrau, gewinnt gegen alle angreifer, Garezgor schwärmt von ihr, Balduin reibt sich die Hände, da er erneut viele Wetten gewonnen hat, adelina wirkt eifersüchtig, schlägt sogar vor gegen sie anzutreten. Der Oberste Schamane berichtet der Gruppe, dass die Siegeren die Tochter des Überlebenden korumpierten schamanen ist, und man ihr nicht trauen kann. Sie sei außerdem Dumm. Garezgor sclägt vor sie für diundriel zu besiegen um ihren anspruch auf den Titel zu verwähren, diundriel lehnt ab, er hat erfahren, dass es 3 Narik titel gibt kampf, Geister/Magie/Weisheit und Schicksahl nur wenn jemand mehrere Titel hat ist er gzwungen sie als partnerin zu wählen. besonders der titel schicksahl scheint ihm alle Optionen offen zu halten, da hier auch ein Verlieben oder ähnlichse möglich ist. Adelina scheint sich hoffnungen auf den titel Geister/magie zu machen, auch wenn nicht ganz klar ist, ob sie es ernst meint, da sie wohl kaum geeignet ist die Orks zu führen.",
+            "Charaktere": [],
+            "Orte/Fraktionen": []
+        },
+        "Tag34": {
+            "Kurzzusammenfassung": "Diundriel und Balduin suchen im Wald Weitere Geister und finden Drei Skelettkämpfer, die immer wieder aufstehen, bis sie sie die geister endlich einfangen können. Adelina ist in ihrem Zelt und arbeitet an der Reinigung, Thoralf und Garezgor bereiten ein Fest für die Orkfrauen vor, um eine Geignetere Marik zu finden. Am abend vor dem Fest macht adelina Diundriel und Garezgor gegenüber merkwürdige andeutungen sie habe eine Überraschung für das Fest. Will aber nicht mehr sagen. Thoralf ist Skeptisch und setzt Balduin auf sie an, er solle ihr dummheiten austreiben (er hat angst sie will tatsächlich marik werden). Es kommen erst 3 Orkfrauen und dann noch die beiden in der Arena geschalgenen, die durchblicken lassen, dass sie Drohungen von der Marik erhalten haben. Thoralf stellt sich beim befragen dumm an, Garezgor muss wieder und wider die Situation retten.Eine der Drei Orkfrauen ist merkwürdig aufgetarkelt und verhält sich wie eine Hofdame. Die Crush Marik erscheint als Letztes. Kurz nach ihr erscheint adelina, die sich über Thoralf, der sich zuvor bei balduin absichert gehör bei allen verschafft (Thoralf rülpst die ORks stimmen begeistert ein)  Adelina sagtsie habe die Seele von Garona gefunden und Gereinigt. Nimmt ihre geistefiole und trinkt einen Schluck. Anschließend scheint sie von Garona (Garezgoers frau) besessen zu sein. Sie redet mit ihm und die Orks sind begeistert und wollen sie zur Marik der seelen ernennen, doch die Crush Marik ist wütend und behauptet es sei schwindel und ein menschenkind könne ohnehin niemals marak sein. dabei schubst sie Adelina, die das Seelengefäß verliert und mehrere (10) seelen verliert. Die Seelen versuchen zum teil besitz von den gästen zu ergreifen oder verlassen das zelt. Diundriel versucht sie mit dem Gefäß wieder einzufangen. Es kommt zu einem handgemenge zwischen der Marik und Thoralf. Als Plötzlich von draußen ein Seelenfresse das zelt betreitt und beginnt die verschütteten seelen zu fressen. die Marik überwältigt thoralf und stürzt sich auf den seelenfresser. Sie ruft dabei sie werde nun Marik der seelen. Doch sie wird vom seelenfresser überwältigt und ihre seele ausgesaugt. Diundriel fängt alle geister ein, garona/aldelina hält den seelenfresser in schach und besiegt diesen. Die gruppe überträgt garonas seele in den nun seelenlosen körper der narik, Garona wird zur dreifachen Marik ausgerufen. Diudriel schlögt vor Garezgor zum narak zu machen, da dieser mit der wiedererlangung seiner garona kein gor mehr ist.",
+            "Charaktere": [],
+            "Orte/Fraktionen": []
+        },
+        "Tag35": {
+            "Kurzzusammenfassung": "Diundriel reinigt wald",
+            "Charaktere": [],
+            "Orte/Fraktionen": []
+        },
+        "Tag36": {
+            "Kurzzusammenfassung": "Diundriel reinigt wald",
+            "Charaktere": [],
+            "Orte/Fraktionen": []
+        },
+        "Tag37": {
+            "Kurzzusammenfassung": "Garez wird von Diundriel zum Graez'Narak ernannt. Eer ernennt Garona zur Marak und nennt den neuen Stamm Diundrielor was so viel heißt wie Diener der glücklichen fügung des lichtes, damit ordnet er den Stamm zugleich diundriel aus auch dem licht unter. Als zeichen wählt er die eine Weiße hand, einerseits, da die hand das zeichen des dienens ist, andererseits als anspielung auf die hand die diundriel von  Toralf singt sein Lied erweitert um einige Strophen, diundriel und Thoralf kämpfen zu ehren des neuen Narak in der Arena gegen zwei Steingolems (groß und Klein). Balduin reibt sich die hände weil er malwieder viel bei wetten verdient hat.",
+            "Charaktere": [],
+            "Orte/Fraktionen": []
+        }
+        ,
+        "Tag38": {
+            "Kurzzusammenfassung": "Diundriel reinigt wald, Garez'narak und Garona/Marik bereiten alles für die Abreise vor.",
+            "Charaktere": ["Diundriel", "Garez'Narak", "Garona"],
+            "Orte/Fraktionen": []
+        }
+    
+},
+"Kapitel3":{"Tag39": {
+    "Kurzzusammenfassung": "Diundriel Garez'narak, Adelina, Balduin und Thoralf brechen auf um zu den Hochelfen zu gelangen. Sie reisen über die Berge. als sie mittags auf dem Berggrad ankommen sind sie durch den eisigen Wind und den Hüfthohen Schnee bereits sehr erschöpft und frieren. Thoralf bemerkt, dass der abstieg schnell sehr kalt werden könnte, da die sonne schon sehr früh hinter dem Berg verschwinden wird. Um zeit zu sparen und vor der Dunkelheit bei der Waldgrenze ein lager aufschlagen zu können beschließen sie den Berg auf ihren Schilden hinabzurodeln. Thoralf und Garez'narak teilen sich das Schild von Garez, Diundriel und Adelina rodeln auf dem schild von Diundriel. Balduin und sein Pferd werden im tragbaren Loch verstaut und von Adelina gertragen. Die Wargs und die Ziege sollen der Gruppe im Plattgedrückten Schnee folgen, Saphira leitet sie. Auf der Rodelpartie muss die Gruppe unfreiwillig über einen Vorsprung springen, wobei Adelina durch Magie das Schild von Diundriel in der Luft hält, sodass sie sanft landen, anschließend bremst sie das Schild Magisch ab, sodass Diundriel und sie unverletzt absteigen können. Balduin und sein Pferd sind leicht verletzt, da sie im Loch durchgeschüttelt wurden. Thoralf und Garez'narak landen jedoch unsanft und verlieren die Kontrolle über die Rodelpartie. Kurz vor der Waldgrenze springt Thoralf ab, schleudert Garez'narak von dem Schild. Garez'narak landet Kopf voran im Schnee. Als die Gruppe ihn ausgräbt ist er zunächst bewusstlos, als er zu sich kommt ist er verwirrt, während die Gruppe nach einem Lagerplatz sucht muss er sich übergeben, während das Lager aufgeschlagen wird und Feuerholz gesammelt wird ruht er sich aus. Thoralf und Balduin die ein sehr solides Lager aufbauen sind etwas sauer, als sie die mikrige holzausbeute sehen, die Diundriel und adelina in der zwischenzeit gesammelt haben, da sie mehr mit REden als mit sammeln beschäftigt waren. Verstimmt geht Thoralf ebenfalls hoz sammeln. Erst als Adelina Magisches essen zubereitet steigt die Stimmung wieder und selbst Garez'narak kommt wieder zu kräften. Nach dem essen werden Wachdienste eingeteilt und die Gruppe schläft bis zum nächsten morgen.",
+    "Charaktere": [],
+    "Orte/Fraktionen": []
+    },
+    "Tag40": {
+        "Kurzzusammenfassung": "Die Gruppe reist weiter und erreicht bald die Straße, die zur Hauptstadt der Hochelfen führt. Sie Folgen der Straße und begegnen bald zwei menschlichen Pelz und Fell Händlern, die ihnen verstimmt berichten, dass man nur wenn man einen Magischen Eid auf den König ablegt die Stadt betreten darf. Da sie ihre Ware nicht verkaufen konnten beginnt Balduin mit ihnen zu feilschen. Er Kauft die Pelze zu einem extrem geringen Preis. Neben etwas Gold soll Adelina ihnen ein Festmahl herbeizaubern. Thoralf ist nicht Begeißtert, unter den Erworbenen Pelzen ist auch ein Einhornfell, er findet es nicht richtig solch seltene Tiere für ihren Pelz zu töten und meint Balduin sei als Käufer mitschuld an ihrem Tot. Balduin versteht die Bedenken nicht, er sagt die Tiere seien sowieso Tot, und man könne aus ihrem Fell unsichtbarkeitsmäntel herstellen. Als die Gruppe auf die Stadt zugeht bemerken sie ein Lager von Händlern, die auf einem Hügel vor dem Dorf kampieren. Sie beschließen sich aufzuteilen, da Garez'narak vermutlich für aufsehen sorgen würde. Thoralf und Garez'narak schlagen sich in den Wald nahe der Stad und kundschaften aus, ob es eine möglichkeit gibt unbemerkt in die Stadt zu gelangen während der REst zum Händlerlager weitergeht. Unglücklicherweise werden die Beiden sehr schnell von einer Elfenpatullie aufgegriffen. Es gelingt ihnen sich herauszureden, sie würden nur einen Lagerplatz suchen und seine eine Gruppe Händler. Dass sie abseits lagern erklären sie mit der Anwesenheit von Garez, da dieser die anderen Händler verunsichern würde und sie unruhen und feindseligkeiten vermeiden wollen. Die Elfen erklähren, dass ein Aufhentalt abseits der wege nur mit einer Sondergenehmigung zulässig sei und wollen ihre Wahren sehen. Thoralf und Garez führen sie also zum Rest der Gruppe und zeigen ihnen die Pelze. Die Elfen sind ebenfalls bestürzt über das Einhorn, doch Balduin zeigt ein Zertifikat der Händler, dass bestätigt, dass es sich um einen Rechtmäßigen Abschuss handelt. Die Elfenwache glaubt den schwindel und zieht ab, verwarnt die Gruppe jedoch, dass sie eingekerkert werden sollten sie noch einmal abseits der wege aufgegriffen werden. Von Einheimischen erfährt die Gruppe, dass alle Fremden und alle unter Waffen stehenden Elfen einen unbrechbaren Treueschwur auf den König leisten mussten. Der König mache keine Ausnahmen und hätte sogar den Paladinorden mit seinem Anführer der zuvor der oberste Heerführer War eingekerkert als diese sich weigerten den Eid zu leisten, da sie auf das Lich vereidigt sind. Adelina schlägt vor jemanden über Illusionsmagie als Bewohner zu tarnen und einzuschleusen, sie hat sich einen der Dorfbewohner namens Fändrael zu diesem Zweck genau eingeprägt. Die Gruppe beschließt jedoch zunächst Sphira in gestalt eines Vogels Erkundungsflüge machen zu lassen. Saphira erkundet die Stadt im Bereich des Palastes und der Kathedrale sind ungewöhnlich viele Wachen auf Patrullie. Als sie über den Marktplatz fliegt wird sie von einer Elfin beobachtet, die ihr zuwinkt und andeutet, sie sole in ihrem Garten Landen. Saphira geht dem nach und Erkennt zu ihrer verblüffung Annazazi in Elfengestalt, die sie schnell ins haus Schickt und die Fenster undurchsichtig macht. Annazazi die angibt selbst ihre Gestalt zu verändern und sich zwischen den Städten hin und her zu teleportieren schimpft mit Saphira, dass ihre illusion so leicht durchschaubar gewesen sei. Sie sagt sie hätte Adelina extra so viel über Illusionen gelehrt, da sie gehofft hatte, sie würde ihr wisen an Saphira weitergeben. Bezüglich der Situation in der Stadt weiß sie nichts genaues, sie rät aber zu äußerster Vorsicht, da unklar ist was vorsich geht und wer auf wessen Seite steht. Sie berichtet von einem geheimen Widerstand der Behauptet der König sei der Dunkelheit verfallen und diese Behauptung auf die Festnahme der Paladine stütze. Der König hingegen gibt an verraten worden zu sein und die Elfen vor einer Gefahr durch eine aufziehende Dunkelheit beschützen zu wollen. Annazazi hat selbst jedoch keinen kontakt zum Widerstand und weiß nicht wer im recht ist. Die Gruppe möchte nun, das Annazazi das Einhornfell zu einem Tarnumhang verarbeitet um mit umhang und Schwarzem Loch ungesehen in die Stadt zu kommen. Der Ursprünglich Plan von Adelina über eine Illusion in die Stadt zu gelangen hätte laut Annazazi nicht funktioniert, da ihre Illusionen zu schwach sind. Während Annazazi den Umhang baut soll die Gruppe sich einen Plan überlegen wie sie weiter vorgehen, währenddessen bildet annanzazi Saphira in den fortgeschrittenen künsten der illusion aus, damit die anderen Elfen ihre tarnung als Tier nicht durchschauen. Der Erste Plan der Gruppe sieht vor, dass Saphira den Umhang nach draußen bringt, damit er an den Wachen vorbei geschleust wird. Am selben tag schickt Annazazi einen befreundeten Pelzhändler nach draußen, der die Pelze kauft ",
+        "Charaktere": [],
+        "Orte/Fraktionen": []
+    },
+    "Tag41": {
+        "Kurzzusammenfassung": "Saphira schmuggelt den von Annazazi hergestellten Umhang nach draußen, in den Umhang hat annazazi eine der von Adelina gereinigten Seelen eingearbeitet, sodass er sehr mächtig ist. Die Gruppe tut so, als ob sie Abreist. Garazgor nimmt anschließend die Tiere und schlägt sich begleitet von saphira, die ihm so kommunikation mit der gruppe ermöglichen soll ins unterholz während Balduin den Rest der Gruppe mit dem Tarnumhang im Tragbaren Loch in die Stadt schmuggelt. In der Stadt hören sie gesprächsfetzen von Widerstandskämpfern, die sich für unbeobachtet halten. Ohne sich ihnen zu zeigen gelingt es ihnen sie davon zu überzeugen, dass sie auf ihrer seite sind und erfahren von einem Geheimen Treffpunkt in einem Keller, zu dem sie kommen sollen. Dort angekommen werden sie von einem Novizen der Paladine in einer Zone der Wahrheit auf die Probe gestellt, obwohl Balduin mühe hat einige fragen bezüglich seiner Absichten zufridenstellend zu beantworten ist der widerstand schnell überzeugt, dass sie der Gruppe unter führung diundriels trauen kann. Die Gruppe erfährt, dass für die nacht ein Befreiungsversuch geplant ist. Der Widerstand kennt die Zeit der Wachablöse und hat eine Wache Bestochen ihren Posten frühzeitig zu verlassen. Außerdem haben sie eine Karte des Verlieses auf der die Position der Gefangenen und die Wachstube eingezeichnet sind. Die Gruppe bietet an die Mission für den Widerstand zu übernehmen, da sie mit dem Umhang unbemerkt agieren können. Bis mitternacht ruhen sie sich bei Annazazi aus und bereiten sich auf den Angriff vor. ",
+        
+        "Charaktere": [],
+        "Orte/Fraktionen": []
+    },
+    "Tag42": {
+        "Kurzzusammenfassung": "Die Gruppe Schleicht in das Verlies und überwältigt zwei wachen auf der ebene der Zelle der Paladine. Um zu den Paladinen zu gelangen müssen sie jedoch eine Magische Barriere durchqueren. das bloße berühren der barriere verurscht schmerzen, wesshalb alle hadern sie zu durchqueren. Adelina bietet an einen abschirmenden zauber zu wirken, dieser verbraucht jedoch zu viel Energie um alle durch die Barriere zu schaffen. Als Thoralf schließlich ungeduldig wird schickt er alle ins tragbare schwarze Loch und springt ohne Schutz durch die Barriere, was sich als fehler herausstellt. Beim passieren der Barriere werden alle unsanft aber ohne verletzungen aus dem loch geschleudert Thoralf, der jedoch liegt schwer verletzt am boden und muss von Diundriel durch Handauflegung vor dem tode bewahrt werden. Panisch stellen Adelina und Thoralf fest, das ihre Magie hinter diesem Schild nicht wirkt, auch das loch lässt sich nicht öffnen nur Heilige Magie scheint nicht betroffen. Die Gruppe befreit die Paladine aus ihren Zellen welche dabei helfen Thoralf zu heilen und damit ihre verbindung zum Licht beweisen. Da die Gruppe die Barriere von innen nicht unbeschadet überwinden kann und sie an Thoralf gesehen haben wie lebensgefährlich es ist sie zu durchschreiten beschließen sie, dass nur die Paladine und Diundriel sie Durchqueren. Die Paladine, die selbst an der entwicklung des Gefängnisses beteiligt waren wissen wie sie die Barriere abschalten können und versichern, dass Paladine durch ihre verbindung zum licht nicht so stark von der magie der barriere beeinflusst werden. Diundriel und die Paladine durchschreiten die Barriere, heilen sich von ihren verletzungen, und stürmen die wachstube, in der sich der mechanismus zum abschalten der Barriere befindet. als alle befreit sind ziehen sie sich schnell zurück, da jeden moment die wachablöse kommen kann. Adelina tarnt sich und den Halbelf diundriel als elfische bewohner der statt und geht zusammen mit ihm zu annazazi, während thoralf und Balduin die Paladine im loch zum unterschlupf des Widerstandes führt. Dort vereinbaren sie ein Treffen in einer Höhle vor der Stadt, wo sich der hauptteil des widerstandes befindet. Auf dem weg nutzt Adelina die Tarnung als elfisches Pärchen erfolglos um zu versuchen Diundriel näher zu kommen. Bei anazazi angekommen legt sie sich erschöpft auf ein bett und schläft ein. Diundriel konfrontiert annazazi mit der frage was sie ist, da auch hier unter den elfen lebt. annazazi versucht mehrfach dem gespräch auszuweichen bis sie schließlich wütend einknickt und diundriel erzählt, dass sie ein drache ist und Saphira eines ihrer Kinder. Sie lässt diundriel einen unbrechbaren schwur leisten es nimandem zu erzählen. Bevor Diundriel weitere Fragen stellen kann kommen Thoralf und balduin an, die Gruppe ist unschlüssig was sie tun sollen. Alle sind sehr erschöpft und wollen sich ausruhen aber sie fürchten, dass die Wachen deutlich erhöht werden, wenn einmal bemerkt wurde, dass es einen gefängnisausbruch gab. Wieder ergreift thoralf die initiative und bietet sich an Balduins unhang zu tragen und die anderen im loch aus der Stadt zu transportieren. Widerwillig händigt Balduin ihm den umhang aus, da er zu müde und faul ist die gruppe selbst nach draußen zu bringen. Auf halben wege zum tor ertönen hörner und es ist klar, dass der ausbruch bemerkt wurde. in der stadt patrolieren nun Truppen. kurz bevor thoralf sich an den Torwachen vorbei schleichen kann fällt er verheddert im zu langen umhang hin und erregt durch das geräusch ihre aufmerksamkeit. kurz bevor die Wache den unsichtbar am boden kauernden Thoralf erreicht wird sie von der anrückenden Parullie abgelenkt, die befielt sofort die magischen Toore zu verrigeln. Thoralf nutzt diese letzte gelegenheit und sprintet durch das tor bevor die barriere sich schließt. Dies entgeht den wachen nicht, sie öffnen sie wieder und versuchen Thoralf zu schnappen. es gelingt ihnen ihn zu umstellen, obwohl sie seine genaue position nicht sehen. Mit einem überraschenden sound blast gelingt es Thoralf jedoch sie zurückzuschleudern und in den Wald zu entkommen. Außerhalb der Stadt gelingt es diundriel kontakt mit saphira aufzunehmen, die berichtet, das garez gefangen genommen wurde. Die gruppe findet den Widerstand und legt sich zur ruhe",
+        "Charaktere": [],
+        "Orte/Fraktionen": []
+    },
+    "Tag43": {
+        "Kurzzusammenfassung": "Die Gruppe wird von lauten hornstößen geweckt. Garez'narak scheint seine Frau über den Magischen Ring verständigt zu haben, die nun mit dem Clan auf die Hauptstadt der Elfen zumarsceirt um Garez zu befreien. Die Gruppe erklährt den verblüfften Paladinen kurz dass es sich bei den Orks um ferbündete handelt und eilt schnell zu den Orks um zu verhindern, dass diese bei einem Angriff viel zu mächtige elfenstadt in ihr verderben laufen.",
+        "Charaktere": [],
+        "Orte/Fraktionen": []
+    },
+    "Tag44": {
+        "Kurzzusammenfassung": "Die Gruppe stand vor einer schwierigen Entscheidung, um den drohenden Krieg zwischen Orks und Elfen zu verhindern. Schließlich entschieden sie sich, dass Diundriel sich als Lichtbringer offenbaren und um eine Audienz beim König der Elfen bitten sollte. Dies schien die einzige Chance zu sein, eine diplomatische Lösung für den Konflikt zu finden. Balduin nahm einige verbündete Orks in einem tragbaren schwarzen Loch mit, indem er sich unsichtbar machte, um als Rückendeckung zu dienen. Gemeinsam begleitete er Thoralf, Diundriel und die drei Paladine zum Tor der Elfenstadt. Währenddessen schlichen sich Saphira, Adelina und ein Elitetrupp der Orks durch die Kanalisation, um ungesehen in die Stadt zu gelangen und von innen auf die Situation Einfluss zu nehmen. Die Lage war angespannt, und die Gruppe wusste, dass jede Option — Diplomatie oder Gewalt — scheitern könnte. Der riskante Weg zum Thronsaal Als sie das Tor der Elfenstadt erreichten, wurden Thoralf und die anderen von der unnachgiebigen Haltung Lord Arendors und der Wachen konfrontiert. Die Spannung war greifbar, und Lord Arendor schien fest entschlossen, ihnen den Zugang zu verwehren. Die Aussicht, eine Audienz beim König zu erhalten, schien unmöglich. Thoralf griff zu einem riskanten Mittel: Mit seiner Magie als Barde beeinflusste er Lord Arendor, sodass dieser bereitwillig zusagte, die Gruppe persönlich zum König zu bringen. Die Palastwachen am Eingang des Palastes schöpften jedoch Verdacht. Sie bemerkten, dass der Fürst sich merkwürdig verhielt, doch als rangniedrige Soldaten konnten sie seinen Befehlen nicht widersprechen und mussten die Gruppe durchlassen. Nachdem sie die Gruppe hineingelassen hatten, liefen die Wachen sofort in die Festung, um Alarm zu schlagen. Die Enthüllung im Thronsaal Schließlich erreichte die Gruppe den Thronsaal, doch was sie dort erwartete, war schlimmer als alles, was sie sich hätten ausmalen können. Der König, der dort auf seinem Thron saß, wirkte abwesend, seine Augen leer. Hinter ihm stand ein unheilvoller, hagerer Mann — ein Githyanki-Hexer, bekannt für seine mentale Beeinflussung. Es war offensichtlich, dass der König unter seiner Kontrolle stand. Auf das Geflüster des Gith hin rief der König die Palastwachen herbei. Bevor die Gruppe handeln konnte, stürmte eine Übermacht an Bewaffneten durch den Korridor auf den Eingang des Thronsaals zu. Als Reaktion darauf erschienen die von Balduin verborgenen Orks plötzlich im Gang. Ein erbitterter Kampf brach aus. Nur durch die engen Gänge des Palastes und dank der Hilfe der Orks gelang es der Gruppe, sich etwas Zeit zu verschaffen. Währenddessen erkannte Thoralf, dass der Gith der Schlüssel zum Sieg war. Er wagte einen mutigen Vorstoß, doch die mentale Magie des Gith war stark. Mehrmals wurde Thoralf in seinem Willen gebrochen und dazu gebracht, seine eigenen Gefährten — darunter auch Diundriel — anzugreifen. Doch die Gruppe kämpfte verbissen weiter, entschlossen, das Unrecht zu beenden. Schließlich gelang es ihnen, den Gith zu töten. In dem Moment, in dem er fiel, schien ein unsichtbares Band zu zerreißen: Der König war zunächst verwirrt, und die Wachen kämpften weiter, da sie unter seinem Befehl standen. Die Gruppe erklärte dem König die Situation, während Lord Arendor versuchte, den König davon zu überzeugen, dass die Gruppe log. Der König erkannte jedoch die Wahrheit der Gruppe, da diese mit dem Lichtbringer und Paladinen nicht lügen konnten. Schließlich befahl er, die Kämpfe einzustellen und Lord Arendor festzunehmen. Die angespannte Stille im Thronsaal wurde nur vom schweren Atem der Helden und der Soldaten unterbrochen. Ein wichtiger Sieg war errungen worden — nicht nur über die Magie des Githyanki, sondern auch über die Feindseligkeit, die den Frieden zwischen den Völkern bedrohte. Nun lag es an den Führern beider Seiten, den Weg zum dauerhaften Frieden zu finden.",
+        "Charaktere": [],
+        "Orte/Fraktionen": []
+    }
+    }}}
+            
