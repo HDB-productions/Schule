@@ -138,19 +138,6 @@ html, body {
     padding: 0.5rem;
   }
   
-  /* Beispiel: Ausblendbares Seitenmenü */
-  .side-menu {
-    position: absolute;
-    top: 0; right: 0;
-    width: 200px;
-    height: 100%;
-    background-color: #222;
-    border-left: 1px solid #555;
-    transition: transform 0.3s ease;
-  }
-  .side-menu.hidden {
-    transform: translateX(100%);
-  }
   
   /* Buttons */
   button {
@@ -247,8 +234,67 @@ html, body {
     border-radius: 8px;
     min-width: 200px;
     position: relative;
+    text-align: center;
   }
-  
+  /* Container für die Buttons im Modal */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+/* Allgemeine Button-Stile */
+.modal-btn {
+  width: 50%;
+  flex: 1;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Spezifische Stile für positive Aktionen ("gain") */
+.modal-btn.gain {
+  background-color: #0a0; /* Grün */
+  color: #fff;
+}
+
+.modal-btn.gain:hover {
+  background-color: #28a745;
+  transform: scale(1.05);
+}
+
+/* Spezifische Stile für negative Aktionen ("lose") */
+.modal-btn.lose {
+  background-color: #a00; /* Rot */
+  color: #fff;
+}
+
+.modal-btn.lose:hover {
+  background-color: #dc3545;
+  transform: scale(1.05);
+}
+
+/* Zusätzliche Stile für die HP Management Modal Buttons */
+#hpManagementModal .modal-btn {
+  margin-right: 10px;
+}
+
+#hpManagementModal .modal-btn:last-child {
+  margin-right: 0;
+}
+
+/* Zusätzliche Stile für das Temporäre HP Modal Buttons */
+#maxHealthModal .modal-btn {
+  margin-right: 10px;
+}
+
+#maxHealthModal .modal-btn:last-child {
+  margin-right: 0;
+}
   .close-btn {
     position: absolute;
     top: 8px;

@@ -329,3 +329,25 @@ document.addEventListener('DOMContentLoaded', () => {
     closeHpManagement();
   });
 });
+
+const maxHpElement = document.getElementById('max-hp-value'); // Annahme: Element für maximale HP existiert
+const tempHpElement = document.getElementById('temp-hp-value');
+
+document.getElementById('temp-hp-increase').addEventListener('click', () => {
+    let maxHp = parseInt(maxHpElement.textContent);
+    let tempHp = parseInt(tempHpElement.textContent);
+    maxHp += 1;
+    tempHp += 1;
+    maxHpElement.textContent = maxHp;
+    tempHpElement.textContent = tempHp;
+});
+
+document.getElementById('temp-hp-decrease').addEventListener('click', () => {
+    let maxHp = parseInt(maxHpElement.textContent);
+    let tempHp = parseInt(tempHpElement.textContent);
+    if (maxHp > tempHp + 1) {
+        maxHp -= 1;
+        maxHpElement.textContent = maxHp;
+    }
+});
+
