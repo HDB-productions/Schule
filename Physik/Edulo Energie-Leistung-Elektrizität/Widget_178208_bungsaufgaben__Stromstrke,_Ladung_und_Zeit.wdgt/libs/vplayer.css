@@ -1,0 +1,307 @@
+/* ==========================================================================
+   Prmary player and video styles
+   ========================================================================== */
+
+.v-player {
+  position: relative;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  width:100%;
+  max-width:100%;
+}
+
+.v-player:-ms-fullscreen  {
+  width:100%;
+  height: 100%;
+}
+
+.v-player button {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  outline: 0;
+}
+
+.v-video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left:0;
+  top:0;
+
+  background-color: #000;
+  border-radius: 4px;
+  box-shadow: 0 4px 9px rgba(0, 0, 0, .15);
+}
+
+.v-video.nocontrols::-webkit-media-controls {
+  display: none !important;
+}
+
+.v-video.nocontrols::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+
+/* ==========================================================================
+   Controls: Play/Pause button
+   ========================================================================== */
+
+.v-controls {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  opacity: 0;
+  transition: opacity .25s ease-out;
+  z-index: 2147483647; /* to show in fullscreen mode */
+}
+
+.v-controls .play {
+  position: relative;
+  width: 65px;
+  height: 40px;
+  margin-right: 10px;
+  background: rgba(23, 35, 34, .75);
+  color: #fff;
+  border-radius: 5px;
+  transition: opacity .25s ease-out, background-color .05s, color .05s;
+}
+
+.v-controls .play:hover,
+.v-controls .play:focus {
+  background-color: #00adef;
+}
+
+.v-controls .play-icon,
+.v-controls .pause-icon,
+.v-controls .replay-icon {
+  margin-top: 3px;
+  padding-left: 2px;
+}
+
+.v-controls .play.paused .pause-icon,
+.v-controls .play.paused .replay-icon {
+  display: none;
+}
+
+.v-controls .play.playing .play-icon,
+.v-controls .play.playing .replay-icon {
+  display: none;
+}
+
+.v-controls .play.ended .play-icon,
+.v-controls .play.ended .pause-icon {
+  display: none;
+}
+
+/* ==========================================================================
+   Controls: Progress bar
+   ========================================================================== */
+
+.v-controls .play-bar {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+  height: 32px;
+  padding: 10px;
+  background-color: rgba(23, 35, 34, .75);
+  border-radius: 2px;
+}
+
+.v-controls .progress {
+  position: relative;
+  flex: 1;
+  border: 1px solid #666;
+  cursor: pointer;
+  overflow: visible;
+}
+
+.v-controls .progress:active {
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+.v-controls .progress .loaded,
+.v-controls .progress .played {
+  position: absolute;
+  height: 100%;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.v-controls .progress .played {
+  background-color: #00adef;
+}
+
+.v-controls .progress .loaded {
+  background-color: #666;
+  transition: width .2s cubic-bezier(.17, 0, .09, 1);
+}
+
+.scrubbing {
+  cursor: -moz-grabbing !important;
+  cursor: -webkit-grabbing !important;
+  cursor: grabbing !important;
+}
+
+/* ==========================================================================
+   Controls: Progress bar → Timestamp tooltips
+   ========================================================================== */
+
+.v-controls .ghost-timecode,
+.v-controls .timecode {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: -23px 0 0 -12px;
+  opacity: 0;
+  transition: opacity .25s ease-out;
+  pointer-events: none;
+}
+
+.v-controls .ghost-timecode span,
+.v-controls .timecode span {
+  position: relative;
+  left: -50%;
+  padding: 2px 4px;
+  font-size: 10px;
+  font-family: Verdana, sans-serif;
+  border-radius: 2px;
+}
+
+.v-controls .ghost-timecode span::before,
+.v-controls .timecode span::before {
+  bottom: -4px;
+  margin-left: -20px;
+}
+
+.v-controls .ghost-timecode span::after,
+.v-controls .ghost-timecode span::before,
+.v-controls .timecode span::after,
+.v-controls .timecode span::before {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  margin-left: -3px;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 3px solid transparent;
+  content: "";
+}
+
+.v-controls .ghost-timecode {
+  margin-left: 0;
+}
+
+.v-controls .ghost-timecode span::after {
+  border-top-color: rgba(23, 35, 34, .85);
+}
+
+.v-controls .ghost-timecode span {
+  background: rgba(23, 35, 34, .85);
+  color: #fff;
+}
+
+.v-controls .timecode span {
+  background: #fff;
+  color: #000;
+  margin-left: 23px;
+}
+
+.v-controls .timecode span::after {
+  border-top-color: #fff;
+}
+
+/* ==========================================================================
+   Controls: Volume
+   ========================================================================== */
+
+.v-controls .volume {
+  position: relative;
+  width: 24px;
+  height: 100%;
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+.v-controls .volume > div {
+  position: absolute;
+  display: block;
+  width: 3px;
+  height: 12px;
+  bottom: 0;
+  left: 0;
+  background-color: #00adef;
+}
+
+.v-controls .volume > div.fill-0 {
+  background-color: #666;
+}
+
+.v-controls .volume > div.fill-1 {
+  box-shadow: inset -2px 0 0 #666;
+}
+
+.v-controls .volume > div.fill-2 {
+  box-shadow: inset -1px 0 0 #666;
+}
+
+.v-controls .volume > div:nth-child(2) {
+  left: 5px;
+}
+
+.v-controls .volume > div:nth-child(3) {
+  left: 10px;
+}
+
+.v-controls .volume > div:nth-child(4) {
+  left: 15px;
+}
+
+.v-controls .volume > div:nth-child(5) {
+  left: 20px;
+}
+
+.v-controls .volume > div:hover {
+  height: 15px;
+}
+
+/* ==========================================================================
+   Controls: Fullscreen
+   ========================================================================== */
+
+.v-controls .fullscreen {
+  position: relative;
+  width: 12px;
+  height: 100%;
+  margin-left: 10px;
+  font-size: 10px;
+  background: 0 0;
+}
+
+.v-controls .fullscreen.is-fullscreen .enter-fullscreen {
+  display: none;
+}
+
+.v-controls .fullscreen:not(.is-fullscreen) .exit-fullscreen {
+  display: none;
+}
+
+.v-controls .fill {
+  fill: #fff;
+  transition: fill .05s;
+}
+
+.v-controls .fullscreen:hover .fill,
+.v-controls .fullscreen:focus .fill {
+  fill: #00adef;
+}
+

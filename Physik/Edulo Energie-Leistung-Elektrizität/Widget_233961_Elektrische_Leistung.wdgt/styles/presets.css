@@ -1,0 +1,1053 @@
+/* ========================================================================= */
+/* Style Presets for content elements                                        */
+/*  styles with .widgetBody will not be used for template menu               */
+/* ========================================================================= */
+.widgetBody .contentElement {
+  padding:0px;
+  position:relative;
+  box-sizing:border-box;
+  margin-right:1%;
+  display:inline-block;
+  width:99%;
+  vertical-align: top;
+  -webkit-transition: color 1s; 
+  transition:color 1s;
+}
+body.print .contentElement {
+  display:block;
+}
+
+.widgetBody .contentElement.alignleft {
+  text-align:left;
+}
+.widgetBody .contentElement.aligncenter {
+  text-align:center;
+}
+.widgetBody .contentElement.alignright {
+  text-align:right;
+}
+
+.widgetBody .contentElement.floatLeft10 {
+  display:inline-block;
+  width:9%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft20 {
+  display:inline-block;
+  width:19%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft30 {
+  display:inline-block;
+  width:29%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft40 {
+  display:inline-block;
+  width:39%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft50 {
+  display:inline-block;
+  width:49%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft60 {
+  display:inline-block;
+  width:59%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft70 {
+  display:inline-block;
+  width:69%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft80 {
+  display:inline-block;
+  width:79%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft90 {
+  display:inline-block;
+  width:89%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft25 {
+  display:inline-block;
+  width:24%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft33 {
+  display:inline-block;
+  width:32.333333333%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft66 {
+  display:inline-block;
+  width:65.666666666%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft75 {
+  display:inline-block;
+  width:74%;
+  vertical-align: top;
+}
+/* special for tables */
+.widgetBody .contentElement.floatLeft17 {
+  display:inline-block;
+  width:15.666666666%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft14 {
+  display:inline-block;
+  width:13.27%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft13 {
+  display:inline-block;
+  width:11.5%;
+  vertical-align: top;
+}
+.widgetBody .contentElement.floatLeft11 {
+  display:inline-block;
+  width:10.11%;
+  vertical-align: top;
+}
+
+.widgetBody .contentTable .contentElement {
+  margin-right:0;
+  width:100%;
+}
+
+.widgetBody .tableContainer .contentElement {
+  margin-right:0;
+  width:100%;
+}
+
+.widgetBody .tableContainer > .contentElement, 
+.widgetBody .containerContent > .contentElement {
+  align-self:flex-start;
+}
+
+
+/* special for tables */
+
+.widgetBody .tableContainer .contentElement.floatLeft10 {  width:10%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft20 {  width:20%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft30 {  width:30%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft40 {  width:40%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft50 {  width:50%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft60 {  width:60%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft70 {  width:70%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft80 {  width:80%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft90 {  width:90%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft100{  width:100%; flex-grow: 1;}
+
+.widgetBody .tableContainer .contentElement.floatLeft75 {  width:75%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft25 {  width:25%; flex-grow: 1;}
+
+.widgetBody .tableContainer .contentElement.floatLeft66 {  width:66.666666666%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft33 {  width:33.333333333%; flex-grow: 1;}
+
+.widgetBody .tableContainer .contentElement.floatLeft89 {  width:88%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft88 {  width:87%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft87 {  width:86%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft86 {  width:85%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft85 {  width:84%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft84 {  width:83%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft83 {  width:82%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft78 {  width:77%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft71 {  width:70%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft67 {  width:66%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft65 {  width:64%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft63 {  width:62%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft57 {  width:56%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft56 {  width:55%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft52 {  width:51%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft44 {  width:43%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft43 {  width:42%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft38 {  width:37%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft34 {  width:33%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft29 {  width:28%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft28 {  width:27%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft26 {  width:25%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft22 {  width:21%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft21 {  width:20%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft19 {  width:18%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft18 {  width:17%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft17 {  width:16%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft16 {  width:15%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft15 {  width:14%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft14 {  width:13%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft13 {  width:12%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft12 {  width:11%; flex-grow: 1;}
+.widgetBody .tableContainer .contentElement.floatLeft11 {  width:10.11%; flex-grow: 1;}
+
+
+.widgetBody .contentElement.valigntop {
+  align-self:flex-start;
+}
+.widgetBody .contentElement.valignmiddle {
+  align-self:center;
+}
+.widgetBody .contentElement.valignbottom {
+  align-self:flex-end;
+}
+
+.widgetBody .contentTable .contentElement.floatLeft10 {  width:10%;}
+.widgetBody .contentTable .contentElement.floatLeft20 {  width:20%;}
+.widgetBody .contentTable .contentElement.floatLeft30 {  width:30%;}
+.widgetBody .contentTable .contentElement.floatLeft40 {  width:40%;}
+.widgetBody .contentTable .contentElement.floatLeft50 {  width:50%;}
+.widgetBody .contentTable .contentElement.floatLeft60 {  width:60%;}
+.widgetBody .contentTable .contentElement.floatLeft70 {  width:70%;}
+.widgetBody .contentTable .contentElement.floatLeft80 {  width:80%;}
+.widgetBody .contentTable .contentElement.floatLeft90 {  width:90%;}
+.widgetBody .contentTable .contentElement.floatLeft100{  width:100%;}
+.widgetBody .contentTable .contentElement.floatLeft25 {  width:25%;}
+.widgetBody .contentTable .contentElement.floatLeft33 {  width:33.333333333%;}
+.widgetBody .contentTable .contentElement.floatLeft66 {  width:66.666666666%;}
+.widgetBody .contentTable .contentElement.floatLeft75 {  width:75%;}
+.widgetBody .contentTable .contentElement.floatLeft17 {  width:16.666666666%;}
+.widgetBody .contentTable .contentElement.floatLeft14 {  width:14%;}
+.widgetBody .contentTable .contentElement.floatLeft13 {  width:12.5%;}
+.widgetBody .contentTable .contentElement.floatLeft11 {  width:11%;}
+
+
+/* ========================================================================= */
+
+
+.widgetBody div.contentElement.marginTop025 {
+  margin-top:0.375em;
+}
+.widgetBody div.contentElement.marginBottom025 {
+  margin-bottom:0.375em;
+}
+.widgetBody div.contentElement.marginLeft10 {
+  margin-left:10%;
+}
+.widgetBody div.contentElement.marginRight10 {
+  margin-right:10%;
+}
+.widgetBody div.contentElement.marginTop05 {
+  margin-top:0.75em;
+}
+.widgetBody div.contentElement.marginBottom05 {
+  margin-bottom:0.75em;
+}
+.widgetBody div.contentElement.marginLeft20 {
+  margin-left:20%;
+}
+.widgetBody div.contentElement.marginRight20 {
+  margin-right:20%;
+}
+.widgetBody div.contentElement.marginTop1 {
+  margin-top:1.5em;
+}
+.widgetBody div.contentElement.marginBottom1 {
+  margin-bottom:1.5em;
+}
+.widgetBody div.contentElement.marginLeft30 {
+  margin-left:30%;
+}
+.widgetBody div.contentElement.marginRight30 {
+  margin-right:30%;
+}
+.widgetBody div.contentElement.marginTop2 {
+  margin-top:3em;
+}
+.widgetBody div.contentElement.marginBottom2 {
+  margin-bottom:3em;
+}
+.widgetBody div.contentElement.marginLeft40 {
+  margin-left:40%;
+}
+.widgetBody div.contentElement.marginRight40 {
+  margin-right:40%;
+}
+
+
+.widgetBody div.contentElement.paddingTop025 {
+  padding-top:0.375em;
+}
+.widgetBody div.contentElement.paddingBottom025 {
+  padding-bottom:0.375em;
+}
+.widgetBody div.contentElement.paddingLeft025 {
+  padding-left:0.375em;
+}
+.widgetBody div.contentElement.paddingRight025 {
+  padding-right:0.375em;
+}
+.widgetBody div.contentElement.paddingTop05 {
+  padding-top:0.75em;
+}
+.widgetBody div.contentElement.paddingBottom05 {
+  padding-bottom:0.75em;
+}
+.widgetBody div.contentElement.paddingLeft05 {
+  padding-left:0.75em;
+}
+.widgetBody div.contentElement.paddingRight05 {
+  padding-right:0.75em;
+}
+.widgetBody div.contentElement.paddingTop1 {
+  padding-top:1.5em;
+}
+.widgetBody div.contentElement.paddingBottom1 {
+  padding-bottom:1.5em;
+}
+.widgetBody div.contentElement.paddingLeft1 {
+  padding-left:1.5em;
+}
+.widgetBody div.contentElement.paddingRight1 {
+  padding-right:1.5em;
+}
+.widgetBody div.contentElement.paddingTop2 {
+  padding-top:3em;
+}
+.widgetBody div.contentElement.paddingBottom2 {
+  padding-bottom:3em;
+}
+.widgetBody div.contentElement.paddingLeft2 {
+  padding-left:3em;
+}
+.widgetBody div.contentElement.paddingRight2 {
+  padding-right:3em;
+}
+
+/* ========================================================================= */
+
+.widgetBody .contentElement.tableContainer, 
+.widgetBody .contentElement.containerContent {
+  display:inline-flex;
+  flex-wrap:wrap;
+}
+/* breaks chrome on print, so disable for print now */
+.widgetBody.print .contentElement.tableContainer {
+  display:inline-flex;
+}
+.widgetBody.print .contentElement.containerContent {
+  display:inline-flex;
+}
+
+
+.widgetBody .contentElement.tableContainer > .contentElement.valigntop { 
+  display: flex;
+  align-items: flex-start;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.valignmiddle { 
+  display: flex;
+  align-items: center;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.valignbottom {
+  display: flex;
+  align-items: flex-end;
+}
+.widgetBody .contentElement.tableContainer > .contentElement > .tableContainerCell{
+  width:100%;
+}
+
+.widgetBody .contentElement.tableContainer > .contentElement.paddingTop025 > .tableContainerCell {
+  padding-top:0.375em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingBottom025 > .tableContainerCell {
+  padding-bottom:0.375em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingLeft025 > .tableContainerCell {
+  padding-left:0.375em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingRight025 > .tableContainerCell {
+  padding-right:0.375em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingTop05 > .tableContainerCell {
+  padding-top:0.75em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingBottom05 > .tableContainerCell {
+  padding-bottom:0.75em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingLeft05 > .tableContainerCell {
+  padding-left:0.75em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingRight05 > .tableContainerCell {
+  padding-right:0.75em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingTop1 > .tableContainerCell {
+  padding-top:1.5em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingBottom1 > .tableContainerCell {
+  padding-bottom:1.5em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingLeft1 > .tableContainerCell {
+  padding-left:1.5em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingRight1 > .tableContainerCell {
+  padding-right:1.5em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingTop2 > .tableContainerCell {
+  padding-top:3em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingBottom2 > .tableContainerCell {
+  padding-bottom:3em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingLeft2 > .tableContainerCell {
+  padding-left:3em;
+}
+.widgetBody .contentElement.tableContainer > .contentElement.paddingRight2 > .tableContainerCell {
+  padding-right:3em;
+}
+
+.widgetBody .contentElement.tableContainer > .contentElement.rotateTextMinus90 > .tableContainerCell {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.tableContainer > .contentElement.tableCell {
+  align-self: stretch;
+  --borderTopWidth:0px;
+  --borderRightWidth:0px;
+  --borderBottomWidth:0px;
+  --borderLeftWidth:0px;
+}
+
+/* ========================================================================= */
+/* Table Presets for content elements                                        */
+/* ========================================================================= */
+
+.tableContainer.tablePreset1 {
+  padding:0;
+} 
+.tableContainer.tablePreset1 > .contentElement.tableCell {
+  --borderTopWidth:1px;
+  --borderRightWidth:1px;
+  --borderBottomWidth:1px;
+  --borderLeftWidth:1px;
+  --borderColor:black;
+  --borderStyle:solid;
+  padding:4px;
+} 
+.tableContainer.tablePreset1 > .contentElement.tableCell.row0 {
+  --backgroundColor:#eee;
+  font-weight:bold;
+}
+ 
+.tableContainer.tablePreset2 {
+  padding:0;
+} 
+.tableContainer.tablePreset2 > .contentElement.tableCell {
+  --borderTopWidth:1px;
+  --borderRightWidth:1px;
+  --borderBottomWidth:1px;
+  --borderLeftWidth:1px;
+  --borderColor:black;
+  --borderStyle:solid;
+  padding:4px;
+} 
+.tableContainer.tablePreset2 > .contentElement.tableCell.rowEven {
+  --backgroundColor:#f3f3f3;
+} 
+.tableContainer.tablePreset2 > .contentElement.tableCell.row0 {
+  --backgroundColor:#ccc;
+  font-weight:bold;
+} 
+
+.tableContainer.tablePreset3 {
+  padding:0;
+} 
+.tableContainer.tablePreset3 > .contentElement.tableCell {
+  padding:4px;
+} 
+.tableContainer.tablePreset3 > .contentElement.tableCell.col0 {
+  --borderTopWidth:0px;
+  --borderRightWidth:1px;
+  --borderBottomWidth:0px;
+  --borderLeftWidth:0px;
+  --borderColor:black;
+  --borderStyle:solid;
+  font-weight:bold;
+} 
+.tableContainer.tablePreset3 > .contentElement.tableCell.row0 {
+  --borderTopWidth:0px;
+  --borderRightWidth:0px;
+  --borderBottomWidth:0px;
+  --borderLeftWidth:0px;
+  font-weight:bold;
+} 
+.tableContainer.tablePreset3 > .contentElement.tableCell.row1 {
+  --borderTopWidth:1px;
+  --borderColor:black;
+  --borderStyle:solid;
+} 
+.tableContainer.tablePreset3 > .contentElement.tableCell.rowOdd {
+  --backgroundColor:#f3f3f3;
+} 
+
+.tableContainer.tablePreset4 {
+  padding:0;
+} 
+.tableContainer.tablePreset4 > .contentElement.tableCell {
+  padding:4px;
+} 
+.tableContainer.tablePreset4 > .contentElement.tableCell.row0 {
+  font-weight:bold;
+  font-style:italic;
+} 
+.tableContainer.tablePreset4 > .contentElement.tableCell.row1 {
+  --borderTopWidth:2px;
+  --borderColor:black;
+  --borderStyle:solid;
+} 
+.tableContainer.tablePreset4 > .contentElement.tableCell.rowOdd {
+  --backgroundColor:#f3f3f3;
+} 
+
+.tableContainer.tablePreset5 {
+  padding:0;
+} 
+.tableContainer.tablePreset5 > .contentElement.tableCell {
+  padding:4px;
+} 
+.tableContainer.tablePreset5 > .contentElement.tableCell.rowOdd {
+  --backgroundColor:#f3f3f3;
+} 
+
+.tableContainer.tablePreset6 {
+  padding:0;
+} 
+.tableContainer.tablePreset6 > .contentElement.tableCell {
+  padding:4px;
+  --borderTopWidth:1px;
+  --borderColor:black;
+  --borderStyle:solid;
+} 
+.tableContainer.tablePreset6 > .contentElement.tableCell.row0 {
+  font-weight:bold;
+  --borderTopWidth:0px;
+}
+.tableContainer.tablePreset6 > .contentElement.tableCell.row1 {
+  --borderTopWidth:2px;
+}
+.tableContainer.tablePreset7 {
+  padding:0;
+} 
+.tableContainer.tablePreset7 > .contentElement.tableCell {
+  padding:4px;
+  --borderBottomWidth:1px;
+  --borderRightWidth:1px;
+  --borderTopWidth:1px;
+  --borderLeftWidth:1px;
+  --borderColor:#aaa;
+  --borderStyle:solid;
+} 
+
+.tableContainer.tablePreset8 {
+  padding:0;
+} 
+.tableContainer.tablePreset8 > .contentElement.tableCell {
+  padding:4px;
+} 
+
+/* for all cells */
+.tableContainer.contentElement > .contentElement.tableCell {
+}
+.tableContainer.contentElement > .contentElement.tableCell:before {
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:-1;
+  background-color:var(--backgroundColor);
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+}
+.tableContainer.contentElement > .contentElement.tableCell:after {
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  left:calc(-0.5 * var(--borderLeftWidth,0));
+  right:calc(-0.5 * var(--borderRightWidth,0));
+  top:calc(-0.5 * var(--borderTopWidth,0));
+  bottom:calc(-0.5 * var(--borderBottomWidth,0));
+  border-color:var(--borderColor);
+  border-top-width:var(--borderTopWidth);
+  border-right-width:var(--borderRightWidth);
+  border-bottom-width:var(--borderBottomWidth);
+  border-left-width:var(--borderLeftWidth);
+  border-style:var(--borderStyle);
+}
+.editorIsTableCell {
+  --borderColor:#ccc;
+  --borderTopWidth:1px;
+  --borderRightWidth:1px;
+  --borderBottomWidth:1px;
+  --borderLeftWidth:1px;
+  --borderStyle:dashed;
+}
+
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle1 {
+  --backgroundColor:rgb(255,200,200);
+}
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle2 {
+  --backgroundColor:rgb(200,255,200);
+}
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle3 {
+  --backgroundColor:rgb(200,200,255);
+}
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle4 {
+  --backgroundColor:rgb(255,255,200);
+}
+
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle5 {
+  --borderColor:red;
+  --borderTopWidth:2px;
+  --borderRightWidth:2px;
+  --borderBottomWidth:2px;
+  --borderLeftWidth:2px;
+  --borderStyle:solid;
+}
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle6 {
+  --borderColor:green;
+  --borderTopWidth:2px;
+  --borderRightWidth:2px;
+  --borderBottomWidth:2px;
+  --borderLeftWidth:2px;
+  --borderStyle:solid;
+}
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle7 {
+  --borderColor:blue;
+  --borderTopWidth:2px;
+  --borderRightWidth:2px;
+  --borderBottomWidth:2px;
+  --borderLeftWidth:2px;
+  --borderStyle:solid;
+}
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle8 {
+  --borderColor:orange;
+  --borderTopWidth:2px;
+  --borderRightWidth:2px;
+  --borderBottomWidth:2px;
+  --borderLeftWidth:2px;
+  --borderStyle:solid;
+}
+
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle9 {
+}
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle10 {
+}
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle11 {
+}
+.tableContainer.contentElement > .contentElement.tableCell.cellStyle12 {
+}
+
+/* ========================================================================= */
+/* Style Presets for content elements                                        */
+/* ========================================================================= */
+
+.contentElement.paddingBox1 {
+  padding: 10px;
+}
+.contentElement.paddingBox2 {
+  padding: 20px;
+}
+.contentElement.paddingBox3 {
+  padding: 30px;
+}
+
+.contentElement.colorBox1, 
+.contentElement.colorBox2,
+.contentElement.colorBox3 {
+  padding: 20px;
+  --marginTopLines:0;
+  --marginBottomLines:0;
+  --borderWidth:2px;
+  --borderColor:transparent;
+  --borderStyle:solid;
+  --borderRadius:0px;
+  margin-top:calc(var(--marginTopLines) * 1.5em);
+  margin-bottom:calc(var(--marginBottomLines) * 1.5em);
+} 
+
+.contentElement.colorBox1 {
+  --backgroundColor:#d9e5a6;
+}
+.contentElement.colorBox2 {
+  --backgroundColor:var(--AccentColorLight);
+}
+.contentElement.colorBox3 {
+  --backgroundColor:#fff6a0;
+}
+
+.contentElement.colorBox1:before,
+.contentElement.colorBox2:before,
+.contentElement.colorBox3:before {
+  content: " ";
+  position:absolute;
+  z-index: -1;
+  width:100%;
+  height:100%;
+  left:0;
+  top:0;
+  box-sizing:content-box;
+    
+  background-color:var(--backgroundColor);
+  border-style:var(--borderStyle);
+  border-width:var(--borderWidth);
+  border-color:var(--borderColor);
+  left:calc(-1 * var(--borderWidth));
+  top:calc(-1 * var(--borderWidth));
+  
+  border-radius:var(--borderRadius);
+}
+
+.contentElement.simpleFrame {
+  padding:10px;
+  box-shadow: 0px 0px 1px #ddd;
+
+  --borderColor:#ddd;
+  --borderStyle:solid;
+  --borderWidth:1px;
+
+  --marginTopLines:0;
+  --marginBottomLines:0;
+  margin-top:calc(var(--marginTopLines) * 1.5em);
+  margin-bottom:calc(var(--marginBottomLines) * 1.5em);
+}
+
+.contentElement.simpleFrame:before {
+  content: " ";
+  position:absolute;
+  z-index: -1;
+  width:100%;
+  height:100%;
+  left:0;
+  top:0;
+  box-sizing:content-box;
+
+  background-color:var(--backgroundColor);
+  border-style:var(--borderStyle);
+  border-width:var(--borderWidth);
+  border-color:var(--borderColor);
+  left:calc(-1 * var(--borderWidth));
+  top:calc(-1 * var(--borderWidth));
+  
+  border-radius:var(--borderRadius);
+}
+
+
+.contentElement.borderFrame1,
+.contentElement.borderFrame1e,
+.contentElement.borderFrame2 {
+  padding: 10px;
+
+  --marginTopLines:0.25;
+  --marginBottomLines:0.25;
+  margin-top:calc(var(--marginTopLines) * 1.5em);
+  margin-bottom:calc(var(--marginBottomLines) * 1.5em);
+}
+.contentElement.borderFrame1 {
+  --borderWidth:2px;
+  --borderColor:#999;
+  --borderStyle:solid;
+  --borderRadius:10px;
+  --backgroundColor:rgba(0,0,0,0.02);
+}
+
+.contentElement.borderFrame1e {
+  --borderWidth:2px;
+  --borderColor:#999;
+  --borderStyle:solid;
+  --borderRadius:0px;
+  --backgroundColor:rgba(0,0,0,0.02);
+}  
+
+.contentElement.borderFrame2 {
+  --borderWidth:5px;
+  --borderColor:var(--MainColor);
+  --borderStyle:solid;
+  --borderRadius:20px;
+  --backgroundColor:#d9e5a6;
+}
+
+.contentElement.borderFrame1:before,
+.contentElement.borderFrame1e:before,
+.contentElement.borderFrame2:before {
+  content: " ";
+  position:absolute;
+  z-index: -1;
+  width:100%;
+  height:100%;
+  box-sizing:content-box;
+    
+  background-color:var(--backgroundColor);
+  border-style:var(--borderStyle);
+  border-width:var(--borderWidth);
+  border-color:var(--borderColor);
+  left:calc(-1 * var(--borderWidth));
+  top:calc(-1 * var(--borderWidth));
+  
+  border-radius:var(--borderRadius);
+}
+
+.contentElement.borderBottomLine1,
+.contentElement.borderBottomLine2,
+.contentElement.borderBottomLine3,
+.contentElement.borderBottomLine4,
+.contentElement.borderBottomLine5,
+.contentElement.borderBottomLine6 {
+  --paddingBottom:0.5em;
+  --borderStyle:solid;
+  --fontSize:100%;
+  --backgroundColor:transparent;
+
+  --marginTopLines:0;
+  --marginBottomLines:0;
+  margin-top:calc(var(--marginTopLines) * 1.5em);
+  margin-bottom:calc(var(--marginBottomLines) * 1.5em);
+  
+  font-size:var(--fontSize);
+  padding-bottom:var(--paddingBottom);
+}
+.contentElement.borderBottomLine1 {
+  --borderWidth:5px;
+  --borderColor:var(--MainColor);
+}
+.contentElement.borderBottomLine2 {
+  --borderWidth:3px;
+  --borderColor:var(--MainColor);
+}
+.contentElement.borderBottomLine3 {
+  --borderWidth:1px;
+  --borderColor:var(--MainColor);
+}
+
+.contentElement.borderBottomLine4 {
+  --borderWidth:5px;
+  --borderColor:#9d9d9c;
+}
+.contentElement.borderBottomLine5 {
+  --borderWidth:3px;
+  --borderColor:#9d9d9c;
+}
+.contentElement.borderBottomLine6 {
+  --borderWidth:1px;
+  --borderColor:#9d9d9c;
+}
+
+.contentElement.borderBottomLine1:before,
+.contentElement.borderBottomLine2:before,
+.contentElement.borderBottomLine3:before,
+.contentElement.borderBottomLine4:before,
+.contentElement.borderBottomLine5:before,
+.contentElement.borderBottomLine6:before {
+  content: " ";
+  position:absolute;
+  z-index: -1;
+  width:100%;
+  height:100%;
+  box-sizing:content-box;
+
+  background-color:var(--backgroundColor);
+  left:0px;
+  top:calc(-1 * var(--borderWidth));
+  border-style:var(--borderStyle);
+  border-width:var(--borderWidth);
+  border-color:var(--borderColor);
+  /* only use bottom border */
+  border-top:0;
+  border-left:0;
+  border-right:0;
+}
+
+.contentElement.borderLeftLine1 {
+  padding-left: 10px;
+  --backgroundColor:transparent;
+  --borderStyle:solid;
+  --borderWidth:1px;
+  --borderColor:#9d9d9c;
+
+  --marginTopLines:0;
+  --marginBottomLines:0;
+  margin-top:calc(var(--marginTopLines) * 1.5em);
+  margin-bottom:calc(var(--marginBottomLines) * 1.5em);
+}
+.contentElement.borderLeftLine1:before {
+  content: " ";
+  position:absolute;
+  z-index: -1;
+  width:100%;
+  height:100%;
+  box-sizing:content-box;
+
+  background-color:var(--backgroundColor);
+  top:0px;
+  left:calc(-1 * var(--borderWidth));
+  border-style:var(--borderStyle);
+  border-width:var(--borderWidth);
+  border-color:var(--borderColor);
+  /* only use bottom border */
+  border-top:0;
+  border-right:0;
+  border-bottom:0;
+}
+
+.contentElement.borderRightLine1 {
+  padding-right: 10px;
+  --backgroundColor:transparent;
+  --borderStyle:solid;
+  --borderWidth:1px;
+  --borderColor:#9d9d9c;
+
+  --marginTopLines:0;
+  --marginBottomLines:0;
+  margin-top:calc(var(--marginTopLines) * 1.5em);
+  margin-bottom:calc(var(--marginBottomLines) * 1.5em);
+}
+.contentElement.borderRightLine1:before {
+  content: " ";
+  position:absolute;
+  z-index: -1;
+  width:100%;
+  height:100%;
+  box-sizing:content-box;
+
+  background-color:var(--backgroundColor);
+  top:0px;
+  right:calc(-1 * var(--borderWidth));
+  border-style:var(--borderStyle);
+  border-width:var(--borderWidth);
+  border-color:var(--borderColor);
+  /* only use bottom border */
+  border-top:0;
+  border-left:0;
+  border-bottom:0;
+}
+
+.contentElement.citeFrame {
+  padding-left: 35px;
+  font-style: italic;
+}
+.contentElement.citeFrame:before {
+  content: " ";
+  position:absolute;
+  z-index: -2;
+  width:100%;
+  height:100%;
+  box-sizing:content-box;
+
+  border-left: 4px solid #DDD;
+  left:25px;
+  top:0px;
+}
+.contentElement.citeFrame:after {
+  content: "“";
+  position:absolute;
+  z-index: -1;
+  box-sizing:content-box;
+  font-size:220%;
+  color:#dadada;
+  left:0px;
+  top:5px;
+}
+
+.contentElement.bubbleFrame, 
+.contentElement.bubbleTopFrame, 
+.contentElement.bubbleLeftFrame, 
+.contentElement.bubbleRightFrame, 
+.contentElement.bubbleBottomFrame {
+  padding:10px;
+  box-shadow: 0px 0px 1px #ddd;
+  
+  --backgroundColor:#f0f0f0;
+  --borderStyle:solid;
+  --borderWidth:2px;
+  --borderColor:#ddd;
+  --borderRadius:0px;
+
+  --marginTopLines:0;
+  --marginBottomLines:0;
+  margin-top:calc(var(--marginTopLines) * 1.5em);
+  margin-bottom:calc(var(--marginBottomLines) * 1.5em);
+
+  background-color:var(--backgroundColor);
+  border-style:var(--borderStyle);
+  border-width:var(--borderWidth);
+  border-color:var(--borderColor);
+  border-radius:var(--borderRadius);
+}
+.contentElement.bubbleTopFrame:before, .contentElement.bubbleTopFrame:after,
+.contentElement.bubbleLeftFrame:before, .contentElement.bubbleLeftFrame:after,
+.contentElement.bubbleRightFrame:before, .contentElement.bubbleRightFrame:after,
+.contentElement.bubbleBottomFrame:before, .contentElement.bubbleBottomFrame:after {
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.contentElement.bubbleTopFrame:before, .contentElement.bubbleTopFrame:after {
+  bottom: 100%;
+  left: 50%;
+}
+.contentElement.bubbleLeftFrame:before, .contentElement.bubbleLeftFrame:after {
+  top: 50%;
+  right: 100%;
+}
+.contentElement.bubbleRightFrame:before, .contentElement.bubbleRightFrame:after {
+  top: 50%;
+  left: 100%;
+}
+.contentElement.bubbleBottomFrame:before, .contentElement.bubbleBottomFrame:after {
+  top: 100%;
+  left: 50%;
+}
+
+.contentElement.bubbleTopFrame:before, .contentElement.bubbleLeftFrame:before, 
+.contentElement.bubbleRightFrame:before, .contentElement.bubbleBottomFrame:before {
+  border-color: transparent;
+  border-width: 8px;
+}
+.contentElement.bubbleTopFrame:before {
+  border-bottom-color: var(--borderColor);
+}
+.contentElement.bubbleBottomFrame:before {
+  border-top-color: var(--borderColor);
+}
+.contentElement.bubbleLeftFrame:before {
+  border-right-color: var(--borderColor);
+}
+.contentElement.bubbleRightFrame:before {
+  border-left-color: var(--borderColor);
+}
+.contentElement.bubbleTopFrame:before, .contentElement.bubbleBottomFrame:before {
+  margin-left: -8px;
+}
+.contentElement.bubbleLeftFrame:before, .contentElement.bubbleRightFrame:before {
+  margin-top: -8px;
+}
+
+.contentElement.bubbleTopFrame:after, .contentElement.bubbleLeftFrame:after, 
+.contentElement.bubbleRightFrame:after, .contentElement.bubbleBottomFrame:after {
+  border-color: transparent;
+  border-width: 7px;
+}
+.contentElement.bubbleTopFrame:after {
+  border-bottom-color: var(--backgroundColor);
+  margin-left: -7px;
+}
+.contentElement.bubbleBottomFrame:after {
+  border-top-color: var(--backgroundColor);
+  margin-left: -7px;
+}
+.contentElement.bubbleLeftFrame:after {
+  border-right-color: var(--backgroundColor);
+  margin-top: -7px;
+}
+.contentElement.bubbleRightFrame:after {
+  border-left-color: var(--backgroundColor);
+  margin-top: -7px;
+}
+
+
+

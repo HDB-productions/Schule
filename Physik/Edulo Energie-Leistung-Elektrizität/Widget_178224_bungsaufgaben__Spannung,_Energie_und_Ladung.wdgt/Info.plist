@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AllowNetworkAccess</key>
+	<true/>
+	<key>CFBundleDisplayName</key>
+	<string>178224_bungsaufgaben%3A_Spannung%2C_Energie_und_Ladung</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.edulo.widget178224_bungsaufgaben:_Spannung,_Energie_und_Ladung</string>
+	<key>Width</key>
+	<integer>1024</integer>
+	<key>Height</key>
+	<integer>768</integer>
+	<key>MainHTML</key>
+	<string>index.html</string>
+</dict>
+</plist>

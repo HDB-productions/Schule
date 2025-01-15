@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <meta name="format-detection" content="telephone=no">
+    <link href="libs/jquery-ui.min.css" rel="stylesheet">
+    <link href="libs/font-awesome.min.css" rel="stylesheet">
+    <link href="libs/bootstrap.min.css" rel="stylesheet" >
+  	<link href="libs/jqmath-0.4.3.css" rel="stylesheet">
+    <link href="libs/mathquill/mathquill.css" rel="stylesheet">
+    <link href="libs/vplayer.css" rel="stylesheet">
+    <link href="styles/widget.css" rel="stylesheet">
+    <link href="styles/basic.css" rel="stylesheet">
+    <link href="styles/presets.css" rel="stylesheet">
+  </head>
+  
+  <body class="widgetBody">
+    <div id="loadingPanel"><div><i class="loaderBalls"></i><br><span>edulo.com</span></div></div>
+
+    <div id="headline"><div class="headlineInner">
+      <div class="chapter"></div>
+      <div class="title"></div>
+      <div class="rightMenu item0"></div>
+      <div class="rightMenu item-1"></div>
+      <div class="rightMenu item-2"></div>
+    </div></div>
+    <div id="contentWrapperBackground"></div>
+    <div id="contentWrapperOuter">
+      <div id="contentWrapper">
+        <div id="content"></div>
+      </div>
+    </div>
+    <div id="footerButtons"></div>
+    
+    <script src="libs/jquery-2.1.1.min.js"></script>
+    <script src="libs/jquery-ui.min.js"></script>
+    <script src="libs/jquery.ui.rotateable.js"></script>    
+    <script src="libs/rgbcolor.js"></script>
+    <script src="libs/bootstrap.min.js"></script>
+    <script src="libs/jquery.jscrollpane.js"></script>
+    <script src="libs/jquery.mousewheel.js"></script>
+    <script src="libs/jquery.ui.touch-punch.min.js"></script>
+    <script src="libs/diffMatch.js"></script>
+    <script src="libs/audioplayer.js"></script>
+    <script src="libs/fastclick.js"></script>
+    <script src="libs/unorm.js"></script>
+
+    <script src="libs/mathquill/mathquill.min.js"></script>
+    <script src="libs/mathquill/javascript-cas.min.js"></script>
+
+  	<script src="libs/jscurry-0.4.5.min.js" charset="utf-8"></script>
+  	<script src="libs/jqmath-0.4.6.js" charset="utf-8"></script>
+
+<!--
+    <script src="libs/html2pdf.min.js"></script>
+    <script src="libs/html2canvas.js"></script>
+-->    
+
+    <script src="widget.js"></script>
+    <script>
+      // load global translations before widget
+      helper.getTranslations();
+      // load data file 
+      var JSONfile = helper.getURLParam("data");
+      var inputURL = helper.getURLParam("input");
+      var uploadfolder = helper.getURLParam("uploadfolder");
+      var waitForData = helper.getURLParam("waitfordata");
+      
+      if(JSONfile == "") JSONfile = "data.json";
+      if(uploadfolder == "") uploadfolder = "uploads";
+
+      if(helper.getURLParam("print")) $('body').addClass("print");
+      if(helper.getURLParam("bundlename")) {
+        $('body').addClass("withBundleName");
+        var bundleName = $('<div class="bundleName smallPopupContainerHead"></div>');
+        bundleName.text(helper.getURLParam("bundlename"));
+        $('body').prepend(bundleName);
+      }
+      
+      
+      if(waitForData == "1"){
+        widget = new AWidget("{}",uploadfolder);
+        if(helper.getURLParam("fromeditor")) widget.isFromEditor = true;
+        if(helper.getURLParam("check") == "1") widget.forceCheck = true;
+      }else{
+        if(window.location.protocol == "file:"){
+          // try to load user.js if exists
+          $.getScript("user.js",function(){});
+          // special case for local use, load data as js file
+          $.getScript("data.js",function(){
+            widget = new AWidget(JSONData,uploadfolder);
+            if(helper.getURLParam("fromeditor")) widget.isFromEditor = true;
+            if(helper.getURLParam("check") == "1") widget.forceCheck = true;
+            widget.init();
+          });
+        }else
+        $.getJSON(JSONfile,function(data){ 
+          if(inputURL){
+            $.getJSON(inputURL,function(input){ 
+              if(!input.JSON || input.JSON == ""){
+                input.JSON = '{"contents":[]}';
+              }
+              data["remoteUserData"] = input.JSON;
+              widget = new AWidget(data,uploadfolder);
+              if(helper.getURLParam("fromeditor")) widget.isFromEditor = true;
+              if(helper.getURLParam("check") == "1") widget.forceCheck = true;
+              widget.init();
+              
+              if(input.username){
+                // display username in top right corner
+                var n = $('<div style="position:absolute;z-index:10000;right:8px;top:10px"></div>');
+                n.text(input.username);
+                $('body').append(n);
+              }
+            });
+          }else{
+            widget = new AWidget(data,uploadfolder);
+            if(helper.getURLParam("fromeditor")) widget.isFromEditor = true;
+            if(helper.getURLParam("check") == "1") widget.forceCheck = true;
+            widget.init();
+          }
+        });
+      }
+
+    </script>
+
+  </body>
+</html>  
