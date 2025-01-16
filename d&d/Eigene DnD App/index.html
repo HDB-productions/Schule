@@ -1,319 +1,359 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DnD Character Sheet</title>
-  <!-- Einbinden der externen CSS-Datei -->
-  <link rel="stylesheet" href="styles/styles.css">
-</head>
-
-<body>
-  <!-- Header -->
-  <header class="app-header">
-    <div class="header-left">
-      <button class="btn-home">Home</button>
-    </div>
-    <div class="header-center">
-      <h1 id="charName" style="cursor:pointer;">NamePlaceholder</h1>
-      <div id="charDropdown" class="hidden">
-        <ul id="charList"></ul> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DnD Character Sheet</title>
+    <!-- Einbinden der externen CSS-Datei -->
+    <link rel="stylesheet" href="styles/styles.css" />
+    <!-- Einbinden des externen JavaScript-Skripts. 
+     defer sorgt dafür, dass dass das Skript parallel zum Parsen des HTML-Dokuments heruntergeladen wird, 
+     aber erst ausgeführt wird, nachdem das gesamte HTML geparst wurde  -->
+    <script src="scripts/scripts.js" defer></script>
+  </head>
+  <body>
+    <!-- #region Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <button class="btn-home">Home</button>
       </div>
-      <p id="charClass">KlassePlaceholder</p>
-    </div>
-    <div class="header-right">
-      <button class="btn-menu">&#9776;</button>
-    </div>
-  </header>
-
-
- 
-  <!-- Bild / Portrait -->
-  <section class="portrait-section">
-    <img src="path_to_placeholder.png" alt="Character Portrait" class="portrait-img" />
-  </section>
-
-  <!-- Hauptinhalte (scrollbar, seite 1)  -->
-  <main class="content">
-    
-    <!-- Health / Conditions -->
-    <details open>
-      <summary>Leben</summary>
-      <section class="block">
-        <div class="health-bar">
-          <div class="label">Hit Points</div>
-           <!-- Fortschrittsbalken -->
-           <div class="healthbar-container">
-              <div class="healthbar-inner" id="healthbarInner"></div>
-              <div class="healthbar-text">
-                <span id="currentHp" class="hp-clickable">0</span>
-                /
-                <span id="maxHp" class="hp-clickable">0</span>
+      <div class="header-center">
+        <h1 id="charName" style="cursor: pointer">NamePlaceholder</h1>
+        <div id="charDropdown" class="hidden">
+          <ul id="charList"></ul>
+        </div>
+        <p id="charClass">KlassePlaceholder</p>
+      </div>
+      <div class="header-right">
+        <button class="btn-menu">&#9776;</button>
+      </div>
+    </header>
+    <!-- #endregion -->
+    <!-- #region Bild / Portrait -->
+    <section class="portrait-section">
+      <img
+        src="path_to_placeholder.png"
+        alt="Character Portrait"
+        class="portrait-img"
+      />
+    </section>
+    <!-- #endregion -->
+    <!-- #region Hauptinhalte  -->
+    <main class="content">
+      <!-- #region Seite 1  -->
+      <section class="page-section page1" id="page1">
+        <!-- Lebens und HD Balken -->
+        <details open>
+          <summary>Leben</summary>
+          <section class="block">
+            <div class="health-bar">
+              <div class="label">Hit Points</div>
+              <!-- Fortschrittsbalken -->
+              <div class="healthbar-container">
+                <div class="healthbar-inner" id="healthbarInner"></div>
+                <div class="healthbar-text">
+                  <span id="currentHp" class="hp-clickable">0</span>
+                  <span id="maxHp" class="hp-clickable">0</span>
+                </div>
               </div>
             </div>
+            <div class="health-bar">
+              <div class="label">Hit Dice</div>
+              <div class="bluebar-container">
+                <div class="bluebar-inner" id="hitDiceInner"></div>
+                <div class="healthbar-text">
+                  <span id="hitDiceCurrent" class="hp-clickable">0</span>
+                  /
+                  <span id="hitDiceMax" class="hp-clickable">0</span>
+                  <span id="hitDiceArt">d??</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </details>
+
+        <!-- Zustände -->
+        <details open>
+          <summary>Zustände</summary>
+          <section class="block">
+            <div class="conditions">
+              <div class="condition-box">
+                <input type="checkbox" id="conditionBlind" />
+                <label for="conditionBlind">Blind</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionLiegend" />
+                <label for="conditionLiegend">Liegend</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionVerängstigt" />
+                <label for="conditionVerängstigt">Verängstigt</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionUnsichtbar" />
+                <label for="conditionUnsichtbar">Unsichtbar</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionVergiftet" />
+                <label for="conditionVergiftet">Vergiftet</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionErschöpft" />
+                <label for="conditionErschöpft">Erschöpft</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionParalysiert" />
+                <label for="conditionParalysiert">Paralysiert</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionSchlafend" />
+                <label for="conditionSchlafend">Schlafend</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionStunned" />
+                <label for="conditionStunned">Stunned</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionTaumelnd" />
+                <label for="conditionTaumelnd">Taumelnd</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionTaub" />
+                <label for="conditionTaub">Taub</label>
+              </div>
+              <div class="condition-box">
+                <input type="checkbox" id="conditionGegriffen" />
+                <label for="conditionGegriffen">Gegriffen</label>
+              </div>
+            </div>
+          </section>
+        </details>
+
+        <!-- Attribute -->
+        <details open>
+          <summary>Attribute</summary>
+          <section class="block">
+            <div class="stats-row">
+              <!-- Stärke -->
+              <div class="stat-box">
+                <div class="label">Stärke</div>
+                <div class="value" id="ST-bonus">+0</div>
+                <div class="value" id="ST-wert">10</div>
+              </div>
+
+              <!-- Geschicklichkeit -->
+              <div class="stat-box">
+                <div class="label">Geschicklichkeit</div>
+                <div class="value" id="GE-bonus">+0</div>
+                <div class="value" id="GE-wert">10</div>
+              </div>
+
+              <!-- Konstitution -->
+              <div class="stat-box">
+                <div class="label">Konstitution</div>
+                <div class="value" id="KO-bonus">+0</div>
+                <div class="value" id="KO-wert">10</div>
+              </div>
+            </div>
+
+            <div class="stats-row">
+              <!-- Intelligenz -->
+              <div class="stat-box">
+                <div class="label">Intelligenz</div>
+                <div class="value" id="IN-bonus">+0</div>
+                <div class="value" id="IN-wert">10</div>
+              </div>
+
+              <!-- Weisheit -->
+              <div class="stat-box">
+                <div class="label">Weisheit</div>
+                <div class="value" id="WE-bonus">+0</div>
+                <div class="value" id="WE-wert">10</div>
+              </div>
+
+              <!-- Charisma -->
+              <div class="stat-box">
+                <div class="label">Charisma</div>
+                <div class="value" id="CH-bonus">+0</div>
+                <div class="value" id="CH-wert">10</div>
+              </div>
+            </div>
+          </section>
+        </details>
+
+        <!-- Statistics -->
+        <details open>
+          <summary>Statistics</summary>
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="label">Rüstungsklasse</div>
+              <div class="value">14</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Initiative</div>
+              <div class="value">+3</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Speed</div>
+              <div class="value">30 ft</div>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="label">Passive Perception</div>
+              <div class="value">12</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Fertigkeitsbonus</div>
+              <div class="value">+2</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Inspiration</div>
+              <div class="value">0</div>
+            </div>
+          </div>
+        </details>
+        <!-- Skills -->
+        <details open>
+          <summary>Skills</summary>
+          <section class="block">
+            <div class="skills-row">
+              <div class="skill-box">
+                <div class="label">Acrobatics</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Animal Handling</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Arcana</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Athletics</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Deception</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">History</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Insight</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Intimidation</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Investigation</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Medicine</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Nature</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Perception</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Performance</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Persuasion</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Religion</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Sleight of Hand</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Stealth</div>
+                <div class="value">+0</div>
+              </div>
+              <div class="skill-box">
+                <div class="label">Survival</div>
+                <div class="value">+0</div>
+              </div>
+            </div>
+          </section>
+        </details>
+
+        <!-- Pop-up für Temporäre HP -->
+        <div id="maxHealthModal" class="modal hidden">
+          <div class="modal-content">
+            <span class="close-btn" id="closeMaxHealthModal">&times;</span>
+            <h3>Temporäre Leben</h3>
+            <input type="number" id="temphpInput" placeholder="Betrag" />
+            <div class="button-group">
+              <button id="gainTemphp" class="modal-btn gain">Bekommen</button>
+              <button id="loseTemphp" class="modal-btn lose">Verlieren</button>
+            </div>
+          </div>
         </div>
-        <div class="health-bar">
-          <div class="label">Hit Dice</div>
-          <div class="bluebar-container">
-            <div class="bluebar-inner" id="hitDiceInner"></div>
-            <div class="healthbar-text">
-              <span id="hitDiceCurrent" class="hp-clickable">0</span>
-              /
-              <span id="hitDiceMax" class="hp-clickable">0</span>
-              <span id="hitDiceArt">d??</span>
+
+        <!-- Pop-up für HP Management -->
+        <div id="hpManagementModal" class="modal hidden">
+          <div class="modal-content">
+            <span class="close-btn" id="closeHpManagementModal">&times;</span>
+            <h3>HP Management</h3>
+            <input type="number" id="hpInput" placeholder="Betrag" />
+            <div class="button-group">
+              <button id="healingBtn" class="modal-btn gain">Heilung</button>
+              <button id="damageBtn" class="modal-btn lose">Schaden</button>
             </div>
           </div>
         </div>
       </section>
-    </details >
-   
-    <details open>
-      <summary>Zustände</summary>
-    <section class="block">
-  
-      <div class="conditions">
-        <div class="condition-box">
-          <input type="checkbox" id="conditionBlind" />
-          <label for="conditionBlind">Blind</label>
-        </div>
-        <div class="condition-box">
-          <input type="checkbox" id="conditionLiegend" />
-          <label for="conditionLiegend">Liegend</label>
-        </div>
-        <div class="condition-box">
-          <input type="checkbox" id="conditionVerängstigt" />
-          <label for="conditionVerängstigt">Verängstigt</label>
-        </div>
-        <div class="condition-box">
-          <input type="checkbox" id="conditionUnsichtbar" />
-          <label for="conditionUnsichtbar">Unsichtbar</label>
-        </div>
-      <div class="condition-box">
-        <input type="checkbox" id="conditionVergiftet" />
-        <label for="conditionVergiftet">Vergiftet</label>
-      </div>
-      <div class="condition-box">
-        <input type="checkbox" id="conditionErschöpft" />
-        <label for="conditionErschöpft">Erschöpft</label>  
-      </div>
-      <div class="condition-box">
-        <input type="checkbox" id="conditionParalysiert" />
-        <label for="conditionParalysiert">Paralysiert</label>
-      </div>
-      <div class="condition-box">
-        <input type="checkbox" id="conditionSchlafend" />
-        <label for="conditionSchlafend">Schlafend</label>
-      </div>
-      <div class="condition-box">
-        <input type="checkbox" id="conditionStunned" />
-        <label for="conditionStunned">Stunned</label>
-      </div>
-      <div class="condition-box">
-        <input type="checkbox" id="conditionTaumelnd" />
-        <label for="conditionTaumelnd">Taumelnd</label>
-      </div>
-      <div class="condition-box">
-        <input type="checkbox" id="conditionTaub" />
-        <label for="conditionTaub">Taub</label>
-      </div>
-      <div class="condition-box">
-        <input type="checkbox" id="conditionGegriffen" />
-        <label for="conditionGegriffen">Gegriffen</label>
-      </div>
-
-    </section>
-  </details >
-    <details open>
-      <summary>Attribute</summary>
-      <section class="block">
-        <div class="stats-row">
-          <!-- Stärke -->
-          <div class="stat-box">
-            <div class="label">Stärke</div>
-            <div class="value" id="ST-bonus">+0</div>
-            <div class="value" id="ST-wert">10</div>
-          </div>
-      
-          <!-- Geschicklichkeit -->
-          <div class="stat-box">
-            <div class="label">Geschicklichkeit</div>
-            <div class="value" id="GE-bonus">+0</div>
-            <div class="value" id="GE-wert">10</div>
-          </div>
-      
-          <!-- Konstitution -->
-          <div class="stat-box">
-            <div class="label">Konstitution</div>
-            <div class="value" id="KO-bonus">+0</div>
-            <div class="value" id="KO-wert">10</div>
-          </div>
-        </div>
-      
-        <div class="stats-row">
-          <!-- Intelligenz -->
-          <div class="stat-box">
-            <div class="label">Intelligenz</div>
-            <div class="value" id="IN-bonus">+0</div>
-            <div class="value" id="IN-wert">10</div>
-          </div>
-      
-          <!-- Weisheit -->
-          <div class="stat-box">
-            <div class="label">Weisheit</div>
-            <div class="value" id="WE-bonus">+0</div>
-            <div class="value" id="WE-wert">10</div>
-          </div>
-      
-          <!-- Charisma -->
-          <div class="stat-box">
-            <div class="label">Charisma</div>
-            <div class="value" id="CH-bonus">+0</div>
-            <div class="value" id="CH-wert">10</div>
-          </div>
-        </div>
+      <!-- #endregion -->
+      <!-- #region Seite 2  -->
+      <section class="page-section page2" id="page2">
+        <details open>
+          <summary>Waffen</summary>
+          <section class="block">
+            <div class="weapon-row">
+              <div class="weapon-box">
+                <div class="label">Waffe 1</div>
+                <div class="value">1d8 + 3</div>
+              </div>
+              <div class="weapon-box">
+                <div class="label">Waffe 2</div>
+                <div class="value">1d6 + 1</div>
+              </div>
+              <div class="weapon-box">
+                <div class="label">Waffe 3</div>
+                <div class="value">1d4 + 2</div>
+              </div>
+            </div>
+          </section>
+        </details>
       </section>
-    </details>
-
-    <details open>
-      <summary>Statistics</summary>
-      <div class="stats-row">
-        <div class="stat-box">
-          <div class="label">Armor Class</div>
-          <div class="value">14</div>
-        </div>
-        <div class="stat-box">
-          <div class="label">Initiative</div>
-          <div class="value">+3</div>
-        </div>
-        <div class="stat-box">
-          <div class="label">Speed</div>
-          <div class="value">30 ft</div>
-        </div>
-      </div>
-      <div class="stats-row">
-        <div class="stat-box">
-          <div class="label">Passive Perception</div>
-          <div class="value">12</div>
-        </div>
-        <div class="stat-box">
-          <div class="label">Proficiency</div>
-          <div class="value">+2</div>
-        </div>
-        <div class="stat-box">
-          <div class="label">Inspiration</div>
-          <div class="value">0</div>
-        </div>
-      </div>
-    </details>
-    <details open>
-      <summary>Skills</summary>
-      <section class="block">
-        <div class="skills-row
-        ">
-          <div class="skill-box">
-            <div class="label">Acrobatics</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Animal Handling</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Arcana</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Athletics</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Deception</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">History</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Insight</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Intimidation</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Investigation</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Medicine</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Nature</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Perception</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Performance</div>
-            <div class="value">+0</div>
-          </div>
-          <div class="skill-box">
-            <div class="label">Persuasion</div>
-            <div class="value">+0
-
-
-   <!-- Pop-up für Temporäre HP -->
-<div id="maxHealthModal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close-btn" id="closeMaxHealthModal">&times;</span>
-    <h3>Temporäre Leben</h3>
-    <input type="number" id="temphpInput" placeholder="Betrag" />
-    <div class="button-group">
-      <button id="gainTemphp" class="modal-btn gain">Bekommen</button>
-      <button id="loseTemphp" class="modal-btn lose">Verlieren</button>
-    </div>
-  </div>
-</div>
-
-<!-- Pop-up für HP Management -->
-<div id="hpManagementModal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close-btn" id="closeHpManagementModal">&times;</span>
-    <h3>HP Management</h3>
-    <input type="number" id="hpInput" placeholder="Betrag" />
-    <div class="button-group">
-      <button id="healingBtn" class="modal-btn gain">Heilung</button>
-      <button id="damageBtn" class="modal-btn lose">Schaden</button>
-    </div>
-  </div>
-</div>
-  </main>
-
-  <main class="content">
-    
-  </main>
-
-  <!-- Navigationsleiste (unten) -->
-  <nav class="bottom-nav">
-    <button class="nav-btn" data-tab="stats">💪</button>
-    <button class="nav-btn" data-tab="movement">⚔</button>
-    <button class="nav-btn" data-tab="spells">📖</button>
-    <button class="nav-btn" data-tab="inventory">📦</button>
-    <button class="nav-btn" data-tab="features">≡</button>
-  </nav>
-
-
-
-  <!-- Einbinden des externen JavaScript-Skripts -->
-  <script src="scripts/scripts.js"></script>
-  <script>
-    // Event Listener für Schließen des HP Management Modals
-    document.getElementById('closeHpManagementModal').addEventListener('click', closeHpManagement);
-  </script>
-</body>
+      <!-- #endregion -->
+    </main>
+    <!-- #endregion -->
+    <!-- #region Navigationsleiste (unten) -->
+    <nav class="bottom-nav">
+      <button class="nav-btn" data-tab="page1">💪</button>
+      <button class="nav-btn" data-tab="page2">⚔</button>
+      <button class="nav-btn" data-tab="page3">📖</button>
+      <button class="nav-btn" data-tab="page4">📦</button>
+      <button class="nav-btn" data-tab="page5">≡</button>
+    </nav>
+    <!-- #endregion -->
+  </body>
 </html>

@@ -6,6 +6,14 @@ html, body {
     font-family: sans-serif;
   }
   
+  .page-section {
+    display: none;
+  }
+  
+  .page-section.active {
+    display: block;
+  }
+
   /* Header fix oben */
   .app-header {
     display: flex;
@@ -123,8 +131,8 @@ html, body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #333;
-    padding: 0.5rem 0;
+ 
+    padding: 0;
     position: sticky;
     bottom: 0;
     z-index: 1000;
@@ -136,9 +144,15 @@ html, body {
     color: #f2c94c; /* Goldene Icons */
     font-size: 1.4rem;
     padding: 0.5rem;
+    width: 20%;
+    height: 3.5rem;
+    background-color: #333;
   }
-  
-  
+
+  .nav-btn.active {
+  background-color: #1c1c1c; /* Gleicher Hintergrund wie die Seite */
+  }
+
   /* Buttons */
   button {
     cursor: pointer;
