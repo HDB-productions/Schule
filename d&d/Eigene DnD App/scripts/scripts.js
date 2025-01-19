@@ -40,6 +40,51 @@ loadJson('data/DnDKalender.JSON')
   .catch(err => {
     console.error('Initialisierungsfehler:', err)
   })
+// Beispiel: Laden der zweiten JSON-Datei
+loadJson('data/Charaktäre/Spieler/test.JSON')
+  .then(jsonData => {
+    mergeCharacterData(allDataGlobal, jsonData)
+    fillCharacterList(allDataGlobal) // Aktualisiert die Charakterliste
+  })
+  .catch(err => {
+    console.error('Fehler beim Laden der zweiten JSON:', err)
+  })
+/**
+ * Fügt neue Spielercharaktere zu allDataGlobal hinzu.
+ * @param {Object} targetData - Das bestehende allDataGlobal-Objekt.
+ * @param {Object} newData - Das neue JSON-Datenobjekt, das hinzugefügt werden soll.
+ */
+function mergeCharacterData (targetData, newData) {
+  if (!targetData || !newData) {
+    console.error('Ziel- oder Quelldaten fehlen zum Zusammenführen.')
+    return
+  }
+
+  if (newData.Charaktäre && newData.Charaktäre.Spielercharaktere) {
+    if (!targetData.Charaktäre) {
+      targetData.Charaktäre = {}
+    }
+    if (!targetData.Charaktäre.Spielercharaktere) {
+      targetData.Charaktäre.Spielercharaktere = {}
+    }
+
+    for (const charName in newData.Charaktäre.Spielercharaktere) {
+      if (newData.Charaktäre.Spielercharaktere.hasOwnProperty(charName)) {
+        // Optional: Überprüfen, ob der Charakter bereits existiert
+        if (targetData.Charaktäre.Spielercharaktere.hasOwnProperty(charName)) {
+          console.warn(
+            `Charakter "${charName}" existiert bereits und wird überschrieben.`
+          )
+        }
+        targetData.Charaktäre.Spielercharaktere[charName] =
+          newData.Charaktäre.Spielercharaktere[charName]
+      }
+    }
+  } else {
+    console.warn('Die neue JSON-Datei enthält keine Spielercharaktere.')
+  }
+}
+
 /** Befüllt die Charakterliste im Dropdown und handelt die klicks.
  * @param {Object} data - Die geladenen JSON-Daten.
  */
