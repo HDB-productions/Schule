@@ -1,97 +1,119 @@
-//#region JSON-Laden und Initialisierung
-let allDataGlobal = null // Globale Variable für alle Daten
-/** Lädt eine JSON-Datei und gibt die Daten zurück als Promise.
+//#region Module
+
+/**
+ * Lädt eine JSON-Datei und gibt die Daten zurück als Promise.
  * @param {string} url - Der Pfad zur JSON-Datei.
  * @returns {Promise<Object>} - Ein Promise, das die JSON-Daten enthält.
  */
-function loadJson (url) {
-  // Die fetch-Funktion startet eine asynchrone HTTP-Anfrag und gibt sofort ein Promise zurück.
-  return fetch(url)
-    .then(response => {
-      // Dieser Callback wird aufgerufen, wenn die fetch-Anfrage erfolgreich eine Antwort erhalten hat.
-
-      // Überprüfen, ob die HTTP-Antwort erfolgreich war (Status 200-299)
-      if (!response.ok) {
-        // Wenn die Antwort nicht erfolgreich war, wird ein Fehler erzeugt und das Promise wird abgelehnt (rejected).
-        throw new Error(`HTTP-Fehler! Status: ${response.status}`)
-      }
-
-      // response.json() liest den Antwort-Body und parst ihn als JSON.
-      // Auch diese Methode gibt ein Promise zurück, das die geparsten
-      // JSON-Daten enthält.
-      return response.json()
-    })
-    .catch(err => {
-      // Dieser Block wird aufgerufen, wenn ein Fehler während des fetch
-      // oder beim Verarbeiten der Antwort auftritt.
-      console.error('Fehler beim Laden der JSON:', err)
-
-      // Der Fehler wird erneut geworfen, damit er vom Aufrufer
-      // der loadJson-Funktion behandelt werden kann.
-      throw err
-    })
+async function loadJson (url) {
+  try {
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler! Status: ${response.status}`)
+    }
+    return await response.json()
+  } catch (err) {
+    console.error('Fehler beim Laden der JSON:', err)
+    throw err
+  }
 }
-// JSON mit der Funktion loadJson laden und Charakterliste befüllen
-loadJson('data/DnDKalender.JSON')
-  .then(jsonData => {
-    allDataGlobal = jsonData
-    fillCharacterList(allDataGlobal)
-  })
-  .catch(err => {
-    console.error('Initialisierungsfehler:', err)
-  })
-// Beispiel: Laden der zweiten JSON-Datei
-loadJson('data/Charaktäre/Spieler/test.JSON')
-  .then(jsonData => {
-    mergeCharacterData(allDataGlobal, jsonData)
-    fillCharacterList(allDataGlobal) // Aktualisiert die Charakterliste
-  })
-  .catch(err => {
-    console.error('Fehler beim Laden der zweiten JSON:', err)
-  })
+
 /**
- * Fügt neue Spielercharaktere zu allDataGlobal hinzu.
- * @param {Object} targetData - Das bestehende allDataGlobal-Objekt.
- * @param {Object} newData - Das neue JSON-Datenobjekt, das hinzugefügt werden soll.
+ * Rekursives Zusammenführen von zwei JSON-Objekten.
+ * @param {Object} target - Das Zielobjekt, das aktualisiert werden soll.
+ * @param {Object} source - Das Quellobjekt, dessen Werte hinzugefügt/überschrieben werden sollen.
+ * @returns {Object} - Das zusammengeführte Zielobjekt.
  */
-function mergeCharacterData (targetData, newData) {
-  if (!targetData || !newData) {
-    console.error('Ziel- oder Quelldaten fehlen zum Zusammenführen.')
-    return
-  }
-
-  if (newData.Charaktäre && newData.Charaktäre.Spielercharaktere) {
-    if (!targetData.Charaktäre) {
-      targetData.Charaktäre = {}
-    }
-    if (!targetData.Charaktäre.Spielercharaktere) {
-      targetData.Charaktäre.Spielercharaktere = {}
-    }
-
-    for (const charName in newData.Charaktäre.Spielercharaktere) {
-      if (newData.Charaktäre.Spielercharaktere.hasOwnProperty(charName)) {
-        // Optional: Überprüfen, ob der Charakter bereits existiert
-        if (targetData.Charaktäre.Spielercharaktere.hasOwnProperty(charName)) {
-          console.warn(
-            `Charakter "${charName}" existiert bereits und wird überschrieben.`
-          )
+function mergeJson (target, source) {
+  for (const key in source) {
+    if (source.hasOwnProperty(key)) {
+      // Wenn beide Werte Objekte sind, rekursiv zusammenführen
+      if (
+        typeof source[key] === 'object' &&
+        source[key] !== null &&
+        !Array.isArray(source[key])
+      ) {
+        if (!target[key] || typeof target[key] !== 'object') {
+          target[key] = {} // Initialisieren, falls nicht vorhanden
         }
-        targetData.Charaktäre.Spielercharaktere[charName] =
-          newData.Charaktäre.Spielercharaktere[charName]
+        mergeJson(target[key], source[key]) // Rekursiver Aufruf
+      }
+      // Wenn beide Werte Arrays sind, rekursiv Arrays zusammenführen
+      else if (Array.isArray(source[key]) && Array.isArray(target[key])) {
+        target[key] = mergeArrays(target[key], source[key])
+      }
+      // Andernfalls den Wert direkt übernehmen
+      else {
+        target[key] = source[key]
       }
     }
-  } else {
-    console.warn('Die neue JSON-Datei enthält keine Spielercharaktere.')
   }
+  return target
 }
 
-/** Befüllt die Charakterliste im Dropdown und handelt die klicks.
+/**
+ * Zusammenführen von zwei Arrays.
+ * - Primitive Werte werden kombiniert und Duplikate entfernt.
+ * - Objekte mit gleichen Schlüsseln werden rekursiv zusammengeführt.
+ * @param {Array} targetArray - Das Zielarray, das aktualisiert werden soll.
+ * @param {Array} sourceArray - Das Quellarray, dessen Werte hinzugefügt/überschrieben werden sollen.
+ * @returns {Array} - Das zusammengeführte Array.
+ */
+function mergeArrays (targetArray, sourceArray) {
+  const result = [...targetArray] // Zielarray kopieren
+
+  for (const sourceItem of sourceArray) {
+    if (typeof sourceItem === 'object' && sourceItem !== null) {
+      // Prüfen, ob ein entsprechendes Objekt im Zielarray existiert
+      const matchingItem = result.find(
+        targetItem =>
+          typeof targetItem === 'object' &&
+          targetItem !== null &&
+          getObjectKey(targetItem) === getObjectKey(sourceItem)
+      )
+
+      if (matchingItem) {
+        // Rekursiv zusammenführen, wenn ein passendes Objekt existiert
+        mergeJson(matchingItem, sourceItem)
+      } else {
+        // Neues Objekt hinzufügen, falls es kein Match gibt
+        result.push(sourceItem)
+      }
+    } else {
+      // Primitive Werte hinzufügen, falls sie noch nicht existieren
+      if (!result.includes(sourceItem)) {
+        result.push(sourceItem)
+      }
+    }
+  }
+
+  return result
+}
+
+/**
+ * Hilfsfunktion zum Abrufen eines eindeutigen Schlüssels eines Objekts.
+ * - Angenommen, jedes Objekt hat einen eindeutigen Schlüssel, z. B. einen Namen oder eine ID.
+ * @param {Object} obj - Das Objekt, aus dem der Schlüssel extrahiert werden soll.
+ * @returns {string|undefined} - Der Schlüssel des Objekts oder `undefined`, wenn kein Schlüssel gefunden wird.
+ */
+function getObjectKey (obj) {
+  // Beispiel: Verwenden Sie hier "name" oder "id" als eindeutigen Schlüssel
+  return obj.name || obj.id
+}
+
+/**
+ * Befüllt die Charakterliste im Dropdown.
  * @param {Object} data - Die geladenen JSON-Daten.
  */
 function fillCharacterList (data) {
   const spielercharaktere = data.Charaktäre.Spielercharaktere
   const charListEl = document.getElementById('charList')
   const dropdownEl = document.getElementById('charDropdown') // Passen Sie die ID an
+
+  // Debugging: Überprüfen der Elemente
+  console.log('spielercharaktere:', spielercharaktere)
+  console.log('charListEl:', charListEl)
+  console.log('dropdownEl:', dropdownEl)
 
   // Überprüfen, ob die Elemente vorhanden sind
   if (!spielercharaktere || !charListEl || !dropdownEl) {
@@ -101,13 +123,17 @@ function fillCharacterList (data) {
     return
   }
 
+  // **Leeren der bestehenden Liste**
+  charListEl.innerHTML = ''
+
   // Charaktere zur Liste hinzufügen
   for (const charName in spielercharaktere) {
     if (spielercharaktere.hasOwnProperty(charName)) {
       const li = document.createElement('li')
       li.textContent = charName
+      li.style.cursor = 'pointer' // Hinzufügen eines Cursors für bessere UX
       li.addEventListener('click', () => {
-        dropdownEl.classList.add('hidden') // Dropdown schließen
+        dropdownEl.classList.toggle('hidden') // Dropdown schließen
         loadCharacter(allDataGlobal, charName) // Charakter laden
       })
       charListEl.appendChild(li)
@@ -124,6 +150,79 @@ function fillCharacterList (data) {
 
 //#endregion
 
+//#region JSON-Laden und Initialisierung
+
+let allDataGlobal = null // Globale Variable für alle Daten
+let isInitialized = false // Flag zur Vermeidung mehrfacher Initialisierung
+
+/**
+ * Zeigt eine Fehlermeldung im UI an.
+ * @param {string} message - Die Fehlermeldung.
+ */
+function showError (message) {
+  // Entfernt vorhandene Fehlermeldungen
+  const existingError = document.querySelector('.error-message')
+  if (existingError) {
+    existingError.remove()
+  }
+
+  const errorEl = document.createElement('div')
+  errorEl.textContent = message
+  errorEl.classList.add('error-message')
+  document.body.appendChild(errorEl)
+}
+
+/**
+ * Initialisiert die Anwendung, lädt JSON-Daten und befüllt die Charakterliste.
+ */
+async function initialize () {
+  if (isInitialized) {
+    console.log('Initialisierung bereits abgeschlossen.')
+    return
+  }
+
+  try {
+    // **Erstes JSON laden**
+    const jsonData = await loadJson('data/DnDKalender.JSON')
+    allDataGlobal = jsonData
+
+    // **Zweites JSON laden und zusammenführen**
+    const newJsonData = await loadJson('data/Charaktäre/Spieler/test.JSON')
+    mergeJson(allDataGlobal, newJsonData)
+
+    // **Charakterliste befüllen**
+    fillCharacterList(allDataGlobal)
+
+    isInitialized = true // Markiert die Initialisierung als abgeschlossen
+  } catch (err) {
+    console.error('Initialisierungsfehler:', err)
+    showError(
+      'Fehler beim Laden der Daten. Bitte versuchen Sie es später erneut.'
+    )
+  }
+}
+
+// **Initialisierung beim Laden des DOM**
+document.addEventListener('DOMContentLoaded', initialize)
+
+//#endregion
+
+/**
+ * Mock loadCharacter-Funktion (setzen Sie Ihre eigene Implementierung ein)
+ * @param {Object} data - Die globalen Daten.
+ * @param {string} charName - Der Name des Charakters.
+ */
+function loadCharacter (data, charName) {
+  const char = data.Charaktäre.Spielercharaktere[charName]
+  if (char) {
+    document.getElementById('charName').textContent = charName
+    document.getElementById('charClass').textContent =
+      char.Klasse || 'Klasse nicht definiert'
+    console.log(`Charakter "${charName}" geladen.`)
+  } else {
+    console.warn(`Charakter "${charName}" nicht gefunden.`)
+  }
+}
 // #region Leben
 //#region HP und HD Balken
 /** HP-Bar-Funktion (erstellt die HP-Leiste)

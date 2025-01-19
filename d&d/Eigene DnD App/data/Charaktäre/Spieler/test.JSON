@@ -1,0 +1,16 @@
+{
+  "Charaktäre": {
+    "Spielercharaktere": {
+      "xx46": {},
+      "Diundriel": {
+        "Leben und HD": {
+          "Leben": {
+            "Abkürzung": "HP",
+            "Wert": 8,
+            "Temp Bonus": 0
+          }
+        }
+      }
+    }
+  }
+}
