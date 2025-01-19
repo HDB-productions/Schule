@@ -41,8 +41,10 @@
     <!-- #region Hauptinhalte  -->
     <main class="content">
       <!-- #region Seite 1 (Stats) -->
+
       <section class="page-section page1" id="page1">
-        <!-- Lebens und HD Balken -->
+        <!-- #region Inhanlte Seite 1-->
+        <!-- #region Lebens und HD Balken -->
         <details open>
           <summary>Leben</summary>
           <section class="block">
@@ -53,6 +55,7 @@
                 <div class="healthbar-inner" id="healthbarInner"></div>
                 <div class="healthbar-text">
                   <span id="currentHp" class="hp-clickable">0</span>
+                  /
                   <span id="maxHp" class="hp-clickable">0</span>
                 </div>
               </div>
@@ -71,65 +74,36 @@
             </div>
           </section>
         </details>
+        <!-- #endregion -->
+        <!-- #region Zustände -->
 
-        <!-- Zustände -->
         <details open>
           <summary>Zustände</summary>
           <section class="block">
-            <div class="conditions">
-              <div class="condition-box">
-                <input type="checkbox" id="conditionBlind" />
-                <label for="conditionBlind">Blind</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionLiegend" />
-                <label for="conditionLiegend">Liegend</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionVerängstigt" />
-                <label for="conditionVerängstigt">Verängstigt</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionUnsichtbar" />
-                <label for="conditionUnsichtbar">Unsichtbar</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionVergiftet" />
-                <label for="conditionVergiftet">Vergiftet</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionErschöpft" />
-                <label for="conditionErschöpft">Erschöpft</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionParalysiert" />
-                <label for="conditionParalysiert">Paralysiert</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionSchlafend" />
-                <label for="conditionSchlafend">Schlafend</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionStunned" />
-                <label for="conditionStunned">Stunned</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionTaumelnd" />
-                <label for="conditionTaumelnd">Taumelnd</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionTaub" />
-                <label for="conditionTaub">Taub</label>
-              </div>
-              <div class="condition-box">
-                <input type="checkbox" id="conditionGegriffen" />
-                <label for="conditionGegriffen">Gegriffen</label>
-              </div>
+            <div id="active-conditions" class="conditions">
+              <!-- Aktive Zustände werden hier angezeigt -->
             </div>
+            <details close>
+              <summary>Inaktive Zustände</summary>
+              <section class="block">
+                <div id="inactive-conditions" class="conditions">
+                  <!-- Inaktive Zustände werden hier angezeigt -->
+                </div>
+              </section>
+            </details>
           </section>
         </details>
 
-        <!-- Attribute -->
+        <!-- Vorlage für eine Bedingung -->
+        <template id="condition-template">
+          <div class="condition-box">
+            <input type="checkbox" id="" />
+            <label for=""></label>
+          </div>
+        </template>
+
+        <!-- #endregion -->
+        <!-- #region Attribute -->
         <details open>
           <summary>Attribute</summary>
           <section class="block">
@@ -180,8 +154,8 @@
             </div>
           </section>
         </details>
-
-        <!-- Statistics -->
+        <!-- #endregion -->
+        <!-- #region Statistics -->
         <details open>
           <summary>Statistics</summary>
           <div class="stats-row">
@@ -213,7 +187,8 @@
             </div>
           </div>
         </details>
-        <!-- Skills -->
+        <!-- #endregion -->
+        <!-- #region Skills -->
         <details open>
           <summary>Skills</summary>
           <section class="block">
@@ -293,8 +268,10 @@
             </div>
           </section>
         </details>
-
-        <!-- Pop-up für Temporäre HP -->
+        <!-- #endregion -->
+        <!-- #endregion-->
+        <!-- #region Popups -->
+        <!-- #region Pop-up für Temporäre HP -->
         <div id="maxHealthModal" class="modal hidden">
           <div class="modal-content">
             <span class="close-btn" id="closeMaxHealthModal">&times;</span>
@@ -306,8 +283,8 @@
             </div>
           </div>
         </div>
-
-        <!-- Pop-up für HP Management -->
+        <!-- #endregion-->
+        <!-- #region Pop-up für HP Management -->
         <div id="hpManagementModal" class="modal hidden">
           <div class="modal-content">
             <span class="close-btn" id="closeHpManagementModal">&times;</span>
@@ -319,6 +296,8 @@
             </div>
           </div>
         </div>
+        <!-- #endregion-->
+        <!-- #endregion -->
       </section>
       <!-- #endregion -->
       <!-- #region Seite 2 (Aktionen) -->
