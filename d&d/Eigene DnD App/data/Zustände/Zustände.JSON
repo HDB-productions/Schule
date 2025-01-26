@@ -1,0 +1,140 @@
+{
+  "Zustände": {
+    "Blind": {
+      "Name": "Blind (Blinded)",
+      "Beschreibung": "Ein blinder Kreatur kann nicht sehen und scheitert automatisch bei allen Fähigkeitsproben, die Sicht erfordern.",
+      "Modifikationen": {
+        "Angriffe": {
+          "gegen die Kreatur": "Vorteil",
+          "der Kreatur": "Nachteil"
+        }
+      }
+    },
+    "Bezaubert": {
+      "Name": "Bezaubert (Charmed)",
+      "Beschreibung": "Eine bezauberte Kreatur kann den Bezauberer nicht angreifen oder mit schädlichen Fähigkeiten oder magischen Effekten Zielen.",
+      "Modifikationen": {
+        "Soziale Interaktion": "Der Bezauberer hat Vorteil auf Fähigkeitsproben für soziale Interaktionen."
+      }
+    },
+    "Taub": {
+      "Name": "Taub (Deafened)",
+      "Beschreibung": "Eine taube Kreatur kann nicht hören und scheitert automatisch bei allen Fähigkeitsproben, die Gehör erfordern."
+    },
+    "Erschöpft": {
+      "Name": "Erschöpft (Exhaustion)",
+      "Beschreibung": "Der Zustand 'Erschöpft' ist kumulativ. Jedes Mal, wenn du ihn erhältst, erhältst du 1 Stufe Erschöpfung. Du stirbst, wenn deine Erschöpfungsstufe 6 erreicht. Wenn du einen W20-Test ablegst, ziehst du das doppelte deiner Erschöpfungsstufe vom W20-Wurf ab. Ziehe das doppelte deiner Erschöpfungsstufe vom Zauber-SG jedes Zaubers ab, den du ausführst. Das Beenden einer Langen Rast entfernt 1 deiner Erschöpfungsstufen. Wenn deine Erschöpfungsstufe 0 erreicht, bist du nicht mehr Erschöpft.",
+      "Modifikationen": {}
+    },
+    "Verängstigt": {
+      "Beschreibung": "Eine verängstigte Kreatur hat Nachteil auf Fähigkeitsproben und Angriffsproben, solange die Quelle ihrer Angst in Sichtweite ist.",
+      "Modifikationen": {
+        "Bewegung": "Die Kreatur kann sich nicht freiwillig der Quelle ihrer Angst nähern."
+      }
+    },
+    "Gepackt": {
+      "Name": "Gepackt (Grappled)",
+      "Beschreibung": "Eine gepackte Kreatur hat eine Geschwindigkeit von 0 und kann keinen Bonus auf ihre Geschwindigkeit erhalten. Du hast nachteil auf Angriffsproben gegen alle Ziele außer dem Packer. Der Packende kann den Gepackten mit sich bewegen, die Bewegungskosten sind allerdings verdoppelt",
+      "Modifikationen": {
+        "Ende des Zustands": "Eine Gepackte Kreatur kann seine Aktion nutzen um sich zu befreien, dafür macht es einen Stärke oder Geschicklichkeits check gegen die DC des Griffes bzw gegen einen Stärkewurf des Greifers. Der Zustand endet, wenn der Packer handlungsunfähig wird oder die Kreatur aus der Reichweite des Packers entfernt wird."
+      }
+    },
+    "Handlungsunfähig": {
+      "Name": "Handlungsunfähig (Incapacitated)",
+      "Beschreibung": "Eine handlungsunfähige Kreatur kann keine Aktionen oder Reaktionen ausführen."
+    },
+    "Unsichtbar": {
+      "Name": "Unsichtbar (Invisible)",
+      "Beschreibung": "Eine unsichtbare Kreatur kann ohne magische Hilfe oder besondere Sinne nicht gesehen werden.",
+      "Modifikationen": {
+        "Angriffe": {
+          "gegen die Kreatur": "Nachteil",
+          "der Kreatur": "Vorteil"
+        }
+      }
+    },
+    "Gelähmt": {
+      "Name": "Gelähmt (Paralyzed)",
+      "Beschreibung": "Eine gelähmte Kreatur ist handlungsunfähig und kann sich nicht bewegen oder sprechen.",
+      "Modifikationen": {
+        "Rettungswürfe": "Automatisches Scheitern bei Stärke- und Geschicklichkeits-Rettungswürfen",
+        "Angriffe": {
+          "gegen die Kreatur": "Vorteil",
+          "kritische Treffer": "Bei Angriffen aus 5 Fuß Entfernung"
+        }
+      }
+    },
+    "Versteinert": {
+      "Name": "Versteinert (Petrified)",
+      "Beschreibung": "Eine versteinerte Kreatur ist zusammen mit allen nichtmagischen Gegenständen die sie trägt in einen festen, leblosen Stoff (meist Stein) verwandelt und ist Handlungsunfähig. Geschwindigkeit 0 ",
+      "Modifikationen": {
+        "Eigenschaften": {
+          "Gewicht": "Verzehnfacht",
+          "Alterung": "Eingestellt"
+        },
+        "Angriffe": {
+          "gegen die Kreatur": "Vorteil",
+          "Rettungswürfe": "Automatisches Scheitern bei Stärke- und Geschicklichkeits-Rettungswürfen"
+        },
+        "Resistenzen": "Resistenz gegen allen Schaden",
+        "Immunitäten": "Immun gegen Gift und Krankheiten"
+      }
+    },
+    "Vergiftet": {
+      "Name": "Vergiftet (Poisoned)",
+      "Beschreibung": "Eine vergiftete Kreatur hat Nachteil auf Angriffsproben und Fähigkeitsproben."
+    },
+    "Liegend": {
+      "Name": "Liegend (Prone)",
+      "Beschreibung": "Eine liegende Kreatur kann nur kriechen, es sei denn, sie steht auf und beendet damit den Zustand.",
+      "Modifikationen": {
+        "Angriffe": {
+          "der Kreatur": "Nachteil",
+          "gegen die Kreatur": {
+            "innerhalb von 5 Fuß": "Vorteil",
+            "außerhalb von 5 Fuß": "Nachteil"
+          }
+        }
+      }
+    },
+    "Festgehalten": {
+      "Name": "Festgehalten (Restrained)",
+      "Beschreibung": "Eine festgehaltene Kreatur hat eine Geschwindigkeit von 0 und kann keinen Bonus auf ihre Geschwindigkeit erhalten.",
+      "Modifikationen": {
+        "Angriffe": {
+          "gegen die Kreatur": "Vorteil",
+          "der Kreatur": "Nachteil"
+        },
+        "Rettungswürfe": "Nachteil auf Geschicklichkeits-Rettungswürfe"
+      }
+    },
+    "Betäubt": {
+      "Name": "Betäubt (Stunned)",
+      "Beschreibung": "Eine betäubte Kreatur ist handlungsunfähig, kann sich nicht bewegen und nur stockend sprechen.",
+      "Modifikationen": {
+        "Rettungswürfe": "Automatisches Scheitern bei Stärke- und Geschicklichkeits-Rettungswürfen",
+        "Angriffe": {
+          "gegen die Kreatur": "Vorteil"
+        }
+      }
+    },
+    "Bewusstlos": {
+      "Name": "Bewusstlos (Unconscious)",
+      "Beschreibung": "Eine bewusstlose Kreatur ist handlungsunfähig, kann sich nicht bewegen oder sprechen und ist sich ihrer Umgebung nicht bewusst.",
+      "Modifikationen": {
+        "Rettungswürfe": "Automatisches Scheitern bei Stärke- und Geschicklichkeits-Rettungswürfen",
+        "Angriffe": {
+          "gegen die Kreatur": "Vorteil",
+          "kritische Treffer": "Bei Angriffen aus 5 Fuß Entfernung"
+        },
+        "Auswirkungen": {
+          "Gegenstände": "Die Kreatur lässt alles fallen, was sie hält, und fällt zu Boden."
+        }
+      }
+    },
+    "Sterbend:": {
+      "Name": "Sterbend (Dying)",
+      "Beschreibung": "Wenn eine Kreatur auf 0 Lebenspunkte fällt, stirbt sie entweder sofort oder wird bewusstlos. Eine Kreatur stirbt sofort, wenn: 1) Ihr TP-Maximum auf 0 reduziert wird. 2) Wenn nach dem erreichen von 0 TP noch Schaden übrigbleibt der das TP-Maximum des sterbenden erreicht oder übersteigt. Fällst du auf 0 TP, stirbst aber nicht sofort, erhältst du den Bewusstlosigkeits-Zustand, bis du TP zurückerlangst. Zudem musst du nun Todesrettungswürfe machen. Wenn du deinen Zug mit 0 TP beginnst, musst du einen Todesrettungswurf machen, um zu entscheiden, ob du dem Tod näher kommst oder dich ans Leben klammerst. Dieser Wurf ist nicht an einen Attributswert gebunden. Würfle 1W20. Bei 10 oder höher gilt der Wurf als Erfolg, sonst als Fehlschlag. Drei Erfolge machen dich Stabil, drei Fehlschläge führen zum Tod. Erfolge und Fehlschläge müssen nicht aufeinanderfolgen. Erleidest du Schaden bei 0 TP, erhältst du einen Fehlschlag. Bei einem kritischen Treffer sind es zwei Fehlschläge. Übersteigt der Schaden dein TP-Maximum, stirbst du sofort. Mit der Hilfe-Aktion kannst du, eine bewusstlose Kreatur stabilisieren, indem du eine erfolgreiche Weisheit (Medizin)-Probe (SG 10) machst. Stabile Kreaturen müssen keine Todesrettungswürfe machen, bleiben aber bewusstlos. Bei erneutem Schaden beginnen die Würfe wieder. Ohne Heilung erlangt eine stabile Kreatur nach 1W4 Stunden 1 TP zurück."
+    }
+  }
+}
