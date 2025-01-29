@@ -1,7 +1,6 @@
 {
   "Charaktäre": {
     "Spielercharaktere": {
-      "xx46": {},
       "Diundriel": {
         "Leben und HD": {
           "Leben": {
@@ -9,7 +8,60 @@
             "Wert": 20,
             "Temp Bonus": 0
           }
-        }
+        },
+        "Gegenstände": [
+          {
+            "name": "Tasche des Haltens",
+            "beschreibung": "Diese Tasche hat einen Innenraum, der wesentlich größer ist als ihre Außenmaße: etwa 60 cm Durchmesser an der Öffnung und 120 cm Tiefe. Die Tasche kann bis zu 500 Pfund fassen, wobei ein Volumen von 64 Kubikfuß nicht überschritten wird. Die Tasche wiegt unabhängig von ihrem Inhalt stets 15 Pfund. Das Herausnehmen eines Gegenstands erfordert eine Aktion.\n\nWird die Tasche überladen, durchstochen oder zerrissen, zerreißt sie und wird zerstört; ihr Inhalt wird in der Astralebene verstreut. Wenn die Tasche umgedreht wird, strömt ihr gesamter Inhalt unversehrt heraus, aber die Tasche muss wieder in Ordnung gebracht werden, bevor sie erneut benutzt werden kann. Atmende Kreaturen im Inneren der Tasche können bis zu einer Anzahl von Minuten überleben, die gleich 10 geteilt durch die Anzahl der Kreaturen ist (mindestens 1 Minute); nach dieser Zeit beginnen sie zu ersticken. Wird eine Tasche des Haltens in einen extradimensionalen Raum gelegt, der durch einen 'Handlichen Rucksack', ein 'Tragbares Loch' oder einen ähnlichen Gegenstand entsteht, werden beide Gegenstände sofort zerstört und ein Tor zur Astralebene geöffnet. Das Tor entsteht dort, wo der eine Gegenstand in den anderen gelegt wurde. Jede Kreatur im Umkreis von 3 Metern (10 Fuß) um das Tor wird durch das Tor an einen zufälligen Ort in der Astralebene gesaugt. Dann schließt sich das Tor. Das Tor ist nur in eine Richtung offen und kann nicht wieder geöffnet werden.",
+            "gewicht": 15,
+            "wert": 4000,
+            "equipped": false,
+            "seltenheit": "Ungewöhnlich",
+            "gegenstandsTyp": {
+              "Magisch": {
+                "modifikatoren": [],
+                "erfordertEinstimmung": false
+              },
+              "Behälter": {
+                "ignoreInhaltGewicht": true,
+                "maxInhaltGewicht": 500,
+                "maxInhaltVolumenKubikfuss": 64,
+                "container": [
+                  {
+                    "name": "testgegenstand",
+                    "beschreibung": "der gegenstand soll testen ob modifikatoren klappen",
+                    "gewicht": 10.0,
+                    "wert": 1.0,
+                    "equipped": true,
+                    "gegenstandsTyp": {
+                      "Magisch": {
+                        "eingestimmt": true,
+                        "modifikatoren": [
+                          { "Stärke": "0", "Geschicklichkeit": "0" }
+                        ],
+                        "erfordertEinstimmung": true
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "testgegenstand2",
+            "beschreibung": "der gegenstand soll testen ob modifikatoren klappen",
+            "gewicht": 10.0,
+            "wert": 1.0,
+            "equipped": true,
+            "gegenstandsTyp": {
+              "Magisch": {
+                "eingestimmt": true,
+                "modifikatoren": [{ "Stärke": "0", "Geschicklichkeit": "0" }],
+                "erfordertEinstimmung": true
+              }
+            }
+          }
+        ]
       }
     }
   }

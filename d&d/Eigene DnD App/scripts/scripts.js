@@ -1,49 +1,41 @@
-//#region Module
+//#region JSON-Laden, mergen und in AllDataGlobal speichern
+let allDataGlobal = null // Enthält alle geladenen JSON-Daten (globaler Zugriff)
+let activeCharacter = null // Enthält den aktuell ausgewählten Charakter (globaler Zugriff)
 
-/**
- * Lädt eine JSON-Datei und gibt die Daten zurück als Promise.
- * @param {string} url - Der Pfad zur JSON-Datei.
- * @returns {Promise<Object>} - Ein Promise, das die JSON-Daten enthält.
- */
+const JSON_URLS = [
+  // Liste der zu ladenden JSON-Dateien (Reihenfolge ist wichtig, untere überschreiben obere, wenn Schlüssel gleich)
+  'data/DnDKalender.JSON',
+  'data/Charaktäre/Spieler/Diundriel.json',
+  'data/Charaktäre/Spieler/test.json'
+  // Weitere Dateien können hier hinzugefügt werden
+]
+
 async function loadJson (url) {
+  // Lädt eine JSON-Datei und gibt das Ergebnis zurück
   try {
     const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error(`HTTP-Fehler! Status: ${response.status}`)
-    }
+    if (!response.ok) throw new Error(`HTTP-Fehler! Status: ${response.status}`)
     return await response.json()
   } catch (err) {
-    console.error('Fehler beim Laden der JSON:', err)
+    console.error('Fehler beim Laden der JSON (${url}):', err)
     throw err
   }
 }
 
-/**
- * Rekursives Zusammenführen von zwei JSON-Objekten.
- * @param {Object} target - Das Zielobjekt, das aktualisiert werden soll.
- * @param {Object} source - Das Quellobjekt, dessen Werte hinzugefügt/überschrieben werden sollen.
- * @returns {Object} - Das zusammengeführte Zielobjekt.
- */
 function mergeJson (target, source) {
+  // Mergt zwei JSON-Objekte rekursiv
   for (const key in source) {
     if (source.hasOwnProperty(key)) {
-      // Wenn beide Werte Objekte sind, rekursiv zusammenführen
       if (
         typeof source[key] === 'object' &&
         source[key] !== null &&
         !Array.isArray(source[key])
       ) {
-        if (!target[key] || typeof target[key] !== 'object') {
-          target[key] = {} // Initialisieren, falls nicht vorhanden
-        }
-        mergeJson(target[key], source[key]) // Rekursiver Aufruf
-      }
-      // Wenn beide Werte Arrays sind, rekursiv Arrays zusammenführen
-      else if (Array.isArray(source[key]) && Array.isArray(target[key])) {
+        if (!target[key] || typeof target[key] !== 'object') target[key] = {}
+        mergeJson(target[key], source[key])
+      } else if (Array.isArray(source[key]) && Array.isArray(target[key])) {
         target[key] = mergeArrays(target[key], source[key])
-      }
-      // Andernfalls den Wert direkt übernehmen
-      else {
+      } else {
         target[key] = source[key]
       }
     }
@@ -51,149 +43,63 @@ function mergeJson (target, source) {
   return target
 }
 
-/**
- * Zusammenführen von zwei Arrays.
- * - Primitive Werte werden kombiniert und Duplikate entfernt.
- * - Objekte mit gleichen Schlüsseln werden rekursiv zusammengeführt.
- * @param {Array} targetArray - Das Zielarray, das aktualisiert werden soll.
- * @param {Array} sourceArray - Das Quellarray, dessen Werte hinzugefügt/überschrieben werden sollen.
- * @returns {Array} - Das zusammengeführte Array.
- */
 function mergeArrays (targetArray, sourceArray) {
-  const result = [...targetArray] // Zielarray kopieren
-
+  // Mergt zwei Arrays, wobei Objekte mit gleichem Schlüssel gemerged werden
+  const result = [...targetArray]
   for (const sourceItem of sourceArray) {
     if (typeof sourceItem === 'object' && sourceItem !== null) {
-      // Prüfen, ob ein entsprechendes Objekt im Zielarray existiert
       const matchingItem = result.find(
         targetItem =>
           typeof targetItem === 'object' &&
           targetItem !== null &&
           getObjectKey(targetItem) === getObjectKey(sourceItem)
       )
-
-      if (matchingItem) {
-        // Rekursiv zusammenführen, wenn ein passendes Objekt existiert
-        mergeJson(matchingItem, sourceItem)
-      } else {
-        // Neues Objekt hinzufügen, falls es kein Match gibt
-        result.push(sourceItem)
-      }
-    } else {
-      // Primitive Werte hinzufügen, falls sie noch nicht existieren
-      if (!result.includes(sourceItem)) {
-        result.push(sourceItem)
-      }
+      matchingItem
+        ? mergeJson(matchingItem, sourceItem)
+        : result.push(sourceItem)
+    } else if (!result.includes(sourceItem)) {
+      result.push(sourceItem)
     }
   }
-
   return result
 }
 
-/**
- * Hilfsfunktion zum Abrufen eines eindeutigen Schlüssels eines Objekts.
- * - Angenommen, jedes Objekt hat einen eindeutigen Schlüssel, z. B. einen Namen oder eine ID.
- * @param {Object} obj - Das Objekt, aus dem der Schlüssel extrahiert werden soll.
- * @returns {string|undefined} - Der Schlüssel des Objekts oder `undefined`, wenn kein Schlüssel gefunden wird.
- */
 function getObjectKey (obj) {
-  // Beispiel: Verwenden Sie hier "name" oder "id" als eindeutigen Schlüssel
+  // Gibt den Schlüssel eines Objekts zurück (Name oder ID)
   return obj.name || obj.id
 }
 
-/**
- * Befüllt die Charakterliste im Dropdown.
- * @param {Object} data - Die geladenen JSON-Daten.
- */
-function fillCharacterList (data) {
-  const spielercharaktere = data.Charaktäre.Spielercharaktere
-  const charListEl = document.getElementById('charList')
-  const dropdownEl = document.getElementById('charDropdown') // Passen Sie die ID an
-
-  // Debugging: Überprüfen der Elemente
-  console.log('spielercharaktere:', spielercharaktere)
-  console.log('charListEl:', charListEl)
-  console.log('dropdownEl:', dropdownEl)
-
-  // Überprüfen, ob die Elemente vorhanden sind
-  if (!spielercharaktere || !charListEl || !dropdownEl) {
-    console.error(
-      'Spielercharaktere, charList Element oder dropdown Element nicht gefunden.'
-    )
-    return
-  }
-
-  // **Leeren der bestehenden Liste**
-  charListEl.innerHTML = ''
-
-  // Charaktere zur Liste hinzufügen
-  for (const charName in spielercharaktere) {
-    if (spielercharaktere.hasOwnProperty(charName)) {
-      const li = document.createElement('li')
-      li.textContent = charName
-      li.style.cursor = 'pointer' // Hinzufügen eines Cursors für bessere UX
-      li.addEventListener('click', () => {
-        dropdownEl.classList.toggle('hidden') // Dropdown schließen
-        loadCharacter(allDataGlobal, charName) // Charakter laden
-      })
-      charListEl.appendChild(li)
-    }
-  }
-
-  // Optional: Standard-Charakter laden, falls vorhanden
-  if (spielercharaktere.hasOwnProperty('Diundriel')) {
-    loadCharacter(allDataGlobal, 'Diundriel')
-  } else {
-    console.warn('Standard-Charakter "Diundriel" nicht gefunden.')
-  }
-}
-
-//#endregion
-
-//#region JSON-Laden und Initialisierung
-
-let allDataGlobal = null // Globale Variable für alle Daten
-let isInitialized = false // Flag zur Vermeidung mehrfacher Initialisierung
-
-/**
- * Zeigt eine Fehlermeldung im UI an.
- * @param {string} message - Die Fehlermeldung.
- */
-function showError (message) {
-  // Entfernt vorhandene Fehlermeldungen
-  const existingError = document.querySelector('.error-message')
-  if (existingError) {
-    existingError.remove()
-  }
-
-  const errorEl = document.createElement('div')
-  errorEl.textContent = message
-  errorEl.classList.add('error-message')
-  document.body.appendChild(errorEl)
-}
-
-/**
- * Initialisiert die Anwendung, lädt JSON-Daten und befüllt die Charakterliste.
- */
-async function initialize () {
-  if (isInitialized) {
-    console.log('Initialisierung bereits abgeschlossen.')
-    return
-  }
-
+async function initializeData () {
+  // Initialisiert die Anwendung, lädt alle JSON-Dateien und setzt den aktiven defaultCharakter
   try {
-    // **Erstes JSON laden**
-    const jsonData = await loadJson('data/DnDKalender.JSON')
-    allDataGlobal = jsonData
+    allDataGlobal = {}
 
-    // **Zweites JSON laden und zusammenführen**
-    const newJsonData = await loadJson('data/Charaktäre/Spieler/test.JSON')
-    mergeJson(allDataGlobal, newJsonData)
+    // Dateien sequenziell laden und mergen
+    for (const url of JSON_URLS) {
+      const newData = await loadJson(url)
+      mergeJson(allDataGlobal, newData)
+    }
 
-    // **Charakterliste befüllen**
-    fillCharacterList(allDataGlobal)
+    fillCharacterList()
 
-    isInitialized = true // Markiert die Initialisierung als abgeschlossen
+    // Priorität für aktiven Charakter:
+    // 1. Gespeicherter Charakter
+    // 2. Diundriel (Fallback)
+    // 3. Erster verfügbarer Charakter
+    const storedChar = localStorage.getItem('activeCharacter')
+    const characters = Object.keys(
+      allDataGlobal?.Charaktäre?.Spielercharaktere || {}
+    )
+
+    if (storedChar && characters.includes(storedChar)) {
+      setActiveCharacter(storedChar)
+    } else if (characters.includes('Diundriel')) {
+      setActiveCharacter('Diundriel')
+    } else if (characters.length > 0) {
+      setActiveCharacter(characters[0])
+    }
+
+    activateFirstTab()
   } catch (err) {
     console.error('Initialisierungsfehler:', err)
     showError(
@@ -202,122 +108,43 @@ async function initialize () {
   }
 }
 
-// **Initialisierung beim Laden des DOM**
-document.addEventListener('DOMContentLoaded', initialize)
-
-//#endregion
-
-/**
- * Mock loadCharacter-Funktion (setzen Sie Ihre eigene Implementierung ein)
- * @param {Object} data - Die globalen Daten.
- * @param {string} charName - Der Name des Charakters.
- */
-function loadCharacter (data, charName) {
-  const char = data.Charaktäre.Spielercharaktere[charName]
-  if (char) {
-    document.getElementById('charName').textContent = charName
-    document.getElementById('charClass').textContent =
-      char.Klasse || 'Klasse nicht definiert'
-    console.log(`Charakter "${charName}" geladen.`)
-  } else {
-    console.warn(`Charakter "${charName}" nicht gefunden.`)
+function activateFirstTab () {
+  // Aktiviert den ersten Tab und die erste Sektion
+  const navButtons = document.querySelectorAll('.nav-btn')
+  const sections = document.querySelectorAll('.page-section')
+  if (sections.length > 0) {
+    sections[0].classList.add('active')
+    navButtons[0].classList.add('active')
   }
 }
-// #region Leben
-//#region HP und HD Balken
-/** HP-Bar-Funktion (erstellt die HP-Leiste)
- *@param {number} current: aktuelle HP
- *@param {number} max: aktuelle maximale HP*/
-function updateHealthBar (current, max) {
-  const ratio = Math.max(0, Math.min(current / max, 1)) // ratio = Das verhältnis von current zu max also wie weit die HP-Leiste gefüllt ist
-  const pct = Math.round(ratio * 100) + '%' // pct = Prozentwert von ratio
-  const healthbarInner = document.getElementById('healthbarInner')
-  const currentHpEl = document.getElementById('currentHp')
-  const maxHpEl = document.getElementById('maxHp')
-  healthbarInner.style.width = pct // Die Breite der HP-Leiste wird auf den Prozentwert gesetzt
-  currentHpEl.textContent = current // Der aktuelle HP-Wert wird in das Element mit der ID "currentHp" geschrieben
-  maxHpEl.textContent = max // Der maximale HP-Wert wird in das Element mit der ID "maxHp" geschrieben
-}
-/**  Hit-Dice-Funktion (erstellt die Hit-Dice-Leiste)
- * @param {number} current: aktuelle Hit-Dice
- * @param {number} max: maximale Hit-Dice
- * @param {string} diceArt: Art der Hit-Dice (z.B. "1d8")
- */
-function updateHitDice (current, max, diceArt) {
-  const ratio = Math.max(0, Math.min(current / max, 1))
-  const pct = Math.round(ratio * 100) + '%'
-  const hitDiceInner = document.getElementById('hitDiceInner')
-  const hitDiceCurrent = document.getElementById('hitDiceCurrent')
-  const hitDiceMax = document.getElementById('hitDiceMax')
-  const hitDiceArtEl = document.getElementById('hitDiceArt')
-  hitDiceInner.style.width = pct
-  hitDiceCurrent.textContent = current
-  hitDiceMax.textContent = max
-  hitDiceArtEl.textContent = diceArt
-}
 //#endregion
-//#region HP-Management
-// #region Öffnen und Schließen des HP-Management-Modals
-function openHpManagement () {
-  const hpManagementModal = document.getElementById('hpManagementModal')
-  hpManagementModal.classList.remove('hidden')
+//#region Charakterauswahl
+function setActiveCharacter (characterName) {
+  activeCharacter = characterName
+  localStorage.setItem('activeCharacter', characterName)
+  loadCharacterData()
 }
 
-function closeHpManagement () {
-  const hpManagementModal = document.getElementById('hpManagementModal')
-  hpManagementModal.classList.add('hidden')
+function fillCharacterList () {
+  const charListEl = document.getElementById('charList')
+  const dropdownEl = document.getElementById('charDropdown')
+  const characters = allDataGlobal?.Charaktäre?.Spielercharaktere || {}
+
+  charListEl.innerHTML = ''
+  Object.keys(characters).forEach(charName => {
+    const li = document.createElement('li')
+    li.textContent = charName
+    li.style.cursor = 'pointer'
+    li.addEventListener('click', () => {
+      dropdownEl.classList.add('hidden')
+      setActiveCharacter(charName)
+    })
+    charListEl.appendChild(li)
+  })
 }
-document.getElementById('currentHp').addEventListener('click', openHpManagement)
 //#endregion
 
-// #region HP-Änderungen
-/** Funktion zum Anwenden von HP-Änderungen
- * @param {number} change: Änderung der HP
- */
-function applyHpChange (change) {
-  const currentHpEl = document.getElementById('currentHp')
-  let currentHp = parseInt(currentHpEl.textContent, 10)
-  currentHp += change
-  const maxHp = parseInt(document.getElementById('maxHp').textContent, 10)
-  currentHp = Math.max(0, Math.min(currentHp, maxHp))
-  currentHpEl.textContent = currentHp
-
-  // Aktualisiere das hpInput-Feld nach Änderung
-  document.getElementById('hpInput').value = ''
-}
-
-// Verhindere negative Eingaben und passe das Scrollverhalten an
-document.getElementById('hpInput').addEventListener('input', e => {
-  const value = parseInt(e.target.value, 10)
-  if (isNaN(value) || value < 0) {
-    //Verhindere negative oder ungültige Eingaben
-    e.target.value = ''
-  }
-})
-
-// Event Listener für die Buttons im HP-Management-Modal
-document.getElementById('healingBtn').addEventListener('click', () => {
-  const hpInput = document.getElementById('hpInput').value
-  const healAmount = parseInt(hpInput, 10) || 0
-  applyHpChange(healAmount)
-  closeHpManagement()
-})
-document.getElementById('damageBtn').addEventListener('click', () => {
-  const hpInput = document.getElementById('hpInput').value
-  const damageAmount = parseInt(hpInput, 10) || 0
-  applyHpChange(-damageAmount)
-  closeHpManagement()
-})
-
-//#endregion
-
-//#endregion
-//#endregion
-// #region Zustände
-
-// #endregion
-// #region Attribute
-// #region Hilfsarray: Zuordnung Attributsname -> Kürzel (für ID) zum Update der Attribute
+//#region Daten Laden
 const attributeMapping = [
   { name: 'Stärke', idPrefix: 'ST' },
   { name: 'Geschicklichkeit', idPrefix: 'GE' },
@@ -326,39 +153,123 @@ const attributeMapping = [
   { name: 'Weisheit', idPrefix: 'WE' },
   { name: 'Charisma', idPrefix: 'CH' }
 ]
-// #endregion
 
-/** updateAttributes =>  Aktualisiert die Attributwerte und -boni im UI mit getEquipmentAttributeBonuses
- * @param {*} charData Die Charakterdaten die durch die Funktion loadCharacter aus dem Json geladen werden */
-function updateAttributes (charData) {
-  const attrData = charData.Attribute // Attributdaten aus den Charakterdaten (JSON)
-  const itemBonuses = getEquipmentAttributeBonuses(charData) // Ausrüstungsboni aus den item-Daten (JSON)
+function loadCharacterData () {
+  const charData = getCurrentCharacterData()
+  if (!charData) return
 
-  // Für Stärke, Geschick usw.
+  loadBasicInfo(charData)
+  loadHealthData(charData)
+  loadAttributes(charData)
+  initializeConditions(charData.Zustände)
+  loadPortrait()
+}
+function loadPortrait () {
+  const portraitImg = document.querySelector('.portrait-img')
+  if (!portraitImg || !activeCharacter) return
+
+  // Cache-Busting und Pfadkorrektur
+  const timestamp = new Date().getTime()
+  const imagePath = `data/Charaktäre/Spieler/${activeCharacter}.jpg?t=${timestamp}`
+  const fallbackPath = 'data/Charaktäre/Spieler/NoIMG.png'
+
+  // Sofortiges Zurücksetzen mit Loading-State
+  portraitImg.classList.add('portrait-loading')
+  portraitImg.src =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+  // Abbrechen laufender Requests
+  if (portraitImg._lastImageRequest) {
+    portraitImg._lastImageRequest.onload = null
+    portraitImg._lastImageRequest.onerror = null
+  }
+
+  const testImage = new Image()
+  portraitImg._lastImageRequest = testImage
+
+  testImage.onload = () => {
+    // Nur aktualisieren wenn noch relevant
+    if (activeCharacter === portraitImg.dataset.currentChar) {
+      portraitImg.src = imagePath
+      portraitImg.classList.remove('portrait-loading', 'portrait-error')
+    }
+  }
+
+  testImage.onerror = () => {
+    if (activeCharacter === portraitImg.dataset.currentChar) {
+      const fallbackTest = new Image()
+      fallbackTest.onload = () => {
+        portraitImg.src = fallbackPath
+        portraitImg.classList.remove('portrait-loading')
+      }
+      fallbackTest.onerror = () => {
+        portraitImg.src =
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+        portraitImg.classList.add('portrait-error')
+      }
+      fallbackTest.src = fallbackPath
+    }
+  }
+
+  // Aktuellen Charakter speichern
+  portraitImg.dataset.currentChar = activeCharacter
+  testImage.src = imagePath
+}
+
+function getCurrentCharacterData () {
+  return allDataGlobal?.Charaktäre?.Spielercharaktere?.[activeCharacter]
+}
+
+function loadBasicInfo (charData) {
+  document.getElementById('charName').textContent = activeCharacter
+  const klasse = Object.entries(charData.Klasse)[0]
+  document.getElementById(
+    'charClass'
+  ).textContent = `${klasse[0]} Lvl ${klasse[1]}`
+}
+
+function loadHealthData (charData) {
+  const hpData = charData['Leben und HD'].Leben
+  const hdData = charData['Leben und HD'].HD
+
+  loadHealthBar(hpData.Wert, hpData.Max + (hpData['Temp Bonus'] || 0))
+  loadHitDice(hdData.Wert, hdData.Maximal, hdData.Art)
+}
+
+function loadHealthBar (current, max) {
+  const ratio = Math.max(0, Math.min(current / max, 1))
+  const healthbarInner = document.getElementById('healthbarInner')
+  healthbarInner.style.width = `${ratio * 100}%`
+  document.getElementById('currentHp').textContent = current
+  document.getElementById('maxHp').textContent = max
+}
+
+function loadHitDice (current, max, diceArt) {
+  const hitDiceInner = document.getElementById('hitDiceInner')
+  hitDiceInner.style.width = `${(current / max) * 100}%`
+  document.getElementById('hitDiceCurrent').textContent = current
+  document.getElementById('hitDiceMax').textContent = max
+  document.getElementById('hitDiceArt').textContent = diceArt
+}
+
+function loadAttributes (charData) {
+  const attrData = charData.Attribute
+  const itemBonuses = getEquipmentAttributeBonuses(charData)
+
   attributeMapping.forEach(map => {
-    // map = { name: "Stärke", idPrefix: "ST" },{ name: "Geschicklichkeit", idPrefix: "GE" }, ...
-    const base = attrData[map.name].Wert // Basis Wert Bsp: 12 aus JSON
-    const temp = attrData[map.name]['Temp Mod'] || 0 // Bsp: +2 durch Zauber aus JSON (Temp Mod)
-    const equipBonus = itemBonuses[map.name] || 0 // Bsp: +1 durch Item aus JSON (Item-Bonus) durch getEquipmentAttributeBonuses
-    const finalVal = base + temp + equipBonus // finalVal Berechnet den Finalen Attributwert
-    const bonus = Math.floor((finalVal - 10) / 2) // Dein "calcBonus" => rechnet (finalVal - 10)/2?
+    const base = attrData[map.name]?.Wert || 0
+    const temp = attrData[map.name]?.['Temp Mod'] || 0
+    const equipBonus = itemBonuses[map.name] || 0
 
-    // UI-Update
+    const finalVal = base + temp + equipBonus
+    const bonus = Math.floor((finalVal - 10) / 2)
+
     document.getElementById(`${map.idPrefix}-wert`).textContent = finalVal
     document.getElementById(`${map.idPrefix}-bonus`).textContent =
       (bonus >= 0 ? '+' : '') + bonus
   })
 }
 
-// #endregion
-// #region Stattistic
-// #endregion
-// #region Skills
-// #endregion
-
-/* getEquipmentAttributeBonuses  => Sammelt alle Ausrüstungs-Boni*/
 function getEquipmentAttributeBonuses (charData) {
-  // Summenobjekt
   const bonusSum = {
     Stärke: 0,
     Geschicklichkeit: 0,
@@ -368,174 +279,78 @@ function getEquipmentAttributeBonuses (charData) {
     Charisma: 0
   }
 
-  const items = charData.Gegenstände || []
-  items.forEach(item => {
-    // Nur wenn ausgerüstet
-    if (item.equipped) {
-      const magisch = item.gegenstandsTyp?.Magisch
-      if (magisch) {
-        const requiresAttune = magisch.erfordertEinstimmung || false
-        const isAttuned = magisch.eingestimmt || false
+  const processItem = item => {
+    // Verarbeite den Gegenstand selbst
+    if (item.equipped && item.gegenstandsTyp?.Magisch) {
+      const magisch = item.gegenstandsTyp.Magisch
+      const requiresAttune = magisch.erfordertEinstimmung || false
+      const isAttuned = magisch.eingestimmt || false
 
-        // Bedingung: Keine Einstimmung ODER (Einstimmung & eingestimmt)
-        if (!requiresAttune || isAttuned) {
-          // modifikatoren (Array) => z. B. [ {"Stärke":"+2"} ]
-          if (Array.isArray(magisch.modifikatoren)) {
-            magisch.modifikatoren.forEach(mod => {
-              for (let attrName in mod) {
-                const val = parseInt(mod[attrName], 10) || 0
-                if (bonusSum[attrName] !== undefined) {
-                  bonusSum[attrName] += val
+      if (!requiresAttune || isAttuned) {
+        const processMods = mods => {
+          if (Array.isArray(mods)) {
+            mods.forEach(mod => {
+              Object.entries(mod).forEach(([attr, value]) => {
+                const val = parseInt(value, 10) || 0
+                if (bonusSum.hasOwnProperty(attr)) {
+                  bonusSum[attr] += val
                 }
-              }
+              })
             })
-          }
-          // Falls es auch "passive modifikatoren" oder Ähnliches gibt ...
-          if (Array.isArray(magisch['passive modifikatoren'])) {
-            magisch['passive modifikatoren'].forEach(mod => {
-              for (let attrName in mod) {
-                const val = parseInt(mod[attrName], 10) || 0
-                if (bonusSum[attrName] !== undefined) {
-                  bonusSum[attrName] += val
-                }
+          } else if (typeof mods === 'object') {
+            Object.entries(mods).forEach(([attr, value]) => {
+              const val = parseInt(value, 10) || 0
+              if (bonusSum.hasOwnProperty(attr)) {
+                bonusSum[attr] += val
               }
             })
           }
         }
+
+        processMods(magisch.modifikatoren)
+        processMods(magisch['passive modifikatoren'])
       }
     }
-  })
+
+    // Rekursive Verarbeitung von Containern
+    const processContainer = container => {
+      if (Array.isArray(container)) {
+        container.forEach(subItem => {
+          // Prüfe ob Untergegenstand ausgerüstet ist
+          if (subItem.equipped) {
+            processItem(subItem)
+
+            // Rekursion für verschachtelte Container
+            if (subItem.gegenstandsTyp?.Behälter?.container) {
+              processContainer(subItem.gegenstandsTyp.Behälter.container)
+            }
+          }
+        })
+      }
+    }
+
+    // Verarbeite alle Containertypen
+    if (item.gegenstandsTyp?.Behälter?.container) {
+      processContainer(item.gegenstandsTyp.Behälter.container)
+    }
+  }
+
+  // Starte die Verarbeitung mit den Hauptgegenständen
+  const items = charData.Gegenstände || []
+  items.forEach(item => processItem(item))
 
   return bonusSum
 }
 
-/* -------------------------------------------
-    6) loadCharacter =>  liest HP/HD und ruft updateAttributes auf
-  ------------------------------------------- */
-function loadCharacter (allData, characterName) {
-  const sc = allData.Charaktäre.Spielercharaktere
-  if (!sc) {
-    console.error('Keine Spielercharaktere in JSON gefunden!')
-    return
-  }
-  const charData = sc[characterName]
-  if (!charData) {
-    console.error("Charakter '" + characterName + "' nicht gefunden!")
-    return
-  }
-
-  // Name
-  document.getElementById('charName').textContent = characterName
-
-  // Klasse
-  const klasseObj = charData.Klasse
-  let klasseName = ''
-  let klasseLevel = 0
-  for (let k in klasseObj) {
-    klasseName = k
-    klasseLevel = klasseObj[k]
-  }
-  document.getElementById('charClass').textContent =
-    klasseName + ' Lvl ' + klasseLevel
-
-  // HP
-  const hpData = charData['Leben und HD'].Leben
-  const hpCurrent = hpData.Wert
-  const hpMax = hpData.Max + (hpData['Temp Bonus'] || 0)
-  updateHealthBar(hpCurrent, hpMax)
-
-  // Hit Dice
-  const hdData = charData['Leben und HD'].HD
-  updateHitDice(hdData.Wert, hdData.Maximal, hdData.Art)
-
-  // Attribute (inkl. Gegenstands-Boni)
-  updateAttributes(charData)
-  // **Initialisiere die Zustände basierend auf charData.Zustände**
-
-  initializeConditions(charData.Zustände)
-}
-// #region Tab-Logik, Modals, Char-Auswahl  */
-/*Tab-Logik für die Charakterübersicht.
- wartet auf das Laden des DOM.
- Öffnet die erste Section und setzt den ersten Button auf aktiv .
- Fügt Event-Listener zu allen Buttons hinzu.
-*/
-document.addEventListener('DOMContentLoaded', function () {
-  const navButtons = document.querySelectorAll('.nav-btn')
-  const sections = document.querySelectorAll('.page-section')
-
-  // Funktion zum Deaktivieren aller Sections
-  function hideAllSections () {
-    sections.forEach(section => {
-      section.classList.remove('active')
-    })
-    navButtons.forEach(button => {
-      button.classList.remove('active')
-    })
-  }
-
-  // Initial aktivieren der ersten Section
-  if (sections.length > 0) {
-    sections[0].classList.add('active')
-    navButtons[0].classList.add('active')
-  }
-
-  navButtons.forEach(button => {
-    button.addEventListener('click', function () {
-      const targetTab = this.getAttribute('data-tab')
-      const targetSection = document.getElementById(targetTab)
-
-      if (targetSection) {
-        hideAllSections()
-        targetSection.classList.add('active')
-        this.classList.add('active')
-      } else {
-        console.warn(`Keine Section mit id="${targetTab}" gefunden.`)
-      }
-    })
-  })
-})
-
-const maxHealthModal = document.getElementById('maxHealthModal')
-const closeMaxHealthModal = document.getElementById('closeMaxHealthModal')
-document.getElementById('currentHp').addEventListener('click', () => {
-  damageModal.classList.remove('hidden')
-})
-document.getElementById('maxHp').addEventListener('click', () => {
-  maxHealthModal.classList.remove('hidden')
-})
-closeMaxHealthModal.addEventListener('click', () => {
-  maxHealthModal.classList.add('hidden')
-})
-
-// Klick auf den Char-Namen => Dropdown togglen
-const charNameEl = document.getElementById('charName')
-const dropdownEl = document.getElementById('charDropdown')
-charNameEl.addEventListener('click', () => {
-  dropdownEl.classList.toggle('hidden')
-})
-// Event Listener für Schließen des HP Management Modals
-document
-  .getElementById('closeHpManagementModal')
-  .addEventListener('click', closeHpManagement)
-
-// #endregion
-
-/**
- * Funktion zum Initialisieren der Zustände basierend auf charData.Zustände
- * @param {Object} zustände - Objekt mit Zustandseigenschaften und ihrem Status
- */
 function initializeConditions (zustände) {
   const activeContainer = document.getElementById('active-conditions')
   const inactiveContainer = document.getElementById('inactive-conditions')
   const conditionTemplate =
     document.getElementById('condition-template').content
 
-  // Leere die aktuellen Container
   activeContainer.innerHTML = ''
   inactiveContainer.innerHTML = ''
 
-  // Funktion zum Erstellen einer Bedingung
   function createCondition (id, label, active) {
     const conditionFragment = document.importNode(conditionTemplate, true)
     const conditionElement = conditionFragment.querySelector('.condition-box')
@@ -547,53 +362,138 @@ function initializeConditions (zustände) {
     labelEl.htmlFor = id
     labelEl.textContent = label
 
-    // Event Listener für das Umschalten
     checkbox.addEventListener('change', () => {
-      const isActive = checkbox.checked
-      if (isActive) {
+      if (checkbox.checked) {
         activeContainer.appendChild(conditionElement)
       } else {
         inactiveContainer.appendChild(conditionElement)
       }
-      toggleInactiveDetails()
     })
 
     return conditionElement
   }
 
-  // Iteriere über die Zustände und erstelle die entsprechenden Elemente
-  for (const [key, value] of Object.entries(zustände)) {
-    // Erzeuge eine ID basierend auf dem Zustand
-    const id = `condition${key}`
-    // Optional: Du kannst die Labels anpassen, falls sie anders heißen sollen
-    const label = key
-
-    // Erstelle das Zustandselement
-    const conditionElement = createCondition(id, label, value)
-
-    // Füge es dem entsprechenden Container hinzu
+  Object.entries(zustände).forEach(([key, value]) => {
+    const conditionElement = createCondition(`condition-${key}`, key, value)
     if (value) {
       activeContainer.appendChild(conditionElement)
     } else {
       inactiveContainer.appendChild(conditionElement)
     }
-  }
+  })
+}
+//#endregion
 
-  // Aktualisiere die Sichtbarkeit des Inaktiven-Bereichs
-  toggleInactiveDetails()
+//#region Update
+function saveCharacterData () {
+  loadCharacterData()
 }
 
-/**
- * Funktion zum Anzeigen oder Verbergen des Inaktiven-Bereichs
- */
-function toggleInactiveDetails () {
-  const inactiveDetails = document.getElementById('inactive-details')
-  const inactiveContainer = document.getElementById('inactive-conditions')
-  const hasInactive = inactiveContainer.children.length > 0
-  if (hasInactive) {
-    inactiveDetails.classList.remove('hidden')
-    inactiveDetails.open = true // Optional: automatisch öffnen, wenn inaktive Zustände vorhanden sind
-  } else {
-    inactiveDetails.classList.add('hidden')
-  }
+function applyHpChange (change) {
+  const charData = getCurrentCharacterData()
+  if (!charData) return
+
+  const hpData = charData['Leben und HD'].Leben
+  hpData.Wert = Math.max(
+    0,
+    Math.min(hpData.Wert + change, hpData.Max + (hpData['Temp Bonus'] || 0))
+  )
+  saveCharacterData()
 }
+
+function updateMaxHealth (newMax) {
+  const charData = getCurrentCharacterData()
+  if (!charData) return
+
+  charData['Leben und HD'].Leben.Max = newMax
+  charData['Leben und HD'].Leben.Wert = Math.min(
+    charData['Leben und HD'].Leben.Wert,
+    newMax
+  )
+  saveCharacterData()
+}
+//#endregion
+
+//#region Kontrolle
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Warte bis die Seite geladen ist
+  initializeData() // Initialisiere die Anwendung
+  setupEventListeners() // Setze Event-Listener
+})
+
+function setupEventListeners () {
+  // Tab-Navigation
+  document.querySelectorAll('.nav-btn').forEach(button => {
+    button.addEventListener('click', function () {
+      document
+        .querySelectorAll('.nav-btn.active, .page-section.active')
+        .forEach(el => {
+          el.classList.remove('active')
+        })
+      this.classList.add('active')
+      document.getElementById(this.dataset.tab).classList.add('active')
+    })
+  })
+
+  // Charakterauswahl
+  document.getElementById('charName').addEventListener('click', () => {
+    document.getElementById('charDropdown').classList.toggle('hidden')
+  })
+
+  document.getElementById('Home').addEventListener('click', () => {
+    document.getElementById('homeDropdown').classList.toggle('hidden')
+  })
+
+  // #region HP Management listeners
+  document.getElementById('currentHp').addEventListener('click', () => {
+    document.getElementById('hpManagementModal').classList.remove('hidden')
+  })
+
+  document
+    .getElementById('closeHpManagementModal')
+    .addEventListener('click', () => {
+      document.getElementById('hpManagementModal').classList.add('hidden')
+    })
+
+  document.getElementById('healingBtn').addEventListener('click', () => {
+    const input = parseInt(document.getElementById('hpInput').value, 10) || 0
+    applyHpChange(input)
+    document.getElementById('hpInput').value = ''
+  })
+
+  document.getElementById('damageBtn').addEventListener('click', () => {
+    const input = parseInt(document.getElementById('hpInput').value, 10) || 0
+    applyHpChange(-input)
+    document.getElementById('hpInput').value = ''
+  })
+
+  // Max Health
+  document.getElementById('maxHp').addEventListener('click', () => {
+    document.getElementById('maxHealthModal').classList.remove('hidden')
+  })
+
+  document.getElementById('saveMaxHealth').addEventListener('click', () => {
+    const newMax = parseInt(document.getElementById('maxHealthInput').value, 10)
+    if (!isNaN(newMax)) {
+      updateMaxHealth(newMax)
+      document.getElementById('maxHealthInput').value = ''
+    }
+  })
+
+  document
+    .getElementById('closeMaxHealthModal')
+    .addEventListener('click', () => {
+      document.getElementById('maxHealthModal').classList.add('hidden')
+    })
+
+  // #endregion
+}
+
+function showError (message) {
+  const errorEl = document.createElement('div')
+  errorEl.textContent = message
+  errorEl.classList.add('error-message')
+  document.body.appendChild(errorEl)
+}
+//#endregion

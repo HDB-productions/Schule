@@ -7,6 +7,15 @@ body {
   font-family: sans-serif;
 }
 
+/* CSS Anpassungen */
+
+/* Header-Anpassung für fließende Größe */
+.app-header {
+  flex-wrap: wrap;
+  min-height: 60px;
+  transition: min-height 0.3s ease;
+}
+
 .page-section {
   display: none;
 }
@@ -32,9 +41,6 @@ body {
 .header-right {
   display: flex;
   align-items: center;
-}
-
-.header-center {
   flex-direction: column;
 }
 
@@ -158,14 +164,6 @@ body {
 button {
   cursor: pointer;
   font: inherit;
-}
-.btn-home,
-.btn-menu {
-  background: none;
-  border: none;
-  color: #f2c94c;
-  font-size: 1.5rem;
-  padding: 0.5rem;
 }
 
 /************************************************
@@ -341,6 +339,38 @@ button {
   color: #f2c94c;
 }
 #charDropdown li:hover {
+  text-decoration: underline;
+}
+
+.btn-menu {
+  background: none;
+  border: none;
+  color: #f2c94c;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+
+/* Dropdown (home-Auswahl) */
+#homeDropdown {
+  position: absolute;
+  background-color: #444;
+  border: 1px solid #555;
+  padding: 0.5rem;
+  min-width: 120px;
+  z-index: 1001; /* Sicherstellen, dass Dropdown über anderen Elementen liegt */
+}
+#homeDropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#homeDropdown li {
+  list-style: none;
+  margin: 0.3rem 0;
+  cursor: pointer;
+  color: #f2c94c;
+}
+#homeDropdown li:hover {
   text-decoration: underline;
 }
 

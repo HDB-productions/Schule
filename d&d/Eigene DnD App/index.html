@@ -15,7 +15,15 @@
     <!-- #region Header -->
     <header class="app-header">
       <div class="header-left">
-        <button class="btn-home">Home</button>
+        <div class="home-dropdown">
+          <h1 id="Home" style="cursor: pointer">Home</h1>
+          <div id="homeDropdown" class="hidden">
+            <ul id="homeList">
+              <li>Spieler</li>
+              <li>Rest</li>
+            </ul>
+          </div>
+        </div>
       </div>
       <div class="header-center">
         <h1 id="charName" style="cursor: pointer">NamePlaceholder</h1>
@@ -94,7 +102,7 @@
           </section>
         </details>
 
-        <!-- Vorlage für eine Bedingung -->
+        <!-- Vorlage für Zustände -->
         <template id="condition-template">
           <div class="condition-box">
             <input type="checkbox" id="" />
