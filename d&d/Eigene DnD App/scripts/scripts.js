@@ -7,9 +7,9 @@ let activeCharacter = null // Enthält den aktuell ausgewählten Charakter (glob
 const JSON_URLS = [
   // Liste der zu ladenden JSON-Dateien (Reihenfolge ist wichtig, untere überschreiben obere, wenn Schlüssel gleich)
   'data/DnDKalender.json',
-  'data/Zustände/Zustände.json',
-  'data/Charaktäre/Spieler/Diundriel.json',
-  'data/Charaktäre/Spieler/test.json'
+  'data/Zustaende/Zustaende.json',
+  'data/Charaktaere/Spieler/Diundriel.json',
+  'data/Charaktaere/Spieler/test.json'
   // Weitere Dateien können hier hinzugefügt werden
 ]
 
@@ -173,8 +173,8 @@ function loadPortrait () {
 
   // Cache-Busting und Pfadkorrektur
   const timestamp = new Date().getTime()
-  const imagePath = `data/Charaktäre/Spieler/${activeCharacter}.jpg?t=${timestamp}`
-  const fallbackPath = 'data/Charaktäre/Spieler/NoIMG.png'
+  const imagePath = `data/Charaktaere/Spieler/${activeCharacter}.jpg?t=${timestamp}`
+  const fallbackPath = 'data/Charaktaere/Spieler/NoIMG.png'
 
   // Sofortiges Zurücksetzen mit Loading-State
   portraitImg.classList.add('portrait-loading')
