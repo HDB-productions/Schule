@@ -1,5 +1,3 @@
-//todo: die attributsmods müssen gesichert werden, wenn sie durch gegenstände verändert werden damit andere funktionen sie auslesen können (zb für den ac wert)
-
 //#region JSON-Laden, mergen und in AllDataGlobal speichern
 let allDataGlobal = null // Enthält alle geladenen JSON-Daten (globaler Zugriff)
 let activeCharacter = null // Enthält den aktuell ausgewählten Charakter (globaler Zugriff)
@@ -9,7 +7,8 @@ const JSON_URLS = [
   'data/DnDKalender.json',
   'data/Zustaende/Zustaende.json',
   'data/Charaktaere/Spieler/Diundriel.json',
-  'data/Charaktaere/Spieler/test.json'
+  'data/Charaktaere/Spieler/test.json',
+  'data/Skills/Skills.json'
   // Weitere Dateien können hier hinzugefügt werden
 ]
 
@@ -148,6 +147,7 @@ function fillCharacterList () {
 //#endregion
 
 //#region Daten Laden
+//#region Charakterdaten Header und Metadaten Laden
 const attributeMapping = [
   { name: 'Stärke', idPrefix: 'ST' },
   { name: 'Geschicklichkeit', idPrefix: 'GE' },
@@ -165,6 +165,7 @@ function loadCharacterData () {
   loadHealthData(charData)
   loadAttributes(charData)
   initializeConditions(charData.Zustände)
+  loadProficiency(charData)
   loadPortrait()
 }
 function loadPortrait () {
@@ -229,7 +230,8 @@ function loadKlasse (charData) {
     'charClass'
   ).textContent = `${klasse[0]} Lvl ${klasse[1]}`
 }
-
+//#endregion
+//#region Leben Laden
 function loadHealthData (charData) {
   const hpData = charData['Leben und HD'].Leben
   const hdData = charData['Leben und HD'].HD
@@ -253,29 +255,38 @@ function loadHitDice (current, max, diceArt) {
   document.getElementById('hitDiceMax').textContent = max
   document.getElementById('hitDiceArt').textContent = diceArt
 }
-
+//#endregion
+//#region Attribute Laden
 function loadAttributes (charData) {
   const attrData = charData.Attribute
-  const itemBonuses = getEquipmentAttributeBonuses(charData)
+  const ausrüstungsBoni = loadEquipmentAttributeBonuses(charData)
 
   attributeMapping.forEach(map => {
-    const base = attrData[map.name]?.Wert || 0
-    const temp = attrData[map.name]?.['Temp Mod'] || 0
-    const equipBonus = itemBonuses[map.name] || 0
+    const attrName = map.name
+    const attribut = (attrData[attrName] = attrData[attrName] || {})
 
-    const finalVal = base + temp + equipBonus
-    const bonus = Math.floor((finalVal - 10) / 2)
+    // Basiswerte
+    const basisWert = attribut.Wert || 0
+    const tempMod = attribut['Temp Mod'] || 0
+    const ausrüstungMod = ausrüstungsBoni[attrName] || 0
 
-    document.getElementById(`${map.idPrefix}-wert`).textContent = finalVal
+    // Gesamtberechnung
+    attribut.GesamtWert = basisWert + tempMod + ausrüstungMod
+    attribut.GesamtMod = Math.floor((attribut.GesamtWert - 10) / 2)
+
+    // UI Update
+    document.getElementById(`${map.idPrefix}-wert`).textContent =
+      attribut.GesamtWert
     document.getElementById(`${map.idPrefix}-bonus`).textContent =
-      (bonus >= 0 ? '+' : '') + bonus
+      (attribut.GesamtMod >= 0 ? '+' : '') + attribut.GesamtMod
   })
-  const acValue = calculateArmorClass(charData)
-  document.getElementById('AC-value').textContent = acValue
+
+  document.getElementById('AC-value').textContent =
+    calculateArmorClass(charData)
 }
 
-function getEquipmentAttributeBonuses (charData) {
-  const bonusSum = {
+function loadEquipmentAttributeBonuses (charData) {
+  const bonusMap = {
     Stärke: 0,
     Geschicklichkeit: 0,
     Konstitution: 0,
@@ -284,108 +295,160 @@ function getEquipmentAttributeBonuses (charData) {
     Charisma: 0
   }
 
-  const processItem = item => {
-    // Verarbeite den Gegenstand selbst
+  const processItem = (item, parent = null) => {
     if (item.equipped && item.gegenstandsTyp?.Magisch) {
       const magisch = item.gegenstandsTyp.Magisch
-      const requiresAttune = magisch.erfordertEinstimmung || false
-      const isAttuned = magisch.eingestimmt || false
+      const istAktiv = !magisch.erfordertEinstimmung || magisch.eingestimmt
 
-      if (!requiresAttune || isAttuned) {
-        const processMods = mods => {
-          if (Array.isArray(mods)) {
-            mods.forEach(mod => {
-              Object.entries(mod).forEach(([attr, value]) => {
-                const val = parseInt(value, 10) || 0
-                if (bonusSum.hasOwnProperty(attr)) {
-                  bonusSum[attr] += val
-                }
-              })
-            })
-          } else if (typeof mods === 'object') {
-            Object.entries(mods).forEach(([attr, value]) => {
-              const val = parseInt(value, 10) || 0
-              if (bonusSum.hasOwnProperty(attr)) {
-                bonusSum[attr] += val
+      if (istAktiv) {
+        const addBonus = (mod, typ) => {
+          Object.entries(mod).forEach(([attr, wert]) => {
+            if (bonusMap[attr] !== undefined) {
+              const numWert = parseInt(wert, 10) || 0
+              bonusMap[attr] += numWert
+
+              // Tracke Quelle
+              charData.Attribute[attr] = charData.Attribute[attr] || {}
+              charData.Attribute[attr].Ausruestungsboni = {
+                total: bonusMap[attr],
+                sources: [
+                  ...(charData.Attribute[attr].Ausruestungsboni?.sources || []),
+                  {
+                    gegenstand: item.name,
+                    wert: numWert,
+                    typ,
+                    container: parent?.name
+                  }
+                ]
               }
-            })
-          }
+            }
+          })
         }
 
-        processMods(magisch.modifikatoren)
-        processMods(magisch['passive modifikatoren'])
+        // Verarbeite beide Mod-Typen
+        if (magisch.modifikatoren) {
+          const mods = Array.isArray(magisch.modifikatoren)
+            ? magisch.modifikatoren
+            : [magisch.modifikatoren]
+          mods.forEach(mod => addBonus(mod, 'aktiv'))
+        }
+
+        if (magisch['passive modifikatoren']) {
+          const passivMods = Array.isArray(magisch['passive modifikatoren'])
+            ? magisch['passive modifikatoren']
+            : [magisch['passive modifikatoren']]
+          passivMods.forEach(mod => addBonus(mod, 'passiv'))
+        }
       }
     }
 
-    // Rekursive Verarbeitung von Containern
-    const processContainer = container => {
-      if (Array.isArray(container)) {
-        container.forEach(subItem => {
-          // Prüfe ob Untergegenstand ausgerüstet ist
-          if (subItem.equipped) {
-            processItem(subItem)
+    // Rekursive Container-Verarbeitung
+    const processContainer = (container, parentItem) => {
+      container?.forEach(subItem => {
+        if (subItem.equipped) {
+          processItem(subItem, parentItem)
+          if (subItem.gegenstandsTyp?.Behälter?.container) {
+            processContainer(subItem.gegenstandsTyp.Behälter.container, subItem)
+          }
+        }
+      })
+    }
 
-            // Rekursion für verschachtelte Container
-            if (subItem.gegenstandsTyp?.Behälter?.container) {
-              processContainer(subItem.gegenstandsTyp.Behälter.container)
-            }
+    processContainer(item.gegenstandsTyp?.Behälter?.container, item)
+  }
+
+  charData.Gegenstände?.forEach(processItem)
+  return bonusMap
+}
+//#endregion
+//#region Rüstungsklasse Berechnung
+function loadEquipmentArmorBonuses (charData) {
+  // Initialisiere Rüstungsobjekt
+  charData.Rüstung = charData.Rüstung || {
+    Basis: 10,
+    RC: 0,
+    maxDexBonus: Infinity,
+    Boni: {
+      total: 0,
+      sources: []
+    }
+  }
+
+  // Reset-Werte
+  charData.Rüstung.RC = 0
+  charData.Rüstung.maxDexBonus = Infinity
+  charData.Rüstung.Boni.total = 0
+  charData.Rüstung.Boni.sources = []
+
+  // Durchsuche Ausrüstung
+  charData.Gegenstände?.forEach(item => {
+    if (item.equipped) {
+      // Rüstungswerte
+      if (item.gegenstandsTyp?.Rüstung) {
+        const rüstung = item.gegenstandsTyp.Rüstung
+
+        // Basis RC
+        const rcWert = parseInt(rüstung.RC.replace(/[^0-9-]/g, ''), 10) || 0
+        charData.Rüstung.RC += rcWert
+
+        // Max Dex
+        if (rüstung.maxDexBonus !== undefined) {
+          charData.Rüstung.maxDexBonus = Math.min(
+            charData.Rüstung.maxDexBonus,
+            rüstung.maxDexBonus
+          )
+        }
+      }
+
+      // Magische Boni
+      if (item.gegenstandsTyp?.Magisch) {
+        const magisch = item.gegenstandsTyp.Magisch
+        const mods = magisch.modifikatoren || []
+
+        mods.forEach(mod => {
+          if (mod.Rüstung) {
+            const bonus = parseInt(mod.Rüstung, 10) || 0
+            charData.Rüstung.Boni.total += bonus
+            charData.Rüstung.Boni.sources.push({
+              gegenstand: item.name,
+              wert: bonus,
+              typ: 'magisch'
+            })
           }
         })
       }
     }
-
-    // Verarbeite alle Containertypen
-    if (item.gegenstandsTyp?.Behälter?.container) {
-      processContainer(item.gegenstandsTyp.Behälter.container)
-    }
-  }
-
-  // Starte die Verarbeitung mit den Hauptgegenständen
-  const items = charData.Gegenstände || []
-  items.forEach(item => processItem(item))
-
-  return bonusSum
+  })
 }
 
-//#region Rüstungsklasse Berechnung
 function calculateArmorClass (charData) {
-  const baseAC = 10
-  let armorAC = 0
-  let maxDexBonus = Infinity
-  let hasArmor = false
+  loadEquipmentArmorBonuses(charData)
 
-  // Durchsuche alle Gegenstände nach Rüstungen
-  const items = charData.Gegenstände || []
-  items.forEach(item => {
-    if (item.equipped && item.gegenstandsTyp?.Rüstung) {
-      const rüstung = item.gegenstandsTyp.Rüstung
+  // Berechnungskomponenten
+  const rüstung = charData.Rüstung
+  const geschickMod = charData.Attribute.Geschicklichkeit.GesamtMod
 
-      // Extrahiere numerischen AC-Wert (z.B. "+8" → 8)
-      armorAC += parseInt(rüstung.RC.replace(/[^0-9-]/g, ''), 10) || 0
+  // Max Dex Bonus begrenzen
+  const finalDexBonus =
+    rüstung.maxDexBonus !== Infinity
+      ? Math.min(geschickMod, rüstung.maxDexBonus)
+      : geschickMod
 
-      // Setze maximalen Dex-Bonus
-      if (rüstung.maxDexBonus !== undefined) {
-        maxDexBonus = Math.min(maxDexBonus, rüstung.maxDexBonus)
-        hasArmor = true
-      }
-    }
-  })
+  // Gesamt AC berechnen
+  const gesamtAC =
+    rüstung.Basis + rüstung.RC + rüstung.Boni.total + finalDexBonus
 
-  // Berechne Geschicklichkeitsbonus
-  const dexValue =
-    charData.Attribute.Geschicklichkeit.Wert +
-    (charData.Attribute.Geschicklichkeit['Temp Mod'] || 0)
-  const dexBonus = Math.floor((dexValue - 10) / 2)
+  // Speichere Wert für weitere Berechnungen
+  charData.AC = gesamtAC
 
-  // Begrenze Bonus bei Rüstung
-  const finalDexBonus = hasArmor ? Math.min(dexBonus, maxDexBonus) : dexBonus
+  // UI Update
+  document.getElementById('AC-value').textContent = gesamtAC
 
-  // Gesamt-AC berechnen
-  return baseAC + armorAC + finalDexBonus
+  return gesamtAC
 }
 
 //#endregion
-
+//#region Zustände Laden
 function initializeConditions (charZuständeArray) {
   const activeContainer = document.getElementById('active-conditions')
   const inactiveContainer = document.getElementById('inactive-conditions')
@@ -424,7 +487,7 @@ function initializeConditions (charZuständeArray) {
       } else if (!checkbox.checked && index > -1) {
         charZuständeArray.splice(index, 1)
       }
-      saveCharacterData()
+      loadCharacterData()
     })
 
     // Füge in den richtigen Container ein
@@ -436,13 +499,53 @@ function initializeConditions (charZuständeArray) {
   })
 }
 //#endregion
-
-//#region Update
-function saveCharacterData () {
-  loadCharacterData()
+//#region Fähigkeiten (Proficiency)Laden
+function calculateProficiency (level) {
+  return Math.floor((level + 3) / 4) + 1
 }
 
-function applyHpChange (change) {
+function loadProficiency (charData) {
+  const level = Object.values(charData.Klasse)[0] // Annahme: { "Paladin": 8 }
+  const base = calculateProficiency(level)
+
+  charData.Proficiency = charData.Proficiency || {
+    Basis: { Wert: base, Berechnung: `Math.floor((${level} + 3) / 4) + 1` },
+    Ausrüstungsboni: { total: 0, sources: [] },
+    Gesamt: base
+  }
+
+  // Equipment-Boni berechnen
+  let equipmentBonus = 0
+  charData.Gegenstände?.forEach(item => {
+    if (
+      item.equipped &&
+      item.gegenstandsTyp?.Magisch?.modifikatoren?.Proficiency
+    ) {
+      const bonus = parseInt(
+        item.gegenstandsTyp.Magisch.modifikatoren.Proficiency,
+        10
+      )
+      equipmentBonus += bonus
+      charData.Proficiency.Ausrüstungsboni.sources.push({
+        gegenstand: item.name,
+        wert: bonus,
+        typ: item.gegenstandsTyp.Magisch.erfordertEinstimmung
+          ? 'aktiv'
+          : 'passiv'
+      })
+    }
+  })
+
+  charData.Proficiency.Ausrüstungsboni.total = equipmentBonus
+  charData.Proficiency.Gesamt = base + equipmentBonus
+}
+
+//#endregion
+
+//#endregion
+
+//#region Update
+function updateHP (change) {
   const charData = getCurrentCharacterData()
   if (!charData) return
 
@@ -451,24 +554,22 @@ function applyHpChange (change) {
     0,
     Math.min(hpData.Wert + change, hpData.Max + (hpData['Temp Bonus'] || 0))
   )
-  saveCharacterData()
+  loadCharacterData()
 }
-
 function updateMaxHealth (newMax) {
   const charData = getCurrentCharacterData()
   if (!charData) return
-
   charData['Leben und HD'].Leben.Max = newMax
   charData['Leben und HD'].Leben.Wert = Math.min(
     charData['Leben und HD'].Leben.Wert,
     newMax
   )
-  saveCharacterData()
+  loadCharacterData()
 }
 //#endregion
 
 //#region Kontrolle
-
+//#region Event-Listener und Seiteninizialisierung
 document.addEventListener('DOMContentLoaded', () => {
   // Warte bis die Seite geladen ist
   initializeData() // Initialisiere die Anwendung
@@ -476,7 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 function setupEventListeners () {
-  // Tab-Navigation
+  //#region Tab-Navigation footer
   document.querySelectorAll('.nav-btn').forEach(button => {
     button.addEventListener('click', function () {
       document
@@ -488,16 +589,17 @@ function setupEventListeners () {
       document.getElementById(this.dataset.tab).classList.add('active')
     })
   })
-
-  // Charakterauswahl
+  //#endregion
+  // #region Charakterauswahl
   document.getElementById('charName').addEventListener('click', () => {
     document.getElementById('charDropdown').classList.toggle('hidden')
   })
-
+  //#endregion
+  // #region header
   document.getElementById('Home').addEventListener('click', () => {
     document.getElementById('homeDropdown').classList.toggle('hidden')
   })
-
+  //#endregion
   // #region HP Management listeners
   document.getElementById('currentHp').addEventListener('click', () => {
     document.getElementById('hpManagementModal').classList.remove('hidden')
@@ -511,13 +613,13 @@ function setupEventListeners () {
 
   document.getElementById('healingBtn').addEventListener('click', () => {
     const input = parseInt(document.getElementById('hpInput').value, 10) || 0
-    applyHpChange(input)
+    updateHP(input)
     document.getElementById('hpInput').value = ''
   })
 
   document.getElementById('damageBtn').addEventListener('click', () => {
     const input = parseInt(document.getElementById('hpInput').value, 10) || 0
-    applyHpChange(-input)
+    updateHP(-input)
     document.getElementById('hpInput').value = ''
   })
 
@@ -525,15 +627,7 @@ function setupEventListeners () {
   document.getElementById('maxHp').addEventListener('click', () => {
     document.getElementById('maxHealthModal').classList.remove('hidden')
   })
-  /* muss noch entwickelt werden
-  document.getElementById('saveMaxHealth').addEventListener('click', () => {
-    const newMax = parseInt(document.getElementById('maxHealthInput').value, 10)
-    if (!isNaN(newMax)) {
-      updateMaxHealth(newMax)
-      document.getElementById('maxHealthInput').value = ''
-    }
-  })
-*/
+
   document
     .getElementById('closeMaxHealthModal')
     .addEventListener('click', () => {
@@ -548,5 +642,97 @@ function showError (message) {
   errorEl.textContent = message
   errorEl.classList.add('error-message')
   document.body.appendChild(errorEl)
+}
+
+//#endregion
+//#region JSON-Ansicht Funktionen, die AlldataGlobal anzeigen wenn Home-> Rest gewählt wird
+
+function showJsonView () {
+  // Verstecke Hauptinhalt
+  document.querySelector('main').classList.add('hidden')
+  document.querySelector('.bottom-nav').classList.add('hidden')
+
+  // Erstelle Container
+  const container = document.createElement('div')
+  container.id = 'jsonView'
+  document.body.appendChild(container)
+  // JSON-Baum erstellen
+  createUniversalJsonView(container, allDataGlobal)
+}
+
+function createUniversalJsonView (container, data, depth = 0) {
+  const createCollapsible = (content, isCollapsible) => {
+    const wrapper = document.createElement('div')
+    wrapper.className = 'json-item'
+    wrapper.style.marginLeft = `${depth * 15}px`
+
+    if (isCollapsible) {
+      const header = document.createElement('div')
+      header.className = 'json-header'
+      header.innerHTML = '<span class="toggle">▶</span>'
+
+      const contentWrapper = document.createElement('div')
+      contentWrapper.className = 'json-content'
+      contentWrapper.style.display = 'none'
+
+      header.addEventListener('click', () => {
+        const isHidden = contentWrapper.style.display === 'none'
+        contentWrapper.style.display = isHidden ? 'block' : 'none'
+        header.querySelector('.toggle').textContent = isHidden ? '▼' : '▶'
+      })
+
+      wrapper.appendChild(header)
+      wrapper.appendChild(contentWrapper)
+      header.appendChild(content)
+      return { wrapper, content: contentWrapper }
+    }
+
+    wrapper.appendChild(content)
+    return { wrapper, content: wrapper }
+  }
+
+  if (typeof data === 'object' && data !== null) {
+    const isArray = Array.isArray(data)
+    const typeIndicator = document.createTextNode(isArray ? '[ ' : '{ ')
+    const typeEnd = document.createTextNode(isArray ? ' ]' : ' }')
+
+    const { wrapper, content } = createCollapsible(typeIndicator, true)
+
+    const entries = isArray ? data : Object.entries(data)
+
+    entries.forEach((item, index) => {
+      const key = isArray ? index : item[0]
+      const value = isArray ? item : item[1]
+
+      const entryDiv = document.createElement('div')
+      entryDiv.className = 'json-entry'
+
+      if (!isArray) {
+        const keyElement = document.createElement('span')
+        keyElement.className = 'json-key'
+        keyElement.textContent = `"${key}": `
+        entryDiv.appendChild(keyElement)
+      }
+
+      createUniversalJsonView(entryDiv, value, depth + 1)
+      content.appendChild(entryDiv)
+    })
+
+    content.appendChild(typeEnd)
+    container.appendChild(wrapper)
+  } else {
+    const valueElement = document.createElement('span')
+    valueElement.className = 'json-value'
+    valueElement.textContent = typeof data === 'string' ? `"${data}"` : data
+    container.appendChild(valueElement)
+  }
+}
+
+function showCharacterView () {
+  document.getElementById('homeDropdown').classList.add('hidden')
+  document.querySelector('main').classList.remove('hidden')
+  document.querySelector('.bottom-nav').classList.remove('hidden')
+  const jsonView = document.getElementById('jsonView')
+  if (jsonView) jsonView.remove()
 }
 //#endregion

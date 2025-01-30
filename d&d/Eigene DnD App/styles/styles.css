@@ -1,4 +1,36 @@
 html,
+.json-header {
+  cursor: pointer;
+  display: inline-block;
+  padding: 2px 5px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  margin: 2px 0;
+}
+
+.json-header:hover {
+  background: #e0e0e0;
+}
+
+.toggle {
+  display: inline-block;
+  width: 15px;
+  font-size: 0.8em;
+  color: #444;
+}
+
+.json-content {
+  margin-left: 20px;
+  border-left: 1px dotted #ddd;
+  padding-left: 10px;
+  background: #444;
+  color: #f2c94c;
+}
+
+.json-key {
+  font-weight: bold;
+}
+
 body {
   margin: 0;
   padding: 0;

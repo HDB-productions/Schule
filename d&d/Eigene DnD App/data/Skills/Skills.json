@@ -1,0 +1,76 @@
+{
+  "Skills": {
+    "Athletik": {
+      "Beschreibung": "Umfasst körperliche Aktivitäten wie Klettern, Springen und Schwimmen. Beispiele: Eine steile Klippe erklimmen, über eine Schlucht springen, gegen eine Strömung anschwimmen.",
+      "Attribut": "ST"
+    },
+    "Akrobatik": {
+      "Beschreibung": "Geschickliche Körperbeherrschung für Balanceakte, Stürze und artistische Manöver. Beispiele: Über einen Seilgang balancieren, einem Angriff ausweichen, Saltos schlagen.",
+      "Attribut": "GE"
+    },
+    "Fingerfertigkeit": {
+      "Beschreibung": "Manuelle Geschicklichkeit für Handarbeiten und Taschenspielertricks. Beispiele: Schlösser knacken, Gegenstände stehlen, Fallen entschärfen.",
+      "Attribut": "GE"
+    },
+    "Heimlichkeit": {
+      "Beschreibung": "Lautlose Bewegung und Tarnung. Beispiele: An Wachen vorbeischleichen, im Schatten verstecken, Geräusche maskieren.",
+      "Attribut": "GE"
+    },
+    "Arkane Kunde": {
+      "Beschreibung": "Wissen über magische Theorien, Zauberformeln und esoterische Symbole. Beispiele: Magische Gegenstände identifizieren, Dämonenbeschwörungen erkennen, Zauberrollen entziffern.",
+      "Attribut": "IN"
+    },
+    "Geschichte": {
+      "Beschreibung": "Kenntnis historischer Ereignisse, legendärer Personen und antiker Reiche. Beispiele: Wappenkunde, Entziffern alter Schriften, Ruinen zuordnen.",
+      "Attribut": "IN"
+    },
+    "Nachforschungen": {
+      "Beschreibung": "Systematisches Analysieren und Deduzieren von Informationen. Beispiele: Geheimtüren finden, Rätsel lösen, Fälschungen erkennen.",
+      "Attribut": "IN"
+    },
+    "Naturkunde": {
+      "Beschreibung": "Wissen über Ökosysteme, Tierarten und Wetterphänomene. Beispiele: Giftpflanzen identifizieren, Tierfährten lesen, Stürme vorhersagen.",
+      "Attribut": "IN"
+    },
+    "Religion": {
+      "Beschreibung": "Kenntnis religiöser Rituale, göttlicher Hierarchien und kirchlicher Strukturen. Beispiele: Kleriker-Orden unterscheiden, Dämonennamen kennen, Reliquien zuordnen.",
+      "Attribut": "IN"
+    },
+    "Heilkunde": {
+      "Beschreibung": "Medizinisches Wissen zur Wundversorgung und Diagnose. Beispiele: Krankheitssymptome deuten, Verletzungen stabilisieren, Heilkräuter anwenden.",
+      "Attribut": "WE"
+    },
+    "Mit Tieren umgehen": {
+      "Beschreibung": "Fähigkeit Tiere zu beruhigen, auszubilden oder zu kontrollieren. Beispiele: Pferde zähmen, Wölfe besänftigen, Falken abrichten.",
+      "Attribut": "WE"
+    },
+    "Motiv erkennen": {
+      "Beschreibung": "Einschätzen von Absichten und emotionalen Zuständen. Beispiele: Lügen entlarven, versteckte Agenden erkennen, psychologische Schwächen finden.",
+      "Attribut": "WE"
+    },
+    "Überlebenskunst": {
+      "Beschreibung": "Wildnisfertigkeiten für Nahrungssuche und Orientierung. Beispiele: Trinkwasser finden, Wetterzeichen deuten, natürliche Unterkünfte bauen.",
+      "Attribut": "WE"
+    },
+    "Wahrnehmung": {
+      "Beschreibung": "Aufmerksamkeit für verborgene Details und Umgebungsgeräusche. Beispiele: versteckte Fallen bemerken, leises Flüstern hören, Bewegungen im Augenwinkel erfassen.",
+      "Attribut": "WE"
+    },
+    "Auftreten": {
+      "Beschreibung": "Künstlerische Darbietungen zur Unterhaltung des Publikums. Beispiele: Instrument spielen, Theaterrolle verkörpern, epische Balladen rezitieren.",
+      "Attribut": "CH"
+    },
+    "Einschüchtern": {
+      "Beschreibung": "Durch Drohungen und psychologischen Druck Ziele erreichen. Beispiele: Geständnisse erzwingen, Wachen verunsichern, Rivalen demütigen.",
+      "Attribut": "CH"
+    },
+    "Täuschen": {
+      "Beschreibung": "Vortäuschen falscher Tatsachen und Irreführung. Beispiele: Falsche Identitäten annehmen, Ablenkungsmanöver kreieren, Verhöre überstehen.",
+      "Attribut": "CH"
+    },
+    "Überzeugen": {
+      "Beschreibung": "Diplomatische Einflussnahme durch Argumentation und Charme. Beispiele: Verhandlungen führen, Streit schlichten, Behörden beeinflussen.",
+      "Attribut": "CH"
+    }
+  }
+}

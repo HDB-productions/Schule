@@ -75,6 +75,11 @@
             "Rettungswurfbonus": "na"
           }
         },
+        "Skills": {
+          "Athletik": {
+            "Modifikatoren": { "Pref": 1, "Trainig": "+2" }
+          }
+        },
         "Fertigkeitenboni": {},
 
         "Gegenstände": [
@@ -347,13 +352,13 @@
             "seltenheit": "Legendary",
             "gegenstandsTyp": {
               "Rüstung": {
-                "RC": "+8",
+                "RC": "+5",
                 "Rüstungstyp": "Schwer",
                 "Nachteil beim Schleichen": true,
                 "maxDexBonus": 2
               },
               "Magisch": {
-                "modifikatoren": [],
+                "modifikatoren": [{ "Rüstung": "+3" }],
                 "erfordertEinstimmung": false
               }
             }
