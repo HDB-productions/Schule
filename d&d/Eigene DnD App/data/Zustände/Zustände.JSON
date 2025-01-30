@@ -27,6 +27,7 @@
       "Modifikationen": {}
     },
     "Verängstigt": {
+      "Name": "Verängstigt (Frightened)",
       "Beschreibung": "Eine verängstigte Kreatur hat Nachteil auf Fähigkeitsproben und Angriffsproben, solange die Quelle ihrer Angst in Sichtweite ist.",
       "Modifikationen": {
         "Bewegung": "Die Kreatur kann sich nicht freiwillig der Quelle ihrer Angst nähern."
@@ -34,7 +35,7 @@
     },
     "Gepackt": {
       "Name": "Gepackt (Grappled)",
-      "Beschreibung": "Eine gepackte Kreatur hat eine Geschwindigkeit von 0 und kann keinen Bonus auf ihre Geschwindigkeit erhalten. Du hast nachteil auf Angriffsproben gegen alle Ziele außer dem Packer. Der Packende kann den Gepackten mit sich bewegen, die Bewegungskosten sind allerdings verdoppelt",
+      "Beschreibung": "Eine gepackte Kreatur hat eine Geschwindigkeit von 0 und kann keinen Bonus auf ihre Geschwindigkeit erhalten. Du hast nachteil auf Angriffsproben gegen alle Ziele außer dem Packer. Der Packende kann den Gepackten mit sich bewegen, die Bewegungskosten sind allerdings verdoppelt.",
       "Modifikationen": {
         "Ende des Zustands": "Eine Gepackte Kreatur kann seine Aktion nutzen um sich zu befreien, dafür macht es einen Stärke oder Geschicklichkeits check gegen die DC des Griffes bzw gegen einen Stärkewurf des Greifers. Der Zustand endet, wenn der Packer handlungsunfähig wird oder die Kreatur aus der Reichweite des Packers entfernt wird."
       }
@@ -66,7 +67,7 @@
     },
     "Versteinert": {
       "Name": "Versteinert (Petrified)",
-      "Beschreibung": "Eine versteinerte Kreatur ist zusammen mit allen nichtmagischen Gegenständen die sie trägt in einen festen, leblosen Stoff (meist Stein) verwandelt und ist Handlungsunfähig. Geschwindigkeit 0 ",
+      "Beschreibung": "Eine versteinerte Kreatur ist zusammen mit allen nichtmagischen Gegenständen die sie trägt in einen festen, leblosen Stoff (meist Stein) verwandelt und ist Handlungsunfähig. Geschwindigkeit 0",
       "Modifikationen": {
         "Eigenschaften": {
           "Gewicht": "Verzehnfacht",
@@ -132,7 +133,7 @@
         }
       }
     },
-    "Sterbend:": {
+    "Sterbend": {
       "Name": "Sterbend (Dying)",
       "Beschreibung": "Wenn eine Kreatur auf 0 Lebenspunkte fällt, stirbt sie entweder sofort oder wird bewusstlos. Eine Kreatur stirbt sofort, wenn: 1) Ihr TP-Maximum auf 0 reduziert wird. 2) Wenn nach dem erreichen von 0 TP noch Schaden übrigbleibt der das TP-Maximum des sterbenden erreicht oder übersteigt. Fällst du auf 0 TP, stirbst aber nicht sofort, erhältst du den Bewusstlosigkeits-Zustand, bis du TP zurückerlangst. Zudem musst du nun Todesrettungswürfe machen. Wenn du deinen Zug mit 0 TP beginnst, musst du einen Todesrettungswurf machen, um zu entscheiden, ob du dem Tod näher kommst oder dich ans Leben klammerst. Dieser Wurf ist nicht an einen Attributswert gebunden. Würfle 1W20. Bei 10 oder höher gilt der Wurf als Erfolg, sonst als Fehlschlag. Drei Erfolge machen dich Stabil, drei Fehlschläge führen zum Tod. Erfolge und Fehlschläge müssen nicht aufeinanderfolgen. Erleidest du Schaden bei 0 TP, erhältst du einen Fehlschlag. Bei einem kritischen Treffer sind es zwei Fehlschläge. Übersteigt der Schaden dein TP-Maximum, stirbst du sofort. Mit der Hilfe-Aktion kannst du, eine bewusstlose Kreatur stabilisieren, indem du eine erfolgreiche Weisheit (Medizin)-Probe (SG 10) machst. Stabile Kreaturen müssen keine Todesrettungswürfe machen, bleiben aber bewusstlos. Bei erneutem Schaden beginnen die Würfe wieder. Ohne Heilung erlangt eine stabile Kreatur nach 1W4 Stunden 1 TP zurück."
     }

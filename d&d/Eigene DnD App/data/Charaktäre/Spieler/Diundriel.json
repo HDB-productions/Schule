@@ -30,20 +30,7 @@
             "Maximal": 8
           }
         },
-        "Zustände": {
-          "Blind": true,
-          "Betäubt": true,
-          "Erschöpft": true,
-          "Furcht": true,
-          "Gelähmt": false,
-          "Gift": false,
-          "Krankheit": false,
-          "Paralysiert": false,
-          "Petrifiziert": false,
-          "Taumelnd": false,
-          "Überwältigt": false,
-          "Verwirrt": false
-        },
+        "Zustände": [],
         "Attribute": {
           "Stärke": {
             "Abkürzung": "ST",
@@ -360,7 +347,7 @@
             "seltenheit": "Legendary",
             "gegenstandsTyp": {
               "Rüstung": {
-                "AC": 18,
+                "RC": "+8",
                 "Rüstungstyp": "Schwer",
                 "Nachteil beim Schleichen": true,
                 "maxDexBonus": 2

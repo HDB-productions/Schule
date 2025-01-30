@@ -798,63 +798,7 @@
       }
     }
   },
-  "Zustände": {
-    "Blind": {
-      "Beschreibung": "Der Charakter kann nicht sehen.",
-      "modifikatoren": {
-        "Stärke": 0,
-        "Geschicklichkeit": -2,
-        "Konstitution": 0,
-        "Intelligenz": 0,
-        "Weisheit": 0,
-        "Charisma": 0
-      }
-    },
-    "Betäubt": {
-      "Beschreibung": "Der Charakter ist betäubt und kann keine Aktionen durchführen.",
-      "modifikatoren": {
-        "Stärke": 0,
-        "Geschicklichkeit": 0,
-        "Konstitution": 0,
-        "Intelligenz": 0,
-        "Weisheit": 0,
-        "Charisma": 0
-      }
-    },
-    "Erschöpft": {
-      "Beschreibung": "Der Charakter ist erschöpft und hat einen Malus auf alle Würfe.",
-      "modifikatoren": {
-        "Stärke": -2,
-        "Geschicklichkeit": -2,
-        "Konstitution": -2,
-        "Intelligenz": -2,
-        "Weisheit": -2,
-        "Charisma": -2
-      }
-    },
-    "Liegend": {
-      "Beschreibung": "Der Charakter liegt am Boden und kann sich nicht bewegen.",
-      "modifikatoren": {
-        "Stärke": 0,
-        "Geschicklichkeit": -4,
-        "Konstitution": 0,
-        "Intelligenz": 0,
-        "Weisheit": 0,
-        "Charisma": 0
-      }
-    },
-    "Paralysiert": {
-      "Beschreibung": "Der Charakter ist gelähmt und kann keine Aktionen durchführen.",
-      "modifikatoren": {
-        "Stärke": -4,
-        "Geschicklichkeit": -2,
-        "Konstitution": 0,
-        "Intelligenz": -1,
-        "Weisheit": -1,
-        "Charisma": -1
-      }
-    }
-  },
+  "Zustände": {},
   "Geschichte": {
     "Kapitel1": {
       "DetailLink": "",

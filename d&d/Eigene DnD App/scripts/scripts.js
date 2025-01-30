@@ -1,3 +1,5 @@
+//todo: die attributsmods müssen gesichert werden, wenn sie durch gegenstände verändert werden damit andere funktionen sie auslesen können (zb für den ac wert)
+
 //#region JSON-Laden, mergen und in AllDataGlobal speichern
 let allDataGlobal = null // Enthält alle geladenen JSON-Daten (globaler Zugriff)
 let activeCharacter = null // Enthält den aktuell ausgewählten Charakter (globaler Zugriff)
@@ -5,6 +7,7 @@ let activeCharacter = null // Enthält den aktuell ausgewählten Charakter (glob
 const JSON_URLS = [
   // Liste der zu ladenden JSON-Dateien (Reihenfolge ist wichtig, untere überschreiben obere, wenn Schlüssel gleich)
   'data/DnDKalender.JSON',
+  'data/Zustände/Zustände.JSON',
   'data/Charaktäre/Spieler/Diundriel.json',
   'data/Charaktäre/Spieler/test.json'
   // Weitere Dateien können hier hinzugefügt werden
@@ -158,7 +161,7 @@ function loadCharacterData () {
   const charData = getCurrentCharacterData()
   if (!charData) return
 
-  loadBasicInfo(charData)
+  loadKlasse(charData)
   loadHealthData(charData)
   loadAttributes(charData)
   initializeConditions(charData.Zustände)
@@ -219,7 +222,7 @@ function getCurrentCharacterData () {
   return allDataGlobal?.Charaktäre?.Spielercharaktere?.[activeCharacter]
 }
 
-function loadBasicInfo (charData) {
+function loadKlasse (charData) {
   document.getElementById('charName').textContent = activeCharacter
   const klasse = Object.entries(charData.Klasse)[0]
   document.getElementById(
@@ -267,6 +270,8 @@ function loadAttributes (charData) {
     document.getElementById(`${map.idPrefix}-bonus`).textContent =
       (bonus >= 0 ? '+' : '') + bonus
   })
+  const acValue = calculateArmorClass(charData)
+  document.getElementById('AC-value').textContent = acValue
 }
 
 function getEquipmentAttributeBonuses (charData) {
@@ -342,40 +347,88 @@ function getEquipmentAttributeBonuses (charData) {
   return bonusSum
 }
 
-function initializeConditions (zustände) {
+//#region Rüstungsklasse Berechnung
+function calculateArmorClass (charData) {
+  const baseAC = 10
+  let armorAC = 0
+  let maxDexBonus = Infinity
+  let hasArmor = false
+
+  // Durchsuche alle Gegenstände nach Rüstungen
+  const items = charData.Gegenstände || []
+  items.forEach(item => {
+    if (item.equipped && item.gegenstandsTyp?.Rüstung) {
+      const rüstung = item.gegenstandsTyp.Rüstung
+
+      // Extrahiere numerischen AC-Wert (z.B. "+8" → 8)
+      armorAC += parseInt(rüstung.RC.replace(/[^0-9-]/g, ''), 10) || 0
+
+      // Setze maximalen Dex-Bonus
+      if (rüstung.maxDexBonus !== undefined) {
+        maxDexBonus = Math.min(maxDexBonus, rüstung.maxDexBonus)
+        hasArmor = true
+      }
+    }
+  })
+
+  // Berechne Geschicklichkeitsbonus
+  const dexValue =
+    charData.Attribute.Geschicklichkeit.Wert +
+    (charData.Attribute.Geschicklichkeit['Temp Mod'] || 0)
+  const dexBonus = Math.floor((dexValue - 10) / 2)
+
+  // Begrenze Bonus bei Rüstung
+  const finalDexBonus = hasArmor ? Math.min(dexBonus, maxDexBonus) : dexBonus
+
+  // Gesamt-AC berechnen
+  return baseAC + armorAC + finalDexBonus
+}
+
+//#endregion
+
+function initializeConditions (charZuständeArray) {
   const activeContainer = document.getElementById('active-conditions')
   const inactiveContainer = document.getElementById('inactive-conditions')
   const conditionTemplate =
     document.getElementById('condition-template').content
+  const globalZustände = allDataGlobal.Zustände || {}
 
+  // Leere die Container
   activeContainer.innerHTML = ''
   inactiveContainer.innerHTML = ''
 
-  function createCondition (id, label, active) {
-    const conditionFragment = document.importNode(conditionTemplate, true)
-    const conditionElement = conditionFragment.querySelector('.condition-box')
+  // Erstelle für jeden möglichen Zustand ein Element
+  Object.keys(globalZustände).forEach(conditionKey => {
+    const isActive = charZuständeArray.includes(conditionKey)
+    const conditionData = globalZustände[conditionKey]
+
+    const conditionElement = document.importNode(conditionTemplate, true)
     const checkbox = conditionElement.querySelector('input')
-    const labelEl = conditionElement.querySelector('label')
+    const label = conditionElement.querySelector('label')
+    const details = conditionElement.querySelector('.condition-details')
 
-    checkbox.id = id
-    checkbox.checked = active
-    labelEl.htmlFor = id
-    labelEl.textContent = label
+    // Setze Werte
+    checkbox.id = `condition-${conditionKey}`
+    checkbox.checked = isActive
+    label.textContent = conditionData.Name || conditionKey
+    label.htmlFor = checkbox.id
 
+    // Tooltip mit Beschreibung
+    label.title = conditionData.Beschreibung || 'Keine Beschreibung verfügbar'
+
+    // Event-Listener für Änderungen
     checkbox.addEventListener('change', () => {
-      if (checkbox.checked) {
-        activeContainer.appendChild(conditionElement)
-      } else {
-        inactiveContainer.appendChild(conditionElement)
+      const index = charZuständeArray.indexOf(conditionKey)
+      if (checkbox.checked && index === -1) {
+        charZuständeArray.push(conditionKey)
+      } else if (!checkbox.checked && index > -1) {
+        charZuständeArray.splice(index, 1)
       }
+      saveCharacterData()
     })
 
-    return conditionElement
-  }
-
-  Object.entries(zustände).forEach(([key, value]) => {
-    const conditionElement = createCondition(`condition-${key}`, key, value)
-    if (value) {
+    // Füge in den richtigen Container ein
+    if (isActive) {
       activeContainer.appendChild(conditionElement)
     } else {
       inactiveContainer.appendChild(conditionElement)
