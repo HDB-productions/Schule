@@ -525,7 +525,7 @@ function setupEventListeners () {
   document.getElementById('maxHp').addEventListener('click', () => {
     document.getElementById('maxHealthModal').classList.remove('hidden')
   })
-
+  /* muss noch entwickelt werden
   document.getElementById('saveMaxHealth').addEventListener('click', () => {
     const newMax = parseInt(document.getElementById('maxHealthInput').value, 10)
     if (!isNaN(newMax)) {
@@ -533,7 +533,7 @@ function setupEventListeners () {
       document.getElementById('maxHealthInput').value = ''
     }
   })
-
+*/
   document
     .getElementById('closeMaxHealthModal')
     .addEventListener('click', () => {
