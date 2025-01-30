@@ -6,8 +6,8 @@ let activeCharacter = null // Enthält den aktuell ausgewählten Charakter (glob
 
 const JSON_URLS = [
   // Liste der zu ladenden JSON-Dateien (Reihenfolge ist wichtig, untere überschreiben obere, wenn Schlüssel gleich)
-  'data/DnDKalender.JSON',
-  'data/Zustände/Zustände.JSON',
+  'data/DnDKalender.json',
+  'data/Zustände/Zustände.json',
   'data/Charaktäre/Spieler/Diundriel.json',
   'data/Charaktäre/Spieler/test.json'
   // Weitere Dateien können hier hinzugefügt werden
