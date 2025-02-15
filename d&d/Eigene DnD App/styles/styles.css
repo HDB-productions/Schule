@@ -231,7 +231,7 @@ button {
   cursor: pointer;
   font-weight: bold;
   text-decoration: underline;
-  margin: 0 4px;
+  margin: 10px 10px;
 }
 
 /* "Leerer" Bereich (dunkles Blau) */
@@ -273,7 +273,8 @@ button {
 }
 
 .modal-content {
-  background-color: #333;
+  background-color: rgba(0, 0, 0, 0.7); /*background-color: #333;*/
+
   width: 80%;
   color: #fff;
   padding: 1rem;
