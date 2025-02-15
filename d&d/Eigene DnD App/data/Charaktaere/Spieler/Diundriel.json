@@ -76,9 +76,7 @@
           }
         },
         "Skills": {
-          "Athletik": {
-            "Modifikatoren": { "Pref": 1, "Trainig": "+2" }
-          }
+          "Athletik": { "Prof": 2, "andere": { "Trainig": "0" } }
         },
         "Fertigkeitenboni": {},
 

@@ -5,7 +5,7 @@
         "Leben und HD": {
           "Leben": {
             "Abkürzung": "HP",
-            "Wert": 20,
+            "Wert": 89,
             "Temp Bonus": 0
           }
         },
@@ -37,7 +37,11 @@
                       "Magisch": {
                         "eingestimmt": true,
                         "modifikatoren": [
-                          { "Stärke": "0", "Geschicklichkeit": "0" }
+                          {
+                            "Stärke": "2",
+                            "Geschicklichkeit": "0",
+                            "Proficiency": "+10"
+                          }
                         ],
                         "erfordertEinstimmung": false
                       }

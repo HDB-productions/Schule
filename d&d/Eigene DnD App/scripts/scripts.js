@@ -1,3 +1,5 @@
+//Die Funktion, die die Attributs boni durch rüstung durchgeht funktioniert, die für Proficiency und Skills nicht. evtl eine daraus machen.)
+
 //#region JSON-Laden, mergen und in AllDataGlobal speichern
 let allDataGlobal = null // Enthält alle geladenen JSON-Daten (globaler Zugriff)
 let activeCharacter = null // Enthält den aktuell ausgewählten Charakter (globaler Zugriff)
@@ -8,7 +10,8 @@ const JSON_URLS = [
   'data/Zustaende/Zustaende.json',
   'data/Charaktaere/Spieler/Diundriel.json',
   'data/Charaktaere/Spieler/test.json',
-  'data/Skills/Skills.json'
+  'data/Skills/Skills.json',
+  'data/Charaktaere/Spieler/Thoralf.json'
   // Weitere Dateien können hier hinzugefügt werden
 ]
 
@@ -166,6 +169,7 @@ function loadCharacterData () {
   loadAttributes(charData)
   initializeConditions(charData.Zustände)
   loadProficiency(charData)
+  loadSkills()
   loadPortrait()
 }
 function loadPortrait () {
@@ -361,6 +365,143 @@ function loadEquipmentAttributeBonuses (charData) {
   return bonusMap
 }
 //#endregion
+//#region Zustände Laden
+function initializeConditions (charZuständeArray) {
+  const activeContainer = document.getElementById('active-conditions')
+  const inactiveContainer = document.getElementById('inactive-conditions')
+  const conditionTemplate =
+    document.getElementById('condition-template').content
+  const globalZustände = allDataGlobal.Zustände || {}
+
+  // Leere die Container
+  activeContainer.innerHTML = ''
+  inactiveContainer.innerHTML = ''
+
+  // Erstelle für jeden möglichen Zustand ein Element
+  Object.keys(globalZustände).forEach(conditionKey => {
+    const isActive = charZuständeArray.includes(conditionKey)
+    const conditionData = globalZustände[conditionKey]
+
+    const conditionElement = document.importNode(conditionTemplate, true)
+    const checkbox = conditionElement.querySelector('input')
+    const label = conditionElement.querySelector('label')
+    // const details = conditionElement.querySelector('.condition-details') // falls benötigt
+
+    // Setze Werte
+    checkbox.id = `condition-${conditionKey}`
+    checkbox.checked = isActive
+    label.textContent = conditionData.Name || conditionKey
+    // Entferne die Verknüpfung, damit nur die Checkbox das Aktivieren steuert
+    // label.htmlFor = checkbox.id  <-- entfernt
+
+    // Statt des Standard-Tooltips per Mouseover wird hier beim Tippen ein eigener Tooltip angezeigt:
+    label.addEventListener('click', e => {
+      e.stopPropagation()
+      e.preventDefault()
+      showTooltipAtElement(
+        label,
+        conditionData.Beschreibung || 'Keine Beschreibung verfügbar'
+      )
+    })
+
+    // Event-Listener für Änderungen (Checkbox wird nur durch direktes Tippen aktiviert)
+    checkbox.addEventListener('change', () => {
+      const index = charZuständeArray.indexOf(conditionKey)
+      if (checkbox.checked && index === -1) {
+        charZuständeArray.push(conditionKey)
+      } else if (!checkbox.checked && index > -1) {
+        charZuständeArray.splice(index, 1)
+      }
+      loadCharacterData()
+    })
+
+    // Füge in den richtigen Container ein
+    if (isActive) {
+      activeContainer.appendChild(conditionElement)
+    } else {
+      inactiveContainer.appendChild(conditionElement)
+    }
+  })
+}
+
+function showTooltipAtElement (element, text) {
+  const tooltip = document.createElement('div')
+  tooltip.className = 'custom-tooltip'
+  tooltip.textContent = text
+  tooltip.style.position = 'absolute'
+  tooltip.style.background = 'rgba(0, 0, 0, 0.75)'
+  tooltip.style.color = '#fff'
+  tooltip.style.padding = '5px 10px'
+  tooltip.style.borderRadius = '4px'
+  tooltip.style.fontSize = '14px'
+  tooltip.style.zIndex = '1000'
+
+  // Positioniere den Tooltip knapp unterhalb des Elements
+  const rect = element.getBoundingClientRect()
+  tooltip.style.top = rect.bottom + window.scrollY + 5 + 'px'
+  tooltip.style.left = rect.left + window.scrollX + 'px'
+
+  document.body.appendChild(tooltip)
+
+  // Entferne den Tooltip nach 3 Sekunden automatisch
+  setTimeout(() => {
+    tooltip.remove()
+  }, 3000)
+}
+
+//#endregion
+//#region Statistics Laden
+//#region Fähigkeiten (Proficiency)Laden
+function calculateProficiency (level) {
+  return Math.floor((level + 3) / 4) + 1
+}
+function loadProficiency (charData) {
+  // Summiere alle Level aus den verschiedenen Klassen
+  const totalLevel = Object.values(charData.Klasse).reduce(
+    (sum, lvl) => sum + lvl,
+    0
+  )
+  const base = calculateProficiency(totalLevel)
+
+  charData.Proficiency = charData.Proficiency || {
+    Basis: {
+      Wert: base,
+      Berechnung: `Level ${totalLevel} => Proficiency ${base}`
+    },
+    Ausrüstungsboni: { total: 0, sources: [] },
+    Gesamt: base
+  }
+
+  // Equipment-Boni berechnen
+  let equipmentBonus = 0
+  charData.Gegenstände?.forEach(item => {
+    if (
+      item.equipped &&
+      item.gegenstandsTyp?.Magisch?.modifikatoren?.Proficiency
+    ) {
+      const bonus = parseInt(
+        item.gegenstandsTyp.Magisch.modifikatoren.Proficiency,
+        10
+      )
+      equipmentBonus += bonus
+      charData.Proficiency.Ausrüstungsboni.sources.push({
+        gegenstand: item.name,
+        wert: bonus,
+        typ: item.gegenstandsTyp.Magisch.erfordertEinstimmung
+          ? 'aktiv'
+          : 'passiv'
+      })
+    }
+  })
+
+  charData.Proficiency.Ausrüstungsboni.total = equipmentBonus
+  charData.Proficiency.Gesamt = base + equipmentBonus
+
+  document.getElementById('proficiency-value').textContent =
+    charData.Proficiency.Gesamt
+}
+
+//#endregion
 //#region Rüstungsklasse Berechnung
 function loadEquipmentArmorBonuses (charData) {
   // Initialisiere Rüstungsobjekt
@@ -448,100 +589,52 @@ function calculateArmorClass (charData) {
 }
 
 //#endregion
-//#region Zustände Laden
-function initializeConditions (charZuständeArray) {
-  const activeContainer = document.getElementById('active-conditions')
-  const inactiveContainer = document.getElementById('inactive-conditions')
-  const conditionTemplate =
-    document.getElementById('condition-template').content
-  const globalZustände = allDataGlobal.Zustände || {}
 
-  // Leere die Container
-  activeContainer.innerHTML = ''
-  inactiveContainer.innerHTML = ''
+//#endregion
+//#region Skills Laden
+function loadSkills () {
+  const skillsContainer = document.getElementById('skills')
+  skillsContainer.innerHTML = ''
 
-  // Erstelle für jeden möglichen Zustand ein Element
-  Object.keys(globalZustände).forEach(conditionKey => {
-    const isActive = charZuständeArray.includes(conditionKey)
-    const conditionData = globalZustände[conditionKey]
+  const charData = getCurrentCharacterData()
+  if (!charData) return
 
-    const conditionElement = document.importNode(conditionTemplate, true)
-    const checkbox = conditionElement.querySelector('input')
-    const label = conditionElement.querySelector('label')
-    const details = conditionElement.querySelector('.condition-details')
+  const skillsData = allDataGlobal.Skills || {}
+  Object.entries(skillsData).forEach(([skillName, skillInfo]) => {
+    // Ermittle den Gesamtmod des zugehörigen Attributes:
+    const mapping = attributeMapping.find(
+      m => m.idPrefix === skillInfo.Attribut
+    )
+    const fullAttrName = mapping ? mapping.name : null
+    const currentMod =
+      fullAttrName && charData.Attribute[fullAttrName]
+        ? charData.Attribute[fullAttrName].GesamtMod
+        : 0
 
-    // Setze Werte
-    checkbox.id = `condition-${conditionKey}`
-    checkbox.checked = isActive
-    label.textContent = conditionData.Name || conditionKey
-    label.htmlFor = checkbox.id
+    // Erstelle ein Element für den Skill:
+    const skillEl = document.createElement('div')
+    skillEl.className = 'skill'
+    // Anzeige: Skillname und aktueller Gesamtmod (z. B. "Athletik (+3)")
+    skillEl.textContent = `${skillName} (${
+      currentMod >= 0 ? '+' : ''
+    }${currentMod})`
+    skillEl.style.cursor = 'pointer'
 
-    // Tooltip mit Beschreibung
-    label.title = conditionData.Beschreibung || 'Keine Beschreibung verfügbar'
-
-    // Event-Listener für Änderungen
-    checkbox.addEventListener('change', () => {
-      const index = charZuständeArray.indexOf(conditionKey)
-      if (checkbox.checked && index === -1) {
-        charZuständeArray.push(conditionKey)
-      } else if (!checkbox.checked && index > -1) {
-        charZuständeArray.splice(index, 1)
-      }
-      loadCharacterData()
+    // Beim Tippen wird der Tooltip mit der Beschreibung angezeigt:
+    skillEl.addEventListener('click', e => {
+      e.stopPropagation()
+      e.preventDefault()
+      showTooltipAtElement(
+        skillEl,
+        skillInfo.Beschreibung || 'Keine Beschreibung verfügbar'
+      )
     })
 
-    // Füge in den richtigen Container ein
-    if (isActive) {
-      activeContainer.appendChild(conditionElement)
-    } else {
-      inactiveContainer.appendChild(conditionElement)
-    }
+    skillsContainer.appendChild(skillEl)
   })
 }
-//#endregion
-//#region Fähigkeiten (Proficiency)Laden
-function calculateProficiency (level) {
-  return Math.floor((level + 3) / 4) + 1
-}
 
-function loadProficiency (charData) {
-  const level = Object.values(charData.Klasse)[0] // Annahme: { "Paladin": 8 }
-  const base = calculateProficiency(level)
-
-  charData.Proficiency = charData.Proficiency || {
-    Basis: { Wert: base, Berechnung: `Math.floor((${level} + 3) / 4) + 1` },
-    Ausrüstungsboni: { total: 0, sources: [] },
-    Gesamt: base
-  }
-
-  // Equipment-Boni berechnen
-  let equipmentBonus = 0
-  charData.Gegenstände?.forEach(item => {
-    if (
-      item.equipped &&
-      item.gegenstandsTyp?.Magisch?.modifikatoren?.Proficiency
-    ) {
-      const bonus = parseInt(
-        item.gegenstandsTyp.Magisch.modifikatoren.Proficiency,
-        10
-      )
-      equipmentBonus += bonus
-      charData.Proficiency.Ausrüstungsboni.sources.push({
-        gegenstand: item.name,
-        wert: bonus,
-        typ: item.gegenstandsTyp.Magisch.erfordertEinstimmung
-          ? 'aktiv'
-          : 'passiv'
-      })
-    }
-  })
-
-  charData.Proficiency.Ausrüstungsboni.total = equipmentBonus
-  charData.Proficiency.Gesamt = base + equipmentBonus
-}
-
-//#endregion
-
+// #endregion
 //#endregion
 
 //#region Update
@@ -735,4 +828,5 @@ function showCharacterView () {
   const jsonView = document.getElementById('jsonView')
   if (jsonView) jsonView.remove()
 }
+//#endregion
 //#endregion

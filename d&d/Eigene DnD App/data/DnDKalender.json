@@ -163,7 +163,29 @@
             "Grund für Mod": "na",
             "Rettungswurfbonus": "na"
           }
-        }
+        },
+        "Gegenstände": [
+          {
+            "name": "Natürliche Rüstung",
+            "beschreibung": "Muss ich irgendwie anders noch einbauen",
+            "Gewicht": 0,
+            "wert": 0,
+            "equipped": true,
+            "seltenheit": "?",
+            "gegenstandsTyp": {
+              "Rüstung": {
+                "RC": "+5",
+                "Rüstungstyp": "Leicht",
+                "Nachteil beim Schleichen": true,
+                "maxDexBonus": 10
+              },
+              "Magisch": {
+                "modifikatoren": [{ "Rüstung": "0" }],
+                "erfordertEinstimmung": false
+              }
+            }
+          }
+        ]
       },
       "Saphira": {
         "Rollenspiel": {
@@ -236,7 +258,29 @@
             "Grund für Mod": "na",
             "Rettungswurfbonus": "na"
           }
-        }
+        },
+        "Gegenstände": [
+          {
+            "name": "Natürliche Rüstung",
+            "beschreibung": "Muss ich irgendwie anders noch einbauen",
+            "Gewicht": 0,
+            "wert": 0,
+            "equipped": true,
+            "seltenheit": "?",
+            "gegenstandsTyp": {
+              "Rüstung": {
+                "RC": "+5",
+                "Rüstungstyp": "Leicht",
+                "Nachteil beim Schleichen": true,
+                "maxDexBonus": 10
+              },
+              "Magisch": {
+                "modifikatoren": [{ "Rüstung": "0" }],
+                "erfordertEinstimmung": false
+              }
+            }
+          }
+        ]
       },
       "Adelina": {
         "Rollenspiel": {

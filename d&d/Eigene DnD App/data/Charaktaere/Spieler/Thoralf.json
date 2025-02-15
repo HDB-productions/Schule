@@ -1,89 +1,119 @@
-{"Thoralf":{
-    "Rollenspiel":{"Spieler":"Lisa",
-    "Rasse":"Zwerg",
-    "Geschlecht":"männlich",
-    "Alter":"50",
-    "Größe":"1,40m",
-    "Gewicht":"60kg",
-    "Haarfarbe":"Rotbraun",
-    "Augenfarbe":"braun",
-    "Hautfarbe":"dunkel",
-    "Statur":"breit",
-    "Charaktereigenschaften":"stur, frech, loyal",
-    "Hintergrundinformationen":"Thoralf litt in seiner Kindheit unter der schlechten Behandlung am Hofe. Als Sohn des Königs vorherigen Königs wurde er nicht so schlecht behandelt wie Marut und durfte anders als sie die Gemächer verslassen, doch die Anschuldigungen gegen seine Mutter und die Politische Stimmung sorgten dafür, dass er stets abfällige Bemerkungen ertragen musste. Da er zur Zeit des Umsturzes noch sehr Jung war und Marut ihn zu seinem eigenen Schutz in dem Glauben belassen hat glaubt er selbst, das seine Mutter tatsächlich nur eine Konkubine war. Er verbrachte seit jeher seine Zeit am liebsten außerhalb des Palastes und sogar außerhalb der Zwergenstädte und lernte so die anderen Völker kennen. Was ihn bald zu einem guten Geschichtenerzähler machte."
-},"Klasse":{"Barde":8},            "Attribute":{
-    "Leben":{
-        "Abkürzung": "HP",
-        "Wert":69,
-        "Max":70,
-        "Temp Bonus": 0
-    },
-    "HD":{
-        "Art":"d8",
-        "Wert":2,
-        "Maximal":8         
-    },
-    "Stärke": {
-  "Abkürzung": "ST",
-  "Wert": 18,
-  "Bonus": 4,
-  "Temp Mod": 0,
-  "Grund für Mod": "na",
-  "Temp Wert": 18,
-  "Temp Bonus": 4,
-  "Rettungswurfbonus":"na"
-    },
-    "Geschicklichkeit": {
-  "Abkürzung": "GE",
-  "Wert": 14,
-  "Bonus": 2,
-  "Temp Mod": 0,
-  "Grund für Mod": "na",
-  "Temp Wert": 14,
-  "Temp Bonus": 2,
-  "Rettungswurfbonus":"na"
-    },
-    "Konstitution": {
-    "Abkürzung": "KO",
-    "Wert": 18,
-    "Bonus": 4,
-    "Temp Mod": 0,
-    "Grund für Mod": "na",
-    "Temp Wert": 18,
-    "Temp Bonus": 4,
-    "Rettungswurfbonus":"na"
-    },
-    "Intelligenz": {
-    "Abkürzung": "IN",
-    "Wert": 16,
-    "Bonus": 3,
-    "Temp Mod": 0,
-    "Grund für Mod": "na",
-    "Temp Wert": 16,
-    "Temp Bonus": 3,
-    "Rettungswurfbonus":"na"
-    },
-    "Weisheit": {
-    "Abkürzung": "WE",
-    "Wert": 16,
-    "Bonus": 3,
-    "Temp Mod": 0,
-    "Grund für Mod": "na",
-    "Temp Wert": 16,
-    "Temp Bonus": 3,
-    "Rettungswurfbonus":"na"
-    },
-    "Charisma": {
-    "Abkürzung": "CH",
-    "Wert": 16,
-    "Bonus": 3,
-    "Temp Mod": 2,
-    "Grund für Mod": "+2 Saphira",
-    "Temp Wert": 18,
-    "Temp Bonus": 4,
-    "Rettungswurfbonus":"na"
+{
+  "Charaktäre": {
+    "Spielercharaktere": {
+      "Thoralf": {
+        "Rollenspiel": {
+          "Spieler": "Lisa",
+          "Rasse": "Zwerg",
+          "Geschlecht": "männlich",
+          "Alter": "50",
+          "Größe": "1,40m",
+          "Gewicht": "60kg",
+          "Haarfarbe": "Rotbraun",
+          "Augenfarbe": "braun",
+          "Hautfarbe": "dunkel",
+          "Statur": "breit",
+          "Charaktereigenschaften": "stur, frech, loyal",
+          "Hintergrundinformationen": "Thoralf litt in seiner Kindheit unter der schlechten Behandlung am Hofe. Als Sohn des Königs vorherigen Königs wurde er nicht so schlecht behandelt wie Marut und durfte anders als sie die Gemächer verslassen, doch die Anschuldigungen gegen seine Mutter und die Politische Stimmung sorgten dafür, dass er stets abfällige Bemerkungen ertragen musste. Da er zur Zeit des Umsturzes noch sehr Jung war und Marut ihn zu seinem eigenen Schutz in dem Glauben belassen hat glaubt er selbst, das seine Mutter tatsächlich nur eine Konkubine war. Er verbrachte seit jeher seine Zeit am liebsten außerhalb des Palastes und sogar außerhalb der Zwergenstädte und lernte so die anderen Völker kennen. Was ihn bald zu einem guten Geschichtenerzähler machte."
+        },
+        "Klasse": { "Barde": 8 },
+        "Attribute": {
+          "Leben": {
+            "Abkürzung": "HP",
+            "Wert": 69,
+            "Max": 70,
+            "Temp Bonus": 0
+          },
+          "HD": {
+            "Art": "d8",
+            "Wert": 2,
+            "Maximal": 8
+          },
+          "Stärke": {
+            "Abkürzung": "ST",
+            "Wert": 18,
+            "Bonus": 4,
+            "Temp Mod": 0,
+            "Grund für Mod": "na",
+            "Temp Wert": 18,
+            "Temp Bonus": 4,
+            "Rettungswurfbonus": "na"
+          },
+          "Geschicklichkeit": {
+            "Abkürzung": "GE",
+            "Wert": 14,
+            "Bonus": 2,
+            "Temp Mod": 0,
+            "Grund für Mod": "na",
+            "Temp Wert": 14,
+            "Temp Bonus": 2,
+            "Rettungswurfbonus": "na"
+          },
+          "Konstitution": {
+            "Abkürzung": "KO",
+            "Wert": 18,
+            "Bonus": 4,
+            "Temp Mod": 0,
+            "Grund für Mod": "na",
+            "Temp Wert": 18,
+            "Temp Bonus": 4,
+            "Rettungswurfbonus": "na"
+          },
+          "Intelligenz": {
+            "Abkürzung": "IN",
+            "Wert": 16,
+            "Bonus": 3,
+            "Temp Mod": 0,
+            "Grund für Mod": "na",
+            "Temp Wert": 16,
+            "Temp Bonus": 3,
+            "Rettungswurfbonus": "na"
+          },
+          "Weisheit": {
+            "Abkürzung": "WE",
+            "Wert": 16,
+            "Bonus": 3,
+            "Temp Mod": 0,
+            "Grund für Mod": "na",
+            "Temp Wert": 16,
+            "Temp Bonus": 3,
+            "Rettungswurfbonus": "na"
+          },
+          "Charisma": {
+            "Abkürzung": "CH",
+            "Wert": 16,
+            "Bonus": 3,
+            "Temp Mod": 2,
+            "Grund für Mod": "+2 Saphira",
+            "Temp Wert": 18,
+            "Temp Bonus": 4,
+            "Rettungswurfbonus": "na"
+          }
+        },
+        "Fertigkeitenboni": {},
+        "Gegenstände": [
+          {
+            "name": "Beschlagene Lederrüstung",
+            "beschreibung": "ich muss noch nachgucken welche werte sie genau hat",
+            "Gewicht": 25.0,
+            "wert": 25.0,
+            "equipped": true,
+            "seltenheit": "?",
+            "gegenstandsTyp": {
+              "Rüstung": {
+                "RC": "+3",
+                "Rüstungstyp": "Leicht",
+                "Nachteil beim Schleichen": true,
+                "maxDexBonus": 5
+              },
+              "Magisch": {
+                "modifikatoren": [{ "Rüstung": "0" }],
+                "erfordertEinstimmung": false
+              }
+            }
+          }
+        ]
+      }
     }
-},
-"Fertigkeitenboni":{
-
-}}}
+  }
+}

@@ -1,0 +1,63 @@
+<style>/* Styling für den Pfeil-Div über seine ID */
+
+#e5_cloze_text_input_1,#e5_cloze_text_input_3,#e6_cloze_text_input_1,#e6_cloze_text_input_3,#e7_cloze_text_input_1,#e7_cloze_text_input_3,#e8_cloze_text_input_1,#e8_cloze_text_input_3,#e9_cloze_text_input_1,#e9_cloze_text_input_3{
+    display: inline-flex;
+    height: 75px;
+    width: 250px;
+    background-color: #ADD8E6;
+    /* Erzeugt die Pfeilform ähnlich wie im SVG */
+    clip-path: polygon(0% 0%, 77.27% 0%, 100% 50%, 77.27% 100%, 0% 100%);
+    position: relative;
+    text-align: center;
+    border:none;
+    align-items: center;      
+    margin:0;
+    border:0
+}
+
+#e5_cloze_text_input_2,#e6_cloze_text_input_2,#e7_cloze_text_input_2,#e8_cloze_text_input_2,#e9_cloze_text_input_2{
+    display: inline-flex;
+    height: 75px;
+    background-color: #7a73de;
+    /* Erzeugt die Pfeilform ähnlich wie im SVG */
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0 100%);
+    position: relative;
+    border:none;
+    justify-content: center; 
+    padding:0;
+    margin:0;
+    border:0;
+        display: inline-flex;
+        align-items: center; 
+}
+</style>
+  </style>
+
+
+<svg width="220" height="75" style="padding: 0; margin: 0;">
+    <!-- Pfeil als ein einzelnes Polygon -->
+    <polygon id="pfeil-form" points="0,0 170,0 220,37.5 170,75 0,75" style="fill:#ADD8E6; stroke:#00008B; stroke-width:2;"></polygon>
+    <!-- Text für die Energieform -->
+    <text x="80" y="40" font-size="16" text-anchor="middle" fill="black">chemische Energie</text>
+</svg>
+
+<svg width="75" height="75" style="padding: 0; margin: 0;">
+    <!-- Pfeil als ein einzelnes Polygon -->
+    <polygon id="pfeil-form" points="0,0 75,0 75,75 0,75 " style="fill:#5d5bd4; stroke:#00008B; stroke-width:2;"></polygon>
+    <!-- Text für die Energieform -->
+    <text x="36" y="40" font-size="16" text-anchor="middle" fill="black">Lampe</text>
+</svg>
+
+<div>
+<div>
+    <span id="e5_cloze_text_input_1">chemische Energie</span><span id="e5_cloze_text_input_2">chemische Energie</span>
+  </div>
+</div>
+
+
+
+
+
+
+
+
