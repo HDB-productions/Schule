@@ -76,7 +76,8 @@
           }
         },
         "Skills": {
-          "Athletik": { "Prof": 2, "andere": { "Trainig": "0" } }
+          "Mit Tieren Umgehen": { "Prof": 1, "andere": { "Trainig": "2" } },
+          "Überzeugen": { "Prof": 1, "andere": { "Trainig": "0" } }
         },
         "Fertigkeitenboni": {},
 

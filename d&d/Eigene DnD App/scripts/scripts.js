@@ -601,23 +601,51 @@ function loadSkills () {
 
   const skillsData = allDataGlobal.Skills || {}
   Object.entries(skillsData).forEach(([skillName, skillInfo]) => {
-    // Ermittle den Gesamtmod des zugehörigen Attributes:
+    // Ermittle den Basis-Mod des zugehörigen Attributes:
     const mapping = attributeMapping.find(
       m => m.idPrefix === skillInfo.Attribut
     )
     const fullAttrName = mapping ? mapping.name : null
-    const currentMod =
+    const baseMod =
       fullAttrName && charData.Attribute[fullAttrName]
         ? charData.Attribute[fullAttrName].GesamtMod
         : 0
 
-    // Erstelle ein Element für den Skill:
+    // Zusätzliche Boni aus dem Charakter-Skill:
+    let proficiencyBonus = 0
+    let otherBonus = 0
+
+    if (charData.Skills && charData.Skills[skillName]) {
+      const customSkill = charData.Skills[skillName]
+
+      // "Prof": Multiplikator als Fließkommazahl, der den Proficiency-Wert (Gesamt) mit einbezieht
+      // und das abgerundete Ergebnis wird addiert.
+      if (customSkill.Prof !== undefined) {
+        const factor = parseFloat(customSkill.Prof)
+        const proficiencyValue = charData.Proficiency
+          ? charData.Proficiency.Gesamt
+          : 0
+        proficiencyBonus = Math.floor(factor * proficiencyValue)
+      }
+
+      // "andere": direkte Bonuswerte, die aufsummiert werden
+      if (customSkill.andere) {
+        otherBonus = Object.values(customSkill.andere).reduce(
+          (sum, val) => sum + (parseInt(val, 10) || 0),
+          0
+        )
+      }
+    }
+
+    const totalSkillMod = baseMod + proficiencyBonus + otherBonus
+
+    // Erstelle das Anzeige-Element für den Skill:
     const skillEl = document.createElement('div')
     skillEl.className = 'skill'
-    // Anzeige: Skillname und aktueller Gesamtmod (z. B. "Athletik (+3)")
+    // Anzeige: Skillname und Gesamtskillmod (z. B. "Mit Tieren umgehen (+3)")
     skillEl.textContent = `${skillName} (${
-      currentMod >= 0 ? '+' : ''
-    }${currentMod})`
+      totalSkillMod >= 0 ? '+' : ''
+    }${totalSkillMod})`
     skillEl.style.cursor = 'pointer'
 
     // Beim Tippen wird der Tooltip mit der Beschreibung angezeigt:

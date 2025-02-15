@@ -91,6 +91,26 @@
           }
         },
         "Fertigkeitenboni": {},
+        "Skills": {
+          "Motiv erkennen": { "Prof": 1, "andere": { "Trainig": "2" } },
+          "Nachforschungen": { "Prof": 1, "andere": { "Trainig": "0" } },
+          "Auftreten": { "Prof": 1, "andere": { "Laute": "3" } },
+          "Athletik": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Akrobatik": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Fingerfertigkeit": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Heimlichkeit": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Arkane Kunde": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Geschichte": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+
+          "Religion": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Heilkunde": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Mit Tieren umgehen": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Überlebenskunst": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Wahrnehmung": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Einschüchtern": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Täuschen": { "Prof": 0.5, "andere": { "Trainig": "0" } },
+          "Überzeugen": { "Prof": 0.5, "andere": { "Trainig": "0" } }
+        },
         "Gegenstände": [
           {
             "name": "Beschlagene Lederrüstung",
