@@ -757,7 +757,8 @@ function createUniversalJsonView (container, data, depth = 0) {
   const createCollapsible = (content, isCollapsible) => {
     const wrapper = document.createElement('div')
     wrapper.className = 'json-item'
-    wrapper.style.marginLeft = `${depth * 15}px`
+    // Reduzierte Einrückung: Statt depth * 15px nun depth * 5px
+    wrapper.style.marginLeft = `${depth * 1}px`
 
     if (isCollapsible) {
       const header = document.createElement('div')

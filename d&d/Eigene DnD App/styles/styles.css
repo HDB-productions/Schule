@@ -20,7 +20,7 @@ html,
 }
 
 .json-content {
-  margin-left: 20px;
+  margin-left: 0px;
   border-left: 1px dotted #ddd;
   padding-left: 10px;
   background: #444;
