@@ -148,6 +148,7 @@ body {
   margin: 0.25rem 0;
 }
 .stat-box {
+  height: 60px;
   flex: 1;
   margin: 0 0.5rem;
   text-align: center;
@@ -156,7 +157,7 @@ body {
   padding: 0.5rem;
 }
 .stat-box .label {
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   margin-bottom: 0.25rem;
   color: #ccc;
 }
@@ -427,7 +428,7 @@ details summary {
   font-weight: normal;
   color: #f2c94c;
   border-bottom: 1px solid #555;
-  padding: 0.5rem 0;
+  padding: 0rem 0;
   cursor: pointer;
   outline: none;
 }
