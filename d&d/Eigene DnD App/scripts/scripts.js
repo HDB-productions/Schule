@@ -708,12 +708,14 @@ function setupEventListeners () {
     const input = parseInt(document.getElementById('hpInput').value, 10) || 0
     updateHP(input)
     document.getElementById('hpInput').value = ''
+    document.getElementById('hpManagementModal').classList.add('hidden')
   })
 
   document.getElementById('damageBtn').addEventListener('click', () => {
     const input = parseInt(document.getElementById('hpInput').value, 10) || 0
     updateHP(-input)
     document.getElementById('hpInput').value = ''
+    document.getElementById('hpManagementModal').classList.add('hidden')
   })
 
   // Max Health
