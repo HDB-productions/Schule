@@ -1,3 +1,4 @@
+<!-- Die Aktionen auf seite 2 müssen noch fertig erstellt werden so wie es auf https://www.dnddeutsch.de/schnellreferenz/ ist -->
 <!DOCTYPE html>
 <html lang="de">
   <head>
@@ -16,7 +17,7 @@
     <script src="scripts/scripts.js" defer></script>
   </head>
   <body>
-    <!-- #region Header -->
+    <!-- #region Header-->
     <header class="app-header">
       <div class="header-left">
         <div class="home-dropdown">
@@ -241,26 +242,134 @@
       <!-- #endregion -->
       <!-- #region Seite 2 (Aktionen) -->
       <section class="page-section page2" id="page2">
+        <!-- Bewegung -->
         <details open>
-          <summary>Waffen</summary>
+          <summary>Bewegung (30 Fuß)</summary>
           <section class="block">
-            <div class="weapon-row">
-              <div class="weapon-box">
-                <div class="label">Waffe 1</div>
-                <div class="value">1d8 + 3</div>
-              </div>
-              <div class="weapon-box">
-                <div class="label">Waffe 2</div>
-                <div class="value">1d6 + 1</div>
-              </div>
-              <div class="weapon-box">
-                <div class="label">Waffe 3</div>
-                <div class="value">1d4 + 2</div>
-              </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Bewegungskosten: 5ft Bewegung pro Quadrat Strecke.\n Wenn du mehr als eine Bewegungsrate hast, so wie deine herkömmliche und eine Flugbewegungsrate, kannst du während deiner Bewegung zwischen ihnen hin und her wechseln. Wann immer du wechselst, zieh die Gesamtdistanz, die du dich bisher bewegt hast, von der aktiven Bewegungsrate ab.\n Du kannst dich durch den Bereich einer nicht-feindlichen Kreatur bewegen Du kannst dich nur dann durch den Bereich einer feindlichen Kreatur bewegen, wenn sie mindestens zwei Größenkategorien größer oder kleiner als du ist.\n Der Bereich einer anderen Kreatur ist für dich Schwieriges Gelände Du kannst deinen Zug nicht willentlich im Bereich einer Kreatur beenden, egal ob sie Freund oder Feind ist.')"
+            >
+              <span>Bewegen</span>
+              <span>(5ft/kästchen)</span>
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Bewegungskosten: Hälfte deiner vollen Bewegungsrate \n Wenn deine Geschwindigkeit 0 ist, oder du nicht mehr genügend Bewegungsrate übrig hast, kannst du nicht aufstehen.')"
+            >
+              Aufstehen (Hälfte der vollen Bewegungsrate)
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Ziehe oder trage eine gepackte Kreatur mit dir \n Wenn du dich bewegst während du eine Kreatur im Haltegriff hast, ist deine Geschwindigkeit halbiert, es sei denn, die Kreatur ist zwei oder mehr Größenkategorien kleiner als du.')"
+            >
+              Ringend bewegen (Geschwindigkeit halbiert)
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Bewegungskosten: 10ft Bewegung pro 5ft Strecke \n Kann eine Probe auf Stärke (Athletik) beinhalten, wenn die Strecke schwierig zu klettern ist.')"
+            >
+              Klettern
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Schwimmen: Bewege dich im Wasser fort. Dabei wird oft deine Bewegungsrate reduziert.')"
+            >
+              Schwimmen
+            </div>
+          </section>
+        </details>
+
+        <!-- Aktion -->
+        <details open>
+          <summary>Aktion (1)</summary>
+          <section class="block">
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Angriff: Führe einen Angriff mit deiner Waffe oder einem Zauber aus.')"
+            >
+              Angriff
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Zauber wirken: Wirke einen Zauber, der in der Regel eine Aktion erfordert.')"
+            >
+              Zauber wirken
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Dash: Nutze deine Aktion, um deine Bewegungsrate zu verdoppeln.')"
+            >
+              Dash (Sprint)
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Disengage: Verhindere Gelegenheitsangriffe für diesen Zug.')"
+            >
+              Disengage (Rückzug)
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Dodge: Konzentriere dich auf defensive Manöver, um Angriffe zu erschweren.')"
+            >
+              Dodge
+            </div>
+          </section>
+        </details>
+
+        <!-- Bonusaktion -->
+        <details open>
+          <summary>Bonusaktion (1)</summary>
+          <section class="block">
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Zweitwaffenangriff: Führe einen zusätzlichen Angriff mit einer leichten Waffe in der anderen Hand aus.')"
+            >
+              Zweitwaffenangriff
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Spezialfähigkeit: Eine Bonusaktion, die dir durch ein Klassenmerkmal oder einen Zauber gewährt wird.')"
+            >
+              Spezialfähigkeit
+            </div>
+          </section>
+        </details>
+
+        <!-- Reaktion -->
+        <details open>
+          <summary>Reaktion (1)</summary>
+          <section class="block">
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Gelegenheitsangriff: Führe einen Angriff aus, wenn ein Gegner deine Reichweite verlässt.')"
+            >
+              Gelegenheitsangriff
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Spezialreaktion: Eine reaktive Fähigkeit, die du als Antwort auf bestimmte Auslöser einsetzen kannst.')"
+            >
+              Spezialreaktion
             </div>
           </section>
         </details>
       </section>
+
       <!-- #endregion -->
       <!-- #region Seite 3 (Zauber)-->
       <section class="page-section page3" id="page3">

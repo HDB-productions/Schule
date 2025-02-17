@@ -425,9 +425,22 @@ function initializeConditions (charZuständeArray) {
 }
 
 function showTooltipAtElement (element, text) {
+  // Falls bereits ein Tooltip existiert, entferne ihn und beende die Funktion.
+  if (element._customTooltip) {
+    element._customTooltip.remove()
+    element._customTooltip = null
+    return
+  }
+
+  // Erstelle den Tooltip
   const tooltip = document.createElement('div')
   tooltip.className = 'custom-tooltip'
+
+  // Setze den übergebenen Text (mit \n als Zeilenumbruch) und aktiviere Zeilenumbruch-Handling
   tooltip.textContent = text
+  tooltip.style.whiteSpace = 'pre-line' // So werden \n als Zeilenumbrüche interpretiert
+
+  // Standard-Styling
   tooltip.style.position = 'absolute'
   tooltip.style.background = 'rgba(0, 0, 0, 0.75)'
   tooltip.style.color = '#fff'
@@ -441,12 +454,17 @@ function showTooltipAtElement (element, text) {
   tooltip.style.top = rect.bottom + window.scrollY + 5 + 'px'
   tooltip.style.left = rect.left + window.scrollX + 'px'
 
+  // Füge den Tooltip zum Body hinzu
   document.body.appendChild(tooltip)
 
-  // Entferne den Tooltip nach 3 Sekunden automatisch
-  setTimeout(() => {
+  // Speichere eine Referenz am Element, um zu wissen, dass bereits ein Tooltip aktiv ist
+  element._customTooltip = tooltip
+
+  // Optional: Tooltip schließt sich auch, wenn man ihn direkt anklickt
+  tooltip.addEventListener('click', function () {
     tooltip.remove()
-  }, 3000)
+    element._customTooltip = null
+  })
 }
 
 //#endregion
@@ -642,11 +660,23 @@ function loadSkills () {
     // Erstelle das Anzeige-Element für den Skill:
     const skillEl = document.createElement('div')
     skillEl.className = 'skill'
-    // Anzeige: Skillname und Gesamtskillmod (z. B. "Mit Tieren umgehen (+3)")
-    skillEl.textContent = `${skillName} (${
+    skillEl.style.cursor = 'pointer'
+
+    // Erstelle den Span für den Skillnamen
+    const skillNameSpan = document.createElement('span')
+    skillNameSpan.className = 'skill-name'
+    skillNameSpan.textContent = skillName
+
+    // Erstelle den Span für den Skillwert (in Klammern)
+    const skillValueSpan = document.createElement('span')
+    skillValueSpan.className = 'skill-value'
+    skillValueSpan.textContent = ` (${
       totalSkillMod >= 0 ? '+' : ''
     }${totalSkillMod})`
-    skillEl.style.cursor = 'pointer'
+
+    // Füge beide Spans in den Container ein
+    skillEl.appendChild(skillNameSpan)
+    skillEl.appendChild(skillValueSpan)
 
     // Beim Tippen wird der Tooltip mit der Beschreibung angezeigt:
     skillEl.addEventListener('click', e => {

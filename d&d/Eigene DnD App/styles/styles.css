@@ -7,7 +7,14 @@ html,
   border-radius: 3px;
   margin: 2px 0;
 }
-
+.skill {
+  /* z. B. einen flex-Container nutzen */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  border-bottom: 1px solid #ccc;
+}
 .json-header:hover {
   background: #e0e0e0;
 }
@@ -55,7 +62,12 @@ body {
 .page-section.active {
   display: block;
 }
-
+.action-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
 /* Header fix oben */
 .app-header {
   display: flex;
