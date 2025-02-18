@@ -245,6 +245,7 @@
         <!-- Bewegung -->
         <details open>
           <summary><span>Bewegung</span><span>30 Fuß</span></summary>
+          <div class="infoblock">Du kannst dich während deines Zugs jederzeit bewegen solange du Bewegungspunkte übrig hast (d.h. vor, nach oder während anderer Aktionen).</div>
           <section class="block">
             <div
               class="action-item"
@@ -302,17 +303,42 @@
             <span>Schwimmen</span>
             <span>10ft/Quadrat</span>
             </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Bewegungskosten: 10ft Bewegung pro 5ft Strecke')"
+              >
+            <span>Kriechen</span>
+            <span>10ft/Quadrat</span>
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Bewegungskosten: 0ft (kostenlos) \n Du kannst fallen oder dich absichtlich zu Boden werfen ohne deine Bewegungsrate aufzubrauchen. \n Du erhältst den Zustand Liegend (Nahkampfangriffe gegen dich haben Vorteil, Fernkampfangriffe haben Nachteil, deine eigenen Angriffe haben Nachteil). \n Um sich liegend zu bewegen, musst du kriechen oder Magie (wie Teleportation) nutzen.')"
+            >
+            <span>Fallen</span>
+            <span>Kostenlos</span>
+            </div>
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Bewegungskosten: Zusätzlich +5ft Bewegung pro 5ft Strecke \n Bewegung in schwierigem Gelände kostet zusätzlich 5ft Bewegung pro 5ft zurück gelegter Strecke.\n Das gilt unabhängig von anderen Änderungen der Bewegungskosten')"
+            >
+            <span>Schwieriges Gelände</span>
+            <span>+5ft/Quadrat</span>
+
           </section>
         </details>
 
         <!-- Aktion -->
         <details open>
-          <summary>Aktion (1)</summary>
+          <summary><span>Aktionen</span><span>1/Zug</span></summary>
+          <div class="infoblock">Neben deiner Aktion kannst du kostenlos mit <span style="font-weight: bold; text-decoration: underline;">einem</span> Objekt oder der Umgebung interagieren.</div>
           <section class="block">
             <div
               class="action-item"
               style="cursor: pointer"
-              onclick="showTooltipAtElement(this, 'Angriff: Führe einen Angriff mit deiner Waffe oder einem Zauber aus.')"
+              onclick="showTooltipAtElement(this, 'Vollführe einen Nah- oder Fernkampfangriff mit deiner Waffe\n\nBestimmte Merkmale, wie zum Beispiel der Zusätzliche Angriff des Kämpfers, erlauben mehr als einen Angriff mit dieser Aktion auszuführen. Jeder dieser Angriffe ist ein eigener Angriffswurf und kann sich gegen eine andere Kreatur richten. Du kannst dich zwischen den Angriffen bewegen.\n \n Wenn du mit einer leichten Nahkampfwaffe angreifst, kannst du eine Bonusaktion verwenden, um mit einer zweiten leichten Nahkampfwaffe in deiner anderen Hand anzugreifen (siehe die Bonusaktion Angriff mit Zweitwaffe).\n\n Du kannst einen deiner Nahkampfangriffe durch die Ringen- oder Stoßen-Aktion ersetzen.\n\n Manche Zustände gewähren Vorteil auf einen Angriff: Angriffe gegen blinde, gelähmte, versteinerte, festgesetzte, betäubte oder bewusstlose Ziele; Nahkampfangriffe gegen liegende Ziele; Angriffe durch unsichtbare oder versteckte Angreifer.\n\n Manche Zustände gewähren Nachteil auf einen Angriff: Angriffe gegen unsichtbare oder versteckte Ziele; Fernkampfangriffe gegen liegende Ziele; Angriffe durch blinde, verängstigte, vergiftete oder festgesetzte Angreifer.')"
             >
               Angriff
             </div>

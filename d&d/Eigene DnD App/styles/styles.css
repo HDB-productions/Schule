@@ -1,4 +1,15 @@
-html,
+html {
+  background-color: #1c1c1c;
+}
+
+.infoblock {
+  border: #555 1px solid;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #5555553a;
+  margin: 5px 0;
+}
+
 .json-header {
   cursor: pointer;
   display: inline-block;
