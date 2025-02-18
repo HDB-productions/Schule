@@ -2,7 +2,7 @@
   "Zustände": {
     "Blind": {
       "Name": "Blind (Blinded)",
-      "Beschreibung": "Ein blinder Kreatur kann nicht sehen und scheitert automatisch bei allen Fähigkeitsproben, die Sicht erfordern.",
+      "Beschreibung": "Eine blinde Kreatur kann nicht sehen und scheitert automatisch bei allen Fähigkeitsproben, die Sicht erfordern.",
       "Modifikationen": {
         "Angriffe": {
           "gegen die Kreatur": "Vorteil",

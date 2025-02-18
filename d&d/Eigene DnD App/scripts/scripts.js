@@ -1,4 +1,4 @@
-//Die Funktion, die die Attributs boni durch rüstung durchgeht funktioniert, die für Proficiency und Skills nicht. evtl eine daraus machen.)
+//Die Funktion, die die Attributsboni durch Rüstung durchgeht funktioniert, die für Proficiency und Skills nicht scheinbar noch nicht. evtl eine daraus machen.)
 
 //#region JSON-Laden, mergen und in AllDataGlobal speichern
 let allDataGlobal = null // Enthält alle geladenen JSON-Daten (globaler Zugriff)
@@ -12,21 +12,41 @@ const JSON_URLS = [
   'data/Charaktaere/Spieler/test.json',
   'data/Charaktaere/Spieler/Thoralf.json',
   'data/Skills/Skills.json'
-
-  // Weitere Dateien können hier hinzugefügt werden
 ]
 
+// #region einzelne JSON-Laden
+/** Lädt eine JSON-Datei und gibt das Ergebnis zurück
+ * @param {string} url - Die URL der zu ladenden JSON-Datei
+ * @returns {Promise<Object>} - Das geladene JSON-Objekt als Promise (oder ein Fehler, falls das Laden fehlschlägt)
+ */
 async function loadJson (url) {
-  // Lädt eine JSON-Datei und gibt das Ergebnis zurück
   try {
+    //Alles innerhalb von try { ... } wird ausgeführt, und falls ein Fehler auftritt, wird der Code in catch { ... } ausgeführt.
+    // 1. Daten abrufen:
+    // Fetch-API genutzt, um eine HTTP-Anfrage an die übergebene URL zu senden.
+    // "await" sorgt dafür, dass der Code wartet, bis die Anfrage abgeschlossen ist.
     const response = await fetch(url)
-    if (!response.ok) throw new Error(`HTTP-Fehler! Status: ${response.status}`)
+
+    // 2. HTTP-Status prüfen:
+    // Mit "response.ok" wird überprüft, ob der HTTP-Status im erfolgreichen Bereich (200–299) liegt.
+    // Falls nicht, wird ein Fehler mit einer entsprechenden Fehlermeldung geworfen.
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler! Status: ${response.status}`)
+    }
+
+    // 3. JSON-Daten parsen:
+    // Wenn die Antwort erfolgreich war, wird der Inhalt der Antwort als JSON interpretiert.
+    // Auch hier wird "await" verwendet, da response.json() ein Promise zurückgibt.
     return await response.json()
   } catch (err) {
-    console.error('Fehler beim Laden der JSON (${url}):', err)
+    // 4. Fehlerbehandlung:
+    // Falls bei irgendeinem Schritt ein Fehler auftritt (z. B. Netzwerkfehler oder ungültiges JSON),
+    // wird dieser Fehler hier abgefangen, in der Konsole protokolliert und anschließend erneut geworfen.
+    console.error(`Fehler beim Laden der JSON (${url}):`, err)
     throw err
   }
 }
+//#endregion
 
 function mergeJson (target, source) {
   // Mergt zwei JSON-Objekte rekursiv

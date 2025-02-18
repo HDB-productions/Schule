@@ -244,7 +244,7 @@
       <section class="page-section page2" id="page2">
         <!-- Bewegung -->
         <details open>
-          <summary>Bewegung (30 Fuß)</summary>
+          <summary><span>Bewegung</span><span>30 Fuß</span></summary>
           <section class="block">
             <div
               class="action-item"
@@ -252,35 +252,55 @@
               onclick="showTooltipAtElement(this, 'Bewegungskosten: 5ft Bewegung pro Quadrat Strecke.\n Wenn du mehr als eine Bewegungsrate hast, so wie deine herkömmliche und eine Flugbewegungsrate, kannst du während deiner Bewegung zwischen ihnen hin und her wechseln. Wann immer du wechselst, zieh die Gesamtdistanz, die du dich bisher bewegt hast, von der aktiven Bewegungsrate ab.\n Du kannst dich durch den Bereich einer nicht-feindlichen Kreatur bewegen Du kannst dich nur dann durch den Bereich einer feindlichen Kreatur bewegen, wenn sie mindestens zwei Größenkategorien größer oder kleiner als du ist.\n Der Bereich einer anderen Kreatur ist für dich Schwieriges Gelände Du kannst deinen Zug nicht willentlich im Bereich einer Kreatur beenden, egal ob sie Freund oder Feind ist.')"
             >
               <span>Bewegen</span>
-              <span>(5ft/kästchen)</span>
+              <span>5ft/Quadrat</span>
             </div>
             <div
               class="action-item"
               style="cursor: pointer"
               onclick="showTooltipAtElement(this, 'Bewegungskosten: Hälfte deiner vollen Bewegungsrate \n Wenn deine Geschwindigkeit 0 ist, oder du nicht mehr genügend Bewegungsrate übrig hast, kannst du nicht aufstehen.')"
             >
-              Aufstehen (Hälfte der vollen Bewegungsrate)
+            <span>Aufstehen</span>
+            <span>15ft</span>
             </div>
             <div
               class="action-item"
               style="cursor: pointer"
               onclick="showTooltipAtElement(this, 'Ziehe oder trage eine gepackte Kreatur mit dir \n Wenn du dich bewegst während du eine Kreatur im Haltegriff hast, ist deine Geschwindigkeit halbiert, es sei denn, die Kreatur ist zwei oder mehr Größenkategorien kleiner als du.')"
             >
-              Ringend bewegen (Geschwindigkeit halbiert)
+            <span>Ringend bewegen</span>
+            <span>10ft/Quadrat</span>
             </div>
             <div
               class="action-item"
               style="cursor: pointer"
               onclick="showTooltipAtElement(this, 'Bewegungskosten: 10ft Bewegung pro 5ft Strecke \n Kann eine Probe auf Stärke (Athletik) beinhalten, wenn die Strecke schwierig zu klettern ist.')"
             >
-              Klettern
+            <span>Klettern</span>
+              <span>10ft/Quadrat</span>
             </div>
             <div
               class="action-item"
               style="cursor: pointer"
-              onclick="showTooltipAtElement(this, 'Schwimmen: Bewege dich im Wasser fort. Dabei wird oft deine Bewegungsrate reduziert.')"
+              onclick="showTooltipAtElement(this, 'Bewegungskosten: 5ft Bewegung pro 5ft Strecke \n Du springst eine Distanz in die Höhe, die (3 + deinen Stärkemodifikator) in Fuß entspricht, wenn du dich direkt vor dem Sprung mindestens 10 Fuß bewegt hast. \n Ohne Anlauf springst du halb so hoch \n Während dem Sprung kannst du deine Arme um die Hälfte deiner Körpergröße ausstrecken \n Unter Umständen erlaubt dein DM eine Probe auf Stärke (Athletik) um höher zu springen, als es normalerweise möglich wäre.')"
+            ><span>Hochsprung</span>
+            <span>Max-Höhe:(3+ST-Mod)ft</span>
+          </div>
+          <div
+            class="action-item"
+            style="cursor: pointer"
+            onclick="showTooltipAtElement(this, 'Bewegungskosten: 5ft Bewegung pro 5ft Strecke \n Du springst eine Distanz weit, die deinem (Stärkewert) in Fuß entspricht, wenn du dich direkt vor dem Sprung mindestens 10 Fuß bewegt hast. \n Ohne Anlauf springst du halb so weit. \n Kann eine Probe auf Stärke (Athletik) gegen HG 10 beinhalten, um ein niederes Hindernis (nicht höher als ein Viertel der Sprungdistanz) zu überspringen. Du triffst das Hindernis bei einer fehlgeschlagenen Probe. \n Kann eine Probe auf Geschicklichkeit (Akrobatik) gegen HG 10 beinhalten, um in schwierigem Gelände auf den Füßen zu landen. Du erhältst den Zustand Liegend bei einer fehlgeschlagenen Probe. \n')""
             >
-              Schwimmen
+            <span>Weitsprung</span>
+            <span>Max-Weite:(ST-Wert)ft</span>
+          </div>
+
+            <div
+              class="action-item"
+              style="cursor: pointer"
+              onclick="showTooltipAtElement(this, 'Bewegungskosten: 10ft Bewegung pro 5ft Strecke \n Kann eine Probe auf Stärke (Athletik) beinhalten, wenn die Strecke schwierig zu schwimmen ist oder du stark beladen bist.')"
+            >
+            <span>Schwimmen</span>
+            <span>10ft/Quadrat</span>
             </div>
           </section>
         </details>

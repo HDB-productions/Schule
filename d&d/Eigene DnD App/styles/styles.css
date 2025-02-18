@@ -11,7 +11,7 @@ html,
   display: flex;
   align-items: center;
   padding: 4px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #555;
 }
 
 /* Spalte 1 und 2 (Name und Englisch) erhalten mehr Platz */
@@ -78,6 +78,7 @@ body {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  padding: 4px;
 }
 /* Header fix oben */
 .app-header {
@@ -134,11 +135,8 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.block h2 {
-  color: #f2c94c;
+.action-item {
   border-bottom: 1px solid #555;
-  margin: 0 0 0.5rem;
-  font-weight: normal;
 }
 
 /* Beispiel: Health Bars */
@@ -445,12 +443,13 @@ button {
 
 /* Details / Summary */
 details summary {
-  display: block;
+  display: flex;
+  justify-content: space-between;
   margin: 0 0 0.5rem;
   font-size: 1.5rem;
   font-weight: normal;
   color: #f2c94c;
-  border-bottom: 1px solid #555;
+  border-bottom: 1px solid #f2c84c71;
   padding: 0rem 0;
   cursor: pointer;
   outline: none;
@@ -461,10 +460,6 @@ details summary:focus {
 .conditions {
   margin: 0.5rem 0;
   padding: 0.5rem;
-  border: 1px solid #555;
-  border-radius: 5px;
-  background-color: #333;
-
   /* Flexbox aktivieren */
   display: flex;
   flex-wrap: wrap; /* Ermöglicht das Umbrechen auf eine neue Zeile, wenn nötig */
