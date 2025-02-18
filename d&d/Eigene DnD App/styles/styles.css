@@ -443,6 +443,7 @@ button {
 
 /* Details / Summary */
 details summary {
+  list-style: none;
   display: flex;
   justify-content: space-between;
   margin: 0 0 0.5rem;
