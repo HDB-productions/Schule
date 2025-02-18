@@ -387,56 +387,168 @@ function loadEquipmentAttributeBonuses (charData) {
 }
 //#endregion
 //#region Zustände Laden
-function initializeConditions (charZuständeArray) {
+function initializeConditions () {
+  const charData = getCurrentCharacterData()
+  // Stelle sicher, dass charData.Zustände existiert und ein Objekt ist.
+  charData.Zustände = charData.Zustände || {}
+
   const activeContainer = document.getElementById('active-conditions')
   const inactiveContainer = document.getElementById('inactive-conditions')
   const conditionTemplate =
     document.getElementById('condition-template').content
   const globalZustände = allDataGlobal.Zustände || {}
 
-  // Leere die Container
+  // Container leeren
   activeContainer.innerHTML = ''
   inactiveContainer.innerHTML = ''
 
-  // Erstelle für jeden möglichen Zustand ein Element
   Object.keys(globalZustände).forEach(conditionKey => {
-    const isActive = charZuständeArray.includes(conditionKey)
+    // Prüfe, ob der Zustand aktuell aktiv ist – für "Erschöpft" anhand eines Eintrags in charData.Zustände,
+    // für alle anderen z. B. als Boolean (true) gespeichert.
+    const isActive = charData.Zustände.hasOwnProperty(conditionKey)
     const conditionData = globalZustände[conditionKey]
 
     const conditionElement = document.importNode(conditionTemplate, true)
     const checkbox = conditionElement.querySelector('input')
     const label = conditionElement.querySelector('label')
-    // const details = conditionElement.querySelector('.condition-details') // falls benötigt
 
-    // Setze Werte
+    // Setze Basiswerte
     checkbox.id = `condition-${conditionKey}`
     checkbox.checked = isActive
     label.textContent = conditionData.Name || conditionKey
-    // Entferne die Verknüpfung, damit nur die Checkbox das Aktivieren steuert
-    // label.htmlFor = checkbox.id  <-- entfernt
 
-    // Statt des Standard-Tooltips per Mouseover wird hier beim Tippen ein eigener Tooltip angezeigt:
-    label.addEventListener('click', e => {
-      e.stopPropagation()
-      e.preventDefault()
-      showTooltipAtElement(
-        label,
-        conditionData.Beschreibung || 'Keine Beschreibung verfügbar'
-      )
-    })
+    if (conditionKey === 'Erschöpft') {
+      if (isActive) {
+        // Wenn "Erschöpft" aktiv ist, erwarten wir ein Objekt mit einer Stufe.
+        // Falls noch keine Stufe vorhanden ist, initialisieren wir mit Stufe 1.
+        if (
+          !charData.Zustände['Erschöpft'].Stufe ||
+          charData.Zustände['Erschöpft'].Stufe < 1
+        ) {
+          charData.Zustände['Erschöpft'].Stufe = 1
+        }
 
-    // Event-Listener für Änderungen (Checkbox wird nur durch direktes Tippen aktiviert)
-    checkbox.addEventListener('change', () => {
-      const index = charZuständeArray.indexOf(conditionKey)
-      if (checkbox.checked && index === -1) {
-        charZuständeArray.push(conditionKey)
-      } else if (!checkbox.checked && index > -1) {
-        charZuständeArray.splice(index, 1)
+        // Erstelle einen Container für die vertikale Steuerung (Plus, Stufenanzeige, Minus)
+        const stageControl = document.createElement('span')
+        stageControl.className = 'exhaustion-stage-control'
+
+        // Plus-Button (▲)
+        const plusButton = document.createElement('button')
+        plusButton.textContent = '▲'
+        plusButton.addEventListener('click', e => {
+          e.stopPropagation()
+          if (charData.Zustände['Erschöpft'].Stufe < 6) {
+            charData.Zustände['Erschöpft'].Stufe++
+            updateStageDisplay()
+            loadCharacterData()
+          }
+        })
+
+        // Anzeige der aktuellen Stufe
+        const stageDisplay = document.createElement('span')
+        stageDisplay.className = 'exhaustion-stage-display'
+        stageDisplay.textContent = charData.Zustände['Erschöpft'].Stufe
+
+        // Minus-Button (▼)
+        const minusButton = document.createElement('button')
+        minusButton.textContent = '▼'
+        minusButton.addEventListener('click', e => {
+          e.stopPropagation()
+          if (charData.Zustände['Erschöpft'].Stufe > 1) {
+            charData.Zustände['Erschöpft'].Stufe--
+            updateStageDisplay()
+            loadCharacterData()
+          } else {
+            // Wäre die nächste Stufe 0, entfernen wir "Erschöpft" komplett.
+            delete charData.Zustände['Erschöpft']
+            loadCharacterData()
+            checkbox.checked = false
+            // Entferne auch die Regler aus dem UI.
+            stageControl.remove()
+          }
+        })
+
+        function updateStageDisplay () {
+          stageDisplay.textContent = charData.Zustände['Erschöpft'].Stufe
+        }
+
+        // Füge die Buttons und die Anzeige vertikal zusammen.
+        stageControl.appendChild(plusButton)
+        stageControl.appendChild(stageDisplay)
+        stageControl.appendChild(minusButton)
+        // Positioniere die Steuerung rechts neben dem Label – idealerweise mit CSS (z. B. absolute Positionierung in .condition-box)
+        label.parentElement.appendChild(stageControl)
+
+        // Tooltip: Zeige allgemeine Beschreibung plus alle Effekte der Stufen 1 bis zur aktuellen Stufe.
+        label.addEventListener('click', e => {
+          e.stopPropagation()
+          e.preventDefault()
+          let tooltipText =
+            conditionData.Beschreibung || 'Keine Beschreibung verfügbar'
+          const stages = conditionData.Stufen
+          let stageDetails = ''
+          const currentStage = charData.Zustände['Erschöpft'].Stufe
+          for (let i = 1; i <= currentStage; i++) {
+            if (stages[i]) {
+              stageDetails += `\nStufe ${i}: ${stages[i]}`
+            }
+          }
+          tooltipText += stageDetails
+          showTooltipAtElement(label, tooltipText)
+        })
+      } else {
+        // Falls "Erschöpft" nicht aktiv ist, entfernen wir einen eventuell vorhandenen Eintrag.
+        if (charData.Zustände['Erschöpft']) {
+          delete charData.Zustände['Erschöpft']
+        }
+        label.addEventListener('click', e => {
+          e.stopPropagation()
+          e.preventDefault()
+          showTooltipAtElement(
+            label,
+            conditionData.Beschreibung || 'Keine Beschreibung verfügbar'
+          )
+        })
       }
-      loadCharacterData()
-    })
 
-    // Füge in den richtigen Container ein
+      // Checkbox-Event für "Erschöpft":
+      checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+          // Wird "Erschöpft" aktiviert, legen wir es mit Stufe 1 an (falls noch nicht vorhanden)
+          if (!charData.Zustände['Erschöpft']) {
+            charData.Zustände['Erschöpft'] = { Stufe: 1 }
+          }
+          loadCharacterData()
+        } else {
+          // Wird es deaktiviert, entfernen wir den Eintrag komplett
+          if (charData.Zustände['Erschöpft']) {
+            delete charData.Zustände['Erschöpft']
+          }
+          loadCharacterData()
+        }
+      })
+    } else {
+      // Standardverhalten für alle anderen Zustände:
+      label.addEventListener('click', e => {
+        e.stopPropagation()
+        e.preventDefault()
+        showTooltipAtElement(
+          label,
+          conditionData.Beschreibung || 'Keine Beschreibung verfügbar'
+        )
+      })
+      checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+          // Für normale Zustände speichern wir einfach true (oder einen anderen Wert)
+          charData.Zustände[conditionKey] = true
+        } else {
+          delete charData.Zustände[conditionKey]
+        }
+        loadCharacterData()
+      })
+    }
+
+    // Füge das Element in den entsprechenden Container ein.
     if (isActive) {
       activeContainer.appendChild(conditionElement)
     } else {
@@ -835,10 +947,14 @@ function showJsonView () {
   // Verstecke Hauptinhalt
   document.querySelector('main').classList.add('hidden')
   document.querySelector('.bottom-nav').classList.add('hidden')
-
+  document.querySelector('.portrait-section').classList.add('hidden')
+  document.getElementById('homeDropdown').classList.add('hidden')
+  const jsonView = document.getElementById('jsonView')
+  if (jsonView) jsonView.remove()
   // Erstelle Container
   const container = document.createElement('div')
   container.id = 'jsonView'
+  container.className = 'json-view'
   document.body.appendChild(container)
   // JSON-Baum erstellen
   createUniversalJsonView(container, allDataGlobal)
@@ -916,6 +1032,7 @@ function showCharacterView () {
   document.getElementById('homeDropdown').classList.add('hidden')
   document.querySelector('main').classList.remove('hidden')
   document.querySelector('.bottom-nav').classList.remove('hidden')
+  document.querySelector('.portrait-section').classList.remove('hidden')
   const jsonView = document.getElementById('jsonView')
   if (jsonView) jsonView.remove()
 }

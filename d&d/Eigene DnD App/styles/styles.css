@@ -1,98 +1,20 @@
 html {
-  background-color: #1c1c1c;
-}
-
-.infoblock {
-  border: #555 1px solid;
-  border-radius: 5px;
-  padding: 5px;
-  background-color: #5555553a;
-  margin: 5px 0;
-}
-
-.json-header {
-  cursor: pointer;
-  display: inline-block;
-  padding: 2px 5px;
-  background: #f0f0f0;
-  border-radius: 3px;
-  margin: 2px 0;
-}
-.skill {
-  display: flex;
-  align-items: center;
-  padding: 4px;
-  border-bottom: 1px solid #555;
-}
-
-/* Spalte 1 und 2 (Name und Englisch) erhalten mehr Platz */
-.skill-name,
-.skill-english {
-  flex: 4; /* oder ein anderer höherer Wert */
-}
-
-/* Spalte 3 und 4 (Attribut und Wert) erhalten weniger Platz */
-.skill-attribute,
-.skill-value {
-  flex: 1; /* oder ein anderer kleinerer Wert */
-}
-
-.json-header:hover {
-  background: #e0e0e0;
-}
-
-.toggle {
-  display: inline-block;
-  width: 15px;
-  font-size: 0.8em;
-  color: #444;
-}
-
-.json-content {
-  margin-left: 0px;
-  border-left: 1px dotted #ddd;
-  padding-left: 10px;
-  background: #444;
-  color: #f2c94c;
-}
-
-.json-key {
-  font-weight: bold;
+  background-color: #1c1c1c; /* Dunkler Hintergrund */
+  color: #ddd; /* helle Schrift für Dark Theme */
+  font-family: sans-serif;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #1c1c1c;
-  color: #ddd; /* helle Schrift für Dark Theme */
-  font-family: sans-serif;
+  padding-bottom: 50px; /* Platz für die Navigationsleiste unten */
 }
-
-/* CSS Anpassungen */
 
 /* Header-Anpassung für fließende Größe */
 .app-header {
   flex-wrap: wrap;
   min-height: 60px;
   transition: min-height 0.3s ease;
-}
-
-.page-section {
-  display: none;
-}
-
-.page-section.active {
-  display: block;
-}
-.action-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  padding: 4px;
-}
-/* Header fix oben */
-.app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -118,9 +40,73 @@ body {
 }
 
 .app-header p {
+  /* Untertitel (Klasse+Lvl)*/
   margin: 0;
   font-size: 0.9rem;
   color: #ccc;
+}
+
+.infoblock {
+  border: #555 1px solid;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #5555553a;
+  margin: 5px 0;
+}
+
+.json-header {
+  cursor: pointer;
+  display: inline-block;
+  padding: 2px 5px;
+
+  border-radius: 3px;
+  margin: 2px 0;
+}
+.skill {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-bottom: 1px solid #555;
+}
+
+/* Spalte 1 und 2 (Name und Englisch) erhalten mehr Platz */
+.skill-name,
+.skill-english {
+  flex: 4; /* oder ein anderer höherer Wert */
+}
+
+/* Spalte 3 und 4 (Attribut und Wert) erhalten weniger Platz */
+.skill-attribute,
+.skill-value {
+  flex: 1; /* oder ein anderer kleinerer Wert */
+}
+
+.json-view {
+  margin-left: 0px;
+  border-left: 1px dotted #ddd;
+  padding-left: 10px;
+  color: #f2c94c;
+}
+
+.json-key {
+  font-weight: bold;
+}
+
+/* CSS Anpassungen */
+
+.page-section {
+  display: none;
+}
+
+.page-section.active {
+  display: block;
+}
+.action-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px;
 }
 
 /* Portrait */
@@ -203,10 +189,12 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
-
+  width: 100%;
   padding: 0;
-  position: sticky;
+  position: fixed;
   bottom: 0;
+  bottom: 0;
+  left: 0;
   z-index: 1000;
 }
 
@@ -243,6 +231,7 @@ button {
   overflow: hidden;
   margin-bottom: 1rem;
 }
+
 .healthbar-inner {
   height: 100%;
   background-color: #0a0; /* Grün */
@@ -478,14 +467,41 @@ details summary:focus {
   margin: 0.5rem 0;
   padding: 0.5rem;
   /* Flexbox aktivieren */
-  display: flex;
+  display: flexbox;
   flex-wrap: wrap; /* Ermöglicht das Umbrechen auf eine neue Zeile, wenn nötig */
   gap: 0.5rem; /* Abstand zwischen den condition-boxen */
 }
 .condition-box {
   display: flex;
-  padding: 0.25rem 0.5rem; /* Innenabstand für die condition-box */
+  padding: 0.25rem 0.5rem;
+  align-items: center;
+  position: relative; /* Damit absolute Elemente sich relativ zu dieser Box positionieren */
 }
-.condition-box input[type="checkbox"] {
-  margin-right: 0.5rem; /* Abstand zwischen Checkbox und Label */
+
+/* Die Erschöpfungssteuerung wird rechts oben (bzw. mittig) positioniert,
+   ohne den normalen Zeilenfluss zu beeinflussen */
+.exhaustion-stage-control {
+  position: absolute;
+  right: 0; /* Rechtsbündig */
+  top: 50%; /* Vertikale Mitte der Box */
+  transform: translateY(-50%); /*Korrektur, damit sie genau mittig sitzt */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 0px; /* Abstand zum rechten Rand*/
+}
+
+.exhaustion-stage-control button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 0.8em; /* Größe der Dreiecke anpassen */
+  line-height: 0.8;
+  color: inherit;
+}
+
+.exhaustion-stage-control button:hover {
+  color: #f2c94c;
 }

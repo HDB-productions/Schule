@@ -3,15 +3,11 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-    />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <title>DnD Character Sheet</title>
     <!-- Einbinden der externen CSS-Datei -->
     <link rel="stylesheet" href="styles/styles.css" />
-    <!-- Einbinden des externen JavaScript-Skripts. 
+    <!-- Einbinden des externen haupt JavaScripts (verweist wiederum auf andere Inhalte). 
      defer sorgt dafür, dass dass das Skript parallel zum Parsen des HTML-Dokuments heruntergeladen wird, 
      aber erst ausgeführt wird, nachdem das gesamte HTML geparst wurde  -->
     <script src="scripts/scripts.js" defer></script>
@@ -32,7 +28,7 @@
       </div>
       <div class="header-center">
         <h1 id="charName" style="cursor: pointer">NamePlaceholder</h1>
-        <div id="charDropdown" class="hidden">
+          <div id="charDropdown" class="hidden">
           <ul id="charList"></ul>
         </div>
         <p id="charClass">KlassePlaceholder</p>
@@ -242,7 +238,7 @@
       <!-- #endregion -->
       <!-- #region Seite 2 (Aktionen) -->
       <section class="page-section page2" id="page2">
-        <!-- Bewegung -->
+        <!-- #region Bewegung -->
         <details open>
           <summary><span>Bewegung</span><span>30 Fuß</span></summary>
           <div class="infoblock">Du kannst dich während deines Zugs jederzeit bewegen solange du Bewegungspunkte übrig hast (d.h. vor, nach oder während anderer Aktionen).</div>
@@ -329,8 +325,8 @@
 
           </section>
         </details>
-
-        <!-- Aktion -->
+        <!-- #endregion -->
+        <!-- #region Aktionen -->
         <details open>
           <summary><span>Aktionen</span><span>1/Zug</span></summary>
           <div class="infoblock">Neben deiner Aktion kannst du kostenlos mit <span style="font-weight: bold; text-decoration: underline;">einem</span> Objekt oder der Umgebung interagieren.</div>
@@ -372,10 +368,10 @@
             </div>
           </section>
         </details>
-
-        <!-- Bonusaktion -->
+        <!-- #endregion -->
+        <!-- #region Bonusaktionen -->
         <details open>
-          <summary>Bonusaktion (1)</summary>
+          <summary><span>Bonusaktionen</span><span>1/Zug</span></summary>
           <section class="block">
             <div
               class="action-item"
@@ -393,10 +389,10 @@
             </div>
           </section>
         </details>
-
-        <!-- Reaktion -->
+        <!-- #endregion -->
+        <!-- #region Reaktionen -->
         <details open>
-          <summary>Reaktion (1)</summary>
+          <summary><span>Reaktionen</span><span>1/Zug</span></summary>
           <section class="block">
             <div
               class="action-item"
@@ -414,8 +410,8 @@
             </div>
           </section>
         </details>
+         <!-- #endregion -->
       </section>
-
       <!-- #endregion -->
       <!-- #region Seite 3 (Zauber)-->
       <section class="page-section page3" id="page3">
