@@ -449,13 +449,17 @@ details summary {
   margin: 0 0 0.5rem;
   font-size: 1.5rem;
   font-weight: normal;
-  /*color: #f2c94c; */
-  color: #f24cc3;
+  color: #f2c94c;
+  /*color: #f24cc3;*/
   border-bottom: 1px solid #f2c84c71;
   padding: 0rem 0;
   cursor: pointer;
   outline: none;
 }
+summary::-webkit-details-marker {
+  display: none; /* Versteckt das Standard-Dreieck */
+}
+
 details summary:focus {
   outline: none;
 }
