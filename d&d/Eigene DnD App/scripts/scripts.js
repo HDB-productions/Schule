@@ -10,8 +10,9 @@ const JSON_URLS = [
   'data/Zustaende/Zustaende.json',
   'data/Charaktaere/Spieler/Diundriel.json',
   'data/Charaktaere/Spieler/test.json',
-  'data/Skills/Skills.json',
-  'data/Charaktaere/Spieler/Thoralf.json'
+  'data/Charaktaere/Spieler/Thoralf.json',
+  'data/Skills/Skills.json'
+
   // Weitere Dateien können hier hinzugefügt werden
 ]
 
@@ -636,8 +637,7 @@ function loadSkills () {
     if (charData.Skills && charData.Skills[skillName]) {
       const customSkill = charData.Skills[skillName]
 
-      // "Prof": Multiplikator als Fließkommazahl, der den Proficiency-Wert (Gesamt) mit einbezieht
-      // und das abgerundete Ergebnis wird addiert.
+      // Berechne den Proficiency-Bonus
       if (customSkill.Prof !== undefined) {
         const factor = parseFloat(customSkill.Prof)
         const proficiencyValue = charData.Proficiency
@@ -646,7 +646,7 @@ function loadSkills () {
         proficiencyBonus = Math.floor(factor * proficiencyValue)
       }
 
-      // "andere": direkte Bonuswerte, die aufsummiert werden
+      // Addiere weitere Bonuswerte
       if (customSkill.andere) {
         otherBonus = Object.values(customSkill.andere).reduce(
           (sum, val) => sum + (parseInt(val, 10) || 0),
@@ -657,28 +657,39 @@ function loadSkills () {
 
     const totalSkillMod = baseMod + proficiencyBonus + otherBonus
 
-    // Erstelle das Anzeige-Element für den Skill:
+    // Erstelle das Container-Element für den Skill:
     const skillEl = document.createElement('div')
     skillEl.className = 'skill'
     skillEl.style.cursor = 'pointer'
 
-    // Erstelle den Span für den Skillnamen
-    const skillNameSpan = document.createElement('span')
-    skillNameSpan.className = 'skill-name'
-    skillNameSpan.textContent = skillName
+    // Span für den deutschen Namen
+    const nameSpan = document.createElement('span')
+    nameSpan.className = 'skill-name'
+    nameSpan.textContent = skillName
 
-    // Erstelle den Span für den Skillwert (in Klammern)
-    const skillValueSpan = document.createElement('span')
-    skillValueSpan.className = 'skill-value'
-    skillValueSpan.textContent = ` (${
-      totalSkillMod >= 0 ? '+' : ''
-    }${totalSkillMod})`
+    // Span für den englischen Namen
+    const englishSpan = document.createElement('span')
+    englishSpan.className = 'skill-english'
+    englishSpan.textContent = ' ' + (skillInfo.Englisch || '')
 
-    // Füge beide Spans in den Container ein
-    skillEl.appendChild(skillNameSpan)
-    skillEl.appendChild(skillValueSpan)
+    // Span für das Attribut
+    const attributeSpan = document.createElement('span')
+    attributeSpan.className = 'skill-attribute'
+    attributeSpan.textContent = ' ' + skillInfo.Attribut
 
-    // Beim Tippen wird der Tooltip mit der Beschreibung angezeigt:
+    // Span für den berechneten Wert
+    const valueSpan = document.createElement('span')
+    valueSpan.className = 'skill-value'
+    valueSpan.textContent =
+      ' (' + (totalSkillMod >= 0 ? '+' : '') + totalSkillMod + ')'
+
+    // Füge alle Spans nacheinander in den Container ein
+    skillEl.appendChild(nameSpan)
+    skillEl.appendChild(englishSpan)
+    skillEl.appendChild(attributeSpan)
+    skillEl.appendChild(valueSpan)
+
+    // Beim Klick wird der Tooltip mit der Beschreibung angezeigt:
     skillEl.addEventListener('click', e => {
       e.stopPropagation()
       e.preventDefault()

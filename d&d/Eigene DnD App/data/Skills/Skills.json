@@ -1,76 +1,94 @@
 {
   "Skills": {
-    "Akrobatik (Acrobatics) GE": {
+    "Akrobatik": {
       "Beschreibung": "Geschickliche Körperbeherrschung für Balanceakte, Stürze und artistische Manöver. Beispiele: Über einen Seilgang balancieren, einem Angriff ausweichen, Saltos schlagen.",
-      "Attribut": "GE"
+      "Attribut": "GE",
+      "Englisch": "Acrobatics"
     },
-    "Arkane Kunde (Arcana) IN": {
+    "Arkane Kunde": {
       "Beschreibung": "Wissen über magische Theorien, Zauberformeln und esoterische Symbole. Beispiele: Magische Gegenstände identifizieren, Dämonenbeschwörungen erkennen, Zauberrollen entziffern.",
-      "Attribut": "IN"
-    }, 
-    "Athletik (Athletics) ST": {
+      "Attribut": "IN",
+      "Englisch": "Arcana"
+    },
+    "Athletik": {
       "Beschreibung": "Umfasst körperliche Aktivitäten wie Klettern, Springen und Schwimmen. Beispiele: Eine steile Klippe erklimmen, über eine Schlucht springen, gegen eine Strömung anschwimmen.",
-      "Attribut": "ST"
-    }, 
-    "Auftreten (Performance) CH": {
+      "Attribut": "ST",
+      "Englisch": "Athletics"
+    },
+    "Auftreten": {
       "Beschreibung": "Künstlerische Darbietungen zur Unterhaltung des Publikums. Beispiele: Instrument spielen, Theaterrolle verkörpern, epische Balladen rezitieren.",
-      "Attribut": "CH"
+      "Attribut": "CH",
+      "Englisch": "Performance"
     },
-    "Einschüchtern (Intimidation) CH": {
+    "Einschüchtern": {
       "Beschreibung": "Durch Drohungen und psychologischen Druck Ziele erreichen. Beispiele: Geständnisse erzwingen, Wachen verunsichern, Rivalen demütigen.",
-      "Attribut": "CH"
+      "Attribut": "CH",
+      "Englisch": "Intimidation"
     },
-    "Fingerfertigkeit (Sleight of Hand) GE": {
+    "Fingerfertigkeit": {
       "Beschreibung": "Manuelle Geschicklichkeit für Handarbeiten und Taschenspielertricks. Beispiele: Schlösser knacken, Gegenstände stehlen, Fallen entschärfen.",
-      "Attribut": "GE"
+      "Attribut": "GE",
+      "Englisch": "Sleight of Hand"
     },
-    "Geschichte (History) IN": {
+    "Geschichte": {
       "Beschreibung": "Kenntnis historischer Ereignisse, legendärer Personen und antiker Reiche. Beispiele: Wappenkunde, Entziffern alter Schriften, Ruinen zuordnen.",
-      "Attribut": "IN"
+      "Attribut": "IN",
+      "Englisch": "History"
     },
-    "Heilkunde (Medicine) WE": {
+    "Heilkunde": {
       "Beschreibung": "Medizinisches Wissen zur Wundversorgung und Diagnose. Beispiele: Krankheitssymptome deuten, Verletzungen stabilisieren, Heilkräuter anwenden.",
-      "Attribut": "WE"
+      "Attribut": "WE",
+      "Englisch": "Medicine"
     },
-    "Heimlichkeit (Stealth) GE": {
+    "Heimlichkeit": {
       "Beschreibung": "Lautlose Bewegung und Tarnung. Beispiele: An Wachen vorbeischleichen, im Schatten verstecken, Geräusche maskieren.",
-      "Attribut": "GE"
+      "Attribut": "GE",
+      "Englisch": "Stealth"
     },
-    "Nachforschungen (Investigation) IN": {
+    "Nachforschungen": {
       "Beschreibung": "Systematisches Analysieren und Deduzieren von Informationen. Beispiele: Informationen in Büchern finden, Rätsel lösen, Fälschungen erkennen.",
-      "Attribut": "IN"
+      "Attribut": "IN",
+      "Englisch": "Investigation"
     },
-    "Naturkunde (Nature) IN": {
+    "Naturkunde": {
       "Beschreibung": "Wissen über Ökosysteme, Tierarten und Wetterphänomene. Beispiele: Giftpflanzen identifizieren, Tierspuren zuordnen, Stürme vorhersagen.",
-      "Attribut": "IN"
+      "Attribut": "IN",
+      "Englisch": "Nature"
     },
-    "Mit Tieren umgehen (Animal Handling) WE": {
+    "Mit Tieren umgehen": {
       "Beschreibung": "Fähigkeit Tiere zu beruhigen, auszubilden oder zu kontrollieren. Beispiele: Pferde zähmen, Wölfe besänftigen, Falken abrichten.",
-      "Attribut": "WE"
+      "Attribut": "WE",
+      "Englisch": "Animal Handling"
     },
-    "Motiv erkennen (Insight) WE": {
+    "Motiv erkennen": {
       "Beschreibung": "Einschätzen von Absichten und emotionalen Zuständen. Beispiele: Lügen entlarven, versteckte Agenden erkennen, psychologische Schwächen finden.",
-      "Attribut": "WE"
+      "Attribut": "WE",
+      "Englisch": "Insight"
     },
-    "Religion (Religion) IN": {
+    "Religion": {
       "Beschreibung": "Kenntnis religiöser Rituale, göttlicher Hierarchien und kirchlicher Strukturen. Beispiele: Kleriker-Orden unterscheiden, Dämonennamen kennen, Reliquien zuordnen.",
-      "Attribut": "IN"
+      "Attribut": "IN",
+      "Englisch": "Religion"
     },
-    "Täuschen (Deception) CH": {
+    "Täuschen": {
       "Beschreibung": "Vortäuschen falscher Tatsachen und Irreführung. Beispiele: Falsche Identitäten annehmen, Ablenkungsmanöver kreieren, Verhöre überstehen.",
-      "Attribut": "CH"
+      "Attribut": "CH",
+      "Englisch": "Deception"
     },
-    "Überlebenskunst (Survival) WE": {
+    "Überlebenskunst": {
       "Beschreibung": "Wildnisfertigkeiten für Nahrungssuche und Orientierung. Beispiele: Trinkwasser finden, Wetterzeichen deuten, natürliche Unterkünfte bauen.",
-      "Attribut": "WE"
+      "Attribut": "WE",
+      "Englisch": "Survival"
     },
-    "Überzeugen (Persuasion) CH": {
+    "Überzeugen": {
       "Beschreibung": "Diplomatische Einflussnahme durch Argumentation und Charme. Beispiele: Verhandlungen führen, Streit schlichten, Behörden beeinflussen.",
-      "Attribut": "CH"
+      "Attribut": "CH",
+      "Englisch": "Persuasion"
     },
-    "Wahrnehmung (Perception) WE": {
+    "Wahrnehmung": {
       "Beschreibung": "Aufmerksamkeit für verborgene Details und Umgebungsgeräusche. Beispiele: versteckte Fallen bemerken, leises Flüstern hören, Bewegungen im Augenwinkel erfassen.",
-      "Attribut": "WE"
+      "Attribut": "WE",
+      "Englisch": "Perception"
     }
   }
 }

@@ -8,13 +8,24 @@ html,
   margin: 2px 0;
 }
 .skill {
-  /* z. B. einen flex-Container nutzen */
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 4px;
   border-bottom: 1px solid #ccc;
 }
+
+/* Spalte 1 und 2 (Name und Englisch) erhalten mehr Platz */
+.skill-name,
+.skill-english {
+  flex: 4; /* oder ein anderer höherer Wert */
+}
+
+/* Spalte 3 und 4 (Attribut und Wert) erhalten weniger Platz */
+.skill-attribute,
+.skill-value {
+  flex: 1; /* oder ein anderer kleinerer Wert */
+}
+
 .json-header:hover {
   background: #e0e0e0;
 }
