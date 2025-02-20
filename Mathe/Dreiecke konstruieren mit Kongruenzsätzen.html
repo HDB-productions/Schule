@@ -136,8 +136,47 @@
     <!-- #region Musterlösungsanzeige -->
     <section id="musterloesung" class="hidden">
       <h2>Musterlösung</h2>
-      <canvas id="triangleCanvas" width="300" height="300"></canvas>
+   
+    <div class="contentBox" id="contentBox">
+      <script type="text/javascript" src="https://www.geogebra.org/apps/deployggb.js"></script>
+      <script type="text/javascript">
+
+              var parameters = {
+      "prerelease":false,
+      "width":570,
+      "height":400,
+      "showToolBar":false,
+      "borderColor":null,
+      "showMenuBar":false,
+      "showAlgebraInput":false,
+      "showResetIcon":false,
+      "enableLabelDrags":false,
+      "enableShiftDragZoom":true,
+      "enableRightClick":false,
+      "capturingThreshold":null,
+      "showToolBarHelp":false,
+      "errorDialogsActive":true,
+      "useBrowserForJS":false,
+      "material_id":"fwz3d6c3"};
+
+
+              var applet = new GGBApplet(parameters,true);
+            
+              //when used with Math Apps Bundle, uncomment this:
+              //applet.setHTML5Codebase('GeoGebra/HTML5/5.0/webSimple/');
+
+              window.onload = function() {
+                      applet.inject('applet_container');                      
+                  }
+         
+      </script>
+          
+      <div id="applet_container" ></div>
+     
     </section>
+
+
+</div>
     <!-- #endregion Musterlösungsanzeige -->
 
     <!-- #region Einstellungen Modal -->
@@ -442,8 +481,8 @@
               "Winkel " + symbol + " = " + taskSpec.given.angles[angle] + "°"
             );
           }
-          text += parts.join(", ") + ".\n";
-          text += "Bitte tragen Sie die fehlenden Werte ein.";
+          text += parts.join(", ") + ".\n\n";
+          text += "Konstruiere das Dreieck und miss die fehlenden Werte.\n\n";
           return text;
         }
         // === Ende Aufgabentext generieren ===
@@ -534,53 +573,46 @@
 
         // === Dynamisches Zeichnen des Dreiecks im Canvas ===
         function drawTriangle(exact) {
-          const canvas = document.getElementById("triangleCanvas");
-          const ctx = canvas.getContext("2d");
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          // Berechne das Dreieck, sodass es komplett in den Canvas passt
-          const a = exact.sides.a;
-          const c = exact.sides.c;
-          const alpha_rad = (exact.angles.alpha * Math.PI) / 180;
-          const A = { x: 0, y: 0 };
-          const B = { x: a, y: 0 };
-          const C = { x: c * Math.cos(alpha_rad), y: c * Math.sin(alpha_rad) };
-          const minX = Math.min(A.x, B.x, C.x);
-          const maxX = Math.max(A.x, B.x, C.x);
-          const minY = Math.min(A.y, B.y, C.y);
-          const maxY = Math.max(A.y, B.y, C.y);
-          const width = maxX - minX;
-          const height = maxY - minY;
-          const margin = 20;
-          const scale = Math.min(
-            (canvas.width - 2 * margin) / width,
-            (canvas.height - 2 * margin) / height
-          );
-          const offsetX = margin - minX * scale;
-          const offsetY = margin - minY * scale;
-          function transform(point) {
-            return {
-              x: point.x * scale + offsetX,
-              y: canvas.height - (point.y * scale + offsetY),
-            };
-          }
-          const A_t = transform(A);
-          const B_t = transform(B);
-          const C_t = transform(C);
-          ctx.beginPath();
-          ctx.moveTo(A_t.x, A_t.y);
-          ctx.lineTo(B_t.x, B_t.y);
-          ctx.lineTo(C_t.x, C_t.y);
-          ctx.closePath();
-          ctx.strokeStyle = "#333";
-          ctx.lineWidth = 2;
-          ctx.stroke();
-          ctx.font = "14px Arial";
-          ctx.fillStyle = "blue";
-          // Nur die Eckpunkte beschriften
-          ctx.fillText("A", A_t.x - 10, A_t.y + 15);
-          ctx.fillText("B", B_t.x + 5, B_t.y + 15);
-          ctx.fillText("C", C_t.x, C_t.y - 10);
-        }
+    // Verwende statt "a" nun die Seiten, die an Winkel A angrenzen: b und c.
+  // Nach Standardnotation: a liegt gegenüber von A, während b und c an A anliegen.
+  const b = exact.sides.b;
+  const c = exact.sides.c;
+  const alpha_rad = (exact.angles.alpha * Math.PI) / 180;
+
+  // Setze den Eckpunkt A auf (0,0)
+
+  ggbApplet.reset();
+  ggbApplet.evalCommand("A=(0,0)");
+  ggbApplet.evalCommand("B=("+c+",0)");
+  ggbApplet.evalCommand("C=("+b * Math.cos(alpha_rad)+","+b * Math.sin(alpha_rad)+")");
+  ggbApplet.evalCommand("SetPointStyle(A, 1)")
+  ggbApplet.evalCommand("SetFixed(A, true)")
+  ggbApplet.evalCommand("SetPointStyle(B, 1)")
+  ggbApplet.evalCommand("SetFixed(B, true)")
+  ggbApplet.evalCommand("SetPointStyle(C, 1)")
+  ggbApplet.evalCommand("SetFixed(C, true)")
+  ggbApplet.setGraphicsOptions({"gridDistance": {"x":0.5, "y":0.5}});
+  ggbApplet.evalCommand('a_1=Segment(B,C)')
+  ggbApplet.evalCommand('SetCaption(a_1, "a")')
+  ggbApplet.evalCommand('b_1=Segment(A,C)')
+  ggbApplet.evalCommand('SetCaption(b_1, "b")')
+  ggbApplet.evalCommand('c_1=Segment(A,B)')
+  ggbApplet.evalCommand('SetCaption(c_1, "c")')
+  ggbApplet.evalCommand('alpha_1=Angle(B,A,C)')
+  ggbApplet.evalCommand('SetCaption(alpha_1, "α")')
+  ggbApplet.evalCommand('beta_1=Angle(C,B,A)')
+  ggbApplet.evalCommand('SetCaption(beta_1, "β")')
+  ggbApplet.evalCommand('gamma_1=Angle(A,C,B)')
+  ggbApplet.evalCommand('SetCaption(gamma_1, "γ")')
+  ggbApplet.evalCommand("SetColor[a_1, 255, 0, 0]");
+  ggbApplet.evalCommand("SetColor[b_1, 0, 255, 255]");
+  ggbApplet.evalCommand("SetColor[c_1, 0, 255, 0]");
+
+
+
+
+  
+}
 
         // === Ende Zeichnen ===
 
