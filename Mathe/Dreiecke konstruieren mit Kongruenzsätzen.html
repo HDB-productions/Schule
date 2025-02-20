@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kongruenzsätze Übung</title>
+    <style>
+      /* #region CSS Styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f9f9f9;
+      }
+      header {
+        background-color: #4a90e2;
+        color: white;
+        padding: 1em;
+        text-align: center;
+      }
+      section {
+        background: white;
+        padding: 1em;
+        margin: 1em auto;
+        max-width: 600px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .buttonContainer {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .inputField {
+        margin-bottom: 0.5em;
+      }
+      .hidden {
+        display: none;
+      }
+      /* Feedback-Farben */
+      .feedback-good {
+        color: green;
+        font-weight: bold;
+      }
+      .feedback-ok {
+        color: orange;
+        font-weight: bold;
+      }
+      .feedback-bad {
+        color: red;
+        font-weight: bold;
+      }
+      /* Einstellungen Modal */
+      #settingsModal {
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 1em;
+        display: none; /* <-- Hier hinzufügen */
+        z-index: 100;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      #debugOutput {
+        background: #eef;
+        border: 1px solid #99c;
+        margin: 1em;
+        padding: 0.5em;
+        font-size: 0.9em;
+        white-space: pre-wrap;
+      }
+      /* Musterlösungsanzeige zunächst ausgeblendet */
+      #musterloesung.hidden {
+        display: none;
+      }
+      /* #endregion CSS Styles */
+    </style>
+  </head>
+  <body>
+    <!-- #region Header -->
+    <header>
+      <h1>Dreiecke konstruieren mit Kongruenzsätzen</h1>
+    </header>
+    <!-- #endregion Header -->
+
+    <!-- #region Aufgabendarstellung -->
+    <section id="problemDisplay">
+      <!-- Aufgabenstellung -->
+      <div id="problemStatement">
+        <p>Bitte generieren Sie eine neue Aufgabe.</p>
+      </div>
+      <!-- Punktanzeige (kumulative Punkte) -->
+      <div id="pointsDisplay"></div>
+      <!-- Formular für die Eingaben – alle Felder sind initial ausgeblendet -->
+      <form id="solutionForm">
+        <!-- Seiten -->
+        <div class="inputField hidden" id="input_side_a">
+          <label for="side_a">Seite a (cm):</label>
+          <input type="number" id="side_a" name="side_a" step="0.1" />
+        </div>
+        <div class="inputField hidden" id="input_side_b">
+          <label for="side_b">Seite b (cm):</label>
+          <input type="number" id="side_b" name="side_b" step="0.1" />
+        </div>
+        <div class="inputField hidden" id="input_side_c">
+          <label for="side_c">Seite c (cm):</label>
+          <input type="number" id="side_c" name="side_c" step="0.1" />
+        </div>
+        <!-- Winkel -->
+        <div class="inputField hidden" id="input_angle_A">
+          <label for="angle_A">Winkel α (°):</label>
+          <input type="number" id="angle_A" name="angle_A" />
+        </div>
+        <div class="inputField hidden" id="input_angle_B">
+          <label for="angle_B">Winkel β (°):</label>
+          <input type="number" id="angle_B" name="angle_B" />
+        </div>
+        <div class="inputField hidden" id="input_angle_C">
+          <label for="angle_C">Winkel γ (°):</label>
+          <input type="number" id="angle_C" name="angle_C" />
+        </div>
+        <!-- Buttoncontainer -->
+        <div class="buttonContainer">
+          <button type="submit" id="submitBtn">Eingaben absenden</button>
+          <button type="button" id="newTaskBtn">Neue Aufgabe generieren</button>
+          <button type="button" id="settingsBtn">⚙️ Einstellungen</button>
+        </div>
+      </form>
+    </section>
+    <!-- #endregion Aufgabendarstellung -->
+
+    <!-- #region Musterlösungsanzeige -->
+    <section id="musterloesung" class="hidden">
+      <h2>Musterlösung</h2>
+      <canvas id="triangleCanvas" width="300" height="300"></canvas>
+    </section>
+    <!-- #endregion Musterlösungsanzeige -->
+
+    <!-- #region Einstellungen Modal -->
+    <div id="settingsModal">
+      <h2>Einstellungen</h2>
+      <form id="settingsForm">
+        <label
+          ><input type="checkbox" name="kongruenzsatz" value="sss" checked />
+          SSS</label
+        ><br />
+        <label
+          ><input type="checkbox" name="kongruenzsatz" value="sws" /> SWS</label
+        ><br />
+        <label
+          ><input type="checkbox" name="kongruenzsatz" value="wsw" /> WSW</label
+        ><br />
+        <label
+          ><input type="checkbox" name="kongruenzsatz" value="ssw" /> SSW</label
+        ><br />
+        <button type="button" id="saveSettings">Speichern</button>
+      </form>
+    </div>
+    <!-- #endregion Einstellungen Modal -->
+
+    <!-- #region Debug-Ausgabe -->
+    <div id="debugOutput"></div>
+    <!-- #endregion Debug-Ausgabe -->
+
+    <!-- #region JavaScript -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // === Globaler Debug-Modus und Hilfsfunktion ===
+        let debugMode = false;
+        function debugInfo(label, obj) {
+          const debugEl = document.getElementById("debugOutput");
+          if (!debugMode) {
+            debugEl.hidden = true;
+            return;
+          }
+          if (debugMode) {
+            const debugEl = document.getElementById("debugOutput");
+            const message = label + ": " + JSON.stringify(obj) + "\n";
+            debugEl.innerText += message;
+          }
+        }
+
+        // === Globale Punktzahl und aktuelle Aufgabe ===
+        let cumulativePoints = 0;
+        let currentTaskSpec = null;
+
+        /* === Aufgabenfunktionen === */
+        function generateTaskSSS() {
+          let a, b, c;
+          do {
+            a = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            b = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            c = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+          } while (!(a < b + c && b < a + c && c < a + b));
+          let alpha =
+            (Math.acos((b * b + c * c - a * a) / (2 * b * c)) * 180) / Math.PI;
+          let beta =
+            (Math.acos((a * a + c * c - b * b) / (2 * a * c)) * 180) / Math.PI;
+          let gamma =
+            (Math.acos((a * a + b * b - c * c) / (2 * a * b)) * 180) / Math.PI;
+          return {
+            type: "sss",
+            given: { sides: { a: a, b: b, c: c }, angles: {} },
+            exact: {
+              sides: { a: a, b: b, c: c },
+              angles: { alpha: alpha, beta: beta, gamma: gamma },
+            },
+          };
+        }
+
+        function generateTaskSWS() {
+          let mapping = ["a", "b", "c"][Math.floor(Math.random() * 3)];
+          let givenSides = {},
+            givenAngle = {},
+            exactSides = {},
+            exactAngles = {};
+          if (mapping === "a") {
+            let a = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let b = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let gamma = Math.floor(Math.random() * 141) + 20;
+            let rad = (gamma * Math.PI) / 180;
+            let c = Math.sqrt(a * a + b * b - 2 * a * b * Math.cos(rad));
+            let alpha =
+              (Math.acos((b * b + c * c - a * a) / (2 * b * c)) * 180) /
+              Math.PI;
+            let beta =
+              (Math.acos((a * a + c * c - b * b) / (2 * a * c)) * 180) /
+              Math.PI;
+            givenSides = { a: a, b: b };
+            givenAngle = { gamma: gamma };
+            exactSides = { a: a, b: b, c: c };
+            exactAngles = { alpha: alpha, beta: beta, gamma: gamma };
+          } else if (mapping === "b") {
+            let b = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let c = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let alpha = Math.floor(Math.random() * 141) + 20;
+            let rad = (alpha * Math.PI) / 180;
+            let a = Math.sqrt(b * b + c * c - 2 * b * c * Math.cos(rad));
+            let beta =
+              (Math.acos((a * a + c * c - b * b) / (2 * a * c)) * 180) /
+              Math.PI;
+            let gamma =
+              (Math.acos((a * a + b * b - c * c) / (2 * a * b)) * 180) /
+              Math.PI;
+            givenSides = { b: b, c: c };
+            givenAngle = { alpha: alpha };
+            exactSides = { a: a, b: b, c: c };
+            exactAngles = { alpha: alpha, beta: beta, gamma: gamma };
+          } else if (mapping === "c") {
+            let c = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let a = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let beta = Math.floor(Math.random() * 141) + 20;
+            let rad = (beta * Math.PI) / 180;
+            let b = Math.sqrt(c * c + a * a - 2 * c * a * Math.cos(rad));
+            let alpha =
+              (Math.acos((b * b + c * c - a * a) / (2 * b * c)) * 180) /
+              Math.PI;
+            let gamma =
+              (Math.acos((a * a + b * b - c * c) / (2 * a * b)) * 180) /
+              Math.PI;
+            givenSides = { c: c, a: a };
+            givenAngle = { beta: beta };
+            exactSides = { a: a, b: b, c: c };
+            exactAngles = { alpha: alpha, beta: beta, gamma: gamma };
+          }
+          return {
+            type: "sws",
+            mapping: mapping,
+            given: { sides: givenSides, angles: givenAngle },
+            exact: { sides: exactSides, angles: exactAngles },
+          };
+        }
+
+        function generateTaskSSW() {
+          let mapping = ["a", "b", "c"][Math.floor(Math.random() * 3)];
+          let givenSides = {},
+            givenAngle = {},
+            exactSides = {},
+            exactAngles = {};
+          if (mapping === "a") {
+            let a = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let b = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            if (a < b) {
+              [a, b] = [b, a];
+            }
+            let alpha;
+            do {
+              alpha = Math.floor(Math.random() * 71) + 20;
+            } while ((b * Math.sin((alpha * Math.PI) / 180)) / a > 1);
+            let B =
+              (Math.asin((b * Math.sin((alpha * Math.PI) / 180)) / a) * 180) /
+              Math.PI;
+            let C = 180 - alpha - B;
+            let c =
+              (a * Math.sin((C * Math.PI) / 180)) /
+              Math.sin((alpha * Math.PI) / 180);
+            givenSides = { a: a, b: b };
+            givenAngle = { alpha: alpha };
+            exactSides = { a: a, b: b, c: c };
+            exactAngles = { alpha: alpha, beta: B, gamma: C };
+          } else if (mapping === "b") {
+            let b = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let c = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            if (b < c) {
+              [b, c] = [c, b];
+            }
+            let beta;
+            do {
+              beta = Math.floor(Math.random() * 71) + 20;
+            } while ((c * Math.sin((beta * Math.PI) / 180)) / b > 1);
+            let A =
+              (Math.asin((c * Math.sin((beta * Math.PI) / 180)) / b) * 180) /
+              Math.PI;
+            let C = 180 - beta - A;
+            let a =
+              (b * Math.sin((C * Math.PI) / 180)) /
+              Math.sin((beta * Math.PI) / 180);
+            givenSides = { b: b, c: c };
+            givenAngle = { beta: beta };
+            exactSides = { a: a, b: b, c: c };
+            exactAngles = { alpha: A, beta: beta, gamma: C };
+          } else if (mapping === "c") {
+            let c = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let a = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            if (c < a) {
+              [c, a] = [a, c];
+            }
+            let gamma;
+            do {
+              gamma = Math.floor(Math.random() * 71) + 20;
+            } while ((a * Math.sin((gamma * Math.PI) / 180)) / c > 1);
+            let B =
+              (Math.asin((a * Math.sin((gamma * Math.PI) / 180)) / c) * 180) /
+              Math.PI;
+            let A = 180 - gamma - B;
+            let b =
+              (c * Math.sin((A * Math.PI) / 180)) /
+              Math.sin((gamma * Math.PI) / 180);
+            givenSides = { c: c, a: a };
+            givenAngle = { gamma: gamma };
+            exactSides = { a: a, b: b, c: c };
+            exactAngles = { alpha: A, beta: B, gamma: gamma };
+          }
+          return {
+            type: "ssw",
+            mapping: mapping,
+            given: { sides: givenSides, angles: givenAngle },
+            exact: { sides: exactSides, angles: exactAngles },
+          };
+        }
+
+        function generateTaskWSW() {
+          let mapping = ["a", "b", "c"][Math.floor(Math.random() * 3)];
+          let givenSides = {},
+            givenAngles = {},
+            exactSides = {},
+            exactAngles = {};
+          if (mapping === "a") {
+            let a = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let beta = Math.floor(Math.random() * 51) + 20;
+            let gamma = Math.floor(Math.random() * 51) + 20;
+            while (beta + gamma >= 170) {
+              beta = Math.floor(Math.random() * 51) + 20;
+              gamma = Math.floor(Math.random() * 51) + 20;
+            }
+            let alpha = 180 - (beta + gamma);
+            givenSides = { a: a };
+            givenAngles = { beta: beta, gamma: gamma };
+            let b =
+              (a * Math.sin((beta * Math.PI) / 180)) /
+              Math.sin((alpha * Math.PI) / 180);
+            let c =
+              (a * Math.sin((gamma * Math.PI) / 180)) /
+              Math.sin((alpha * Math.PI) / 180);
+            exactSides = { a: a, b: b, c: c };
+            exactAngles = { alpha: alpha, beta: beta, gamma: gamma };
+          } else if (mapping === "b") {
+            let b = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let gamma = Math.floor(Math.random() * 51) + 20;
+            let alpha = Math.floor(Math.random() * 51) + 20;
+            while (gamma + alpha >= 170) {
+              gamma = Math.floor(Math.random() * 51) + 20;
+              alpha = Math.floor(Math.random() * 51) + 20;
+            }
+            let beta = 180 - (gamma + alpha);
+            givenSides = { b: b };
+            givenAngles = { gamma: gamma, alpha: alpha };
+            let c =
+              (b * Math.sin((gamma * Math.PI) / 180)) /
+              Math.sin((beta * Math.PI) / 180);
+            let a =
+              (b * Math.sin((alpha * Math.PI) / 180)) /
+              Math.sin((beta * Math.PI) / 180);
+            exactSides = { a: a, b: b, c: c };
+            exactAngles = { alpha: alpha, beta: beta, gamma: gamma };
+          } else if (mapping === "c") {
+            let c = parseFloat((Math.random() * (10.9 - 1.0) + 1.0).toFixed(1));
+            let alpha = Math.floor(Math.random() * 51) + 20;
+            let beta = Math.floor(Math.random() * 51) + 20;
+            while (alpha + beta >= 170) {
+              alpha = Math.floor(Math.random() * 51) + 20;
+              beta = Math.floor(Math.random() * 51) + 20;
+            }
+            let gamma = 180 - (alpha + beta);
+            givenSides = { c: c };
+            givenAngles = { alpha: alpha, beta: beta };
+            let a =
+              (c * Math.sin((beta * Math.PI) / 180)) /
+              Math.sin((gamma * Math.PI) / 180);
+            let b =
+              (c * Math.sin((alpha * Math.PI) / 180)) /
+              Math.sin((gamma * Math.PI) / 180);
+            exactSides = { a: a, b: b, c: c };
+            exactAngles = { alpha: alpha, beta: beta, gamma: gamma };
+          }
+          return {
+            type: "wsw",
+            mapping: mapping,
+            given: { sides: givenSides, angles: givenAngles },
+            exact: { sides: exactSides, angles: exactAngles },
+          };
+        }
+        /* === Ende Aufgabenfunktionen === */
+
+        // === Aufgabentext generieren ===
+        function generateTaskText(taskSpec) {
+          const greekSymbols = { alpha: "α", beta: "β", gamma: "γ" };
+          let text = "Gegeben sind: ";
+          let parts = [];
+          for (let side in taskSpec.given.sides) {
+            parts.push(
+              "Seite " + side + " = " + taskSpec.given.sides[side] + " cm"
+            );
+          }
+          for (let angle in taskSpec.given.angles) {
+            let symbol = greekSymbols[angle] || angle;
+            parts.push(
+              "Winkel " + symbol + " = " + taskSpec.given.angles[angle] + "°"
+            );
+          }
+          text += parts.join(", ") + ".\n";
+          text += "Bitte tragen Sie die fehlenden Werte ein.";
+          return text;
+        }
+        // === Ende Aufgabentext generieren ===
+
+        // === Auswahl des Aufgabentyps basierend auf den Einstellungen ===
+        function selectTaskType() {
+          const checkboxes = document.querySelectorAll(
+            'input[name="kongruenzsatz"]:checked'
+          );
+          let types = Array.from(checkboxes).map((el) =>
+            el.value.toLowerCase()
+          );
+          if (types.length === 0) {
+            types.push("sss");
+          }
+          const randomIndex = Math.floor(Math.random() * types.length);
+          let selected = types[randomIndex];
+          debugInfo("Selected Task Type", selected);
+          return selected;
+        }
+        // === Ende Auswahl ===
+
+        // === Gesamte Aufgabenstellung erstellen ===
+        function createTask() {
+          let taskType = selectTaskType();
+          let spec;
+          if (taskType === "sss") {
+            spec = generateTaskSSS();
+          } else if (taskType === "sws") {
+            spec = generateTaskSWS();
+          } else if (taskType === "ssw") {
+            spec = generateTaskSSW();
+          } else if (taskType === "wsw") {
+            spec = generateTaskWSW();
+          } else {
+            spec = generateTaskSSS();
+          }
+          currentTaskSpec = spec;
+          let taskText = generateTaskText(spec);
+          document.getElementById("problemStatement").innerText = taskText;
+          // Setze alle Eingabefelder zurück – zunächst alle ausblenden
+          [
+            "side_a",
+            "side_b",
+            "side_c",
+            "angle_A",
+            "angle_B",
+            "angle_C",
+          ].forEach((id) => {
+            let el = document.getElementById(id);
+            el.value = "";
+            el.parentElement.classList.add("hidden");
+          });
+          // Zeige nur jene Felder, die nicht vorgegeben sind.
+          for (let s of ["a", "b", "c"]) {
+            if (!(spec.given.sides && spec.given.sides[s] !== undefined)) {
+              document
+                .getElementById("input_side_" + s)
+                .classList.remove("hidden");
+            }
+          }
+          if (spec.given.angles) {
+            if (!(spec.given.angles.alpha !== undefined)) {
+              document
+                .getElementById("input_angle_A")
+                .classList.remove("hidden");
+            }
+            if (!(spec.given.angles.beta !== undefined)) {
+              document
+                .getElementById("input_angle_B")
+                .classList.remove("hidden");
+            }
+            if (!(spec.given.angles.gamma !== undefined)) {
+              document
+                .getElementById("input_angle_C")
+                .classList.remove("hidden");
+            }
+          }
+          // Stelle sicher, dass der "Eingaben absenden"-Button sichtbar ist.
+          document.getElementById("submitBtn").classList.remove("hidden");
+          // Lösche alte Punktanzeige
+          document.getElementById("pointsDisplay").innerText = "";
+          // Verberge die Musterlösung, falls sichtbar
+          document.getElementById("musterloesung").classList.add("hidden");
+          debugInfo("Final Task Specification", spec);
+        }
+        // === Ende Gesamte Aufgabenstellung ===
+
+        // === Dynamisches Zeichnen des Dreiecks im Canvas ===
+        function drawTriangle(exact) {
+          const canvas = document.getElementById("triangleCanvas");
+          const ctx = canvas.getContext("2d");
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          // Berechne das Dreieck, sodass es komplett in den Canvas passt
+          const a = exact.sides.a;
+          const c = exact.sides.c;
+          const alpha_rad = (exact.angles.alpha * Math.PI) / 180;
+          const A = { x: 0, y: 0 };
+          const B = { x: a, y: 0 };
+          const C = { x: c * Math.cos(alpha_rad), y: c * Math.sin(alpha_rad) };
+          const minX = Math.min(A.x, B.x, C.x);
+          const maxX = Math.max(A.x, B.x, C.x);
+          const minY = Math.min(A.y, B.y, C.y);
+          const maxY = Math.max(A.y, B.y, C.y);
+          const width = maxX - minX;
+          const height = maxY - minY;
+          const margin = 20;
+          const scale = Math.min(
+            (canvas.width - 2 * margin) / width,
+            (canvas.height - 2 * margin) / height
+          );
+          const offsetX = margin - minX * scale;
+          const offsetY = margin - minY * scale;
+          function transform(point) {
+            return {
+              x: point.x * scale + offsetX,
+              y: canvas.height - (point.y * scale + offsetY),
+            };
+          }
+          const A_t = transform(A);
+          const B_t = transform(B);
+          const C_t = transform(C);
+          ctx.beginPath();
+          ctx.moveTo(A_t.x, A_t.y);
+          ctx.lineTo(B_t.x, B_t.y);
+          ctx.lineTo(C_t.x, C_t.y);
+          ctx.closePath();
+          ctx.strokeStyle = "#333";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.font = "14px Arial";
+          ctx.fillStyle = "blue";
+          // Nur die Eckpunkte beschriften
+          ctx.fillText("A", A_t.x - 10, A_t.y + 15);
+          ctx.fillText("B", B_t.x + 5, B_t.y + 15);
+          ctx.fillText("C", C_t.x, C_t.y - 10);
+        }
+
+        // === Ende Zeichnen ===
+
+        // === Validierung der Lösung ===
+        function validateSolution(event) {
+          event.preventDefault();
+          let taskScore = 0;
+          let feedbackHTML = "";
+          const tolSide1 = 0.1,
+            tolSide2 = 0.2;
+          const tolAngle1 = 1,
+            tolAngle2 = 2;
+          // Für Seiten:
+          for (let s of ["a", "b", "c"]) {
+            if (
+              !(
+                currentTaskSpec.given.sides &&
+                currentTaskSpec.given.sides[s] !== undefined
+              )
+            ) {
+              let inputVal = parseFloat(
+                document.getElementById("side_" + s).value
+              );
+              let exactVal = currentTaskSpec.exact.sides[s];
+              let diff = Math.abs(inputVal - exactVal);
+              let score;
+              if (diff <= tolSide1) {
+                score = 2;
+                feedbackHTML += `<span class="feedback-good">Seite ${s}: sehr gut</span><br>`;
+              } else if (diff <= tolSide2) {
+                score = 1;
+                feedbackHTML += `<span class="feedback-ok">Seite ${s}: ok</span><br>`;
+              } else {
+                score = -1;
+                feedbackHTML += `<span class="feedback-bad">Falsch! ${s} = ${exactVal.toFixed(
+                  1
+                )} cm</span><br>`;
+              }
+              taskScore += score;
+            }
+          }
+
+          // Für Winkel:
+          const greekSymbols = { alpha: "α", beta: "β", gamma: "γ" };
+          for (let angleKey of ["alpha", "beta", "gamma"]) {
+            if (
+              !(
+                currentTaskSpec.given.angles &&
+                currentTaskSpec.given.angles[angleKey] !== undefined
+              )
+            ) {
+              let id =
+                angleKey === "gamma"
+                  ? "angle_C"
+                  : "angle_" + angleKey.charAt(0).toUpperCase();
+              let inputVal = parseFloat(document.getElementById(id).value);
+              let exactVal = currentTaskSpec.exact.angles[angleKey];
+              let diff = Math.abs(inputVal - exactVal);
+              let score;
+              if (diff <= tolAngle1) {
+                score = 2;
+                feedbackHTML += `<span class="feedback-good">Winkel ${greekSymbols[angleKey]}: sehr gut</span><br>`;
+              } else if (diff <= tolAngle2) {
+                score = 1;
+                feedbackHTML += `<span class="feedback-ok">Winkel ${greekSymbols[angleKey]}: ok</span><br>`;
+              } else {
+                score = -1;
+                feedbackHTML += `<span class="feedback-bad">Falsch! ${
+                  greekSymbols[angleKey]
+                } = ${exactVal.toFixed(0)}°</span><br>`;
+              }
+              taskScore += score;
+            }
+          }
+
+          cumulativePoints += taskScore;
+          document.getElementById("pointsDisplay").innerHTML =
+            "Diese Aufgabe: " +
+            taskScore +
+            " Punkte<br>" +
+            "Kumulative Punktzahl: " +
+            cumulativePoints +
+            "<br>" +
+            feedbackHTML;
+          // Verstecke den Absenden-Button, bis eine neue Aufgabe generiert wird.
+          document.getElementById("submitBtn").classList.add("hidden");
+          // Zeige die Musterlösung an.
+          document.getElementById("musterloesung").classList.remove("hidden");
+          drawTriangle(currentTaskSpec.exact);
+        }
+
+        document
+          .getElementById("solutionForm")
+          .addEventListener("submit", validateSolution);
+        // === Ende Validierung ===
+
+        // === Neue Aufgabe generieren ===
+        document
+          .getElementById("newTaskBtn")
+          .addEventListener("click", function () {
+            document.getElementById("debugOutput").innerText = "";
+            createTask();
+          });
+        // === Einstellungen Modal ===
+        document
+          .getElementById("settingsBtn")
+          .addEventListener("click", function () {
+            let modal = document.getElementById("settingsModal");
+            modal.style.display =
+              modal.style.display === "none" || modal.style.display === ""
+                ? "block"
+                : "none";
+          });
+        document
+          .getElementById("saveSettings")
+          .addEventListener("click", function () {
+            document.getElementById("settingsModal").style.display = "none";
+          });
+        // === Gesamte Aufgabenstellung initial generieren ===
+        createTask();
+        // === Ende Gesamte Aufgabenstellung ===
+      });
+    </script>
+    <!-- #endregion JavaScript -->
+  </body>
+</html>
