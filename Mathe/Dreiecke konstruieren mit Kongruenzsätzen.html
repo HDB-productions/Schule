@@ -593,25 +593,20 @@
   ggbApplet.evalCommand("SetFixed(C, true)")
   ggbApplet.setGraphicsOptions({"gridDistance": {"x":0.5, "y":0.5}});
   ggbApplet.evalCommand('a_1=Segment(B,C)')
-  ggbApplet.evalCommand('SetCaption(a_1, "a")')
+  ggbApplet.evalCommand('SetCaption(a_1, "a="round(a_1,1))')
   ggbApplet.evalCommand('b_1=Segment(A,C)')
-  ggbApplet.evalCommand('SetCaption(b_1, "b")')
+  ggbApplet.evalCommand('SetCaption(b_1, "b="round(b_1,1))')
   ggbApplet.evalCommand('c_1=Segment(A,B)')
-  ggbApplet.evalCommand('SetCaption(c_1, "c")')
+  ggbApplet.evalCommand('SetCaption(c_1, "c="round(c_1,1))')
   ggbApplet.evalCommand('alpha_1=Angle(B,A,C)')
-  ggbApplet.evalCommand('SetCaption(alpha_1, "α")')
+  ggbApplet.evalCommand('SetCaption(alpha_1, "α="round(alpha_1,0))')
   ggbApplet.evalCommand('beta_1=Angle(C,B,A)')
-  ggbApplet.evalCommand('SetCaption(beta_1, "β")')
+  ggbApplet.evalCommand('SetCaption(beta_1, "β="round(beta_1,0))')
   ggbApplet.evalCommand('gamma_1=Angle(A,C,B)')
-  ggbApplet.evalCommand('SetCaption(gamma_1, "γ")')
+  ggbApplet.evalCommand('SetCaption(gamma_1, "γ="round(gamma_1,0))')
   ggbApplet.evalCommand("SetColor[a_1, 255, 0, 0]");
   ggbApplet.evalCommand("SetColor[b_1, 0, 255, 255]");
   ggbApplet.evalCommand("SetColor[c_1, 0, 255, 0]");
-
-
-
-
-  
 }
 
         // === Ende Zeichnen ===
