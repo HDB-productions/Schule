@@ -1,220 +1,458 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inhaltsverzeichnis</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        .category {
-            margin: 20px 20px;
-            padding: 20px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            background-color: #ffffff;
-            width: calc(100% - 40px);
-            box-sizing: border-box;
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .button {
-            padding: 15px 5px;
-            margin: 5px;
-            font-size: 16px;
-            text-decoration: none;
-            border-radius: 8px;
-            color: white;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-            border: none;
-            flex: 1 1 200px;
-            max-width: 200px;
-            box-sizing: border-box;
-        }
-        .mathe-button {
-            background-color: #FF8C00;
-        }
-        .mathe-button:hover {
-            background-color: #e67e00;
-        }
-        .mathe-button.active {
-            background-color: #e67e00;
-        }
-        .physik-button {
-            background-color: #4682B4;
-        }
-        .physik-button:hover {
-            background-color: #3b6b8e;
-        }
-        .chemie-button {
-            background-color: #FF1493;
-        }
-        .chemie-button:hover {
-            background-color: #e01383;
-        }
-        .bio-button {
-            background-color: #32CD32;
-        }
-        .bio-button:hover {
-            background-color: #2cab2c;
-        }
-        .tool-button {
-            background-color: #2196F3;
-        }
-        .tool-button:hover {
-            background-color: #0b7dda;
-        }
-        .link-list {
-            display: none;
-            margin-top: 20px;
-            text-align: left;
-        }
-        details {
-            margin-top: 10px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        text-align: center;
+        padding: 20px;
+      }
+      h1 {
+        color: #333;
+      }
+      .category {
+        margin: 20px 20px;
+        padding: 20px;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        background-color: #ffffff;
+        width: calc(100% - 40px);
+        box-sizing: border-box;
+      }
+      .button-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .button {
+        padding: 15px 5px;
+        margin: 5px;
+        font-size: 16px;
+        text-decoration: none;
+        border-radius: 8px;
+        color: white;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+        border: none;
+        flex: 1 1 200px;
+        max-width: 200px;
+        box-sizing: border-box;
+      }
+      .mathe-button {
+        background-color: #ff8c00;
+      }
+      .mathe-button:hover {
+        background-color: #e67e00;
+      }
+      .mathe-button.active {
+        background-color: #e67e00;
+      }
+      .physik-button {
+        background-color: #4682b4;
+      }
+      .physik-button:hover {
+        background-color: #3b6b8e;
+      }
+      .chemie-button {
+        background-color: #ff1493;
+      }
+      .chemie-button:hover {
+        background-color: #e01383;
+      }
+      .bio-button {
+        background-color: #32cd32;
+      }
+      .bio-button:hover {
+        background-color: #2cab2c;
+      }
+      .tool-button {
+        background-color: #2196f3;
+      }
+      .tool-button:hover {
+        background-color: #0b7dda;
+      }
+      .link-list {
+        display: none;
+        margin-top: 20px;
+        text-align: left;
+      }
+      details {
+        margin-top: 10px;
+      }
     </style>
     <script>
-        function toggleLinks(buttonId, listId) {
-            const button = document.getElementById(buttonId);
-            const list = document.getElementById(listId);
+      function toggleLinks(buttonId, listId) {
+        const button = document.getElementById(buttonId);
+        const list = document.getElementById(listId);
 
-            // Hide all link lists
-            const allLists = document.querySelectorAll('.link-list');
-            allLists.forEach(item => {
-                item.style.display = "none";
-            });
+        // Hide all link lists
+        const allLists = document.querySelectorAll(".link-list");
+        allLists.forEach((item) => {
+          item.style.display = "none";
+        });
 
-            // Remove active class from all buttons
-            const allButtons = document.querySelectorAll('.button');
-            allButtons.forEach(item => {
-                item.classList.remove('active');
-            });
+        // Remove active class from all buttons
+        const allButtons = document.querySelectorAll(".button");
+        allButtons.forEach((item) => {
+          item.classList.remove("active");
+        });
 
-            // Toggle visibility of the selected list
-            if (list.style.display === "none" || list.style.display === "") {
-                list.style.display = "block";
-                button.classList.add("active");
-            } else {
-                list.style.display = "none";
-                button.classList.remove("active");
-            }
+        // Toggle visibility of the selected list
+        if (list.style.display === "none" || list.style.display === "") {
+          list.style.display = "block";
+          button.classList.add("active");
+        } else {
+          list.style.display = "none";
+          button.classList.remove("active");
         }
+      }
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Willkommen auf HDB's Seite</h1>
-    <p>Hier findest du Links der von mir im Unterricht genutzten (zum Teil selbst erstellten) Materialien nach Fächern sortiert.</p>
-    <p>Sollte Interesse bestehen, kann ich die Link-Sammlung bei Zeiten erweitern.</p>
+    <p>
+      Hier findest du Links der von mir im Unterricht genutzten (zum Teil selbst
+      erstellten) Materialien nach Fächern sortiert.
+    </p>
+    <p>
+      Sollte Interesse bestehen, kann ich die Link-Sammlung bei Zeiten
+      erweitern.
+    </p>
 
     <div class="category" id="faecher">
-        <h2>Fächer</h2>
-        <div class="button-container">
-            <a id="mathe-button" class="button mathe-button" onclick="toggleLinks('mathe-button', 'mathe-links')" href="javascript:void(0)">Mathe</a>
-            <a id="physik-button" class="button physik-button" onclick="toggleLinks('physik-button', 'physik-links')" href="javascript:void(0)">Physik</a>
-            <a id="chemie-button" class="button chemie-button" onclick="toggleLinks('chemie-button', 'chemie-links')" href="javascript:void(0)">Chemie</a>
-            <a id="bio-button" class="button bio-button" onclick="toggleLinks('bio-button', 'bio-links')" href="javascript:void(0)">Biologie</a>
-        </div>
+      <h2>Fächer</h2>
+      <div class="button-container">
+        <a
+          id="mathe-button"
+          class="button mathe-button"
+          onclick="toggleLinks('mathe-button', 'mathe-links')"
+          href="javascript:void(0)"
+          >Mathe</a
+        >
+        <a
+          id="physik-button"
+          class="button physik-button"
+          onclick="toggleLinks('physik-button', 'physik-links')"
+          href="javascript:void(0)"
+          >Physik</a
+        >
+        <a
+          id="chemie-button"
+          class="button chemie-button"
+          onclick="toggleLinks('chemie-button', 'chemie-links')"
+          href="javascript:void(0)"
+          >Chemie</a
+        >
+        <a
+          id="bio-button"
+          class="button bio-button"
+          onclick="toggleLinks('bio-button', 'bio-links')"
+          href="javascript:void(0)"
+          >Biologie</a
+        >
+      </div>
 
-        <div id="mathe-links" class="link-list">
-            <h2>Mathe</h2>
+      <div id="mathe-links" class="link-list">
+        <h2>Mathe</h2>
+        <ul>
+          <li>
+            <a href="https://www.geogebra.org/m/b9cu3ddk" target="_blank"
+              >Schriftliches Rechnen (+ und -) üben</a
+            >
+          </li>
+          <li>
+            <a href="https://www.geogebra.org/m/zkq75c3d" target="_blank"
+              >Runden, Balkendiagramme und Stellenwerttafel üben</a
+            >
+          </li>
+          <li>
+            <a href="https://www.geogebra.org/m/mkxpqssp" target="_blank"
+              >Längen, Flächen und Volumina üben</a
+            >
+          </li>
+          <li>
+            <a href="https://www.geogebra.org/m/ac7knnpn" target="_blank"
+              >Senkrecht und Parallel üben</a
+            >
+          </li>
+          <li>
+            <a href="Mathe/Online-Rechner zum Lösen von Gleichungen.html"
+              >Äquivalenzumformungen üben</a
+            >
+          </li>
+          <li>
+            <a href="Mathe/Zahlenstrahl.html" target="_blank">Zahlenstrahl</a>
+          </li>
+          <li>
+            <a href="Mathe/Zahlenstrahl Aufgaben.html" target="_blank"
+              >Zahlenstrahl Aufgaben</a
+            >
+          </li>
+          <details>
+            <summary>Bruchrechnung</summary>
             <ul>
-                <li><a href="https://www.geogebra.org/m/b9cu3ddk" target="_blank">Schriftliches Rechnen (+ und -) üben</a></li>
-                <li><a href="https://www.geogebra.org/m/zkq75c3d" target="_blank">Runden, Balkendiagramme und Stellenwerttafel üben</a></li>
-                <li><a href="https://www.geogebra.org/m/mkxpqssp" target="_blank">Längen, Flächen und Volumina üben</a></li>
-                <li><a href="https://www.geogebra.org/m/ac7knnpn" target="_blank">Senkrecht und Parallel üben</a></li>
-                <li><a href="Mathe/Online-Rechner zum Lösen von Gleichungen.html">Äquivalenzumformungen üben</a></li>
-                <li><a href="Mathe/Zahlenstrahl.html" target="_blank">Zahlenstrahl</a></li>
-                <li><a href="Mathe/Zahlenstrahl Aufgaben.html" target="_blank">Zahlenstrahl Aufgaben</a></li>
-                <details>
-                    <summary>Bruchrechnung</summary>
-                    <ul>
-                        <li><a href="https://www.alice.edu.tum.de/bruchrechnen.html#" target="_blank">Buch: Bruchrechnung TU-München</a></li>
-                        <li><a href="https://www.geogebra.org/m/Fa8jjyk9" target="_blank">Buch(GGB): Bruchrechnung Wolfgang Wengler</a></li>
-                        <li><a href="https://www.alice.edu.tum.de/bruchrechnen.html#" target="_blank">Buch: Bruchrechnung TU-München</a></li>
-                        <li><a href="https://www.geogebra.org/m/wpd732cy" target="_blank">Gemischte Zahl in unechten Bruch umwandeln</a></li>
-                        <li><a href="https://www.geogebra.org/m/Fa8jjyk9#material/bnakbejz" target="_blank">Brüche kürzen</a></li>
-                        <li><a href="Mathe/Brüche Addieren.html" target="_blank">Brüche addieren</a></li>
-                        <li><a href="https://www.geogebra.org/m/rjmufxgn" target="_blank">Rechnen mit Brüchen</a></li>
-                        <li><a href="https://www.geogebra.org/m/jexewg5q" target="_blank">Bruch zu Dezimal</a></li>
-                        <li><a href="Mathe/Bruch%20darstellen.html" target="_blank">Brüche darstellen</a></li>
-                    </ul>
-                </details>
-                <li><a href="Mathe/Schriftlich Dividieren mit Komma.htm" target="_blank">Schriftliche Division</a></li>
-                <li><a href="Mathe/Proportional oder antiproportional.html" target="_blank">Proportional oder antiproportional</a></li>
+              <li>
+                <a
+                  href="https://www.alice.edu.tum.de/bruchrechnen.html#"
+                  target="_blank"
+                  >Buch: Bruchrechnung TU-München</a
+                >
+              </li>
+              <li>
+                <a href="https://www.geogebra.org/m/Fa8jjyk9" target="_blank"
+                  >Buch(GGB): Bruchrechnung Wolfgang Wengler</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.alice.edu.tum.de/bruchrechnen.html#"
+                  target="_blank"
+                  >Buch: Bruchrechnung TU-München</a
+                >
+              </li>
+              <li>
+                <a href="https://www.geogebra.org/m/wpd732cy" target="_blank"
+                  >Gemischte Zahl in unechten Bruch umwandeln</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.geogebra.org/m/Fa8jjyk9#material/bnakbejz"
+                  target="_blank"
+                  >Brüche kürzen</a
+                >
+              </li>
+              <li>
+                <a href="Mathe/Brüche Addieren.html" target="_blank"
+                  >Brüche addieren</a
+                >
+              </li>
+              <li>
+                <a href="https://www.geogebra.org/m/rjmufxgn" target="_blank"
+                  >Rechnen mit Brüchen</a
+                >
+              </li>
+              <li>
+                <a href="https://www.geogebra.org/m/jexewg5q" target="_blank"
+                  >Bruch zu Dezimal</a
+                >
+              </li>
+              <li>
+                <a href="Mathe/Bruch%20darstellen.html" target="_blank"
+                  >Brüche darstellen</a
+                >
+              </li>
             </ul>
-        </div>
+          </details>
+          <li>
+            <a href="Mathe/Schriftlich Dividieren mit Komma.htm" target="_blank"
+              >Schriftliche Division</a
+            >
+          </li>
+          <li>
+            <a
+              href="Mathe/Proportional oder antiproportional.html"
+              target="_blank"
+              >Proportional oder antiproportional</a
+            >
+          </li>
+        </ul>
+      </div>
 
-        <div id="physik-links" class="link-list">
-            <h2>Physik</h2>
-            <ul>
-                <li><a href="Physik/Taschenrechner.html" target="_blank">Basis HTML-Taschenrechner</a></li>
-                <li><a href="https://phet.colorado.edu/sims/html/circuit-construction-kit-ac-virtual-lab/latest/circuit-construction-kit-ac-virtual-lab_de.html" target="_blank">Schaltkreis Labor</a></li>
-                <li><a href="https://www.geogebra.org/m/dy2pvatq" target="_blank">Schaltungsanalyse</a></li>
-                <li><a href="Physik/edulo E-LehreII/start.html" target="_blank">Buch E-LehreII(JG9/10)</a></li>
-                <li><a href="Physik/Kernphysik/start.html" target="_blank">Buch Kernphysik(JG9/10)</a></li>
-                <li><a href="Physik/Edulo Mechanik/start.html" target="_blank">Buch Mechanik 7/8</a></li>
-                <li><a href="Physik/Energie/start.html" target="_blank">Buch Energie 7/8</a></li>
-                <li><a href="Physik/Edulo Energie-Leistung-Elektrizität/start.html" target="_blank">Energie-Leistung-Elektrizität 9R</a></li>
-                <details>
-                    <summary>Bewegungslehre</summary>
-                    <ul>
-                        <li><a href="https://www.geogebra.org/m/zum6cgxk" target="_blank">Gleichförmige Bewegung in Diagrammen dargestellt</a></li>
-                        <li><a href="https://www.geogebra.org/m/wbjtce3t" target="_blank">Bewegungsgleichung aus Diagramm ablesen Übung</a></li>
-                        <li><a href="https://www.geogebra.org/m/hadax75z" target="_blank">t-v und t-s Diagramm Gleichförmige Bewegung</a></li>
-                        <li><a href="https://www.geogebra.org/m/xswe7nkf" target="_blank">Formelzeichen und Einheiten zuordnen s,v,a,t</a></li>
-                    </ul>
-                </details>
-                <li><a href="Physik/Bewegung_in_Kraftfeldern 1(Gravitationsfeld).html" target="_blank">Bewegung in Kraftfeldern 1 (Gravitationsfeld)</a></li>
-                <li><a href="Physik/Bewegung_in_Kraftfeldern 2 (Elektrisches Feld).html" target="_blank">Bewegung in Kraftfeldern 2 (Elektrisches Feld)</a></li>
-                <li><a href="https://virtuelle-experimente.de/kanone/klassisch/aufbau.php" target="_blank">Elektronenkanone</a></li>
-                <li><a href="https://virtuelle-experimente.de/e-feld/hypothesen/versuchsaufbau.php" target="_blank">Elektronenablenkröhre (Querfeld)</a></li>
-                <li><a href="https://virtuelle-experimente.de/b-feld/b-feld/helmholtzspulenpaar.php" target="_blank">Elektronen im B-Feld (Kathodenstrahlröhre)</a></li>
-            </ul>
-        </div>
+      <div id="physik-links" class="link-list">
+        <h2>Physik</h2>
+        <ul>
+          <li>
+            <a href="Physik/Taschenrechner.html" target="_blank"
+              >Basis HTML-Taschenrechner</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://phet.colorado.edu/sims/html/circuit-construction-kit-ac-virtual-lab/latest/circuit-construction-kit-ac-virtual-lab_de.html"
+              target="_blank"
+              >Schaltkreis Labor</a
+            >
+          </li>
+          <li>
+            <a href="https://www.geogebra.org/m/dy2pvatq" target="_blank"
+              >Schaltungsanalyse</a
+            >
+          </li>
+          <li>
+            <a href="Physik/edulo E-LehreII/start.html" target="_blank"
+              >Buch E-LehreII(JG9/10)</a
+            >
+          </li>
+          <li>
+            <a href="Physik/Kernphysik/start.html" target="_blank"
+              >Buch Kernphysik(JG9/10)</a
+            >
+          </li>
+          <li>
+            <a href="Physik/Edulo Mechanik/start.html" target="_blank"
+              >Buch Mechanik 7/8</a
+            >
+          </li>
+          <li>
+            <a href="Physik/Energie/start.html" target="_blank"
+              >Buch Energie 7/8</a
+            >
+          </li>
+          <li>
+            <a
+              href="Physik/Edulo Energie-Leistung-Elektrizität/start.html"
+              target="_blank"
+              >Energie-Leistung-Elektrizität 9R</a
+            >
+          </li>
+          <li>
+            <a href="Physik/Schallwellen.html" target="_blank">Schallwellen</a>
+          </li>
 
-        <div id="chemie-links" class="link-list">
-            <h2>Chemie</h2>
+          <details>
+            <summary>Bewegungslehre</summary>
             <ul>
-                <li><a href="Chemie/GHS-Quiz.Html" target="_blank">GHS-Quiz</a></li>
-                <li><a href="Chemie/Edulo Laborführerschen/start.html" target="_blank">Edulo Laborführerschein</a></li>  
-                <li><a href="Chemie/Edulo Stoffeigenschaften/start.html" target="_blank">Stoffeigenschaften</a> </li>
+              <li>
+                <a href="https://www.geogebra.org/m/zum6cgxk" target="_blank"
+                  >Gleichförmige Bewegung in Diagrammen dargestellt</a
+                >
+              </li>
+              <li>
+                <a href="https://www.geogebra.org/m/wbjtce3t" target="_blank"
+                  >Bewegungsgleichung aus Diagramm ablesen Übung</a
+                >
+              </li>
+              <li>
+                <a href="https://www.geogebra.org/m/hadax75z" target="_blank"
+                  >t-v und t-s Diagramm Gleichförmige Bewegung</a
+                >
+              </li>
+              <li>
+                <a href="https://www.geogebra.org/m/xswe7nkf" target="_blank"
+                  >Formelzeichen und Einheiten zuordnen s,v,a,t</a
+                >
+              </li>
             </ul>
-        </div>
+          </details>
+          <li>
+            <a
+              href="Physik/Bewegung_in_Kraftfeldern 1(Gravitationsfeld).html"
+              target="_blank"
+              >Bewegung in Kraftfeldern 1 (Gravitationsfeld)</a
+            >
+          </li>
+          <li>
+            <a
+              href="Physik/Bewegung_in_Kraftfeldern 2 (Elektrisches Feld).html"
+              target="_blank"
+              >Bewegung in Kraftfeldern 2 (Elektrisches Feld)</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://virtuelle-experimente.de/kanone/klassisch/aufbau.php"
+              target="_blank"
+              >Elektronenkanone</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://virtuelle-experimente.de/e-feld/hypothesen/versuchsaufbau.php"
+              target="_blank"
+              >Elektronenablenkröhre (Querfeld)</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://virtuelle-experimente.de/b-feld/b-feld/helmholtzspulenpaar.php"
+              target="_blank"
+              >Elektronen im B-Feld (Kathodenstrahlröhre)</a
+            >
+          </li>
+        </ul>
+      </div>
 
-        <div id="bio-links" class="link-list">
-            <h2>Bio</h2>
-            <ul>
-                <li><a href="Bio/Edulo Bio/start.html" target="_blank">Buch Bio 5/6</a></li>
-            </ul>
-        </div>
+      <div id="chemie-links" class="link-list">
+        <h2>Chemie</h2>
+        <ul>
+          <li><a href="Chemie/GHS-Quiz.Html" target="_blank">GHS-Quiz</a></li>
+          <li>
+            <a href="Chemie/Edulo Laborführerschen/start.html" target="_blank"
+              >Edulo Laborführerschein</a
+            >
+          </li>
+          <li>
+            <a href="Chemie/Edulo Stoffeigenschaften/start.html" target="_blank"
+              >Stoffeigenschaften</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div id="bio-links" class="link-list">
+        <h2>Bio</h2>
+        <ul>
+          <li>
+            <a href="Bio/Edulo Bio/start.html" target="_blank">Buch Bio 5/6</a>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="category" id="tools">
-        <h2>Tools</h2>
-        <div class="button-container">
-            <a href="Taschenrechner.html" class="button tool-button" target="_blank">Einfacher Taschenrechner</a>
-            <a href="https://www.geogebra.org/" class="button tool-button" target="_blank">Geogebra</a>
-            <a href="https://www.geogebra.org/cas?lang=de" class="button tool-button" target="_blank">Geogebra CAS</a>
-            <a href="Gleichungen Handschriftlich.html" class="button tool-button">Gleichungseditor (Mathematisch)</a>
-            <a href="Chemische Gleichungen schreiben.html" class="button tool-button">Gleichungseditor (Chemisch)</a>
-            <a href="https://www.edulo.com/" class="button tool-button" target="_blank">Edulo</a>
-            <a href="https://chatgpt.com" class="button tool-button" target="_blank">ChatGPT</a>
-            <a href="https://tools.fobizz.com/" class="button tool-button" target="_blank">Fobizz Tools</a>
-        </div>
+      <h2>Tools</h2>
+      <div class="button-container">
+        <a href="Taschenrechner.html" class="button tool-button" target="_blank"
+          >Einfacher Taschenrechner</a
+        >
+        <a
+          href="https://www.geogebra.org/"
+          class="button tool-button"
+          target="_blank"
+          >Geogebra</a
+        >
+        <a
+          href="https://www.geogebra.org/cas?lang=de"
+          class="button tool-button"
+          target="_blank"
+          >Geogebra CAS</a
+        >
+        <a href="Gleichungen Handschriftlich.html" class="button tool-button"
+          >Gleichungseditor (Mathematisch)</a
+        >
+        <a
+          href="Chemische Gleichungen schreiben.html"
+          class="button tool-button"
+          >Gleichungseditor (Chemisch)</a
+        >
+        <a
+          href="https://www.edulo.com/"
+          class="button tool-button"
+          target="_blank"
+          >Edulo</a
+        >
+        <a href="https://chatgpt.com" class="button tool-button" target="_blank"
+          >ChatGPT</a
+        >
+        <a
+          href="https://tools.fobizz.com/"
+          class="button tool-button"
+          target="_blank"
+          >Fobizz Tools</a
+        >
+      </div>
     </div>
     <div class="category">
-        <h2><a href="https://www.youtube.com/@HDB-AES" target="_blank">Youtube Kanal</a></h2>
+      <h2>
+        <a href="https://www.youtube.com/@HDB-AES" target="_blank"
+          >Youtube Kanal</a
+        >
+      </h2>
     </div>
-    </body>
+  </body>
 </html>
