@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      Kreiswellen-Animation mit optionalem 2. Sender, Touch-Drag und verstecktem
+      Phasen-Offset
+    </title>
+    <style>
+      canvas {
+        border: 1px solid black;
+        display: block;
+        margin: 0 auto;
+        cursor: crosshair;
+        touch-action: none; /* Verhindert Scrollen/Pinch auf Mobile */
+      }
+      .controls {
+        width: 600px;
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-family: sans-serif;
+      }
+      label {
+        display: inline-block;
+        width: 150px;
+      }
+      input[type="range"] {
+        width: 200px;
+        vertical-align: middle;
+      }
+      .sender-label {
+        width: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="waveCanvas" width="600" height="600"></canvas>
+
+    <div class="controls">
+      <div>
+        <label for="spacingSlider">Gitterabstand:</label>
+        <input
+          id="spacingSlider"
+          type="range"
+          min="1"
+          max="50"
+          step="1"
+          value="5"
+        />
+        <span id="spacingValue">5 px</span>
+      </div>
+
+      <div>
+        <label for="frequencySlider">Frequenz:</label>
+        <input
+          id="frequencySlider"
+          type="range"
+          min="0"
+          max="2"
+          step="0.01"
+          value="1"
+        />
+        <span id="frequencyValue">1 Hz</span>
+      </div>
+
+      <div>
+        <label for="wavelengthSlider">Wellenlänge:</label>
+        <input
+          id="wavelengthSlider"
+          type="range"
+          min="50"
+          max="300"
+          step="1"
+          value="100"
+        />
+        <span id="wavelengthValue">100 px</span>
+      </div>
+
+      <!-- Checkbox für 2. Sender -->
+      <div>
+        <label class="sender-label" for="secondSenderCheckbox"
+          >2. Sender aktivieren</label
+        >
+        <input type="checkbox" id="secondSenderCheckbox" />
+      </div>
+
+      <!-- Phasen-Offset in Vielfachen von Pi: 0..2 -->
+      <!-- Wird nur angezeigt, wenn 2. Sender aktiviert ist. -->
+      <div id="phaseControl" style="display: none">
+        <label for="phaseSlider">Phasen-Offset (in π):</label>
+        <input
+          id="phaseSlider"
+          type="range"
+          min="0"
+          max="2"
+          step="0.01"
+          value="0"
+        />
+        <span id="phaseValue">0</span>
+      </div>
+    </div>
+
+    <script>
+      let canvas = document.getElementById("waveCanvas");
+      let ctx = canvas.getContext("2d");
+
+      let width = canvas.width;
+      let height = canvas.height;
+
+      // Basiskonfiguration
+      let amplitude = 5; // Wellenamplitude
+      let spacing = 5; // Punktabstand
+      let frequency = 1; // Frequenz
+      let wavelength = 100; // Wellenlänge
+      let phaseSliderValue = 0; // Phasenverschiebung in Vielfachen von π
+
+      // Sender 1
+      let center1X = width / 2;
+      let center1Y = height / 2;
+
+      // Sender 2 (etwas rechts vom Zentrum)
+      let center2X = width / 2 + 100;
+      let center2Y = height / 2;
+
+      // Aktivierung zweiter Sender
+      let secondSenderActive = false;
+
+      // Punkteliste
+      let points = [];
+
+      // Alte spacing
+      let oldSpacing = spacing;
+
+      // Drag & Drop
+      let isDragging1 = false;
+      let dragOffset1X = 0;
+      let dragOffset1Y = 0;
+
+      let isDragging2 = false;
+      let dragOffset2X = 0;
+      let dragOffset2Y = 0;
+
+      // Slider / Checkbox
+      const spacingSliderEl = document.getElementById("spacingSlider");
+      const frequencySliderEl = document.getElementById("frequencySlider");
+      const wavelengthSliderEl = document.getElementById("wavelengthSlider");
+      const phaseSliderEl = document.getElementById("phaseSlider");
+      const secondSenderCheckbox = document.getElementById(
+        "secondSenderCheckbox"
+      );
+
+      // Anzeige-Spans
+      const spacingValueEl = document.getElementById("spacingValue");
+      const frequencyValueEl = document.getElementById("frequencyValue");
+      const wavelengthValueEl = document.getElementById("wavelengthValue");
+      const phaseValueEl = document.getElementById("phaseValue");
+
+      const phaseControlDiv = document.getElementById("phaseControl");
+
+      // Gitter so erzeugen, dass die gesamte Canvas abgedeckt wird,
+      // unabhängig davon, wo der Sender 1 hin verschoben wird.
+      function generatePoints() {
+        points = [];
+
+        // Maximaler horizontaler / vertikaler Abstand
+        let horizontalDistance = Math.max(center1X, width - center1X);
+        let verticalDistance = Math.max(center1Y, height - center1Y);
+
+        // Wie viele Schritte nach links / rechts?
+        let maxI = Math.ceil(horizontalDistance / spacing) + 2;
+        let maxJ = Math.ceil(verticalDistance / spacing) + 2;
+
+        // Raster um Sender1
+        for (let i = -maxI; i <= maxI; i++) {
+          for (let j = -maxJ; j <= maxJ; j++) {
+            let x = center1X + i * spacing;
+            let y = center1Y + j * spacing;
+            // Nur Punkte im sichtbaren Canvas-Bereich
+            if (x >= 0 && x <= width && y >= 0 && y <= height) {
+              points.push({ x, y });
+            }
+          }
+        }
+      }
+
+      // Parameter aktualisieren
+      function updateParams() {
+        spacing = parseInt(spacingSliderEl.value);
+        frequency = parseFloat(frequencySliderEl.value);
+        wavelength = parseFloat(wavelengthSliderEl.value);
+
+        // Checkbox -> Schalter f. 2. Sender
+        secondSenderActive = secondSenderCheckbox.checked;
+
+        // Phase-Offset-Slider ein-/ausblenden
+        if (secondSenderActive) {
+          phaseControlDiv.style.display = "block";
+        } else {
+          phaseControlDiv.style.display = "none";
+        }
+
+        phaseSliderValue = parseFloat(phaseSliderEl.value); // 0..2, in π
+
+        // Label-Updates mit Einheit
+        spacingValueEl.textContent = spacing + " px";
+        frequencyValueEl.textContent = frequency.toFixed(2) + " Hz";
+        wavelengthValueEl.textContent = wavelength + " px";
+        phaseValueEl.textContent = phaseSliderValue.toFixed(2);
+
+        if (spacing !== oldSpacing) {
+          generatePoints();
+          oldSpacing = spacing;
+        }
+      }
+
+      // Initial
+      generatePoints();
+
+      spacingSliderEl.addEventListener("input", updateParams);
+      frequencySliderEl.addEventListener("input", updateParams);
+      wavelengthSliderEl.addEventListener("input", updateParams);
+      phaseSliderEl.addEventListener("input", updateParams);
+      secondSenderCheckbox.addEventListener("change", updateParams);
+
+      // Mouse Drag&Drop
+      canvas.addEventListener("mousedown", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        // Distanz zu Sender1
+        let dist1 = Math.sqrt(
+          (mouseX - center1X) ** 2 + (mouseY - center1Y) ** 2
+        );
+        // Distanz zu Sender2
+        let dist2 = Math.sqrt(
+          (mouseX - center2X) ** 2 + (mouseY - center2Y) ** 2
+        );
+
+        if (dist1 < 10) {
+          // Klick in Nähe von Sender1
+          isDragging1 = true;
+          dragOffset1X = mouseX - center1X;
+          dragOffset1Y = mouseY - center1Y;
+        } else if (secondSenderActive && dist2 < 10) {
+          // Klick in Nähe von Sender2 (nur wenn aktiv)
+          isDragging2 = true;
+          dragOffset2X = mouseX - center2X;
+          dragOffset2Y = mouseY - center2Y;
+        }
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        if (!isDragging1 && !isDragging2) return;
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        if (isDragging1) {
+          center1X = mouseX - dragOffset1X;
+          center1Y = mouseY - dragOffset1Y;
+          // Raster um Sender1 neu aufbauen
+          generatePoints();
+        } else if (isDragging2) {
+          center2X = mouseX - dragOffset2X;
+          center2Y = mouseY - dragOffset2Y;
+          // Raster bleibt
+        }
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        isDragging1 = false;
+        isDragging2 = false;
+      });
+      canvas.addEventListener("mouseleave", () => {
+        isDragging1 = false;
+        isDragging2 = false;
+      });
+
+      // Touch Drag&Drop
+      canvas.addEventListener(
+        "touchstart",
+        (e) => {
+          e.preventDefault(); // Verhindert Scrollen/Pinch
+          const rect = canvas.getBoundingClientRect();
+          // Wir nehmen den ersten Finger
+          if (e.touches.length > 0) {
+            let touch = e.touches[0];
+            let touchX = touch.clientX - rect.left;
+            let touchY = touch.clientY - rect.top;
+
+            let dist1 = Math.sqrt(
+              (touchX - center1X) ** 2 + (touchY - center1Y) ** 2
+            );
+            let dist2 = Math.sqrt(
+              (touchX - center2X) ** 2 + (touchY - center2Y) ** 2
+            );
+
+            if (dist1 < 10) {
+              isDragging1 = true;
+              dragOffset1X = touchX - center1X;
+              dragOffset1Y = touchY - center1Y;
+            } else if (secondSenderActive && dist2 < 10) {
+              isDragging2 = true;
+              dragOffset2X = touchX - center2X;
+              dragOffset2Y = touchY - center2Y;
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      canvas.addEventListener(
+        "touchmove",
+        (e) => {
+          e.preventDefault();
+          if ((!isDragging1 && !isDragging2) || e.touches.length === 0) return;
+
+          const rect = canvas.getBoundingClientRect();
+          let touch = e.touches[0];
+          let touchX = touch.clientX - rect.left;
+          let touchY = touch.clientY - rect.top;
+
+          if (isDragging1) {
+            center1X = touchX - dragOffset1X;
+            center1Y = touchY - dragOffset1Y;
+            generatePoints();
+          } else if (isDragging2) {
+            center2X = touchX - dragOffset2X;
+            center2Y = touchY - dragOffset2Y;
+          }
+        },
+        { passive: false }
+      );
+
+      canvas.addEventListener(
+        "touchend",
+        (e) => {
+          isDragging1 = false;
+          isDragging2 = false;
+        },
+        { passive: false }
+      );
+
+      canvas.addEventListener(
+        "touchcancel",
+        (e) => {
+          isDragging1 = false;
+          isDragging2 = false;
+        },
+        { passive: false }
+      );
+
+      function draw(time) {
+        let t = time / 1000;
+
+        updateParams(); // Aktuelle Sliderwerte
+
+        let k = (2 * Math.PI) / wavelength;
+        let omega = 2 * Math.PI * frequency;
+
+        // Phasen-Offset in rad
+        let phaseOffset = phaseSliderValue * Math.PI;
+
+        ctx.clearRect(0, 0, width, height);
+
+        // Alle Gitterpunkte
+        for (let i = 0; i < points.length; i++) {
+          let px = points[i].x;
+          let py = points[i].y;
+
+          // Vector1
+          let dx1 = px - center1X;
+          let dy1 = py - center1Y;
+          let r1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+          let angle1 = Math.atan2(dy1, dx1);
+          let disp1 = amplitude * Math.sin(k * r1 - omega * t);
+          let vx1 = Math.cos(angle1) * disp1;
+          let vy1 = Math.sin(angle1) * disp1;
+
+          let vx = vx1;
+          let vy = vy1;
+
+          // Zweiter Sender
+          if (secondSenderActive) {
+            let dx2 = px - center2X;
+            let dy2 = py - center2Y;
+            let r2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            let angle2 = Math.atan2(dy2, dx2);
+            let disp2 = amplitude * Math.sin(k * r2 - omega * t + phaseOffset);
+            let vx2 = Math.cos(angle2) * disp2;
+            let vy2 = Math.sin(angle2) * disp2;
+            vx += vx2;
+            vy += vy2;
+          }
+
+          // Endgültige Position des Punkts
+          let shiftedX = px + vx;
+          let shiftedY = py + vy;
+
+          // Schwarzer Punkt
+          ctx.fillStyle = "black";
+          ctx.beginPath();
+          ctx.arc(shiftedX, shiftedY, 2, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+
+        // Jetzt IMMER die beiden Sender selbst zeichnen:
+        // SENDER 1
+        let pulsRadius1 = 4 - 2 * Math.sin(omega * t);
+        if (pulsRadius1 < 0.5) pulsRadius1 = 0.5;
+
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        ctx.arc(center1X, center1Y, pulsRadius1, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // Wenn 2. Sender aktiv, auch ihn zeichnen
+        if (secondSenderActive) {
+          let pulsRadius2 = 4 - 2 * Math.sin(omega * t + phaseOffset);
+          if (pulsRadius2 < 0.5) pulsRadius2 = 0.5;
+
+          ctx.beginPath();
+          ctx.arc(center2X, center2Y, pulsRadius2, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+
+        // Farbe soll den gesamten Regenbogen durchlaufen (zeitbasiert).
+        // Wir nehmen z.B. hue = (time * 20) % 360 => Regenbogen in ~18s.
+
+        let hue = (t * 20) % 360;
+
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.font = "bold 18px sans-serif";
+        ctx.textAlign = "right";
+        ctx.fillText("Hdb 2025", width - 10, height - 10);
+
+        requestAnimationFrame(draw);
+      }
+
+      requestAnimationFrame(draw);
+    </script>
+  </body>
+</html>
