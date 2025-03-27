@@ -41,10 +41,11 @@
     <div class="controls">
       <div>
         <label for="spacingSlider">Gitterabstand:</label>
+        <!-- Beispiel für vom Nutzer angepasste Grenzen: min=3, max=15? -->
         <input
           id="spacingSlider"
           type="range"
-          min="1"
+          min="5"
           max="50"
           step="1"
           value="5"
@@ -54,6 +55,7 @@
 
       <div>
         <label for="frequencySlider">Frequenz:</label>
+        <!-- Original war min=0, max=2. Falls Nutzer andere Grenzen will, hier anpassen. -->
         <input
           id="frequencySlider"
           type="range"
@@ -67,6 +69,7 @@
 
       <div>
         <label for="wavelengthSlider">Wellenlänge:</label>
+        <!-- Angepasste Grenzen: min=50, max=300 -->
         <input
           id="wavelengthSlider"
           type="range"
@@ -87,7 +90,6 @@
       </div>
 
       <!-- Phasen-Offset in Vielfachen von Pi: 0..2 -->
-      <!-- Wird nur angezeigt, wenn 2. Sender aktiviert ist. -->
       <div id="phaseControl" style="display: none">
         <label for="phaseSlider">Phasen-Offset (in π):</label>
         <input
@@ -109,11 +111,11 @@
       let width = canvas.width;
       let height = canvas.height;
 
-      // Basiskonfiguration
+      // Basiskonfiguration (Nutzergrenzen ggf. anpassen)
       let amplitude = 5; // Wellenamplitude
-      let spacing = 5; // Punktabstand
+      let spacing = 5; // Punktabstand (User kann min=3, max=15 o.ä. setzen)
       let frequency = 1; // Frequenz
-      let wavelength = 100; // Wellenlänge
+      let wavelength = 100; // Wellenlänge (User wollte min=50, max=300)
       let phaseSliderValue = 0; // Phasenverschiebung in Vielfachen von π
 
       // Sender 1
@@ -160,50 +162,54 @@
       const phaseControlDiv = document.getElementById("phaseControl");
 
       // Gitter so erzeugen, dass die gesamte Canvas abgedeckt wird,
-      // unabhängig davon, wo der Sender 1 hin verschoben wird.
+      // ABER wir überspringen den exakten Mittelpunkt, damit kein Gitterpunkt
+      // genau unter Sender1 liegt.
+
       function generatePoints() {
         points = [];
 
-        // Maximaler horizontaler / vertikaler Abstand
         let horizontalDistance = Math.max(center1X, width - center1X);
         let verticalDistance = Math.max(center1Y, height - center1Y);
 
-        // Wie viele Schritte nach links / rechts?
         let maxI = Math.ceil(horizontalDistance / spacing) + 2;
         let maxJ = Math.ceil(verticalDistance / spacing) + 2;
 
-        // Raster um Sender1
         for (let i = -maxI; i <= maxI; i++) {
           for (let j = -maxJ; j <= maxJ; j++) {
             let x = center1X + i * spacing;
             let y = center1Y + j * spacing;
-            // Nur Punkte im sichtbaren Canvas-Bereich
+
+            // Nur Punkte im sichtbaren Bereich
             if (x >= 0 && x <= width && y >= 0 && y <= height) {
+              // Falls wir den Punkt genau am Sender1 vermeiden wollen:
+              let distToCenter1 = Math.sqrt(
+                (x - center1X) ** 2 + (y - center1Y) ** 2
+              );
+              // z.B. skip, wenn dist < spacing*0.5, damit kein "Doppelpunkt" drunter
+              if (distToCenter1 < spacing * 0.5) {
+                continue; // Überspringen
+              }
               points.push({ x, y });
             }
           }
         }
       }
 
-      // Parameter aktualisieren
       function updateParams() {
         spacing = parseInt(spacingSliderEl.value);
         frequency = parseFloat(frequencySliderEl.value);
         wavelength = parseFloat(wavelengthSliderEl.value);
 
-        // Checkbox -> Schalter f. 2. Sender
         secondSenderActive = secondSenderCheckbox.checked;
 
-        // Phase-Offset-Slider ein-/ausblenden
         if (secondSenderActive) {
           phaseControlDiv.style.display = "block";
         } else {
           phaseControlDiv.style.display = "none";
         }
 
-        phaseSliderValue = parseFloat(phaseSliderEl.value); // 0..2, in π
+        phaseSliderValue = parseFloat(phaseSliderEl.value);
 
-        // Label-Updates mit Einheit
         spacingValueEl.textContent = spacing + " px";
         frequencyValueEl.textContent = frequency.toFixed(2) + " Hz";
         wavelengthValueEl.textContent = wavelength + " px";
@@ -224,28 +230,24 @@
       phaseSliderEl.addEventListener("input", updateParams);
       secondSenderCheckbox.addEventListener("change", updateParams);
 
-      // Mouse Drag&Drop
+      // Maus-Drag
       canvas.addEventListener("mousedown", (e) => {
         const rect = canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
 
-        // Distanz zu Sender1
         let dist1 = Math.sqrt(
           (mouseX - center1X) ** 2 + (mouseY - center1Y) ** 2
         );
-        // Distanz zu Sender2
         let dist2 = Math.sqrt(
           (mouseX - center2X) ** 2 + (mouseY - center2Y) ** 2
         );
 
         if (dist1 < 10) {
-          // Klick in Nähe von Sender1
           isDragging1 = true;
           dragOffset1X = mouseX - center1X;
           dragOffset1Y = mouseY - center1Y;
         } else if (secondSenderActive && dist2 < 10) {
-          // Klick in Nähe von Sender2 (nur wenn aktiv)
           isDragging2 = true;
           dragOffset2X = mouseX - center2X;
           dragOffset2Y = mouseY - center2Y;
@@ -261,12 +263,10 @@
         if (isDragging1) {
           center1X = mouseX - dragOffset1X;
           center1Y = mouseY - dragOffset1Y;
-          // Raster um Sender1 neu aufbauen
           generatePoints();
         } else if (isDragging2) {
           center2X = mouseX - dragOffset2X;
           center2Y = mouseY - dragOffset2Y;
-          // Raster bleibt
         }
       });
 
@@ -279,13 +279,12 @@
         isDragging2 = false;
       });
 
-      // Touch Drag&Drop
+      // Touch Drag
       canvas.addEventListener(
         "touchstart",
         (e) => {
-          e.preventDefault(); // Verhindert Scrollen/Pinch
+          e.preventDefault();
           const rect = canvas.getBoundingClientRect();
-          // Wir nehmen den ersten Finger
           if (e.touches.length > 0) {
             let touch = e.touches[0];
             let touchX = touch.clientX - rect.left;
@@ -356,22 +355,19 @@
       function draw(time) {
         let t = time / 1000;
 
-        updateParams(); // Aktuelle Sliderwerte
+        updateParams();
 
         let k = (2 * Math.PI) / wavelength;
         let omega = 2 * Math.PI * frequency;
-
-        // Phasen-Offset in rad
         let phaseOffset = phaseSliderValue * Math.PI;
 
         ctx.clearRect(0, 0, width, height);
 
-        // Alle Gitterpunkte
+        // Zeichen der Gitterpunkte
         for (let i = 0; i < points.length; i++) {
           let px = points[i].x;
           let py = points[i].y;
 
-          // Vector1
           let dx1 = px - center1X;
           let dy1 = py - center1Y;
           let r1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
@@ -383,7 +379,6 @@
           let vx = vx1;
           let vy = vy1;
 
-          // Zweiter Sender
           if (secondSenderActive) {
             let dx2 = px - center2X;
             let dy2 = py - center2Y;
@@ -396,19 +391,16 @@
             vy += vy2;
           }
 
-          // Endgültige Position des Punkts
           let shiftedX = px + vx;
           let shiftedY = py + vy;
 
-          // Schwarzer Punkt
           ctx.fillStyle = "black";
           ctx.beginPath();
           ctx.arc(shiftedX, shiftedY, 2, 0, 2 * Math.PI);
           ctx.fill();
         }
 
-        // Jetzt IMMER die beiden Sender selbst zeichnen:
-        // SENDER 1
+        // Sender1
         let pulsRadius1 = 4 - 2 * Math.sin(omega * t);
         if (pulsRadius1 < 0.5) pulsRadius1 = 0.5;
 
@@ -417,22 +409,18 @@
         ctx.arc(center1X, center1Y, pulsRadius1, 0, 2 * Math.PI);
         ctx.fill();
 
-        // Wenn 2. Sender aktiv, auch ihn zeichnen
+        // Sender2
         if (secondSenderActive) {
           let pulsRadius2 = 4 - 2 * Math.sin(omega * t + phaseOffset);
           if (pulsRadius2 < 0.5) pulsRadius2 = 0.5;
-
           ctx.beginPath();
           ctx.arc(center2X, center2Y, pulsRadius2, 0, 2 * Math.PI);
           ctx.fill();
         }
 
-        // Farbe soll den gesamten Regenbogen durchlaufen (zeitbasiert).
-        // Wir nehmen z.B. hue = (time * 20) % 360 => Regenbogen in ~18s.
-
+        // Regenbogenfarben f. Text
         let hue = (t * 20) % 360;
-
-        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.fillStyle = `hsl(${hue},100%,50%)`;
         ctx.font = "bold 18px sans-serif";
         ctx.textAlign = "right";
         ctx.fillText("Hdb 2025", width - 10, height - 10);
