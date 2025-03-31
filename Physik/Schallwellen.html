@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>
-      Kreiswellen-Animation mit optionalem 2. Sender, Touch-Drag und verstecktem
-      Phasen-Offset
+      Kreiswellen-Animation mit optionalem 2. Sender, Touch-Drag, Phasen-Offset,
+      Wellenfronten und Rot-Blau-Farbübergang
     </title>
     <style>
       canvas {
@@ -41,7 +41,6 @@
     <div class="controls">
       <div>
         <label for="spacingSlider">Gitterabstand:</label>
-        <!-- Beispiel für vom Nutzer angepasste Grenzen: min=3, max=15? -->
         <input
           id="spacingSlider"
           type="range"
@@ -55,7 +54,6 @@
 
       <div>
         <label for="frequencySlider">Frequenz:</label>
-        <!-- Original war min=0, max=2. Falls Nutzer andere Grenzen will, hier anpassen. -->
         <input
           id="frequencySlider"
           type="range"
@@ -69,7 +67,6 @@
 
       <div>
         <label for="wavelengthSlider">Wellenlänge:</label>
-        <!-- Angepasste Grenzen: min=50, max=300 -->
         <input
           id="wavelengthSlider"
           type="range"
@@ -102,6 +99,14 @@
         />
         <span id="phaseValue">0</span>
       </div>
+
+      <!-- Checkbox für Wellenfronten -->
+      <div>
+        <label class="sender-label" for="wavefrontCheckbox"
+          >Wellenfronten anzeigen</label
+        >
+        <input type="checkbox" id="wavefrontCheckbox" />
+      </div>
     </div>
 
     <script>
@@ -111,31 +116,30 @@
       let width = canvas.width;
       let height = canvas.height;
 
-      // Basiskonfiguration (Nutzergrenzen ggf. anpassen)
+      // Basiskonfiguration
       let amplitude = 5; // Wellenamplitude
-      let spacing = 5; // Punktabstand (User kann min=3, max=15 o.ä. setzen)
+      let spacing = 5; // Punktabstand
       let frequency = 1; // Frequenz
-      let wavelength = 100; // Wellenlänge (User wollte min=50, max=300)
+      let wavelength = 100; // Wellenlänge
       let phaseSliderValue = 0; // Phasenverschiebung in Vielfachen von π
 
       // Sender 1
       let center1X = width / 2;
       let center1Y = height / 2;
 
-      // Sender 2 (etwas rechts vom Zentrum)
+      // Sender 2 (optional)
       let center2X = width / 2 + 100;
       let center2Y = height / 2;
 
-      // Aktivierung zweiter Sender
+      // Flags
       let secondSenderActive = false;
+      let wavefrontActive = false;
 
       // Punkteliste
       let points = [];
-
-      // Alte spacing
       let oldSpacing = spacing;
 
-      // Drag & Drop
+      // Drag States
       let isDragging1 = false;
       let dragOffset1X = 0;
       let dragOffset1Y = 0;
@@ -144,7 +148,7 @@
       let dragOffset2X = 0;
       let dragOffset2Y = 0;
 
-      // Slider / Checkbox
+      // DOM
       const spacingSliderEl = document.getElementById("spacingSlider");
       const frequencySliderEl = document.getElementById("frequencySlider");
       const wavelengthSliderEl = document.getElementById("wavelengthSlider");
@@ -152,8 +156,8 @@
       const secondSenderCheckbox = document.getElementById(
         "secondSenderCheckbox"
       );
+      const wavefrontCheckbox = document.getElementById("wavefrontCheckbox");
 
-      // Anzeige-Spans
       const spacingValueEl = document.getElementById("spacingValue");
       const frequencyValueEl = document.getElementById("frequencyValue");
       const wavelengthValueEl = document.getElementById("wavelengthValue");
@@ -161,10 +165,7 @@
 
       const phaseControlDiv = document.getElementById("phaseControl");
 
-      // Gitter so erzeugen, dass die gesamte Canvas abgedeckt wird,
-      // ABER wir überspringen den exakten Mittelpunkt, damit kein Gitterpunkt
-      // genau unter Sender1 liegt.
-
+      // Gitter generieren
       function generatePoints() {
         points = [];
 
@@ -178,16 +179,12 @@
           for (let j = -maxJ; j <= maxJ; j++) {
             let x = center1X + i * spacing;
             let y = center1Y + j * spacing;
-
-            // Nur Punkte im sichtbaren Bereich
             if (x >= 0 && x <= width && y >= 0 && y <= height) {
-              // Falls wir den Punkt genau am Sender1 vermeiden wollen:
               let distToCenter1 = Math.sqrt(
                 (x - center1X) ** 2 + (y - center1Y) ** 2
               );
-              // z.B. skip, wenn dist < spacing*0.5, damit kein "Doppelpunkt" drunter
               if (distToCenter1 < spacing * 0.5) {
-                continue; // Überspringen
+                continue; // Skip direkter Punkt unterm Sender1
               }
               points.push({ x, y });
             }
@@ -201,6 +198,7 @@
         wavelength = parseFloat(wavelengthSliderEl.value);
 
         secondSenderActive = secondSenderCheckbox.checked;
+        wavefrontActive = wavefrontCheckbox.checked;
 
         if (secondSenderActive) {
           phaseControlDiv.style.display = "block";
@@ -221,20 +219,22 @@
         }
       }
 
-      // Initial
+      // Erstinitialisierung
       generatePoints();
 
+      // Event-Listener
       spacingSliderEl.addEventListener("input", updateParams);
       frequencySliderEl.addEventListener("input", updateParams);
       wavelengthSliderEl.addEventListener("input", updateParams);
       phaseSliderEl.addEventListener("input", updateParams);
       secondSenderCheckbox.addEventListener("change", updateParams);
+      wavefrontCheckbox.addEventListener("change", updateParams);
 
-      // Maus-Drag
+      // Maus Drag
       canvas.addEventListener("mousedown", (e) => {
         const rect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
+        let mouseX = e.clientX - rect.left;
+        let mouseY = e.clientY - rect.top;
 
         let dist1 = Math.sqrt(
           (mouseX - center1X) ** 2 + (mouseY - center1Y) ** 2
@@ -257,9 +257,8 @@
       canvas.addEventListener("mousemove", (e) => {
         if (!isDragging1 && !isDragging2) return;
         const rect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-
+        let mouseX = e.clientX - rect.left;
+        let mouseY = e.clientY - rect.top;
         if (isDragging1) {
           center1X = mouseX - dragOffset1X;
           center1Y = mouseY - dragOffset1Y;
@@ -289,14 +288,12 @@
             let touch = e.touches[0];
             let touchX = touch.clientX - rect.left;
             let touchY = touch.clientY - rect.top;
-
             let dist1 = Math.sqrt(
               (touchX - center1X) ** 2 + (touchY - center1Y) ** 2
             );
             let dist2 = Math.sqrt(
               (touchX - center2X) ** 2 + (touchY - center2Y) ** 2
             );
-
             if (dist1 < 10) {
               isDragging1 = true;
               dragOffset1X = touchX - center1X;
@@ -316,7 +313,6 @@
         (e) => {
           e.preventDefault();
           if ((!isDragging1 && !isDragging2) || e.touches.length === 0) return;
-
           const rect = canvas.getBoundingClientRect();
           let touch = e.touches[0];
           let touchX = touch.clientX - rect.left;
@@ -352,43 +348,92 @@
         { passive: false }
       );
 
+      // Interpolation: sin= +1 => BLUE, sin=-1 => RED, sin=0 => PURPLE
+      function colorCenter(sVal) {
+        // sVal in [-1..+1]
+        // val= (sVal+1)/2 => 0..1
+        // Rot=(255,0,0), Blau=(0,0,255). => +1 => Blau, -1 => Rot
+        let val = (sVal + 1) / 2;
+        let R = 255 * (1 - val);
+        let G = 0;
+        let B = 255 * val;
+        return `rgb(${Math.round(R)},${Math.round(G)},${Math.round(B)})`;
+      }
+
+      // Wellenfronten: crest=BLUE, trough=RED
+      function drawWavefronts(senderX, senderY, k, omega, t, phase) {
+        let maxRadius = Math.sqrt(width * width + height * height);
+
+        // crest => k*r-omega*t+phase= 2πn => r= ...
+        ctx.lineWidth = 1;
+
+        let nStartCrest = Math.floor(-(omega * t - phase) / (2 * Math.PI));
+        let nEndCrest = Math.ceil(
+          (k * maxRadius - (omega * t - phase)) / (2 * Math.PI)
+        );
+
+        ctx.strokeStyle = "blue"; // Maxima => Blau
+        for (let n = nStartCrest; n <= nEndCrest; n++) {
+          let r = (omega * t - phase + 2 * Math.PI * n) / k;
+          if (r > 0 && r < maxRadius) {
+            ctx.beginPath();
+            ctx.arc(senderX, senderY, r, 0, 2 * Math.PI);
+            ctx.stroke();
+          }
+        }
+
+        // trough => k*r-omega*t+phase= π+2πn
+        let nStartTrough = Math.floor(
+          -(omega * t - phase + Math.PI) / (2 * Math.PI)
+        );
+        let nEndTrough = Math.ceil(
+          (k * maxRadius - (omega * t - phase + Math.PI)) / (2 * Math.PI)
+        );
+
+        ctx.strokeStyle = "red"; // Minima => Rot
+        for (let n = nStartTrough; n <= nEndTrough; n++) {
+          let r = (omega * t - phase + Math.PI + 2 * Math.PI * n) / k;
+          if (r > 0 && r < maxRadius) {
+            ctx.beginPath();
+            ctx.arc(senderX, senderY, r, 0, 2 * Math.PI);
+            ctx.stroke();
+          }
+        }
+      }
+
       function draw(time) {
         let t = time / 1000;
-
         updateParams();
 
         let k = (2 * Math.PI) / wavelength;
         let omega = 2 * Math.PI * frequency;
-        let phaseOffset = phaseSliderValue * Math.PI;
+        let phiOffset = phaseSliderValue * Math.PI;
 
         ctx.clearRect(0, 0, width, height);
 
-        // Zeichen der Gitterpunkte
-        for (let i = 0; i < points.length; i++) {
-          let px = points[i].x;
-          let py = points[i].y;
+        // Gitter-Partikel
+        for (let pt of points) {
+          let px = pt.x;
+          let py = pt.y;
 
           let dx1 = px - center1X;
           let dy1 = py - center1Y;
           let r1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
           let angle1 = Math.atan2(dy1, dx1);
           let disp1 = amplitude * Math.sin(k * r1 - omega * t);
-          let vx1 = Math.cos(angle1) * disp1;
-          let vy1 = Math.sin(angle1) * disp1;
 
-          let vx = vx1;
-          let vy = vy1;
+          let vx = Math.cos(angle1) * disp1;
+          let vy = Math.sin(angle1) * disp1;
 
+          // 2. Sender?
           if (secondSenderActive) {
             let dx2 = px - center2X;
             let dy2 = py - center2Y;
             let r2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
             let angle2 = Math.atan2(dy2, dx2);
-            let disp2 = amplitude * Math.sin(k * r2 - omega * t + phaseOffset);
-            let vx2 = Math.cos(angle2) * disp2;
-            let vy2 = Math.sin(angle2) * disp2;
-            vx += vx2;
-            vy += vy2;
+            let disp2 = amplitude * Math.sin(k * r2 - omega * t + phiOffset);
+            vx += Math.cos(angle2) * disp2;
+            vy += Math.sin(angle2) * disp2;
           }
 
           let shiftedX = px + vx;
@@ -400,25 +445,43 @@
           ctx.fill();
         }
 
-        // Sender1
-        let pulsRadius1 = 4 - 2 * Math.sin(omega * t);
+        // Sender1: sin(omega*t)
+        let s1Val = Math.sin(omega * t + 0.5 * Math.PI); // +0.5 => 0..2π
+        // Farbe => +1 => Blau, -1 => Rot
+        let colorS1 = colorCenter(s1Val);
+
+        // Radius => 4 - 2*s1Val => +1 => radius=2(Blau), -1=> radius=6(Rot)
+        let pulsRadius1 = 4 - 2 * s1Val;
         if (pulsRadius1 < 0.5) pulsRadius1 = 0.5;
 
-        ctx.fillStyle = "red";
+        ctx.fillStyle = colorS1;
         ctx.beginPath();
         ctx.arc(center1X, center1Y, pulsRadius1, 0, 2 * Math.PI);
         ctx.fill();
 
+        // Wellenfronten Sender1
+        if (wavefrontActive) {
+          drawWavefronts(center1X, center1Y, k, omega, t, 0);
+        }
+
         // Sender2
         if (secondSenderActive) {
-          let pulsRadius2 = 4 - 2 * Math.sin(omega * t + phaseOffset);
+          let s2Val = Math.sin(omega * t + phiOffset + 0.5 * Math.PI);
+          let colorS2 = colorCenter(s2Val);
+          let pulsRadius2 = 4 - 2 * s2Val;
           if (pulsRadius2 < 0.5) pulsRadius2 = 0.5;
+
+          ctx.fillStyle = colorS2;
           ctx.beginPath();
           ctx.arc(center2X, center2Y, pulsRadius2, 0, 2 * Math.PI);
           ctx.fill();
+
+          if (wavefrontActive) {
+            drawWavefronts(center2X, center2Y, k, omega, t, phiOffset);
+          }
         }
 
-        // Regenbogenfarben f. Text
+        // Regenbogen-Hdb
         let hue = (t * 20) % 360;
         ctx.fillStyle = `hsl(${hue},100%,50%)`;
         ctx.font = "bold 18px sans-serif";
