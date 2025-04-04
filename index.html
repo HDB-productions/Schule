@@ -5,15 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inhaltsverzeichnis</title>
     <style>
+      /***********************************************************************
+       * Grundlayout
+       ***********************************************************************/
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(0deg, #2190d5, #cfeafb);
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
         padding: 20px;
       }
+
       h1 {
         color: #333;
+        margin-bottom: 10px;
       }
+
+      section {
+        margin: 20px 0;
+        padding: 20px;
+        width: calc(100% - 40px);
+        box-sizing: border-box;
+        max-width: 900px;
+      }
+
       .category {
         margin: 20px 20px;
         padding: 20px;
@@ -22,106 +46,411 @@
         background-color: #ffffff;
         width: calc(100% - 40px);
         box-sizing: border-box;
+        max-width: 900px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        transition: background 0.7s ease;
       }
+
+      .category h2 {
+        margin-bottom: 20px;
+        margin-left: 20px;
+      }
+
       .button-container {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
       }
+
+      /***********************************************************************
+       * Button-Basis (Farbe inaktiv, Hover-Ring, Aktiv-Vollfläche)
+       ***********************************************************************/
+
       .button {
+        position: relative;
         padding: 15px 5px;
         margin: 5px;
         font-size: 16px;
         text-decoration: none;
-        border-radius: 8px;
-        color: white;
-        transition: background-color 0.3s ease;
+        border-radius: 10px;
+        color: #fff;
         cursor: pointer;
         border: none;
         flex: 1 1 200px;
         max-width: 200px;
         box-sizing: border-box;
+        text-align: center;
+        overflow: hidden; /* Damit das Glühen nicht über den Button hinausragt */
+        z-index: 0;
+        transition: transform 0.3s ease;
       }
+
+      /* Leichtes Anheben bei Hover + Schatten */
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Das ringförmige Glühen als ::before (wird per Blur vergrößert) */
+      .button::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        border-radius: 10px;
+        z-index: -1;
+        filter: blur(5px);
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+        background-size: 400% 400%;
+      }
+
+      /* Nur beim Hover erscheint der Ring-Effekt */
+      .button:hover::before {
+        opacity: 1;
+      }
+
+      /* ACTIVE => Button-Füllung wird animierter Gradient
+         => Wir blenden den Ring aus (oder lassen ihn weg),
+            damit nur die Füllung "wackelt". */
+      .button.active {
+        /* standard => hier: wir überschreiben pro Fach
+           also kann leer sein, oder nur color: #000, etc. */
+      }
+      .button.active::before {
+        /* ring unsichtbar machen, da die Füllung selbst wabert */
+        opacity: 0 !important;
+      }
+
+      /* Keyframe für die ring-Animation ist identisch zu fill-Animation,
+         wir definieren aber ggf. pro Fach Variation. Hier eine generische:
+      */
+      @keyframes glow-wobble {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /***********************************************************************
+       * MATHE-BUTTON
+       *  1) inaktiv => #ff8c00 als Füllung
+       *  2) hover => ring mit linearem rainbow (nur ring)
+       *  3) active => gesamte Füllung animiert
+      ***********************************************************************/
       .mathe-button {
-        background-color: #ff8c00;
+        background-color: #ff8c00; /* inaktiv => einfarbig */
       }
-      .mathe-button:hover {
-        background-color: #e67e00;
+      .mathe-button::before {
+        /* ring-farbverlauf auf Hover */
+        background: linear-gradient(
+          45deg,
+          #ffad33,
+          #ff8c00,
+          #ff7300,
+          #ffc266,
+          #ff8c00
+        );
+        animation: glow-wobble 8s linear infinite;
       }
+
+      /* wenn hovered => ring ist sichtbar => implementiert in .button:hover::before {opacity:1} */
+
       .mathe-button.active {
-        background-color: #e67e00;
+        /* = klick/ausgewählt => Fill-Wabern! */
+        background: linear-gradient(
+          45deg,
+          #ffad33,
+          #ff8c00,
+          #ff7300,
+          #ffc266,
+          #ff8c00
+        );
+        background-size: 400% 400%;
+        animation: matheFillWobble 8s linear infinite;
       }
+      @keyframes matheFillWobble {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /***********************************************************************
+       * PHYSIK-BUTTON
+      ***********************************************************************/
       .physik-button {
-        background-color: #4682b4;
+        background-color: #4682b4; /* inaktiv => einfarbig */
       }
-      .physik-button:hover {
-        background-color: #3b6b8e;
+
+      .physik-button::before {
+        /* ring-farbverlauf beim Hover */
+        background: linear-gradient(
+          45deg,
+          #5a9bcf,
+          #4682b4,
+          #2d5f7f,
+          #a9dcff,
+          #3b6b8e
+        );
+        animation: glow-wobble 8s linear infinite;
       }
+
+      .physik-button.active {
+        /* gesamte Füllung animieren */
+        background: linear-gradient(
+          45deg,
+          #5a9bcf,
+          #4682b4,
+          #2d5f7f,
+          #a9dcff,
+          #3b6b8e
+        );
+        background-size: 400% 400%;
+        animation: physikFillWobble 8s linear infinite;
+      }
+      @keyframes physikFillWobble {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /***********************************************************************
+       * CHEMIE-BUTTON
+      ***********************************************************************/
       .chemie-button {
-        background-color: #ff1493;
+        background-color: #ff1493; /* inaktiv => einfarbig pink */
       }
-      .chemie-button:hover {
-        background-color: #e01383;
+
+      .chemie-button::before {
+        /* ring-farbverlauf */
+        background: linear-gradient(
+          45deg,
+          #ff1493,
+          #ff4fae,
+          #ff005c,
+          #ffb8dc,
+          #ff1493
+        );
+        animation: glow-wobble 8s linear infinite;
       }
+
+      .chemie-button.active {
+        background: linear-gradient(
+          45deg,
+          #ff1493,
+          #ff4fae,
+          #ff005c,
+          #ffb8dc,
+          #ff1493
+        );
+        background-size: 400% 400%;
+        animation: chemieFillWobble 8s linear infinite;
+      }
+      @keyframes chemieFillWobble {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /***********************************************************************
+       * BIO-BUTTON
+      ***********************************************************************/
       .bio-button {
-        background-color: #32cd32;
+        background-color: #32cd32; /* inaktiv => einfarbig grün */
       }
-      .bio-button:hover {
-        background-color: #2cab2c;
+
+      .bio-button::before {
+        background: linear-gradient(
+          45deg,
+          #32cd32,
+          #54e754,
+          #249124,
+          #b2fdb2,
+          #2cab2c
+        );
+        animation: glow-wobble 8s linear infinite;
       }
+
+      .bio-button.active {
+        background: linear-gradient(
+          45deg,
+          #32cd32,
+          #54e754,
+          #249124,
+          #b2fdb2,
+          #2cab2c
+        );
+        background-size: 400% 400%;
+        animation: bioFillWobble 8s linear infinite;
+      }
+      @keyframes bioFillWobble {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /***********************************************************************
+       * TOOLS-BUTTON (keine Füll-Animation?), 
+         bei Bedarf anpassen wie oben.
+      ***********************************************************************/
       .tool-button {
         background-color: #2196f3;
+        border-radius: 10px;
       }
       .tool-button:hover {
         background-color: #0b7dda;
       }
+
+      /***********************************************************************
+       * LINKLIST-ANIMATION
+      ***********************************************************************/
       .link-list {
-        display: none;
-        margin-top: 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease, opacity 0.5s ease;
+        opacity: 0;
+        margin-top: 0;
         text-align: left;
       }
-      details {
+      .link-list.show {
+        opacity: 1;
+        max-height: 900px;
+      }
+
+      .link-list h2 {
+        margin: 10px 0 10px 0;
+      }
+
+      .link-list ul {
+        list-style-type: disc;
+        margin-left: 40px;
+      }
+
+      .link-list details {
         margin-top: 10px;
       }
+
+      /***********************************************************************
+       * Fusszeile, Youtube-Bereich
+      ***********************************************************************/
+      .footer-category {
+        text-align: center;
+      }
+      .footer-category a {
+        text-decoration: none;
+        color: #2196f3;
+        font-weight: bold;
+      }
+
+      /* Hintergründe, wenn eine Kategorie aktiv ist, lassen wir unverändert. */
     </style>
+
     <script>
+      // Minimalistisches Mapping, wenn du verschiedene Hintergründe willst.
+      // Falls du das nicht benötigst, kannst du es entfernen.
+      const gradientMap = {
+        "mathe-button":
+          "linear-gradient(to bottom, #ffe0c2, #fff4e6 40%, #fff)",
+        "physik-button":
+          "linear-gradient(to bottom, #cce5f4, #eef6fb 40%, #fff)",
+        "chemie-button":
+          "linear-gradient(to bottom, #ffd1e9, #ffe9f4 40%, #fff)",
+        "bio-button": "linear-gradient(to bottom, #d5ffd1, #ebffe6 40%, #fff)",
+      };
+
       function toggleLinks(buttonId, listId) {
-        const button = document.getElementById(buttonId);
-        const list = document.getElementById(listId);
+        const clickedButton = document.getElementById(buttonId);
+        const newList = document.getElementById(listId);
+        const container = document.getElementById("faecher");
 
-        // Hide all link lists
-        const allLists = document.querySelectorAll(".link-list");
-        allLists.forEach((item) => {
-          item.style.display = "none";
-        });
+        // Finde den aktuell offenen Bereich (falls einer offen ist)
+        const currentlyOpen = document.querySelector(".link-list.show");
 
-        // Remove active class from all buttons
-        const allButtons = document.querySelectorAll(".button");
-        allButtons.forEach((item) => {
-          item.classList.remove("active");
-        });
+        // Falls kein Bereich offen ist oder der gleiche erneut gewählt wird,
+        // einfach toggeln
+        if (!currentlyOpen || currentlyOpen === newList) {
+          newList.classList.toggle("show");
+          clickedButton.classList.toggle("active");
 
-        // Toggle visibility of the selected list
-        if (list.style.display === "none" || list.style.display === "") {
-          list.style.display = "block";
-          button.classList.add("active");
-        } else {
-          list.style.display = "none";
-          button.classList.remove("active");
+          // Wenn jetzt geöffnet => setze container-background
+          if (newList.classList.contains("show")) {
+            container.style.background = gradientMap[buttonId] || "#fff";
+          } else {
+            container.style.background = "#fff";
+          }
+          return;
         }
+
+        // Wenn ein anderer Bereich bereits offen ist,
+        // erst diesen schließen (transitionend abwarten)
+        currentlyOpen.classList.remove("show");
+        const openButton = document.querySelector(".button.active");
+        if (openButton && openButton !== clickedButton) {
+          openButton.classList.remove("active");
+        }
+
+        // Nach dem Schließen des alten Bereichs öffnen wir den neuen
+        const transitionHandler = function (e) {
+          if (e.target === currentlyOpen && e.propertyName === "max-height") {
+            currentlyOpen.removeEventListener(
+              "transitionend",
+              transitionHandler
+            );
+
+            newList.classList.add("show");
+            clickedButton.classList.add("active");
+            container.style.background = gradientMap[buttonId] || "#fff";
+          }
+        };
+        currentlyOpen.addEventListener("transitionend", transitionHandler, {
+          once: true,
+        });
       }
     </script>
   </head>
   <body>
     <h1>Willkommen auf HDB's Seite</h1>
-    <p>
-      Hier findest du Links der von mir im Unterricht genutzten (zum Teil selbst
-      erstellten) Materialien nach Fächern sortiert.
-    </p>
-    <p>
-      Sollte Interesse bestehen, kann ich die Link-Sammlung bei Zeiten
-      erweitern.
-    </p>
+    <section>
+      <p>
+        Hier findest du Links der von mir im Unterricht genutzten (zum Teil
+        selbst erstellten) Materialien nach Fächern sortiert.
+      </p>
+      <p>
+        Sollte Interesse bestehen, kann ich die Link-Sammlung bei Zeiten
+        erweitern.
+      </p>
+    </section>
 
     <div class="category" id="faecher">
       <h2>Fächer</h2>
@@ -447,7 +776,7 @@
         >
       </div>
     </div>
-    <div class="category">
+    <div class="category footer-category">
       <h2>
         <a href="https://www.youtube.com/@HDB-AES" target="_blank"
           >Youtube Kanal</a
