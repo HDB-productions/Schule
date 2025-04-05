@@ -6,13 +6,8 @@
     <title>Inhaltsverzeichnis</title>
     <style>
       /***********************************************************************
-       * Grundlayout
-       ***********************************************************************/
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+     * Grundlayout
+     ***********************************************************************/
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -46,7 +41,7 @@
         background-color: #ffffff;
         width: calc(100% - 40px);
         box-sizing: border-box;
-        max-width: 900px;
+        max-width: 1000px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         transition: background 0.7s ease;
       }
@@ -63,9 +58,28 @@
       }
 
       /***********************************************************************
-       * Button-Basis (Farbe inaktiv, Hover-Ring, Aktiv-Vollfläche)
-       ***********************************************************************/
+     * Keyframes: Hover/Active-Animation
+     * 
+     * Hier deine gewünschte Variante mit 0%->50%->100%, 
+     * und Y-Position fix auf 50%.
+     ***********************************************************************/
+      @keyframes glowing {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
 
+      /*
+       2) Basis-Stile für ALLE Buttons.
+       Wichtig: z-index, overflow: visible, 
+       damit der Rand-Glow nicht abgeschnitten wird.
+    */
       .button {
         position: relative;
         padding: 15px 5px;
@@ -78,20 +92,15 @@
         border: none;
         flex: 1 1 200px;
         max-width: 200px;
-        box-sizing: border-box;
-        text-align: center;
-        overflow: hidden; /* Damit das Glühen nicht über den Button hinausragt */
-        z-index: 0;
-        transition: transform 0.3s ease;
+
+        z-index: 1; /* Der Button selbst ist über dem Rand-Glow */
+        overflow: visible; /* Verhindert abgeschnittene Filter-Effekte */
       }
 
-      /* Leichtes Anheben bei Hover + Schatten */
-      .button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-      }
-
-      /* Das ringförmige Glühen als ::before (wird per Blur vergrößert) */
+      /* 
+       3) Gemeinsamer "glühender Rand" mit ::before,
+          standardmäßig unsichtbar (opacity: 0).
+    */
       .button::before {
         content: "";
         position: absolute;
@@ -100,241 +109,193 @@
         width: calc(100% + 4px);
         height: calc(100% + 4px);
         border-radius: 10px;
-        z-index: -1;
+
+        /* Platzhalter-Fallback, wird pro Fach überschrieben */
+        background: linear-gradient(45deg, #000000, #ffffff);
+        background-size: 200%;
+        background-repeat: no-repeat;
+
         filter: blur(5px);
         opacity: 0;
         transition: opacity 0.3s ease-in-out;
-        background-size: 400% 400%;
+        z-index: -1;
+
+        /* Rand pulsiert (invisibel), bis .button:active => opacity: 1 */
+        animation: glowing 3s linear infinite;
       }
 
-      /* Nur beim Hover erscheint der Ring-Effekt */
-      .button:hover::before {
+      /*
+       4) :active => glühender Rand einblenden,
+          Button-Hintergrund wird einfarbig (also KEIN Hover-Verlauf mehr).
+    */
+      .button:active {
+        /* Button selbst einfarbig. 
+         Wir überschreiben ggf. den Hover-Farbverlauf. */
+        animation: none;
+      }
+      .button:active::before {
+        /* Rand sichtbar machen */
         opacity: 1;
       }
 
-      /* ACTIVE => Button-Füllung wird animierter Gradient
-         => Wir blenden den Ring aus (oder lassen ihn weg),
-            damit nur die Füllung "wackelt". */
-      .button.active {
-        /* standard => hier: wir überschreiben pro Fach
-           also kann leer sein, oder nur color: #000, etc. */
-      }
-      .button.active::before {
-        /* ring unsichtbar machen, da die Füllung selbst wabert */
-        opacity: 0 !important;
-      }
+      /* 
+       5) Hover => animierter Verlauf auf dem Button selbst.
+    */
 
-      /* Keyframe für die ring-Animation ist identisch zu fill-Animation,
-         wir definieren aber ggf. pro Fach Variation. Hier eine generische:
-      */
-      @keyframes glow-wobble {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      /***********************************************************************
-       * MATHE-BUTTON
-       *  1) inaktiv => #ff8c00 als Füllung
-       *  2) hover => ring mit linearem rainbow (nur ring)
-       *  3) active => gesamte Füllung animiert
-      ***********************************************************************/
+      /* ========================= Mathe (Orange-Rot) ========================= */
       .mathe-button {
-        background-color: #ff8c00; /* inaktiv => einfarbig */
+        /* Grundfarbe (Normalzustand) */
+        background: #ff8c00;
+      }
+      .mathe-button:hover {
+        background: linear-gradient(
+          45deg,
+          #ff8c00,
+          #ff7300,
+          #fffb00,
+          #ff7300,
+          #ff8c00
+        );
+        background-size: 200%;
+        background-repeat: no-repeat;
+        animation: glowing 3s linear infinite;
       }
       .mathe-button::before {
-        /* ring-farbverlauf auf Hover */
         background: linear-gradient(
           45deg,
-          #ffad33,
           #ff8c00,
           #ff7300,
-          #ffc266,
-          #ff8c00
-        );
-        animation: glow-wobble 8s linear infinite;
-      }
-
-      /* wenn hovered => ring ist sichtbar => implementiert in .button:hover::before {opacity:1} */
-
-      .mathe-button.active {
-        /* = klick/ausgewählt => Fill-Wabern! */
-        background: linear-gradient(
-          45deg,
-          #ffad33,
-          #ff8c00,
+          #fffb00,
           #ff7300,
-          #ffc266,
           #ff8c00
         );
-        background-size: 400% 400%;
-        animation: matheFillWobble 8s linear infinite;
-      }
-      @keyframes matheFillWobble {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
+        background-size: 200%;
+        background-repeat: no-repeat;
       }
 
-      /***********************************************************************
-       * PHYSIK-BUTTON
-      ***********************************************************************/
+      /* ========================= Physik (Blautöne) ========================= */
       .physik-button {
-        background-color: #4682b4; /* inaktiv => einfarbig */
+        background: #00008b;
       }
-
+      .physik-button:hover {
+        background: linear-gradient(
+          45deg,
+          #000033,
+          #00008b,
+          #0000cd,
+          #1e90ff,
+          #0000cd
+        );
+        background-size: 200%;
+        background-repeat: no-repeat;
+        animation: glowing 3s linear infinite;
+      }
       .physik-button::before {
-        /* ring-farbverlauf beim Hover */
         background: linear-gradient(
           45deg,
-          #5a9bcf,
-          #4682b4,
-          #2d5f7f,
-          #a9dcff,
-          #3b6b8e
+          #000033,
+          #00008b,
+          #0000cd,
+          #1e90ff,
+          #0000cd
         );
-        animation: glow-wobble 8s linear infinite;
+        background-size: 200%;
+        background-repeat: no-repeat;
       }
 
-      .physik-button.active {
-        /* gesamte Füllung animieren */
-        background: linear-gradient(
-          45deg,
-          #5a9bcf,
-          #4682b4,
-          #2d5f7f,
-          #a9dcff,
-          #3b6b8e
-        );
-        background-size: 400% 400%;
-        animation: physikFillWobble 8s linear infinite;
-      }
-      @keyframes physikFillWobble {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      /***********************************************************************
-       * CHEMIE-BUTTON
-      ***********************************************************************/
+      /* ========================= Chemie (Pink-Lila) ========================= */
       .chemie-button {
-        background-color: #ff1493; /* inaktiv => einfarbig pink */
+        background: #ff1493;
       }
-
+      .chemie-button:hover {
+        background: linear-gradient(
+          45deg,
+          #ff1493,
+          #ff00ff,
+          #cc00cc,
+          #9933ff,
+          #ff1493
+        );
+        background-size: 200%;
+        background-repeat: no-repeat;
+        animation: glowing 3s linear infinite;
+      }
       .chemie-button::before {
-        /* ring-farbverlauf */
         background: linear-gradient(
           45deg,
           #ff1493,
-          #ff4fae,
-          #ff005c,
-          #ffb8dc,
+          #ff00ff,
+          #cc00cc,
+          #9933ff,
           #ff1493
         );
-        animation: glow-wobble 8s linear infinite;
+        background-size: 200%;
+        background-repeat: no-repeat;
       }
 
-      .chemie-button.active {
-        background: linear-gradient(
-          45deg,
-          #ff1493,
-          #ff4fae,
-          #ff005c,
-          #ffb8dc,
-          #ff1493
-        );
-        background-size: 400% 400%;
-        animation: chemieFillWobble 8s linear infinite;
-      }
-      @keyframes chemieFillWobble {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      /***********************************************************************
-       * BIO-BUTTON
-      ***********************************************************************/
+      /* ========================= Bio (Grün) ========================= */
       .bio-button {
-        background-color: #32cd32; /* inaktiv => einfarbig grün */
+        background: #228b22;
       }
-
+      .bio-button:hover {
+        background: linear-gradient(
+          45deg,
+          #00ff00,
+          #00aa00,
+          #00ff44,
+          #00aa00,
+          #00ff00
+        );
+        background-size: 200%;
+        background-repeat: no-repeat;
+        animation: glowing 3s linear infinite;
+      }
       .bio-button::before {
         background: linear-gradient(
           45deg,
-          #32cd32,
-          #54e754,
-          #249124,
-          #b2fdb2,
-          #2cab2c
+          #00ff00,
+          #00aa00,
+          #00ff44,
+          #00aa00,
+          #00ff00
         );
-        animation: glow-wobble 8s linear infinite;
+        background-size: 200%;
+        background-repeat: no-repeat;
       }
 
-      .bio-button.active {
-        background: linear-gradient(
-          45deg,
-          #32cd32,
-          #54e754,
-          #249124,
-          #b2fdb2,
-          #2cab2c
-        );
-        background-size: 400% 400%;
-        animation: bioFillWobble 8s linear infinite;
-      }
-      @keyframes bioFillWobble {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      /***********************************************************************
-       * TOOLS-BUTTON (keine Füll-Animation?), 
-         bei Bedarf anpassen wie oben.
-      ***********************************************************************/
+      /* ========================= Tools (Hellblau) ========================= */
       .tool-button {
-        background-color: #2196f3;
-        border-radius: 10px;
+        background: #00bfff;
       }
       .tool-button:hover {
-        background-color: #0b7dda;
+        background: linear-gradient(
+          45deg,
+          #add8e6,
+          #87cefa,
+          #b0e0e6,
+          #87cefa,
+          #add8e6
+        );
+        background-size: 200%;
+        background-repeat: no-repeat;
+        animation: glowing 3s linear infinite;
+      }
+      .tool-button::before {
+        background: linear-gradient(
+          45deg,
+          #add8e6,
+          #87cefa,
+          #b0e0e6,
+          #87cefa,
+          #add8e6
+        );
+        background-size: 200%;
+        background-repeat: no-repeat;
       }
 
       /***********************************************************************
-       * LINKLIST-ANIMATION
-      ***********************************************************************/
+     * LINKLIST-ANIMATION
+    ***********************************************************************/
       .link-list {
         max-height: 0;
         overflow: hidden;
@@ -362,8 +323,8 @@
       }
 
       /***********************************************************************
-       * Fusszeile, Youtube-Bereich
-      ***********************************************************************/
+     * Fusszeile, Youtube-Bereich
+    ***********************************************************************/
       .footer-category {
         text-align: center;
       }
@@ -372,13 +333,10 @@
         color: #2196f3;
         font-weight: bold;
       }
-
-      /* Hintergründe, wenn eine Kategorie aktiv ist, lassen wir unverändert. */
     </style>
 
     <script>
-      // Minimalistisches Mapping, wenn du verschiedene Hintergründe willst.
-      // Falls du das nicht benötigst, kannst du es entfernen.
+      /* Hintergründe, wenn eine Kategorie aktiv ist*/
       const gradientMap = {
         "mathe-button":
           "linear-gradient(to bottom, #ffe0c2, #fff4e6 40%, #fff)",
