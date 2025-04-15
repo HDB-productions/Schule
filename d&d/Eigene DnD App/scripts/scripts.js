@@ -11,7 +11,8 @@ const JSON_URLS = [
   'data/Charaktaere/Spieler/Diundriel.json',
   'data/Charaktaere/Spieler/test.json',
   'data/Charaktaere/Spieler/Thoralf.json',
-  'data/Skills/Skills.json'
+  'data/Skills/Skills.json',
+  'data/Zauber/Zauber.json'
 ]
 
 // #region einzelne JSON-Laden
@@ -193,6 +194,7 @@ function loadCharacterData () {
   loadSkills()
   loadPortrait()
   loadInventory(charData) // NEU: Inventar laden
+  loadSpells() // NEU: Zauber laden
 }
 
 function loadPortrait () {
@@ -989,70 +991,196 @@ function showJsonView () {
   createUniversalJsonView(container, allDataGlobal)
 }
 
-function createUniversalJsonView (container, data, depth = 0) {
-  const createCollapsible = (content, isCollapsible) => {
+function createUniversalJsonView (
+  container,
+  data,
+  depth = 0,
+  path = [],
+  forceOpen = false
+) {
+  const INDENT = 0.7 // Weniger Einrückung pro Ebene
+  const createCollapsible = (
+    label,
+    isCollapsible,
+    currentData,
+    currentPath,
+    forceOpen
+  ) => {
     const wrapper = document.createElement('div')
     wrapper.className = 'json-item'
-    wrapper.style.marginLeft = `${depth * 1}px`
+    wrapper.style.marginLeft = `${depth * INDENT}em`
 
     if (isCollapsible) {
       const header = document.createElement('div')
       header.className = 'json-header'
-      header.innerHTML = '<span class="toggle">▶</span>'
-
+      header.style.display = 'flex'
+      header.style.alignItems = 'center'
+      // Name
+      const nameSpan = document.createElement('span')
+      nameSpan.className = 'json-key'
+      nameSpan.textContent = label
+      // Aufklappsymbol
+      const toggle = document.createElement('span')
+      toggle.className = 'toggle'
+      toggle.textContent = forceOpen ? '▼' : '▶'
+      toggle.style.marginLeft = '0.5em'
+      toggle.style.cursor = 'pointer'
+      // Speicher-Button
+      const saveBtn = document.createElement('button')
+      saveBtn.textContent = '💾'
+      saveBtn.title = 'Diesen Knoten als JSON speichern'
+      saveBtn.className = 'json-save-btn'
+      saveBtn.style.background = 'transparent'
+      saveBtn.style.border = 'none'
+      saveBtn.style.color = '#fff'
+      saveBtn.style.cursor = 'pointer'
+      saveBtn.style.fontSize = '1em'
+      saveBtn.style.marginLeft = '0.5em'
+      saveBtn.addEventListener('click', e => {
+        e.stopPropagation()
+        let obj = currentData
+        for (let i = currentPath.length - 1; i >= 0; i--) {
+          const key = currentPath[i]
+          const wrap = {}
+          wrap[key] = obj
+          obj = wrap
+        }
+        const jsonStr = JSON.stringify(obj, null, 2)
+        const blob = new Blob([jsonStr], { type: 'application/json' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.download =
+          (currentPath.length ? currentPath.join('_') : 'daten') + '.json'
+        a.href = url
+        document.body.appendChild(a)
+        a.click()
+        setTimeout(() => {
+          document.body.removeChild(a)
+          URL.revokeObjectURL(url)
+        }, 100)
+      })
+      // Content
       const contentWrapper = document.createElement('div')
       contentWrapper.className = 'json-content'
-      contentWrapper.style.display = 'none'
-
-      header.addEventListener('click', () => {
+      contentWrapper.style.display = forceOpen ? 'block' : 'none'
+      header.addEventListener('click', e => {
+        if (e.target === saveBtn) return
         const isHidden = contentWrapper.style.display === 'none'
         contentWrapper.style.display = isHidden ? 'block' : 'none'
-        header.querySelector('.toggle').textContent = isHidden ? '▼' : '▶'
+        toggle.textContent = isHidden ? '▼' : '▶'
       })
-
+      header.appendChild(nameSpan)
+      header.appendChild(toggle)
+      header.appendChild(saveBtn)
       wrapper.appendChild(header)
       wrapper.appendChild(contentWrapper)
-      header.appendChild(content)
       return { wrapper, content: contentWrapper }
     }
-
-    wrapper.appendChild(content)
+    // Für primitive Werte
+    const valueSpan = document.createElement('span')
+    valueSpan.className = 'json-value'
+    valueSpan.textContent = label
+    wrapper.appendChild(valueSpan)
     return { wrapper, content: wrapper }
   }
 
   if (typeof data === 'object' && data !== null) {
     const isArray = Array.isArray(data)
-    const typeIndicator = document.createTextNode(isArray ? '[ ' : '{ ')
-    const typeEnd = document.createTextNode(isArray ? ' ]' : ' }')
-
-    const { wrapper, content } = createCollapsible(typeIndicator, true)
-
     const entries = isArray ? data : Object.entries(data)
-
-    entries.forEach((item, index) => {
-      const key = isArray ? index : item[0]
-      const value = isArray ? item : item[1]
-
-      const entryDiv = document.createElement('div')
-      entryDiv.className = 'json-entry'
-
-      if (!isArray) {
-        const keyElement = document.createElement('span')
-        keyElement.className = 'json-key'
-        keyElement.textContent = `"${key}": `
-        entryDiv.appendChild(keyElement)
-      }
-
-      createUniversalJsonView(entryDiv, value, depth + 1)
-      content.appendChild(entryDiv)
-    })
-
-    content.appendChild(typeEnd)
-    container.appendChild(wrapper)
+    if (depth === 0) {
+      const { wrapper, content } = createCollapsible('', true, data, path, true)
+      entries.forEach((item, index) => {
+        let key, value
+        if (isArray) {
+          key = index
+          value = item
+        } else {
+          key = item[0]
+          value = item[1]
+        }
+        createUniversalJsonView(
+          content,
+          value,
+          depth + 1,
+          path.concat([key]),
+          false
+        )
+      })
+      container.appendChild(wrapper)
+    } else if (
+      typeof data === 'object' &&
+      data !== null &&
+      !Array.isArray(data)
+    ) {
+      // Mische primitive Werte und Objekte/Arrays
+      const label = path.length ? path[path.length - 1] : ''
+      const { wrapper, content } = createCollapsible(
+        label,
+        true,
+        data,
+        path,
+        false
+      )
+      Object.entries(data).forEach(([k, v]) => {
+        if (typeof v === 'object' && v !== null) {
+          // Listen oder verschachtelte Objekte: als aufklappbar anzeigen
+          createUniversalJsonView(
+            content,
+            v,
+            depth + 1,
+            path.concat([k]),
+            false
+          )
+        } else {
+          // Primitive Werte: als Zeile mit gelbem Key anzeigen
+          const row = document.createElement('div')
+          row.className = 'json-primitive-row'
+          const keySpan = document.createElement('span')
+          keySpan.className = 'json-key'
+          keySpan.textContent = k + ': '
+          const valueSpan = document.createElement('span')
+          valueSpan.className = 'json-value'
+          valueSpan.textContent = v
+          row.appendChild(keySpan)
+          row.appendChild(valueSpan)
+          content.appendChild(row)
+        }
+      })
+      container.appendChild(wrapper)
+    } else {
+      // Für alle weiteren Knoten (z.B. Arrays)
+      const label = path.length ? path[path.length - 1] : ''
+      const { wrapper, content } = createCollapsible(
+        label,
+        true,
+        data,
+        path,
+        false
+      )
+      entries.forEach((item, index) => {
+        let key, value
+        if (isArray) {
+          key = index
+          value = item
+        } else {
+          key = item[0]
+          value = item[1]
+        }
+        createUniversalJsonView(
+          content,
+          value,
+          depth + 1,
+          path.concat([key]),
+          false
+        )
+      })
+      container.appendChild(wrapper)
+    }
   } else {
+    // Für primitive Werte
     const valueElement = document.createElement('span')
     valueElement.className = 'json-value'
-    valueElement.textContent = typeof data === 'string' ? `"${data}"` : data
+    valueElement.textContent = data
     container.appendChild(valueElement)
   }
 }
@@ -1156,4 +1284,68 @@ function loadInventory (charData) {
     parentBox.appendChild(box)
   }
   items.forEach(item => renderItem(item, inventoryRow, 0))
+}
+
+function loadSpells () {
+  const charData = getCurrentCharacterData()
+  if (!charData) return
+  const spellsContainer = document.getElementById('spells')
+  if (!spellsContainer) return
+  spellsContainer.innerHTML = ''
+
+  // Hole Zauber-Liste des Charakters
+  const charSpells = charData.Zauber || []
+  // Hole globale Zauber-Infos (direkt allDataGlobal.Zauber!)
+  const allSpells = (allDataGlobal && allDataGlobal.Zauber) || {}
+
+  charSpells.forEach(spellName => {
+    const spellData = allSpells[spellName] || { Quelle: 'Unbekannt' }
+    // Hauptcontainer für Zauber
+    const spellDiv = document.createElement('div')
+    spellDiv.className = 'spell-entry'
+    // Header (Name, aufklappbar)
+    const header = document.createElement('div')
+    header.className = 'spell-header'
+    header.style.cursor = 'pointer'
+    header.style.fontWeight = 'bold'
+    header.style.color = '#f2c94c'
+    header.textContent = spellName
+    // Aufklapp-Icon
+    const toggle = document.createElement('span')
+    toggle.textContent = ' ▶'
+    toggle.style.marginLeft = '0.5em'
+    header.appendChild(toggle)
+    // Detailbereich
+    const details = document.createElement('div')
+    details.className = 'spell-details'
+    details.style.display = 'none'
+    // Fülle Details
+    Object.entries(spellData).forEach(([key, value]) => {
+      const row = document.createElement('div')
+      row.className = 'spell-detail-row'
+      const keySpan = document.createElement('span')
+      keySpan.className = 'json-key'
+      keySpan.textContent = key + ': '
+      row.appendChild(keySpan)
+      if (Array.isArray(value)) {
+        row.appendChild(document.createTextNode(value.join(', ')))
+      } else {
+        row.appendChild(document.createTextNode(value))
+      }
+      details.appendChild(row)
+    })
+    // Aufklapp-Logik
+    header.addEventListener('click', () => {
+      if (details.style.display === 'none') {
+        details.style.display = 'block'
+        toggle.textContent = ' ▼'
+      } else {
+        details.style.display = 'none'
+        toggle.textContent = ' ▶'
+      }
+    })
+    spellDiv.appendChild(header)
+    spellDiv.appendChild(details)
+    spellsContainer.appendChild(spellDiv)
+  })
 }

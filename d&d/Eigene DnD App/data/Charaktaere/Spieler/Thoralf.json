@@ -131,7 +131,8 @@
               }
             }
           }
-        ]
+        ],
+        "Zauber": ["Tanzende Lichter", "Magie Entdecken [Detect Magic]"]
       }
     }
   }
