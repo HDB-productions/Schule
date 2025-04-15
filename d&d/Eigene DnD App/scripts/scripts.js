@@ -192,7 +192,9 @@ function loadCharacterData () {
   loadProficiency(charData)
   loadSkills()
   loadPortrait()
+  loadInventory(charData) // NEU: Inventar laden
 }
+
 function loadPortrait () {
   const portraitImg = document.querySelector('.portrait-img')
   if (!portraitImg || !activeCharacter) return
@@ -931,6 +933,33 @@ function setupEventListeners () {
     })
 
   // #endregion
+  // #region Menü-Dropdown und Speichern
+  const menuBtn = document.getElementById('menuBtn')
+  const menuDropdown = document.getElementById('menuDropdown')
+  menuBtn.addEventListener('click', () => {
+    menuDropdown.classList.toggle('hidden')
+  })
+  document.addEventListener('click', e => {
+    if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+      menuDropdown.classList.add('hidden')
+    }
+  })
+  document.getElementById('saveJsonBtn').addEventListener('click', () => {
+    const dataStr = JSON.stringify(allDataGlobal, null, 2)
+    const blob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'DnD_Charakterdaten.json'
+    document.body.appendChild(a)
+    a.click()
+    setTimeout(() => {
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    }, 100)
+    menuDropdown.classList.add('hidden')
+  })
+  // #endregion
 }
 
 function showError (message) {
@@ -1038,3 +1067,93 @@ function showCharacterView () {
 }
 //#endregion
 //#endregion
+
+// NEU: Gegenstände/Inventar anzeigen
+function loadInventory (charData) {
+  const inventoryRow = document.querySelector('#page4 .inventory-row')
+  if (!inventoryRow) return
+  inventoryRow.innerHTML = ''
+  const items = charData.Gegenstände || []
+  if (items.length === 0) {
+    inventoryRow.innerHTML =
+      '<div class="inventory-box"><div class="label">Keine Gegenstände</div></div>'
+    return
+  }
+  // Hilfsfunktion für Behälter rekursiv
+  function renderItem (item, parentBox, indent = 0) {
+    const box = document.createElement('div')
+    box.className = 'inventory-box'
+    if (item.equipped) box.classList.add('equipped')
+    box.style.marginLeft = indent + 'em'
+    // Checkbox für Equip-Status
+    const equipCheckbox = document.createElement('input')
+    equipCheckbox.type = 'checkbox'
+    equipCheckbox.checked = !!item.equipped
+    equipCheckbox.className = 'equip-checkbox'
+    equipCheckbox.title = 'Ausrüsten/Ablegen'
+    equipCheckbox.addEventListener('click', e => {
+      e.stopPropagation()
+      item.equipped = equipCheckbox.checked
+      loadCharacterData() // UI neu laden, damit Boni etc. aktualisiert werden
+    })
+    // Kopfzeile: Checkbox + Name
+    const header = document.createElement('div')
+    header.className = 'inventory-header'
+    header.appendChild(equipCheckbox)
+    const nameSpan = document.createElement('span')
+    nameSpan.className = 'item-name'
+    nameSpan.textContent = item.name || 'Unbenannt'
+    header.appendChild(nameSpan)
+    box.appendChild(header)
+    // Behälter-Logik
+    let isContainer =
+      item.gegenstandsTyp &&
+      item.gegenstandsTyp.Behälter &&
+      Array.isArray(item.gegenstandsTyp.Behälter.container)
+    let containerContent = null
+    if (isContainer) {
+      const toggleBtn = document.createElement('button')
+      toggleBtn.textContent = '[+]'
+      toggleBtn.className = 'container-toggle'
+      header.appendChild(toggleBtn)
+      containerContent = document.createElement('div')
+      containerContent.className = 'container-content'
+      containerContent.style.display = 'none'
+      toggleBtn.addEventListener('click', e => {
+        e.stopPropagation()
+        if (containerContent.style.display === 'none') {
+          containerContent.style.display = 'block'
+          toggleBtn.textContent = '[-]'
+        } else {
+          containerContent.style.display = 'none'
+          toggleBtn.textContent = '[+]'
+        }
+      })
+      // Rekursiv Inhalt rendern, eingerückt
+      item.gegenstandsTyp.Behälter.container.forEach(subItem => {
+        renderItem(subItem, containerContent, indent + 2)
+      })
+      box.appendChild(containerContent)
+    }
+    // Tooltip für Details (Beschreibung, Wert, Gewicht, Boni)
+    box.style.cursor = 'pointer'
+    box.addEventListener('click', e => {
+      e.stopPropagation()
+      e.preventDefault()
+      let tooltip = ''
+      tooltip += item.beschreibung ? item.beschreibung + '\n' : ''
+      tooltip += `Wert: ${item.wert ?? '-'} | Gewicht: ${
+        item.Gewicht ?? '-'
+      } | Seltenheit: ${item.seltenheit ?? '-'}\n`
+      if (item.gegenstandsTyp && item.gegenstandsTyp.Magisch) {
+        const mag = item.gegenstandsTyp.Magisch
+        if (mag.modifikatoren) {
+          tooltip += 'Boni: ' + JSON.stringify(mag.modifikatoren) + '\n'
+        }
+      }
+      showTooltipAtElement(box, tooltip)
+    })
+    parentBox.appendChild(box)
+  }
+  items.forEach(item => renderItem(item, inventoryRow, 0))
+}

@@ -232,7 +232,7 @@
             "equipped": true,
             "gegenstandsTyp": {
               "Magisch": {
-                "modifikatoren": [{ "Stärke": "+0", "Geschicklichkeit": "0" }],
+                "modifikatoren": [{ "Stärke": "+5", "Geschicklichkeit": "0" }],
                 "erfordertEinstimmung": false
               }
             }
