@@ -555,3 +555,36 @@ details summary:focus {
 .json-item {
   margin-bottom: 2px;
 }
+
+/* Styling für Info-Boxen */
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 2.5rem;
+  margin-bottom: 1.5rem;
+}
+.info-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 220px;
+  margin-bottom: 0.2rem;
+}
+.info-box .label {
+  color: #f2c94c;
+  font-weight: bold;
+  min-width: 120px;
+  margin-bottom: 0.2em;
+  font-size: 1.05em;
+  letter-spacing: 0.02em;
+  writing-mode: initial;
+  text-orientation: initial;
+  transform: none;
+  text-align: left;
+  line-height: 1.1;
+}
+.info-box .value {
+  color: #fff;
+  font-size: 1.05em;
+  word-break: break-word;
+}

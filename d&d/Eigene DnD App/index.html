@@ -288,7 +288,7 @@
           <div
             class="action-item"
             style="cursor: pointer"
-            onclick="showTooltipAtElement(this, 'Bewegungskosten: 5ft Bewegung pro 5ft Strecke \n Du springst eine Distanz weit, die deinem (Stärkewert) in Fuß entspricht, wenn du dich direkt vor dem Sprung mindestens 10 Fuß bewegt hast. \n Ohne Anlauf springst du halb so weit. \n Kann eine Probe auf Stärke (Athletik) gegen HG 10 beinhalten, um ein niederes Hindernis (nicht höher als ein Viertel der Sprungdistanz) zu überspringen. Du triffst das Hindernis bei einer fehlgeschlagenen Probe. \n Kann eine Probe auf Geschicklichkeit (Akrobatik) gegen HG 10 beinhalten, um in schwierigem Gelände auf den Füßen zu landen. Du erhältst den Zustand Liegend bei einer fehlgeschlagenen Probe. \n')""
+            onclick="showTooltipAtElement(this, 'Bewegungskosten: 5ft Bewegung pro 5ft Strecke \n Du springst eine Distanz weit, die deinem (Stärkewert) in Fuß entspricht, wenn du dich direkt vor dem Sprung mindestens 10 Fuß bewegt hast. \n Ohne Anlauf springst du halb so weit. \n Kann eine Probe auf Stärke (Athletik) gegen HG 10 beinhalten, um ein niederes Hindernis (nicht höher als ein Viertel der Sprungdistanz) zu überspringen. Du triffst das Hindernis bei einer fehlgeschlagenen Probe. \n Kann eine Probe auf Geschicklichkeit (Akrobatik) gegen HG 10 beinhalten, um in schwierigem Gelände auf den Füßen zu landen. Du erhältst den Zustand Liegend bei einer fehlgeschlagenen Probe. \n')"" 
             >
             <span>Weitsprung</span>
             <span>Max-Weite:(ST-Wert)ft</span>
@@ -429,25 +429,29 @@
       <!-- #region Seite 4 (Inventar) -->
       <section class="page-section page4" id="page4">
         <details open>
-          <summary>Inventar</summary>
+          <summary>Inventar
+            <button id="addItemBtn" title="Gegenstand hinzufügen" style="margin-left:1em;font-size:1.2em;vertical-align:middle;">＋</button>
+          </summary>
           <section class="block">
-            <div class="inventory-row">
-              <div class="inventory-box">
-                <div class="label">Item 1</div>
-                <div class="value">1d8 + 3</div>
-              </div>
-              <div class="inventory-box">
-                <div class="label">Item 2</div>
-                <div class="value">1d6 + 1</div>
-              </div>
-              <div class="inventory-box">
-                <div class="label">Item 3</div>
-                <div class="value">1d4 + 2</div>
-              </div>
-            </div>
+            <div class="inventory-row"></div>
           </section>
         </details>
       </section>
+      <!-- Modal für neuen Gegenstand -->
+      <div id="addItemModal" class="modal hidden">
+        <div class="modal-content" style="max-width:400px;">
+          <button class="close-btn" id="closeAddItemModal">×</button>
+          <h2>Neuen Gegenstand hinzufügen</h2>
+          <form id="addItemForm">
+            <label>Name:<br><input name="name" required maxlength="50"></label><br>
+            <label>Beschreibung:<br><textarea name="beschreibung" rows="2" maxlength="200"></textarea></label><br>
+            <label>Wert:<br><input name="wert" type="number" min="0" step="1"></label><br>
+            <label>Gewicht:<br><input name="gewicht" type="number" min="0" step="0.01"></label><br>
+            <label>Seltenheit:<br><input name="seltenheit" maxlength="30"></label><br>
+            <button type="submit" class="modal-btn gain" style="width:100%;margin-top:0.7em;">Hinzufügen</button>
+          </form>
+        </div>
+      </div>
       <!-- #endregion -->
       <!-- #region Seite 5 (Informationen) -->
       <section class="page-section page5" id="page5">

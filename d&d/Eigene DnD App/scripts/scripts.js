@@ -193,8 +193,9 @@ function loadCharacterData () {
   loadProficiency(charData)
   loadSkills()
   loadPortrait()
-  loadInventory(charData) // NEU: Inventar laden
-  loadSpells() // NEU: Zauber laden
+  loadInventory(charData)
+  loadSpells()
+  loadBackgroundInfo(charData) // NEU: Hintergrundinfos laden
 }
 
 function loadPortrait () {
@@ -962,6 +963,41 @@ function setupEventListeners () {
     menuDropdown.classList.add('hidden')
   })
   // #endregion
+  // #region Inventar: Gegenstand hinzufügen
+  const addItemBtn = document.getElementById('addItemBtn')
+  const addItemModal = document.getElementById('addItemModal')
+  const closeAddItemModal = document.getElementById('closeAddItemModal')
+  const addItemForm = document.getElementById('addItemForm')
+
+  if (addItemBtn && addItemModal && closeAddItemModal && addItemForm) {
+    addItemBtn.addEventListener('click', e => {
+      e.preventDefault()
+      addItemModal.classList.remove('hidden')
+      addItemForm.reset()
+    })
+    closeAddItemModal.addEventListener('click', () => {
+      addItemModal.classList.add('hidden')
+    })
+    addItemForm.addEventListener('submit', function (e) {
+      e.preventDefault()
+      const formData = new FormData(addItemForm)
+      const newItem = {
+        name: formData.get('name'),
+        beschreibung: formData.get('beschreibung'),
+        wert: formData.get('wert') ? Number(formData.get('wert')) : undefined,
+        gewicht: formData.get('gewicht')
+          ? Number(formData.get('gewicht'))
+          : undefined,
+        seltenheit: formData.get('seltenheit') || undefined
+      }
+      const charData = getCurrentCharacterData()
+      if (!charData.Gegenstände) charData.Gegenstände = []
+      charData.Gegenstände.push(newItem)
+      addItemModal.classList.add('hidden')
+      loadCharacterData()
+    })
+  }
+  // #endregion
 }
 
 function showError (message) {
@@ -1207,6 +1243,17 @@ function loadInventory (charData) {
       '<div class="inventory-box"><div class="label">Keine Gegenstände</div></div>'
     return
   }
+
+  // Sortierfunktion: Waffen, Rüstung, Magisch, Behälter, Sonstiges
+  function getSortKey (item) {
+    if (item.gegenstandsTyp?.Waffe) return 1
+    if (item.gegenstandsTyp?.Rüstung) return 2
+    if (item.gegenstandsTyp?.Magisch) return 3
+    if (item.gegenstandsTyp?.Behälter) return 4
+    return 5
+  }
+  const sortedItems = [...items].sort((a, b) => getSortKey(a) - getSortKey(b))
+
   // Hilfsfunktion für Behälter rekursiv
   function renderItem (item, parentBox, indent = 0) {
     const box = document.createElement('div')
@@ -1263,7 +1310,7 @@ function loadInventory (charData) {
       })
       box.appendChild(containerContent)
     }
-    // Tooltip für Details (Beschreibung, Wert, Gewicht, Boni)
+    // Tooltip für Details (Beschreibung, Wert, Gewicht, Boni, Waffeninfos)
     box.style.cursor = 'pointer'
     box.addEventListener('click', e => {
       e.stopPropagation()
@@ -1271,9 +1318,28 @@ function loadInventory (charData) {
       let tooltip = ''
       tooltip += item.beschreibung ? item.beschreibung + '\n' : ''
       tooltip += `Wert: ${item.wert ?? '-'} | Gewicht: ${
-        item.Gewicht ?? '-'
+        item.gewicht ?? '-'
       } | Seltenheit: ${item.seltenheit ?? '-'}\n`
-      if (item.gegenstandsTyp && item.gegenstandsTyp.Magisch) {
+      if (item.gegenstandsTyp?.Waffe) {
+        tooltip += 'Typ: Waffe\n'
+        const waffe = item.gegenstandsTyp.Waffe
+        Object.entries(waffe).forEach(([hand, handData]) => {
+          if (typeof handData === 'object' && handData.Aktiv !== undefined) {
+            tooltip += `- ${hand}: ${handData.Aktiv ? 'aktiv' : 'inaktiv'}\n`
+            if (handData.treffen) {
+              tooltip += `  Angriff: ${JSON.stringify(handData.treffen)}\n`
+            }
+            if (handData.schaden) {
+              tooltip += `  Schaden: ${JSON.stringify(handData.schaden)}\n`
+            }
+          }
+        })
+      }
+      if (item.gegenstandsTyp?.Rüstung) {
+        tooltip += 'Typ: Rüstung\n'
+        tooltip += JSON.stringify(item.gegenstandsTyp.Rüstung) + '\n'
+      }
+      if (item.gegenstandsTyp?.Magisch) {
         const mag = item.gegenstandsTyp.Magisch
         if (mag.modifikatoren) {
           tooltip += 'Boni: ' + JSON.stringify(mag.modifikatoren) + '\n'
@@ -1283,7 +1349,7 @@ function loadInventory (charData) {
     })
     parentBox.appendChild(box)
   }
-  items.forEach(item => renderItem(item, inventoryRow, 0))
+  sortedItems.forEach(item => renderItem(item, inventoryRow, 0))
 }
 
 function loadSpells () {
@@ -1347,5 +1413,32 @@ function loadSpells () {
     spellDiv.appendChild(header)
     spellDiv.appendChild(details)
     spellsContainer.appendChild(spellDiv)
+  })
+}
+
+// NEU: Hintergrundinfos im Info-Tab anzeigen
+function loadBackgroundInfo (charData) {
+  // Die Daten liegen unter charData.Rollenspiel
+  const info = charData.Rollenspiel || {}
+  // Mapping: Label im UI -> Key im JSON
+  const mapping = [
+    { label: 'Hintergrund', key: 'Hintergrundinformationen' },
+    { label: 'Rasse', key: 'Spezies' },
+    { label: 'Geschlecht', key: 'Geschlecht' },
+    { label: 'Alter', key: 'Alter' },
+    { label: 'Größe', key: 'Größe' },
+    { label: 'Gewicht', key: 'Gewicht' },
+    { label: 'Augenfarbe', key: 'Augen' },
+    { label: 'Haarfarbe', key: 'Haar' },
+    { label: 'Hautfarbe', key: 'Haut' }
+  ]
+  // Finde alle Info-Boxen im Info-Tab (Seite 5)
+  const infoBoxes = document.querySelectorAll('#page5 .info-box')
+  mapping.forEach((map, idx) => {
+    const box = infoBoxes[idx]
+    if (box) {
+      const valueDiv = box.querySelector('.value')
+      if (valueDiv) valueDiv.textContent = info[map.key] || '-'
+    }
   })
 }
