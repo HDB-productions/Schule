@@ -112,10 +112,10 @@
         },
         "Gegenstände": [
           {
-            "name": "Beschlagene Lederrüstung",
-            "beschreibung": "ich muss noch nachgucken welche werte sie genau hat",
-            "Gewicht": 25.0,
-            "wert": 25.0,
+            "name": "Mithril Kettenhemd elfischer Verabeitungstechnik",
+            "beschreibung": "Dieses Mithril Kettenhemd wurde nach Elfischer Technik speziell auf Thoralf angepasst. Es ist leichter als normale Kettenhemden und schränkt die Bewegungen weniger ein.",
+            "Gewicht": "20 Pfd. / 10 Kg.",
+            "wert": 4.0,
             "equipped": true,
             "seltenheit": "?",
             "gegenstandsTyp": {
@@ -123,10 +123,10 @@
                 "RC": "+3",
                 "Rüstungstyp": "Leicht",
                 "Nachteil beim Schleichen": true,
-                "maxDexBonus": 5
+                "maxDexBonus": 3
               },
               "Magisch": {
-                "modifikatoren": [{ "Rüstung": "0" }],
+                "modifikatoren": [{ "Rüstung": "1" }],
                 "erfordertEinstimmung": false
               }
             }
