@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Energiefluss‑Diagramm – interaktiv</title>
+    <style>
+      /* Grundlayout */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        font-family: system-ui, sans-serif;
+      }
+
+      svg {
+        border: 1px solid #ccc;
+        touch-action: none; /* keine Scroll‑Gesten während Drag */
+      }
+
+      /* Griffpunkt */
+      .draggable {
+        cursor: ns-resize;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sichtfenster: 0 … 30 in x‑Richtung, −3 … 8 in y‑Richtung  -->
+    <svg id="diagram" viewBox="-.5 -0.5 26 7" height="300" width="1080">
+      <!-- Karoraster à 0,5 cm → Pattern 0,5 × 0,5 SVG‑Einheiten -->
+      <defs>
+        <pattern
+          id="grid"
+          patternUnits="userSpaceOnUse"
+          width="0.5"
+          height="0.5"
+        >
+          <path
+            d="M 0.5 0 L 0 0 0 0.5"
+            fill="none"
+            stroke="#b0b0b0"
+            stroke-width="0.01"
+          />
+        </pattern>
+      </defs>
+
+      <!-- Hintergrundraster -->
+      <rect x="-0.5" y="-0.5" width="26" height="10" fill="url(#grid)" />
+
+      <!-- Reihenfolge: Verlust (unten) → Nutz (oben) darüber → damit kein Überdecken -->
+      <g id="objects" stroke="#222" stroke-width="0.05">
+        <!-- Eingehender Pfeil (Primärenergie) -->
+        <polygon id="arrowLeft" fill="#7fcfa4" fill-opacity="0.5" />
+        <!-- Prozess‑Block -->
+        <polygon id="square" fill="#8080e0" fill-opacity="0.5" />
+        <!-- Verlustenergie (unten, rot – Pfad mit Rundung) -->
+        <path id="arrowWaste" fill="#e06060" fill-opacity="0.5" />
+        <!-- Nutzenergie (oben, grün – Polygon) -->
+        <polygon id="arrowUseful" fill="#7fcfa4" fill-opacity="0.5" />
+      </g>
+
+      <!-- Beschriftungen -->
+      <g id="labels" font-size="0.8"></g>
+
+      <!-- Griffpunkt A -->
+      <circle
+        id="handle"
+        class="draggable"
+        cx="15"
+        cy="2.5"
+        r="0.2"
+        fill="#007bff"
+        stroke="#fff"
+        stroke-width="0.05"
+      />
+
+      <script>
+        /* ===================== Konstanten ===================== */ const svg =
+        document.getElementById("diagram"); const handle =
+        document.getElementById("handle"); const arrowLeft =
+        document.getElementById("arrowLeft"); const square =
+        document.getElementById("square"); const arrowUseful =
+        document.getElementById("arrowUseful"); const arrowWaste =
+        document.getElementById("arrowWaste"); const labelsLayer =
+        document.getElementById("labels"); /* ----------------
+        Beschriftungsfelder --------------- */ const labelConfigs = [ { id:
+        "labelLeft", target: arrowLeft, text: "Zugefügte Energie" }, { id:
+        "labelSquare", target: square, text: "Wandler" }, { id: "labelUseful",
+        target: arrowUseful, text: "Nutzenergie" }, { id: "labelWaste", target:
+        arrowWaste, text: "Entwertete Energie" }, ]; labelConfigs.forEach((cfg)
+        => { const txt = document.createElementNS("http://www.w3.org/2000/svg",
+        "text"); txt.setAttribute("id", cfg.id); txt.setAttribute("text-anchor",
+        "middle"); txt.setAttribute("dominant-baseline", "middle");
+        txt.textContent = cfg.text; labelsLayer.appendChild(txt); }); /*
+        ================ Geometrie‑Berechnung ================ */ function
+        updateShapes() { const yA = +handle.getAttribute("cy"); // Position des
+        Griffpunkts [0‥5] /* 1) Eingehender Pfeil (links) */
+        arrowLeft.setAttribute("points", "0,0 8,0 10,2.5 8,5 0,5"); /* 2)
+        Prozessblock */ square.setAttribute("points", "10,0 15,0 15,5 10,5"); /*
+        3) Nutzenergie (oben, grün) – Bereich 0‥yA */ const midY = yA / 2; //
+        y‑Koordinate der Pfeilspitze const ptsUseful = [ [15, 0], // links oben
+        [23, 0], // rechts oben [25, midY], // Spitze [23, yA], // rechts unten
+        [15, yA], // links unten ]; arrowUseful.setAttribute("points",
+        ptsUseful.map((p) => p.join(",")).join(" ")); /* 4) Verlustenergie
+        (unten, rot) – Bereich yA‥5 */ const r = 5 - yA; // Radius des
+        Viertelkreises const xB = 25 - r; // B = D.x const tipX = xB + r / 2; //
+        Pfeilspitze const tipY = 5 + Math.min(1,r / 2); // Pfeilspitze‑Y (etwas
+        unterhalb) const pathLoss = [ `M 15 ${yA}`, // A (Start) `L 15 5`, //
+        senkrecht nach unten `L ${xB} 5`, // bis B `L ${tipX} ${tipY}`, //
+        Pfeilspitze `L 25 5`, // bis C // Viertelkreis C (Ost) → D (Nord) `A
+        ${r} ${r} 0 0 0 ${xB} ${yA}`, "Z", ].join(" ");
+        arrowWaste.setAttribute("d", pathLoss); /* 5) Beschriftungen
+        nachjustieren */ requestAnimationFrame(updateLabels); } function
+        updateLabels() { labelConfigs.forEach((cfg) => { const bb =
+        cfg.target.getBBox(); // Bounding Box des Ziel‑Elements Die Bounding Box
+        ist das kleinste Rechteck, das ein SVG-Element vollständig umschließt
+        const fo = document.getElementById(cfg.id); // Beschriftungsfeld //
+        Breite und Höhe dynamisch anpassen, damit der Text immer mittig im
+        Pfeil/Block ist // Für den Prozess-Block etwas mehr Höhe
+        fo.setAttribute("width", bb.width); fo.setAttribute("height",
+        bb.height); // Zentriert auf das jeweilige Element fo.setAttribute("x",
+        bb.x + bb.width / 2 ); fo.setAttribute("y", bb.y + bb.height / 2); }); }
+        /* Erstmaliges Zeichnen */ updateShapes(); /* ==================
+        Drag‑Interaktion =================== */ let dragging = false; const
+        svgPoint = svg.createSVGPoint(); function pointerPos(evt) { svgPoint.x =
+        evt.clientX; svgPoint.y = evt.clientY; return
+        svgPoint.matrixTransform(svg.getScreenCTM().inverse()); } function
+        startDrag(evt) { dragging = true; evt.preventDefault(); } function
+        doDrag(evt) { if (!dragging) return; const p = pointerPos(evt.touches ?
+        evt.touches[0] : evt); const y = Math.max(0, Math.min(5, p.y));
+        handle.setAttribute("cy", y.toFixed(2)); updateShapes(); } function
+        endDrag() { dragging = false; } handle.addEventListener("mousedown",
+        startDrag); window.addEventListener("mousemove", doDrag);
+        window.addEventListener("mouseup", endDrag);
+        handle.addEventListener("touchstart", startDrag);
+        window.addEventListener("touchmove", doDrag);
+        window.addEventListener("touchend", endDrag);
+      </script>
+    </svg>
+  </body>
+</html>
