@@ -305,7 +305,15 @@
         ];
 
         function clearTable() {
-          eqIDs.forEach((id) => (document.getElementById(id).textContent = ""));
+          // Clear all dynamic cells: remove text, user/auto classes, and userFill flags
+          const cells = document.querySelectorAll("#eqTable td.equation-cell");
+          cells.forEach((td) => {
+            // don't touch separators
+            if (td.classList.contains("separator")) return;
+            td.textContent = "";
+            td.classList.remove("user-cell", "auto-cell");
+            delete td.dataset.userFill;
+          });
         }
         function showGiven(idx) {
           const vals = steps[idx].show(texts);
@@ -345,40 +353,34 @@
         function archiveCurrentExercise() {
           const clone = document.querySelector("#eqTable").cloneNode(true);
           clone.removeAttribute("id");
-          clone.classList.remove("equation");
-          clone.classList.add("history-table");
+          clone.classList.replace("equation", "history-table");
 
-          clone.querySelectorAll("td").forEach((td) => {
-            // Skip separator cells (= and |)
-            if (td.classList.contains("separator")) return;
-            // Skip only the original equation cells of the first row
-            if (["gleichung1l", "gleichung1r"].includes(td.id)) return;
-            // Skip the final empty cell in fourth row (no input ever)
-            const row = td.parentElement;
-            const table = row.parentElement;
-            // rowIndex might not exist on tbody children so use query
-            const rows = [...table.children];
-            const rowIndex = rows.indexOf(row);
-            const cellIndex = [...row.children].indexOf(td);
-            if (rowIndex === 3 && cellIndex === 4) return;
-            // Skip separator cells (= and |)
-            if (td.classList.contains("separator")) return;
-            // Skip only the original equation cells of the first row
-            if (["gleichung1l", "gleichung1r"].includes(td.id)) return;
+          const tbody = clone.tBodies[0];
+          for (let r = 0; r < tbody.rows.length; r++) {
+            const cells = tbody.rows[r].cells;
+            for (let c = 0; c < cells.length; c++) {
+              const td = cells[c];
+              // skip separators (= and |)
+              if (td.classList.contains("separator")) continue;
+              // skip original first-row equation cells (g1l at col 0, g1r at col 2)
+              if (r === 0 && (c === 0 || c === 2)) continue;
+              // skip last empty cell (4th row, 5th col)
+              if (r === 3 && c === 4) continue;
 
-            const inp = td.querySelector("input");
-            if (inp) {
-              const v = inp.value.trim();
-              td.textContent = v || " ";
-              td.classList.add(v ? "user-cell" : "auto-cell");
-            } else if (td.dataset.userFill === "1") {
-              td.classList.add("user-cell");
-            } else {
-              td.textContent = td.textContent || " ";
-              td.classList.add("auto-cell");
+              const input = td.querySelector("input");
+              if (input) {
+                const v = input.value.trim();
+                td.textContent = v || " ";
+                td.classList.add(v ? "user-cell" : "auto-cell");
+              } else if (td.dataset.userFill) {
+                td.classList.add("user-cell");
+              } else {
+                td.textContent = td.textContent || " ";
+                td.classList.add("auto-cell");
+              }
+              delete td.dataset.userFill;
             }
-            delete td.dataset.userFill;
-          });
+          }
 
           document.querySelector("#history").appendChild(clone);
         }
