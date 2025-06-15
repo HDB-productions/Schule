@@ -24,7 +24,7 @@
       /* Aktuelle Aufgabe */
       table.equation {
         width: min(560px, 100%);
-        margin-inline: auto;
+        margin: auto;
         border-collapse: collapse;
         background: var(--c-bg);
         border: 1px solid #ccc;
@@ -104,6 +104,7 @@
           transform: translateX(0);
         }
       }
+
       .button-container {
         display: flex;
         justify-content: center;
@@ -129,13 +130,6 @@
         }
       }
     </style>
-    <!-- html2canvas für Export -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
-      integrity="sha512-sn+GjvEPNi19hYz3Rv6/K5S+6Jx/BjQj0mXoQIS3RykR7Y0mf5eKQZ/ONuXgG1dnLBb8BQjohmI4Y49d6a7pVA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
   </head>
   <body>
     <h1>Löse die Gleichung durch Äquivalenz­umformungen</h1>
@@ -150,30 +144,30 @@
       </colgroup>
       <tbody>
         <tr>
-          <td id="g1l" class="equation-cell text-right"></td>
+          <td id="gleichung1l" class="equation-cell text-right"></td>
           <td class="separator">=</td>
-          <td id="g1r" class="equation-cell"></td>
+          <td id="gleichung1r" class="equation-cell"></td>
           <td class="separator">|</td>
-          <td id="u1" class="equation-cell"></td>
+          <td id="umformung1" class="equation-cell"></td>
         </tr>
         <tr>
-          <td id="g2l" class="equation-cell text-right"></td>
+          <td id="gleichung2l" class="equation-cell text-right"></td>
           <td class="separator">=</td>
-          <td id="g2r" class="equation-cell"></td>
+          <td id="gleichung2r" class="equation-cell"></td>
           <td class="separator">|</td>
-          <td id="u2" class="equation-cell"></td>
+          <td id="umformung2" class="equation-cell"></td>
         </tr>
         <tr>
-          <td id="g3l" class="equation-cell text-right"></td>
+          <td id="gleichung3l" class="equation-cell text-right"></td>
           <td class="separator">=</td>
-          <td id="g3r" class="equation-cell"></td>
+          <td id="gleichung3r" class="equation-cell"></td>
           <td class="separator">|</td>
-          <td id="u3" class="equation-cell"></td>
+          <td id="umformung3" class="equation-cell"></td>
         </tr>
         <tr>
-          <td id="g4l" class="equation-cell text-right"></td>
+          <td id="gleichung4l" class="equation-cell text-right"></td>
           <td class="separator">=</td>
-          <td id="g4r" class="equation-cell"></td>
+          <td id="gleichung4r" class="equation-cell"></td>
           <td class="separator"></td>
           <td class="equation-cell"></td>
         </tr>
@@ -183,10 +177,11 @@
     <div class="button-container">
       <button id="checkBtn">Prüfen</button>
       <button id="newBtn">Neue Aufgabe</button>
-      <button id="exportBtn">Exportiere Historie</button>
     </div>
 
-    <section id="history"><h2>Bisherige Aufgaben</h2></section>
+    <section id="history">
+      <h2>Bisherige Aufgaben</h2>
+    </section>
 
     <script>
       (() => {
@@ -195,27 +190,27 @@
         const rand = (n) => Math.floor(Math.random() * (2 * n + 1)) - n;
         const sg = (n) => (n < 0 ? "-" : "+");
         const abs = Math.abs;
-        const norm = (s) => {
-          let t = s.replace(/\s+/g, "").toLowerCase();
-          t = t.replace(/^x/, "1x").replace(/([+-])x/g, "$11x");
-          return t.replace(/\*\(-1\)/g, ":(-1)");
+        const norm = (str) => {
+          let s = str.replace(/\s+/g, "").toLowerCase();
+          s = s.replace(/^x/, "1x").replace(/([+-])x/g, "$11x");
+          return s.replace(/\*\(-1\)/g, ":(-1)");
         };
 
-        let step = 0,
-          coeffs = {},
-          texts = {};
+        let step = 0;
+        let coeffs = {};
+        let texts = {};
         const eqIDs = [
-          "g1l",
-          "g1r",
-          "u1",
-          "g2l",
-          "g2r",
-          "u2",
-          "g3l",
-          "g3r",
-          "u3",
-          "g4l",
-          "g4r",
+          "gleichung1l",
+          "gleichung1r",
+          "umformung1",
+          "gleichung2l",
+          "gleichung2r",
+          "umformung2",
+          "gleichung3l",
+          "gleichung3r",
+          "umformung3",
+          "gleichung4l",
+          "gleichung4r",
         ];
 
         function newCoeffs() {
@@ -235,158 +230,184 @@
 
         function buildTexts({ a1, a2, a3, L }) {
           return {
-            g1l: `${a1 + a3}x ${sg(a2)} ${abs(a2)}`,
-            g1r: `${a1 * L + a2} ${sg(a3)} ${abs(a3)}x`,
-            u1: `${sg(-a3)} ${abs(a3)}x`,
-            g2l: `${a1}x ${sg(a2)} ${abs(a2)}`,
-            g2r: `${a1 * L + a2}`,
-            u2: `${sg(-a2)} ${abs(a2)}`,
-            g3l: `${a1}x`,
-            g3r: `${a1 * L}`,
-            u3: a1 < 0 ? `:(-${abs(a1)})` : `:${abs(a1)}`,
-            g4l: `x`,
-            g4r: `${L}`,
+            gleichung1l: `${a1 + a3}x ${sg(a2)} ${abs(a2)}`,
+            gleichung1r: `${a1 * L + a2} ${sg(a3)} ${abs(a3)}x`,
+            umformung1: `${sg(-a3)} ${abs(a3)}x`,
+            gleichung2l: `${a1}x ${sg(a2)} ${abs(a2)}`,
+            gleichung2r: `${a1 * L + a2}`,
+            umformung2: `${sg(-a2)} ${abs(a2)}`,
+            gleichung3l: `${a1}x`,
+            gleichung3r: `${a1 * L}`,
+            umformung3: a1 < 0 ? `:(-${abs(a1)})` : `:${abs(a1)}`,
+            gleichung4l: `x`,
+            gleichung4r: `${L}`,
           };
         }
 
         const steps = [
           {
-            c: "u1",
-            p: "Bringe alle x nach links.",
-            a: (t) => t.u1,
-            show: (t) => ({ g1l: t.g1l, g1r: t.g1r }),
+            cell: "umformung1",
+            placeholder: "Bringe alle x nach links.",
+            answer: (t) => t.umformung1,
+            show: (t) => ({
+              gleichung1l: t.gleichung1l,
+              gleichung1r: t.gleichung1r,
+            }),
           },
           {
-            c: "g2l",
-            p: "Vereinfache.",
-            a: (t) => t.g2l,
-            show: (t) => ({ u1: t.u1 }),
+            cell: "gleichung2l",
+            placeholder: "Vereinfache.",
+            answer: (t) => t.gleichung2l,
+            show: (t) => ({ umformung1: t.umformung1 }),
           },
           {
-            c: "g2r",
-            p: "Vereinfache.",
-            a: (t) => t.g2r,
-            show: (t) => ({ g2l: t.g2l }),
+            cell: "gleichung2r",
+            placeholder: "Vereinfache.",
+            answer: (t) => t.gleichung2r,
+            show: (t) => ({ gleichung2l: t.gleichung2l }),
           },
           {
-            c: "u2",
-            p: "Konstante entfernen.",
-            a: (t) => t.u2,
-            show: (t) => ({ g2r: t.g2r }),
+            cell: "umformung2",
+            placeholder: "Konstante entfernen.",
+            answer: (t) => t.umformung2,
+            show: (t) => ({ gleichung2r: t.gleichung2r }),
           },
           {
-            c: "g3l",
-            p: "Vereinfache.",
-            a: (t) => t.g3l,
-            show: (t) => ({ u2: t.u2 }),
+            cell: "gleichung3l",
+            placeholder: "Vereinfache.",
+            answer: (t) => t.gleichung3l,
+            show: (t) => ({ umformung2: t.umformung2 }),
           },
           {
-            c: "g3r",
-            p: "Vereinfache.",
-            a: (t) => t.g3r,
-            show: (t) => ({ g3l: t.g3l }),
+            cell: "gleichung3r",
+            placeholder: "Vereinfache.",
+            answer: (t) => t.gleichung3r,
+            show: (t) => ({ gleichung3l: t.gleichung3l }),
           },
           {
-            c: "u3",
-            p: "Durch Koeffizient teilen.",
-            a: (t) => t.u3,
-            show: (t) => ({ g3r: t.g3r }),
+            cell: "umformung3",
+            placeholder: "Faktor entfernen.",
+            answer: (t) => t.umformung3,
+            show: (t) => ({ gleichung3r: t.gleichung3r }),
           },
           {
-            c: "g4l",
-            p: "Vereinfache.",
-            a: (t) => t.g4l,
-            show: (t) => ({ u3: t.u3 }),
+            cell: "gleichung4l",
+            placeholder: "Vereinfache.",
+            answer: (t) => t.gleichung4l,
+            show: (t) => ({ umformung3: t.umformung3 }),
           },
           {
-            c: "g4r",
-            p: "Vereinfache.",
-            a: (t) => t.g4r,
-            show: (t) => ({ g4l: t.g4l }),
+            cell: "gleichung4r",
+            placeholder: "Vereinfache.",
+            answer: (t) => t.gleichung4r,
+            show: (t) => ({ gleichung4l: t.gleichung4l }),
           },
         ];
 
         function clearTable() {
-          eqIDs.forEach((id) => ($(`#${id}`).textContent = ""));
+          eqIDs.forEach((id) => (document.getElementById(id).textContent = ""));
         }
-        function showGiven(i) {
-          Object.entries(steps[i].show(texts)).forEach(
-            ([id, v]) => ($(`#${id}`).textContent = v)
+        function showGiven(idx) {
+          const vals = steps[idx].show(texts);
+          Object.keys(vals).forEach(
+            (id) => (document.getElementById(id).textContent = vals[id])
           );
         }
-        function addInput(i) {
-          const cfg = steps[i],
-            cell = $(`#${cfg.c}`);
-          cell.dataset.expect = cfg.a(texts);
-          cell.innerHTML = `<input class="answer-input" placeholder="${cfg.p}">`;
+        function addInput(idx) {
+          const cfg = steps[idx];
+          const cell = document.getElementById(cfg.cell);
+          cell.dataset.expect = cfg.answer(texts);
+          cell.innerHTML = `<input class="answer-input" placeholder="${cfg.placeholder}">`;
           cell.querySelector("input").focus();
         }
 
-        function archive() {
-          const clone = $(`#eqTable`).cloneNode(true);
-          clone.removeAttribute("id");
-          clone.classList.replace("equation", "history-table");
-          clone.querySelectorAll("td").forEach((td) => {
-            const inp = td.querySelector("input");
-            if (inp) {
-              const v = inp.value.trim();
-              td.textContent = v || " ";
-              td.classList.add(v ? "user-cell" : "auto-cell");
-            } else if (td.dataset.userFill) td.classList.add("user-cell");
-            td.removeAttribute("data-user-fill");
-          });
-          $("#history").appendChild(clone);
-        }
-
-        function check() {
-          const cfg = steps[step],
-            cell = $(`#${cfg.c}`),
-            inp = cell.querySelector("input");
-          if (!inp) return;
-          if (norm(inp.value) === norm(cell.dataset.expect)) {
-            cell.textContent = inp.value.trim() || " ";
-            cell.dataset.userFill = true;
+        function checkAnswer() {
+          const cfg = steps[step];
+          const cell = document.getElementById(cfg.cell);
+          const input = cell.querySelector("input");
+          if (!input) return;
+          if (norm(input.value) === norm(cell.dataset.expect)) {
+            cell.textContent = input.value.trim() || " ";
+            cell.dataset.userFill = "1";
             step++;
             if (step < steps.length) {
               showGiven(step);
               addInput(step);
             } else {
-              $("#checkBtn").classList.add("hidden");
+              document.getElementById("checkBtn").classList.add("hidden");
             }
           } else {
-            inp.classList.add("error");
-            setTimeout(() => inp.classList.remove("error"), 300);
+            input.classList.add("error");
+            setTimeout(() => input.classList.remove("error"), 300);
           }
         }
 
+        function archiveCurrentExercise() {
+          const clone = document.querySelector("#eqTable").cloneNode(true);
+          clone.removeAttribute("id");
+          clone.classList.remove("equation");
+          clone.classList.add("history-table");
+
+          clone.querySelectorAll("td").forEach((td) => {
+            // Skip separator cells (= and |)
+            if (td.classList.contains("separator")) return;
+            // Skip only the original equation cells of the first row
+            if (["gleichung1l", "gleichung1r"].includes(td.id)) return;
+            // Skip the final empty cell in fourth row (no input ever)
+            const row = td.parentElement;
+            const table = row.parentElement;
+            // rowIndex might not exist on tbody children so use query
+            const rows = [...table.children];
+            const rowIndex = rows.indexOf(row);
+            const cellIndex = [...row.children].indexOf(td);
+            if (rowIndex === 3 && cellIndex === 4) return;
+            // Skip separator cells (= and |)
+            if (td.classList.contains("separator")) return;
+            // Skip only the original equation cells of the first row
+            if (["gleichung1l", "gleichung1r"].includes(td.id)) return;
+
+            const inp = td.querySelector("input");
+            if (inp) {
+              const v = inp.value.trim();
+              td.textContent = v || " ";
+              td.classList.add(v ? "user-cell" : "auto-cell");
+            } else if (td.dataset.userFill === "1") {
+              td.classList.add("user-cell");
+            } else {
+              td.textContent = td.textContent || " ";
+              td.classList.add("auto-cell");
+            }
+            delete td.dataset.userFill;
+          });
+
+          document.querySelector("#history").appendChild(clone);
+        }
+
         function newExercise() {
-          if (step > 0 || $(`#g1l`).textContent) archive();
+          if (step > 0 || document.getElementById("gleichung1l").textContent) {
+            archiveCurrentExercise();
+          }
           clearTable();
           coeffs = newCoeffs();
           texts = buildTexts(coeffs);
           step = 0;
-          $("#checkBtn").classList.remove("hidden");
+          document.getElementById("checkBtn").classList.remove("hidden");
           showGiven(0);
           addInput(0);
         }
 
-        function exportHistory() {
-          const hist = document.querySelector("#history");
-          html2canvas(hist).then((canvas) => {
-            const link = document.createElement("a");
-            link.download = "history.png";
-            link.href = canvas.toDataURL();
-            link.click();
-          });
-        }
-
         document.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" && e.target.matches(".answer-input")) check();
+          if (e.key === "Enter" && e.target.matches(".answer-input"))
+            checkAnswer();
         });
-        $("#checkBtn").addEventListener("click", check);
-        $("#newBtn").addEventListener("click", newExercise);
-        $("#exportBtn").addEventListener("click", exportHistory);
+        document
+          .getElementById("checkBtn")
+          .addEventListener("click", checkAnswer);
+        document
+          .getElementById("newBtn")
+          .addEventListener("click", newExercise);
 
+        // Start
         newExercise();
       })();
     </script>
