@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Äquivalenz-Übungen – freier Modus (Brüche)</title>
+<style>
+  :root{--sp:.65rem;--c-bg:#fffce8;--c-user:#d7f8d7;--c-auto:#ffd6d6}
+  body{font-family:system-ui,sans-serif;margin:0;padding:var(--sp) 1rem 2rem}
+  h1{margin:0 0 1.25rem;text-align:center}
+  table.equation{width:min(560px,100%);margin:auto;border-collapse:collapse;background:var(--c-bg);border:1px solid #ccc;table-layout:fixed}
+  col.eq-left,col.eq-right{width:28%} col.eq-op,col.eq-pipe{width:4%} col.eq-transform{width:36%}
+  td{padding:.3rem .35rem} td.separator{text-align:center} td.text-right{text-align:right}
+  td.equation-cell{overflow-wrap:anywhere}
+  #history{margin-top:2rem} #history h2{font-size:1.05rem;text-align:center;margin-bottom:.5rem}
+  .history-table{width:min(560px,100%);margin:.8rem auto;border:1px solid #ccc;border-collapse:collapse}
+  .history-table td{padding:.3rem .35rem} .history-table .user-cell{background:var(--c-user)} .history-table .auto-cell{background:var(--c-auto)}
+  .answer-input{width:100%;box-sizing:border-box;font:inherit;padding:.15rem .25rem}
+  td:nth-child(5) .answer-input{min-width:11rem}
+  .answer-input.error{border:2px solid red;animation:shake .15s 3}
+  @keyframes shake{0%{transform:translateX(-2px)}50%{transform:translateX(2px)}100%{transform:translateX(0)}}
+  .button-container{display:flex;justify-content:center;gap:1.25rem;margin-top:1.4rem}
+  button{padding:.45rem 1rem;font:inherit;border:1px solid #777;border-radius:6px;background:#fafafa;cursor:pointer}
+  button.hidden{display:none}
+  @media (max-width:480px){table.equation,.history-table{font-size:.9rem}}
+
+  /* Bruchdarstellung (gestapelt) */
+  .frac{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle}
+  .frac .num{padding:0 .15em}
+  .frac .bar{border-top:1px solid currentColor;width:100%;transform:translateY(-0.1em)}
+  .frac .den{padding:0 .15em}
+
+  /* Rot für nicht zielführende Schritte */
+  .bad-cell { background: var(--c-auto); }
+</style>
+</head>
+<body>
+  <h1>Löse die Gleichung durch Äquivalenz­umformungen</h1>
+
+  <table class="equation" id="eqTable">
+    <colgroup>
+      <col class="eq-left" /><col class="eq-op" /><col class="eq-right" /><col class="eq-pipe" /><col class="eq-transform" />
+    </colgroup>
+    <tbody id="eqBody"></tbody>
+  </table>
+
+  <div class="button-container">
+    <button id="checkBtn">Prüfen</button>
+    <button id="newBtn">Neue Aufgabe</button>
+  </div>
+
+  <section id="history"><h2>Bisherige Aufgaben</h2></section>
+
+<script>
+(() => {
+  "use strict";
+  const $ = s => document.querySelector(s);
+  const tbody = document.getElementById("eqBody");
+
+  // --------- Rationale Zahlen ----------
+  const gcd = (a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1};
+  const normQ = (n,d)=>{ if(d<0){n=-n;d=-d} const g=gcd(n,d); return {n:n/g, d:d/g} };
+  const q = (n,d=1)=>normQ(n,d);
+  const qAdd = (x,y)=>normQ(x.n*y.d + y.n*x.d, x.d*y.d);
+  const qSub = (x,y)=>normQ(x.n*y.d - y.n*x.d, x.d*y.d);
+  const qMul = (x,y)=>normQ(x.n*y.n, x.d*y.d);
+  const qDiv = (x,y)=>{ if(y.n===0) throw new Error("Durch 0 teilen ist nicht erlaubt."); return normQ(x.n*y.d, x.d*y.n); };
+  const qEq  = (x,y)=> x.n===y.n && x.d===y.d;
+  const qZero= q(0,1), qOne=q(1,1), qNegOne=q(-1,1);
+// NEU: Negation und Gleichheit bis auf Vorzeichen
+const qNeg = (x)=> q(-x.n, x.d);
+const qEqAbs = (x,y)=> qEq(x,y) || qEq(x, qNeg(y));
+
+  const parseQ = (s)=>{
+    const m = s.match(/^(-?\d+)(?:\/(\d+))?$/);
+    if(!m) return null;
+    const n = parseInt(m[1],10);
+    const d = m[2]? parseInt(m[2],10):1;
+    if(d===0) return null;
+    return q(n,d);
+  };
+
+  const htmlQ = (x)=>{
+    if(x.d===1) return String(x.n);
+    const sign = x.n<0 ? "-" : "";
+    const a = Math.abs(x.n);
+    return `${sign}<span class="frac"><span class="num">${a}</span><span class="bar"></span><span class="den">${x.d}</span></span>`;
+  };
+
+  // --------- Gleichung A x + B = C x + D ----------
+  let A,B,C,D; // rationale Koeffizienten
+
+  // Darstellung einer Seite: kx + c
+  const sideHTML = (k,c)=>{
+    const parts = [];
+    if(!(k.n===0)){
+      if(qEq(k,qOne)) parts.push("x");
+      else if(qEq(k,qNegOne)) parts.push("-x");
+      else parts.push(`${htmlQ(k)}x`);
+    }
+    if(!(c.n===0)){
+      const isNeg = c.n<0;
+      const absC = q(Math.abs(c.n), c.d);
+      const sign = parts.length ? (isNeg ? " - " : " + ") : (isNeg ? "-" : "");
+      parts.push(`${sign}${htmlQ(absC)}`);
+    }
+    if(parts.length===0) return "0";
+    return parts.join("");
+  };
+
+  const renderRow = (transformHTML="")=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="equation-cell text-right">${sideHTML(A,B)}</td>
+      <td class="separator">=</td>
+      <td class="equation-cell">${sideHTML(C,D)}</td>
+      <td class="separator">|</td>
+      <td class="equation-cell">${transformHTML}</td>`;
+    tbody.appendChild(tr);
+  };
+
+  // --------- Parser für Umformungen ----------
+  const parseOp = (raw)=>{
+    let s = raw.replace(/\s+/g,"").toLowerCase();
+    s = s.replace(/^([+-])x$/, "$11x"); // +x, -x -> +1x, -1x
+
+    // +k  oder -k  (auch Bruch)
+    if(/^([+-])\d+(?:\/\d+)?$/.test(s)){
+      const qv = parseQ(s[0] === '+' ? s.slice(1) : s);
+      return {type:"addConst", k:qv, canon: (s[0]==='+'? '+' : '-') + (s[0]==='+'? s.slice(1): s.slice(1)) };
+    }
+    // +kx  oder -kx
+    if(/^([+-])\d+(?:\/\d+)?x$/.test(s)){
+      const core = s.slice(0,-1);
+      const qv = parseQ(core[0] === '+' ? core.slice(1) : core);
+      return {type:"addX", k:qv, canon: core + 'x'};
+    }
+
+    // *k  (positiv als *k, negativ NUR als *(-k))
+    if(/^\*(\d+(?:\/\d+)?)$/.test(s)){
+      const qv = parseQ(s.slice(1));
+      return {type:"mul", k:qv, canon: `*${s.slice(1)}`};
+    }
+    if(/^\*\(-\d+(?:\/\d+)?\)$/.test(s)){
+      const inner = s.slice(2,-1);
+      const qv = parseQ(inner);
+      return {type:"mul", k:qv, canon: `*(${inner})`};
+    }
+
+    // :k  (positiv als :k, negativ NUR als :(-k))
+    if(/^:(\d+(?:\/\d+)?)$/.test(s)){
+      const qv = parseQ(s.slice(1));
+      return {type:"div", k:qv, canon: `:${s.slice(1)}`};
+    }
+    if(/^:\(-\d+(?:\/\d+)?\)$/.test(s)){
+      const inner = s.slice(2,-1);
+      const qv = parseQ(inner);
+      return {type:"div", k:qv, canon: `:(${inner})`};
+    }
+
+    return null;
+  };
+
+  const applyOp = (op)=>{
+    if(op.type==="addConst"){
+      B = qAdd(B, op.k);
+      D = qAdd(D, op.k);
+    } else if(op.type==="addX"){
+      A = qAdd(A, op.k);
+      C = qAdd(C, op.k);
+    } else if(op.type==="mul"){
+      if(op.k.n===0) throw new Error("Mit 0 multiplizieren ist nicht erlaubt.");
+      A = qMul(A, op.k); B = qMul(B, op.k);
+      C = qMul(C, op.k); D = qMul(D, op.k);
+    } else if(op.type==="div"){
+      if(op.k.n===0) throw new Error("Durch 0 teilen ist nicht erlaubt.");
+      A = qDiv(A, op.k); B = qDiv(B, op.k);
+      C = qDiv(C, op.k); D = qDiv(D, op.k);
+    }
+  };
+
+  const isSolved = ()=> qEq(A,qOne) && qEq(B,qZero) && qEq(C,qZero);
+
+  // --------- NEW: Bewertungsregeln ----------
+  const toNum = (x)=> x.n / x.d;
+// NEU: aktuelle (invariante) Lösung x = (D - B)/(A - C)
+const currentSolution = ()=> qDiv(qSub(D, B), qSub(A, C));
+  // prüft, ob durch den Schritt neue Brüche ENTSTEHEN (vorher ganzzahlig, nachher nicht)
+// NEU: Neue Brüche sind unerwünscht, AUSNAHME: D darf fraktional werden,
+// wenn es exakt dem gewünschten Endwert entspricht.
+const introducesFractions = (beforeArr, afterArr)=>{
+  const sol = currentSolution(); // gewünschter Endwert von D
+  for (let i = 0; i < 4; i++) {
+    const wasInt = beforeArr[i].d === 1;
+    const isFrac = afterArr[i].d !== 1;
+    if (wasInt && isFrac) {
+    // ALT: if (i === 3 && qEq(afterArr[3], sol)) continue;
+// NEU: D darf auch ok sein, wenn es nur das Vorzeichen vom Zielwert unterscheidet
+if (i === 3 && qEqAbs(afterArr[3], sol)) continue;
+
+      return true;
+    }
+  }
+  return false;
+};
+
+// NEU: prüft, ob durch Multiplikation Brüche verschwinden
+const removesFractions = (beforeArr, afterArr) =>
+  beforeArr.some((b,i) => b.d !== 1 && afterArr[i].d === 1);
+  // --------- Aufgaben-Generator ----------
+  const rand = (min,max)=> Math.floor(Math.random()*(max-min+1))+min;
+  const pick = a => a[Math.floor(Math.random()*a.length)];
+
+  function newCoeffs(){
+    const type = pick(["ABCD","AB=D","A=CD","A=D","1B=CD","AB=0"]);
+    let a,b,c,d;
+    for(;;){
+      a = rand(-9,9); c = rand(-9,9); b = rand(-12,12); d = rand(-12,12);
+      if(a===0 && (type!=="1B=CD" && type!=="A=D")) continue;
+      if(type==="1B=CD"){ a = 1; }
+      if(type==="AB=D"){ c = 0; }
+      if(type==="A=CD"){ b = 0; }
+      if(type==="A=D"){ b = 0; c = 0; }
+      if(type==="AB=0"){ c = 0; d = 0; }
+      if(a===c) continue; // eindeutige Lösung erzwingen
+      if(a===0 && c===0) continue;
+      if(Math.abs(a)+Math.abs(b)+Math.abs(c)+Math.abs(d) < 3) continue;
+      break;
+    }
+    A=q(a); B=q(b); C=q(c); D=q(d);
+  }
+
+  // --------- UI-Logik ----------
+  function addInputRow(){
+    const cellHTML = `<input class="answer-input" placeholder="z.B. +5, -3x, *2, *(-2), :4, :(-3)">`;
+    renderRow(cellHTML);
+    tbody.querySelector("tr:last-child input").focus();
+  }
+
+  function clearTable(){ tbody.innerHTML=""; }
+
+  function archiveCurrent(){
+    if(!tbody.children.length) return;
+    const clone = document.getElementById("eqTable").cloneNode(true);
+    clone.removeAttribute("id");
+    clone.classList.replace("equation","history-table");
+    // Eingabefelder einfrieren, aber hier keine globale Grünfärbung
+    clone.querySelectorAll("input").forEach(inp=>{
+      const td = inp.parentElement;
+      const v = inp.value.trim();
+      td.textContent = v || " ";
+      if(!v) td.classList.add("auto-cell");
+    });
+    document.getElementById("history").appendChild(clone);
+  }
+
+  function newExercise(){
+    archiveCurrent();
+    clearTable();
+    newCoeffs();
+    addInputRow();
+    document.getElementById("checkBtn").classList.remove("hidden");
+  }
+
+  function canonicalOpText(raw, op){
+    if(!op) return raw.trim() || " ";
+    if(op.type==='mul' || op.type==='div'){
+      const num = op.k.n, den = op.k.d;
+      const base = den===1 ? `${num}` : `${num}/${den}`;
+      if(op.type==='mul'){
+        return num < 0 ? `*(${base})` : `*${base}`;
+      } else {
+        return num < 0 ? `:(${base})` : `:${base}`;
+      }
+    }
+    return raw.trim() || " ";
+  }
+
+  function checkAnswer(){
+    const inp = tbody.querySelector("tr:last-child input");
+    if(!inp) return;
+    const raw = inp.value.trim();
+    const op = parseOp(raw);
+    if(!op){ inp.classList.add("error"); setTimeout(()=>inp.classList.remove("error"),300); return; }
+
+    try{
+      // --- Zustand vorher merken (für Bewertung)
+      const before = [A,B,C,D].map(x=>({n:x.n, d:x.d}));
+
+      // Anwenden
+      applyOp(op);
+
+      // --- Zustand nachher
+      const after = [A,B,C,D];
+let removedFracs = false; // NEU
+      // --- NEW: Gut/Schlecht bestimmen
+      let good = false;
+
+if (op.type === "mul" || op.type === "div") {
+  const aBefore = Math.abs(toNum(before[0]) - 1);
+  const aAfter  = Math.abs(toNum(A) - 1);
+  const noNewFracs = !introducesFractions(before, after);
+  removedFracs = (op.type === "mul") && removesFractions(before, after); // NEU
+
+  // Gut, wenn A näher an 1 UND keine neuen Brüche
+  // ODER: bei Multiplikation verschwinden Brüche (und es entstehen keine neuen)
+  good = ((aAfter < aBefore - 1e-12) && noNewFracs) || (removedFracs && noNewFracs); // NEU
+} else {
+  const bToZero = (before[1].n !== 0) && (B.n === 0);
+  const cToZero = (before[2].n !== 0) && (C.n === 0);
+  good = bToZero || cToZero;
+}
+
+      // Eingabezelle einfrieren + ggf. als schlecht markieren
+      const td = inp.parentElement;
+      td.textContent = canonicalOpText(raw, op);
+      if(!good) td.classList.add("bad-cell");
+
+      if(isSolved()){
+        renderRow("");
+        // Ergebniszeile grün markieren (nur links/rechts)
+        const last = tbody.lastElementChild;
+        last.children[0].classList.add('user-cell');
+        last.children[2].classList.add('user-cell');
+        document.getElementById("checkBtn").classList.add("hidden");
+      } else {
+        addInputRow();
+      }
+    }catch(e){
+      inp.classList.add("error");
+      inp.title = e.message;
+      setTimeout(()=>{inp.classList.remove("error");},400);
+    }
+  }
+
+  document.addEventListener("keydown", e=>{
+    if(e.key==="Enter" && e.target.matches(".answer-input")) checkAnswer();
+  });
+  document.getElementById("checkBtn").addEventListener("click", checkAnswer);
+  document.getElementById("newBtn").addEventListener("click", newExercise);
+
+  // Init
+  newExercise();
+})();
+</script>
+</body>
+</html>
