@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Schwebung – Interaktive Canvas-Demo</title>
+  <style>
+    :root{
+      --bg: #0f1220;
+      --panel: #13162a;
+      --panel-2: #0c0f1d;
+      --text: #e9ecf1;
+      --muted: #9aa3b2;
+      --accent: #2f81f7;    /* Blau – resultierende Welle */
+      --envelopeA: #21c07a; /* Grün – Einhüllende */
+      --envelopeB: #00cfd2; /* Cyan – Einhüllende (zweite Linie) */
+      --waves: #b466ff;     /* Lila – Einzelwellen */
+      --zero: #ffffff;      /* Weiße Null-Linie */
+      --grid: rgba(255,255,255,0.08);
+      --grid-strong: rgba(255,255,255,0.16);
+      --shadow: rgba(0,0,0,0.25);
+      --radius: 16px;
+    }
+    html, body{
+      margin:0; height:100%; background:var(--bg); color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    .wrap{
+      display:flex; flex-direction:column; gap:14px; padding:14px; max-width:1200px; margin:0 auto;
+    }
+    header{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    header h1{ font-size:clamp(18px, 2.4vw, 28px); margin:0; font-weight:700; letter-spacing:0.2px; }
+    header .legend{ display:flex; gap:14px; flex-wrap:wrap; font-size:14px; color:var(--muted); }
+    .key{ display:inline-flex; align-items:center; gap:8px; }
+    .swatch{ width:14px; height:14px; border-radius:3px; box-shadow:0 0 0 2px var(--panel) inset, 0 1px 2px var(--shadow); }
+    .sw-blue{ background:var(--accent); }
+    .sw-green{ background:var(--envelopeA); }
+    .sw-cyan{ background:var(--envelopeB); }
+    .sw-purple{ background:var(--waves); }
+    .sw-white{ background:var(--zero); }
+
+    .canvas-card{
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
+      padding:12px; position:relative;
+    }
+    canvas{ width:100%; height:50vh; display:block; border-radius:12px; background:transparent; }
+
+    .controls{
+      display:grid; gap:12px; grid-template-columns: repeat(12, 1fr);
+      background:var(--panel); border-radius: var(--radius);
+      padding:12px; box-shadow: 0 6px 18px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    .ctrl{ grid-column: span 6; background:var(--panel-2); border-radius:12px; padding:12px; }
+    .ctrl.long{ grid-column: span 12; }
+    .ctrl h3{ font-size:14px; margin:0 0 8px; color:var(--muted); font-weight:600; letter-spacing:0.3px; }
+    .row{ display:flex; align-items:center; gap:10px; }
+    .row input[type="range"]{ width:100%; }
+    .value{ min-width:80px; text-align:right; font-variant-numeric: tabular-nums; color:var(--text); }
+    .btns{ display:flex; flex-wrap:wrap; gap:10px; }
+    button{
+      background: linear-gradient(180deg, #1b2344, #141a33);
+      color:var(--text); border:1px solid rgba(255,255,255,0.08);
+      padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600; letter-spacing:0.2px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    button:hover{ filter:brightness(1.08); }
+    button:active{ transform: translateY(1px); }
+    .toggle{ display:flex; align-items:center; gap:10px; }
+    label{ font-size:14px; color:var(--text); }
+
+    .readout{
+      display:grid; grid-template-columns: repeat(5, minmax(140px, 1fr)); gap:10px; margin-top:8px; color:var(--muted);
+      font-variant-numeric: tabular-nums; font-size:14px;
+    }
+    .pill{ background:var(--panel-2); padding:8px 10px; border-radius:10px; color:var(--text); }
+
+    @media (max-width: 840px){
+      .ctrl{ grid-column: span 12; }
+      canvas{ height:52vh; }
+      .readout{ grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Schwebung – Überlagerung zweier Sinuswellen</h1>
+      <div class="legend">
+        <span class="key"><span class="swatch sw-blue"></span>Resultierende y = y₁ + y₂</span>
+        <span class="key"><span class="swatch sw-green"></span>Einhüllende +</span>
+        <span class="key"><span class="swatch sw-cyan"></span>Einhüllende −</span>
+        <span class="key"><span class="swatch sw-purple"></span>Einzelwellen y₁, y₂</span>
+        <span class="key"><span class="swatch sw-white"></span>Null-Linie</span>
+      </div>
+    </header>
+
+    <div class="canvas-card">
+      <canvas id="plot"></canvas>
+    </div>
+
+    <section class="controls">
+      <div class="ctrl">
+        <h3>f₁ – Grundfrequenz (Hz)</h3>
+        <div class="row">
+          <input id="f1" type="range" min="0.5" max="20" step="0.1" value="2" />
+          <div class="value"><span id="f1Val">2.0</span> Hz</div>
+        </div>
+      </div>
+      <div class="ctrl">
+        <h3>Δf – Frequenzdifferenz (Hz)</h3>
+        <div class="row">
+          <input id="df" type="range" min="0" max="5" step="0.01" value="0.20" />
+          <div class="value"><span id="dfVal">0.20</span> Hz</div>
+        </div>
+      </div>
+      <div class="ctrl">
+        <h3>T – Zeitfenster (s)</h3>
+        <div class="row">
+          <input id="T" type="range" min="0.5" max="6" step="0.1" value="2.0" />
+          <div class="value"><span id="TVal">2.0</span> s</div>
+        </div>
+      </div>
+      <div class="ctrl">
+        <h3>Optionen</h3>
+        <div class="row toggle">
+          <input id="showWaves" type="checkbox" checked />
+          <label for="showWaves">Einzelwellen y₁(t), y₂(t) anzeigen</label>
+        </div>
+      </div>
+      <div class="ctrl long">
+        <h3>Steuerung</h3>
+        <div class="btns">
+          <button id="playPause">▶️ Play</button>
+          <button id="step">+20 ms</button>
+          <button id="reset">Zurücksetzen</button>
+        </div>
+        <div class="readout">
+          <div class="pill">f₁ = <strong><span id="roF1">2.00</span> Hz</strong></div>
+          <div class="pill">f₂ = <strong><span id="roF2">2.20</span> Hz</strong></div>
+          <div class="pill">Δf = <strong><span id="roDf">0.20</span> Hz</strong></div>
+          <div class="pill">T = <strong><span id="roT">2.00</span> s</strong></div>
+          <div class="pill">t₀ = <strong><span id="roT0">0.000</span> s</strong></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ======= Utilities =======
+    const $ = (sel) => document.querySelector(sel);
+    const plot = $('#plot');
+
+    // State
+    const state = {
+      f1: 2.0,
+      df: 0.20,
+      get f2(){ return this.f1 + this.df; },
+      T: 2.0,
+      showWaves: true,
+      t0: 0,        // Startzeit (Verschiebung)
+      playing: false,
+      lastTs: 0
+    };
+
+    // Inputs
+    const f1El = $('#f1');
+    const dfEl = $('#df');
+    const TEl  = $('#T');
+    const showEl = $('#showWaves');
+    const btnPlay = $('#playPause');
+    const btnStep = $('#step');
+    const btnReset = $('#reset');
+
+    const f1Val = $('#f1Val');
+    const dfVal = $('#dfVal');
+    const TVal  = $('#TVal');
+
+    const roF1 = $('#roF1');
+    const roF2 = $('#roF2');
+    const roDf = $('#roDf');
+    const roT  = $('#roT');
+    const roT0 = $('#roT0');
+
+    // Canvas sizing with HiDPI support
+    let dpr = 1;
+    function sizeCanvas(){
+      dpr = Math.max(1, window.devicePixelRatio || 1);
+      const rect = plot.getBoundingClientRect();
+      // Set the internal pixel size to device pixels
+      plot.width = Math.max(1, Math.floor(rect.width * dpr));
+      plot.height = Math.max(1, Math.floor(rect.height * dpr));
+      // Reset transform so we can draw in CSS pixels by scaling once per frame
+      const ctx = plot.getContext('2d');
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    }
+
+    window.addEventListener('resize', sizeCanvas);
+
+    // ======= Signal model =======
+    const A = 0.5; // Einzelwellen-Amplitude – Vorgabe
+    const TWO_PI = Math.PI * 2;
+
+    function y1(t, f1){ return A * Math.sin(TWO_PI * f1 * t); }
+    function y2(t, f2){ return A * Math.sin(TWO_PI * f2 * t); }
+    function yRes(t, f1, f2){ return y1(t, f1) + y2(t, f2); }
+    // Einhüllende für gleiche Amplituden: 2A * |cos(pi * Δf * t)|; hier 2A = 1 → ±|cos(...)|
+    function envMag(t, df){ return Math.abs(Math.cos(Math.PI * df * t)); }
+
+    // ======= Self-tests (basics) =======
+    (function selfTests(){
+      try{
+        // At t=0, sin(0)=0 → all zero
+        console.assert(y1(0, 3) === 0 && y2(0, 5) === 0 && yRes(0,3,3) === 0, 't=0 should be 0');
+        // If f1=f2=3 Hz, pick t where phase = π/2 → amplitude 1
+        const tPeak = 1/(12); // 2π*3*t = π/2
+        const resEq = yRes(tPeak, 3, 3);
+        console.assert(Math.abs(resEq - 1) < 1e-12, 'Equal freqs peak should be 1');
+        // Envelope: df=0.5 → t=1/(2*df)=1 → cos(π/2)=0
+        console.assert(Math.abs(envMag(0, 0.5) - 1) < 1e-12, 'Envelope at t=0 is 1');
+        console.assert(Math.abs(envMag(1, 0.5) - 0) < 1e-12, 'Envelope zero at t=1 for df=0.5');
+        console.log('%cSelf-tests passed','color:lightgreen');
+      }catch(e){ console.warn('Self-tests failed', e); }
+    })();
+
+    // ======= Drawing =======
+    function draw(){
+      const ctx = plot.getContext('2d');
+      const Wcss = plot.clientWidth || Math.floor(plot.width / dpr);
+      const Hcss = plot.clientHeight || Math.floor(plot.height / dpr);
+      if (Wcss < 2 || Hcss < 2) return;
+
+      // Clear in device pixels with identity transform
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, plot.width, plot.height);
+      // Scale so that drawing commands use CSS pixels
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const W = Wcss; const H = Hcss;
+
+      // background
+      const grad = ctx.createLinearGradient(0,0,0,H);
+      grad.addColorStop(0, '#0f142b');
+      grad.addColorStop(1, '#0b0f20');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0,0,W,H);
+
+      // padding for axes labels
+      const padL = 40, padR = 10, padT = 12, padB = 28;
+      const x0 = padL, x1 = Math.max(x0+1, W - padR);
+      const y0 = padT, yB = Math.max(y0+1, H - padB); // yB statt y1, um Funktionsnamen y1() nicht zu überschreiben
+
+      // helpers (guard against divide-by-zero)
+      const spanX = Math.max(1e-6, x1 - x0);
+      const toX = (t) => x0 + (t - state.t0) * spanX / state.T;
+      const toT = (x) => state.t0 + (x - x0) * state.T / spanX;
+      const toY = (y) => (yB + y0)/2 - y * (yB - y0)/2; // map y in [-1,1]
+
+      // grid horizontal lines at -1, -0.5, 0, 0.5, 1
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid');
+      ctx.beginPath();
+      [ -1, -0.5, 0, 0.5, 1 ].forEach(v => {
+        const yy = toY(v);
+        ctx.moveTo(x0, yy); ctx.lineTo(x1, yy);
+      });
+      ctx.stroke();
+
+      // stronger zero line
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--zero');
+      ctx.globalAlpha = 0.8; ctx.lineWidth = 1.25;
+      ctx.beginPath();
+      ctx.moveTo(x0, toY(0)); ctx.lineTo(x1, toY(0));
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // vertical grid (time ticks)
+      const tickCount = 10;
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid');
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for(let i=0;i<=tickCount;i++){
+        const tTick = state.t0 + i * state.T / tickCount;
+        const xx = toX(tTick);
+        ctx.moveTo(xx, y0); ctx.lineTo(xx, yB);
+      }
+      ctx.stroke();
+
+      // time labels
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted');
+      ctx.font = '12px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      for(let i=0;i<=tickCount;i++){
+        const tTick = state.t0 + i * state.T / tickCount;
+        const xx = toX(tTick);
+        ctx.fillText(tTick.toFixed(2)+' s', xx, H - 8);
+      }
+
+      // axes labels (y)
+      ctx.textAlign = 'right';
+      [ -1, -0.5, 0, 0.5, 1 ].forEach(v => {
+        const yy = toY(v);
+        ctx.fillText(v.toFixed(1), x0 - 6, yy + 4);
+      });
+
+      // envelope (upper & lower): ±envMag(t)
+      const step = Math.max(1, Math.floor((x1-x0)/800));
+
+      // Upper envelope
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--envelopeA');
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for(let x = x0; x <= x1; x += step){
+        const t = toT(x);
+        const y = envMag(t, state.df); // magnitude in [0,1]
+        const yy = toY(+y);
+        if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+      }
+      ctx.stroke();
+
+      // Lower envelope
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--envelopeB');
+      ctx.beginPath();
+      for(let x = x0; x <= x1; x += step){
+        const t = toT(x);
+        const y = -envMag(t, state.df);
+        const yy = toY(y);
+        if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+      }
+      ctx.stroke();
+
+      // Einzelwellen (optional)
+      if(state.showWaves){
+        ctx.globalAlpha = 0.55;
+        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--waves');
+        ctx.lineWidth = 1.3;
+        ctx.beginPath();
+        for(let x = x0; x <= x1; x += 1){
+          const t = toT(x);
+          const y = y1(t, state.f1);
+          const yy = toY(y);
+          if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+        }
+        ctx.stroke();
+
+        ctx.beginPath();
+        for(let x = x0; x <= x1; x += 1){
+          const t = toT(x);
+          const y = y2(t, state.f2);
+          const yy = toY(y);
+          if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+        }
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      // Resultierende
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      for(let x = x0; x <= x1; x += 1){
+        const t = toT(x);
+        const y = yRes(t, state.f1, state.f2);
+        const yy = toY(y);
+        if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+      }
+      ctx.stroke();
+
+      
+    }
+
+    // ======= Interactivity =======
+    function syncUI(){
+      f1Val.textContent = Number(state.f1).toFixed(2);
+      dfVal.textContent = Number(state.df).toFixed(2);
+      TVal.textContent  = Number(state.T).toFixed(2);
+
+      roF1.textContent = Number(state.f1).toFixed(2);
+      roF2.textContent = Number(state.f2).toFixed(2);
+      roDf.textContent = Number(state.df).toFixed(2);
+      roT.textContent  = Number(state.T).toFixed(2);
+      roT0.textContent = Number(state.t0).toFixed(3);
+    }
+
+    function attach(){
+      f1El.addEventListener('input', () => { state.f1 = +f1El.value; syncUI(); });
+      dfEl.addEventListener('input', () => { state.df = +dfEl.value; syncUI(); });
+      TEl.addEventListener('input',  () => { state.T  = +TEl.value; syncUI(); });
+      showEl.addEventListener('change', () => { state.showWaves = showEl.checked; });
+
+      btnPlay.addEventListener('click', () => {
+        state.playing = !state.playing;
+        btnPlay.textContent = state.playing ? '⏸️ Pause' : '▶️ Play';
+      });
+      btnStep.addEventListener('click', () => { state.t0 += 0.020; syncUI(); });
+      btnReset.addEventListener('click', () => { state.t0 = 0; syncUI(); });
+    }
+
+    // ======= Animation loop =======
+    function loop(ts){
+      if(!state.lastTs) state.lastTs = ts;
+      const dt = (ts - state.lastTs) / 1000; // seconds
+      state.lastTs = ts;
+      if(state.playing){
+        state.t0 += dt; // 1x Zeitbasis
+      }
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    // init
+    sizeCanvas();
+    attach();
+    syncUI();
+    // Ensure first draw before RAF (avoids initial blank if rAF throttled)
+    draw();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
