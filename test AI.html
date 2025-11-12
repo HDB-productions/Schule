@@ -1,280 +1,58 @@
 <!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>KI-Check: Deckt mein Text alle Aspekte ab?</title>
-    <style>
-      :root {
-        font-family: system-ui, Arial, sans-serif;
-        line-height: 1.35;
-      }
-      body {
-        margin: 0;
-        padding: 1rem;
-        background: #f6f7fb;
-      }
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-      }
-      h1 {
-        font-size: 1.25rem;
-        margin: 0 0 0.75rem;
-      }
-      .card {
-        background: #fff;
-        border-radius: 12px;
-        padding: 1rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-      }
-      textarea {
-        width: 100%;
-        min-height: 180px;
-        resize: vertical;
-        padding: 0.75rem;
-        border-radius: 10px;
-        border: 1px solid #d9dce3;
-        background: #fafbff;
-      }
-      label {
-        display: block;
-        font-weight: 600;
-        margin: 0.5rem 0 0.25rem;
-      }
-      .row {
-        display: grid;
-        gap: 0.75rem;
-        grid-template-columns: 1fr 1fr;
-      }
-      .row > div {
-        background: #fff;
-        border-radius: 12px;
-        padding: 0.75rem;
-        border: 1px solid #e6e8f0;
-      }
-      .pill {
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        border-radius: 999px;
-        border: 1px solid #d9dce3;
-        margin: 0.125rem 0.25rem 0.25rem 0;
-        background: #fff;
-      }
-      button {
-        padding: 0.7rem 1rem;
-        border-radius: 10px;
-        border: 0;
-        background: #2b6be6;
-        color: #fff;
-        font-weight: 700;
-        cursor: pointer;
-      }
-      button[disabled] {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-      .muted {
-        color: #6a7385;
-        font-size: 0.9rem;
-      }
-      .output {
-        white-space: pre-wrap;
-        background: #0f172a;
-        color: #e2e8f0;
-        padding: 1rem;
-        border-radius: 12px;
-      }
-      .ok {
-        color: #0f8a0f;
-        font-weight: 700;
-      }
-      .warn {
-        color: #b45309;
-        font-weight: 700;
-      }
-      .error {
-        color: #b91c1c;
-        font-weight: 700;
-      }
-      .tiny {
-        font-size: 0.85rem;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <h1>KI-Check: Deckt dein Text alle Aspekte ab?</h1>
+<meta charset="utf-8" />
+<title>KI-Check</title>
+<textarea id="t" style="width: 100%; height: 150px"></textarea><br />
+<button id="b">Prüfen</button>
+<pre
+  id="o"
+  style="white-space: pre-wrap; border: 1px solid #ccc; padding: 8px"
+></pre>
+<script>
+  const WORKER_URL = "https://https://dark-band-42a3.hildebrandt.workers.dev/"; // <- anpassen
 
-      <div class="card" id="config">
-        <label>Aufgabentitel / Kontext (optional)</label>
-        <input
-          id="kontext"
-          type="text"
-          placeholder="z. B. 'Fotosynthese kurz erklären'"
-          style="
-            width: 100%;
-            padding: 0.6rem;
-            border-radius: 10px;
-            border: 1px solid #d9dce3;
-            background: #fafbff;
-          "
-        />
-        <div class="row" style="margin-top: 0.75rem">
-          <div>
-            <label>Aspekte, die enthalten sein sollen</label>
-            <div
-              id="aspekteWrap"
-              class="tiny muted"
-              style="margin-bottom: 0.5rem"
-            >
-              (Du kannst die Liste im Code ändern; aktuell:)
-            </div>
-            <ul
-              id="aspekteList"
-              class="tiny"
-              style="margin: 0; padding-left: 1rem"
-            ></ul>
-          </div>
-          <div>
-            <label>Bewertungsstil</label>
-            <div class="tiny">
-              • kurz & schülergerecht<br />
-              • zuerst Überblick (Checkliste), dann konkrete Tipps<br />
-              • maximal 8 Bulletpoints gesamt
-            </div>
-          </div>
-        </div>
-      </div>
+  document.getElementById("b").onclick = async () => {
+    const txt = document.getElementById("t").value.trim();
+    const o = document.getElementById("o");
+    if (!txt) {
+      o.textContent = "Bitte Text eingeben.";
+      return;
+    }
 
-      <div class="card" style="margin-top: 1rem">
-        <label>Dein Text</label>
-        <textarea
-          id="text"
-          placeholder="Schreibe hier deine Antwort…"
-        ></textarea>
-        <div class="muted tiny" id="count">0 Zeichen</div>
-        <div
-          style="
-            margin-top: 0.75rem;
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-          "
-        >
-          <button id="checkBtn">Text prüfen</button>
-          <span id="status" class="muted tiny"></span>
-        </div>
-      </div>
+    o.textContent = "prüfe…";
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: "system",
+              content:
+                "Du bewertest kurz und schülergerecht (Klasse 7). Zuerst Checkliste mit ✅/❌ zu den Aspekten, dann 2–4 Tipps.",
+            },
+            {
+              role: "user",
+              content: `Aspekte:
+1. Begriffsdefinition in 1–2 Sätzen
+2. wichtige Ursachen/Voraussetzungen
+3. Ablauf/Prinzip in Reihenfolge
+4. ein anschauliches Beispiel
+5. korrekte Fachbegriffe
+6. kurzes Fazit in einem Satz
 
-      <div class="card" style="margin-top: 1rem">
-        <label>Ergebnis</label>
-        <div id="result" class="output">Noch nichts geprüft.</div>
-      </div>
-
-      <p class="muted tiny" style="margin-top: 0.75rem">
-        Hinweis: Dein Text wird an den schuleigenen Proxy (Cloudflare Worker)
-        gesendet, <b>nicht</b> mit einem sichtbaren API-Schlüssel im Browser.
-      </p>
-    </div>
-
-    <script>
-      /* === 🧩 Einstellungen === */
-      const WORKER_URL = "https://dark-band-42a3.hildebrandt.workers.dev"; // ⬅️ HIER deine Worker-URL eintragen
-      // Liste der Aspekte (anpassbar):
-      const ASPEKTE = [
-        "Begriffsdefinition in 1–2 Sätzen",
-        "wichtige Ursachen / Voraussetzungen",
-        "zentrales Prinzip oder Ablauf in logischer Reihenfolge",
-        "ein anschauliches Beispiel",
-        "korrekte Fachbegriffe ohne Abschweifen",
-        "kurzes Fazit/Ergebnis in einem Satz",
-      ];
-      // Optional: System-Ansage (Anpassbar an Fach/Level)
-      const SYSTEM_MSG =
-        "Du bewertest sachlich, sehr kurz und schülergerecht (Klasse 7). Gib zuerst eine Checkliste mit ✅/❌ zu den Aspekten, dann 2–4 präzise Tipps, wie der Text punktgenau verbessert werden kann. Keine langen Vorreden, keine Noten.";
-
-      /* === UI-Setup === */
-      const aspektenUl = document.getElementById("aspekteList");
-      document
-        .getElementById("aspekteWrap")
-        .insertAdjacentHTML(
-          "beforeend",
-          ASPEKTE.map((a) => `<span class="pill">${a}</span>`).join(" ")
-        );
-      ASPEKTE.forEach((a, i) => {
-        const li = document.createElement("li");
-        li.textContent = a;
-        aspektenUl.appendChild(li);
+Text:
+"""${txt}"""
+Bitte genau in diesem Format antworten.`,
+            },
+          ],
+        }),
       });
-
-      const textEl = document.getElementById("text");
-      const countEl = document.getElementById("count");
-      textEl.addEventListener("input", () => {
-        countEl.textContent = `${textEl.value.length} Zeichen`;
-      });
-
-      /* === Aufruf an deinen Worker === */
-      async function checkText() {
-        const btn = document.getElementById("checkBtn");
-        const status = document.getElementById("status");
-        const result = document.getElementById("result");
-        const kontext = document.getElementById("kontext").value.trim();
-        const userText = textEl.value.trim();
-
-        if (!userText) {
-          result.innerHTML =
-            "<span class='warn'>Bitte gib zuerst einen Text ein.</span>";
-          return;
-        }
-
-        btn.disabled = true;
-        status.textContent = "prüfe…";
-
-        // Prompt sauber strukturieren
-        const userPrompt = `Aufgabe/Kontext: ${kontext || "—"}
-Aspekte, die enthalten sein sollen (Checkliste):
-${ASPEKTE.map((a, i) => `${i + 1}. ${a}`).join("\n")}
-
-Schülertext:
-"""${userText}"""
-
-Gib zurück:
-1) Kurze Checkliste mit ✅/❌ je Aspekt (max. 6 Zeilen).
-2) Dann 2–4 präzise Tipps, was noch fehlt oder wie es knapper/korrekter wird.
-3) Wenn alles enthalten ist: Hinweis "Alles Wesentliche ist drin."`;
-
-        try {
-          const res = await fetch(WORKER_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              messages: [
-                { role: "system", content: SYSTEM_MSG },
-                { role: "user", content: userPrompt },
-              ],
-            }),
-          });
-
-          if (!res.ok) {
-            const t = await res.text();
-            throw new Error(`Fehler ${res.status}: ${t}`);
-          }
-
-          const data = await res.json();
-          const answer = data?.choices?.[0]?.message?.content?.trim();
-          result.textContent = answer || "Keine Antwort erhalten.";
-        } catch (err) {
-          console.error(err);
-          result.innerHTML = `<span class="error">Fehler beim Prüfen: ${err.message}</span>`;
-        } finally {
-          btn.disabled = false;
-          status.textContent = "";
-        }
-      }
-
-      /* === Event === */
-      document.getElementById("checkBtn").addEventListener("click", checkText);
-    </script>
-  </body>
-</html>
+      const data = await res.json();
+      if (!res.ok)
+        throw new Error(data?.error?.message || JSON.stringify(data));
+      o.textContent = data?.choices?.[0]?.message?.content || "Keine Antwort.";
+    } catch (e) {
+      o.textContent = "Fehler: " + e.message;
+    }
+  };
+</script>
