@@ -1,421 +1,381 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Schwebung – Interaktive Canvas-Demo</title>
-  <style>
-    :root{
-      --bg: #0f1220;
-      --panel: #13162a;
-      --panel-2: #0c0f1d;
-      --text: #e9ecf1;
-      --muted: #9aa3b2;
-      --accent: #2f81f7;    /* Blau – resultierende Welle */
-      --envelopeA: #21c07a; /* Grün – Einhüllende */
-      --envelopeB: #00cfd2; /* Cyan – Einhüllende (zweite Linie) */
-      --waves: #b466ff;     /* Lila – Einzelwellen */
-      --zero: #ffffff;      /* Weiße Null-Linie */
-      --grid: rgba(255,255,255,0.08);
-      --grid-strong: rgba(255,255,255,0.16);
-      --shadow: rgba(0,0,0,0.25);
-      --radius: 16px;
-    }
-    html, body{
-      margin:0; height:100%; background:var(--bg); color:var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    }
-    .wrap{
-      display:flex; flex-direction:column; gap:14px; padding:14px; max-width:1200px; margin:0 auto;
-    }
-    header{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    header h1{ font-size:clamp(18px, 2.4vw, 28px); margin:0; font-weight:700; letter-spacing:0.2px; }
-    header .legend{ display:flex; gap:14px; flex-wrap:wrap; font-size:14px; color:var(--muted); }
-    .key{ display:inline-flex; align-items:center; gap:8px; }
-    .swatch{ width:14px; height:14px; border-radius:3px; box-shadow:0 0 0 2px var(--panel) inset, 0 1px 2px var(--shadow); }
-    .sw-blue{ background:var(--accent); }
-    .sw-green{ background:var(--envelopeA); }
-    .sw-cyan{ background:var(--envelopeB); }
-    .sw-purple{ background:var(--waves); }
-    .sw-white{ background:var(--zero); }
-
-    .canvas-card{
-      background: linear-gradient(180deg, var(--panel), var(--panel-2));
-      border-radius: var(--radius);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
-      padding:12px; position:relative;
-    }
-    canvas{ width:100%; height:50vh; display:block; border-radius:12px; background:transparent; }
-
-    .controls{
-      display:grid; gap:12px; grid-template-columns: repeat(12, 1fr);
-      background:var(--panel); border-radius: var(--radius);
-      padding:12px; box-shadow: 0 6px 18px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.03);
-    }
-    .ctrl{ grid-column: span 6; background:var(--panel-2); border-radius:12px; padding:12px; }
-    .ctrl.long{ grid-column: span 12; }
-    .ctrl h3{ font-size:14px; margin:0 0 8px; color:var(--muted); font-weight:600; letter-spacing:0.3px; }
-    .row{ display:flex; align-items:center; gap:10px; }
-    .row input[type="range"]{ width:100%; }
-    .value{ min-width:80px; text-align:right; font-variant-numeric: tabular-nums; color:var(--text); }
-    .btns{ display:flex; flex-wrap:wrap; gap:10px; }
-    button{
-      background: linear-gradient(180deg, #1b2344, #141a33);
-      color:var(--text); border:1px solid rgba(255,255,255,0.08);
-      padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600; letter-spacing:0.2px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    button:hover{ filter:brightness(1.08); }
-    button:active{ transform: translateY(1px); }
-    .toggle{ display:flex; align-items:center; gap:10px; }
-    label{ font-size:14px; color:var(--text); }
-
-    .readout{
-      display:grid; grid-template-columns: repeat(5, minmax(140px, 1fr)); gap:10px; margin-top:8px; color:var(--muted);
-      font-variant-numeric: tabular-nums; font-size:14px;
-    }
-    .pill{ background:var(--panel-2); padding:8px 10px; border-radius:10px; color:var(--text); }
-
-    @media (max-width: 840px){
-      .ctrl{ grid-column: span 12; }
-      canvas{ height:52vh; }
-      .readout{ grid-template-columns: repeat(2, 1fr); }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Wellenpaket (λ₁ & λ₂, Spektralfarben) – Unschärferelation</title>
+<style>
+  :root{
+    --bg:#0f1116; --panel:#121722; --grid:#273041; --axis:#cbd5e1;
+    --text:#e6e6e6; --muted:#94a3b8;
+    --colA:#dbfa60; --colB:#f5be0b; --colSum:#16a34a; --env:#5e90c9;
+  }
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.4 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:grid;place-items:center;padding:18px}
+  .wrap{width:min(980px,96vw)}
+  h1{font-size:20px;margin:0 0 10px}
+  h2{font-size:18px;margin:18px 0 8px}
+  .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:10px 0}
+  label{font-weight:600}
+  .note{font-size:14px;color:var(--muted)}
+  canvas{width:100%;height:auto;background:var(--panel);border-radius:12px;box-shadow:0 6px 24px #0007}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px;font-size:14px;color:var(--muted)}
+  .sw{display:inline-flex;align-items:center;gap:8px}
+  .dot{width:16px;height:4px;border-radius:2px;display:inline-block}
+  .a{background:var(--colA); --legendCol: var(--colA)}
+  .b{background:var(--colB); --legendCol: var(--colB)}
+  .s{background:var(--colSum)}
+  .e{background:var(--env)}
+  /* gestricheltes Legendensymbol */
+  .dot.dashed{background-color:transparent; background-image:repeating-linear-gradient(90deg, #cbd5e1 0 8px, transparent 8px 12px);}
+  /* farbige Stil-Symbole für Legende */
+  .dot.dashed-col{background-color:transparent; background-image:repeating-linear-gradient(90deg, var(--legendCol) 0 8px, transparent 8px 12px);} 
+  .dot.dotted-col{background-color:transparent; background-image:repeating-linear-gradient(90deg, var(--legendCol) 0 2px, transparent 2px 6px);} 
+  /* Slider-Styling + farbiger Thumb über CSS-Variablen */
+  .ctrl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ctrl input[type=range]{width:min(420px,78vw); -webkit-appearance:none; appearance:none; height:4px; background:#2a3346; border-radius:2px; outline:none}
+  .ctrl input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%;
+    background: var(--thumb, #888); border:2px solid #000; box-shadow:0 0 0 3px rgba(0,0,0,.25);
+  }
+  .ctrl input[type=range]::-moz-range-thumb{
+    width:18px; height:18px; border-radius:50%; background: var(--thumb, #888);
+    border:2px solid #000; box-shadow:0 0 0 3px rgba(0,0,0,.25);
+  }
+  .sep{height:1px;background:#233044;margin:8px 0}
+  select{background:#2a3346;color:var(--text);border:1px solid #3a4356;border-radius:4px;padding:4px 8px;font-size:14px}
+</style>
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <h1>Schwebung – Überlagerung zweier Sinuswellen</h1>
-      <div class="legend">
-        <span class="key"><span class="swatch sw-blue"></span>Resultierende y = y₁ + y₂</span>
-        <span class="key"><span class="swatch sw-green"></span>Einhüllende +</span>
-        <span class="key"><span class="swatch sw-cyan"></span>Einhüllende −</span>
-        <span class="key"><span class="swatch sw-purple"></span>Einzelwellen y₁, y₂</span>
-        <span class="key"><span class="swatch sw-white"></span>Null-Linie</span>
-      </div>
-    </header>
+    <h1>Warum lassen sich Ort und Impuls nicht zeitgleich exakt bestimmen?</h1>
 
-    <div class="canvas-card">
-      <canvas id="plot"></canvas>
+    <!-- PANEL 1: Zwei-Wellen-Schwebung -->
+    <h2>Panel 1 – Zwei Wellen (Schwebung)</h2>
+    <div class="row ctrl">
+      <label for="lambda1">λ₁ (erste Wellenlänge):</label>
+      <input id="lambda1" type="range" min="0.38" max="0.75" step="0.002" value="0.50" />
+      <output id="lamOut1">0,50&nbsp;µm</output>
+    </div>
+    <div class="row ctrl">
+      <label for="lambda2">λ₂ (zweite Wellenlänge):</label>
+      <input id="lambda2" type="range" min="0.38" max="0.75" step="0.002" value="0.50" />
+      <output id="lamOut2">0,50&nbsp;µm</output>
+      <div class="note">Phase 0 im Ursprung, Bereich: x ∈ [−2 µm, +2 µm], Amplituden ±0.5</div>
     </div>
 
-    <section class="controls">
-      <div class="ctrl">
-        <h3>f₁ – Grundfrequenz (Hz)</h3>
-        <div class="row">
-          <input id="f1" type="range" min="0.5" max="20" step="0.1" value="2" />
-          <div class="value"><span id="f1Val">2.0</span> Hz</div>
-        </div>
-      </div>
-      <div class="ctrl">
-        <h3>Δf – Frequenzdifferenz (Hz)</h3>
-        <div class="row">
-          <input id="df" type="range" min="0" max="5" step="0.01" value="0.20" />
-          <div class="value"><span id="dfVal">0.20</span> Hz</div>
-        </div>
-      </div>
-      <div class="ctrl">
-        <h3>T – Zeitfenster (s)</h3>
-        <div class="row">
-          <input id="T" type="range" min="0.5" max="6" step="0.1" value="2.0" />
-          <div class="value"><span id="TVal">2.0</span> s</div>
-        </div>
-      </div>
-      <div class="ctrl">
-        <h3>Optionen</h3>
-        <div class="row toggle">
-          <input id="showWaves" type="checkbox" checked />
-          <label for="showWaves">Einzelwellen y₁(t), y₂(t) anzeigen</label>
-        </div>
-      </div>
-      <div class="ctrl long">
-        <h3>Steuerung</h3>
-        <div class="btns">
-          <button id="playPause">▶️ Play</button>
-          <button id="step">+20 ms</button>
-          <button id="reset">Zurücksetzen</button>
-        </div>
-        <div class="readout">
-          <div class="pill">f₁ = <strong><span id="roF1">2.00</span> Hz</strong></div>
-          <div class="pill">f₂ = <strong><span id="roF2">2.20</span> Hz</strong></div>
-          <div class="pill">Δf = <strong><span id="roDf">0.20</span> Hz</strong></div>
-          <div class="pill">T = <strong><span id="roT">2.00</span> s</strong></div>
-          <div class="pill">t₀ = <strong><span id="roT0">0.000</span> s</strong></div>
-        </div>
-      </div>
-    </section>
+    <canvas id="cv" width="960" height="420"></canvas>
+
+    <div class="legend">
+      <label class="sw"><input id="showPsi1" type="checkbox" checked /> <i class="dot a dashed-col"></i>Einzelwelle Ψ₁ (λ₁)</label>
+      <label class="sw"><input id="showPsi2" type="checkbox" checked /> <i class="dot b dotted-col"></i>Einzelwelle Ψ₂ (λ₂)</label>
+      <label class="sw"><input id="showSum" type="checkbox" checked /> <i class="dot s"></i>Summe Ψ = Ψ₁ + Ψ₂</label>
+      <label class="sw"><input id="showEnv" type="checkbox" checked /> <i class="dot e"></i>Einhüllende</label>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- PANEL 2: Mehrkomponenten-Paket -->
+    <h2>Panel 2 – Mehrkomponenten-Wellenpaket (N Wellen)</h2>
+    <div class="row ctrl">
+      <label for="lambda0">λ₀ (Mitte):</label>
+      <input id="lambda0" type="range" min="0.38" max="0.75" step="0.002" value="0.50" />
+      <output id="lamOut0">0,50&nbsp;µm</output>
+    </div>
+    <div class="row ctrl">
+      <label for="band">Δλ (Bandbreite):</label>
+      <input id="band" type="range" min="0.002" max="0.80" step="0.002" value="0.040" />
+      <output id="bandOut">0,040&nbsp;µm</output>
+    </div>
+    <div class="row ctrl">
+      <label for="num">Anzahl N:</label>
+      <input id="num" type="range" min="2" max="200" step="1" value="40" />
+      <output id="numOut">40</output>
+      <label for="phaseMode">Phasen:</label>
+      <select id="phaseMode">
+        <option value="coherent">alle 0 (kohärent)</option>
+        <option value="random">zufällig [0,2π)</option>
+      </select>
+      <div class="note">x ∈ [−2 µm, +2 µm], Gauß-gewichtete Amplituden</div>
+    </div>
+
+    <canvas id="cvN" width="960" height="420"></canvas>
+
+    <div class="legend">
+      <label class="sw"><input id="showSinglesN" type="checkbox" /> <i class="dot dashed"></i>Einzelkomponente (optional)</label>
+      <label class="sw"><input id="showSumN" type="checkbox" checked /> <i class="dot s"></i>Resultierende ΣΨᵢ</label>
+      <label class="sw"><input id="showEnvN" type="checkbox" checked /> <i class="dot e"></i>Einhüllende</label>
+    </div>
   </div>
 
-  <script>
-    // ======= Utilities =======
-    const $ = (sel) => document.querySelector(sel);
-    const plot = $('#plot');
+<script>
+(function(){
+  // ---- Physik/Skalen ----
+  const A = 0.5;                         // Amplitude beider Einzelwellen
+  const xMin = -2.0, xMax = 2.0;         // µm (horizontale Achse)
+  const yMin = -1.1, yMax =  1.1;        // Amplitude (vertikale Achse)
 
-    // State
-    const state = {
-      f1: 2.0,
-      df: 0.20,
-      get f2(){ return this.f1 + this.df; },
-      T: 2.0,
-      showWaves: true,
-      t0: 0,        // Startzeit (Verschiebung)
-      playing: false,
-      lastTs: 0
-    };
+  // ---- DOM Panel 1 ----
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const padL=70, padR=22, padT=28, padB=46;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
 
-    // Inputs
-    const f1El = $('#f1');
-    const dfEl = $('#df');
-    const TEl  = $('#T');
-    const showEl = $('#showWaves');
-    const btnPlay = $('#playPause');
-    const btnStep = $('#step');
-    const btnReset = $('#reset');
+  const r1 = document.getElementById('lambda1');
+  const r2 = document.getElementById('lambda2');
+  const o1 = document.getElementById('lamOut1');
+  const o2 = document.getElementById('lamOut2');
+  const chkPsi1 = document.getElementById('showPsi1');
+  const chkPsi2 = document.getElementById('showPsi2');
+  const chkSum = document.getElementById('showSum');
+  const chkEnv = document.getElementById('showEnv');
 
-    const f1Val = $('#f1Val');
-    const dfVal = $('#dfVal');
-    const TVal  = $('#TVal');
+  // ---- DOM Panel 2 ----
+  const cvN = document.getElementById('cvN');
+  const ctxN = cvN.getContext('2d');
+  const WN = cvN.width, HN = cvN.height;
+  const plotWN = WN - padL - padR;
+  const plotHN = HN - padT - padB;
 
-    const roF1 = $('#roF1');
-    const roF2 = $('#roF2');
-    const roDf = $('#roDf');
-    const roT  = $('#roT');
-    const roT0 = $('#roT0');
+  const r0 = document.getElementById('lambda0');
+  const rb = document.getElementById('band');
+  const rn = document.getElementById('num');
+  const o0 = document.getElementById('lamOut0');
+  const ob = document.getElementById('bandOut');
+  const on = document.getElementById('numOut');
+  const phaseMode = document.getElementById('phaseMode');
+  const chkN = document.getElementById('showSinglesN');
+  const chkSumN = document.getElementById('showSumN');
+  const chkEnvN = document.getElementById('showEnvN');
 
-    // Canvas sizing with HiDPI support
-    let dpr = 1;
-    function sizeCanvas(){
-      dpr = Math.max(1, window.devicePixelRatio || 1);
-      const rect = plot.getBoundingClientRect();
-      // Set the internal pixel size to device pixels
-      plot.width = Math.max(1, Math.floor(rect.width * dpr));
-      plot.height = Math.max(1, Math.floor(rect.height * dpr));
-      // Reset transform so we can draw in CSS pixels by scaling once per frame
-      const ctx = plot.getContext('2d');
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+  // ---- Util ----
+  const toPxX = x => padL + (x - xMin) * plotW / (xMax - xMin);
+  const toPxY = y => padT + (yMax - y) * plotH / (yMax - yMin);
+  const toPxXN = x => padL + (x - xMin) * plotWN / (xMax - xMin);
+  const toPxYN = y => padT + (yMax - y) * plotHN / (yMax - yMin);
+  
+  function getCss(varName){ return getComputedStyle(document.documentElement).getPropertyValue(varName).trim(); }
+  function fmt(v){ return (Math.abs(v)<1e-3? "0" : v.toString().replace(".",",")); }
+
+  function grid(context, width, height, toPxXFunc, toPxYFunc){
+    context.fillStyle = getCss('--panel'); context.fillRect(0,0,width,height);
+    // Grid
+    context.strokeStyle = getCss('--grid'); context.lineWidth = 1;
+    context.beginPath();
+    const xTicks = [-2,-1.5,-1,-0.5,0,0.5,1,1.5,2];
+    for(const xt of xTicks){ const X = toPxXFunc(xt); context.moveTo(X,padT); context.lineTo(X,padT+height-padT-padB); }
+    const yTicks = [-1,-0.5,0,0.5,1];
+    for(const yt of yTicks){ const Y = toPxYFunc(yt); context.moveTo(padL,Y); context.lineTo(padL+width-padL-padR,Y); }
+    context.stroke();
+    // Achsen
+    context.strokeStyle = getCss('--axis'); context.lineWidth = 1.5;
+    context.beginPath(); context.moveTo(padL,toPxYFunc(0)); context.lineTo(padL+width-padL-padR,toPxYFunc(0)); context.stroke(); // x
+    context.beginPath(); context.moveTo(toPxXFunc(0),padT); context.lineTo(toPxXFunc(0),padT+height-padT-padB); context.stroke(); // y
+    // Labels
+    context.fillStyle = getCss('--text'); context.font = "14px system-ui, Segoe UI, sans-serif"; context.textAlign="center"; context.textBaseline="top";
+    for(const xt of xTicks){ const X=toPxXFunc(xt); const label = (xt===0? "0":"\u2009"+fmt(xt)+"\u00a0µm"); context.fillText(label, X, padT+height-padT-padB+8); }
+    context.textAlign="right"; context.textBaseline="middle"; context.fillStyle=getCss('--muted');
+    for(const yt of yTicks){ const Y=toPxYFunc(yt); context.fillText(fmt(yt), padL-8, Y); }
+  }
+
+  function drawCurve(context, fun, color, width, lineDash, toPxXFunc, toPxYFunc){
+    context.strokeStyle = color;
+    context.lineWidth = width; context.lineJoin="round";
+    context.setLineDash(lineDash);
+    context.beginPath();
+    const N=1600;
+    for(let i=0;i<=N;i++){
+      const t = i/N;
+      const x = xMin + (xMax-xMin)*t;
+      const y = fun(x);
+      const X = toPxXFunc(x), Y = toPxYFunc(y);
+      if(i===0) context.moveTo(X,Y); else context.lineTo(X,Y);
+    }
+    context.stroke();
+    context.setLineDash([]);  // Reset zu durchgezogener Linie
+  }
+
+  // --- Wellenlänge (nm/µm) -> RGB (sichtbares Spektrum) ---
+  // Grobe, didaktisch gute Approximation (basierend auf Dan Bruton's Mapping).
+  function wavelengthToRGB(lambda_um){
+    let w = Math.max(0.38, Math.min(0.75, lambda_um));       // clamp
+    const nm = w*1000;                                       // nm
+    let r=0,g=0,b=0;
+    if (nm>=380 && nm<440)     { r=-(nm-440)/(440-380); g=0; b=1; }
+    else if(nm<490)            { r=0; g=(nm-440)/(490-440); b=1; }
+    else if(nm<510)            { r=0; g=1; b=-(nm-510)/(510-490); }
+    else if(nm<580)            { r=(nm-510)/(580-510); g=1; b=0; }
+    else if(nm<645)            { r=1; g=-(nm-645)/(645-580); b=0; }
+    else if(nm<=750)           { r=1; g=0; b=0; }
+    // Helligkeitskorrektur an den Rändern
+    let factor=1;
+    if(nm<420) factor=0.3+0.7*(nm-380)/(420-380);
+    else if(nm>645) factor=0.3+0.7*(750-nm)/(750-645);
+    r=Math.round(255*r*factor); g=Math.round(255*g*factor); b=Math.round(255*b*factor);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  function setThumbColor(inputEl, cssColor){
+    inputEl.style.setProperty('--thumb', cssColor);
+  }
+
+  function gaussian(x, mu, sigma){ 
+    const z = (x - mu) / sigma; 
+    return Math.exp(-0.5 * z * z); 
+  }
+
+  // ---- Panel 1: Zwei-Wellen-Render ----
+  function render(){
+    const L1 = parseFloat(r1.value);    // µm
+    const L2 = parseFloat(r2.value);    // µm
+    o1.innerHTML = r1.value.replace(".",",") + "&nbsp;µm";
+    o2.innerHTML = r2.value.replace(".",",") + "&nbsp;µm";
+
+    // Farben aus Spektral-Mapping
+    const colA = wavelengthToRGB(L1);
+    const colB = wavelengthToRGB(L2);
+    // Resultierende: k_avg = (k1+k2)/2 -> λ_eff = 2π / k_avg = 2 / (1/λ1 + 1/λ2)
+    const lambdaEff = 2 / (1/L1 + 1/L2); // harmonisches Mittel in µm
+    const colSum = wavelengthToRGB(lambdaEff);
+
+    // CSS-Variablen + Thumb-Farben setzen
+    document.documentElement.style.setProperty('--colA', colA);
+    document.documentElement.style.setProperty('--colB', colB);
+    document.documentElement.style.setProperty('--colSum', colSum);
+    setThumbColor(r1, colA);
+    setThumbColor(r2, colB);
+
+    grid(ctx, W, H, toPxX, toPxY);
+
+    // Wellenzahlen (rad/µm), Phase 0 am Ursprung: sin(k x)
+    const k1 = 2*Math.PI / L1;
+    const k2 = 2*Math.PI / L2;
+    const dK = k2 - k1;
+
+    // Einzelwellen + Summe + Einhüllende
+    const psi1 = x =>  A * Math.sin(k1*x);
+    const psi2 = x =>  A * Math.sin(k2*x);
+    const psis = x =>  psi1(x) + psi2(x);
+    const env  = x =>  2*A*Math.abs(Math.cos(0.5*dK*x));
+
+    // Zeichnen
+    if (chkPsi1.checked){
+      drawCurve(ctx, psi1, colA, 2, [8, 4], toPxX, toPxY);  // gestrichelt
+    }
+    if (chkPsi2.checked){
+      drawCurve(ctx, psi2, colB, 2, [2, 3], toPxX, toPxY);  // gepunktet
+    }
+    if (chkSum.checked){
+      drawCurve(ctx, psis, colSum, 3, [], toPxX, toPxY);    // durchgezogen (normal)
+    }
+    if (chkEnv.checked){
+      drawCurve(ctx, x =>  env(x), getCss('--env'), 2, [], toPxX, toPxY);  // durchgezogen (normal)
+      drawCurve(ctx, x => -env(x), getCss('--env'), 2, [], toPxX, toPxY);  // durchgezogen (normal)
+    }
+  }
+
+  // ---- Panel 2: N-Wellen-Render ----
+  function renderN(){
+    const L0 = parseFloat(r0.value);    // µm
+    const dL = parseFloat(rb.value);    // µm
+    const N = parseInt(rn.value, 10);
+    o0.innerHTML = r0.value.replace(".",",") + "&nbsp;µm";
+    ob.innerHTML = rb.value.replace(".",",") + "&nbsp;µm";
+    on.innerText = N;
+
+    // Spektralfarbe der resultierenden ≈ Farbe von λ0
+    const colSum = wavelengthToRGB(L0);
+    document.documentElement.style.setProperty('--colSum', colSum);
+    setThumbColor(r0, colSum);
+
+    grid(ctxN, WN, HN, toPxXN, toPxYN);
+
+    // Erzeuge N Wellen um λ0 mit Gaußgewicht im k-Raum (≈ Gauß in λ bei kleiner Bandbreite)
+    // Wir sampeln gleichmäßig in λ in [λ0-Δλ/2, λ0+Δλ/2]
+    const Lmin = Math.max(0.38, L0 - dL/2);
+    const Lmax = Math.min(0.75, L0 + dL/2);
+    const lamList = [];
+    for(let i=0; i<N; i++){
+      const t = (N===1) ? 0.5 : i/(N-1);
+      lamList.push(Lmin + (Lmax - Lmin)*t);
+    }
+    
+    // Gewichte: Gauß in λ (didaktisch ok). σ so wählen, dass 95% im Fenster liegen.
+    const sigma = dL/4; // 4σ ≈ Bandbreite
+    const weights = lamList.map(L => gaussian(L, L0, sigma));
+    
+    // Normiere auf Summe der Amplituden = 1 (damit y-Skala bleibt)
+    const sumW = weights.reduce((a,b) => a+b, 0);
+    const A0 = 1.0/sumW; // Gesamtamplitude ~1
+
+    const randPhase = (phaseMode.value === 'random');
+
+    // Precompute Komponentenfunktionen
+    const comps = lamList.map((L, i) => {
+      const k = 2*Math.PI/L;
+      const phi = randPhase ? Math.random()*2*Math.PI : 0;
+      const amp = A0 * weights[i];
+      return {L, k, phi, amp, color: chkN.checked ? wavelengthToRGB(L) : null};
+    });
+
+  // Resultierende
+  const psiSum = x => comps.reduce((acc, c) => acc + c.amp*Math.sin(c.k*x + c.phi), 0);
+
+  // Einhüllende (sidelobes-geeignet): Betrag der komplexen Summenfunktion
+  // E(x) = |Σ a_i · e^{i (k_i x + φ_i)}|
+  const envN = x => {
+    let re = 0, im = 0;
+    for(const c of comps){
+      const th = c.k * x + c.phi;
+      re += c.amp * Math.cos(th);
+      im += c.amp * Math.sin(th);
+    }
+    return Math.hypot(re, im);
+  };
+
+    // Zeichne Komponenten (dünn, gepunktet)
+    if(chkN.checked){
+      for(const c of comps){
+        drawCurve(ctxN, x => c.amp*Math.sin(c.k*x + c.phi), c.color, 1, [2, 2], toPxXN, toPxYN);
+      }
+    }
+    
+    // Zeichne Summe
+    if(chkSumN.checked){
+      drawCurve(ctxN, psiSum, colSum, 3, [], toPxXN, toPxYN);
     }
 
-    window.addEventListener('resize', sizeCanvas);
-
-    // ======= Signal model =======
-    const A = 0.5; // Einzelwellen-Amplitude – Vorgabe
-    const TWO_PI = Math.PI * 2;
-
-    function y1(t, f1){ return A * Math.sin(TWO_PI * f1 * t); }
-    function y2(t, f2){ return A * Math.sin(TWO_PI * f2 * t); }
-    function yRes(t, f1, f2){ return y1(t, f1) + y2(t, f2); }
-    // Einhüllende für gleiche Amplituden: 2A * |cos(pi * Δf * t)|; hier 2A = 1 → ±|cos(...)|
-    function envMag(t, df){ return Math.abs(Math.cos(Math.PI * df * t)); }
-
-    // ======= Self-tests (basics) =======
-    (function selfTests(){
-      try{
-        // At t=0, sin(0)=0 → all zero
-        console.assert(y1(0, 3) === 0 && y2(0, 5) === 0 && yRes(0,3,3) === 0, 't=0 should be 0');
-        // If f1=f2=3 Hz, pick t where phase = π/2 → amplitude 1
-        const tPeak = 1/(12); // 2π*3*t = π/2
-        const resEq = yRes(tPeak, 3, 3);
-        console.assert(Math.abs(resEq - 1) < 1e-12, 'Equal freqs peak should be 1');
-        // Envelope: df=0.5 → t=1/(2*df)=1 → cos(π/2)=0
-        console.assert(Math.abs(envMag(0, 0.5) - 1) < 1e-12, 'Envelope at t=0 is 1');
-        console.assert(Math.abs(envMag(1, 0.5) - 0) < 1e-12, 'Envelope zero at t=1 for df=0.5');
-        console.log('%cSelf-tests passed','color:lightgreen');
-      }catch(e){ console.warn('Self-tests failed', e); }
-    })();
-
-    // ======= Drawing =======
-    function draw(){
-      const ctx = plot.getContext('2d');
-      const Wcss = plot.clientWidth || Math.floor(plot.width / dpr);
-      const Hcss = plot.clientHeight || Math.floor(plot.height / dpr);
-      if (Wcss < 2 || Hcss < 2) return;
-
-      // Clear in device pixels with identity transform
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.clearRect(0, 0, plot.width, plot.height);
-      // Scale so that drawing commands use CSS pixels
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      const W = Wcss; const H = Hcss;
-
-      // background
-      const grad = ctx.createLinearGradient(0,0,0,H);
-      grad.addColorStop(0, '#0f142b');
-      grad.addColorStop(1, '#0b0f20');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0,0,W,H);
-
-      // padding for axes labels
-      const padL = 40, padR = 10, padT = 12, padB = 28;
-      const x0 = padL, x1 = Math.max(x0+1, W - padR);
-      const y0 = padT, yB = Math.max(y0+1, H - padB); // yB statt y1, um Funktionsnamen y1() nicht zu überschreiben
-
-      // helpers (guard against divide-by-zero)
-      const spanX = Math.max(1e-6, x1 - x0);
-      const toX = (t) => x0 + (t - state.t0) * spanX / state.T;
-      const toT = (x) => state.t0 + (x - x0) * state.T / spanX;
-      const toY = (y) => (yB + y0)/2 - y * (yB - y0)/2; // map y in [-1,1]
-
-      // grid horizontal lines at -1, -0.5, 0, 0.5, 1
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid');
-      ctx.beginPath();
-      [ -1, -0.5, 0, 0.5, 1 ].forEach(v => {
-        const yy = toY(v);
-        ctx.moveTo(x0, yy); ctx.lineTo(x1, yy);
-      });
-      ctx.stroke();
-
-      // stronger zero line
-      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--zero');
-      ctx.globalAlpha = 0.8; ctx.lineWidth = 1.25;
-      ctx.beginPath();
-      ctx.moveTo(x0, toY(0)); ctx.lineTo(x1, toY(0));
-      ctx.stroke();
-      ctx.globalAlpha = 1;
-
-      // vertical grid (time ticks)
-      const tickCount = 10;
-      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid');
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      for(let i=0;i<=tickCount;i++){
-        const tTick = state.t0 + i * state.T / tickCount;
-        const xx = toX(tTick);
-        ctx.moveTo(xx, y0); ctx.lineTo(xx, yB);
-      }
-      ctx.stroke();
-
-      // time labels
-      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted');
-      ctx.font = '12px system-ui, sans-serif';
-      ctx.textAlign = 'center';
-      for(let i=0;i<=tickCount;i++){
-        const tTick = state.t0 + i * state.T / tickCount;
-        const xx = toX(tTick);
-        ctx.fillText(tTick.toFixed(2)+' s', xx, H - 8);
-      }
-
-      // axes labels (y)
-      ctx.textAlign = 'right';
-      [ -1, -0.5, 0, 0.5, 1 ].forEach(v => {
-        const yy = toY(v);
-        ctx.fillText(v.toFixed(1), x0 - 6, yy + 4);
-      });
-
-      // envelope (upper & lower): ±envMag(t)
-      const step = Math.max(1, Math.floor((x1-x0)/800));
-
-      // Upper envelope
-      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--envelopeA');
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      for(let x = x0; x <= x1; x += step){
-        const t = toT(x);
-        const y = envMag(t, state.df); // magnitude in [0,1]
-        const yy = toY(+y);
-        if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
-      }
-      ctx.stroke();
-
-      // Lower envelope
-      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--envelopeB');
-      ctx.beginPath();
-      for(let x = x0; x <= x1; x += step){
-        const t = toT(x);
-        const y = -envMag(t, state.df);
-        const yy = toY(y);
-        if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
-      }
-      ctx.stroke();
-
-      // Einzelwellen (optional)
-      if(state.showWaves){
-        ctx.globalAlpha = 0.55;
-        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--waves');
-        ctx.lineWidth = 1.3;
-        ctx.beginPath();
-        for(let x = x0; x <= x1; x += 1){
-          const t = toT(x);
-          const y = y1(t, state.f1);
-          const yy = toY(y);
-          if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
-        }
-        ctx.stroke();
-
-        ctx.beginPath();
-        for(let x = x0; x <= x1; x += 1){
-          const t = toT(x);
-          const y = y2(t, state.f2);
-          const yy = toY(y);
-          if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
-        }
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-      }
-
-      // Resultierende
-      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
-      ctx.lineWidth = 2.2;
-      ctx.beginPath();
-      for(let x = x0; x <= x1; x += 1){
-        const t = toT(x);
-        const y = yRes(t, state.f1, state.f2);
-        const yy = toY(y);
-        if(x===x0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
-      }
-      ctx.stroke();
-
-      
+    // Zeichne Einhüllende
+    if(chkEnvN.checked){
+      const envCol = getCss('--env');
+      drawCurve(ctxN, x =>  envN(x), envCol, 2, [], toPxXN, toPxYN);
+      drawCurve(ctxN, x => -envN(x), envCol, 2, [], toPxXN, toPxYN);
     }
+  }
 
-    // ======= Interactivity =======
-    function syncUI(){
-      f1Val.textContent = Number(state.f1).toFixed(2);
-      dfVal.textContent = Number(state.df).toFixed(2);
-      TVal.textContent  = Number(state.T).toFixed(2);
+  // Initial + Events Panel 1
+  ['input','change'].forEach(ev=>{
+    r1.addEventListener(ev, render);
+    r2.addEventListener(ev, render);
+  });
+  [chkPsi1, chkPsi2, chkSum, chkEnv].forEach(chk => {
+    chk.addEventListener('change', render);
+  });
+  render();
 
-      roF1.textContent = Number(state.f1).toFixed(2);
-      roF2.textContent = Number(state.f2).toFixed(2);
-      roDf.textContent = Number(state.df).toFixed(2);
-      roT.textContent  = Number(state.T).toFixed(2);
-      roT0.textContent = Number(state.t0).toFixed(3);
-    }
-
-    function attach(){
-      f1El.addEventListener('input', () => { state.f1 = +f1El.value; syncUI(); });
-      dfEl.addEventListener('input', () => { state.df = +dfEl.value; syncUI(); });
-      TEl.addEventListener('input',  () => { state.T  = +TEl.value; syncUI(); });
-      showEl.addEventListener('change', () => { state.showWaves = showEl.checked; });
-
-      btnPlay.addEventListener('click', () => {
-        state.playing = !state.playing;
-        btnPlay.textContent = state.playing ? '⏸️ Pause' : '▶️ Play';
-      });
-      btnStep.addEventListener('click', () => { state.t0 += 0.020; syncUI(); });
-      btnReset.addEventListener('click', () => { state.t0 = 0; syncUI(); });
-    }
-
-    // ======= Animation loop =======
-    function loop(ts){
-      if(!state.lastTs) state.lastTs = ts;
-      const dt = (ts - state.lastTs) / 1000; // seconds
-      state.lastTs = ts;
-      if(state.playing){
-        state.t0 += dt; // 1x Zeitbasis
-      }
-      draw();
-      requestAnimationFrame(loop);
-    }
-
-    // init
-    sizeCanvas();
-    attach();
-    syncUI();
-    // Ensure first draw before RAF (avoids initial blank if rAF throttled)
-    draw();
-    requestAnimationFrame(loop);
-  </script>
+  // Initial + Events Panel 2
+  ['input','change'].forEach(ev=>{
+    r0.addEventListener(ev, renderN);
+    rb.addEventListener(ev, renderN);
+    rn.addEventListener(ev, renderN);
+    phaseMode.addEventListener(ev, renderN);
+    chkN.addEventListener(ev, renderN);
+    chkSumN.addEventListener(ev, renderN);
+    chkEnvN.addEventListener(ev, renderN);
+  });
+  renderN();
+})();
+</script>
 </body>
 </html>
