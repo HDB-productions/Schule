@@ -1,0 +1,1150 @@
+﻿
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trainer für Flächenberechnungen</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #f5f6ff;
+            --fg: #0f1526;
+            --card: #ffffffec;
+            --accent: #4c7cf0;
+            --accent-dark: #2646a6;
+            --muted: #6f7799;
+            --border: #dbe2f4;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f111d;
+                --fg: #eff1ff;
+                --card: #161a2d;
+                --accent: #6f9cff;
+                --accent-dark: #96b1ff;
+                --muted: #aab2d7;
+                --border: #242842;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", "Inter", system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 3rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 1.4rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.8rem, 4vw, 2.7rem);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: .5rem;
+        }
+
+        .settings-toggle {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--fg);
+            display: grid;
+            place-items: center;
+            font-size: 1.35rem;
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+
+        .settings-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .settings-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 7, 18, 0.45);
+            backdrop-filter: blur(2px);
+            z-index: 50;
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 2.5rem;
+            right: 2.5rem;
+            width: min(360px, calc(100% - 2rem));
+            z-index: 60;
+        }
+
+        .settings-panel.hidden,
+        .settings-backdrop.hidden {
+            display: none;
+        }
+
+        .settings-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .settings-group h3 {
+            margin: 0 0 .5rem;
+            font-size: 1rem;
+        }
+
+        .settings-group label {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-size: .95rem;
+            margin-bottom: .3rem;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 1.1rem;
+            height: 1.1rem;
+        }
+
+        button {
+            font: inherit;
+            border: none;
+            border-radius: 14px;
+            padding: .85rem 1.4rem;
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease, opacity .2s ease;
+        }
+
+        button.primary {
+            background: linear-gradient(120deg, var(--accent), var(--accent-dark));
+            color: #fff;
+            box-shadow: 0 12px 22px rgba(76, 124, 240, .35);
+        }
+
+        button.ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--fg);
+        }
+
+        button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        button:not(:disabled):active {
+            transform: translateY(1px);
+        }
+
+        .status-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .status-pill {
+            padding: .4rem .85rem;
+            border-radius: 999px;
+            background: rgba(76, 124, 240, 0.15);
+            color: var(--accent-dark);
+        }
+
+        .task-card {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.6rem;
+        }
+
+        .task-text {
+            flex: 1 1 280px;
+        }
+
+        .drawing {
+            flex: 1 1 320px;
+            min-height: 220px;
+            border-radius: 16px;
+            padding: .75rem;
+            background: radial-gradient(circle at top, rgba(76,124,240,.20), transparent 70%);
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .given-values {
+            list-style: none;
+            padding: 0;
+            margin: .9rem 0 0;
+            display: grid;
+            gap: .35rem;
+        }
+
+        .given-values li {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-bottom: .25rem;
+            border-bottom: 1px dashed var(--border);
+            font-size: .95rem;
+        }
+
+        .given-symbol {
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .answer-area {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: .85rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--fg);
+            font-size: 1.05rem;
+        }
+
+        .unit-label {
+            position: absolute;
+            right: .9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .answer-input {
+            position: relative;
+        }
+
+        .answer-buttons {
+            display: flex;
+            gap: .75rem;
+            flex-wrap: wrap;
+        }
+
+        .feedback {
+            min-height: 2.4rem;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        .feedback.good {
+            color: #0c915a;
+        }
+
+        .feedback.bad {
+            color: #c62828;
+        }
+
+        .history {
+            margin-top: 2.2rem;
+        }
+
+        .history ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: .45rem;
+        }
+
+        .history li {
+            display: flex;
+            justify-content: space-between;
+            padding: .8rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-size: .95rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 640px) {
+            .settings-panel {
+                top: 1.5rem;
+                right: 1rem;
+                width: calc(100% - 2rem);
+            }
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="header-row">
+        <div>
+            <h1>Trainer für Flächenberechnungen</h1>
+            <p>Übe Rechteck, Dreieck, Parallelogramm und Trapez: Wähle aus, welche Figuren und welche gesuchte Größe
+                abgefragt werden und lasse dir zufällige Aufgaben generieren.</p>
+        </div>
+        <button id="settingsBtn" class="settings-toggle" aria-label="Einstellungen">
+            ⚙
+        </button>
+    </div>
+
+    <div id="settingsBackdrop" class="settings-backdrop hidden"></div>
+    <section id="settingsPanel" class="settings-panel card hidden" aria-label="Einstellungen">
+        <div class="settings-group">
+            <h3>Flächentypen</h3>
+            <label><input type="checkbox" name="shape" value="rectangle" checked> Rechteck</label>
+            <label><input type="checkbox" name="shape" value="triangle" checked> Dreieck</label>
+            <label><input type="checkbox" name="shape" value="parallelogram" checked> Parallelogramm</label>
+            <label><input type="checkbox" name="shape" value="trapezoid" checked> Trapez</label>
+        </div>
+        <div class="settings-group">
+            <h3>Gesuchte Größe</h3>
+            <label><input type="checkbox" name="target" value="area" checked> Fläche A</label>
+            <label><input type="checkbox" name="target" value="base" checked> Grundseite g</label>
+            <label><input type="checkbox" name="target" value="height" checked> Höhe h</label>
+            <label><input type="checkbox" name="target" value="a" checked> Trapezseite a</label>
+            <label><input type="checkbox" name="target" value="c" checked> Trapezseite c</label>
+        </div>
+        <div class="settings-group">
+            <h3>Trainingsmodus</h3>
+            <label><input type="radio" name="mode" value="training" checked> Training (mit Hilfen)</label>
+            <label><input type="radio" name="mode" value="challenge"> Prüfung (1 Versuch)</label>
+            <label><input type="radio" name="mode" value="timer"> Zeitrennen (30 s)</label>
+        </div>
+        <button id="closeSettings" class="primary" style="width: 100%;">Fertig</button>
+    </section>
+
+    <section class="status-bar">
+        <div id="modeInfo">Training: Hinweise sind aktiv.</div>
+        <div id="timerDisplay" class="status-pill hidden">⏱ 30 s</div>
+        <div id="streakDisplay" class="status-pill">Serie: 0</div>
+    </section>
+
+    <section class="card task-card">
+        <div class="task-text">
+            <h2 id="taskTitle">Starte mit einer neuen Aufgabe</h2>
+            <p id="taskPrompt">Tippe auf „Neue Aufgabe“, um loszulegen.</p>
+            <ul id="givenValues" class="given-values"></ul>
+            <div id="formulaHint" class="hidden"></div>
+        </div>
+        <div id="shapeDrawing" class="drawing">
+            <svg viewBox="0 0 220 180" aria-hidden="true">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="var(--muted)">
+                    SVG Vorschau
+                </text>
+            </svg>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="answer-area">
+            <div>
+                <label for="answerInput">Dein Ergebnis</label>
+                <div class="answer-input">
+                    <input type="text" id="answerInput" inputmode="decimal" placeholder="z. B. 42,5">
+                    <span id="unitLabel" class="unit-label">cm²</span>
+                </div>
+            </div>
+            <div class="answer-buttons">
+                <button id="checkBtn" class="primary">Antwort prüfen</button>
+                <button id="newTaskBtn" class="ghost">Neue Aufgabe</button>
+                <button id="giveUpBtn" class="ghost">Aufgeben / Lösung</button>
+            </div>
+        </div>
+        <p id="feedback" class="feedback"></p>
+    </section>
+
+    <section class="history card">
+        <h2>Verlauf</h2>
+        <ul id="historyList">
+            <li>Noch keine Versuche.</li>
+        </ul>
+    </section>
+</main>
+<script>
+    const formatNumber = (value, digits = 2) => {
+        if (Number.isInteger(value)) return value.toString();
+        return value.toFixed(digits).replace(".", ",").replace(/0+$/, "").replace(/,$/, "");
+    };
+
+    const randomValue = (min, max, step = 0.5) => {
+        const steps = Math.round((max - min) / step);
+        const raw = min + Math.round(Math.random() * steps) * step;
+        return Math.round(raw * 100) / 100;
+    };
+
+    const units = ["cm", "m", "mm"];
+    const measureColors = {
+        g: "#e63946",
+        h: "#2a9d8f",
+        a: "#ff7f11",
+        c: "#6d5dfc",
+        A: "#f4a261",
+        b: "#ffbe0b",
+        d: "#ffbe0b",
+        s: "#ffba08"
+    };
+
+    const targetLabels = {
+        area: "A",
+        base: "g",
+        height: "h",
+        a: "a",
+        c: "c"
+    };
+
+    const createEntry = (symbol, label, value, unit) => ({ symbol, label, value, unit });
+
+    const shapeConfig = {
+        rectangle: {
+            label: "Rechteck",
+            formula: "A = g · h",
+            targets: ["area", "base", "height"],
+            generate(unit) {
+                const base = randomValue(4, 24, 0.5);
+                let height = randomValue(4, 24, 0.5);
+                if (height === base) height += 0.5;
+                return { unit, params: { base, height } };
+            },
+            area({ base, height }) {
+                return base * height;
+            },
+            prepare(target, generated) {
+                const { base, height } = generated.params;
+                const unit = generated.unit;
+                const areaValue = this.area(generated.params);
+                const entries = {
+                    area: {
+                        prompt: "Berechne den Flächeninhalt A.",
+                        given: [
+                            createEntry("g", "Grundseite", base, unit),
+                            createEntry("h", "Höhe", height, unit)
+                        ],
+                        unitSuffix: `${unit}²`,
+                        correctValue: areaValue,
+                        highlight: ["g", "h"],
+                        hint: "Multipliziere g mit h."
+                    },
+                    base: {
+                        prompt: "Grundseite g ist gesucht.",
+                        given: [
+                            createEntry("h", "Höhe", height, unit),
+                            createEntry("A", "Fläche", areaValue, `${unit}²`)
+                        ],
+                        unitSuffix: unit,
+                        correctValue: base,
+                        highlight: ["g", "h"],
+                        hint: "Formel nach g auflösen: g = A ÷ h."
+                    },
+                    height: {
+                        prompt: "Höhe h ist gesucht.",
+                        given: [
+                            createEntry("g", "Grundseite", base, unit),
+                            createEntry("A", "Fläche", areaValue, `${unit}²`)
+                        ],
+                        unitSuffix: unit,
+                        correctValue: height,
+                        highlight: ["g", "h"],
+                        hint: "Formel nach h auflösen: h = A ÷ g."
+                    }
+                };
+                return entries[target];
+            },
+            draw(params) {
+                const { base, height } = params;
+                const scale = 5;
+                const w = base * scale;
+                const h = height * scale;
+                const offsetX = (200 - w) / 2 + 10;
+                const offsetY = (160 - h) / 2 + 10;
+                const baseColor = measureColors.g;
+                const heightColor = measureColors.h;
+                return `
+                <svg viewBox="0 0 220 180">
+                    <rect x="${offsetX}" y="${offsetY}" width="${w}" height="${h}"
+                          style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;"/>
+                    <line x1="${offsetX}" y1="${offsetY + h + 15}" x2="${offsetX + w}" y2="${offsetY + h + 15}"
+                          style="stroke: ${baseColor}; stroke-width: 2;"/>
+                    <line x1="${offsetX - 15}" y1="${offsetY}" x2="${offsetX - 15}" y2="${offsetY + h}"
+                          style="stroke: ${heightColor}; stroke-width: 2;"/>
+                    <text x="${offsetX + w / 2}" y="${offsetY + h + 32}" text-anchor="middle"
+                          style="fill: ${baseColor}; font-weight: 600;">g</text>
+                    <text x="${offsetX - 18}" y="${offsetY + h / 2}" text-anchor="middle"
+                          transform="rotate(-90 ${offsetX - 18} ${offsetY + h / 2})"
+                          style="fill: ${heightColor}; font-weight: 600;">h</text>
+                </svg>`;
+            }
+        },
+        triangle: {
+            label: "Dreieck",
+            formula: "A = (g · h) / 2",
+            targets: ["area", "base", "height"],
+            generate(unit) {
+                const base = randomValue(6, 22, 0.5);
+                const height = randomValue(4, 18, 0.5);
+                const leg = Math.sqrt(Math.pow(base / 2, 2) + Math.pow(height, 2));
+                return { unit, params: { base, height, leg } };
+            },
+            area({ base, height }) {
+                return (base * height) / 2;
+            },
+            prepare(target, generated) {
+                const { base, height } = generated.params;
+                const unit = generated.unit;
+                const areaValue = this.area(generated.params);
+                const entries = {
+                    area: {
+                        prompt: "Berechne den Flächeninhalt A.",
+                        given: [
+                            createEntry("g", "Grundseite", base, unit),
+                            createEntry("h", "Höhe", height, unit)
+                        ],
+                        unitSuffix: `${unit}²`,
+                        correctValue: areaValue,
+                        highlight: ["g", "h"],
+                        hint: "A = (g · h) : 2."
+                    },
+                    base: {
+                        prompt: "Grundseite g ist gesucht.",
+                        given: [
+                            createEntry("h", "Höhe", height, unit),
+                            createEntry("A", "Fläche", areaValue, `${unit}²`)
+                        ],
+                        unitSuffix: unit,
+                        correctValue: base,
+                        highlight: ["g", "h"],
+                        hint: "g = (2 · A) ÷ h."
+                    },
+                    height: {
+                        prompt: "Höhe h ist gesucht.",
+                        given: [
+                            createEntry("g", "Grundseite", base, unit),
+                            createEntry("A", "Fläche", areaValue, `${unit}²`)
+                        ],
+                        unitSuffix: unit,
+                        correctValue: height,
+                        highlight: ["g", "h"],
+                        hint: "h = (2 · A) ÷ g."
+                    }
+                };
+                return entries[target];
+            },
+            draw(params) {
+                const { base, height } = params;
+                const scale = 5;
+                const w = base * scale;
+                const h = height * scale;
+                const startX = (200 - w) / 2 + 10;
+                const baseY = 150;
+                const apexX = startX + w / 2;
+                const apexY = baseY - h;
+                return `
+                <svg viewBox="0 0 220 180">
+                    <polygon points="${startX},${baseY} ${startX + w},${baseY} ${apexX},${apexY}"
+                             style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;"/>
+                    <line x1="${apexX}" y1="${apexY}" x2="${apexX}" y2="${baseY}"
+                          style="stroke: ${measureColors.h}; stroke-width: 2;"/>
+                    <line x1="${startX}" y1="${baseY + 12}" x2="${startX + w}" y2="${baseY + 12}"
+                          style="stroke: ${measureColors.g}; stroke-width: 2;"/>
+                    <text x="${startX + w / 2}" y="${baseY + 28}" text-anchor="middle"
+                          style="fill: ${measureColors.g}; font-weight: 600;">g</text>
+                    <text x="${apexX + 10}" y="${apexY + (baseY - apexY) / 2}"
+                          transform="rotate(-90 ${apexX + 10} ${apexY + (baseY - apexY) / 2})"
+                          style="fill: ${measureColors.h}; font-weight: 600;">h</text>
+                </svg>`;
+            }
+        },
+        parallelogram: {
+            label: "Parallelogramm",
+            formula: "A = g · h",
+            targets: ["area", "base", "height"],
+            generate(unit) {
+                const base = randomValue(6, 24, 0.5);
+                const height = randomValue(4, 16, 0.5);
+                let side = randomValue(height + 1, 22, 0.5);
+                const angleRad = Math.asin(Math.min(0.98, height / side));
+                const angleDeg = Math.round(angleRad * 180 / Math.PI);
+                return { unit, params: { base, height, side, angleDeg } };
+            },
+            area({ base, height }) {
+                return base * height;
+            },
+            prepare(target, generated) {
+                const { base, height, side, angleDeg } = generated.params;
+                const unit = generated.unit;
+                const areaValue = this.area(generated.params);
+                const sharedInfo = [
+                    createEntry("s", "Seite s", side, unit),
+                    createEntry("α", "Winkel α", angleDeg, "°")
+                ];
+                const entries = {
+                    area: {
+                        prompt: "Berechne den Flächeninhalt A.",
+                        given: [createEntry("g", "Grundseite", base, unit), createEntry("h", "Höhe", height, unit), ...sharedInfo],
+                        unitSuffix: `${unit}²`,
+                        correctValue: areaValue,
+                        highlight: ["g", "h"],
+                        hint: "A = g · h"
+                    },
+                    base: {
+                        prompt: "Grundseite g ist gesucht.",
+                        given: [createEntry("h", "Höhe", height, unit), createEntry("A", "Fläche", areaValue, `${unit}²`), ...sharedInfo],
+                        unitSuffix: unit,
+                        correctValue: base,
+                        highlight: ["g", "h"],
+                        hint: "g = A ÷ h"
+                    },
+                    height: {
+                        prompt: "Höhe h ist gesucht.",
+                        given: [createEntry("g", "Grundseite", base, unit), createEntry("A", "Fläche", areaValue, `${unit}²`), ...sharedInfo],
+                        unitSuffix: unit,
+                        correctValue: height,
+                        highlight: ["g", "h"],
+                        hint: "h = A ÷ g"
+                    }
+                };
+                return entries[target];
+            },
+            draw(params) {
+                const { base, height } = params;
+                const scale = 4.7;
+                const w = base * scale;
+                const h = height * scale;
+                const slant = Math.min(60, Math.max(20, h * 0.8));
+                const startX = (200 - w) / 2 + 10;
+                const startY = 135;
+                return `
+                <svg viewBox="0 0 220 180">
+                    <polygon points="${startX},${startY} ${startX + w},${startY} ${startX + w + slant},${startY - h} ${startX + slant},${startY - h}"
+                             style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;"/>
+                    <line x1="${startX + slant}" y1="${startY - h}" x2="${startX + slant}" y2="${startY}"
+                          style="stroke: ${measureColors.h}; stroke-width: 2;"/>
+                    <line x1="${startX}" y1="${startY + 12}" x2="${startX + w}" y2="${startY + 12}"
+                          style="stroke: ${measureColors.g}; stroke-width: 2;"/>
+                    <text x="${startX + w / 2}" y="${startY + 28}" text-anchor="middle"
+                          style="fill: ${measureColors.g}; font-weight: 600;">g</text>
+                    <text x="${startX + slant - 8}" y="${startY - h / 2}"
+                          transform="rotate(-90 ${startX + slant - 8} ${startY - h / 2})"
+                          style="fill: ${measureColors.h}; font-weight: 600;">h</text>
+                </svg>`;
+            }
+        },
+        trapezoid: {
+            label: "Trapez",
+            formula: "A = ((a + c) / 2) · h",
+            targets: ["area", "height", "a", "c"],
+            generate(unit) {
+                const baseA = randomValue(12, 26, 0.5);
+                const baseC = randomValue(6, baseA - 3, 0.5);
+                const height = randomValue(4, 12, 0.5);
+                const offset = (baseA - baseC) / 2;
+                const leg = Math.sqrt(offset * offset + height * height);
+                return { unit, params: { baseA, baseC, height, leg } };
+            },
+            area({ baseA, baseC, height }) {
+                return ((baseA + baseC) / 2) * height;
+            },
+            prepare(target, generated) {
+                const { baseA, baseC, height, leg } = generated.params;
+                const unit = generated.unit;
+                const areaValue = this.area(generated.params);
+                const shared = [
+                    createEntry("b", "Seite b", leg, unit),
+                    createEntry("d", "Seite d", leg, unit)
+                ];
+                const entries = {
+                    area: {
+                        prompt: "Berechne den Flächeninhalt A.",
+                        given: [
+                            createEntry("a", "Grundseite a", baseA, unit),
+                            createEntry("c", "Grundseite c", baseC, unit),
+                            createEntry("h", "Höhe", height, unit),
+                            ...shared
+                        ],
+                        unitSuffix: `${unit}²`,
+                        correctValue: areaValue,
+                        highlight: ["a", "c", "h"],
+                        hint: "A = ((a + c) / 2) · h"
+                    },
+                    height: {
+                        prompt: "Höhe h ist gesucht.",
+                        given: [
+                            createEntry("a", "Grundseite a", baseA, unit),
+                            createEntry("c", "Grundseite c", baseC, unit),
+                            createEntry("A", "Fläche", areaValue, `${unit}²`),
+                            ...shared
+                        ],
+                        unitSuffix: unit,
+                        correctValue: height,
+                        highlight: ["a", "c", "h"],
+                        hint: "h = (2 · A) ÷ (a + c)"
+                    },
+                    a: {
+                        prompt: "Grundseite a ist gesucht.",
+                        given: [
+                            createEntry("c", "Grundseite c", baseC, unit),
+                            createEntry("h", "Höhe", height, unit),
+                            createEntry("A", "Fläche", areaValue, `${unit}²`),
+                            ...shared
+                        ],
+                        unitSuffix: unit,
+                        correctValue: baseA,
+                        highlight: ["a", "c", "h"],
+                        hint: "a = (2 · A ÷ h) − c"
+                    },
+                    c: {
+                        prompt: "Grundseite c ist gesucht.",
+                        given: [
+                            createEntry("a", "Grundseite a", baseA, unit),
+                            createEntry("h", "Höhe", height, unit),
+                            createEntry("A", "Fläche", areaValue, `${unit}²`),
+                            ...shared
+                        ],
+                        unitSuffix: unit,
+                        correctValue: baseC,
+                        highlight: ["a", "c", "h"],
+                        hint: "c = (2 · A ÷ h) − a"
+                    }
+                };
+                return entries[target];
+            },
+            draw(params) {
+                const { baseA, baseC, height } = params;
+                const scale = 4.5;
+                const a = baseA * scale;
+                const c = baseC * scale;
+                const h = height * scale;
+                const startX = (200 - a) / 2 + 10;
+                const baseY = 150;
+                const topX = startX + (a - c) / 2;
+                const topY = baseY - h;
+                return `
+                <svg viewBox="0 0 220 180">
+                    <polygon points="${startX},${baseY} ${startX + a},${baseY} ${topX + c},${topY} ${topX},${topY}"
+                             style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;"/>
+                    <line x1="${startX}" y1="${baseY + 12}" x2="${startX + a}" y2="${baseY + 12}"
+                          style="stroke: ${measureColors.a}; stroke-width: 2;"/>
+                    <line x1="${topX}" y1="${topY - 12}" x2="${topX + c}" y2="${topY - 12}"
+                          style="stroke: ${measureColors.c}; stroke-width: 2;"/>
+                    <line x1="${topX + c}" y1="${topY}" x2="${topX + c}" y2="${baseY}"
+                          style="stroke: ${measureColors.h}; stroke-width: 2;"/>
+                    <text x="${startX + a / 2}" y="${baseY + 28}" text-anchor="middle"
+                          style="fill: ${measureColors.a}; font-weight: 600;">a</text>
+                    <text x="${topX + c / 2}" y="${topY - 18}" text-anchor="middle"
+                          style="fill: ${measureColors.c}; font-weight: 600;">c</text>
+                    <text x="${topX + c + 12}" y="${topY + h / 2}"
+                          transform="rotate(-90 ${topX + c + 12} ${topY + h / 2})"
+                          style="fill: ${measureColors.h}; font-weight: 600;">h</text>
+                </svg>`;
+            }
+        }
+    };
+    const modes = {
+        training: {
+            label: "Training",
+            description: "Hinweise eingeblendet, mehrere Versuche",
+            timer: null,
+            maxAttempts: Infinity,
+            showHints: true
+        },
+        challenge: {
+            label: "Prüfung",
+            description: "Nur ein Versuch pro Aufgabe",
+            timer: null,
+            maxAttempts: 1,
+            showHints: false
+        },
+        timer: {
+            label: "Zeitrennen",
+            description: "30 Sekunden pro Aufgabe",
+            timer: 30,
+            maxAttempts: Infinity,
+            showHints: false
+        }
+    };
+
+    const state = {
+        settings: {
+            shapes: new Set(["rectangle", "triangle", "parallelogram", "trapezoid"]),
+            targets: new Set(["area", "base", "height", "a", "c"]),
+            mode: "training"
+        },
+        currentTask: null,
+        correctValue: null,
+        unitSuffix: "cm²",
+        attempts: 0,
+        streak: 0,
+        timerId: null,
+        timeLeft: 0,
+        history: [],
+        solved: false
+    };
+
+    const elements = {
+        settingsBtn: document.getElementById("settingsBtn"),
+        settingsPanel: document.getElementById("settingsPanel"),
+        settingsBackdrop: document.getElementById("settingsBackdrop"),
+        closeSettings: document.getElementById("closeSettings"),
+        givenValues: document.getElementById("givenValues"),
+        taskTitle: document.getElementById("taskTitle"),
+        taskPrompt: document.getElementById("taskPrompt"),
+        drawing: document.getElementById("shapeDrawing"),
+        formulaHint: document.getElementById("formulaHint"),
+        unitLabel: document.getElementById("unitLabel"),
+        answerInput: document.getElementById("answerInput"),
+        checkBtn: document.getElementById("checkBtn"),
+        newTaskBtn: document.getElementById("newTaskBtn"),
+        giveUpBtn: document.getElementById("giveUpBtn"),
+        feedback: document.getElementById("feedback"),
+        historyList: document.getElementById("historyList"),
+        modeInfo: document.getElementById("modeInfo"),
+        timerDisplay: document.getElementById("timerDisplay"),
+        streakDisplay: document.getElementById("streakDisplay")
+    };
+
+    const shapeCheckboxes = Array.from(document.querySelectorAll('input[name="shape"]'));
+    const targetCheckboxes = Array.from(document.querySelectorAll('input[name="target"]'));
+    const modeRadios = Array.from(document.querySelectorAll('input[name="mode"]'));
+
+    function toggleSettings(open) {
+        const shouldOpen = open ?? elements.settingsPanel.classList.contains("hidden");
+        elements.settingsPanel.classList.toggle("hidden", !shouldOpen);
+        elements.settingsBackdrop.classList.toggle("hidden", !shouldOpen);
+    }
+
+    function ensureAtLeastOne(set, checkbox) {
+        if (set.size === 0) {
+            set.add(checkbox.value);
+            checkbox.checked = true;
+            return false;
+        }
+        return true;
+    }
+
+    shapeCheckboxes.forEach(cb => {
+        cb.addEventListener("change", () => {
+            if (cb.checked) {
+                state.settings.shapes.add(cb.value);
+            } else {
+                state.settings.shapes.delete(cb.value);
+                if (!ensureAtLeastOne(state.settings.shapes, cb)) {
+                    return;
+                }
+            }
+        });
+    });
+
+    targetCheckboxes.forEach(cb => {
+        cb.addEventListener("change", () => {
+            if (cb.checked) {
+                state.settings.targets.add(cb.value);
+            } else {
+                state.settings.targets.delete(cb.value);
+                if (!ensureAtLeastOne(state.settings.targets, cb)) {
+                    return;
+                }
+            }
+        });
+    });
+
+    modeRadios.forEach(radio => {
+        radio.addEventListener("change", () => {
+            if (radio.checked) {
+                state.settings.mode = radio.value;
+                updateModeInfo();
+                if (modes[radio.value].timer && state.currentTask) {
+                    startTask();
+                } else if (!modes[radio.value].timer) {
+                    clearTimer();
+                }
+            }
+        });
+    });
+
+    function getEligibleShapes() {
+        return Array.from(state.settings.shapes).filter(shapeKey => {
+            const validTargets = shapeConfig[shapeKey].targets.filter(target => state.settings.targets.has(target));
+            return validTargets.length > 0;
+        });
+    }
+
+    function pickRandom(list) {
+        return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function startTask() {
+        const shapes = getEligibleShapes();
+        if (!shapes.length) {
+            showFeedback(false, "Bitte wähle mindestens einen Flächentyp und eine passende Abfrage.");
+            return;
+        }
+        clearTimer();
+        state.solved = false;
+        elements.checkBtn.disabled = false;
+        elements.answerInput.disabled = false;
+        state.attempts = 0;
+        elements.feedback.textContent = "";
+        elements.feedback.className = "feedback";
+        const shapeKey = pickRandom(shapes);
+        const config = shapeConfig[shapeKey];
+        const unit = units[Math.floor(Math.random() * units.length)];
+        const generated = config.generate(unit);
+        const targets = config.targets.filter(target => state.settings.targets.has(target));
+        const target = pickRandom(targets);
+        const taskData = config.prepare(target, generated, unit);
+        state.currentTask = {
+            shapeKey,
+            target,
+            config,
+            params: generated.params,
+            prompt: taskData.prompt,
+            given: taskData.given,
+            highlight: taskData.highlight,
+            hint: taskData.hint,
+            unitSuffix: taskData.unitSuffix,
+            unit,
+            formula: config.formula
+        };
+        state.correctValue = taskData.correctValue;
+        state.unitSuffix = taskData.unitSuffix;
+        elements.unitLabel.textContent = taskData.unitSuffix;
+        renderTask();
+        updateModeInfo();
+        if (modes[state.settings.mode].timer) {
+            startTimer(modes[state.settings.mode].timer);
+        }
+        elements.answerInput.value = "";
+        elements.answerInput.focus();
+    }
+    function renderTask() {
+        if (!state.currentTask) return;
+        const config = state.currentTask.config;
+        elements.taskTitle.textContent = `${config.label}: ${targetLabels[state.currentTask.target] ?? "A"} gesucht`;
+        elements.taskPrompt.textContent = state.currentTask.prompt;
+        elements.givenValues.innerHTML = state.currentTask.given.map(entry => {
+            const color = measureColors[entry.symbol] || "var(--fg)";
+            const valueText = typeof entry.value === "number" ? formatNumber(entry.value) : entry.value;
+            return `<li><span><span class="given-symbol" style="color:${color}">${entry.symbol}</span> ${entry.label}</span><span>${valueText} ${entry.unit || ""}</span></li>`;
+        }).join("");
+        elements.drawing.innerHTML = config.draw(state.currentTask.params, state.currentTask.unit, state.currentTask.highlight);
+        const mode = modes[state.settings.mode];
+        if (mode.showHints) {
+            elements.formulaHint.classList.remove("hidden");
+            elements.formulaHint.innerHTML = `<strong>${config.formula}</strong><br><span style="color:var(--muted)">${state.currentTask.hint}</span>`;
+        } else {
+            elements.formulaHint.classList.add("hidden");
+            elements.formulaHint.textContent = "";
+        }
+    }
+
+    function parseInput() {
+        const raw = elements.answerInput.value.trim();
+        if (!raw) return null;
+        const normalized = raw.replace(",", ".");
+        const value = Number(normalized);
+        if (!Number.isFinite(value)) return null;
+        const decimals = normalized.includes(".") ? normalized.split(".")[1].length : 0;
+        return { value, raw, decimals };
+    }
+
+    function valuesMatch(user, exact, decimals) {
+        const epsilon = 1e-6;
+        if (Math.abs(user - exact) < epsilon) return true;
+        if (decimals >= 0) {
+            const rounded = Number(exact.toFixed(decimals));
+            return Math.abs(user - rounded) < epsilon;
+        }
+        return false;
+    }
+
+    function checkAnswer(timeout = false) {
+        if (!state.currentTask) return;
+        if (state.solved && !timeout) return;
+        const modeKey = state.settings.mode;
+        const mode = modes[modeKey];
+        if (timeout) {
+            showFeedback(false, "Die Zeit ist abgelaufen.");
+            addHistory(false, null, true);
+            state.streak = 0;
+            updateStreak();
+            state.solved = true;
+            elements.checkBtn.disabled = true;
+            elements.answerInput.disabled = true;
+            if (modeKey === "timer") {
+                setTimeout(startTask, 1500);
+            }
+            return;
+        }
+        const userInput = parseInput();
+        if (!userInput) {
+            showFeedback(false, "Bitte gib eine Zahl ein (Komma oder Punkt erlaubt).");
+            return;
+        }
+        state.attempts += 1;
+        const isCorrect = valuesMatch(userInput.value, state.correctValue, userInput.decimals);
+        if (isCorrect) {
+            state.solved = true;
+            elements.checkBtn.disabled = true;
+            elements.answerInput.disabled = true;
+            if (mode.timer) {
+                clearTimer();
+            }
+            showFeedback(true, `Richtig! ${targetLabels[state.currentTask.target] ?? "A"} = ${formatNumber(state.correctValue)} ${state.unitSuffix}`);
+            addHistory(true, userInput.value);
+            state.streak += 1;
+            updateStreak();
+            if (modeKey === "challenge" || modeKey === "timer") {
+                setTimeout(startTask, 1400);
+            }
+        } else {
+            showFeedback(false, mode.showHints ? "Überprüfe deine Formel oder runde korrekt." : "Leider falsch.");
+            addHistory(false, userInput.value);
+            state.streak = 0;
+            updateStreak();
+            if (state.attempts >= mode.maxAttempts) {
+                revealSolution(true);
+            }
+        }
+    }
+    function showFeedback(isCorrect, message) {
+        elements.feedback.textContent = message;
+        elements.feedback.className = `feedback ${isCorrect ? "good" : "bad"}`;
+    }
+
+    function addHistory(isCorrect, userValue, timedOut = false) {
+        const entry = {
+            label: shapeConfig[state.currentTask.shapeKey].label,
+            target: targetLabels[state.currentTask.target] || "A",
+            mode: modes[state.settings.mode].label,
+            user: userValue,
+            correct: state.correctValue,
+            unit: state.unitSuffix,
+            isCorrect,
+            timedOut
+        };
+        state.history.unshift(entry);
+        if (state.history.length > 8) state.history.pop();
+        renderHistory();
+    }
+
+    function renderHistory() {
+        if (!state.history.length) {
+            elements.historyList.innerHTML = "<li>Noch keine Versuche.</li>";
+            return;
+        }
+        elements.historyList.innerHTML = state.history.map(item => {
+            const icon = item.timedOut ? "⏱" : item.isCorrect ? "✔" : "✖";
+            const answer = item.user === null ? "—" : `${formatNumber(item.user)} ${item.unit}`;
+            return `<li><span>${icon} ${item.label} · ${item.target}</span><span>${answer} → ${formatNumber(item.correct)} ${item.unit}</span></li>`;
+        }).join("");
+    }
+
+    function revealSolution(autoNext = false) {
+        if (!state.currentTask) return;
+        clearTimer();
+        state.solved = true;
+        elements.checkBtn.disabled = true;
+        elements.answerInput.disabled = true;
+        showFeedback(false, `Die korrekte Lösung: ${targetLabels[state.currentTask.target] ?? "A"} = ${formatNumber(state.correctValue)} ${state.unitSuffix}`);
+        elements.answerInput.value = formatNumber(state.correctValue);
+        state.streak = 0;
+        updateStreak();
+        if (autoNext) {
+            setTimeout(startTask, 1600);
+        }
+    }
+
+    function updateModeInfo() {
+        const mode = modes[state.settings.mode];
+        elements.modeInfo.textContent = `${mode.label}: ${mode.description}`;
+        if (mode.timer) {
+            elements.timerDisplay.classList.remove("hidden");
+            elements.timerDisplay.textContent = `⏱ ${mode.timer} s`;
+        } else if (!state.timerId) {
+            elements.timerDisplay.classList.add("hidden");
+        }
+    }
+
+    function updateStreak() {
+        elements.streakDisplay.textContent = `Serie: ${state.streak}`;
+    }
+
+    function startTimer(seconds) {
+        state.timeLeft = seconds;
+        updateTimerLabel();
+        state.timerId = setInterval(() => {
+            state.timeLeft -= 1;
+            updateTimerLabel();
+            if (state.timeLeft <= 0) {
+                clearTimer();
+                checkAnswer(true);
+            }
+        }, 1000);
+    }
+
+    function updateTimerLabel() {
+        elements.timerDisplay.classList.remove("hidden");
+        elements.timerDisplay.textContent = `⏱ ${state.timeLeft}s`;
+    }
+
+    function clearTimer() {
+        if (state.timerId) {
+            clearInterval(state.timerId);
+            state.timerId = null;
+        }
+    }
+
+    elements.settingsBtn.addEventListener("click", () => toggleSettings(true));
+    elements.settingsBackdrop.addEventListener("click", () => toggleSettings(false));
+    elements.closeSettings.addEventListener("click", () => toggleSettings(false));
+
+    elements.newTaskBtn.addEventListener("click", startTask);
+    elements.checkBtn.addEventListener("click", () => checkAnswer(false));
+    elements.giveUpBtn.addEventListener("click", () => revealSolution(false));
+
+    elements.answerInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            checkAnswer(false);
+        }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            clearTimer();
+        }
+    });
+</script>
+</body>
+</html>
