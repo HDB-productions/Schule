@@ -223,6 +223,54 @@
             letter-spacing: 0.04em;
         }
 
+        .side-selection {
+            margin-top: 1.1rem;
+            border: 1px dashed var(--border);
+            border-radius: 14px;
+            padding: .9rem;
+            background: rgba(76, 124, 240, 0.05);
+        }
+
+        .side-selection h3 {
+            margin: 0 0 .4rem;
+            font-size: 1rem;
+        }
+
+        .side-selection-fields {
+            display: grid;
+            gap: .6rem;
+        }
+
+        .side-select {
+            display: flex;
+            flex-direction: column;
+            gap: .2rem;
+            font-size: .95rem;
+        }
+
+        .side-select select {
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: .45rem .7rem;
+            font-size: 1rem;
+            background: var(--bg);
+            color: var(--fg);
+        }
+
+        .side-selection-message {
+            margin-top: .4rem;
+            font-size: .9rem;
+            font-weight: 600;
+        }
+
+        .side-selection.success {
+            border-color: #0c915a;
+        }
+
+        .side-selection.error {
+            border-color: #c62828;
+        }
+
         .answer-area {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -355,8 +403,13 @@
     <section class="card task-card">
         <div class="task-text">
             <h2 id="taskTitle">Starte mit einer neuen Aufgabe</h2>
-            <p id="taskPrompt">Tippe auf „Neue Aufgabe“, um loszulegen.</p>
+            <p id="taskPrompt">Tippe auf "Neue Aufgabe", um loszulegen.</p>
             <ul id="givenValues" class="given-values"></ul>
+            <div id="sideSelection" class="side-selection hidden">
+                <h3>Ordne die Buchstaben zu</h3>
+                <div id="sideSelectionFields" class="side-selection-fields"></div>
+                <p id="sideSelectionMessage" class="side-selection-message"></p>
+            </div>
             <div id="formulaHint" class="hidden"></div>
         </div>
         <div id="shapeDrawing" class="drawing">
@@ -404,17 +457,30 @@
         const raw = min + Math.round(Math.random() * steps) * step;
         return Math.round(raw * 100) / 100;
     };
+    const roundMeasure = value => Math.round(value * 100) / 100;
+
+    const shuffle = list => {
+        const arr = [...list];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    };
 
     const units = ["cm", "m", "mm"];
-    const measureColors = {
-        g: "#e63946",
-        h: "#2a9d8f",
-        a: "#ff7f11",
-        c: "#6d5dfc",
-        A: "#f4a261",
+    const letterPool = ["a", "b", "c", "d"];
+    const letterColors = {
+        a: "#e63946",
         b: "#ffbe0b",
-        d: "#ffbe0b",
-        s: "#ffba08"
+        c: "#6d5dfc",
+        d: "#ff7f11",
+        h: "#2a9d8f"
+    };
+    const extraColors = {
+        A: "#f4a261",
+        α: "#6d5dfc",
+        s: "#ffbe0b"
     };
 
     const targetLabels = {
@@ -425,12 +491,69 @@
         c: "c"
     };
 
-    const createEntry = (symbol, label, value, unit) => ({ symbol, label, value, unit });
+    const viewBox = { width: 220, height: 180, centerX: 110, centerY: 90 };
+    const rotationOptions = [0, 90, 180, 270];
+    const pickRotation = () => rotationOptions[Math.floor(Math.random() * rotationOptions.length)];
+    const rotateTextAttr = (rotation, x, y) => rotation ? ` transform="rotate(${-rotation} ${x} ${y})"` : "";
+    const getLetterColor = letter => letterColors[letter] || "#4c7cf0";
+    const assignLetters = identifyList => {
+        if (!identifyList?.length) return {};
+        const shuffled = shuffle(letterPool);
+        const mapping = {};
+        identifyList.forEach((item, index) => {
+            mapping[item.key] = shuffled[index % shuffled.length];
+        });
+        return mapping;
+    };
+    const getCustomMapping = shapeKey => {
+        switch (shapeKey) {
+            case "rectangle":
+                return { base: "a", height: "b" };
+            case "triangle": {
+                const letters = shuffle(["a", "b", "c"]);
+                return {
+                    base: letters[0],
+                    sideLeft: letters[1],
+                    sideRight: letters[2],
+                    height: "h"
+                };
+            }
+            case "parallelogram": {
+                const letters = shuffle(["a", "b", "c", "d"]);
+                return {
+                    base: letters[0],
+                    side: letters[1],
+                    height: "h"
+                };
+            }
+            case "trapezoid": {
+                const letters = shuffle(["a", "b", "c", "d"]);
+                return {
+                    baseA: letters[0],
+                    legLeft: letters[1],
+                    baseC: letters[2],
+                    legRight: letters[3],
+                    height: "h"
+                };
+            }
+            default:
+                return null;
+        }
+    };
+
+    const createEntry = (key, label, value, unit, options = {}) => ({
+        key,
+        label,
+        value,
+        unit,
+        type: options.type ?? "measure",
+        display: options.display ?? null
+    });
 
     const shapeConfig = {
         rectangle: {
             label: "Rechteck",
-            formula: "A = g · h",
+            formula: "A = a · b",
             targets: ["area", "base", "height"],
             generate(unit) {
                 const base = randomValue(4, 24, 0.5);
@@ -449,61 +572,75 @@
                     area: {
                         prompt: "Berechne den Flächeninhalt A.",
                         given: [
-                            createEntry("g", "Grundseite", base, unit),
-                            createEntry("h", "Höhe", height, unit)
+                            createEntry("base", "Seite a", base, unit, { type: "side" }),
+                            createEntry("height", "Seite b", height, unit, { type: "side" })
                         ],
                         unitSuffix: `${unit}²`,
                         correctValue: areaValue,
-                        highlight: ["g", "h"],
-                        hint: "Multipliziere g mit h."
+                        highlight: ["base", "height"],
+                        hint: "A = a · b"
                     },
                     base: {
-                        prompt: "Grundseite g ist gesucht.",
+                        prompt: "Seite a ist gesucht.",
                         given: [
-                            createEntry("h", "Höhe", height, unit),
-                            createEntry("A", "Fläche", areaValue, `${unit}²`)
+                            createEntry("height", "Seite b", height, unit, { type: "side" }),
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" })
                         ],
                         unitSuffix: unit,
                         correctValue: base,
-                        highlight: ["g", "h"],
-                        hint: "Formel nach g auflösen: g = A ÷ h."
+                        highlight: ["base", "height"],
+                        hint: "a = A ÷ b"
                     },
                     height: {
-                        prompt: "Höhe h ist gesucht.",
+                        prompt: "Seite b ist gesucht.",
                         given: [
-                            createEntry("g", "Grundseite", base, unit),
-                            createEntry("A", "Fläche", areaValue, `${unit}²`)
+                            createEntry("base", "Seite a", base, unit, { type: "side" }),
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" })
                         ],
                         unitSuffix: unit,
                         correctValue: height,
-                        highlight: ["g", "h"],
-                        hint: "Formel nach h auflösen: h = A ÷ g."
+                        highlight: ["base", "height"],
+                        hint: "b = A ÷ a"
                     }
                 };
                 return entries[target];
             },
-            draw(params) {
+            draw(params, unit, highlight, mapping = {}) {
                 const { base, height } = params;
                 const scale = 5;
                 const w = base * scale;
                 const h = height * scale;
-                const offsetX = (200 - w) / 2 + 10;
-                const offsetY = (160 - h) / 2 + 10;
-                const baseColor = measureColors.g;
-                const heightColor = measureColors.h;
+                const offsetX = (viewBox.width - w) / 2;
+                const offsetY = (viewBox.height - h) / 2;
+                const rotation = pickRotation();
+                const left = offsetX;
+                const right = offsetX + w;
+                const top = offsetY;
+                const bottom = offsetY + h;
+                const baseLetter = mapping.base || letterPool[0];
+                const heightLetter = mapping.height || letterPool[1];
+                const baseColor = getLetterColor(baseLetter);
+                const heightColor = getLetterColor(heightLetter);
+                const baseLabelX = (left + right) / 2;
+                const baseLabelY = bottom + 16;
+                const heightLabelX = left - 14;
+                const heightLabelY = (top + bottom) / 2;
                 return `
-                <svg viewBox="0 0 220 180">
-                    <rect x="${offsetX}" y="${offsetY}" width="${w}" height="${h}"
-                          style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;"/>
-                    <line x1="${offsetX}" y1="${offsetY + h + 15}" x2="${offsetX + w}" y2="${offsetY + h + 15}"
-                          style="stroke: ${baseColor}; stroke-width: 2;"/>
-                    <line x1="${offsetX - 15}" y1="${offsetY}" x2="${offsetX - 15}" y2="${offsetY + h}"
-                          style="stroke: ${heightColor}; stroke-width: 2;"/>
-                    <text x="${offsetX + w / 2}" y="${offsetY + h + 32}" text-anchor="middle"
-                          style="fill: ${baseColor}; font-weight: 600;">g</text>
-                    <text x="${offsetX - 18}" y="${offsetY + h / 2}" text-anchor="middle"
-                          transform="rotate(-90 ${offsetX - 18} ${offsetY + h / 2})"
-                          style="fill: ${heightColor}; font-weight: 600;">h</text>
+                <svg viewBox="0 0 ${viewBox.width} ${viewBox.height}">
+                    <g transform="rotate(${rotation} ${viewBox.centerX} ${viewBox.centerY})">
+                        <rect x="${left}" y="${top}" width="${w}" height="${h}"
+                              style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;" />
+                        <line x1="${left}" y1="${bottom}" x2="${right}" y2="${bottom}"
+                              style="stroke: ${baseColor}; stroke-width: 4; stroke-linecap: round;" />
+                        <line x1="${left}" y1="${top}" x2="${left}" y2="${bottom}"
+                              style="stroke: ${heightColor}; stroke-width: 4; stroke-linecap: round;" />
+                        <text x="${baseLabelX}" y="${baseLabelY}" text-anchor="middle"
+                              ${rotateTextAttr(rotation, baseLabelX, baseLabelY)}
+                              style="fill: ${baseColor}; font-weight: 600;">${baseLetter}</text>
+                        <text x="${heightLabelX}" y="${heightLabelY}" text-anchor="middle"
+                              ${rotateTextAttr(rotation, heightLabelX, heightLabelY)}
+                              style="fill: ${heightColor}; font-weight: 600;">${heightLetter}</text>
+                    </g>
                 </svg>`;
             }
         },
@@ -511,78 +648,133 @@
             label: "Dreieck",
             formula: "A = (g · h) / 2",
             targets: ["area", "base", "height"],
+            identify: () => [
+                { key: "base", label: "Grundseite zu h" },
+                { key: "height", label: "Höhe" }
+            ],
             generate(unit) {
                 const base = randomValue(6, 22, 0.5);
                 const height = randomValue(4, 18, 0.5);
-                const leg = Math.sqrt(Math.pow(base / 2, 2) + Math.pow(height, 2));
-                return { unit, params: { base, height, leg } };
+                const footRatio = Math.random() * 1.4 - 0.2;
+                const leftHorizontal = Math.abs(base * footRatio);
+                const rightHorizontal = Math.abs(base - base * footRatio);
+                const sideLeft = roundMeasure(Math.sqrt(leftHorizontal * leftHorizontal + height * height));
+                const sideRight = roundMeasure(Math.sqrt(rightHorizontal * rightHorizontal + height * height));
+                return { unit, params: { base, height, footRatio, sideLeft, sideRight } };
             },
             area({ base, height }) {
                 return (base * height) / 2;
             },
             prepare(target, generated) {
-                const { base, height } = generated.params;
+                const { base, height, sideLeft, sideRight } = generated.params;
                 const unit = generated.unit;
                 const areaValue = this.area(generated.params);
+                const sharedSides = [
+                    createEntry("sideLeft", "Seite", sideLeft, unit, { type: "side" }),
+                    createEntry("sideRight", "Seite", sideRight, unit, { type: "side" })
+                ];
                 const entries = {
                     area: {
                         prompt: "Berechne den Flächeninhalt A.",
                         given: [
-                            createEntry("g", "Grundseite", base, unit),
-                            createEntry("h", "Höhe", height, unit)
+                            createEntry("base", "Grundseite", base, unit, { type: "side" }),
+                            createEntry("height", "Höhe", height, unit, { type: "side" }),
+                            ...sharedSides
                         ],
                         unitSuffix: `${unit}²`,
                         correctValue: areaValue,
-                        highlight: ["g", "h"],
+                        highlight: ["base", "height"],
                         hint: "A = (g · h) : 2."
                     },
                     base: {
-                        prompt: "Grundseite g ist gesucht.",
+                        prompt: "Die zur Höhe gehörende Grundseite ist gesucht.",
                         given: [
-                            createEntry("h", "Höhe", height, unit),
-                            createEntry("A", "Fläche", areaValue, `${unit}²`)
+                            createEntry("height", "Höhe", height, unit, { type: "side" }),
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
+                            ...sharedSides
                         ],
                         unitSuffix: unit,
                         correctValue: base,
-                        highlight: ["g", "h"],
-                        hint: "g = (2 · A) ÷ h."
+                        highlight: ["base", "height"],
+                        hint: "Die Grundseite liegt an der eingezeichneten Höhe: g = (2 · A) ÷ h."
                     },
                     height: {
-                        prompt: "Höhe h ist gesucht.",
+                        prompt: "Höhe ist gesucht.",
                         given: [
-                            createEntry("g", "Grundseite", base, unit),
-                            createEntry("A", "Fläche", areaValue, `${unit}²`)
+                            createEntry("base", "Grundseite", base, unit, { type: "side" }),
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
+                            ...sharedSides
                         ],
                         unitSuffix: unit,
                         correctValue: height,
-                        highlight: ["g", "h"],
+                        highlight: ["base", "height"],
                         hint: "h = (2 · A) ÷ g."
                     }
                 };
                 return entries[target];
             },
-            draw(params) {
-                const { base, height } = params;
+            draw(params, unit, highlight, mapping = {}) {
+                const { base, height, footRatio = 0.5 } = params;
                 const scale = 5;
                 const w = base * scale;
                 const h = height * scale;
-                const startX = (200 - w) / 2 + 10;
-                const baseY = 150;
-                const apexX = startX + w / 2;
+                const startX = (viewBox.width - w) / 2;
+                const baseY = viewBox.height - 30;
+                const apexX = startX + w * footRatio;
                 const apexY = baseY - h;
+                const rotation = pickRotation();
+                const footX = apexX;
+                const baseLetter = mapping.base || "a";
+                const heightLetter = mapping.height || "h";
+                const sideLeftLetter = mapping.sideLeft || "b";
+                const sideRightLetter = mapping.sideRight || "c";
+                const baseColor = getLetterColor(baseLetter);
+                const heightColor = getLetterColor(heightLetter);
+                const sideLeftColor = getLetterColor(sideLeftLetter);
+                const sideRightColor = getLetterColor(sideRightLetter);
+                const needsLeftHelper = footX < startX;
+                const needsRightHelper = footX > startX + w;
+                const helperLines = [];
+                if (needsLeftHelper) {
+                    helperLines.push(`<line x1="${footX}" y1="${baseY}" x2="${startX}" y2="${baseY}" style="stroke-dasharray: 6 4; stroke: ${baseColor}; stroke-width: 2;" />`);
+                } else if (needsRightHelper) {
+                    helperLines.push(`<line x1="${startX + w}" y1="${baseY}" x2="${footX}" y2="${baseY}" style="stroke-dasharray: 6 4; stroke: ${baseColor}; stroke-width: 2;" />`);
+                }
+                const baseMidX = (startX + startX + w) / 2;
+                const baseLabelY = baseY + 18;
+                const heightLabelX = footX + 10;
+                const heightLabelY = (apexY + baseY) / 2;
+                const leftMidX = (startX + apexX) / 2 - 6;
+                const leftMidY = (baseY + apexY) / 2 - 6;
+                const rightMidX = (startX + w + apexX) / 2 + 6;
+                const rightMidY = (baseY + apexY) / 2 - 6;
                 return `
-                <svg viewBox="0 0 220 180">
-                    <polygon points="${startX},${baseY} ${startX + w},${baseY} ${apexX},${apexY}"
-                             style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;"/>
-                    <line x1="${apexX}" y1="${apexY}" x2="${apexX}" y2="${baseY}"
-                          style="stroke: ${measureColors.h}; stroke-width: 2;"/>
-                    <line x1="${startX}" y1="${baseY + 12}" x2="${startX + w}" y2="${baseY + 12}"
-                          style="stroke: ${measureColors.g}; stroke-width: 2;"/>
-                    <text x="${startX + w / 2}" y="${baseY + 28}" text-anchor="middle"
-                          style="fill: ${measureColors.g}; font-weight: 600;">g</text>
-                    <text x="${apexX + 10}" y="${apexY + (baseY - apexY) / 2}"
-                          transform="rotate(-90 ${apexX + 10} ${apexY + (baseY - apexY) / 2})"
-                          style="fill: ${measureColors.h}; font-weight: 600;">h</text>
+                <svg viewBox="0 0 ${viewBox.width} ${viewBox.height}">
+                    <g transform="rotate(${rotation} ${viewBox.centerX} ${viewBox.centerY})">
+                        <polygon points="${startX},${baseY} ${startX + w},${baseY} ${apexX},${apexY}"
+                                 style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;" />
+                        ${helperLines.join("")}
+                        <line x1="${startX}" y1="${baseY}" x2="${startX + w}" y2="${baseY}"
+                              style="stroke: ${baseColor}; stroke-width: 3.5; stroke-linecap: round;" />
+                        <line x1="${startX}" y1="${baseY}" x2="${apexX}" y2="${apexY}"
+                              style="stroke: ${sideLeftColor}; stroke-width: 3; stroke-linecap: round;" />
+                        <line x1="${startX + w}" y1="${baseY}" x2="${apexX}" y2="${apexY}"
+                              style="stroke: ${sideRightColor}; stroke-width: 3; stroke-linecap: round;" />
+                        <line x1="${apexX}" y1="${apexY}" x2="${footX}" y2="${baseY}"
+                              style="stroke: ${heightColor}; stroke-width: 3.5; stroke-linecap: round;" />
+                        <text x="${baseMidX}" y="${baseLabelY}" text-anchor="middle"
+                              ${rotateTextAttr(rotation, baseMidX, baseLabelY)}
+                              style="fill: ${baseColor}; font-weight: 600;">${baseLetter}</text>
+                        <text x="${leftMidX}" y="${leftMidY}"
+                              ${rotateTextAttr(rotation, leftMidX, leftMidY)}
+                              style="fill: ${sideLeftColor}; font-weight: 600;">${sideLeftLetter}</text>
+                        <text x="${rightMidX}" y="${rightMidY}"
+                              ${rotateTextAttr(rotation, rightMidX, rightMidY)}
+                              style="fill: ${sideRightColor}; font-weight: 600;">${sideRightLetter}</text>
+                        <text x="${heightLabelX}" y="${heightLabelY}"
+                              ${rotateTextAttr(rotation, heightLabelX, heightLabelY)}
+                              style="fill: ${heightColor}; font-weight: 600;">${heightLetter}</text>
+                    </g>
                 </svg>`;
             }
         },
@@ -590,6 +782,11 @@
             label: "Parallelogramm",
             formula: "A = g · h",
             targets: ["area", "base", "height"],
+            identify: () => [
+                { key: "base", label: "Grundseite" },
+                { key: "side", label: "Seite" },
+                { key: "height", label: "Höhe" }
+            ],
             generate(unit) {
                 const base = randomValue(6, 24, 0.5);
                 const height = randomValue(4, 16, 0.5);
@@ -606,58 +803,109 @@
                 const unit = generated.unit;
                 const areaValue = this.area(generated.params);
                 const sharedInfo = [
-                    createEntry("s", "Seite s", side, unit),
-                    createEntry("α", "Winkel α", angleDeg, "°")
+                    createEntry("side", "Seite", side, unit, { type: "side" }),
+                    createEntry("angle", "Winkel α", angleDeg, "°", { display: "α" })
                 ];
                 const entries = {
                     area: {
                         prompt: "Berechne den Flächeninhalt A.",
-                        given: [createEntry("g", "Grundseite", base, unit), createEntry("h", "Höhe", height, unit), ...sharedInfo],
+                        given: [
+                            createEntry("base", "Grundseite", base, unit, { type: "side" }),
+                            createEntry("height", "Höhe", height, unit, { type: "side" }),
+                            ...sharedInfo
+                        ],
                         unitSuffix: `${unit}²`,
                         correctValue: areaValue,
-                        highlight: ["g", "h"],
+                        highlight: ["base", "height"],
                         hint: "A = g · h"
                     },
                     base: {
-                        prompt: "Grundseite g ist gesucht.",
-                        given: [createEntry("h", "Höhe", height, unit), createEntry("A", "Fläche", areaValue, `${unit}²`), ...sharedInfo],
+                        prompt: "Grundseite ist gesucht.",
+                        given: [
+                            createEntry("height", "Höhe", height, unit, { type: "side" }),
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
+                            ...sharedInfo
+                        ],
                         unitSuffix: unit,
                         correctValue: base,
-                        highlight: ["g", "h"],
+                        highlight: ["base", "height"],
                         hint: "g = A ÷ h"
                     },
                     height: {
-                        prompt: "Höhe h ist gesucht.",
-                        given: [createEntry("g", "Grundseite", base, unit), createEntry("A", "Fläche", areaValue, `${unit}²`), ...sharedInfo],
+                        prompt: "Höhe ist gesucht.",
+                        given: [
+                            createEntry("base", "Grundseite", base, unit, { type: "side" }),
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
+                            ...sharedInfo
+                        ],
                         unitSuffix: unit,
                         correctValue: height,
-                        highlight: ["g", "h"],
+                        highlight: ["base", "height"],
                         hint: "h = A ÷ g"
                     }
                 };
                 return entries[target];
             },
-            draw(params) {
+            draw(params, unit, highlight, mapping = {}) {
                 const { base, height } = params;
-                const scale = 4.7;
+                const scale = 4.6;
                 const w = base * scale;
                 const h = height * scale;
-                const slant = Math.min(60, Math.max(20, h * 0.8));
-                const startX = (200 - w) / 2 + 10;
-                const startY = 135;
+                const slant = (Math.random() * 1.1 - 0.55) * w;
+                const minX = Math.min(0, slant);
+                const maxX = Math.max(w, w + slant);
+                const offsetX = (viewBox.width - (maxX - minX)) / 2 - minX;
+                const baseY = viewBox.height - 28;
+                const topY = baseY - h;
+                const p1 = [offsetX, baseY];
+                const p2 = [offsetX + w, baseY];
+                const p3 = [offsetX + w + slant, topY];
+                const p4 = [offsetX + slant, topY];
+                const rotation = pickRotation();
+                const baseLetter = mapping.base || "a";
+                const heightLetter = mapping.height || "h";
+                const sideLetter = mapping.side || "b";
+                const baseColor = getLetterColor(baseLetter);
+                const heightColor = getLetterColor(heightLetter);
+                const sideColor = getLetterColor(sideLetter);
+                const dropFromRight = Math.random() > 0.5;
+                const anchor = dropFromRight ? p3 : p4;
+                const footX = anchor[0];
+                const helper = [];
+                if (footX < p1[0]) {
+                    helper.push(`<line x1="${footX}" y1="${baseY}" x2="${p1[0]}" y2="${baseY}" style="stroke-dasharray: 6 4; stroke: ${baseColor}; stroke-width: 2;" />`);
+                } else if (footX > p2[0]) {
+                    helper.push(`<line x1="${p2[0]}" y1="${baseY}" x2="${footX}" y2="${baseY}" style="stroke-dasharray: 6 4; stroke: ${baseColor}; stroke-width: 2;" />`);
+                }
+                const baseMidX = (p1[0] + p2[0]) / 2;
+                const baseLabelY = baseY + 16;
+                const heightLabelX = anchor[0] + 12;
+                const heightLabelY = (anchor[1] + baseY) / 2;
+                const sideMidX = (p1[0] + p4[0]) / 2 - 8;
+                const sideMidY = (p1[1] + p4[1]) / 2;
+                const polygonPoints = `${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]} ${p4[0]},${p4[1]}`;
                 return `
-                <svg viewBox="0 0 220 180">
-                    <polygon points="${startX},${startY} ${startX + w},${startY} ${startX + w + slant},${startY - h} ${startX + slant},${startY - h}"
-                             style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;"/>
-                    <line x1="${startX + slant}" y1="${startY - h}" x2="${startX + slant}" y2="${startY}"
-                          style="stroke: ${measureColors.h}; stroke-width: 2;"/>
-                    <line x1="${startX}" y1="${startY + 12}" x2="${startX + w}" y2="${startY + 12}"
-                          style="stroke: ${measureColors.g}; stroke-width: 2;"/>
-                    <text x="${startX + w / 2}" y="${startY + 28}" text-anchor="middle"
-                          style="fill: ${measureColors.g}; font-weight: 600;">g</text>
-                    <text x="${startX + slant - 8}" y="${startY - h / 2}"
-                          transform="rotate(-90 ${startX + slant - 8} ${startY - h / 2})"
-                          style="fill: ${measureColors.h}; font-weight: 600;">h</text>
+                <svg viewBox="0 0 ${viewBox.width} ${viewBox.height}">
+                    <g transform="rotate(${rotation} ${viewBox.centerX} ${viewBox.centerY})">
+                        <polygon points="${polygonPoints}"
+                                 style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;" />
+                        ${helper.join("")}
+                        <line x1="${p1[0]}" y1="${p1[1]}" x2="${p2[0]}" y2="${p2[1]}"
+                              style="stroke: ${baseColor}; stroke-width: 3.5; stroke-linecap: round;" />
+                        <line x1="${p4[0]}" y1="${p4[1]}" x2="${p1[0]}" y2="${p1[1]}"
+                              style="stroke: ${sideColor}; stroke-width: 3; stroke-linecap: round;" />
+                        <line x1="${anchor[0]}" y1="${anchor[1]}" x2="${footX}" y2="${baseY}"
+                              style="stroke: ${heightColor}; stroke-width: 3.5; stroke-linecap: round;" />
+                        <text x="${baseMidX}" y="${baseLabelY}" text-anchor="middle"
+                              ${rotateTextAttr(rotation, baseMidX, baseLabelY)}
+                              style="fill: ${baseColor}; font-weight: 600;">${baseLetter}</text>
+                        <text x="${sideMidX}" y="${sideMidY}"
+                              ${rotateTextAttr(rotation, sideMidX, sideMidY)}
+                              style="fill: ${sideColor}; font-weight: 600;">${sideLetter}</text>
+                        <text x="${heightLabelX}" y="${heightLabelY}"
+                              ${rotateTextAttr(rotation, heightLabelX, heightLabelY)}
+                              style="fill: ${heightColor}; font-weight: 600;">${heightLetter}</text>
+                    </g>
                 </svg>`;
             }
         },
@@ -665,108 +913,164 @@
             label: "Trapez",
             formula: "A = ((a + c) / 2) · h",
             targets: ["area", "height", "a", "c"],
+            identify: () => [
+                { key: "baseA", label: "Grundseite (unten)" },
+                { key: "baseC", label: "Grundseite (oben)" },
+                { key: "height", label: "Höhe" },
+                { key: "legLeft", label: "Seite links" },
+                { key: "legRight", label: "Seite rechts" }
+            ],
             generate(unit) {
                 const baseA = randomValue(12, 26, 0.5);
                 const baseC = randomValue(6, baseA - 3, 0.5);
                 const height = randomValue(4, 12, 0.5);
-                const offset = (baseA - baseC) / 2;
-                const leg = Math.sqrt(offset * offset + height * height);
-                return { unit, params: { baseA, baseC, height, leg } };
+                const extra = Math.max(1.2, baseC * 0.4);
+                const offset = randomValue(-extra, (baseA - baseC) + extra, 0.5);
+                const leftOffset = offset;
+                const rightOffset = baseA - (offset + baseC);
+                const legLeft = roundMeasure(Math.sqrt(leftOffset * leftOffset + height * height));
+                const legRight = roundMeasure(Math.sqrt(rightOffset * rightOffset + height * height));
+                return { unit, params: { baseA, baseC, height, offset, legLeft, legRight } };
             },
             area({ baseA, baseC, height }) {
                 return ((baseA + baseC) / 2) * height;
             },
             prepare(target, generated) {
-                const { baseA, baseC, height, leg } = generated.params;
+                const { baseA, baseC, height, legLeft, legRight } = generated.params;
                 const unit = generated.unit;
                 const areaValue = this.area(generated.params);
-                const shared = [
-                    createEntry("b", "Seite b", leg, unit),
-                    createEntry("d", "Seite d", leg, unit)
+                const sharedLegs = [
+                    createEntry("legLeft", "Seite", legLeft, unit, { type: "side" }),
+                    createEntry("legRight", "Seite", legRight, unit, { type: "side" })
                 ];
                 const entries = {
                     area: {
                         prompt: "Berechne den Flächeninhalt A.",
                         given: [
-                            createEntry("a", "Grundseite a", baseA, unit),
-                            createEntry("c", "Grundseite c", baseC, unit),
-                            createEntry("h", "Höhe", height, unit),
-                            ...shared
+                            createEntry("baseA", "Grundseite a", baseA, unit, { type: "side" }),
+                            createEntry("baseC", "Grundseite c", baseC, unit, { type: "side" }),
+                            createEntry("height", "Höhe", height, unit, { type: "side" }),
+                            ...sharedLegs
                         ],
                         unitSuffix: `${unit}²`,
                         correctValue: areaValue,
-                        highlight: ["a", "c", "h"],
+                        highlight: ["baseA", "baseC", "height"],
                         hint: "A = ((a + c) / 2) · h"
                     },
                     height: {
                         prompt: "Höhe h ist gesucht.",
                         given: [
-                            createEntry("a", "Grundseite a", baseA, unit),
-                            createEntry("c", "Grundseite c", baseC, unit),
-                            createEntry("A", "Fläche", areaValue, `${unit}²`),
-                            ...shared
+                            createEntry("baseA", "Grundseite a", baseA, unit, { type: "side" }),
+                            createEntry("baseC", "Grundseite c", baseC, unit, { type: "side" }),
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
+                            ...sharedLegs
                         ],
                         unitSuffix: unit,
                         correctValue: height,
-                        highlight: ["a", "c", "h"],
+                        highlight: ["baseA", "baseC", "height"],
                         hint: "h = (2 · A) ÷ (a + c)"
                     },
                     a: {
-                        prompt: "Grundseite a ist gesucht.",
+                        prompt: "Die längere Grundseite ist gesucht.",
                         given: [
-                            createEntry("c", "Grundseite c", baseC, unit),
-                            createEntry("h", "Höhe", height, unit),
-                            createEntry("A", "Fläche", areaValue, `${unit}²`),
-                            ...shared
+                            createEntry("baseC", "Grundseite c", baseC, unit, { type: "side" }),
+                            createEntry("height", "Höhe", height, unit, { type: "side" }),
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
+                            ...sharedLegs
                         ],
                         unitSuffix: unit,
                         correctValue: baseA,
-                        highlight: ["a", "c", "h"],
-                        hint: "a = (2 · A ÷ h) − c"
+                        highlight: ["baseA", "baseC", "height"],
+                        hint: "a = (2 · A ÷ h) - c"
                     },
                     c: {
-                        prompt: "Grundseite c ist gesucht.",
+                        prompt: "Die kürzere Grundseite ist gesucht.",
                         given: [
-                            createEntry("a", "Grundseite a", baseA, unit),
-                            createEntry("h", "Höhe", height, unit),
-                            createEntry("A", "Fläche", areaValue, `${unit}²`),
-                            ...shared
+                            createEntry("baseA", "Grundseite a", baseA, unit, { type: "side" }),
+                            createEntry("height", "Höhe", height, unit, { type: "side" }),
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
+                            ...sharedLegs
                         ],
                         unitSuffix: unit,
                         correctValue: baseC,
-                        highlight: ["a", "c", "h"],
-                        hint: "c = (2 · A ÷ h) − a"
+                        highlight: ["baseA", "baseC", "height"],
+                        hint: "c = (2 · A ÷ h) - a"
                     }
                 };
                 return entries[target];
             },
-            draw(params) {
-                const { baseA, baseC, height } = params;
-                const scale = 4.5;
+            draw(params, unit, highlight, mapping = {}) {
+                const { baseA, baseC, height, offset = (baseA - baseC) / 2 } = params;
+                const scale = 4.4;
                 const a = baseA * scale;
                 const c = baseC * scale;
                 const h = height * scale;
-                const startX = (200 - a) / 2 + 10;
-                const baseY = 150;
-                const topX = startX + (a - c) / 2;
-                const topY = baseY - h;
+                const baseY = viewBox.height - 26;
+                const startX = (viewBox.width - a) / 2;
+                const topStartX = startX + offset * scale;
+                const rotation = pickRotation();
+                const baseALetter = mapping.baseA || "a";
+                const baseCLetter = mapping.baseC || "c";
+                const heightLetter = mapping.height || "h";
+                const legLeftLetter = mapping.legLeft || "b";
+                const legRightLetter = mapping.legRight || "d";
+                const baseAColor = getLetterColor(baseALetter);
+                const baseCColor = getLetterColor(baseCLetter);
+                const heightColor = getLetterColor(heightLetter);
+                const legLeftColor = getLetterColor(legLeftLetter);
+                const legRightColor = getLetterColor(legRightLetter);
+                const p1 = [startX, baseY];
+                const p2 = [startX + a, baseY];
+                const p3 = [topStartX + c, baseY - h];
+                const p4 = [topStartX, baseY - h];
+                const anchor = Math.random() > 0.5 ? p3 : p4;
+                const footX = anchor[0];
+                const helper = [];
+                if (footX < p1[0]) {
+                    helper.push(`<line x1="${footX}" y1="${baseY}" x2="${p1[0]}" y2="${baseY}" style="stroke-dasharray: 6 4; stroke: ${baseAColor}; stroke-width: 2;" />`);
+                } else if (footX > p2[0]) {
+                    helper.push(`<line x1="${p2[0]}" y1="${baseY}" x2="${footX}" y2="${baseY}" style="stroke-dasharray: 6 4; stroke: ${baseAColor}; stroke-width: 2;" />`);
+                }
+                const baseABottomY = baseY + 14;
+                const baseCTopY = p4[1] - 14;
+                const heightLabelX = anchor[0] + 12;
+                const heightLabelY = (anchor[1] + baseY) / 2;
+                const leftLegMidX = (p1[0] + p4[0]) / 2 - 8;
+                const leftLegMidY = (p1[1] + p4[1]) / 2;
+                const rightLegMidX = (p2[0] + p3[0]) / 2 + 8;
+                const rightLegMidY = (p2[1] + p3[1]) / 2;
                 return `
-                <svg viewBox="0 0 220 180">
-                    <polygon points="${startX},${baseY} ${startX + a},${baseY} ${topX + c},${topY} ${topX},${topY}"
-                             style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;"/>
-                    <line x1="${startX}" y1="${baseY + 12}" x2="${startX + a}" y2="${baseY + 12}"
-                          style="stroke: ${measureColors.a}; stroke-width: 2;"/>
-                    <line x1="${topX}" y1="${topY - 12}" x2="${topX + c}" y2="${topY - 12}"
-                          style="stroke: ${measureColors.c}; stroke-width: 2;"/>
-                    <line x1="${topX + c}" y1="${topY}" x2="${topX + c}" y2="${baseY}"
-                          style="stroke: ${measureColors.h}; stroke-width: 2;"/>
-                    <text x="${startX + a / 2}" y="${baseY + 28}" text-anchor="middle"
-                          style="fill: ${measureColors.a}; font-weight: 600;">a</text>
-                    <text x="${topX + c / 2}" y="${topY - 18}" text-anchor="middle"
-                          style="fill: ${measureColors.c}; font-weight: 600;">c</text>
-                    <text x="${topX + c + 12}" y="${topY + h / 2}"
-                          transform="rotate(-90 ${topX + c + 12} ${topY + h / 2})"
-                          style="fill: ${measureColors.h}; font-weight: 600;">h</text>
+                <svg viewBox="0 0 ${viewBox.width} ${viewBox.height}">
+                    <g transform="rotate(${rotation} ${viewBox.centerX} ${viewBox.centerY})">
+                        <polygon points="${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]} ${p4[0]},${p4[1]}"
+                                 style="fill: rgba(76,124,240,.15); stroke: var(--accent); stroke-width: 2;" />
+                        ${helper.join("")}
+                        <line x1="${p1[0]}" y1="${baseABottomY}" x2="${p2[0]}" y2="${baseABottomY}"
+                              style="stroke: ${baseAColor}; stroke-width: 3.5; stroke-linecap: round;" />
+                        <line x1="${p4[0]}" y1="${baseCTopY}" x2="${p3[0]}" y2="${baseCTopY}"
+                              style="stroke: ${baseCColor}; stroke-width: 3.5; stroke-linecap: round;" />
+                        <line x1="${p1[0]}" y1="${p1[1]}" x2="${p4[0]}" y2="${p4[1]}"
+                              style="stroke: ${legLeftColor}; stroke-width: 3; stroke-linecap: round;" />
+                        <line x1="${p2[0]}" y1="${p2[1]}" x2="${p3[0]}" y2="${p3[1]}"
+                              style="stroke: ${legRightColor}; stroke-width: 3; stroke-linecap: round;" />
+                        <line x1="${anchor[0]}" y1="${anchor[1]}" x2="${footX}" y2="${baseY}"
+                              style="stroke: ${heightColor}; stroke-width: 3.5; stroke-linecap: round;" />
+                        <text x="${(p1[0] + p2[0]) / 2}" y="${baseABottomY + 16}" text-anchor="middle"
+                              ${rotateTextAttr(rotation, (p1[0] + p2[0]) / 2, baseABottomY + 16)}
+                              style="fill: ${baseAColor}; font-weight: 600;">${baseALetter}</text>
+                        <text x="${(p3[0] + p4[0]) / 2}" y="${baseCTopY - 10}" text-anchor="middle"
+                              ${rotateTextAttr(rotation, (p3[0] + p4[0]) / 2, baseCTopY - 10)}
+                              style="fill: ${baseCColor}; font-weight: 600;">${baseCLetter}</text>
+                        <text x="${leftLegMidX}" y="${leftLegMidY}"
+                              ${rotateTextAttr(rotation, leftLegMidX, leftLegMidY)}
+                              style="fill: ${legLeftColor}; font-weight: 600;">${legLeftLetter}</text>
+                        <text x="${rightLegMidX}" y="${rightLegMidY}"
+                              ${rotateTextAttr(rotation, rightLegMidX, rightLegMidY)}
+                              style="fill: ${legRightColor}; font-weight: 600;">${legRightLetter}</text>
+                        <text x="${heightLabelX}" y="${heightLabelY}"
+                              ${rotateTextAttr(rotation, heightLabelX, heightLabelY)}
+                              style="fill: ${heightColor}; font-weight: 600;">${heightLetter}</text>
+                    </g>
                 </svg>`;
             }
         }
@@ -809,7 +1113,9 @@
         timerId: null,
         timeLeft: 0,
         history: [],
-        solved: false
+        solved: false,
+        mappingSolved: false,
+        userSelections: {}
     };
 
     const elements = {
@@ -831,7 +1137,10 @@
         historyList: document.getElementById("historyList"),
         modeInfo: document.getElementById("modeInfo"),
         timerDisplay: document.getElementById("timerDisplay"),
-        streakDisplay: document.getElementById("streakDisplay")
+        streakDisplay: document.getElementById("streakDisplay"),
+        sideSelection: document.getElementById("sideSelection"),
+        sideSelectionFields: document.getElementById("sideSelectionFields"),
+        sideSelectionMessage: document.getElementById("sideSelectionMessage")
     };
 
     const shapeCheckboxes = Array.from(document.querySelectorAll('input[name="shape"]'));
@@ -924,6 +1233,12 @@
         const targets = config.targets.filter(target => state.settings.targets.has(target));
         const target = pickRandom(targets);
         const taskData = config.prepare(target, generated, unit);
+        const identifyList = typeof config.identify === "function" ? config.identify(generated.params, target) : [];
+        let sideMapping = assignLetters(identifyList);
+        const customMapping = getCustomMapping(shapeKey);
+        if (customMapping) {
+            sideMapping = customMapping;
+        }
         state.currentTask = {
             shapeKey,
             target,
@@ -935,8 +1250,12 @@
             hint: taskData.hint,
             unitSuffix: taskData.unitSuffix,
             unit,
-            formula: config.formula
+            formula: config.formula,
+            identify: identifyList,
+            sideMapping
         };
+        state.mappingSolved = identifyList.length === 0;
+        state.userSelections = {};
         state.correctValue = taskData.correctValue;
         state.unitSuffix = taskData.unitSuffix;
         elements.unitLabel.textContent = taskData.unitSuffix;
@@ -953,12 +1272,18 @@
         const config = state.currentTask.config;
         elements.taskTitle.textContent = `${config.label}: ${targetLabels[state.currentTask.target] ?? "A"} gesucht`;
         elements.taskPrompt.textContent = state.currentTask.prompt;
+        const sideMapping = state.currentTask.sideMapping || {};
         elements.givenValues.innerHTML = state.currentTask.given.map(entry => {
-            const color = measureColors[entry.symbol] || "var(--fg)";
+            const isSide = entry.type === "side";
+            const mappedSymbol = isSide ? (sideMapping[entry.key] || "?") : (entry.display || entry.key || "");
+            const label = isSide ? `Seite ${mappedSymbol}` : entry.label;
+            const color = isSide ? getLetterColor(mappedSymbol) : (entry.display ? (extraColors[entry.display] || "var(--fg)") : "var(--fg)");
             const valueText = typeof entry.value === "number" ? formatNumber(entry.value) : entry.value;
-            return `<li><span><span class="given-symbol" style="color:${color}">${entry.symbol}</span> ${entry.label}</span><span>${valueText} ${entry.unit || ""}</span></li>`;
+            const unit = entry.unit || "";
+            return `<li><span><span class="given-symbol" style="color:${color}">${mappedSymbol}</span> ${label}</span><span>${valueText} ${unit}</span></li>`;
         }).join("");
-        elements.drawing.innerHTML = config.draw(state.currentTask.params, state.currentTask.unit, state.currentTask.highlight);
+        elements.drawing.innerHTML = config.draw(state.currentTask.params, state.currentTask.unit, state.currentTask.highlight, sideMapping);
+        renderSideSelection();
         const mode = modes[state.settings.mode];
         if (mode.showHints) {
             elements.formulaHint.classList.remove("hidden");
@@ -967,6 +1292,61 @@
             elements.formulaHint.classList.add("hidden");
             elements.formulaHint.textContent = "";
         }
+    }
+
+    function renderSideSelection() {
+        const identifyList = state.currentTask?.identify ?? [];
+        if (!identifyList.length) {
+            elements.sideSelection.classList.add("hidden");
+            elements.sideSelectionFields.innerHTML = "";
+            elements.sideSelectionMessage.textContent = "";
+            return;
+        }
+        const sideMapping = state.currentTask.sideMapping || {};
+        const letters = [...new Set(Object.values(sideMapping))];
+        elements.sideSelection.classList.remove("hidden");
+        elements.sideSelection.classList.remove("error", "success");
+        if (state.mappingSolved) {
+            elements.sideSelection.classList.add("success");
+        }
+        elements.sideSelectionMessage.textContent = state.mappingSolved ? "Zuordnung korrekt! Jetzt Ergebnis berechnen." : "Ordne zu, welche Seite Grundseite bzw. Höhe ist.";
+        elements.sideSelectionFields.innerHTML = identifyList.map(item => {
+            const correctLetter = sideMapping[item.key];
+            const currentValue = state.mappingSolved ? correctLetter : (state.userSelections[item.key] || "");
+            const options = ['<option value="">– auswählen –</option>', ...letters.map(letter => `<option value="${letter}" ${currentValue === letter ? "selected" : ""}>${letter}</option>`)].join("");
+            return `<label class="side-select">${item.label}<select data-key="${item.key}">${options}</select></label>`;
+        }).join("");
+        elements.sideSelectionFields.querySelectorAll("select").forEach(select => {
+            select.disabled = state.mappingSolved;
+        });
+    }
+
+    function validateSideSelection() {
+        if (state.mappingSolved) return true;
+        const identifyList = state.currentTask?.identify ?? [];
+        if (!identifyList.length) {
+            state.mappingSolved = true;
+            return true;
+        }
+        for (const item of identifyList) {
+            if (!state.userSelections[item.key]) {
+                elements.sideSelection.classList.add("error");
+                elements.sideSelectionMessage.textContent = `${item.label} fehlt noch.`;
+                showFeedback(false, `Ordne zuerst ${item.label} zu.`);
+                return false;
+            }
+        }
+        const errors = identifyList.filter(item => state.userSelections[item.key] !== state.currentTask.sideMapping[item.key]);
+        if (errors.length) {
+            elements.sideSelection.classList.add("error");
+            elements.sideSelectionMessage.textContent = "Zuordnung stimmt noch nicht.";
+            showFeedback(false, "Die Buchstaben-Zuordnung ist noch falsch.");
+            return false;
+        }
+        state.mappingSolved = true;
+        state.userSelections = {};
+        renderSideSelection();
+        return true;
     }
 
     function parseInput() {
@@ -1005,6 +1385,9 @@
             if (modeKey === "timer") {
                 setTimeout(startTask, 1500);
             }
+            return;
+        }
+        if (!state.mappingSolved && !validateSideSelection()) {
             return;
         }
         const userInput = parseInput();
@@ -1075,6 +1458,10 @@
         if (!state.currentTask) return;
         clearTimer();
         state.solved = true;
+        if (!state.mappingSolved) {
+            state.mappingSolved = true;
+            renderSideSelection();
+        }
         elements.checkBtn.disabled = true;
         elements.answerInput.disabled = true;
         showFeedback(false, `Die korrekte Lösung: ${targetLabels[state.currentTask.target] ?? "A"} = ${formatNumber(state.correctValue)} ${state.unitSuffix}`);
@@ -1137,6 +1524,13 @@
     elements.answerInput.addEventListener("keydown", event => {
         if (event.key === "Enter") {
             checkAnswer(false);
+        }
+    });
+
+    elements.sideSelectionFields.addEventListener("change", event => {
+        if (event.target.matches("select[data-key]")) {
+            state.userSelections[event.target.dataset.key] = event.target.value;
+            elements.sideSelection.classList.remove("error");
         }
     });
 
