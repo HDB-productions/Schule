@@ -69,19 +69,26 @@
             margin-bottom: .5rem;
         }
 
-        .settings-toggle {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            border: 1px solid var(--border);
-            background: var(--card);
-            color: var(--fg);
-            display: grid;
-            place-items: center;
-            font-size: 1.35rem;
-            cursor: pointer;
-            transition: transform .15s ease, box-shadow .15s ease;
-        }
+.settings-toggle {
+    line-height: 1;
+    width: 46px;          /* wieder schön kompakt & rund */
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--fg);
+    display: grid;
+    place-items: center;
+    font-size: 1.35rem;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+/* Feinjustierung des Emojis in X-Richtung */
+.settings-icon {
+    display: inline-block;
+    transform: translateX(-8px);
+}
 
         .settings-toggle:active {
             transform: scale(0.95);
@@ -221,6 +228,10 @@
         .given-symbol {
             font-weight: 600;
             letter-spacing: 0.04em;
+        }
+
+        .given-side-label {
+            font-weight: 600;
         }
 
         .side-selection {
@@ -363,9 +374,9 @@
             <p>Übe Rechteck, Dreieck, Parallelogramm und Trapez: Wähle aus, welche Figuren und welche gesuchte Größe
                 abgefragt werden und lasse dir zufällige Aufgaben generieren.</p>
         </div>
-        <button id="settingsBtn" class="settings-toggle" aria-label="Einstellungen">
-            ⚙
-        </button>
+<button id="settingsBtn" class="settings-toggle" aria-label="Einstellungen">
+    <span class="settings-icon">⚙</span>
+</button>
     </div>
 
     <div id="settingsBackdrop" class="settings-backdrop hidden"></div>
@@ -382,8 +393,8 @@
             <label><input type="checkbox" name="target" value="area" checked> Fläche A</label>
             <label><input type="checkbox" name="target" value="base" checked> Grundseite g</label>
             <label><input type="checkbox" name="target" value="height" checked> Höhe h</label>
-            <label><input type="checkbox" name="target" value="a" checked> Trapezseite a</label>
-            <label><input type="checkbox" name="target" value="c" checked> Trapezseite c</label>
+            <label><input type="checkbox" name="target" value="longBase" checked> längere Grundseite</label>
+            <label><input type="checkbox" name="target" value="shortBase" checked> kürzere Grundseite</label>
         </div>
         <div class="settings-group">
             <h3>Trainingsmodus</h3>
@@ -406,7 +417,7 @@
             <p id="taskPrompt">Tippe auf "Neue Aufgabe", um loszulegen.</p>
             <ul id="givenValues" class="given-values"></ul>
             <div id="sideSelection" class="side-selection hidden">
-                <h3>Ordne die Buchstaben zu</h3>
+                <h3>Ordne die Variablen zu</h3>
                 <div id="sideSelectionFields" class="side-selection-fields"></div>
                 <p id="sideSelectionMessage" class="side-selection-message"></p>
             </div>
@@ -487,8 +498,8 @@
         area: "A",
         base: "g",
         height: "h",
-        a: "a",
-        c: "c"
+        longBase: "längere Grundseite",
+        shortBase: "kürzere Grundseite"
     };
 
     const viewBox = { width: 220, height: 180, centerX: 110, centerY: 90 };
@@ -572,8 +583,8 @@
                     area: {
                         prompt: "Berechne den Flächeninhalt A.",
                         given: [
-                            createEntry("base", "Seite a", base, unit, { type: "side" }),
-                            createEntry("height", "Seite b", height, unit, { type: "side" })
+                            createEntry("base", "Seite", base, unit, { type: "side" }),
+                            createEntry("height", "Seite", height, unit, { type: "side" })
                         ],
                         unitSuffix: `${unit}²`,
                         correctValue: areaValue,
@@ -583,7 +594,7 @@
                     base: {
                         prompt: "Seite a ist gesucht.",
                         given: [
-                            createEntry("height", "Seite b", height, unit, { type: "side" }),
+                            createEntry("height", "Seite", height, unit, { type: "side" }),
                             createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" })
                         ],
                         unitSuffix: unit,
@@ -594,7 +605,7 @@
                     height: {
                         prompt: "Seite b ist gesucht.",
                         given: [
-                            createEntry("base", "Seite a", base, unit, { type: "side" }),
+                            createEntry("base", "Seite", base, unit, { type: "side" }),
                             createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" })
                         ],
                         unitSuffix: unit,
@@ -677,7 +688,7 @@
                     area: {
                         prompt: "Berechne den Flächeninhalt A.",
                         given: [
-                            createEntry("base", "Grundseite", base, unit, { type: "side" }),
+                            createEntry("base", "Seite", base, unit, { type: "side" }),
                             createEntry("height", "Höhe", height, unit, { type: "side" }),
                             ...sharedSides
                         ],
@@ -690,8 +701,7 @@
                         prompt: "Die zur Höhe gehörende Grundseite ist gesucht.",
                         given: [
                             createEntry("height", "Höhe", height, unit, { type: "side" }),
-                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
-                            ...sharedSides
+                            createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" })
                         ],
                         unitSuffix: unit,
                         correctValue: base,
@@ -701,7 +711,7 @@
                     height: {
                         prompt: "Höhe ist gesucht.",
                         given: [
-                            createEntry("base", "Grundseite", base, unit, { type: "side" }),
+                            createEntry("base", "Seite", base, unit, { type: "side" }),
                             createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
                             ...sharedSides
                         ],
@@ -784,7 +794,6 @@
             targets: ["area", "base", "height"],
             identify: () => [
                 { key: "base", label: "Grundseite" },
-                { key: "side", label: "Seite" },
                 { key: "height", label: "Höhe" }
             ],
             generate(unit) {
@@ -803,14 +812,13 @@
                 const unit = generated.unit;
                 const areaValue = this.area(generated.params);
                 const sharedInfo = [
-                    createEntry("side", "Seite", side, unit, { type: "side" }),
-                    createEntry("angle", "Winkel α", angleDeg, "°", { display: "α" })
+                    createEntry("side", "Seite", side, unit, { type: "side" })
                 ];
                 const entries = {
                     area: {
                         prompt: "Berechne den Flächeninhalt A.",
                         given: [
-                            createEntry("base", "Grundseite", base, unit, { type: "side" }),
+                            createEntry("base", "Seite", base, unit, { type: "side" }),
                             createEntry("height", "Höhe", height, unit, { type: "side" }),
                             ...sharedInfo
                         ],
@@ -820,11 +828,11 @@
                         hint: "A = g · h"
                     },
                     base: {
-                        prompt: "Grundseite ist gesucht.",
+                        prompt: "Zu h gehörende Grundseite ist gesucht.",
                         given: [
                             createEntry("height", "Höhe", height, unit, { type: "side" }),
                             createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
-                            ...sharedInfo
+                           
                         ],
                         unitSuffix: unit,
                         correctValue: base,
@@ -834,7 +842,7 @@
                     height: {
                         prompt: "Höhe ist gesucht.",
                         given: [
-                            createEntry("base", "Grundseite", base, unit, { type: "side" }),
+                            createEntry("base", "Seite", base, unit, { type: "side" }),
                             createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
                             ...sharedInfo
                         ],
@@ -912,13 +920,12 @@
         trapezoid: {
             label: "Trapez",
             formula: "A = ((a + c) / 2) · h",
-            targets: ["area", "height", "a", "c"],
-            identify: () => [
-                { key: "baseA", label: "Grundseite (unten)" },
-                { key: "baseC", label: "Grundseite (oben)" },
-                { key: "height", label: "Höhe" },
-                { key: "legLeft", label: "Seite links" },
-                { key: "legRight", label: "Seite rechts" }
+            targets: ["area", "height", "longBase", "shortBase"],
+
+identify: () => [
+    { key: "baseA", label: "Grundseite (längerer Teil)" },
+    { key: "baseC", label: "Grundseite (kürzerer Teil)" },
+    { key: "height", label: "Höhe" }
             ],
             generate(unit) {
                 const baseA = randomValue(12, 26, 0.5);
@@ -947,8 +954,8 @@
                     area: {
                         prompt: "Berechne den Flächeninhalt A.",
                         given: [
-                            createEntry("baseA", "Grundseite a", baseA, unit, { type: "side" }),
-                            createEntry("baseC", "Grundseite c", baseC, unit, { type: "side" }),
+                            createEntry("baseA", "Seite", baseA, unit, { type: "side" }),
+                            createEntry("baseC", "Seite", baseC, unit, { type: "side" }),
                             createEntry("height", "Höhe", height, unit, { type: "side" }),
                             ...sharedLegs
                         ],
@@ -960,8 +967,8 @@
                     height: {
                         prompt: "Höhe h ist gesucht.",
                         given: [
-                            createEntry("baseA", "Grundseite a", baseA, unit, { type: "side" }),
-                            createEntry("baseC", "Grundseite c", baseC, unit, { type: "side" }),
+                            createEntry("baseA", "Seite", baseA, unit, { type: "side" }),
+                            createEntry("baseC", "Seite", baseC, unit, { type: "side" }),
                             createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
                             ...sharedLegs
                         ],
@@ -970,10 +977,10 @@
                         highlight: ["baseA", "baseC", "height"],
                         hint: "h = (2 · A) ÷ (a + c)"
                     },
-                    a: {
+                    longBase: {
                         prompt: "Die längere Grundseite ist gesucht.",
                         given: [
-                            createEntry("baseC", "Grundseite c", baseC, unit, { type: "side" }),
+                            createEntry("baseC", "Seite", baseC, unit, { type: "side" }),
                             createEntry("height", "Höhe", height, unit, { type: "side" }),
                             createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
                             ...sharedLegs
@@ -983,10 +990,10 @@
                         highlight: ["baseA", "baseC", "height"],
                         hint: "a = (2 · A ÷ h) - c"
                     },
-                    c: {
+                    shortBase: {
                         prompt: "Die kürzere Grundseite ist gesucht.",
                         given: [
-                            createEntry("baseA", "Grundseite a", baseA, unit, { type: "side" }),
+                            createEntry("baseA", "Seite", baseA, unit, { type: "side" }),
                             createEntry("height", "Höhe", height, unit, { type: "side" }),
                             createEntry("area", "Fläche", areaValue, `${unit}²`, { display: "A" }),
                             ...sharedLegs
@@ -1102,7 +1109,7 @@
     const state = {
         settings: {
             shapes: new Set(["rectangle", "triangle", "parallelogram", "trapezoid"]),
-            targets: new Set(["area", "base", "height", "a", "c"]),
+            targets: new Set(["area", "base", "height", "longBase", "shortBase"]),
             mode: "training"
         },
         currentTask: null,
@@ -1276,11 +1283,25 @@
         elements.givenValues.innerHTML = state.currentTask.given.map(entry => {
             const isSide = entry.type === "side";
             const mappedSymbol = isSide ? (sideMapping[entry.key] || "?") : (entry.display || entry.key || "");
-            const label = isSide ? `Seite ${mappedSymbol}` : entry.label;
             const color = isSide ? getLetterColor(mappedSymbol) : (entry.display ? (extraColors[entry.display] || "var(--fg)") : "var(--fg)");
             const valueText = typeof entry.value === "number" ? formatNumber(entry.value) : entry.value;
             const unit = entry.unit || "";
-            return `<li><span><span class="given-symbol" style="color:${color}">${mappedSymbol}</span> ${label}</span><span>${valueText} ${unit}</span></li>`;
+            let leftContent = "";
+            let liStyle = "";
+            if (isSide) {
+                const baseLabel = (entry.label || "").trim();
+                const words = baseLabel.toLowerCase().split(/\s+/).filter(Boolean);
+                const symbolLower = mappedSymbol?.toLowerCase();
+                const hasLetterInLabel = symbolLower && words.includes(symbolLower);
+                const labelWithLetter = (!mappedSymbol || mappedSymbol === "?")
+                    ? baseLabel
+                    : hasLetterInLabel ? baseLabel : `${baseLabel} ${mappedSymbol}`;
+                leftContent = `<span class="given-side-label">${labelWithLetter}</span>`;
+                liStyle = ` style="color:${color}"`;
+            } else {
+                leftContent = `<span><span class="given-symbol" style="color:${color}">${mappedSymbol || ""}</span> ${entry.label}</span>`;
+            }
+            return `<li${liStyle}>${leftContent}<span>${valueText} ${unit}</span></li>`;
         }).join("");
         elements.drawing.innerHTML = config.draw(state.currentTask.params, state.currentTask.unit, state.currentTask.highlight, sideMapping);
         renderSideSelection();
@@ -1303,7 +1324,9 @@
             return;
         }
         const sideMapping = state.currentTask.sideMapping || {};
-        const letters = [...new Set(Object.values(sideMapping))];
+const letters = [...new Set(Object.values(sideMapping))].sort((a, b) =>
+    a.localeCompare(b, "de", { sensitivity: "base" })
+);
         elements.sideSelection.classList.remove("hidden");
         elements.sideSelection.classList.remove("error", "success");
         if (state.mappingSolved) {
@@ -1340,7 +1363,7 @@
         if (errors.length) {
             elements.sideSelection.classList.add("error");
             elements.sideSelectionMessage.textContent = "Zuordnung stimmt noch nicht.";
-            showFeedback(false, "Die Buchstaben-Zuordnung ist noch falsch.");
+            showFeedback(false, "Die Variablen-Zuordnung ist noch falsch.");
             return false;
         }
         state.mappingSolved = true;
