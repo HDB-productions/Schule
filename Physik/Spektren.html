@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Spektrum-Demo</title>
+<style>
+  body {
+    background: #111;
+    color: #eee;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 1.3rem;
+    margin-top: 0;
+  }
+  .container {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  #spectrumCanvas {
+    border: 1px solid #444;
+    background: #000;
+    display: block;
+    width: 100%;
+    max-width: 1200px;
+  }
+  fieldset {
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  legend {
+    padding: 0 0.3rem;
+    font-size: 0.9rem;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-right: 0.75rem;
+    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+  }
+  #tempValue {
+    font-variant-numeric: tabular-nums;
+  }
+  .hint {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-top: 0.25rem;
+  }
+  .mix-color {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .mix-color__swatch {
+    width: 48px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background: #000;
+  }
+  .mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: #ccc;
+  }
+  .mode-toggle input {
+    appearance: none;
+    width: 42px;
+    height: 22px;
+    border-radius: 999px;
+    background: #333;
+    position: relative;
+    border: 1px solid #555;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .mode-toggle input::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #bbb;
+    top: 1px;
+    left: 1px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .mode-toggle input:checked {
+    background: #1f7aec;
+    border-color: #3795ff;
+  }
+  .mode-toggle input:checked::before {
+    transform: translateX(20px);
+    background: #fff;
+  }
+  .mode-toggle input:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .mode-toggle span {
+    font-size: 0.8rem;
+    color: #bbb;
+  }
+</style>
+</head>
+<body>
+<h1>Sichtbare Spektren – Emission, Absorption & Sonne</h1>
+
+<div class="container">
+  <div>
+    <canvas id="spectrumCanvas" width="1200" height="260"></canvas>
+    <div class="hint">
+      Die folgende Mischfarbe fasst die aktuelle Wellenlängenverteilung ungefähr zusammen (gewichtetes Mittel über das Spektrum).
+    </div>
+    <div class="mix-color">
+      <span>Gemischte Farbe:</span>
+      <div id="colorSwatch" class="mix-color__swatch" aria-label="Gemischte Farbe"></div>
+
+    </div>
+  </div>
+
+  <div>
+    <fieldset class="line-fieldset">
+      <legend>
+        <span>Spektrallinien</span>
+        <label class="mode-toggle" for="modeToggle">
+          <span>Absorption</span>
+          <input type="checkbox" id="modeToggle" checked aria-label="Zwischen Absorption und Emission umschalten">
+          <span>Emission</span>
+        </label>
+      </legend>
+      <label><input type="checkbox" id="lineHydrogen" checked> Wasserstoff</label>
+      <label><input type="checkbox" id="lineSodium"> Natrium</label>
+      <label><input type="checkbox" id="lineMercury"> Quecksilber</label>
+      <div class="hint" id="modeHint">Modus: Emission</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Sonnenspektrum</legend>
+      <label><input type="checkbox" id="solarSpectrum"> Fraunhofer-Linien anzeigen</label>
+      <div class="hint">Sonnenspektrum kann nicht gemeinsam mit anderen Quellen aktiv sein.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Hintergrund</legend>
+      <label>
+        <input type="checkbox" id="blackbodyToggle" checked>
+        Schwarzkörperstrahlung
+      </label>
+      <br>
+      <label for="tempSlider">Temperatur:
+        <span id="tempValue">5800</span> K
+      </label>
+      <input type="range" id="tempSlider" min="1000" max="10000" step="100" value="5800">
+      <div class="hint">
+        Bestimmt das Kontinuum bei Absorption. Für die Sonne eignet sich 5800&nbsp;K.
+      </div>
+    </fieldset>
+  </div>
+</div>
+
+<script>
+  // --- Parameter für den sichtbaren Bereich ---
+  const wlMin = 380;  // nm
+  const wlMax = 780;  // nm
+
+  const canvas = document.getElementById('spectrumCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const spectrumHeight = 190; // oberer Bereich für das Spektrum
+  const axisHeight = canvas.height - spectrumHeight;
+
+  const colorSwatch = document.getElementById('colorSwatch');
+
+
+  // --- Spektrallinien (nm) ---
+  const hydrogenLines = [
+    { lambda: 656.28, label: "Hα (Balmer)", source: "Wasserstoff", width: 0.7, absWidth: 1.6, absDepth: 0.55 },
+    { lambda: 486.13, label: "Hβ (Balmer)", source: "Wasserstoff", width: 0.6, absWidth: 1.5, absDepth: 0.6 },
+    { lambda: 434.05, label: "Hγ (Balmer)", source: "Wasserstoff", width: 0.5, absWidth: 1.4, absDepth: 0.58 },
+    { lambda: 410.17, label: "Hδ (Balmer)", source: "Wasserstoff", width: 0.5, absWidth: 1.3, absDepth: 0.55 }
+  ];
+
+  const sodiumLines = [
+    { lambda: 589.00, label: "Na D₂", source: "Natrium", width: 0.6, absWidth: 1.1, absDepth: 0.7 },
+    { lambda: 589.59, label: "Na D₁", source: "Natrium", width: 0.6, absWidth: 1.1, absDepth: 0.65 }
+  ];
+
+  const mercuryLines = [
+    { lambda: 404.66, label: "Hg", source: "Quecksilber", width: 0.6, absWidth: 0.9, absDepth: 0.45 },
+    { lambda: 435.83, label: "Hg", source: "Quecksilber", width: 0.6, absWidth: 0.9, absDepth: 0.45 },
+    { lambda: 546.07, label: "Hg", source: "Quecksilber", width: 0.7, absWidth: 1.0, absDepth: 0.5 },
+    { lambda: 576.96, label: "Hg", source: "Quecksilber", width: 0.6, absWidth: 0.9, absDepth: 0.45 },
+    { lambda: 579.07, label: "Hg", source: "Quecksilber", width: 0.6, absWidth: 0.9, absDepth: 0.45 }
+  ];
+
+  // Fraunhofer-Linien nach NIST/IAU-Tabellen (nm) mit relativer Tiefe
+  const solarLines = [
+    { lambda: 393.366, label: "Ca II K", source: "Sonne", width: 1.4, depth: 0.9 },
+    { lambda: 396.847, label: "Ca II H", source: "Sonne", width: 1.3, depth: 0.88 },
+    { lambda: 410.174, label: "Hδ", source: "Sonne", width: 1.0, depth: 0.65 },
+    { lambda: 430.790, label: "G-Band (CH)", source: "Sonne", width: 1.1, depth: 0.72 },
+    { lambda: 434.047, label: "Hγ", source: "Sonne", width: 0.9, depth: 0.7 },
+    { lambda: 486.134, label: "Hβ", source: "Sonne", width: 0.9, depth: 0.72 },
+    { lambda: 516.733, label: "Mg b₁", source: "Sonne", width: 0.9, depth: 0.55 },
+    { lambda: 517.269, label: "Mg b₂", source: "Sonne", width: 0.9, depth: 0.55 },
+    { lambda: 518.362, label: "Mg b₃", source: "Sonne", width: 0.9, depth: 0.5 },
+    { lambda: 526.965, label: "Fe I", source: "Sonne", width: 0.8, depth: 0.45 },
+    { lambda: 589.000, label: "Na D₂", source: "Sonne", width: 0.8, depth: 0.85 },
+    { lambda: 589.592, label: "Na D₁", source: "Sonne", width: 0.8, depth: 0.8 },
+    { lambda: 656.281, label: "Hα", source: "Sonne", width: 1.1, depth: 0.68 },
+    { lambda: 686.719, label: "O₂ B-Band", source: "Sonne", width: 1.4, depth: 0.75 },
+    { lambda: 759.370, label: "O₂ A-Band", source: "Sonne", width: 1.9, depth: 0.82 },
+    { lambda: 769.238, label: "K I", source: "Sonne", width: 1.2, depth: 0.6 }
+  ];
+
+  // --- UI-Elemente ---
+  const modeToggle = document.getElementById('modeToggle');
+  const lineHydrogen = document.getElementById('lineHydrogen');
+  const lineSodium = document.getElementById('lineSodium');
+  const lineMercury = document.getElementById('lineMercury');
+  const speciesCheckboxes = [lineHydrogen, lineSodium, lineMercury];
+
+  const solarSpectrum = document.getElementById('solarSpectrum');
+
+  const blackbodyToggle = document.getElementById('blackbodyToggle');
+  const tempSlider = document.getElementById('tempSlider');
+  const tempValue = document.getElementById('tempValue');
+  const modeHint = document.getElementById('modeHint');
+
+  let storedSpeciesState = null;
+  let storedBlackbodyState = null;
+
+  tempSlider.addEventListener('input', () => {
+    tempValue.textContent = tempSlider.value;
+    drawSpectrum();
+  });
+
+  modeToggle.addEventListener('input', () => {
+    updateModeHint();
+    drawSpectrum();
+  });
+
+  speciesCheckboxes.forEach(cb =>
+    cb.addEventListener('input', () => {
+      updateModeHint();
+      drawSpectrum();
+    })
+  );
+
+  blackbodyToggle.addEventListener('input', drawSpectrum);
+
+  solarSpectrum.addEventListener('input', () => {
+    if (solarSpectrum.checked) {
+      storedSpeciesState = speciesCheckboxes.map(cb => ({ id: cb.id, checked: cb.checked }));
+      speciesCheckboxes.forEach(cb => cb.checked = false);
+      storedBlackbodyState = blackbodyToggle.checked;
+      blackbodyToggle.checked = false;
+    } else {
+      if (storedSpeciesState) {
+        storedSpeciesState.forEach(state => {
+          const checkbox = document.getElementById(state.id);
+          if (checkbox) checkbox.checked = state.checked;
+        });
+      }
+      storedSpeciesState = null;
+      if (storedBlackbodyState !== null) {
+        blackbodyToggle.checked = storedBlackbodyState;
+      }
+      storedBlackbodyState = null;
+    }
+    syncInterlocks();
+    updateModeHint();
+    drawSpectrum();
+  });
+
+  function syncInterlocks() {
+    const solarActive = solarSpectrum.checked;
+    speciesCheckboxes.forEach(cb => cb.disabled = solarActive);
+    modeToggle.disabled = solarActive;
+    blackbodyToggle.disabled = solarActive;
+    tempSlider.disabled = solarActive;
+  }
+
+  function updateModeHint() {
+    if (solarSpectrum.checked) {
+      modeHint.textContent = "Aktiv: Sonnenspektrum (Fraunhofer-Linien)";
+      return;
+    }
+    const selections = [];
+    if (lineHydrogen.checked) selections.push("Wasserstoff");
+    if (lineSodium.checked) selections.push("Natrium");
+    if (lineMercury.checked) selections.push("Quecksilber");
+
+    if (selections.length === 0) {
+      modeHint.textContent = "Keine Gasquelle ausgewählt";
+      return;
+    }
+
+    const modeLabel = modeToggle.checked ? "Emission" : "Absorption";
+    modeHint.textContent = `Aktiv: ${selections.join(', ')} – Modus: ${modeLabel}`;
+  }
+
+  // --- Mathematische Hilfsfunktionen ---
+
+  function lambdaToX(lambda) {
+    return (lambda - wlMin) / (wlMax - wlMin) * canvas.width;
+  }
+
+  function xToLambda(x) {
+    return wlMin + (x / canvas.width) * (wlMax - wlMin);
+  }
+
+  function gaussian(x, mu, sigmaNm) {
+    const d = (x - mu) / sigmaNm;
+    return Math.exp(-0.5 * d * d);
+  }
+
+  // Grob physikalische Planck-Funktion (skalierte Einheiten)
+  function planck(lambdaNm, T) {
+    // SI: lambda in m, T in K
+    const lambda = lambdaNm * 1e-9;
+    const c1 = 3.741e-16;   // 2 * h * c^2
+    const c2 = 1.4388e-2;   // h * c / k_B
+    return c1 / (Math.pow(lambda, 5) * (Math.exp(c2 / (lambda * T)) - 1));
+  }
+
+  function updateMixedColor(r, g, b) {
+    const clamp = (value) => Math.max(0, Math.min(255, Math.round(value)));
+    const cR = clamp(r);
+    const cG = clamp(g);
+    const cB = clamp(b);
+    const hex = [cR, cG, cB]
+      .map(v => v.toString(16).padStart(2, '0'))
+      .join('')
+      .toUpperCase();
+    colorSwatch.style.backgroundColor = `rgb(${cR}, ${cG}, ${cB})`;
+   
+  }
+
+  // Mapping Wellenlänge -> RGB (0..255), basierend auf einem bekannten Approx.-Algorithmus
+  function wavelengthToRGB(wavelength) {
+    let r = 0, g = 0, b = 0;
+    if (wavelength >= 380 && wavelength <= 440) {
+      r = -(wavelength - 440) / (440 - 380);
+      g = 0.0;
+      b = 1.0;
+    } else if (wavelength > 440 && wavelength <= 490) {
+      r = 0.0;
+      g = (wavelength - 440) / (490 - 440);
+      b = 1.0;
+    } else if (wavelength > 490 && wavelength <= 510) {
+      r = 0.0;
+      g = 1.0;
+      b = -(wavelength - 510) / (510 - 490);
+    } else if (wavelength > 510 && wavelength <= 580) {
+      r = (wavelength - 510) / (580 - 510);
+      g = 1.0;
+      b = 0.0;
+    } else if (wavelength > 580 && wavelength <= 645) {
+      r = 1.0;
+      g = -(wavelength - 645) / (645 - 580);
+      b = 0.0;
+    } else if (wavelength > 645 && wavelength <= 780) {
+      r = 1.0;
+      g = 0.0;
+      b = 0.0;
+    }
+
+    // Korrektur für Augenempfindlichkeit am Rand
+    let factor = 0.0;
+    if (wavelength >= 380 && wavelength < 420) {
+      factor = 0.3 + 0.7 * (wavelength - 380) / (420 - 380);
+    } else if (wavelength >= 420 && wavelength <= 700) {
+      factor = 1.0;
+    } else if (wavelength > 700 && wavelength <= 780) {
+      factor = 0.3 + 0.7 * (780 - wavelength) / (780 - 700);
+    }
+
+    r = Math.round(255 * r * factor);
+    g = Math.round(255 * g * factor);
+    b = Math.round(255 * b * factor);
+    return { r, g, b };
+  }
+
+  // --- Zeichnen des Spektrums ---
+  function drawSpectrum() {
+    const width = canvas.width;
+    const height = canvas.height;
+
+    const imageData = ctx.createImageData(width, height);
+    const data = imageData.data;
+    let mixR = 0;
+    let mixG = 0;
+    let mixB = 0;
+    let mixWeight = 0;
+
+  const useBlackbody = blackbodyToggle.checked;
+    const T = parseFloat(tempSlider.value);
+    const solarActive = solarSpectrum.checked;
+    const emissionMode = modeToggle.checked;
+    const hydrogenActive = lineHydrogen.checked && !solarActive;
+    const sodiumActive = lineSodium.checked && !solarActive;
+    const mercuryActive = lineMercury.checked && !solarActive;
+
+    const hasSpeciesSelection = hydrogenActive || sodiumActive || mercuryActive;
+    const wantsAbsorption = !solarActive && !emissionMode && hasSpeciesSelection;
+    const wantsEmission = !solarActive && emissionMode && hasSpeciesSelection;
+  const needsContinuum = solarActive || useBlackbody;
+
+    // 1) Kontinuum vorberechnen
+    const continuum = new Float32Array(width);
+    let maxCont = 0;
+
+    for (let x = 0; x < width; x++) {
+      const lambda = xToLambda(x);
+      let c = 0;
+
+      if (needsContinuum) {
+        const tempHere = solarActive ? 5800 : T;
+        c = planck(lambda, tempHere);
+      } else {
+        c = 0;
+      }
+
+      continuum[x] = c;
+      if (c > maxCont) maxCont = c;
+    }
+
+    if (maxCont === 0) maxCont = 1; // Vermeide Division durch 0
+
+    // 2) Für jede x-Spalte Intensität berechnen
+    for (let x = 0; x < width; x++) {
+      const lambda = xToLambda(x);
+      // Kontinuum normalisieren
+      let baseIntensity = continuum[x];
+      if (needsContinuum) {
+        baseIntensity = baseIntensity / maxCont;
+      }
+
+      // Absorptionslinien: schmälern das Kontinuum
+      if (wantsAbsorption) {
+        if (hydrogenActive) {
+          hydrogenLines.forEach(line => {
+            const depth = line.absDepth ?? 0.65;
+            const sigma = line.absWidth ?? line.width;
+            baseIntensity *= (1 - depth * gaussian(lambda, line.lambda, sigma));
+          });
+        }
+        if (sodiumActive) {
+          sodiumLines.forEach(line => {
+            const depth = line.absDepth ?? 0.7;
+            const sigma = line.absWidth ?? line.width;
+            baseIntensity *= (1 - depth * gaussian(lambda, line.lambda, sigma));
+          });
+        }
+        if (mercuryActive) {
+          mercuryLines.forEach(line => {
+            const depth = line.absDepth ?? 0.55;
+            const sigma = line.absWidth ?? line.width;
+            baseIntensity *= (1 - depth * gaussian(lambda, line.lambda, sigma));
+          });
+        }
+      }
+
+      if (solarActive) {
+        solarLines.forEach(line => {
+          const depth = line.depth ?? 0.8;
+          baseIntensity *= (1 - depth * gaussian(lambda, line.lambda, line.width));
+        });
+      }
+
+      // Emissionslinien: addieren Licht auf dunklem Hintergrund
+      let emissionIntensity = 0.0;
+      if (wantsEmission) {
+        if (hydrogenActive) {
+          hydrogenLines.forEach(line => {
+            const amp = 1.0;
+            emissionIntensity += amp * gaussian(lambda, line.lambda, 0.4);
+          });
+        }
+        if (sodiumActive) {
+          sodiumLines.forEach(line => {
+            const amp = 1.0;
+            emissionIntensity += amp * gaussian(lambda, line.lambda, 0.25);
+          });
+        }
+        if (mercuryActive) {
+          mercuryLines.forEach(line => {
+            const amp = 0.9;
+            emissionIntensity += amp * gaussian(lambda, line.lambda, 0.35);
+          });
+        }
+      }
+
+      let totalIntensity = baseIntensity + emissionIntensity;
+      if (totalIntensity > 1) totalIntensity = 1;
+      if (totalIntensity < 0) totalIntensity = 0;
+
+      const rgb = wavelengthToRGB(lambda);
+
+    const r = Math.round(rgb.r * totalIntensity);
+    const g = Math.round(rgb.g * totalIntensity);
+    const b = Math.round(rgb.b * totalIntensity);
+
+    const rLin = Math.pow(rgb.r / 255, 2.2);
+    const gLin = Math.pow(rgb.g / 255, 2.2);
+    const bLin = Math.pow(rgb.b / 255, 2.2);
+    mixR += rLin * totalIntensity;
+    mixG += gLin * totalIntensity;
+    mixB += bLin * totalIntensity;
+    mixWeight += totalIntensity;
+
+      for (let y = 0; y < spectrumHeight; y++) {
+        const index = 4 * (y * width + x);
+        data[index] = r;
+        data[index + 1] = g;
+        data[index + 2] = b;
+        data[index + 3] = 255;
+      }
+
+      // Unterer Bereich zunächst schwarz (wird später Achse drübergezeichnet)
+      for (let y = spectrumHeight; y < height; y++) {
+        const index = 4 * (y * width + x);
+        data[index] = 0;
+        data[index + 1] = 0;
+        data[index + 2] = 0;
+        data[index + 3] = 255;
+      }
+    }
+
+    if (mixWeight > 0) {
+      const invGamma = 1 / 2.2;
+      const avgR = Math.pow(mixR / mixWeight, invGamma) * 255;
+      const avgG = Math.pow(mixG / mixWeight, invGamma) * 255;
+      const avgB = Math.pow(mixB / mixWeight, invGamma) * 255;
+      updateMixedColor(avgR, avgG, avgB);
+    } else {
+      updateMixedColor(0, 0, 0);
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    drawAxis();
+  }
+
+  // --- Achsenbeschriftung ---
+  function drawAxis() {
+    ctx.save();
+    ctx.fillStyle = "#fff";
+    ctx.font = "12px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+
+    const yAxis = spectrumHeight + 5;
+
+    // Hauptmarken alle 100 nm, kleine Striche alle 10 nm
+    for (let wl = 380; wl <= 780; wl += 10) {
+      const x = lambdaToX(wl);
+      const isMajor = wl % 100 === 0;
+      ctx.strokeStyle = "#666";
+      ctx.beginPath();
+      ctx.moveTo(x + 0.5, spectrumHeight);
+      ctx.lineTo(x + 0.5, spectrumHeight + (isMajor ? 12 : 6));
+      ctx.stroke();
+
+      if (isMajor) {
+        ctx.fillText(wl.toString() + " nm", x, yAxis + 10);
+      }
+    }
+
+    // Achsentitel
+    ctx.fillText("Wellenlänge λ [nm]", canvas.width / 2, spectrumHeight + axisHeight - 18);
+
+    ctx.restore();
+  }
+
+  // Initial zeichnen
+  syncInterlocks();
+  updateModeHint();
+  drawSpectrum();
+</script>
+</body>
+</html>
