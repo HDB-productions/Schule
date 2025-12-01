@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Präfix-Übungs-App</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 1rem auto;
+      max-width: 900px;
+      line-height: 1.4;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .panel {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1rem;
+    }
+    .panel h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+    }
+    .config-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .config-block {
+      min-width: 220px;
+    }
+    .prefix-list, .quantity-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem 0.8rem;
+    }
+    label {
+      user-select: none;
+    }
+    .small-note {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    #pointsDisplay {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    button {
+      padding: 0.3rem 0.7rem;
+      border-radius: 4px;
+      border: 1px solid #666;
+      cursor: pointer;
+      background: #f4f4f4;
+    }
+    button:hover {
+      background: #e8e8e8;
+    }
+    .task-text {
+      margin-bottom: 0.5rem;
+      font-size: 1.05rem;
+    }
+    .step {
+      margin-top: 0.6rem;
+      padding-top: 0.4rem;
+      border-top: 1px dashed #ccc;
+    }
+    .step-title {
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+    input[type="text"], select {
+      padding: 0.1rem 0.3rem;
+      font-size: 1rem;
+    }
+    input[type="text"] {
+      min-width: 3ch;
+    }
+    .exp-input {
+      width: 3ch;
+      text-align: center;
+    }
+    input.correct, select.correct {
+      background-color: #c8f7c5;
+      border: 1px solid #2ecc71;
+    }
+    input.incorrect, select.incorrect {
+      background-color: #fdd;
+      border: 1px solid #e74c3c;
+    }
+    input.needs-attention, select.needs-attention {
+      background-color: #fff4b3;
+      border-color: #d4a017;
+    }
+    .hidden {
+      display: none;
+    }
+    .math {
+      font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif;
+    }
+    .litre-symbol {
+      font-family: "Cambria", "Times New Roman", cursive;
+      font-style: italic;
+    }
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .icon-button {
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      border: 1px solid #666;
+      background: #f4f4f4;
+    }
+    .icon-button[aria-expanded="true"] {
+      background: #e8e8e8;
+    }
+    .page-footer {
+      text-align: right;
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trainer für SI-Präfixe</h1>
+
+  <div class="panel">
+    <div class="task-header">
+      <div id="pointsDisplay">Punkte: 0</div>
+      <div class="header-actions">
+        <button id="toggleSettingsBtn" class="icon-button" aria-label="Einstellungen einblenden" aria-expanded="false" aria-controls="settingsPanel">⚙️</button>
+        <button id="newTaskBtn">Neue Aufgabe</button>
+      </div>
+    </div>
+    <div class="small-note">„Neue Aufgabe“ wird freigeschaltet, sobald die aktuelle Aufgabe vollständig abgeschlossen ist.</div>
+  </div>
+
+  <div class="page-footer">HDB 2025</div>
+
+  <div id="settingsPanel" class="panel hidden" aria-hidden="true">
+    <h2>Einstellungen</h2>
+    <div class="config-section">
+      <div class="config-block">
+        <strong>Präfixe</strong>
+        <div class="prefix-list">
+          <label><input type="checkbox" class="prefixCheckbox" value="T" checked> T</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="G" checked> G</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="M" checked> M</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="k" checked> k</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="h" checked> h</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="da" checked> da</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="d" checked> d</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="c" checked> c</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="m" checked> m</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="μ" checked> μ</label>
+          <label><input type="checkbox" class="prefixCheckbox" value="n" checked> n</label>
+        </div>
+        <div class="small-note">Mindestens zwei Präfixe aktiv lassen.</div>
+      </div>
+
+      <div class="config-block">
+        <strong>Grundgrößen</strong>
+        <div class="quantity-list">
+          <label><input type="checkbox" class="quantityCheckbox" value="length" checked> Länge (m)</label>
+          <label><input type="checkbox" class="quantityCheckbox" value="mass" checked> Masse (g)</label>
+          <label><input type="checkbox" class="quantityCheckbox" value="volume" checked> Volumen (<span class="litre-symbol">ℓ</span>)</label>
+        </div>
+        <div id="tonneOptionWrapper" class="small-note">
+          <label><input type="checkbox" id="useTonneCheckbox"> Für Masse: „t“ statt „Mg“ (10<sup>6</sup> g)</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Aufgabe</h2>
+    <div id="noTaskHint" class="small-note">
+      Wähle oben Präfixe und Grundgrößen und klicke auf „Neue Aufgabe“.
+    </div>
+
+    <div id="taskContainer" class="hidden">
+      <div class="task-text" id="taskIntro"></div>
+
+      <!-- Schritt 1 -->
+      <div class="step" id="step1">
+        <div class="step-title">Schritt 1: Präfixe als Zehnerpotenzen</div>
+        <div class="task-text">Schreibe die Präfixe zunächst als Zehnerpotenz.</div>
+        <div class="math">
+          <div>
+            1 <span id="s1_unitFrom"></span> = 10
+            <sup>
+              <input type="text" id="s1_expFrom" class="exp-input" maxlength="3" data-score="0" data-attempts="0">
+            </sup>
+            <span id="s1_baseUnit"></span>
+          </div>
+          <div>
+            1 <span id="s1_unitTo"></span> = 10
+            <sup>
+              <input type="text" id="s1_expTo" class="exp-input" maxlength="3" data-score="0" data-attempts="0">
+            </sup>
+            <span id="s1_baseUnit2"></span>
+          </div>
+        </div>
+        <button id="checkStep1Btn">Schritt 1 prüfen</button>
+      </div>
+
+      <!-- Schritt 2 -->
+      <div class="step hidden" id="step2">
+        <div class="step-title">Schritt 2: Stellenunterschied</div>
+        <div class="math">
+          <span id="s2_unitFrom"></span> ist um
+          <input type="text" id="s2_diff" data-score="0" data-attempts="0" style="width:4ch">
+          Stellen
+          <select id="s2_relation" data-score="0" data-attempts="0">
+            <option value="">– bitte wählen –</option>
+            <option value="größer">größer</option>
+            <option value="kleiner">kleiner</option>
+          </select>
+          als <span id="s2_unitTo"></span>.
+        </div>
+        <button id="checkStep2Btn">Schritt 2 prüfen</button>
+      </div>
+
+      <!-- Schritt 3 -->
+      <div class="step hidden" id="step3">
+        <div class="step-title">Schritt 3: Umrechnungsfaktor</div>
+        <div class="math">
+          <span id="s3_valueN"></span>
+          <span id="s3_unitFrom"></span>
+          = <span id="s3_valueN2"></span> · 10
+          <sup>
+            <input type="text" id="s3_expDiff" class="exp-input" maxlength="3" data-score="0" data-attempts="0">
+          </sup>
+          <span id="s3_unitTo"></span>
+        </div>
+        <button id="checkStep3Btn">Schritt 3 prüfen</button>
+      </div>
+
+      <!-- Schritt 4 -->
+      <div class="step hidden" id="step4">
+        <div class="step-title">Schritt 4: Ergebnis als Dezimalzahl</div>
+        <div class="math">
+          <span id="s4_valueN"></span>
+          <span id="s4_unitFrom"></span>
+          = <input type="text" id="s4_resultValue" data-score="0" data-attempts="0">
+          <span id="s4_unitTo"></span>
+        </div>
+        <div class="small-note">
+          Verwende ein Komma als Dezimalzeichen (z.&nbsp;B. 0,25).
+        </div>
+        <button id="checkStep4Btn">Schritt 4 prüfen</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Präfix-Exponenten
+    const PREFIX_EXPONENTS = {
+      "T": 12,
+      "G": 9,
+      "M": 6,
+      "k": 3,
+      "h": 2,
+      "da": 1,
+      "d": -1,
+      "c": -2,
+      "m": -3,
+      "μ": -6,
+      "n": -9
+    };
+
+  let points = 0;
+
+  const newTaskBtn = document.getElementById("newTaskBtn");
+  const toggleSettingsBtn = document.getElementById("toggleSettingsBtn");
+  const settingsPanel = document.getElementById("settingsPanel");
+
+  let taskActive = false;
+  let taskComplete = true;
+
+    const state = {
+      quantityType: null,      // 'length' | 'mass' | 'volume'
+      prefixFrom: null,
+      prefixTo: null,
+      expFrom: 0,
+      expTo: 0,
+      valueNStr: "1",
+      valueNNum: 1,
+      expDiff: 0,
+      correctRelation: "größer"  // or "kleiner"
+    };
+
+    function updatePointsDisplay() {
+      document.getElementById("pointsDisplay").textContent = "Punkte: " + points;
+    }
+
+    function updateNewTaskButtonState() {
+      newTaskBtn.disabled = taskActive && !taskComplete;
+    }
+
+    function setTaskInProgress() {
+      taskActive = true;
+      taskComplete = false;
+      updateNewTaskButtonState();
+    }
+
+    function setTaskCompleted() {
+      taskComplete = true;
+      updateNewTaskButtonState();
+    }
+
+    function getSelectedPrefixes() {
+      const boxes = document.querySelectorAll(".prefixCheckbox");
+      const arr = [];
+      boxes.forEach(cb => {
+        if (cb.checked) arr.push(cb.value);
+      });
+      return arr;
+    }
+
+    function getSelectedQuantities() {
+      const boxes = document.querySelectorAll(".quantityCheckbox");
+      const arr = [];
+      boxes.forEach(cb => {
+        if (cb.checked) arr.push(cb.value);
+      });
+      return arr;
+    }
+
+    function randomChoice(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // Einheiten-Bezeichner für Anzeige (kg, Gg, t, mℓ, …)
+    function getUnitSymbol(quantityType, prefix, useTonne) {
+      if (quantityType === "mass" && useTonne && prefix === "M") {
+        return "t";
+      }
+      let baseSymbol = "m";
+      if (quantityType === "mass") baseSymbol = "g";
+      if (quantityType === "volume") baseSymbol = "ℓ";
+      return prefix + baseSymbol;
+    }
+
+    function getBaseUnitSymbol(quantityType) {
+      if (quantityType === "mass") return "g";
+      if (quantityType === "volume") return "ℓ";
+      return "m";
+    }
+
+    // Zufallszahl-Generierung mit Punkte-abhängiger Schwierigkeit
+    function generateRandomValue(points) {
+      // Rückgabe: {str: "0,25", num: 0.25}
+      if (points <= -10) {
+        return { str: "1", num: 1 };
+      }
+
+      if (points < 0) {
+        // Einstellige ganze Zahl 1..9
+        const n = 1 + Math.floor(Math.random() * 9);
+        return { str: String(n), num: n };
+      }
+
+      if (points < 10) {
+        // Immer zweistellige ganze Zahl 10..99
+        const n = 10 + Math.floor(Math.random() * 90);
+        return { str: String(n), num: n };
+      }
+
+      // Punkte >= 10: Wahrscheinlichkeitssteuerung
+      const difficulty = Math.min(Math.max(points - 10, 0), 40); // 0..40
+
+      // Wahrscheinlichkeiten für Anzahl signifikanter Stellen
+      const t = difficulty / 40; // 0..1
+      const p1 = 0.2 - 0.1 * t; // 0.2 -> 0.1
+      const p3 = 0.1 + 0.5 * t; // 0.1 -> 0.6
+      const p2 = 1 - p1 - p3;   // 0.7 -> 0.3
+
+      let r = Math.random();
+      let digitsCount;
+      if (r < p1) {
+        digitsCount = 1;
+      } else if (r < p1 + p2) {
+        digitsCount = 2;
+      } else {
+        digitsCount = 3;
+      }
+
+      // Wahrscheinlichkeit für Dezimalzahl
+      const pDecimal = Math.min(0.7, (points - 10) / 30); // ab 10 langsam steigend
+      const isDecimal = Math.random() < pDecimal;
+
+      let base;
+      if (digitsCount === 1) {
+        base = 1 + Math.floor(Math.random() * 9); // 1-9
+      } else if (digitsCount === 2) {
+        base = 10 + Math.floor(Math.random() * 90); // 10-99
+      } else {
+        base = 100 + Math.floor(Math.random() * 900); // 100-999
+      }
+
+      if (!isDecimal) {
+        // Ganze Zahl
+        return { str: String(base), num: base };
+      }
+
+      // Dezimalformen – maximale "Stelligkeit" begrenzen
+      let str, num;
+      if (digitsCount === 1) {
+        // 0,x ; x,0 ; x,00
+        const pattern = Math.floor(Math.random() * 3);
+        if (pattern === 0) {
+          str = "0," + base; // base ist 1..9
+          num = base / 10;
+        } else if (pattern === 1) {
+          str = base + ",0";
+          num = base;
+        } else {
+          str = base + ",00";
+          num = base;
+        }
+      } else if (digitsCount === 2) {
+        // 0,xy oder x,y
+        const pattern = Math.floor(Math.random() * 2);
+        const bStr = String(base);
+        if (pattern === 0) {
+          str = "0," + bStr;      // z.B. 0,34
+          num = base / 100;
+        } else {
+          // 34 -> 3,4
+          const s1 = bStr[0];
+          const s2 = bStr[1];
+          str = s1 + "," + s2;
+          num = parseFloat(s1 + "." + s2);
+        }
+      } else {
+        // digitsCount === 3
+        // Varianten: 0,xyz oder xy,z oder x,yz
+        const pattern = Math.floor(Math.random() * 3);
+        const bStr = String(base);
+        if (pattern === 0) {
+          str = "0," + bStr;      // 0,123
+          num = base / 1000;
+        } else if (pattern === 1) {
+          // 123 -> 12,3
+          str = bStr.slice(0, 2) + "," + bStr.slice(2);
+          num = parseFloat(bStr.slice(0, 2) + "." + bStr.slice(2));
+        } else {
+          // 123 -> 1,23
+          str = bStr[0] + "," + bStr.slice(1);
+          num = parseFloat(bStr[0] + "." + bStr.slice(1));
+        }
+      }
+      return { str, num };
+    }
+
+    function formatNumberForInput(value) {
+      if (!isFinite(value)) {
+        return value.toString().replace(".", ",");
+      }
+      let str = value.toLocaleString("de-DE", {
+        useGrouping: false,
+        maximumFractionDigits: 12
+      });
+      if (str.includes(",")) {
+        str = str.replace(/0+$/, "").replace(/,$/, "");
+      }
+      return str;
+    }
+
+    // Bewertung eines einzelnen Feldes mit Punkte-Logik
+    function evaluateField(element, isCorrect) {
+      const alreadyCorrect = element.dataset.correct === "true";
+      if (alreadyCorrect) {
+        return; // Keine weitere Bewertung
+      }
+
+      let attempts = parseInt(element.dataset.attempts || "0", 10);
+      let score = parseInt(element.dataset.score || "0", 10);
+      attempts++;
+
+      if (isCorrect) {
+        if (attempts === 1) {
+          // Erster Versuch und richtig -> +1
+          points += 1;
+          score = 1;
+        } else if (attempts === 2) {
+          // Erster Versuch war falsch (-1), jetzt richtig -> +1 dazu -> netto 0
+          if (score === -1) {
+            points += 1;
+            score = 0;
+          }
+        }
+        element.dataset.correct = "true";
+        element.classList.remove("incorrect");
+        element.classList.add("correct");
+        const hadErrorBefore = element.dataset.hadError === "true" || attempts > 1;
+        if (hadErrorBefore) {
+          element.classList.add("needs-attention");
+        } else {
+          element.classList.remove("needs-attention");
+        }
+        if (element.tagName.toLowerCase() === "input") {
+          element.readOnly = true;
+        } else {
+          element.disabled = true;
+        }
+      } else {
+        if (attempts === 1) {
+          // Erster Versuch falsch -> -1
+          points -= 1;
+          score = -1;
+        }
+        element.dataset.hadError = "true";
+        element.classList.remove("correct", "needs-attention");
+        element.classList.add("incorrect");
+      }
+
+      element.dataset.attempts = String(attempts);
+      element.dataset.score = String(score);
+      updatePointsDisplay();
+    }
+
+    function clearFieldState(element) {
+      element.value = element.tagName.toLowerCase() === "select" ? "" : "";
+      element.dataset.score = "0";
+      element.dataset.attempts = "0";
+      element.dataset.correct = "false";
+      element.dataset.hadError = "false";
+      element.dataset.autoSolved = "false";
+      element.classList.remove("correct", "incorrect", "needs-attention");
+      if (element.tagName.toLowerCase() === "input") {
+        element.readOnly = false;
+      } else {
+        element.disabled = false;
+      }
+      if (element.tagName.toLowerCase() === "select") {
+        element.selectedIndex = 0;
+      }
+    }
+
+    function autoFillField(element, correctValue) {
+      if (element.tagName.toLowerCase() === "select") {
+        element.value = correctValue;
+        element.disabled = true;
+      } else {
+        element.value = correctValue;
+        element.readOnly = true;
+      }
+      element.dataset.correct = "true";
+      element.dataset.hadError = "true";
+      element.classList.remove("incorrect");
+      element.classList.add("correct", "needs-attention");
+    }
+
+    function handleAutoSolve(element, correctValue) {
+      const attempts = parseInt(element.dataset.attempts || "0", 10);
+      if (element.dataset.correct === "true" || attempts < 3) {
+        return false;
+      }
+      autoFillField(element, correctValue);
+      return true;
+    }
+
+    function areStep1FieldsCorrect() {
+      const a = document.getElementById("s1_expFrom").dataset.correct === "true";
+      const b = document.getElementById("s1_expTo").dataset.correct === "true";
+      return a && b;
+    }
+
+    function areStep2FieldsCorrect() {
+      const a = document.getElementById("s2_diff").dataset.correct === "true";
+      const b = document.getElementById("s2_relation").dataset.correct === "true";
+      return a && b;
+    }
+
+    function isStep3FieldCorrect() {
+      return document.getElementById("s3_expDiff").dataset.correct === "true";
+    }
+
+    function checkTaskCompletion() {
+      const resultInput = document.getElementById("s4_resultValue");
+      if (resultInput.dataset.correct === "true") {
+        setTaskCompleted();
+      }
+    }
+
+    function resetAllSteps() {
+      // Alle Eingabefelder zurücksetzen
+      const ids = [
+        "s1_expFrom", "s1_expTo",
+        "s2_diff", "s2_relation",
+        "s3_expDiff",
+        "s4_resultValue"
+      ];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) clearFieldState(el);
+      });
+
+      ["checkStep1Btn", "checkStep2Btn", "checkStep3Btn", "checkStep4Btn"].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.classList.remove("hidden");
+      });
+
+      // Schritte 2-4 ausblenden
+      document.getElementById("step2").classList.add("hidden");
+      document.getElementById("step3").classList.add("hidden");
+      document.getElementById("step4").classList.add("hidden");
+    }
+
+    function generateNewTask() {
+      const prefixes = getSelectedPrefixes();
+      const quantities = getSelectedQuantities();
+      const useTonne = document.getElementById("useTonneCheckbox").checked;
+
+      if (prefixes.length < 2) {
+        alert("Bitte mindestens zwei Präfixe auswählen.");
+        return;
+      }
+      if (quantities.length < 1) {
+        alert("Bitte mindestens eine Grundgröße auswählen.");
+        return;
+      }
+
+      // Grundgröße wählen
+      const quantityType = randomChoice(quantities);
+
+      // Zwei verschiedene Präfixe wählen
+      let p1 = randomChoice(prefixes);
+      let p2 = randomChoice(prefixes);
+      let safety = 0;
+      while (p2 === p1 && safety < 20) {
+        p2 = randomChoice(prefixes);
+        safety++;
+      }
+      if (p1 === p2) {
+        alert("Konnte zwei verschiedene Präfixe nicht auswählen. Bitte mehr Präfixe aktivieren.");
+        return;
+      }
+
+      // Zufallswert abhängig von Punkten
+      const rand = generateRandomValue(points);
+      state.quantityType = quantityType;
+      state.prefixFrom = p1;
+      state.prefixTo = p2;
+      state.expFrom = PREFIX_EXPONENTS[p1];
+      state.expTo = PREFIX_EXPONENTS[p2];
+      state.valueNStr = rand.str;
+      state.valueNNum = rand.num;
+
+      // Differenz-Exponent (von From nach To)
+      state.expDiff = state.expFrom - state.expTo;
+
+      // Relation größer/kleiner
+      if (state.expFrom > state.expTo) {
+        state.correctRelation = "größer";
+      } else if (state.expFrom < state.expTo) {
+        state.correctRelation = "kleiner";
+      } else {
+        // eigentlich nie der Fall, da Präfixe verschieden
+        state.correctRelation = "gleich";
+      }
+
+      // UI aufbauen
+      document.getElementById("noTaskHint").classList.add("hidden");
+      document.getElementById("taskContainer").classList.remove("hidden");
+      resetAllSteps();
+
+      const baseUnitSymbol = getBaseUnitSymbol(quantityType);
+      const unitFrom = getUnitSymbol(quantityType, p1, useTonne);
+      const unitTo = getUnitSymbol(quantityType, p2, useTonne);
+
+      // Aufgaben-Text
+      const quantityName = quantityType === "length"
+        ? "Länge"
+        : quantityType === "mass"
+        ? "Masse"
+        : "Volumen";
+      document.getElementById("taskIntro").innerHTML =
+        `${state.valueNStr} ${unitFrom} sollen in ${unitTo} umgerechnet werden.` +
+        ` (${quantityName})`;
+
+      // Schritt 1
+      document.getElementById("s1_unitFrom").textContent = unitFrom;
+      document.getElementById("s1_unitTo").textContent = unitTo;
+      document.getElementById("s1_baseUnit").textContent = baseUnitSymbol;
+      document.getElementById("s1_baseUnit2").textContent = baseUnitSymbol;
+
+      // Schritt 2
+      document.getElementById("s2_unitFrom").textContent = unitFrom;
+      document.getElementById("s2_unitTo").textContent = unitTo;
+
+      // Schritt 3
+      document.getElementById("s3_valueN").textContent = state.valueNStr;
+      document.getElementById("s3_valueN2").textContent = state.valueNStr;
+      document.getElementById("s3_unitFrom").textContent = unitFrom;
+      document.getElementById("s3_unitTo").textContent = unitTo;
+
+      // Schritt 4
+      document.getElementById("s4_valueN").textContent = state.valueNStr;
+      document.getElementById("s4_unitFrom").textContent = unitFrom;
+      document.getElementById("s4_unitTo").textContent = unitTo;
+
+      setTaskInProgress();
+    }
+
+    // Schritt 1 prüfen
+    function checkStep1() {
+      const expFromInput = document.getElementById("s1_expFrom");
+      const expToInput = document.getElementById("s1_expTo");
+
+      const valFrom = expFromInput.value.trim().replace(",", ".");
+      const valTo = expToInput.value.trim().replace(",", ".");
+
+      if (valFrom === "" || valTo === "") {
+        alert("Bitte beide Exponenten eintragen.");
+        return;
+      }
+
+      const correctFrom = Number(valFrom) === state.expFrom;
+      const correctTo = Number(valTo) === state.expTo;
+
+      evaluateField(expFromInput, correctFrom);
+      handleAutoSolve(expFromInput, String(state.expFrom));
+      evaluateField(expToInput, correctTo);
+      handleAutoSolve(expToInput, String(state.expTo));
+
+      if (areStep1FieldsCorrect()) {
+        document.getElementById("step2").classList.remove("hidden");
+        document.getElementById("checkStep1Btn").classList.add("hidden");
+      }
+    }
+
+    // Schritt 2 prüfen
+    function checkStep2() {
+      const diffInput = document.getElementById("s2_diff");
+      const relationSelect = document.getElementById("s2_relation");
+
+      const diffVal = diffInput.value.trim().replace(",", ".");
+      if (diffVal === "" || relationSelect.value === "") {
+        alert("Bitte Stellenanzahl und größer/kleiner auswählen.");
+        return;
+      }
+
+      const expectedDiff = Math.abs(state.expFrom - state.expTo);
+
+      const correctDiff = Number(diffVal) === expectedDiff;
+      const correctRel = relationSelect.value === state.correctRelation;
+
+      evaluateField(diffInput, correctDiff);
+      handleAutoSolve(diffInput, String(expectedDiff));
+      evaluateField(relationSelect, correctRel);
+      handleAutoSolve(relationSelect, state.correctRelation);
+
+      if (areStep2FieldsCorrect()) {
+        document.getElementById("step3").classList.remove("hidden");
+        document.getElementById("checkStep2Btn").classList.add("hidden");
+      }
+    }
+
+    // Schritt 3 prüfen
+    function checkStep3() {
+      const expDiffInput = document.getElementById("s3_expDiff");
+      const val = expDiffInput.value.trim().replace(",", ".");
+
+      if (val === "") {
+        alert("Bitte den Exponenten eintragen.");
+        return;
+      }
+
+      const correct = Number(val) === state.expDiff;
+      evaluateField(expDiffInput, correct);
+      handleAutoSolve(expDiffInput, String(state.expDiff));
+
+      if (isStep3FieldCorrect()) {
+        document.getElementById("step4").classList.remove("hidden");
+        document.getElementById("checkStep3Btn").classList.add("hidden");
+      }
+    }
+
+    // Schritt 4 prüfen
+    function checkStep4() {
+      const resultInput = document.getElementById("s4_resultValue");
+      let valStr = resultInput.value.trim();
+      if (valStr === "") {
+        alert("Bitte ein Ergebnis eintragen.");
+        return;
+      }
+
+      const factor = Math.pow(10, state.expDiff);
+      const expected = state.valueNNum * factor;
+
+      // Komma -> Punkt
+      const num = parseFloat(valStr.replace(",", "."));
+      if (isNaN(num)) {
+        evaluateField(resultInput, false);
+        handleAutoSolve(resultInput, formatNumberForInput(expected));
+        checkTaskCompletion();
+        return;
+      }
+
+      // Vergleich mit Toleranz
+      const tolerance = 1e-9 * Math.max(1, Math.abs(expected));
+      const correct = Math.abs(num - expected) <= tolerance;
+
+      evaluateField(resultInput, correct);
+      if (!correct) {
+        handleAutoSolve(resultInput, formatNumberForInput(expected));
+      }
+      checkTaskCompletion();
+      if (resultInput.dataset.correct === "true") {
+        document.getElementById("checkStep4Btn").classList.add("hidden");
+      }
+    }
+
+    // Event-Listener
+    newTaskBtn.addEventListener("click", () => {
+      if (newTaskBtn.disabled) return;
+      generateNewTask();
+    });
+    document.getElementById("checkStep1Btn").addEventListener("click", checkStep1);
+    document.getElementById("checkStep2Btn").addEventListener("click", checkStep2);
+    document.getElementById("checkStep3Btn").addEventListener("click", checkStep3);
+    document.getElementById("checkStep4Btn").addEventListener("click", checkStep4);
+
+    toggleSettingsBtn.addEventListener("click", () => {
+      const isHidden = settingsPanel.classList.toggle("hidden");
+      toggleSettingsBtn.setAttribute("aria-expanded", String(!isHidden));
+      settingsPanel.setAttribute("aria-hidden", String(isHidden));
+    });
+
+    // Tonne-Option ein-/ausblenden (nur optisch; technisch immer vorhanden)
+    function updateTonneVisibility() {
+      const massChecked = Array.from(document.querySelectorAll(".quantityCheckbox"))
+        .some(cb => cb.value === "mass" && cb.checked);
+      document.getElementById("tonneOptionWrapper").style.display = massChecked ? "block" : "none";
+    }
+    document.querySelectorAll(".quantityCheckbox").forEach(cb => {
+      cb.addEventListener("change", updateTonneVisibility);
+    });
+    updateTonneVisibility();
+
+    updatePointsDisplay();
+    updateNewTaskButtonState();
+  </script>
+</body>
+</html>
