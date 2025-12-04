@@ -21,29 +21,39 @@
 
     <!-- super-hands for grab/drag with Touch controllers -->
     <script src="https://unpkg.com/super-hands@^3.0.6/dist/super-hands.min.js"></script>
+
+    <script>
+      // Force transparent clear color once renderer is ready (helps passthrough)
+      AFRAME.scenes[0]?.addEventListener("render-target-loaded", () => {
+        const r = AFRAME.scenes[0].renderer;
+        if (r) {
+          r.setClearColor(0x000000, 0);
+        }
+      });
+    </script>
   </head>
   <body style="margin:0; padding:0; overflow:hidden; background: transparent;">
     <a-scene
       renderer="alpha: true; physicallyCorrectLights: true; colorManagement: true"
       background="transparent: true"
       xr-mode-ui="enabled: true"
-      webxr="mode: ar; optionalFeatures: local-floor,hit-test,hand-tracking">
+      webxr="mode: ar; optionalFeatures: local-floor,hit-test,hand-tracking; requiredFeatures: []">
 
       <!-- Camera + controller rig -->
       <a-entity id="rig">
         <a-camera position="0 1.6 0"></a-camera>
 
-        <!-- Left hand/controller -->
+        <!-- Left Touch controller -->
         <a-entity id="leftHand"
-          hand-controls="hand: left"
-          super-hands
+          oculus-touch-controls="hand: left"
+          super-hands="grabStartButtons: triggerdown; grabEndButtons: triggerup"
           sphere-collider="objects: .grabbable">
         </a-entity>
 
-        <!-- Right hand/controller -->
+        <!-- Right Touch controller -->
         <a-entity id="rightHand"
-          hand-controls="hand: right"
-          super-hands
+          oculus-touch-controls="hand: right"
+          super-hands="grabStartButtons: triggerdown; grabEndButtons: triggerup"
           sphere-collider="objects: .grabbable">
         </a-entity>
       </a-entity>
@@ -59,7 +69,7 @@
         <!-- text -->
         <a-text value="Zieh mich!"
           align="center"
-          color="#FFF"
+          color="#cfeafb"
           position="0 0 0.01"
           width="1.2">
         </a-text>
