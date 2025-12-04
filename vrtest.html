@@ -21,20 +21,10 @@
 
     <!-- super-hands for grab/drag with Touch controllers -->
     <script src="https://unpkg.com/super-hands@^3.0.6/dist/super-hands.min.js"></script>
-
-    <script>
-      // Force transparent clear color once renderer is ready (helps passthrough)
-      AFRAME.scenes[0]?.addEventListener("render-target-loaded", () => {
-        const r = AFRAME.scenes[0].renderer;
-        if (r) {
-          r.setClearColor(0x000000, 0);
-        }
-      });
-    </script>
   </head>
   <body style="margin:0; padding:0; overflow:hidden; background: transparent;">
     <a-scene
-      renderer="alpha: true; physicallyCorrectLights: true; colorManagement: true"
+      renderer="alpha: true; antialias: true; physicallyCorrectLights: true; colorManagement: true; logarithmicDepthBuffer: true"
       background="transparent: true"
       xr-mode-ui="enabled: true"
       webxr="mode: ar; optionalFeatures: local-floor,hit-test,hand-tracking; requiredFeatures: []">
@@ -47,14 +37,14 @@
         <a-entity id="leftHand"
           oculus-touch-controls="hand: left"
           super-hands="grabStartButtons: triggerdown; grabEndButtons: triggerup"
-          sphere-collider="objects: .grabbable">
+          sphere-collider="objects: .grabbable; radius: 0.1">
         </a-entity>
 
         <!-- Right Touch controller -->
         <a-entity id="rightHand"
           oculus-touch-controls="hand: right"
           super-hands="grabStartButtons: triggerdown; grabEndButtons: triggerup"
-          sphere-collider="objects: .grabbable">
+          sphere-collider="objects: .grabbable; radius: 0.1">
         </a-entity>
       </a-entity>
 
@@ -69,7 +59,7 @@
         <!-- text -->
         <a-text value="Zieh mich!"
           align="center"
-          color="#cfeafb"
+          color="red"
           position="0 0 0.01"
           width="1.2">
         </a-text>
@@ -77,5 +67,16 @@
 
       <!-- No sky, no ground: background stays transparent for passthrough -->
     </a-scene>
+    <script>
+      // Set renderer clear color to transparent once scene is ready and on session start.
+      const sceneEl = document.querySelector('a-scene');
+      function setTransparentRenderer() {
+        if (!sceneEl || !sceneEl.renderer) return;
+        sceneEl.renderer.setClearColor(new THREE.Color(0x000000), 0);
+      }
+      sceneEl.addEventListener('render-target-loaded', setTransparentRenderer);
+      sceneEl.addEventListener('rendererinitialized', setTransparentRenderer);
+      sceneEl.addEventListener('enter-vr', setTransparentRenderer);
+    </script>
   </body>
 </html>
