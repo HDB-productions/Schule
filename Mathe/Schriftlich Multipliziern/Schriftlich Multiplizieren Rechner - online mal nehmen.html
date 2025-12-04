@@ -30,152 +30,7 @@
         media="print" type="text/css"><noscript>
         <link rel="stylesheet" href="/styles/stylePrint.css?v=7.2" media="print">
     </noscript>
-    <style>
-        .settings-trigger {
-            text-align: right;
-            margin: 1.5rem 0;
-        }
 
-        #settings-button {
-            border: none;
-            border-radius: 999px;
-            background: #1e7cd6;
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 0.6rem 1.6rem;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(21, 78, 133, 0.25);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-        }
-
-        #settings-button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 15px 30px rgba(21, 78, 133, 0.35);
-            background: #1a6cb9;
-        }
-
-        #settings-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(9, 21, 39, 0.55);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            z-index: 999;
-        }
-
-        #settings-overlay.show {
-            display: flex;
-        }
-
-        #settings-overlay .overlay-content {
-            background: #fff;
-            border-radius: 24px;
-            width: min(720px, 100%);
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: clamp(1.5rem, 2vw, 2.75rem);
-            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
-            position: relative;
-        }
-
-        .overlay-close-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            border: none;
-            background: transparent;
-            font-size: 1.5rem;
-            cursor: pointer;
-            line-height: 1;
-            color: #1f2937;
-        }
-
-        .settings-section + .settings-section {
-            margin-top: 2rem;
-        }
-
-        .settings-section h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        .settings-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            border-radius: 999px;
-            padding: 0.4rem 1.3rem;
-            border: 1px solid #c1d7f3;
-            background: #f0f6ff;
-            color: #1f3b63;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
-        }
-
-        .settings-toggle.active {
-            background: #1e7cd6;
-            border-color: #1e7cd6;
-            color: #fff;
-        }
-
-        #generated-options {
-            margin-top: 1.25rem;
-            border-radius: 16px;
-            border: 1px solid #dbe6f8;
-            background: #f6f8fd;
-            padding: 1rem 1.25rem;
-        }
-
-        .toggle-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-        }
-
-        .toggle-row + .toggle-row {
-            border-top: 1px solid rgba(148, 163, 184, 0.4);
-        }
-
-        .toggle-row label {
-            flex: 1;
-            margin-right: 1rem;
-        }
-
-        .toggle-row input[type="checkbox"] {
-            width: 1.2rem;
-            height: 1.2rem;
-        }
-
-        #manual-length-sliders {
-            margin-top: 1rem;
-        }
-
-        .slider-group + .slider-group {
-            margin-top: 1rem;
-        }
-
-        .slider-group label {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .slider-group input[type="range"] {
-            width: 100%;
-        }
-
-        body.overlay-open {
-            overflow: hidden;
-        }
-    </style>
     <script src="./Schriftlich Multiplizieren Rechner - online mal nehmen_files/multiply.js"
         type="text/javascript" defer=""></script>
     <link rel="stylesheet" href="./Schriftlich Multiplizieren Rechner - online mal nehmen_files/stylePrint.css"
@@ -277,6 +132,11 @@
                     onclick="calcYourselfCheckbox.checked?calculate(mult_self,&quot;multiplizieren&quot;):calculate(mult,&quot;multiplizieren&quot;)"
                     id="submit-button" type="button">Berechnen</button>
             </form>
+
+        <div id="random-scoreboard" class="hide">
+        <div class="score-header">Punkte: <span id="random-score-value">0</span></div>
+        <ul id="random-score-list"></ul>
+        </div>
             <div id="svg-container"></div>
             <div class="hide" id="exercise-container"></div>
             <div class="hide" id="message-container"><span id="message"></span></div>
@@ -284,6 +144,9 @@
                     prüfen</button> <button onclick="markWrongInputs()" class="exercise-button">Falsche Eingaben
                     markieren</button> <button onclick="showSolution()" class="exercise-button">Lösung anzeigen</button>
             </div>
+        <div class="hide" id="random-mode-buttons"><button type="button" id="random-check-button"
+            class="exercise-button">Prüfen</button> <button type="button" id="random-new-task-button"
+            class="exercise-button hide">Neue Aufgabe</button></div>
         </main>
     </div>
     <!-- 
@@ -476,41 +339,80 @@
                 aria-label="Einstellungen schließen">&times;</button>
             <h2 id="settings-overlay-title">Einstellungen</h2>
             <section class="settings-section">
-                <h3>Rechenmodus</h3>
-                <p>Wähle, ob du den Rechenweg angezeigt bekommst oder selbst übst.</p>
-                <div class="not-selectable" id="calculate-yourself-button-div">
-                    <label id="calculate-yourself-button-container">
-                        <input autocomplete="off" id="calculate-yourself-checkbox" name="calculate-yourself-checkbox"
-                            onchange="calculateYourselfChanged()" type="checkbox">
-                        <span id="calculate-yourself-button"></span>
-                    </label>
-                    <label id="calculate-yourself-label" for="calculate-yourself-checkbox">selber rechnen</label>
-                </div>
-            </section>
-            <section class="settings-section">
-                <h3>Eingabeoptionen</h3>
-                <p>Arbeite mit eigenen Zahlen oder lasse dir Aufgaben generieren.</p>
-                <button type="button" id="custom-numbers-toggle" class="settings-toggle active"
-                    aria-pressed="true">Eigene Zahlen</button>
-                <div id="generated-options" class="hide" aria-live="polite">
-                    <div class="toggle-row">
-                        <label for="comma-mode-toggle">mit Komma</label>
-                        <input type="checkbox" id="comma-mode-toggle" name="comma-mode-toggle">
-                    </div>
-                    <div class="toggle-row">
-                        <label for="adaptive-toggle">Adaptive Schwierigkeit</label>
-                        <input type="checkbox" id="adaptive-toggle" name="adaptive-toggle" checked>
-                    </div>
-                    <div id="manual-length-sliders" class="hide">
-                        <div class="slider-group">
-                            <label for="length-factor-one">Länge erster Faktor: <span
-                                    id="length-factor-one-value">3</span></label>
-                            <input type="range" id="length-factor-one" min="1" max="12" value="3">
+                <h3>Aufgaben &amp; Darstellung</h3>
+                <p>Stelle ein, wie du rechnen möchtest und welche Art von Aufgaben erzeugt werden.</p>
+                <div class="settings-table" role="table">
+                    <div class="settings-row" role="row">
+                        <div class="settings-row-label" role="cell">
+                            <label for="calculate-yourself-checkbox">Selber rechnen</label>
+                            <button type="button" class="info-button" data-info-target="info-self-calc"
+                                aria-label="Info zu selber rechnen" aria-expanded="false">?</button>
                         </div>
-                        <div class="slider-group">
-                            <label for="length-factor-two">Länge zweiter Faktor: <span
-                                    id="length-factor-two-value">3</span></label>
-                            <input type="range" id="length-factor-two" min="1" max="12" value="3">
+                        <div class="settings-row-control" role="cell">
+                            <div class="not-selectable" id="calculate-yourself-button-div">
+                                <label id="calculate-yourself-button-container">
+                                    <input autocomplete="off" id="calculate-yourself-checkbox"
+                                        name="calculate-yourself-checkbox" onchange="calculateYourselfChanged()"
+                                        type="checkbox">
+                                    <span id="calculate-yourself-button"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-panel hide" id="info-self-calc" aria-hidden="true">Wenn diese Option aktiviert ist, 
+                        kannst du die schriftliche Multiplikation selbst lösen und deine Eingaben prüfen lassen. 
+                        Ist sie deaktiviert, wird dir die Lösung direkt angezeigt.</div>
+
+                    <div class="settings-row" role="row">
+                        <div class="settings-row-label" role="cell">
+                            <label for="custom-numbers-checkbox">Eigene Zahlen</label>
+                            <button type="button" class="info-button" data-info-target="info-own-numbers"
+                                aria-label="Info zu eigenen Zahlen" aria-expanded="false">?</button>
+                        </div>
+                        <div class="settings-row-control" role="cell">
+                            <input type="checkbox" id="custom-numbers-checkbox" name="custom-numbers-checkbox" checked>
+                        </div>
+                    </div>
+                    <div class="info-panel hide" id="info-own-numbers" aria-hidden="true">Ist diese Option aktiviert, kannst du in den Eingabefeldern bestimmen, welche Zahlen multipliziert werden sollen. Wenn sie deaktiviert ist, erstellt das Programm automatisch Zufallsaufgaben.</div>
+
+                    <div id="generated-options" class="hide" aria-live="polite">
+                        <div class="settings-row" role="row">
+                            <div class="settings-row-label" role="cell">
+                                <label for="comma-mode-toggle">Mit Komma</label>
+                                <button type="button" class="info-button" data-info-target="info-comma"
+                                    aria-label="Info zu Mit Komma" aria-expanded="false">?</button>
+                            </div>
+                            <div class="settings-row-control" role="cell">
+                                <input type="checkbox" id="comma-mode-toggle" name="comma-mode-toggle">
+                            </div>
+                        </div>
+                        <div class="info-panel hide" id="info-comma" aria-hidden="true">Wenn diese Option ausgewählt ist,
+                            enthalten zufällig generierte Aufgaben Dezimalzahlen.</div>
+
+                        <div class="settings-row" role="row">
+                            <div class="settings-row-label" role="cell">
+                                <label for="adaptive-toggle">Adaptive Schwierigkeit</label>
+                                <button type="button" class="info-button" data-info-target="info-adaptive"
+                                    aria-label="Info zu adaptiver Schwierigkeit" aria-expanded="false">?</button>
+                            </div>
+                            <div class="settings-row-control" role="cell">
+                                <input type="checkbox" id="adaptive-toggle" name="adaptive-toggle" checked>
+                            </div>
+                        </div>
+                        <div class="info-panel hide" id="info-adaptive" aria-hidden="true">Die Anzahl der Stellen je Faktor
+                            passt sich automatisch deinem Fortschritt an. Wenn deaktiviert, kannst du feste Längen wählen.</div>
+
+                        <div id="manual-length-sliders" class="hide">
+                            <div class="slider-group">
+                                <label for="length-factor-one">Länge erster Faktor: <span
+                                        id="length-factor-one-value">3</span></label>
+                                <input type="range" id="length-factor-one" min="1" max="12" value="3">
+                            </div>
+                            <div class="slider-group">
+                                <label for="length-factor-two">Länge zweiter Faktor: <span
+                                        id="length-factor-two-value">3</span></label>
+                                <input type="range" id="length-factor-two" min="1" max="12" value="3">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -542,7 +444,7 @@
             const settingsButton = document.getElementById("settings-button");
             const settingsOverlay = document.getElementById("settings-overlay");
             const settingsCloseButton = document.getElementById("settings-close-button");
-            const customNumbersToggle = document.getElementById("custom-numbers-toggle");
+            const customNumbersCheckbox = document.getElementById("custom-numbers-checkbox");
             const generatedOptions = document.getElementById("generated-options");
             const adaptiveToggle = document.getElementById("adaptive-toggle");
             const sliderContainer = document.getElementById("manual-length-sliders");
@@ -550,6 +452,24 @@
             const lengthFactorTwo = document.getElementById("length-factor-two");
             const lengthFactorOneValue = document.getElementById("length-factor-one-value");
             const lengthFactorTwoValue = document.getElementById("length-factor-two-value");
+            const infoButtons = document.querySelectorAll(".info-button");
+            const numberInputRows = document.querySelectorAll(".number-input");
+            const number1Input = document.getElementById("number1");
+            const number2Input = document.getElementById("number2");
+            const selfCheckCheckbox = document.getElementById("calculate-yourself-checkbox");
+            const submitButton = document.getElementById("submit-button");
+            const generatedFactorOne = document.getElementById("generated-factor-one");
+            const generatedFactorTwo = document.getElementById("generated-factor-two");
+            const randomScoreboard = document.getElementById("random-scoreboard");
+            const randomScoreValue = document.getElementById("random-score-value");
+            const randomScoreList = document.getElementById("random-score-list");
+            const randomButtonsContainer = document.getElementById("random-mode-buttons");
+            const randomCheckButton = document.getElementById("random-check-button");
+            const randomNewTaskButton = document.getElementById("random-new-task-button");
+            const exerciseButtonsDiv = document.getElementById("exercise-buttons-div");
+            const commaModeToggle = document.getElementById("comma-mode-toggle");
+            const exerciseContainerElement = document.getElementById("exercise-container");
+            const messageElement = document.getElementById("message");
 
             function openOverlay() {
                 if (!settingsOverlay) {
@@ -574,16 +494,14 @@
             }
 
             function updateGeneratedOptionsVisibility() {
-                const usesOwnNumbers = customNumbersToggle?.classList.contains("active");
+                const usesOwnNumbers = customNumbersCheckbox ? customNumbersCheckbox.checked : true;
                 if (!generatedOptions) {
                     return;
                 }
                 if (usesOwnNumbers) {
                     generatedOptions.classList.add("hide");
-                    customNumbersToggle?.setAttribute("aria-pressed", "true");
                 } else {
                     generatedOptions.classList.remove("hide");
-                    customNumbersToggle?.setAttribute("aria-pressed", "false");
                 }
             }
 
@@ -613,6 +531,226 @@
                 }
             }
 
+            function initInfoButtons() {// Info-Buttons initialisieren
+                if (!infoButtons) {
+                    return;
+                }
+                infoButtons.forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const targetId = button.getAttribute("data-info-target");
+                        if (!targetId) {
+                            return;
+                        }
+                        const panel = document.getElementById(targetId);
+                        if (!panel) {
+                            return;
+                        }
+                        panel.classList.toggle("hide");
+                        const expanded = !panel.classList.contains("hide");
+                        button.setAttribute("aria-expanded", expanded ? "true" : "false");
+                        panel.setAttribute("aria-hidden", expanded ? "false" : "true");
+                    });
+                });
+            }
+
+            let randomModeActive = false;
+            let randomScore = 0;
+            let randomWrongStreak = 0;
+            let randomTaskCompleted = false;
+
+            const originalCalculateYourselfChanged = window.calculateYourselfChanged;
+            window.calculateYourselfChanged = function () {
+                if (typeof originalCalculateYourselfChanged === "function") {
+                    originalCalculateYourselfChanged();
+                }
+                enforceRandomButtons();
+            };
+
+            function enforceRandomButtons() {// Zufallsmodus-Buttons verwalten
+                if (!exerciseButtonsDiv) {
+                    randomButtonsContainer?.classList.toggle("hide", !randomModeActive);
+                    return;
+                }
+                if (randomModeActive) {
+                    exerciseButtonsDiv.classList.add("hide");
+                    randomButtonsContainer?.classList.remove("hide");
+                    // Nur beim Start einer neuen Aufgabe werden die Button-Zustände gesetzt
+                    // handleRandomCheck steuert die Sichtbarkeit während des Spiels
+                } else {
+                    randomButtonsContainer?.classList.add("hide");
+                    if (selfCheckCheckbox?.checked && exerciseContainerElement?.hasChildNodes()) {
+                        exerciseButtonsDiv.classList.remove("hide");
+                    } else {
+                        exerciseButtonsDiv.classList.add("hide");
+                    }
+                }
+            }
+
+            function setRandomMode(active) {
+                randomModeActive = active;  // Aktivierungsstatus setzen 
+                numberInputRows.forEach(row => row.classList.toggle("hide", active)); // Eingabefelder ein-/ausblenden
+                submitButton && (submitButton.disabled = active);   // Submit-Button deaktivieren/aktivieren
+                randomScoreboard && randomScoreboard.classList.toggle("hide", !active);
+                randomButtonsContainer && randomButtonsContainer.classList.toggle("hide", !active);
+               
+                if (selfCheckCheckbox) {
+                    selfCheckCheckbox.disabled = active;
+                }
+                if (active) {
+                    submitButton.classList.add("hide"); // Submit-Button ausblenden
+                    // Beim Start: Prüfen sichtbar, Neue Aufgabe versteckt
+                    randomCheckButton && randomCheckButton.classList.remove("hide");
+                    randomNewTaskButton && randomNewTaskButton.classList.add("hide");
+                    if (selfCheckCheckbox && !selfCheckCheckbox.checked) {
+                        selfCheckCheckbox.checked = true;
+                    }
+                    window.calculateYourselfChanged();
+                    generateAndRenderRandomTask();
+                } else {
+                    submitButton.classList.remove("hide"); // Submit-Button einblenden 
+                    randomTaskCompleted = false;
+                    randomWrongStreak = 0;
+                    randomButtonsContainer && randomButtonsContainer.classList.add("hide");
+                    randomNewTaskButton && randomNewTaskButton.classList.add("hide");
+ 
+                    submitButton && (submitButton.disabled = false);
+                    if (selfCheckCheckbox) {
+                        selfCheckCheckbox.disabled = false;
+                    }
+                    enforceRandomButtons();
+                }
+            }
+
+            function generateAndRenderRandomTask() {
+                if (!randomModeActive) {
+                    return;
+                }
+                randomWrongStreak = 0;
+                randomTaskCompleted = false;
+                const task = createRandomTask();
+                if (number1Input) {
+                    number1Input.value = task.factorOne;
+                }
+                if (number2Input) {
+                    number2Input.value = task.factorTwo;
+                }
+                generatedFactorOne && (generatedFactorOne.textContent = task.factorOne);
+                generatedFactorTwo && (generatedFactorTwo.textContent = task.factorTwo);
+                calculate(mult_self, "multiplizieren");
+                // Nach calculate(): Prüfen sichtbar, Neue Aufgabe versteckt
+                randomNewTaskButton && randomNewTaskButton.classList.add("hide");
+                randomCheckButton && randomCheckButton.classList.remove("hide");
+                // exerciseButtonsDiv muss im Zufallsmodus versteckt bleiben
+                exerciseButtonsDiv && exerciseButtonsDiv.classList.add("hide");
+            }
+
+            function createRandomTask() {
+                const { first, second } = getRequestedLengths();
+                const factorOneBase = buildRandomIntegerString(first);
+                const factorTwoBase = buildRandomIntegerString(second);
+                const useComma = !!commaModeToggle?.checked;
+                const factorOne = useComma ? applyDecimalFormatting(factorOneBase) : factorOneBase;
+                const factorTwo = useComma ? applyDecimalFormatting(factorTwoBase) : factorTwoBase;
+                return { factorOne, factorTwo };
+            }
+
+            function getRequestedLengths() {
+                if (adaptiveToggle?.checked) {
+                    const increments = Math.floor(randomScore / 5);
+                    const len1 = 2 + Math.ceil(increments / 2);
+                    const len2 = 2 + Math.floor(increments / 2);
+                    return { first: len1, second: len2 };
+                }
+                const len1 = Math.max(1, parseInt(lengthFactorOne?.value || "2", 10));
+                const len2 = Math.max(1, parseInt(lengthFactorTwo?.value || "2", 10));
+                return { first: len1, second: len2 };
+            }
+
+            function buildRandomIntegerString(length) {
+                if (length <= 1) {
+                    return String(Math.floor(Math.random() * 9) + 1);
+                }
+                let result = String(Math.floor(Math.random() * 9) + 1);
+                for (let i = 1; i < length; i++) {
+                    result += Math.floor(Math.random() * 10);
+                }
+                return result;
+            }
+
+            function applyDecimalFormatting(value) {
+                if (value.length <= 1) {
+                    return value;
+                }
+                const maxDecimals = Math.min(3, value.length - 1);
+                const decimalPlaces = Math.floor(Math.random() * maxDecimals) + 1;
+                const splitIndex = value.length - decimalPlaces;
+                return `${value.slice(0, splitIndex)},${value.slice(splitIndex)}`;
+            }
+
+            function handleRandomCheck() {
+                if (!randomModeActive || randomTaskCompleted) {
+                    return;
+                }
+                const checkResult = typeof checkInputs === "function" ? checkInputs() : undefined;
+                const fallbackCorrect = messageElement
+                    ? (messageElement.classList.contains("positive") && !messageElement.classList.contains("negative"))
+                    : false;
+                const allCorrect = typeof checkResult === "boolean" ? checkResult : fallbackCorrect;
+                if (allCorrect) {
+                    randomTaskCompleted = true;
+                    adjustScore(1, "Aufgabe korrekt gelöst");
+                    randomWrongStreak = 0;
+                    randomNewTaskButton && randomNewTaskButton.classList.remove("hide");
+                    randomCheckButton && randomCheckButton.classList.add("hide");
+                } else {
+                    randomWrongStreak += 1;
+                    markWrongInputs();
+                    adjustScore(-1, "Fehlerhafte Eingabe");
+                    if (randomWrongStreak >= 2) {
+                        showSolution();
+                        randomTaskCompleted = true;
+                        randomWrongStreak = 0;
+                        randomNewTaskButton && randomNewTaskButton.classList.remove("hide");
+                        randomCheckButton && randomCheckButton.classList.add("hide");
+                    }
+                }
+            }
+
+            function adjustScore(delta, label) {
+                if (delta === 0) {
+                    return;
+                }
+                randomScore += delta;
+                randomScoreValue && (randomScoreValue.textContent = randomScore.toString());
+                addScoreEntry(delta, label);
+            }
+
+            function addScoreEntry(delta, label) {
+                if (!randomScoreList) {
+                    return;
+                }
+                const entry = document.createElement("li");
+                entry.textContent = `${delta > 0 ? "+1" : "-1"} Punkt – ${label}`;
+                entry.classList.add(delta > 0 ? "positive" : "negative");
+                randomScoreList.insertBefore(entry, randomScoreList.firstChild);
+                trimScoreHistory();
+            }
+
+            function trimScoreHistory() {
+                if (!randomScoreList) {
+                    return;
+                }
+                while (randomScoreList.childElementCount > 10) {
+                    randomScoreList.removeChild(randomScoreList.lastChild);
+                }
+            }
+
+            function handleRandomSettingsChange() {
+                if (randomModeActive) {
+                    generateAndRenderRandomTask();
+                }
+            }
+
             settingsButton?.addEventListener("click", openOverlay, { passive: true });
             settingsCloseButton?.addEventListener("click", closeOverlay, { passive: true });
             settingsOverlay?.addEventListener("click", (event) => {
@@ -626,16 +764,36 @@
                 }
             });
 
-            customNumbersToggle?.addEventListener("click", () => {
-                customNumbersToggle.classList.toggle("active");
+            customNumbersCheckbox?.addEventListener("change", () => {
                 updateGeneratedOptionsVisibility();
+                setRandomMode(!customNumbersCheckbox.checked);
             });
 
-            adaptiveToggle?.addEventListener("change", updateSliderVisibility, { passive: true });
+            adaptiveToggle?.addEventListener("change", () => {
+                updateSliderVisibility();
+                handleRandomSettingsChange();
+            });
 
             updateGeneratedOptionsVisibility();
             updateSliderVisibility();
             attachSliderValueUpdates();
+            initInfoButtons();
+            randomCheckButton?.addEventListener("click", handleRandomCheck);
+            randomNewTaskButton?.addEventListener("click", () => {
+                if (randomModeActive) {
+                    generateAndRenderRandomTask();
+                }
+            });
+            commaModeToggle?.addEventListener("change", handleRandomSettingsChange);
+            lengthFactorOne?.addEventListener("input", handleRandomSettingsChange);
+            lengthFactorTwo?.addEventListener("input", handleRandomSettingsChange);
+            selfCheckCheckbox?.addEventListener("change", () => {
+                if (randomModeActive && !selfCheckCheckbox.checked) {
+                    selfCheckCheckbox.checked = true;
+                    window.calculateYourselfChanged();
+                }
+            });
+            setRandomMode(!customNumbersCheckbox?.checked);
         });
     </script>
         </body>
