@@ -5,38 +5,42 @@
     <title>Passthrough Label Drag Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <!-- A-Frame (WebXR/AR-fähig) -->
+    <!-- A-Frame (WebXR/AR) -->
     <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
 
-    <!-- alter "grabbable"-Name wird freigeräumt für super-hands -->
-    <script>
-      delete AFRAME.components["grabbable"];
-    </script>
-
-    <!-- Collider + Extras -->
+    <!-- Collider + Extras (provides sphere-collider) -->
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.1/dist/aframe-extras.min.js"></script>
 
-    <!-- super-hands für Grab/Drag-Interaktionen -->
+    <!-- Remove extras grabbable/draggable so super-hands can register its versions -->
+    <script>
+      delete AFRAME.components["grabbable"];
+      delete AFRAME.systems["grabbable"];
+      delete AFRAME.components["draggable"];
+      delete AFRAME.systems["draggable"];
+    </script>
+
+    <!-- super-hands for grab/drag with Touch controllers -->
     <script src="https://unpkg.com/super-hands@^3.0.6/dist/super-hands.min.js"></script>
   </head>
-  <body style="margin:0; padding:0; overflow:hidden;">
+  <body style="margin:0; padding:0; overflow:hidden; background: transparent;">
     <a-scene
-      renderer="alpha:true; physicallyCorrectLights:true"
+      renderer="alpha: true; physicallyCorrectLights: true; colorManagement: true"
+      background="transparent: true"
       xr-mode-ui="enabled: true"
-      webxr="mode: ar; optionalFeatures: local-floor,hit-test">
+      webxr="mode: ar; optionalFeatures: local-floor,hit-test,hand-tracking">
 
-      <!-- Kamera + Controller-Rig -->
+      <!-- Camera + controller rig -->
       <a-entity id="rig">
         <a-camera position="0 1.6 0"></a-camera>
 
-        <!-- Linke Hand -->
+        <!-- Left hand/controller -->
         <a-entity id="leftHand"
           hand-controls="hand: left"
           super-hands
           sphere-collider="objects: .grabbable">
         </a-entity>
 
-        <!-- Rechte Hand -->
+        <!-- Right hand/controller -->
         <a-entity id="rightHand"
           hand-controls="hand: right"
           super-hands
@@ -44,15 +48,15 @@
         </a-entity>
       </a-entity>
 
-      <!-- Das Label, das du greifen und verschieben kannst -->
+      <!-- The label you can grab and move -->
       <a-entity id="label" class="grabbable"
         position="0 1.4 -0.8"
         hoverable grabbable draggable>
 
-        <!-- Hintergrundplatte -->
+        <!-- background plate -->
         <a-plane width="0.4" height="0.12" color="#222" opacity="0.8"></a-plane>
 
-        <!-- Text -->
+        <!-- text -->
         <a-text value="Zieh mich!"
           align="center"
           color="#FFF"
@@ -61,7 +65,7 @@
         </a-text>
       </a-entity>
 
-      <!-- Kein a-sky, kein Boden: Hintergrund bleibt transparent = Passthrough -->
+      <!-- No sky, no ground: background stays transparent for passthrough -->
     </a-scene>
   </body>
 </html>
