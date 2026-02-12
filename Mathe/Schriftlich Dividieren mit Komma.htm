@@ -19,9 +19,274 @@
         { /*Ausblenden des Footers mit Datenschutz und Impressum*/
         display: none;
         }
+        #number1-input.manual-visible,
+        #number2-input.manual-visible {
+            display: block;
+        }
+
+        #mode-menu {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: transparent;
+            box-sizing: border-box;
+        }
+
+        #mode-menu h2 {
+            margin: 0 0 8px 0;
+            color: #023557;
+            font-size: 18px;
+        }
+
+        .mode-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 6px 14px;
+        }
+
+        .mode-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 15px;
+            color: #023557;
+            line-height: 1.35;
+            cursor: pointer;
+        }
+
+        .mode-option input {
+            margin-top: 2px;
+        }
+
+        #zero-cancel-panel {
+            width: min(720px, 95%);
+            margin: 0 auto 14px auto;
+            padding: 12px 14px;
+            border: 2px dashed #057fd0;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            box-sizing: border-box;
+            color: #023557;
+        }
+
+        #zero-cancel-panel p {
+            margin: 6px 0;
+        }
+
+        .zero-cancel-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+            font-size: 17px;
+        }
+
+        .zero-cancel-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            font-family: Consolas, monospace;
+            font-size: 20px;
+        }
+
+        .zero-cancel-number .digit {
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+
+        .zero-cancel-number .clickable-zero {
+            cursor: pointer;
+            border: 1px solid #057fd0;
+            background: #eef8ff;
+        }
+
+        .zero-cancel-number .clickable-zero.removed {
+            background: #d0d0d0;
+            border-color: #8a8a8a;
+            color: #555;
+        }
+
+        #zero-cancel-hint {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid #057fd0;
+            color: #057fd0;
+            font-weight: 700;
+            font-family: Arial, sans-serif;
+            cursor: default;
+            user-select: none;
+        }
+
+        #zero-cancel-hint-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        #zero-cancel-hint-wrap.hide {
+            display: none;
+        }
+
+        #zero-cancel-hint-tooltip {
+            position: absolute;
+            left: 0;
+            top: 28px;
+            min-width: 260px;
+            max-width: 360px;
+            background: #fff;
+            border: 1px solid #057fd0;
+            border-left: 4px solid #057fd0;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 13px;
+            color: #023557;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+            z-index: 5;
+            display: none;
+        }
+
+        #zero-cancel-hint-wrap.show-tooltip #zero-cancel-hint-tooltip {
+            display: block;
+        }
+
+        #zero-cancel-reduced {
+            font-family: Consolas, monospace;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .settings-trigger {
+            text-align: right;
+            margin: 10px auto 10px auto;
+            width: min(720px, 95%);
+        }
+
+        #settings-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(to bottom,#33bdef 5%,#019ad2 100%);
+            color: #fff;
+            border-radius: 24px;
+            border: 1px solid #057fd0;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        #settings-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 999;
+        }
+
+        #settings-overlay.show {
+            display: flex;
+        }
+
+        #settings-overlay .overlay-content {
+            background: #d8f5f2;
+            border: 1px solid #c2c2c2;
+            border-radius: 10px;
+            width: min(760px, calc(100% - 30px));
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 22px 24px 24px;
+            box-shadow: 4px 4px 10px #888;
+            position: relative;
+        }
+
+        .settings-section h3 {
+            margin: 0 0 10px 0;
+            color: #023557;
+        }
+
+        .overlay-close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+            color: #002b47;
+        }
+
+        .settings-table {
+            margin-top: 12px;
+            border-radius: 10px;
+            border: 1px solid #d3d3d3;
+            background: #fff;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, .05);
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+        }
+
+        .settings-row + .settings-row {
+            border-top: 1px solid rgba(148, 163, 184, .4);
+        }
+
+        .settings-row-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .settings-row-control input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .info-button {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid #057fd0;
+            background: #fff;
+            color: #057fd0;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .info-button[aria-expanded="true"] {
+            background: #057fd0;
+            color: #fff;
+        }
+
+        .info-panel {
+            margin: -4px 16px 12px 16px;
+            padding: 10px 14px;
+            border-left: 3px solid #057fd0;
+            background: rgba(173, 241, 235, .4);
+            font-size: 14px;
+        }
+
+        body.overlay-open {
+            overflow: hidden;
+        }
         </style>
         <script>
-            function generateNewTask() {
+            function legacyGenerateNewTaskDoNotUse() {
             expectedInputPeriod= undefined;
             
             // Generieren Sie eine zufällige Ganzzahl zwischen 1 und 99
@@ -42,10 +307,873 @@
         }
   
             }
+            var MODE_OWN_NUMBERS_ID = 'mode-own-numbers';
+            var MODE_INTEGER_ONLY_ID = 'mode-only-integer';
+            var MODE_REST_ID = 'mode-rest';
+            var MODE_COMMA_ID = 'mode-comma';
+            var MODE_PERIOD_ID = 'mode-period';
+            var MODE_CANCEL_ZEROS_ID = 'mode-cancel-zeros';
+            var MODE_SELF_CALC_ID = 'mode-self-calc';
+            var MODE_IDS = [
+                MODE_OWN_NUMBERS_ID,
+                MODE_INTEGER_ONLY_ID,
+                MODE_REST_ID,
+                MODE_COMMA_ID,
+                MODE_PERIOD_ID
+            ];
+
+            function byId(id) {
+                return document.getElementById(id);
+            }
+
+            function isOwnNumbersMode() {
+                var checkbox = byId(MODE_OWN_NUMBERS_ID);
+                return !!(checkbox && checkbox.checked);
+            }
+
+            function isScoringEnabled() {
+                return !isOwnNumbersMode();
+            }
+
+            function isZeroCancelMode() {
+                var checkbox = byId(MODE_CANCEL_ZEROS_ID);
+                return !!(checkbox && checkbox.checked);
+            }
+
+            var currentZeroCancelTask = null;
+            var currentCalculationOverride = null;
+
+            window.isScoringEnabled = isScoringEnabled;
+
+            function updatePointsOutput() {
+                var pointsField = byId('Punkte');
+                var pointsText = byId('PunktAusgabe');
+                if (!pointsField || !pointsText) {
+                    return;
+                }
+
+                var points = parseInt(pointsField.value, 10);
+                if (isNaN(points)) {
+                    points = 0;
+                    pointsField.value = '0';
+                }
+
+                if (isScoringEnabled()) {
+                    pointsText.textContent = 'Du hast ' + points + ' Punkte';
+                } else {
+                    pointsText.textContent = 'Eigene Zahlen aktiv: keine Punkte';
+                }
+            }
+
+            var baseAdjustPoints = typeof adjustPoints === 'function' ? adjustPoints : null;
+            if (baseAdjustPoints) {
+                adjustPoints = function (amount) {
+                    if (!isScoringEnabled()) {
+                        updatePointsOutput();
+                        return;
+                    }
+                    baseAdjustPoints(amount);
+                    updatePointsOutput();
+                };
+            }
+
+            var baseShowSolution = typeof showSolution === 'function' ? showSolution : null;
+            if (baseShowSolution) {
+                showSolution = function () {
+                    if (!isScoringEnabled()) {
+                        var pointsField = byId('Punkte');
+                        var pointsBefore = 0;
+                        if (pointsField) {
+                            pointsBefore = parseInt(pointsField.value, 10);
+                            if (isNaN(pointsBefore)) {
+                                pointsBefore = 0;
+                            }
+                        }
+
+                        baseShowSolution();
+
+                        if (pointsField) {
+                            pointsField.value = String(pointsBefore);
+                        }
+                        updatePointsOutput();
+                        return;
+                    }
+
+                    baseShowSolution();
+                    updatePointsOutput();
+                };
+            }
+
+            function randomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            function pickRandom(values) {
+                return values[randomInt(0, values.length - 1)];
+            }
+
+            function gcd(a, b) {
+                var x = Math.abs(a);
+                var y = Math.abs(b);
+                while (y !== 0) {
+                    var temp = x % y;
+                    x = y;
+                    y = temp;
+                }
+                return x || 1;
+            }
+
+            function hasOnlyTwoAndFiveFactors(value) {
+                var reduced = value;
+                while (reduced % 2 === 0) {
+                    reduced /= 2;
+                }
+                while (reduced % 5 === 0) {
+                    reduced /= 5;
+                }
+                return reduced === 1;
+            }
+
+            function isFiniteDecimalResult(dividend, divisor) {
+                var common = gcd(dividend, divisor);
+                var reducedDivisor = divisor / common;
+                return hasOnlyTwoAndFiveFactors(reducedDivisor);
+            }
+
+            function generateIntegerTask(optionalDivisors) {
+                var divisor = optionalDivisors && optionalDivisors.length
+                    ? pickRandom(optionalDivisors)
+                    : randomInt(2, 15);
+                var minQuotient = Math.max(2, Math.ceil(100 / divisor));
+                var maxQuotient = Math.max(minQuotient, 40);
+                var quotient = randomInt(minQuotient, maxQuotient);
+                return {
+                    number1: divisor * quotient,
+                    number2: divisor
+                };
+            }
+
+            function generateRestTask(integerOnly) {
+                if (integerOnly) {
+                    return generateIntegerTask();
+                }
+
+                for (var i = 0; i < 300; i++) {
+                    var divisor = randomInt(2, 15);
+                    var quotient = randomInt(2, 40);
+                    var remainder = randomInt(1, divisor - 1);
+                    var dividend = divisor * quotient + remainder;
+                    if (dividend >= 100) {
+                        return {
+                            number1: dividend,
+                            number2: divisor
+                        };
+                    }
+                }
+
+                return {
+                    number1: 101,
+                    number2: 6
+                };
+            }
+
+            function generateFiniteDecimalTask(integerOnly) {
+                var finiteDivisors = [2, 4, 5, 8, 10, 20, 25];
+                if (integerOnly) {
+                    return generateIntegerTask(finiteDivisors);
+                }
+
+                for (var i = 0; i < 200; i++) {
+                    var divisor = pickRandom(finiteDivisors);
+                    var dividend = randomInt(100, 999);
+                    if (dividend % divisor !== 0) {
+                        return {
+                            number1: dividend,
+                            number2: divisor
+                        };
+                    }
+                }
+
+                return {
+                    number1: 125,
+                    number2: 8
+                };
+            }
+
+            function generatePeriodicTask(integerOnly) {
+                var periodicDivisors = [3, 6, 7, 9, 11, 12, 13, 14, 15];
+                if (integerOnly) {
+                    return generateIntegerTask(periodicDivisors);
+                }
+
+                for (var i = 0; i < 400; i++) {
+                    var divisor = pickRandom(periodicDivisors);
+                    var dividend = randomInt(100, 999);
+                    if (dividend % divisor !== 0 && !isFiniteDecimalResult(dividend, divisor)) {
+                        return {
+                            number1: dividend,
+                            number2: divisor
+                        };
+                    }
+                }
+
+                return {
+                    number1: 131,
+                    number2: 11
+                };
+            }
+
+            function countTrailingZeros(numberValue) {
+                var text = String(Math.abs(numberValue));
+                var count = 0;
+                for (var i = text.length - 1; i >= 0 && text[i] === '0'; i--) {
+                    count++;
+                }
+                return count;
+            }
+
+            function parsePositiveInteger(textValue) {
+                var normalized = String(textValue || '').trim();
+                if (!/^\d+$/.test(normalized)) {
+                    return null;
+                }
+
+                var parsed = parseInt(normalized, 10);
+                if (!isFinite(parsed) || parsed <= 0) {
+                    return null;
+                }
+                return parsed;
+            }
+
+            function getInputIntegerValue(inputId) {
+                var input = byId(inputId);
+                if (!input) {
+                    return null;
+                }
+                return parsePositiveInteger(input.value);
+            }
+
+            function buildZeroCancelTaskFromNumbers(number1, number2) {
+                var removableZeros = Math.min(
+                    countTrailingZeros(number1),
+                    countTrailingZeros(number2)
+                );
+
+                while (
+                    removableZeros > 0 &&
+                    Math.floor(number2 / Math.pow(10, removableZeros)) > 99
+                ) {
+                    removableZeros--;
+                }
+
+                return {
+                    scaledNumber1: number1,
+                    scaledNumber2: number2,
+                    reducedNumber1: Math.floor(number1 / Math.pow(10, removableZeros)),
+                    reducedNumber2: Math.floor(number2 / Math.pow(10, removableZeros)),
+                    removableZeros: removableZeros,
+                    trailingZerosDividend: countTrailingZeros(number1),
+                    trailingZerosDivisor: countTrailingZeros(number2)
+                };
+            }
+
+            function createScaledTaskWithCancelableZeros(baseTask) {
+                var possiblePowers = [];
+                for (var power = 1; power <= 3; power++) {
+                    if (baseTask.number2 * Math.pow(10, power) <= 9999) {
+                        possiblePowers.push(power);
+                    }
+                }
+
+                if (possiblePowers.length === 0) {
+                    possiblePowers.push(1);
+                }
+
+                var selectedPower = pickRandom(possiblePowers);
+                var scaledNumber1 = baseTask.number1 * Math.pow(10, selectedPower);
+                var scaledNumber2 = baseTask.number2 * Math.pow(10, selectedPower);
+                return buildZeroCancelTaskFromNumbers(scaledNumber1, scaledNumber2);
+            }
+
+            function getManualTaskForZeroCancelMode() {
+                var number1 = getInputIntegerValue('number1');
+                var number2 = getInputIntegerValue('number2');
+                if (number1 === null || number2 === null) {
+                    return null;
+                }
+
+                return buildZeroCancelTaskFromNumbers(number1, number2);
+            }
+
+            function getRandomTaskForZeroCancelMode() {
+                var fallbackTask = null;
+                for (var attempt = 0; attempt < 120; attempt++) {
+                    var candidate = createScaledTaskWithCancelableZeros(getRandomTaskByMode());
+                    var candidateValid =
+                        candidate &&
+                        candidate.removableZeros > 0 &&
+                        candidate.reducedNumber1 >= 100 &&
+                        candidate.reducedNumber2 !== 1;
+
+                    if (candidateValid && !fallbackTask) {
+                        fallbackTask = candidate;
+                    }
+                    if (
+                        candidateValid &&
+                        candidate.trailingZerosDividend !==
+                        candidate.trailingZerosDivisor
+                    ) {
+                        return candidate;
+                    }
+                }
+                if (fallbackTask) {
+                    return fallbackTask;
+                }
+
+                return buildZeroCancelTaskFromNumbers(3600, 120);
+            }
+
+            function renderZeroCancelExpression(task) {
+                var container = byId('zero-cancel-expression');
+                if (!container) {
+                    return;
+                }
+
+                function addDigit(charValue, side, indexInSide) {
+                    var span = document.createElement('span');
+                    span.classList.add('digit');
+                    span.textContent = charValue;
+                    if (charValue === '0') {
+                        span.classList.add('clickable-zero');
+                        span.setAttribute('data-side', side);
+                        span.setAttribute('data-index', String(indexInSide));
+                        span.addEventListener('click', zeroDigitClicked, {
+                            passive: true
+                        });
+                    }
+                    container.appendChild(span);
+                }
+
+                container.innerHTML = '';
+                var dividendText = String(task.scaledNumber1);
+                var divisorText = String(task.scaledNumber2);
+
+                for (var i = 0; i < dividendText.length; i++) {
+                    addDigit(dividendText[i], 'dividend', i);
+                }
+
+                var divider = document.createElement('span');
+                divider.classList.add('digit');
+                divider.textContent = ':';
+                container.appendChild(divider);
+
+                for (var j = 0; j < divisorText.length; j++) {
+                    addDigit(divisorText[j], 'divisor', j);
+                }
+            }
+
+            function isCorrectZeroSelection(task) {
+                var expression = byId('zero-cancel-expression');
+                if (!expression) {
+                    return false;
+                }
+
+                var removedDigits = expression.querySelectorAll('.clickable-zero.removed');
+                var required = task.removableZeros;
+                var dividendTextLength = String(task.scaledNumber1).length;
+                var divisorTextLength = String(task.scaledNumber2).length;
+                var dividendRemoved = 0;
+                var divisorRemoved = 0;
+
+                for (var i = 0; i < removedDigits.length; i++) {
+                    var side = removedDigits[i].getAttribute('data-side');
+                    var indexValue = parseInt(removedDigits[i].getAttribute('data-index'), 10);
+
+                    if (side === 'dividend') {
+                        dividendRemoved++;
+                        if (indexValue < dividendTextLength - required) {
+                            return false;
+                        }
+                    } else if (side === 'divisor') {
+                        divisorRemoved++;
+                        if (indexValue < divisorTextLength - required) {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+
+                return dividendRemoved === required && divisorRemoved === required;
+            }
+
+            function lockZeroCancelSelection() {
+                var expression = byId('zero-cancel-expression');
+                if (!expression) {
+                    return;
+                }
+
+                var clickableZeros = expression.querySelectorAll('.clickable-zero');
+                for (var i = 0; i < clickableZeros.length; i++) {
+                    clickableZeros[i].removeEventListener('click', zeroDigitClicked);
+                    clickableZeros[i].style.cursor = 'default';
+                }
+            }
+
+            function zeroDigitClicked(event) {
+                event.currentTarget.classList.toggle('removed');
+            }
+
+            function hideZeroCancelHint() {
+                var hintWrap = byId('zero-cancel-hint-wrap');
+                if (!hintWrap) {
+                    return;
+                }
+                hintWrap.classList.add('hide');
+                hintWrap.classList.remove('show-tooltip');
+            }
+
+            function showZeroCancelHint() {
+                var hintWrap = byId('zero-cancel-hint-wrap');
+                if (!hintWrap) {
+                    return;
+                }
+                hintWrap.classList.remove('hide');
+                hintWrap.classList.add('show-tooltip');
+            }
+
+            function hideZeroCancelPanel() {
+                var panel = byId('zero-cancel-panel');
+                if (panel) {
+                    panel.classList.add('hide');
+                }
+                var expressionSpan = byId('zero-cancel-expression');
+                var reducedText = byId('zero-cancel-reduced');
+                var applyButton = byId('zero-cancel-apply-button');
+                if (expressionSpan) {
+                    expressionSpan.innerHTML = '';
+                }
+                if (reducedText) {
+                    reducedText.textContent = '';
+                    reducedText.classList.add('hide');
+                }
+                hideZeroCancelHint();
+                if (applyButton) {
+                    applyButton.disabled = true;
+                }
+                currentZeroCancelTask = null;
+                currentCalculationOverride = null;
+            }
+
+            function showZeroCancelPanel(task) {
+                currentZeroCancelTask = task;
+                currentCalculationOverride = null;
+
+                if (!task || task.removableZeros <= 0) {
+                    hideZeroCancelPanel();
+                    calculateCurrentTask();
+                    return;
+                }
+
+                if (typeof resetCanvas === 'function') {
+                    resetCanvas();
+                }
+
+                var panel = byId('zero-cancel-panel');
+                var instruction = byId('zero-cancel-instruction');
+                var reducedText = byId('zero-cancel-reduced');
+                var applyButton = byId('zero-cancel-apply-button');
+                if (instruction) {
+                    instruction.textContent =
+                        'Klicke in der Aufgabe alle Nullen an, die du streichen moechtest.';
+                }
+                hideZeroCancelHint();
+                if (reducedText) {
+                    reducedText.textContent = '';
+                    reducedText.classList.add('hide');
+                }
+                if (applyButton) {
+                    applyButton.disabled = false;
+                }
+
+                renderZeroCancelExpression(task);
+
+                if (panel) {
+                    panel.classList.remove('hide');
+                }
+            }
+
+            function applyZeroCancellation() {
+                if (!currentZeroCancelTask) {
+                    return;
+                }
+
+                var panel = byId('zero-cancel-panel');
+                if (!panel) {
+                    return;
+                }
+
+                if (!isCorrectZeroSelection(currentZeroCancelTask)) {
+                    adjustPoints(-1);
+                    showZeroCancelHint();
+                    return;
+                }
+
+                hideZeroCancelHint();
+                currentCalculationOverride = {
+                    number1: currentZeroCancelTask.reducedNumber1,
+                    number2: currentZeroCancelTask.reducedNumber2
+                };
+                var reducedText = byId('zero-cancel-reduced');
+                if (reducedText) {
+                    reducedText.textContent =
+                        'Gekuerzt: ' +
+                        currentZeroCancelTask.reducedNumber1 +
+                        ':' +
+                        currentZeroCancelTask.reducedNumber2;
+                    reducedText.classList.remove('hide');
+                }
+                lockZeroCancelSelection();
+                var applyButton = byId('zero-cancel-apply-button');
+                if (applyButton) {
+                    applyButton.disabled = true;
+                }
+                calculateCurrentTask();
+            }
+
+            function activateOnlyMode(activeModeId) {
+                for (var i = 0; i < MODE_IDS.length; i++) {
+                    var checkbox = byId(MODE_IDS[i]);
+                    if (checkbox) {
+                        checkbox.checked = MODE_IDS[i] === activeModeId;
+                    }
+                }
+            }
+
+            function getActiveModeId() {
+                for (var i = 0; i < MODE_IDS.length; i++) {
+                    var checkbox = byId(MODE_IDS[i]);
+                    if (checkbox && checkbox.checked) {
+                        return MODE_IDS[i];
+                    }
+                }
+                return MODE_COMMA_ID;
+            }
+
+            function syncResultModeToCalculator() {
+                var restModeEnabled = getActiveModeId() === MODE_REST_ID;
+                var restSelect = byId('rest-select');
+                var commaSelect = byId('comma-select');
+                if (!restSelect || !commaSelect) {
+                    return;
+                }
+
+                restSelect.checked = restModeEnabled;
+                commaSelect.checked = !restModeEnabled;
+                changeRestComma();
+            }
+
+            function syncSelfCalcModeToMenu() {
+                var menuCheckbox = byId(MODE_SELF_CALC_ID);
+                var calcCheckbox = byId('calculate-yourself-checkbox');
+                if (!menuCheckbox || !calcCheckbox) {
+                    return;
+                }
+                menuCheckbox.checked = calcCheckbox.checked;
+            }
+
+            function isZeroCancelPending() {
+                var panel = byId('zero-cancel-panel');
+                var applyButton = byId('zero-cancel-apply-button');
+                return !!(
+                    panel &&
+                    !panel.classList.contains('hide') &&
+                    applyButton &&
+                    !applyButton.disabled
+                );
+            }
+
+            function getRandomTaskByMode() {
+                var activeModeId = getActiveModeId();
+
+                if (activeModeId === MODE_INTEGER_ONLY_ID) {
+                    return generateIntegerTask();
+                }
+                if (activeModeId === MODE_REST_ID) {
+                    return generateRestTask(false);
+                }
+                if (activeModeId === MODE_PERIOD_ID) {
+                    return generatePeriodicTask(false);
+                }
+
+                // MODE_COMMA_ID (und Fallback)
+                return generateFiniteDecimalTask(false);
+            }
+
+            function calculateCurrentTask() {
+                var calcYourselfCheckbox = byId('calculate-yourself-checkbox');
+                var number1Input = byId('number1');
+                var number2Input = byId('number2');
+                var hasOverride = !!(
+                    currentCalculationOverride &&
+                    number1Input &&
+                    number2Input
+                );
+                var number1Backup = '';
+                var number2Backup = '';
+
+                if (hasOverride) {
+                    number1Backup = number1Input.value;
+                    number2Backup = number2Input.value;
+                    number1Input.value = String(currentCalculationOverride.number1);
+                    number2Input.value = String(currentCalculationOverride.number2);
+                }
+
+                try {
+                    if (calcYourselfCheckbox && calcYourselfCheckbox.checked) {
+                        calculate(div_self, 'dividieren');
+                    } else {
+                        calculate(div, 'dividieren');
+                    }
+                } finally {
+                    if (hasOverride) {
+                        number1Input.value = number1Backup;
+                        number2Input.value = number2Backup;
+                    }
+                }
+            }
+
+            function applyModeUi() {
+                var ownNumbersMode = isOwnNumbersMode();
+                var number1Input = byId('number1-input');
+                var number2Input = byId('number2-input');
+                var submitButton = byId('submit-button');
+
+                if (number1Input) {
+                    number1Input.classList.toggle('manual-visible', ownNumbersMode);
+                }
+                if (number2Input) {
+                    number2Input.classList.toggle('manual-visible', ownNumbersMode);
+                }
+                if (submitButton) {
+                    submitButton.textContent = ownNumbersMode ? 'Aufgabe berechnen' : 'Neue Aufgabe';
+                }
+
+                if (!isZeroCancelMode()) {
+                    hideZeroCancelPanel();
+                }
+
+                syncResultModeToCalculator();
+                syncSelfCalcModeToMenu();
+                updatePointsOutput();
+            }
+
+            function modeChanged(event) {
+                var clickedId = event.target.id;
+                activateOnlyMode(clickedId);
+                generateNewTask();
+            }
+
+            function selfCalcModeChanged(event) {
+                var calcCheckbox = byId('calculate-yourself-checkbox');
+                if (!calcCheckbox) {
+                    return;
+                }
+
+                calcCheckbox.checked = !!(event.target && event.target.checked);
+                if (typeof calculateYourselfChanged === 'function') {
+                    calculateYourselfChanged();
+                }
+
+                if (isZeroCancelPending()) {
+                    return;
+                }
+                calculateCurrentTask();
+            }
+
+            function toggleInfoPanel(infoButton) {
+                var targetId = infoButton.getAttribute('data-info-target');
+                if (!targetId) {
+                    return;
+                }
+
+                var panel = byId(targetId);
+                if (!panel) {
+                    return;
+                }
+
+                panel.classList.toggle('hide');
+                var expanded = !panel.classList.contains('hide');
+                infoButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                panel.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+            }
+
+            function initializeInfoButtons() {
+                var infoButtons = document.querySelectorAll('#settings-overlay .info-button');
+                for (var i = 0; i < infoButtons.length; i++) {
+                    infoButtons[i].addEventListener(
+                        'click',
+                        function (event) {
+                            toggleInfoPanel(event.currentTarget);
+                        },
+                        { passive: true }
+                    );
+                }
+            }
+
+            function openSettingsOverlay() {
+                var settingsOverlay = byId('settings-overlay');
+                var settingsButton = byId('settings-button');
+                var settingsCloseButton = byId('settings-close-button');
+                if (!settingsOverlay) {
+                    return;
+                }
+
+                settingsOverlay.classList.add('show');
+                settingsOverlay.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('overlay-open');
+                if (settingsButton) {
+                    settingsButton.setAttribute('aria-expanded', 'true');
+                }
+                if (settingsCloseButton) {
+                    settingsCloseButton.focus();
+                }
+            }
+
+            function closeSettingsOverlay(restoreFocus) {
+                var settingsOverlay = byId('settings-overlay');
+                var settingsButton = byId('settings-button');
+                if (!settingsOverlay) {
+                    return;
+                }
+
+                settingsOverlay.classList.remove('show');
+                settingsOverlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('overlay-open');
+                if (settingsButton) {
+                    settingsButton.setAttribute('aria-expanded', 'false');
+                    if (restoreFocus) {
+                        settingsButton.focus();
+                    }
+                }
+            }
+
+            function initializeSettingsOverlay() {
+                var settingsButton = byId('settings-button');
+                var settingsOverlay = byId('settings-overlay');
+                var settingsCloseButton = byId('settings-close-button');
+
+                if (settingsButton) {
+                    settingsButton.addEventListener(
+                        'click',
+                        function () {
+                            openSettingsOverlay();
+                        },
+                        { passive: true }
+                    );
+                }
+
+                if (settingsCloseButton) {
+                    settingsCloseButton.addEventListener(
+                        'click',
+                        function () {
+                            closeSettingsOverlay(true);
+                        },
+                        { passive: true }
+                    );
+                }
+
+                if (settingsOverlay) {
+                    settingsOverlay.addEventListener(
+                        'click',
+                        function (event) {
+                            if (event.target === settingsOverlay) {
+                                closeSettingsOverlay(false);
+                            }
+                        },
+                        { passive: true }
+                    );
+                }
+
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape' && settingsOverlay && settingsOverlay.classList.contains('show')) {
+                        closeSettingsOverlay(true);
+                    }
+                });
+
+                initializeInfoButtons();
+            }
+
+            function initializeModeMenu() {
+                for (var i = 0; i < MODE_IDS.length; i++) {
+                    var checkbox = byId(MODE_IDS[i]);
+                    if (checkbox) {
+                        checkbox.addEventListener('change', modeChanged, { passive: true });
+                    }
+                }
+                var cancelZerosCheckbox = byId(MODE_CANCEL_ZEROS_ID);
+                if (cancelZerosCheckbox) {
+                    cancelZerosCheckbox.addEventListener(
+                        'change',
+                        function () {
+                            generateNewTask();
+                        },
+                        { passive: true }
+                    );
+                }
+
+                var selfCalcCheckbox = byId(MODE_SELF_CALC_ID);
+                if (selfCalcCheckbox) {
+                    selfCalcCheckbox.addEventListener('change', selfCalcModeChanged, { passive: true });
+                }
+
+                activateOnlyMode(getActiveModeId());
+                syncSelfCalcModeToMenu();
+            }
+
+            function generateNewTask() {
+                expectedInputPeriod = undefined;
+                applyModeUi();
+
+                if (isOwnNumbersMode()) {
+                    if (isZeroCancelMode()) {
+                        var ownTaskWithZeros = getManualTaskForZeroCancelMode();
+                        if (ownTaskWithZeros && ownTaskWithZeros.removableZeros > 0) {
+                            showZeroCancelPanel(ownTaskWithZeros);
+                            return;
+                        }
+                    }
+                    hideZeroCancelPanel();
+                    calculateCurrentTask();
+                    return;
+                }
+
+                if (isZeroCancelMode()) {
+                    var taskWithZeros = getRandomTaskForZeroCancelMode();
+                    byId('number1').value = String(taskWithZeros.scaledNumber1);
+                    byId('number2').value = String(taskWithZeros.scaledNumber2);
+                    showZeroCancelPanel(taskWithZeros);
+                    return;
+                }
+
+                hideZeroCancelPanel();
+                var task = getRandomTaskByMode();
+                byId('number1').value = String(task.number1);
+                byId('number2').value = String(task.number2);
+                calculateCurrentTask();
+            }
+
+            function initializeDivisionTrainer() {
+                divide_init();
+                initializeSettingsOverlay();
+                initializeModeMenu();
+                updatePointsOutput();
+                generateNewTask();
+            }
         </script>
     </head>
 
-<body onload="divide_init(); generateNewTask();">
+<body onload="initializeDivisionTrainer();">
     <!-- Den uhrsprünglichen Header Ausgeblendet indem er in Komentare gesetzt wurde
     <div id="header-main-container">
    
@@ -69,6 +1197,11 @@
 -->
     <main>
         <h1>Schriftlich Dividieren</h1>
+        <div class="settings-trigger">
+            <button type="button" id="settings-button" aria-haspopup="dialog" aria-controls="settings-overlay" aria-expanded="false">
+                <span aria-hidden="true">&#9881;</span> Einstellungen
+            </button>
+        </div>
         <form>
                     <input autocomplete="off" id="rest-select" name="rest-comma-selection" onchange="changeRestComma()" type="radio" class="hide"> 
                     <input autocomplete="off" id="comma-select" name="rest-comma-selection" onchange="changeRestComma()" type="radio" class="hide" checked="checked">
@@ -78,9 +1211,21 @@
                         <label for="rest-select" id="select-rest">mit Rest</label>
                         </div>
                     </div>
-                <div class="number-input">1. Zahl: <input autocomplete="off" id="number1" placeholder="Dividend" required="" value="3"></div>
-                <div class="number-input">2. Zahl: <input autocomplete="off" id="number2" placeholder="Divisor" required="" value="9"></div>
-                <div class="number-input">Punkte: <input autocomplete="off" id="Punkte" placeholder="Punkte" required="" value="0"></div>
+                <div class="number-input" id="number1-input">1. Zahl: <input autocomplete="off" id="number1" placeholder="Dividend" required="" value="3"></div>
+                <div class="number-input" id="number2-input">2. Zahl: <input autocomplete="off" id="number2" placeholder="Divisor" required="" value="9"></div>
+                <section id="zero-cancel-panel" class="hide">
+                    <p id="zero-cancel-instruction"></p>
+                    <div class="zero-cancel-row">
+                        <span id="zero-cancel-expression" class="zero-cancel-number"></span>
+                        <span id="zero-cancel-hint-wrap" class="hide">
+                            <span id="zero-cancel-hint">!</span>
+                            <span id="zero-cancel-hint-tooltip">Es muss bei beiden Zahlen gleich viel gestrichen werden.</span>
+                        </span>
+                    </div>
+                    <p id="zero-cancel-reduced" class="hide"></p>
+                    <button id="zero-cancel-apply-button" class="exercise-button" type="button" onclick="applyZeroCancellation()" disabled>Mit gekuerzten Zahlen rechnen</button>
+                </section>
+                <div class="number-input" id="punkte-input">Punkte: <input autocomplete="off" id="Punkte" placeholder="Punkte" required="" value="0"></div>
                 <div class="number-input" id="decimals-input-div">Anzahl Nachkommastellen: <input autocomplete="off" id="decimals" aria-label="Anzahl Nachkommastellen" value="50"></div>
                 <div class="not-selectable" id="calculate-yourself-button-div">
                     <label id="calculate-yourself-button-container">
@@ -192,6 +1337,109 @@
                                 </div>
                             </main>
                         </div>
+    <div id="settings-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="settings-overlay-title">
+        <div class="overlay-content">
+            <button type="button" class="overlay-close-button" id="settings-close-button" aria-label="Einstellungen schliessen">&times;</button>
+            <h2 id="settings-overlay-title">Einstellungen</h2>
+            <section class="settings-section">
+                <h3>Aufgabenmodi</h3>
+                <section id="mode-menu" class="not-selectable">
+                    <div class="settings-table" role="table">
+                        <div class="settings-row" role="row">
+                            <div class="settings-row-label" role="cell">
+                                <label for="mode-self-calc">Selber rechnen</label>
+                                <button type="button" class="info-button" data-info-target="info-self-calc" aria-label="Info zu selber rechnen" aria-expanded="false">?</button>
+                            </div>
+                            <div class="settings-row-control" role="cell">
+                                <input autocomplete="off" id="mode-self-calc" type="checkbox" checked="checked">
+                            </div>
+                        </div>
+                        <div class="info-panel hide" id="info-self-calc" aria-hidden="true">
+                            Aktiv: Du loest die Aufgabe selbst. Deaktiviert: Der Rechenweg wird direkt angezeigt.
+                        </div>
+
+                        <div class="settings-row" role="row">
+                            <div class="settings-row-label" role="cell">
+                                <label for="mode-own-numbers">Eigene Zahlen</label>
+                                <button type="button" class="info-button" data-info-target="info-own-numbers" aria-label="Info zu eigenen Zahlen" aria-expanded="false">?</button>
+                            </div>
+                            <div class="settings-row-control" role="cell">
+                                <input autocomplete="off" id="mode-own-numbers" type="checkbox">
+                            </div>
+                        </div>
+                        <div class="info-panel hide" id="info-own-numbers" aria-hidden="true">
+                            Du gibst Dividend und Divisor selbst ein. In diesem Modus gibt es keine Punkte.
+                        </div>
+
+                        <div class="settings-row" role="row">
+                            <div class="settings-row-label" role="cell">
+                                <label for="mode-only-integer">Nur ganze Ergebnisse</label>
+                                <button type="button" class="info-button" data-info-target="info-only-integer" aria-label="Info zu ganzen Ergebnissen" aria-expanded="false">?</button>
+                            </div>
+                            <div class="settings-row-control" role="cell">
+                                <input autocomplete="off" id="mode-only-integer" type="checkbox">
+                            </div>
+                        </div>
+                        <div class="info-panel hide" id="info-only-integer" aria-hidden="true">
+                            Zufallsaufgaben werden so erzeugt, dass das Ergebnis ohne Rest und ohne Komma aufgeht.
+                        </div>
+
+                        <div class="settings-row" role="row">
+                            <div class="settings-row-label" role="cell">
+                                <label for="mode-rest">Mit Rest</label>
+                                <button type="button" class="info-button" data-info-target="info-rest" aria-label="Info zu Mit Rest" aria-expanded="false">?</button>
+                            </div>
+                            <div class="settings-row-control" role="cell">
+                                <input autocomplete="off" id="mode-rest" type="checkbox">
+                            </div>
+                        </div>
+                        <div class="info-panel hide" id="info-rest" aria-hidden="true">
+                            Aufgaben werden im Restmodus gerechnet. Das Ergebnis wird mit Rest angegeben.
+                        </div>
+
+                        <div class="settings-row" role="row">
+                            <div class="settings-row-label" role="cell">
+                                <label for="mode-comma">Mit Komma</label>
+                                <button type="button" class="info-button" data-info-target="info-comma" aria-label="Info zu Mit Komma" aria-expanded="false">?</button>
+                            </div>
+                            <div class="settings-row-control" role="cell">
+                                <input autocomplete="off" id="mode-comma" type="checkbox" checked="checked">
+                            </div>
+                        </div>
+                        <div class="info-panel hide" id="info-comma" aria-hidden="true">
+                            Aufgaben koennen endliche Kommazahlen als Ergebnis haben.
+                        </div>
+
+                        <div class="settings-row" role="row">
+                            <div class="settings-row-label" role="cell">
+                                <label for="mode-period">Mit Periode</label>
+                                <button type="button" class="info-button" data-info-target="info-period" aria-label="Info zu Mit Periode" aria-expanded="false">?</button>
+                            </div>
+                            <div class="settings-row-control" role="cell">
+                                <input autocomplete="off" id="mode-period" type="checkbox">
+                            </div>
+                        </div>
+                        <div class="info-panel hide" id="info-period" aria-hidden="true">
+                            Aufgaben koennen periodische Kommazahlen als Ergebnis haben.
+                        </div>
+
+                        <div class="settings-row" role="row">
+                            <div class="settings-row-label" role="cell">
+                                <label for="mode-cancel-zeros">Nullen streichen (zusaetzlich)</label>
+                                <button type="button" class="info-button" data-info-target="info-cancel-zeros" aria-label="Info zu Nullen streichen" aria-expanded="false">?</button>
+                            </div>
+                            <div class="settings-row-control" role="cell">
+                                <input autocomplete="off" id="mode-cancel-zeros" type="checkbox">
+                            </div>
+                        </div>
+                        <div class="info-panel hide" id="info-cancel-zeros" aria-hidden="true">
+                            Vor dem Rechnen werden an klickbaren Endnullen gleiche Zehnerpotenzen gekuerzt.
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </div>
+    </div>
            <div>
             <p id="PunktAusgabe">Du hast 0 Punkte</p>
            </div>                     
