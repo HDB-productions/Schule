@@ -59,6 +59,10 @@
             font-family: "Segoe UI", Tahoma, sans-serif;
         }
 
+        .task-line.ok {
+            color: #145f2c;
+        }
+
         #inputText {
             min-width: 12px;
             display: inline-block;
@@ -218,14 +222,38 @@
             }
 
             function render() {
+                var taskLine = document.querySelector(".task-line");
                 var taskText = document.getElementById("taskText");
                 var inputText = document.getElementById("inputText");
                 var scoreLine = document.getElementById("scoreLine");
+                var solved = state.Richtig;
 
                 taskText.textContent = state.EuA;
                 inputText.textContent = state.Ergebnis;
                 scoreLine.textContent = state.Punkte + " Punkte";
-                scoreLine.classList.toggle("ok", state.Richtig);
+                scoreLine.classList.toggle("ok", solved);
+                taskLine.classList.toggle("ok", solved);
+
+                updateActionButtonsVisibility(solved);
+            }
+
+            function updateActionButtonsVisibility(solved) {
+                var keyboardRoot = document.getElementById("tableContainer");
+                var actionToHide = {
+                    Pruefen: true,
+                    Loeschen: true
+                };
+
+                if (!keyboardRoot) {
+                    return;
+                }
+
+                keyboardRoot.querySelectorAll("button").forEach(function (button) {
+                    var action = button.dataset.funktion;
+                    if (actionToHide[action]) {
+                        button.style.display = solved ? "none" : "";
+                    }
+                });
             }
 
             function pruefen() {
@@ -385,7 +413,7 @@
                     return;
                 }
 
-                if (action === "Neue Aufgabe") {
+                if (action === "Weiter" || action === "Neue Aufgabe") {
                     neueAufgabe();
                 }
             }
