@@ -1,3 +1,4 @@
+// Dokumentation: siehe eigeneTastatur.md
 function EigeneTastatur(buttonList, containerId, buttonFunction, buttonSize, rand, eckenRadius) {
     if (!Array.isArray(buttonList)) {
         throw new TypeError("EigeneTastatur: buttonList muss ein Array sein.");
@@ -10,9 +11,11 @@ function EigeneTastatur(buttonList, containerId, buttonFunction, buttonSize, ran
     var buttonMargin = toNonNegativeInt(rand, 0);
     var cornerRadius = toNonNegativeNumber(eckenRadius, 0);
     var container = resolveContainer(containerId);
-    var entries = normalizeEntries(buttonList);
+    var expandedButtonList = expandButtonDefinitions(buttonList);
+    var entries = normalizeEntries(expandedButtonList);
     var bounds = calculateBounds(entries);
     var stage = createStage(gridSize, bounds);
+    var mathTargets = [];
 
     detectOverlaps(entries);
 
@@ -49,12 +52,13 @@ function EigeneTastatur(buttonList, containerId, buttonFunction, buttonSize, ran
         button.style.zIndex = String(i + 1);
 
         applyButtonStyleOptions(button, entry);
-        applyButtonLabel(button, entry.label);
+        applyButtonLabel(button, entry.label, entry.mathOption, mathTargets);
         button.addEventListener("click", createClickHandler(buttonFunction, entry, button));
         stage.appendChild(button);
     }
 
     container.replaceChildren(stage);
+    typesetMath(mathTargets);
 }
 
 function createStage(gridSize, bounds) {
@@ -117,92 +121,298 @@ function applyCustomStyleObject(button, customStyle) {
     }
 }
 
-function applyButtonLabel(button, label) {
+function applyButtonLabel(button, label, mathOption, mathTargets) {
     var text = String(label || "");
-    button.textContent = renderLatexLikeText(text, 0);
-}
+    var shouldRenderMath = shouldUseMathRendering(text, mathOption);
 
-function renderLatexLikeText(text, depth) {
-    var source = String(text || "");
-    var level = depth || 0;
-
-    if (!containsLatexSyntax(source) || level > 5) {
-        return source;
+    if (!shouldRenderMath) {
+        button.textContent = text;
+        return;
     }
 
-    var result = source;
-    result = result.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, function (_match, numerator, denominator) {
-        return (
-            renderLatexLikeText(numerator, level + 1) +
-            "\u2044" +
-            renderLatexLikeText(denominator, level + 1)
+    if (typeof window !== "undefined" && window.katex && typeof window.katex.render === "function") {
+        try {
+            var katexNode = document.createElement("span");
+            window.katex.render(text, katexNode, {
+                throwOnError: false,
+                displayMode: false
+            });
+            button.replaceChildren(katexNode);
+            return;
+        } catch (error) {
+            console.warn("EigeneTastatur: KaTeX konnte Formel nicht rendern.", error, text);
+        }
+    }
+
+    var mathNode = document.createElement("span");
+    mathNode.className = "eigene-tastatur-math";
+    mathNode.textContent = "\\(" + text + "\\)";
+    button.replaceChildren(mathNode);
+    mathTargets.push(button);
+}
+
+function shouldUseMathRendering(labelText, mathOption) {
+    if (mathOption === true) {
+        return true;
+    }
+    if (mathOption === false) {
+        return false;
+    }
+
+    // Auto-Modus: Latex-typische Tokens erkannt.
+    return /\\[A-Za-z]+|[_^{}]/.test(labelText);
+}
+
+function typesetMath(targets) {
+    if (!targets || targets.length === 0 || typeof window === "undefined") {
+        return;
+    }
+
+    tryMathJaxTypeset(targets, 20);
+}
+
+function tryMathJaxTypeset(targets, retriesLeft) {
+    if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+        window.MathJax.typesetPromise(targets).catch(function (error) {
+            console.warn("EigeneTastatur: MathJax-Rendering fehlgeschlagen.", error);
+        });
+        return;
+    }
+
+    if (retriesLeft <= 0) {
+        console.warn(
+            "EigeneTastatur: MathJax nicht gefunden. Formeln werden als roher LaTeX-Text angezeigt."
         );
-    });
-
-    result = result.replace(/\\sqrt\{([^{}]+)\}/g, function (_match, value) {
-        return "\u221a(" + renderLatexLikeText(value, level + 1) + ")";
-    });
-
-    result = replaceLatexCommands(result);
-
-    result = result.replace(/\^\{([^{}]+)\}/g, function (_match, value) {
-        return toSuperscript(renderLatexLikeText(value, level + 1));
-    });
-    result = result.replace(/_\{([^{}]+)\}/g, function (_match, value) {
-        return toSubscript(renderLatexLikeText(value, level + 1));
-    });
-    result = result.replace(/\^([^\s])/g, function (_match, value) {
-        return toSuperscript(renderLatexLikeText(value, level + 1));
-    });
-    result = result.replace(/_([^\s])/g, function (_match, value) {
-        return toSubscript(renderLatexLikeText(value, level + 1));
-    });
-
-    result = result.replace(/[{}]/g, "");
-    result = result.replace(/\\,/g, " ");
-    result = result.replace(/\\;/g, " ");
-    result = result.replace(/\\!/g, "");
-
-    return result;
-}
-
-function containsLatexSyntax(text) {
-    return /\\[A-Za-z]+|\^|_/.test(text);
-}
-
-function replaceLatexCommands(text) {
-    return text.replace(/\\[A-Za-z]+/g, function (command) {
-        if (Object.prototype.hasOwnProperty.call(LATEX_SYMBOL_MAP, command)) {
-            return LATEX_SYMBOL_MAP[command];
-        }
-        return command;
-    });
-}
-
-function toSuperscript(text) {
-    return convertUsingMap(text, SUPERSCRIPT_MAP, "^");
-}
-
-function toSubscript(text) {
-    return convertUsingMap(text, SUBSCRIPT_MAP, "_");
-}
-
-function convertUsingMap(text, map, fallbackPrefix) {
-    var raw = String(text || "");
-    if (!raw) {
-        return "";
+        return;
     }
 
-    var converted = "";
-    for (var i = 0; i < raw.length; i++) {
-        var char = raw.charAt(i);
-        if (!Object.prototype.hasOwnProperty.call(map, char)) {
-            return fallbackPrefix + "(" + raw + ")";
+    window.setTimeout(function () {
+        tryMathJaxTypeset(targets, retriesLeft - 1);
+    }, 100);
+}
+
+function expandButtonDefinitions(buttonList) {
+    var expanded = [];
+
+    for (var i = 0; i < buttonList.length; i++) {
+        var source = buttonList[i];
+
+        if (isBlockDefinition(source)) {
+            var blockButtons = expandBlockDefinition(source, i);
+            for (var j = 0; j < blockButtons.length; j++) {
+                expanded.push(blockButtons[j]);
+            }
+            continue;
         }
-        converted += map[char];
+
+        expanded.push(source);
     }
 
-    return converted;
+    return expanded;
+}
+
+function isBlockDefinition(source) {
+    if (!source || typeof source !== "object" || Array.isArray(source)) {
+        return false;
+    }
+
+    var type = readFirst(source, ["Typ", "typ", "Type", "type", "Art", "art"]);
+    if (typeof type !== "undefined" && type !== null) {
+        var normalizedType = String(type).trim().toLowerCase();
+        if (normalizedType === "block" || normalizedType === "gruppe" || normalizedType === "group") {
+            return true;
+        }
+    }
+
+    var items = readFirst(source, ["Buttons", "buttons", "Eintraege", "eintraege", "Entries", "entries", "Items", "items"]);
+    return Array.isArray(items);
+}
+
+function expandBlockDefinition(block, blockIndex) {
+    var items = readFirst(block, ["Buttons", "buttons", "Eintraege", "eintraege", "Entries", "entries", "Items", "items"]);
+    if (!Array.isArray(items) || items.length === 0) {
+        throw new Error("EigeneTastatur: Block an Index " + blockIndex + " braucht eine nicht-leere Buttons-Liste.");
+    }
+
+    var startX = toPositiveInt(
+        readFirst(block, ["AnkerX", "ankerX", "x", "X", "Spalte", "spalte", "column", "col"]),
+        null
+    );
+    var startY = toPositiveInt(
+        readFirst(block, ["AnkerY", "ankerY", "y", "Y", "Zeile", "zeile", "row"]),
+        null
+    );
+    var perRow = toPositiveInt(
+        readFirst(
+            block,
+            [
+                "AnzahlProReihe",
+                "anzahlProReihe",
+                "Anzahl pro reihe",
+                "Anzahl pro Reihe",
+                "anzahl pro reihe",
+                "anzahl pro Reihe",
+                "AnzahlProZeile",
+                "anzahlProZeile",
+                "ProReihe",
+                "proReihe",
+                "Columns",
+                "columns",
+                "Spalten",
+                "spalten"
+            ]
+        ),
+        null
+    );
+    var baseWidth = toPositiveInt(readFirst(block, ["Breite", "breite", "width", "colSpan"]), 1);
+    var baseHeight = toPositiveInt(
+        readFirst(block, ["H\u00f6he", "Hoehe", "h\u00f6he", "hoehe", "height", "rowSpan"]),
+        1
+    );
+    var stepX = toPositiveInt(
+        readFirst(block, ["SchrittX", "schrittX", "stepX", "StepX", "AbstandX", "abstandX"]),
+        baseWidth
+    );
+    var stepY = toPositiveInt(
+        readFirst(block, ["SchrittY", "schrittY", "stepY", "StepY", "AbstandY", "abstandY"]),
+        baseHeight
+    );
+
+    if (!startX || !startY) {
+        throw new Error("EigeneTastatur: Block an Index " + blockIndex + " braucht AnkerX und AnkerY.");
+    }
+    if (!perRow) {
+        throw new Error("EigeneTastatur: Block an Index " + blockIndex + " braucht AnzahlProReihe > 0.");
+    }
+
+    var defaults = buildBlockDefaults(block);
+    var expanded = [];
+
+    for (var i = 0; i < items.length; i++) {
+        var rawItem = normalizeBlockItem(items[i], blockIndex, i);
+        var merged = mergeObjects(defaults, rawItem);
+        var colIndex = i % perRow;
+        var rowIndex = Math.floor(i / perRow);
+        var defaultX = startX + colIndex * stepX;
+        var defaultY = startY + rowIndex * stepY;
+        var anchor = parseAnchor(readFirst(merged, ["Anker", "anker", "anchor", "position"]));
+        var itemX = readFirst(merged, ["AnkerX", "ankerX", "x", "X", "Spalte", "spalte", "column", "col"]);
+        var itemY = readFirst(merged, ["AnkerY", "ankerY", "y", "Y", "Zeile", "zeile", "row"]);
+
+        if (!anchor) {
+            if (isMissingValue(itemX)) {
+                merged.AnkerX = defaultX;
+            }
+            if (isMissingValue(itemY)) {
+                merged.AnkerY = defaultY;
+            }
+        }
+
+        expanded.push(merged);
+    }
+
+    return expanded;
+}
+
+function buildBlockDefaults(block) {
+    var defaults = {};
+
+    for (var key in block) {
+        if (!Object.prototype.hasOwnProperty.call(block, key)) {
+            continue;
+        }
+        if (isBlockControlKey(key)) {
+            continue;
+        }
+        defaults[key] = block[key];
+    }
+
+    return defaults;
+}
+
+function isBlockControlKey(key) {
+    var normalized = String(key || "").toLowerCase().replace(/[\s_\-]/g, "");
+
+    return (
+        normalized === "typ" ||
+        normalized === "type" ||
+        normalized === "art" ||
+        normalized === "buttons" ||
+        normalized === "items" ||
+        normalized === "entries" ||
+        normalized === "eintraege" ||
+        normalized === "anzahlproreihe" ||
+        normalized === "anzahlprozeile" ||
+        normalized === "proreihe" ||
+        normalized === "columns" ||
+        normalized === "spalten" ||
+        normalized === "schrittx" ||
+        normalized === "schritty" ||
+        normalized === "stepx" ||
+        normalized === "stepy" ||
+        normalized === "anker" ||
+        normalized === "anchor" ||
+        normalized === "position" ||
+        normalized === "ankerx" ||
+        normalized === "ankery" ||
+        normalized === "col" ||
+        normalized === "x" ||
+        normalized === "y" ||
+        normalized === "zeile" ||
+        normalized === "row" ||
+        normalized === "spalte" ||
+        normalized === "column"
+    );
+}
+
+function normalizeBlockItem(item, blockIndex, itemIndex) {
+    if (item === null || typeof item === "undefined") {
+        throw new Error(
+            "EigeneTastatur: Block an Index " +
+            blockIndex +
+            " hat einen leeren Eintrag bei Buttons[" +
+            itemIndex +
+            "]."
+        );
+    }
+
+    if (typeof item === "object" && !Array.isArray(item)) {
+        return item;
+    }
+
+    // Primitive Eintraege werden als Label/Funktionswert interpretiert.
+    var text = String(item);
+    return {
+        Beschriftung: text,
+        Funktion: text
+    };
+}
+
+function mergeObjects(base, override) {
+    var merged = {};
+    var key;
+
+    if (base && typeof base === "object") {
+        for (key in base) {
+            if (Object.prototype.hasOwnProperty.call(base, key)) {
+                merged[key] = base[key];
+            }
+        }
+    }
+
+    if (override && typeof override === "object") {
+        for (key in override) {
+            if (Object.prototype.hasOwnProperty.call(override, key)) {
+                merged[key] = override[key];
+            }
+        }
+    }
+
+    return merged;
+}
+
+function isMissingValue(value) {
+    return value === null || typeof value === "undefined" || value === "";
 }
 
 function normalizeEntries(buttonList) {
@@ -248,6 +458,9 @@ function normalizeEntries(buttonList) {
             )
         );
         var customStyle = normalizeStyleObject(readFirst(source, ["Style", "style", "Stil", "stil"]));
+        var mathOption = normalizeMathOption(
+            readFirst(source, ["Formel", "formel", "latex", "LaTeX", "math", "Math", "renderMath", "mathMode"])
+        );
         var x = xCandidate;
         var y = yCandidate;
 
@@ -285,7 +498,8 @@ function normalizeEntries(buttonList) {
             hoverColor: hoverColor,
             textColor: textColor,
             fontSize: fontSize,
-            customStyle: customStyle
+            customStyle: customStyle,
+            mathOption: mathOption
         });
     }
 
@@ -458,6 +672,34 @@ function normalizeStyleObject(styleValue) {
     return styleValue;
 }
 
+function normalizeMathOption(value) {
+    if (value === null || typeof value === "undefined" || value === "") {
+        return null;
+    }
+
+    if (typeof value === "boolean") {
+        return value;
+    }
+
+    if (typeof value === "number") {
+        return value !== 0;
+    }
+
+    var text = String(value).trim().toLowerCase();
+    if (!text) {
+        return null;
+    }
+
+    if (text === "1" || text === "true" || text === "yes" || text === "ja" || text === "latex" || text === "math" || text === "tex") {
+        return true;
+    }
+    if (text === "0" || text === "false" || text === "no" || text === "nein" || text === "text") {
+        return false;
+    }
+
+    return null;
+}
+
 function readFirst(obj, keys) {
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
@@ -467,95 +709,3 @@ function readFirst(obj, keys) {
     }
     return undefined;
 }
-
-var LATEX_SYMBOL_MAP = {
-    "\\alpha": "\u03b1",
-    "\\beta": "\u03b2",
-    "\\gamma": "\u03b3",
-    "\\delta": "\u03b4",
-    "\\epsilon": "\u03b5",
-    "\\theta": "\u03b8",
-    "\\lambda": "\u03bb",
-    "\\mu": "\u03bc",
-    "\\pi": "\u03c0",
-    "\\rho": "\u03c1",
-    "\\sigma": "\u03c3",
-    "\\tau": "\u03c4",
-    "\\phi": "\u03c6",
-    "\\omega": "\u03c9",
-    "\\Gamma": "\u0393",
-    "\\Delta": "\u0394",
-    "\\Theta": "\u0398",
-    "\\Lambda": "\u039b",
-    "\\Pi": "\u03a0",
-    "\\Sigma": "\u03a3",
-    "\\Phi": "\u03a6",
-    "\\Omega": "\u03a9",
-    "\\times": "\u00d7",
-    "\\cdot": "\u00b7",
-    "\\pm": "\u00b1",
-    "\\leq": "\u2264",
-    "\\geq": "\u2265",
-    "\\neq": "\u2260",
-    "\\approx": "\u2248",
-    "\\infty": "\u221e",
-    "\\rightarrow": "\u2192",
-    "\\leftarrow": "\u2190",
-    "\\leftrightarrow": "\u2194",
-    "\\degree": "\u00b0"
-};
-
-var SUPERSCRIPT_MAP = {
-    "0": "\u2070",
-    "1": "\u00b9",
-    "2": "\u00b2",
-    "3": "\u00b3",
-    "4": "\u2074",
-    "5": "\u2075",
-    "6": "\u2076",
-    "7": "\u2077",
-    "8": "\u2078",
-    "9": "\u2079",
-    "+": "\u207a",
-    "-": "\u207b",
-    "=": "\u207c",
-    "(": "\u207d",
-    ")": "\u207e",
-    "n": "\u207f",
-    "i": "\u2071"
-};
-
-var SUBSCRIPT_MAP = {
-    "0": "\u2080",
-    "1": "\u2081",
-    "2": "\u2082",
-    "3": "\u2083",
-    "4": "\u2084",
-    "5": "\u2085",
-    "6": "\u2086",
-    "7": "\u2087",
-    "8": "\u2088",
-    "9": "\u2089",
-    "+": "\u208a",
-    "-": "\u208b",
-    "=": "\u208c",
-    "(": "\u208d",
-    ")": "\u208e",
-    "a": "\u2090",
-    "e": "\u2091",
-    "h": "\u2095",
-    "i": "\u1d62",
-    "j": "\u2c7c",
-    "k": "\u2096",
-    "l": "\u2097",
-    "m": "\u2098",
-    "n": "\u2099",
-    "o": "\u2092",
-    "p": "\u209a",
-    "r": "\u1d63",
-    "s": "\u209b",
-    "t": "\u209c",
-    "u": "\u1d64",
-    "v": "\u1d65",
-    "x": "\u2093"
-};

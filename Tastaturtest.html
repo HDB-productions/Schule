@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tastaturtest</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [["\\(", "\\)"]]
+            },
+            svg: {
+                fontCache: "global"
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <script src="eigeneTastatur.js"></script>
     <style>
         body {
@@ -32,80 +43,72 @@
     <div id="tableContainer"></div>
 
     <script>
-        // Ankerkoordinaten sind 1-basiert und beide Werte sind Pflicht:
-        // AnkerX=1, AnkerY=1 startet links oben.
+        // Beispiel fuer Blockmodus:
+        // Die Buttons-Liste wird links nach rechts gefuellt, dann in der naechsten Zeile fortgesetzt.
+        // Bei Breite=2 ist der Standard-Schritt in X ebenfalls 2 (AnkerX: 2,4,6...).
+        // Fuer bewusstes Ueberlappen kann z.B. SchrittX: 1 gesetzt werden.
         var buttonList = [
             {
+                Typ: "Block",
                 AnkerX: 1,
                 AnkerY: 1,
-                Beschriftung: "\\alpha",
-                Funktion: "alpha",
-                Breite: 1,
+                AnzahlProReihe: 5,
+                Breite: 2,
                 Hoehe: 1,
+                Formel: false,
                 Hintergrundfarbe: "#1f2937",
                 HoverFarbe: "#374151",
                 Schriftfarbe: "#ffffff",
-                Schriftgroesse: 18
+                Schriftgroesse: 18,
+                Buttons: [
+                    { Beschriftung: "1", Funktion: "digit-1" },
+                    { Beschriftung: "2", Funktion: "digit-2" },
+                    { Beschriftung: "3", Funktion: "digit-3" },
+                    { Beschriftung: "4", Funktion: "digit-4" },
+                    { Beschriftung: "5", Funktion: "digit-5" },
+                    { Beschriftung: "6", Funktion: "digit-6" },
+                    { Beschriftung: "7", Funktion: "digit-7" },
+                    { Beschriftung: "8", Funktion: "digit-8" },
+                    { Beschriftung: "9", Funktion: "digit-9" },
+                    { Beschriftung: "0", Funktion: "digit-0" },
+                ]
             },
             {
-                AnkerX: 2,
-                AnkerY: 1,
-                Beschriftung: "E = mc^2",
-                Funktion: "energie",
-                Breite: 2,
+                Typ: "Block",
+                AnkerX: 1,
+                AnkerY: 3,
+                AnzahlProReihe: 2,
+                Breite: 5,
                 Hoehe: 1,
-                Hintergrundfarbe: "#0f766e",
-                HoverFarbe: "#0d9488",
+                Formel: false,
+                Hintergrundfarbe: "#1f2937",
+                HoverFarbe: "#374151",
                 Schriftfarbe: "#ffffff",
-                Schriftgroesse: 16
-            },
-            {
+                Schriftgroesse: 18,
+                Buttons: [
+                    { Beschriftung: "Prüfen", Funktion: "Prüfen" },
+                    { Beschriftung: "Löschen", Funktion: "Löschen" },
+                    
+                ]
+            },{
+                Typ: "button",
                 AnkerX: 1,
-                AnkerY: 2,
-                Beschriftung: "\\frac{1}{2}x^2",
-                Funktion: "halb-x-quadrat",
-                Breite: 2,
+                AnkerY: 4,
+                AnzahlProReihe: 2,
+                Breite: 10,
                 Hoehe: 1,
-                Hintergrundfarbe: "#fef3c7",
-                HoverFarbe: "#fde68a",
-                Schriftfarbe: "#78350f",
-                Schriftgroesse: "15px"
-            },
-            {
-                AnkerX: 3,
-                AnkerY: 2,
-                Beschriftung: "\\sqrt{a_1}",
-                Funktion: "wurzel",
-                Breite: 1,
-                Hoehe: 2,
-                Hintergrundfarbe: "#ede9fe",
-                HoverFarbe: "#ddd6fe",
-                Schriftfarbe: "#4c1d95",
-                Schriftgroesse: 16
-            },
-            {
-                AnkerX: 1,
-                AnkerY: 3,
-                Beschriftung: "x_2 + y_1",
-                Funktion: "indizes",
-                Breite: 1,
-                Hoehe: 1,
-                Hintergrundfarbe: "#dbeafe",
-                HoverFarbe: "#bfdbfe",
-                Schriftfarbe: "#1e3a8a",
-                Style: { fontWeight: "700" }
-            },
-            {
-                AnkerX: 2,
-                AnkerY: 3,
-                Beschriftung: "\\beta \\pm 3",
-                Funktion: "6",
-                Breite: 1,
-                Hoehe: 1,
-                Hintergrundfarbe: "#dcfce7",
-                HoverFarbe: "#bbf7d0",
-                Schriftfarbe: "#14532d"
+                Formel: false,
+                Hintergrundfarbe: "#1f2937",
+                HoverFarbe: "#374151",
+                Schriftfarbe: "#ffffff",
+                Schriftgroesse: 18,
+                Beschriftung: "Neue Aufgabe", 
+                Funktion: "Neue Aufgabe" ,
+         
+                    
+                
             }
+
         ];
 
         function buttonFunction(n) {
@@ -113,9 +116,9 @@
         }
 
         // Parameter: buttonList, containerId, callback, buttonSize, rand, eckenRadius
-        // Optionale Felder pro Button: Hintergrundfarbe, HoverFarbe, Schriftfarbe, Schriftgroesse, Style
-        // LaTeX light: z.B. \alpha, \beta, \frac{1}{2}, ^, _
-        EigeneTastatur(buttonList, "tableContainer", buttonFunction, 60, 2, 6);
+        // Optionale Felder pro Block/Button: Hintergrundfarbe, HoverFarbe, Schriftfarbe, Schriftgroesse, Style, Formel
+        // SchrittX/SchrittY sind optional; default ist Breite/Hoehe.
+        EigeneTastatur(buttonList, "tableContainer", buttonFunction, 40, 2, 6);
     </script>
 </body>
 </html>
