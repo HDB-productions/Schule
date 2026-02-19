@@ -1,70 +1,121 @@
-<!-- In Ihrem anderen HTML-Dokument -->
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andere Seite</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Verlinkung zu Ihrem CSS-Stylesheet -->
-    <script src="eigeneTastatur.js"></script> <!-- Verlinkung zu Ihrer JavaScript-Datei -->
+    <title>Tastaturtest</title>
+    <script src="eigeneTastatur.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 24px;
+        }
+
+        #tableContainer {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 8px;
+        }
+
+        .eigene-tastatur button {
+            border: 1px solid #888;
+            background: #f8f8f8;
+            cursor: pointer;
+        }
+
+        .eigene-tastatur button:hover {
+            background: #ececec;
+        }
+    </style>
 </head>
 <body>
-    <!-- Container, in dem die Tabelle erstellt wird -->
     <div id="tableContainer"></div>
 
     <script>
-        // Eine Liste von zu erstellenden Buttons.
+        // Ankerkoordinaten sind 1-basiert und beide Werte sind Pflicht:
+        // AnkerX=1, AnkerY=1 startet links oben.
         var buttonList = [
             {
-                Zeile: 1,
-                Beschriftung: 'Button 1',
-                Funktion: 'buttonFunction1', //Der funktionswert, mit dem die Buttonfunktion beim klick ausgführt wird
-                Höhe: 1,
-                Breite: 1
+                AnkerX: 1,
+                AnkerY: 1,
+                Beschriftung: "\\alpha",
+                Funktion: "alpha",
+                Breite: 1,
+                Hoehe: 1,
+                Hintergrundfarbe: "#1f2937",
+                HoverFarbe: "#374151",
+                Schriftfarbe: "#ffffff",
+                Schriftgroesse: 18
             },
             {
-                Zeile: 1,
-                Beschriftung: 'Button 2',
-                Funktion: 'buttonFunction2',
-                Höhe: 1,
-                Breite: 2 //Dieser Button erstreckt sich über mehrere spalten
-            },
-       
-            {
-                Zeile: 2,
-                Beschriftung: 'Button 3',
-                Funktion: 'buttonFunction3',
-                Höhe: 1,
-                Breite: 2
+                AnkerX: 2,
+                AnkerY: 1,
+                Beschriftung: "E = mc^2",
+                Funktion: "energie",
+                Breite: 2,
+                Hoehe: 1,
+                Hintergrundfarbe: "#0f766e",
+                HoverFarbe: "#0d9488",
+                Schriftfarbe: "#ffffff",
+                Schriftgroesse: 16
             },
             {
-                Zeile: 2,
-                Beschriftung: 'Button 4',
-                Funktion: 'buttonFunction4',
-                Höhe: 2,
-                Breite: 1
+                AnkerX: 1,
+                AnkerY: 2,
+                Beschriftung: "\\frac{1}{2}x^2",
+                Funktion: "halb-x-quadrat",
+                Breite: 2,
+                Hoehe: 1,
+                Hintergrundfarbe: "#fef3c7",
+                HoverFarbe: "#fde68a",
+                Schriftfarbe: "#78350f",
+                Schriftgroesse: "15px"
             },
             {
-                Zeile: 3,
-                Beschriftung: 'Button 4',
-                Funktion: 'buttonFunction4',
-                Höhe: 1,
-                Breite: 1
+                AnkerX: 3,
+                AnkerY: 2,
+                Beschriftung: "\\sqrt{a_1}",
+                Funktion: "wurzel",
+                Breite: 1,
+                Hoehe: 2,
+                Hintergrundfarbe: "#ede9fe",
+                HoverFarbe: "#ddd6fe",
+                Schriftfarbe: "#4c1d95",
+                Schriftgroesse: 16
             },
             {
-                Zeile: 3,
-                Beschriftung: 'Button 4',
-                Funktion: '4',
-                Höhe: 1,
-                Breite: 1
+                AnkerX: 1,
+                AnkerY: 3,
+                Beschriftung: "x_2 + y_1",
+                Funktion: "indizes",
+                Breite: 1,
+                Hoehe: 1,
+                Hintergrundfarbe: "#dbeafe",
+                HoverFarbe: "#bfdbfe",
+                Schriftfarbe: "#1e3a8a",
+                Style: { fontWeight: "700" }
             },
-
-
+            {
+                AnkerX: 2,
+                AnkerY: 3,
+                Beschriftung: "\\beta \\pm 3",
+                Funktion: "6",
+                Breite: 1,
+                Hoehe: 1,
+                Hintergrundfarbe: "#dcfce7",
+                HoverFarbe: "#bbf7d0",
+                Schriftfarbe: "#14532d"
+            }
         ];
-            function buttonFunction (n){
-            alert(n + ' wurde geklickt!');}
-        EigeneTastatur(buttonList,"tableContainer",buttonFunction,100); // Aufruf der Funktion, Erste Variable enthält die Buttons, zweite den ort, an dem erstellt werden soll, die dritte benennt die funktion, die beim auswählen durchgeführt wird, die letzte die größe der buttons
+
+        function buttonFunction(n) {
+            alert(n + " wurde geklickt!");
+        }
+
+        // Parameter: buttonList, containerId, callback, buttonSize, rand, eckenRadius
+        // Optionale Felder pro Button: Hintergrundfarbe, HoverFarbe, Schriftfarbe, Schriftgroesse, Style
+        // LaTeX light: z.B. \alpha, \beta, \frac{1}{2}, ^, _
+        EigeneTastatur(buttonList, "tableContainer", buttonFunction, 60, 2, 6);
     </script>
 </body>
 </html>
