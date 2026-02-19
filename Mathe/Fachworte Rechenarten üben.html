@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Fachworte&nbsp;Rechenarten&nbsp;üben</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    /* Container for the exercise */
+    .exercise {
+      border: 2px solid #ccc;
+      padding: 20px;
+      max-width: 500px;
+      position: relative;
+    }
+
+    /* Equation styling */
+    .equation {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+    .equation .num1 {
+      color: #0066ff; /* blue */
+    }
+    .equation .op {
+      color: #000000; /* black */
+      margin: 0 4px;
+    }
+    .equation .num2 {
+      color: #aa00aa; /* violet/purple */
+    }
+    .equation .eq {
+      color: #000000;
+      margin: 0 4px;
+    }
+    .equation .result {
+      color: #ff0000; /* red */
+    }
+
+    /* Label styling */
+    .field {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    .label {
+      width: 120px;
+      font-weight: bold;
+    }
+    .label.blue {
+      color: #0066ff;
+    }
+    .label.purple {
+      color: #aa00aa;
+    }
+    .label.red {
+      color: #ff0000;
+    }
+
+    select, input[type="text"] {
+      width: 200px;
+      padding: 4px;
+      font-size: 14px;
+    }
+
+    .buttons {
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    button {
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
+    .score {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+
+    /* Toggle for hints */
+    .hints-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+    }
+
+    .answer {
+      color: #009900;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fachworte&nbsp;Rechenarten&nbsp;üben</h1>
+  <div class="exercise">
+    <!-- Equation display -->
+    <div class="equation" id="equation"></div>
+
+    <!-- Hints toggle -->
+    <div class="hints-toggle">
+      <input type="checkbox" id="hintsCheckbox">
+      <label for="hintsCheckbox">Mit&nbsp;Hilfen</label>
+    </div>
+
+    <!-- Fields -->
+    <div class="field">
+      <span class="label">Aufgabentyp:</span>
+      <select id="typSelect" style="display:none">
+        <option value="">--</option>
+        <option value="1">Addition</option>
+        <option value="2">Subtraktion</option>
+        <option value="3">Multiplikation</option>
+        <option value="4">Division</option>
+      </select>
+      <input type="text" id="typInput">
+    </div>
+    <div class="field">
+      <span class="label blue">Erste&nbsp;Zahl:</span>
+      <select id="firstSelect" style="display:none">
+        <option value="">--</option>
+        <option value="1">Summand</option>
+        <option value="2">Minuend</option>
+        <option value="3">Faktor</option>
+        <option value="4">Dividend</option>
+      </select>
+      <input type="text" id="firstInput">
+    </div>
+    <div class="field">
+      <span class="label purple">Zweite&nbsp;Zahl:</span>
+      <select id="secondSelect" style="display:none">
+        <option value="">--</option>
+        <option value="1">Summand</option>
+        <option value="2">Subtrahend</option>
+        <option value="3">Faktor</option>
+        <option value="4">Divisor</option>
+      </select>
+      <input type="text" id="secondInput">
+    </div>
+    <div class="field">
+      <span class="label red">Ergebnis:</span>
+      <select id="resultSelect" style="display:none">
+        <option value="">--</option>
+        <option value="1">Summe</option>
+        <option value="2">Differenz</option>
+        <option value="3">Produkt</option>
+        <option value="4">Quotient</option>
+      </select>
+      <input type="text" id="resultInput">
+    </div>
+
+    <!-- Buttons and score -->
+    <div class="buttons">
+      <button id="checkBtn">Prüfen</button>
+      <span class="score" id="scoreDisplay">0&nbsp;Punkte</span>
+      <button id="newBtn">Neue&nbsp;Aufgabe</button>
+    </div>
+  </div>
+
+  <script>
+    // German term arrays for each type (index corresponds to type number 1..4)
+    const typeNames = [null, "Addition", "Subtraktion", "Multiplikation", "Division"];
+    const firstNames = [null, "Summand", "Minuend", "Faktor", "Dividend"];
+    const secondNames = [null, "Summand", "Subtrahend", "Faktor", "Divisor"];
+    const resultNames = [null, "Summe", "Differenz", "Produkt", "Quotient"];
+
+    // State variables
+    let currentType = 1;
+    let z1 = 0;
+    let z2 = 0;
+    let result = 0;
+    let score = 0;
+    // Flags indicating whether the respective answer has already been answered correctly.
+    // They are initialised to true so that the first call to newTask() does not penalise the player.
+    let richtigTyp = true;
+    let richtigFirst = true;
+    let richtigSecond = true;
+    let richtigResult = true;
+
+    // References to DOM elements
+    const equationDiv = document.getElementById('equation');
+    const hintsCheckbox = document.getElementById('hintsCheckbox');
+    const typSelect = document.getElementById('typSelect');
+    const typInput = document.getElementById('typInput');
+    const firstSelect = document.getElementById('firstSelect');
+    const firstInput = document.getElementById('firstInput');
+    const secondSelect = document.getElementById('secondSelect');
+    const secondInput = document.getElementById('secondInput');
+    const resultSelect = document.getElementById('resultSelect');
+    const resultInput = document.getElementById('resultInput');
+    const checkBtn = document.getElementById('checkBtn');
+    const newBtn = document.getElementById('newBtn');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+
+    // Random integer between min and max inclusive
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Generate a new task
+    function newTask() {
+      // Penalize unanswered parts from the previous task
+      if (!richtigTyp) score--;
+      if (!richtigFirst) score--;
+      if (!richtigSecond) score--;
+      if (!richtigResult) score--;
+      // Ensure score doesn't drop below -999 (arbitrary) – but we leave as is
+
+      // Reset flags
+      richtigTyp = false;
+      richtigFirst = false;
+      richtigSecond = false;
+      richtigResult = false;
+      // Reset inputs
+      typInput.value = '';
+      firstInput.value = '';
+      secondInput.value = '';
+      resultInput.value = '';
+      typSelect.value = '';
+      firstSelect.value = '';
+      secondSelect.value = '';
+      resultSelect.value = '';
+
+      // Reset hints to off by default (like the GeoGebra version)
+      hintsCheckbox.checked = false;
+      showInputs(false);
+
+      // Pick a random type (1..4)
+      currentType = randInt(1, 4);
+      // Generate numbers based on type
+      switch (currentType) {
+        case 1: // Addition
+          z1 = randInt(1, 20);
+          z2 = randInt(1, 20);
+          result = z1 + z2;
+          break;
+        case 2: // Subtraktion (ensure non-negative result)
+          z1 = randInt(1, 20);
+          z2 = randInt(1, 20);
+          // swap if necessary to avoid negative result
+          if (z2 > z1) {
+            const tmp = z1;
+            z1 = z2;
+            z2 = tmp;
+          }
+          result = z1 - z2;
+          break;
+        case 3: // Multiplikation
+          z1 = randInt(1, 12);
+          z2 = randInt(1, 12);
+          result = z1 * z2;
+          break;
+        case 4: // Division – ensure integer result
+          const divisor = randInt(1, 10);
+          const quotient = randInt(1, 10);
+          z2 = divisor;
+          z1 = divisor * quotient;
+          result = quotient;
+          break;
+      }
+      updateEquation();
+      updateScoreDisplay();
+    }
+
+    // Update equation display
+    function updateEquation() {
+      const opSymbol = currentType === 1 ? '+' : currentType === 2 ? '−' : currentType === 3 ? '·' : '÷';
+      equationDiv.innerHTML = `<span class="num1">${z1}</span> <span class="op">${opSymbol}</span> <span class="num2">${z2}</span> <span class="eq">=</span> <span class="result">${result}</span>`;
+    }
+
+    // Update score display
+    function updateScoreDisplay() {
+      scoreDisplay.textContent = `${score} Punkte`;
+    }
+
+    // Show selects or inputs based on hints toggle
+    function showInputs(hints) {
+      if (hints) {
+        typSelect.style.display = '';
+        firstSelect.style.display = '';
+        secondSelect.style.display = '';
+        resultSelect.style.display = '';
+        typInput.style.display = 'none';
+        firstInput.style.display = 'none';
+        secondInput.style.display = 'none';
+        resultInput.style.display = 'none';
+      } else {
+        typSelect.style.display = 'none';
+        firstSelect.style.display = 'none';
+        secondSelect.style.display = 'none';
+        resultSelect.style.display = 'none';
+        typInput.style.display = '';
+        firstInput.style.display = '';
+        secondInput.style.display = '';
+        resultInput.style.display = '';
+      }
+    }
+
+    // Check the answers
+    function checkAnswers() {
+      const hints = hintsCheckbox.checked;
+      // Check operation type
+      if (!richtigTyp) {
+          if (hints) {
+            const sel = parseInt(typSelect.value || '0', 10);
+            if (sel === currentType) {
+              score += 1;
+              richtigTyp = true;
+            } else {
+              score -= 1;
+            }
+          } else {
+            const inputVal = typInput.value.trim();
+            if (inputVal.toLowerCase() === typeNames[currentType].toLowerCase()) {
+              score += 10;
+              richtigTyp = true;
+            } else {
+              score -= 1;
+            }
+          }
+      }
+      // Check first term
+      if (!richtigFirst) {
+          if (hints) {
+            const sel = parseInt(firstSelect.value || '0', 10);
+            if (sel === currentType) {
+              score += 1;
+              richtigFirst = true;
+            } else {
+              score -= 1;
+            }
+          } else {
+            const inputVal = firstInput.value.trim();
+            if (inputVal.toLowerCase() === firstNames[currentType].toLowerCase()) {
+              score += 10;
+              richtigFirst = true;
+            } else {
+              score -= 1;
+            }
+          }
+      }
+      // Check second term
+      if (!richtigSecond) {
+          if (hints) {
+            const sel = parseInt(secondSelect.value || '0', 10);
+            if (sel === currentType) {
+              score += 1;
+              richtigSecond = true;
+            } else {
+              score -= 1;
+            }
+          } else {
+            const inputVal = secondInput.value.trim();
+            if (inputVal.toLowerCase() === secondNames[currentType].toLowerCase()) {
+              score += 10;
+              richtigSecond = true;
+            } else {
+              score -= 1;
+            }
+          }
+      }
+      // Check result term
+      if (!richtigResult) {
+          if (hints) {
+            const sel = parseInt(resultSelect.value || '0', 10);
+            if (sel === currentType) {
+              score += 1;
+              richtigResult = true;
+            } else {
+              score -= 1;
+            }
+          } else {
+            const inputVal = resultInput.value.trim();
+            if (inputVal.toLowerCase() === resultNames[currentType].toLowerCase()) {
+              score += 10;
+              richtigResult = true;
+            } else {
+              score -= 1;
+            }
+          }
+      }
+
+      // After checking, display correct terms in the respective input/select in green
+      if (richtigTyp && !hints) {
+        typInput.value = typeNames[currentType];
+        typInput.classList.add('answer');
+        typInput.disabled = true;
+      }
+      if (richtigFirst && !hints) {
+        firstInput.value = firstNames[currentType];
+        firstInput.classList.add('answer');
+        firstInput.disabled = true;
+      }
+      if (richtigSecond && !hints) {
+        secondInput.value = secondNames[currentType];
+        secondInput.classList.add('answer');
+        secondInput.disabled = true;
+      }
+      if (richtigResult && !hints) {
+        resultInput.value = resultNames[currentType];
+        resultInput.classList.add('answer');
+        resultInput.disabled = true;
+      }
+      if (richtigTyp && hints) {
+        typSelect.value = String(currentType);
+        typSelect.style.color = '#009900';
+      }
+      if (richtigFirst && hints) {
+        firstSelect.value = String(currentType);
+        firstSelect.style.color = '#009900';
+      }
+      if (richtigSecond && hints) {
+        secondSelect.value = String(currentType);
+        secondSelect.style.color = '#009900';
+      }
+      if (richtigResult && hints) {
+        resultSelect.value = String(currentType);
+        resultSelect.style.color = '#009900';
+      }
+      // Update score display
+      updateScoreDisplay();
+    }
+
+    // Event listeners
+    hintsCheckbox.addEventListener('change', () => {
+      const hints = hintsCheckbox.checked;
+      showInputs(hints);
+    });
+    checkBtn.addEventListener('click', checkAnswers);
+    newBtn.addEventListener('click', newTask);
+
+    // Initial call
+    newTask();
+  </script>
+</body>
+</html>
