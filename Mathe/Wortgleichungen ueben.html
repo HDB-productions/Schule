@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wortgleichungen ueben</title>
+    <script src="../eigeneTastatur.js"></script>
+    <style>
+        :root {
+            --bg: #d9d9d9;
+            --text: #111;
+            --muted: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background: var(--bg);
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: var(--text);
+        }
+
+        .app {
+            width: 403px;
+            padding: 20px 16px 18px;
+        }
+
+        .word-line {
+            min-height: 66px;
+            font-size: 34px;
+            line-height: 1.2;
+            font-weight: 400;
+            letter-spacing: 0.1px;
+            margin-bottom: 6px;
+        }
+
+        .word-line.ok {
+            color: #145f2c;
+        }
+
+        .task-line {
+            min-height: 52px;
+            font-size: 46px;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            letter-spacing: 0.2px;
+            font-weight: 400;
+        }
+
+        .task-line.ok {
+            color: #145f2c;
+        }
+
+        #resultText {
+            min-width: 8px;
+            display: inline-block;
+        }
+
+        #tableContainer {
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .eigene-tastatur button {
+            border: 2px solid #202020;
+            background: #f3f3f3;
+            color: #101010;
+            cursor: pointer;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            font-weight: 500;
+        }
+
+        .eigene-tastatur button:hover {
+            background: #e7e7e7;
+        }
+
+        .score {
+            margin-top: 14px;
+            text-align: center;
+            font-size: 50px;
+            line-height: 1.2;
+            font-weight: 500;
+        }
+
+        .score.ok {
+            color: #145f2c;
+        }
+
+        .footer {
+            margin-top: 2px;
+            text-align: center;
+            font-size: 29px;
+            color: var(--muted);
+        }
+
+        .footer a:link {
+            color: #0000ee;
+            text-decoration: underline;
+        }
+
+        .footer a:visited {
+            color: #551a8b;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <main class="app">
+        <div id="wordLine" class="word-line"></div>
+        <div id="taskLine" class="task-line"><span id="equationText"></span><span id="resultText"></span></div>
+        <div id="tableContainer"></div>
+        <div id="scoreLine" class="score">0 Punkte</div>
+        <div class="footer"><a href="https://hdb-productions.github.io/Schule/">HDB 2026</a></div>
+    </main>
+
+    <script>
+        (function () {
+            var lists = {
+                Typen: ["+", "-", "\u00b7", ":"],
+                Wort1: ["Summe aus", "Differenz aus", "Produkt aus", "Quotient aus"],
+                Wort3: ["zu", "von", "mit", "durch"],
+                Wort4: ["Addiere", "Subtrahiere", "Multipliziere", "Dividiere"],
+                Wort2a: ["die", "die", "das", "den"],
+                Wort2b: ["der", "der", "dem", "dem"],
+                Wort2c: ["die", "die", "das", "den"]
+            };
+
+            var state = {
+                Punkte: 0,
+                Ergebnis: "",
+                EText: "",
+                Richtig: false,
+                Aufgabe: "",
+                EuA: "",
+                Wortgleichung: "",
+                KlammerAn: true,
+                Typ1: 1,
+                Typ2: 1,
+                Klammer: 0,
+                VorNach: 0,
+                E1: 0,
+                E2: 0,
+                a: 0,
+                b: 0,
+                c: 0
+            };
+
+            var buttonList = [
+                {
+                    Typ: "Block",
+                    AnkerX: 1,
+                    AnkerY: 1,
+                    AnzahlProReihe: 5,
+                    Breite: 2,
+                    Hoehe: 2,
+                    Formel: false,
+                    Hintergrundfarbe: "#f3f3f3",
+                    HoverFarbe: "#e7e7e7",
+                    Schriftfarbe: "#111111",
+                    Schriftgroesse: 24,
+                    Buttons: [
+                        { Beschriftung: "1", Funktion: "digit-1" },
+                        { Beschriftung: "2", Funktion: "digit-2" },
+                        { Beschriftung: "3", Funktion: "digit-3" },
+                        { Beschriftung: "4", Funktion: "digit-4" },
+                        { Beschriftung: "5", Funktion: "digit-5" },
+                        { Beschriftung: "6", Funktion: "digit-6" },
+                        { Beschriftung: "7", Funktion: "digit-7" },
+                        { Beschriftung: "8", Funktion: "digit-8" },
+                        { Beschriftung: "9", Funktion: "digit-9" },
+                        { Beschriftung: "0", Funktion: "digit-0" }
+                    ]
+                },
+                {
+                    Typ: "Block",
+                    AnkerX: 1,
+                    AnkerY: 6,
+                    AnzahlProReihe: 2,
+                    Breite: 5,
+                    Hoehe: 2,
+                    Formel: false,
+                    Hintergrundfarbe: "#f3f3f3",
+                    HoverFarbe: "#e7e7e7",
+                    Schriftfarbe: "#111111",
+                    Schriftgroesse: 20,
+                    Buttons: [
+                        { Beschriftung: "Pr\u00fcfen", Funktion: "Pruefen" },
+                        { Beschriftung: "L\u00f6schen", Funktion: "Loeschen" }
+                    ]
+                },
+                {
+                    Typ: "button",
+                    AnkerX: 1,
+                    AnkerY: 8,
+                    Breite: 10,
+                    Hoehe: 2,
+                    Formel: false,
+                    Hintergrundfarbe: "#f3f3f3",
+                    HoverFarbe: "#e7e7e7",
+                    Schriftfarbe: "#111111",
+                    Schriftgroesse: 20,
+                    Beschriftung: "Neue Aufgabe",
+                    Funktion: "Neue Aufgabe"
+                }
+            ];
+
+            function randomInt(min, max) {
+                var from = Math.ceil(min);
+                var to = Math.floor(max);
+                if (to < from) {
+                    var swap = from;
+                    from = to;
+                    to = swap;
+                }
+                return Math.floor(Math.random() * (to - from + 1)) + from;
+            }
+
+            function listValue(name, index1Based) {
+                var arr = lists[name];
+                if (!arr || index1Based < 1 || index1Based > arr.length) {
+                    return "";
+                }
+                return arr[index1Based - 1];
+            }
+
+            function typen(typ) {
+                return listValue("Typen", typ);
+            }
+
+            function render() {
+                var wordLine = document.getElementById("wordLine");
+                var taskLine = document.getElementById("taskLine");
+                var equationText = document.getElementById("equationText");
+                var resultText = document.getElementById("resultText");
+                var scoreLine = document.getElementById("scoreLine");
+                var solved = state.Richtig;
+
+                wordLine.textContent = state.Wortgleichung;
+                equationText.textContent = state.EuA;
+                resultText.textContent = state.Ergebnis;
+                scoreLine.textContent = state.Punkte + " Punkte";
+
+                wordLine.classList.toggle("ok", solved);
+                taskLine.classList.toggle("ok", solved);
+                scoreLine.classList.toggle("ok", solved);
+                updateActionButtonsVisibility(solved);
+            }
+
+            function updateActionButtonsVisibility(solved) {
+                var keyboardRoot = document.getElementById("tableContainer");
+                var actionToHide = {
+                    Pruefen: true,
+                    Loeschen: true
+                };
+
+                if (!keyboardRoot) {
+                    return;
+                }
+
+                keyboardRoot.querySelectorAll("button").forEach(function (button) {
+                    var action = button.dataset.funktion;
+                    if (actionToHide[action]) {
+                        button.style.display = solved ? "none" : "";
+                    }
+                });
+            }
+
+            function pruefen() {
+                if (state.Ergebnis === state.EText) {
+                    state.Punkte = state.Punkte + 1;
+                } else {
+                    state.Punkte = state.Punkte - 1;
+                }
+
+                if (state.Ergebnis === state.EText) {
+                    state.Richtig = true;
+                } else {
+                    state.EuA = state.Aufgabe;
+                }
+
+                render();
+            }
+
+            function loeschen() {
+                state.Ergebnis = "";
+                render();
+            }
+
+            function neueAufgabe(vonNeueAufgabeButton) {
+                if (vonNeueAufgabeButton === true && state.Aufgabe !== "" && state.Richtig !== true) {
+                    state.Punkte = state.Punkte - 1;
+                }
+
+                state.Ergebnis = "";
+                state.Richtig = false;
+                state.Aufgabe = "";
+                state.Typ1 = randomInt(1, 4);
+                state.Typ2 = randomInt(1, 4);
+
+                if (state.KlammerAn === true) {
+                    state.Klammer = randomInt(1, 1);
+                } else {
+                    state.Klammer = 0;
+                }
+
+                if (state.Typ1 !== 3) {
+                    state.E1 = randomInt(2, 10);
+                }
+
+                if (state.Typ1 === 1) {
+                    state.a = randomInt(1, state.E1 - 1);
+                    state.b = state.E1 - state.a;
+                }
+
+                if (state.Typ1 === 2) {
+                    state.b = randomInt(1, 20);
+                    state.a = state.E1 + state.b;
+                }
+
+                if (state.Typ1 === 3) {
+                    state.a = randomInt(1, 10);
+                    state.b = randomInt(1, 12 - state.a);
+                    state.E1 = state.a * state.b;
+                }
+
+                if (state.Typ1 === 4) {
+                    state.a = state.E1 * randomInt(1, 10);
+                    state.b = state.a / state.E1;
+                }
+
+                if (state.Klammer === 1) {
+                    state.Aufgabe = "(";
+                }
+
+                state.Aufgabe = state.Aufgabe + state.a + typen(state.Typ1) + state.b;
+
+                if (state.Klammer === 1) {
+                    state.Aufgabe = state.Aufgabe + ")";
+                }
+
+                if (state.Klammer === 0 && (state.Typ1 !== 3 || state.Typ1 !== 4) && state.Typ2 === 2) {
+                    state.VorNach = 1;
+                } else {
+                    state.VorNach = randomInt(0, 1);
+                }
+
+                if (state.Typ2 === 1) {
+                    state.c = randomInt(1, 25);
+                    state.E2 = state.c + state.E1;
+                }
+
+                if (state.Typ2 === 2) {
+                    if (state.VorNach === 0) {
+                        state.c = randomInt(state.E1, state.E1 + 10);
+                    } else {
+                        state.c = randomInt(1, state.E1);
+                    }
+
+                    if (state.VorNach === 0) {
+                        state.E2 = state.c - state.E1;
+                    } else {
+                        state.E2 = state.E1 - state.c;
+                    }
+                }
+
+                if (state.Typ2 === 3) {
+                    state.E2 = randomInt(1, 10);
+                    state.c = Math.round(state.E2 / state.E1);
+                    state.E2 = state.E1 * state.c;
+                }
+
+                if (state.Typ2 === 4) {
+                    state.VorNach = 0;
+                }
+
+                if (state.Typ2 === 4) {
+                    state.c = state.E1 * randomInt(1, 10);
+                    state.E2 = state.c / state.E1;
+                }
+
+                if (state.VorNach === 0) {
+                    state.Aufgabe = state.c + typen(state.Typ2) + state.Aufgabe + "=";
+                } else {
+                    state.Aufgabe = state.Aufgabe + typen(state.Typ2) + state.c + "=";
+                }
+
+                state.EuA = "";
+
+                state.Wortgleichung = listValue("Wort1", state.Typ1) + " " + state.a + " und " + state.b;
+
+                if (state.Typ2 === 2) {
+                    state.VorNach = Math.pow(state.VorNach - 1, 2);
+                }
+
+                if (state.VorNach === 0) {
+                    state.Wortgleichung =
+                        listValue("Wort4", state.Typ2) +
+                        " " +
+                        state.c +
+                        " " +
+                        listValue("Wort3", state.Typ2) +
+                        " " +
+                        (state.Typ2 === 4 ? listValue("Wort2a", state.Typ1) : listValue("Wort2b", state.Typ1)) +
+                        " " +
+                        state.Wortgleichung;
+                } else {
+                    state.Wortgleichung =
+                        listValue("Wort4", state.Typ2) +
+                        " " +
+                        listValue("Wort2c", state.Typ1) +
+                        " " +
+                        state.Wortgleichung +
+                        " " +
+                        listValue("Wort3", state.Typ2) +
+                        " " +
+                        state.c;
+                }
+
+                state.EText = String(state.E2);
+                render();
+            }
+
+            function appendDigit(digitChar) {
+                state.Ergebnis = state.Ergebnis + digitChar;
+                render();
+            }
+
+            function handleAction(action) {
+                if (typeof action !== "string") {
+                    return;
+                }
+
+                if (action.indexOf("digit-") === 0) {
+                    appendDigit(action.substring(6));
+                    return;
+                }
+
+                if (action === "Pruefen") {
+                    pruefen();
+                    return;
+                }
+
+                if (action === "Loeschen") {
+                    loeschen();
+                    return;
+                }
+
+                if (action === "Neue Aufgabe" || action === "Weiter") {
+                    neueAufgabe(true);
+                }
+            }
+
+            EigeneTastatur(buttonList, "tableContainer", handleAction, 29, 3, 7);
+            neueAufgabe(false);
+        }());
+    </script>
+</body>
+</html>

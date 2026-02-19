@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rechenapp</title>
+    <title>Vorrangregeln &uuml;ben neu</title>
     <script src="../eigeneTastatur.js"></script>
     <style>
         :root {
@@ -103,6 +103,16 @@
             font-size: 29px;
             color: var(--muted);
         }
+
+        .footer a:link {
+            color: #0000ee;
+            text-decoration: underline;
+        }
+
+        .footer a:visited {
+            color: #551a8b;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -119,7 +129,7 @@
         <div id="tableContainer"></div>
 
         <div id="scoreLine" class="score">0 Punkte</div>
-        <div class="footer">Hildebrandt 2019</div>
+        <div class="footer"><a href="https://hdb-productions.github.io/Schule/">HDB 2026</a></div>
     </main>
 
     <script>
@@ -276,7 +286,11 @@
                 render();
             }
 
-            function neueAufgabe() {
+            function neueAufgabe(vonNeueAufgabeButton) {
+                if (vonNeueAufgabeButton === true && state.Aufgabe !== "" && state.Richtig !== true) {
+                    state.Punkte = state.Punkte - 1;
+                }
+
                 state.Ergebnis = "";
                 state.Richtig = false;
                 state.Aufgabe = "";
@@ -414,17 +428,17 @@
                 }
 
                 if (action === "Weiter" || action === "Neue Aufgabe") {
-                    neueAufgabe();
+                    neueAufgabe(true);
                 }
             }
 
             document.getElementById("klammerAn").addEventListener("change", function (event) {
                 state.KlammerAn = event.target.checked;
-                neueAufgabe();
+                neueAufgabe(false);
             });
 
             EigeneTastatur(buttonList, "tableContainer", handleAction, 29, 3, 7);
-            neueAufgabe();
+            neueAufgabe(false);
         }());
     </script>
 </body>
