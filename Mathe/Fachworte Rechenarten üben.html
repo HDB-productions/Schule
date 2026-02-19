@@ -18,7 +18,7 @@
     .exercise {
       border: 2px solid #ccc;
       padding: 20px;
-      max-width: 500px;
+      max-width: 350px;
       position: relative;
     }
 
@@ -52,7 +52,7 @@
       align-items: center;
     }
     .label {
-      width: 120px;
+      width: 150px;
       font-weight: bold;
     }
     .label.blue {
@@ -73,25 +73,37 @@
 
     .buttons {
       margin-top: 15px;
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 15px;
+      column-gap: 10px;
     }
     button {
       padding: 6px 12px;
       font-size: 14px;
     }
+    #checkBtn,
+    #newBtn {
+      width: 120px;
+    }
+    #checkBtn {
+      justify-self: start;
+    }
+    #newBtn {
+      justify-self: end;
+    }
 
     .score {
-      margin-left: 10px;
       font-weight: bold;
+      justify-self: center;
+      text-align: center;
     }
 
     /* Toggle for hints */
     .hints-toggle {
       position: absolute;
       top: 10px;
-      right: 10px;
+      right: 45px;
       display: flex;
       align-items: center;
       gap: 4px;
@@ -183,12 +195,15 @@
     let z2 = 0;
     let result = 0;
     let score = 0;
+    let taskTypeQueue = [];
+    let lastTaskType = null;
     // Flags indicating whether the respective answer has already been answered correctly.
     // They are initialised to true so that the first call to newTask() does not penalise the player.
     let richtigTyp = true;
     let richtigFirst = true;
     let richtigSecond = true;
     let richtigResult = true;
+    let hintsLockedForTask = false;
 
     // References to DOM elements
     const equationDiv = document.getElementById('equation');
@@ -205,9 +220,66 @@
     const newBtn = document.getElementById('newBtn');
     const scoreDisplay = document.getElementById('scoreDisplay');
 
+    function resetField(inputEl, selectEl) {
+      inputEl.value = '';
+      selectEl.value = '';
+      inputEl.disabled = false;
+      selectEl.disabled = false;
+      inputEl.classList.remove('answer');
+      selectEl.classList.remove('answer');
+      selectEl.style.color = '';
+    }
+
+    function setFieldLock(isCorrect, inputEl, selectEl, correctName) {
+      if (isCorrect) {
+        inputEl.value = correctName;
+        selectEl.value = String(currentType);
+        inputEl.disabled = true;
+        selectEl.disabled = true;
+        inputEl.classList.add('answer');
+        selectEl.classList.add('answer');
+        selectEl.style.color = '#009900';
+        return;
+      }
+      inputEl.disabled = false;
+      selectEl.disabled = false;
+      inputEl.classList.remove('answer');
+      selectEl.classList.remove('answer');
+      selectEl.style.color = '';
+    }
+
+    function applyAnswerLocks() {
+      setFieldLock(richtigTyp, typInput, typSelect, typeNames[currentType]);
+      setFieldLock(richtigFirst, firstInput, firstSelect, firstNames[currentType]);
+      setFieldLock(richtigSecond, secondInput, secondSelect, secondNames[currentType]);
+      setFieldLock(richtigResult, resultInput, resultSelect, resultNames[currentType]);
+    }
+
     // Random integer between min and max inclusive
     function randInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function shuffleArray(values) {
+      const arr = values.slice();
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = randInt(0, i);
+        const tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+      }
+      return arr;
+    }
+
+    function createTaskTypeQueue(previousType) {
+      const queue = shuffleArray([1, 2, 3, 4]);
+      if (previousType !== null && queue[0] === previousType) {
+        const swapIndex = randInt(1, queue.length - 1);
+        const tmp = queue[0];
+        queue[0] = queue[swapIndex];
+        queue[swapIndex] = tmp;
+      }
+      return queue;
     }
 
     // Generate a new task
@@ -224,22 +296,24 @@
       richtigFirst = false;
       richtigSecond = false;
       richtigResult = false;
-      // Reset inputs
-      typInput.value = '';
-      firstInput.value = '';
-      secondInput.value = '';
-      resultInput.value = '';
-      typSelect.value = '';
-      firstSelect.value = '';
-      secondSelect.value = '';
-      resultSelect.value = '';
+      hintsLockedForTask = false;
+      resetField(typInput, typSelect);
+      resetField(firstInput, firstSelect);
+      resetField(secondInput, secondSelect);
+      resetField(resultInput, resultSelect);
 
       // Reset hints to off by default (like the GeoGebra version)
+      hintsCheckbox.disabled = false;
       hintsCheckbox.checked = false;
       showInputs(false);
 
-      // Pick a random type (1..4)
-      currentType = randInt(1, 4);
+      // Use each task type exactly once per 4-task set in random order.
+      // The first task of a new set must not match the final task of the previous set.
+      if (taskTypeQueue.length === 0) {
+        taskTypeQueue = createTaskTypeQueue(lastTaskType);
+      }
+      currentType = taskTypeQueue.shift();
+      lastTaskType = currentType;
       // Generate numbers based on type
       switch (currentType) {
         case 1: // Addition
@@ -393,51 +467,22 @@
           }
       }
 
-      // After checking, display correct terms in the respective input/select in green
-      if (richtigTyp && !hints) {
-        typInput.value = typeNames[currentType];
-        typInput.classList.add('answer');
-        typInput.disabled = true;
-      }
-      if (richtigFirst && !hints) {
-        firstInput.value = firstNames[currentType];
-        firstInput.classList.add('answer');
-        firstInput.disabled = true;
-      }
-      if (richtigSecond && !hints) {
-        secondInput.value = secondNames[currentType];
-        secondInput.classList.add('answer');
-        secondInput.disabled = true;
-      }
-      if (richtigResult && !hints) {
-        resultInput.value = resultNames[currentType];
-        resultInput.classList.add('answer');
-        resultInput.disabled = true;
-      }
-      if (richtigTyp && hints) {
-        typSelect.value = String(currentType);
-        typSelect.style.color = '#009900';
-      }
-      if (richtigFirst && hints) {
-        firstSelect.value = String(currentType);
-        firstSelect.style.color = '#009900';
-      }
-      if (richtigSecond && hints) {
-        secondSelect.value = String(currentType);
-        secondSelect.style.color = '#009900';
-      }
-      if (richtigResult && hints) {
-        resultSelect.value = String(currentType);
-        resultSelect.style.color = '#009900';
-      }
+      // Show and lock any correct answers in both modes
+      applyAnswerLocks();
       // Update score display
       updateScoreDisplay();
     }
 
     // Event listeners
     hintsCheckbox.addEventListener('change', () => {
-      const hints = hintsCheckbox.checked;
-      showInputs(hints);
+      if (hintsCheckbox.checked) {
+        hintsLockedForTask = true;
+      } else if (hintsLockedForTask) {
+        hintsCheckbox.checked = true;
+      }
+      hintsCheckbox.disabled = hintsLockedForTask;
+      showInputs(hintsCheckbox.checked);
+      applyAnswerLocks();
     });
     checkBtn.addEventListener('click', checkAnswers);
     newBtn.addEventListener('click', newTask);
