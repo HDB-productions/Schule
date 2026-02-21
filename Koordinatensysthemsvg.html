@@ -5,7 +5,7 @@
     <title>Koordinatensystem Generator</title>
     <style>
       :root {
-        color-scheme: light dark;
+        color-scheme: light;
       }
       body {
         font-family: "Segoe UI", Tahoma, sans-serif;
@@ -35,6 +35,51 @@
         padding: 1rem;
         background: #ffffff;
       }
+      details.top-section {
+        border: 1px solid #c9c9c9;
+        border-radius: 0.5rem;
+        padding: 0.8rem 1rem 1rem;
+        background: #ffffff;
+      }
+      details.top-section + details.top-section {
+        margin-top: 0.1rem;
+      }
+      details.top-section > summary {
+        cursor: pointer;
+        font-weight: 700;
+        user-select: none;
+        font-size: 1.02rem;
+      }
+      details.top-section > .section-body {
+        margin-top: 0.75rem;
+      }
+      details.subsection {
+        border: 1px solid #dddddd;
+        border-radius: 0.45rem;
+        background: #fcfcfc;
+        padding: 0.6rem 0.75rem 0.75rem;
+      }
+      details.subsection + details.subsection {
+        margin-top: 0.65rem;
+      }
+      details.subsection > summary {
+        cursor: pointer;
+        font-weight: 600;
+        user-select: none;
+      }
+      details.subsection > .field-grid {
+        margin-top: 0.65rem;
+      }
+      .subgroup + .subgroup {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #e2e2e2;
+      }
+      .subgroup-title {
+        margin: 0 0 0.55rem;
+        font-size: 0.93rem;
+        font-weight: 600;
+      }
       legend {
         font-weight: 600;
         padding: 0 0.5rem;
@@ -56,12 +101,56 @@
         border: 1px solid #bdbdbd;
         font-size: 0.95rem;
       }
+      input[type="text"],
+      select {
+        padding: 0.4rem 0.5rem;
+        border-radius: 0.4rem;
+        border: 1px solid #bdbdbd;
+        font-size: 0.95rem;
+        background: #ffffff;
+        color: #1f1f1f;
+      }
+      input[type="number"],
+      textarea {
+        color: #1f1f1f;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: #666666;
+      }
       input[type="color"] {
         padding: 0;
         border: none;
         background: none;
         height: 2rem;
         width: 100%;
+      }
+      .object-panel {
+        border: 1px dashed #bdbdbd;
+        border-radius: 0.4rem;
+        padding: 0.75rem;
+        background: #fafafa;
+      }
+      #object-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.5rem;
+      }
+      #object-list li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        border: 1px solid #dddddd;
+        border-radius: 0.4rem;
+        padding: 0.5rem 0.65rem;
+        background: #ffffff;
+      }
+      button.small {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.85rem;
       }
       .actions {
         display: flex;
@@ -117,13 +206,14 @@
         <h1>Koordinatensystem Generator</h1>
         <p>
           Passe die Parameter an, um ein Koordinatensystem im SVG-Format zu
-          erzeugen. Alle Längenangaben beziehen sich auf Millimeter (mm).
+          erzeugen. Alle Laengenangaben beziehen sich auf Millimeter (mm).
         </p>
       </header>
       <form id="config-form">
-        <fieldset>
-          <legend>Grundgröße</legend>
-          <div class="field-grid">
+        <details class="top-section" open>
+          <summary>Grundgroesse</summary>
+          <div class="section-body">
+            <div class="field-grid">
             <label>
               Gesamtbreite (mm)
               <input
@@ -136,7 +226,7 @@
               />
             </label>
             <label>
-              Gesamthöhe (mm)
+              Gesamthoehe (mm)
               <input
                 type="number"
                 name="height"
@@ -161,530 +251,617 @@
               Hintergrundfarbe
               <input type="color" name="background" value="#ffffff" />
             </label>
+            </div>
           </div>
-        </fieldset>
-        <fieldset>
-          <legend>Feines Gitter</legend>
-          <div class="field-grid">
-            <label>
-              Feines Gitter aktiv
-              <input type="checkbox" name="showMinor" checked />
-            </label>
-            <label>
-              Abstand (mm)
-              <input
-                type="number"
-                name="minorSpacing"
-                min="0"
-                step="0.5"
-                value="1"
-              />
-            </label>
-            <label>
-              Linienbreite (mm)
-              <input
-                type="number"
-                name="minorStroke"
-                min="0"
-                step="0.05"
-                value="0.05"
-              />
-            </label>
-            <label>
-              Linienfarbe
-              <input type="color" name="minorColor" value="#d0d0d0" />
-            </label>
+        </details>
+        <details class="top-section" open>
+          <summary>Gitter</summary>
+          <div class="section-body">
+          <details class="subsection" open>
+            <summary>Grobes Gitter</summary>
+            <div class="field-grid">
+              <label>
+                Grobes Gitter aktiv
+                <input type="checkbox" name="showMajor" checked />
+              </label>
+              <label>
+                Abstand (mm)
+                <input
+                  type="number"
+                  name="majorSpacing"
+                  min="0"
+                  step="1"
+                  value="5"
+                />
+              </label>
+              <label>
+                Linienbreite (mm)
+                <input
+                  type="number"
+                  name="majorStroke"
+                  min="0"
+                  step="0.05"
+                  value="0.05"
+                />
+              </label>
+              <label>
+                Linienfarbe
+                <input type="color" name="majorColor" value="#9b9b9b" />
+              </label>
+            </div>
+          </details>
+          <details class="subsection">
+            <summary>Feines Gitter</summary>
+            <div class="field-grid">
+              <label>
+                Feines Gitter aktiv
+                <input type="checkbox" name="showMinor" checked />
+              </label>
+              <label>
+                Abstand (mm)
+                <input
+                  type="number"
+                  name="minorSpacing"
+                  min="0"
+                  step="0.5"
+                  value="1"
+                />
+              </label>
+              <label>
+                Linienbreite (mm)
+                <input
+                  type="number"
+                  name="minorStroke"
+                  min="0"
+                  step="0.05"
+                  value="0.05"
+                />
+              </label>
+              <label>
+                Linienfarbe
+                <input type="color" name="minorColor" value="#d0d0d0" />
+              </label>
+            </div>
+          </details>
           </div>
-        </fieldset>
-        <fieldset>
-          <legend>Grobes Gitter</legend>
-          <div class="field-grid">
-            <label>
-              Grobes Gitter aktiv
-              <input type="checkbox" name="showMajor" checked />
-            </label>
-            <label>
-              Abstand (mm)
-              <input
-                type="number"
-                name="majorSpacing"
-                min="0"
-                step="1"
-                value="5"
-              />
-            </label>
-            <label>
-              Linienbreite (mm)
-              <input
-                type="number"
-                name="majorStroke"
-                min="0"
-                step="0.05"
-                value="0.05"
-              />
-            </label>
-            <label>
-              Linienfarbe
-              <input type="color" name="majorColor" value="#9b9b9b" />
-            </label>
+        </details>
+        <details class="top-section" open>
+          <summary>Achsen</summary>
+          <div class="section-body">
+            <details class="subsection" open>
+              <summary>Allgemein</summary>
+              <div class="field-grid">
+                <label>
+                  Linienbreite (mm)
+                  <input
+                    type="number"
+                    name="axisStroke"
+                    min="0"
+                    step="0.05"
+                    value="0.1"
+                  />
+                </label>
+                <label>
+                  Linienfarbe
+                  <input type="color" name="axisColor" value="#000000" />
+                </label>
+                <label>
+                  Pfeilgroesse (mm)
+                  <input
+                    type="number"
+                    name="arrowSize"
+                    min="0"
+                    step="0.5"
+                    value="2"
+                  />
+                </label>
+                <label>
+                  X-Achse anzeigen
+                  <input type="checkbox" name="showXAxis" checked />
+                </label>
+                <label>
+                  Y-Achse anzeigen
+                  <input type="checkbox" name="showYAxis" checked />
+                </label>
+              </div>
+            </details>
+            <details class="subsection">
+              <summary>Achsenmarkierungen</summary>
+              <div class="subgroup">
+                <p class="subgroup-title">Markierungen</p>
+                <div class="field-grid">
+                  <label>
+                    Markierungen anzeigen
+                    <input type="checkbox" name="showTicks" checked />
+                  </label>
+                  <label>
+                    Markierungsabstand X (mm)
+                    <input
+                      type="number"
+                      name="tickSpacingX"
+                      min="0"
+                      step="0.5"
+                      value="10"
+                    />
+                  </label>
+                  <label>
+                    Wertschritt X (Einheiten)
+                    <input
+                      type="number"
+                      name="tickValueStepX"
+                      min="0"
+                      step="0.5"
+                      value="1"
+                    />
+                  </label>
+                  <label>
+                    Markierungsabstand Y (mm)
+                    <input
+                      type="number"
+                      name="tickSpacingY"
+                      min="0"
+                      step="0.5"
+                      value="10"
+                    />
+                  </label>
+                  <label>
+                    Wertschritt Y (Einheiten)
+                    <input
+                      type="number"
+                      name="tickValueStepY"
+                      min="0"
+                      step="0.5"
+                      value="1"
+                    />
+                  </label>
+                  <label>
+                    Markierungslaenge (mm)
+                    <input
+                      type="number"
+                      name="tickLength"
+                      min="0"
+                      step="0.5"
+                      value="2"
+                    />
+                  </label>
+                  <label>
+                    Markierungsstaerke (mm)
+                    <input
+                      type="number"
+                      name="tickStroke"
+                      min="0"
+                      step="0.05"
+                      value="0.1"
+                    />
+                  </label>
+                  <label>
+                    Markierungsfarbe
+                    <input type="color" name="tickColor" value="#000000" />
+                  </label>
+                </div>
+              </div>
+              <div class="subgroup">
+                <p class="subgroup-title">Beschriftung</p>
+                <div class="field-grid">
+                  <label>
+                    Beschriftung anzeigen
+                    <input type="checkbox" name="showTickLabels" checked />
+                  </label>
+                  <label>
+                    Zahlenabstand (mm)
+                    <input
+                      type="number"
+                      name="tickLabelOffset"
+                      min="0"
+                      step="0.5"
+                      value="2"
+                    />
+                  </label>
+                  <label>
+                    Schriftgroesse (mm)
+                    <input
+                      type="number"
+                      name="tickLabelFontSize"
+                      min="0"
+                      step="0.5"
+                      value="1"
+                    />
+                  </label>
+                  <label>
+                    Schriftfarbe
+                    <input type="color" name="tickLabelColor" value="#000000" />
+                  </label>
+                </div>
+              </div>
+            </details>
+            <details class="subsection" open>
+              <summary>Achsenlabels</summary>
+              <div class="field-grid">
+                <label>
+                  Label x-Achse
+                  <input type="text" name="axisLabelX" value="x" />
+                </label>
+                <label>
+                  Label y-Achse
+                  <input type="text" name="axisLabelY" value="y" />
+                </label>
+                <label>
+                  x-Label anzeigen
+                  <input type="checkbox" name="showXAxisLabel" checked />
+                </label>
+                <label>
+                  y-Label anzeigen
+                  <input type="checkbox" name="showYAxisLabel" checked />
+                </label>
+                <label>
+                  Labelgroesse (mm)
+                  <input
+                    type="number"
+                    name="axisLabelFontSize"
+                    min="0"
+                    step="0.1"
+                    value="1.5"
+                  />
+                </label>
+                <label>
+                  Labelfarbe
+                  <input type="color" name="axisLabelColor" value="#000000" />
+                </label>
+                <label>
+                  x-Label Offset X (mm)
+                  <input
+                    type="number"
+                    name="xAxisLabelOffsetX"
+                    step="0.5"
+                    value="6"
+                  />
+                </label>
+                <label>
+                  x-Label Offset Y (mm)
+                  <input
+                    type="number"
+                    name="xAxisLabelOffsetY"
+                    step="0.5"
+                    value="2"
+                  />
+                </label>
+                <label>
+                  y-Label Offset X (mm)
+                  <input
+                    type="number"
+                    name="yAxisLabelOffsetX"
+                    step="0.5"
+                    value="-3.5"
+                  />
+                </label>
+                <label>
+                  y-Label Offset Y (mm)
+                  <input
+                    type="number"
+                    name="yAxisLabelOffsetY"
+                    step="0.5"
+                    value="8"
+                  />
+                </label>
+              </div>
+            </details>
+            <details class="subsection">
+              <summary>Ursprung</summary>
+              <div class="field-grid">
+                <label>
+                  Ursprung X ab linkem Innenrand (mm)
+                  <input
+                    type="number"
+                    name="originOffsetX"
+                    step="0.5"
+                    value="0"
+                  />
+                </label>
+                <label>
+                  Ursprung Y ab unterem Innenrand (mm)
+                  <input
+                    type="number"
+                    name="originOffsetY"
+                    step="0.5"
+                    value="0"
+                  />
+                </label>
+              </div>
+            </details>
           </div>
-        </fieldset>
-        <fieldset>
-          <legend>Achsen</legend>
-          <div class="field-grid">
+        </details>
+        <details class="top-section" open>
+          <summary>Dynamische Objekte</summary>
+          <div class="section-body">
+            <div class="field-grid">
             <label>
-              Linienbreite (mm)
+              Objekttyp
+              <select name="objectType">
+                <option value="point">Punkt</option>
+                <option value="line">Strecke</option>
+                <option value="function">Funktion</option>
+                <option value="area">Flaeche</option>
+              </select>
+            </label>
+            <label>
+              Objektname
+              <input type="text" name="objectName" value="" placeholder="z.B. P1 oder f_oben" />
+            </label>
+            <label>
+              Farbe
+              <input type="color" name="objectColor" value="#d81b60" />
+            </label>
+            <label>
+              Beschriftungsgroesse (mm)
               <input
                 type="number"
-                name="axisStroke"
+                name="objectLabelFontSize"
                 min="0"
-                step="0.05"
-                value="0.1"
+                step="0.1"
+                value="1.6"
               />
             </label>
-            <label>
-              Linienfarbe
-              <input type="color" name="axisColor" value="#000000" />
-            </label>
-            <label>
-              Pfeilgröße (mm)
-              <input
-                type="number"
-                name="arrowSize"
-                min="0"
-                step="0.5"
-                value="2"
-              />
-            </label>
+            </div>
+            <div class="object-panel" data-object-panel="point">
+            <div class="field-grid">
+              <label>
+                Punkt X (Einheit)
+                <input type="number" name="pointX" step="0.5" value="1" />
+              </label>
+              <label>
+                Punkt Y (Einheit)
+                <input type="number" name="pointY" step="0.5" value="1" />
+              </label>
+              <label>
+                Punktlabel
+                <input type="text" name="pointLabel" value="A" />
+              </label>
+              <label>
+                Darstellungsform
+                <select name="pointShape">
+                  <option value="circle">Kreis</option>
+                  <option value="cross">Kreuz diagonal</option>
+                  <option value="errorbars">x,y Fehlerbalken</option>
+                </select>
+              </label>
+              <label>
+                Punktradius (mm)
+                <input
+                  type="number"
+                  name="pointRadius"
+                  min="0"
+                  step="0.1"
+                  value="1.2"
+                />
+              </label>
+              <label>
+                Strichstaerke (mm)
+                <input
+                  type="number"
+                  name="pointStroke"
+                  min="0"
+                  step="0.05"
+                  value="0.2"
+                />
+              </label>
+              <label>
+                Fehler x (Einheiten)
+                <input type="number" name="pointErrorX" min="0" step="0.1" value="0.5" />
+              </label>
+              <label>
+                Fehler y (Einheiten)
+                <input type="number" name="pointErrorY" min="0" step="0.1" value="0.5" />
+              </label>
+            </div>
           </div>
-        </fieldset>
-        <fieldset>
-          <legend>Achsenmarkierungen</legend>
-          <div class="field-grid">
-            <label>
-              Markierungen anzeigen
-              <input type="checkbox" name="showTicks" checked />
-            </label>
-            <label>
-              Abstand X (mm)
-              <input
-                type="number"
-                name="tickSpacingX"
-                min="0"
-                step="0.5"
-                value="10"
-              />
-            </label>
-            <label>
-              Abstand Y (mm)
-              <input
-                type="number"
-                name="tickSpacingY"
-                min="0"
-                step="0.5"
-                value="10"
-              />
-            </label>
-            <label>
-              Strichlänge (mm)
-              <input
-                type="number"
-                name="tickLength"
-                min="0"
-                step="0.5"
-                value="2"
-              />
-            </label>
-            <label>
-              Strichstärke (mm)
-              <input
-                type="number"
-                name="tickStroke"
-                min="0"
-                step="0.05"
-                value="0.1"
-              />
-            </label>
-            <label>
-              Strichfarbe
-              <input type="color" name="tickColor" value="#000000" />
-            </label>
-            <label>
-              Beschriftung anzeigen
-              <input type="checkbox" name="showTickLabels" checked />
-            </label>
-            <label>
-              Zahlenabstand (mm)
-              <input
-                type="number"
-                name="tickLabelOffset"
-                min="0"
-                step="0.5"
-                value="2"
-              />
-            </label>
-            <label>
-              Schriftgröße (mm)
-              <input
-                type="number"
-                name="tickLabelFontSize"
-                min="0"
-                step="0.5"
-                value="1"
-              />
-            </label>
-            <label>
-              Schriftfarbe
-              <input type="color" name="tickLabelColor" value="#000000" />
-            </label>
-            <label>
-              Schrittweite X (Einheiten)
-              <input
-                type="number"
-                name="tickValueStepX"
-                min="0"
-                step="0.5"
-                value="1"
-              />
-            </label>
-            <label>
-              Schrittweite Y (Einheiten)
-              <input
-                type="number"
-                name="tickValueStepY"
-                min="0"
-                step="0.5"
-                value="1"
-              />
-            </label>
+          <div class="object-panel" data-object-panel="line" hidden>
+            <div class="field-grid">
+              <label>
+                x1
+                <input type="number" name="lineX1" step="0.5" value="-2" />
+              </label>
+              <label>
+                y1
+                <input type="number" name="lineY1" step="0.5" value="-1" />
+              </label>
+              <label>
+                x2
+                <input type="number" name="lineX2" step="0.5" value="3" />
+              </label>
+              <label>
+                y2
+                <input type="number" name="lineY2" step="0.5" value="2" />
+              </label>
+              <label>
+                Linienstil
+                <select name="lineStyle">
+                  <option value="solid">durchgezogen</option>
+                  <option value="dashed">gestrichelt</option>
+                  <option value="dotted">gepunktet</option>
+                </select>
+              </label>
+              <label>
+                Strichstaerke (mm)
+                <input
+                  type="number"
+                  name="lineStroke"
+                  min="0"
+                  step="0.05"
+                  value="0.2"
+                />
+              </label>
+            </div>
           </div>
-        </fieldset>
+          <div class="object-panel" data-object-panel="function" hidden>
+            <div class="field-grid">
+              <label>
+                Ausdruck y = f(x)
+                <input
+                  type="text"
+                  name="funcExpression"
+                  value="2x^2-3x+1"
+                  placeholder="z.B. a*x^n+b*x^(n-1) oder a*b^x oder sin(x)"
+                />
+              </label>
+              <label>
+                Parameter (z.B. a=2;b=3;n=4)
+                <input type="text" name="funcParameters" value="" />
+              </label>
+              <label>
+                min x
+                <input type="number" name="funcMinX" step="0.5" value="-6" />
+              </label>
+              <label>
+                max x
+                <input type="number" name="funcMaxX" step="0.5" value="6" />
+              </label>
+              <label>
+                Schrittweite
+                <input
+                  type="number"
+                  name="funcStep"
+                  min="0.001"
+                  step="0.01"
+                  value="0.1"
+                />
+              </label>
+              <label>
+                Linienstil
+                <select name="funcStyle">
+                  <option value="solid">durchgezogen</option>
+                  <option value="dashed">gestrichelt</option>
+                  <option value="dotted">gepunktet</option>
+                </select>
+              </label>
+              <label>
+                Strichstaerke (mm)
+                <input
+                  type="number"
+                  name="funcStroke"
+                  min="0"
+                  step="0.05"
+                  value="0.2"
+                />
+              </label>
+            </div>
+          </div>
+          <div class="object-panel" data-object-panel="area" hidden>
+            <div class="field-grid">
+              <label>
+                Flaechenmodus
+                <select name="areaMode">
+                  <option value="polygon">aus Punktfolge</option>
+                  <option value="functions">zwischen zwei Funktionen</option>
+                </select>
+              </label>
+              <label>
+                Fuellfarbe
+                <input type="color" name="areaFillColor" value="#ffcc80" />
+              </label>
+              <label>
+                Fuelltransparenz (0-1)
+                <input
+                  type="number"
+                  name="areaFillOpacity"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value="0.45"
+                />
+              </label>
+              <label>
+                Randlinienstil
+                <select name="areaStyle">
+                  <option value="solid">durchgezogen</option>
+                  <option value="dashed">gestrichelt</option>
+                  <option value="dotted">gepunktet</option>
+                </select>
+              </label>
+              <label>
+                Punktefolge (x,y; x,y; x,y)
+                <input type="text" name="areaPoints" value="-4,-1; -1,2; 2,1; 3,-2" />
+              </label>
+              <label>
+                Untere Funktion y = f(x)
+                <input type="text" name="areaLowerExpression" value="x^2-4" />
+              </label>
+              <label>
+                Parameter unten (optional)
+                <input type="text" name="areaLowerParameters" value="" />
+              </label>
+              <label>
+                Obere Funktion y = g(x)
+                <input type="text" name="areaUpperExpression" value="2x+4" />
+              </label>
+              <label>
+                Parameter oben (optional)
+                <input type="text" name="areaUpperParameters" value="" />
+              </label>
+              <label>
+                min x
+                <input type="number" name="areaMinX" step="0.5" value="-6" />
+              </label>
+              <label>
+                max x
+                <input type="number" name="areaMaxX" step="0.5" value="6" />
+              </label>
+              <label>
+                Schrittweite
+                <input
+                  type="number"
+                  name="areaStep"
+                  min="0.001"
+                  step="0.01"
+                  value="0.1"
+                />
+              </label>
+              <label>
+                Strichstaerke (mm)
+                <input
+                  type="number"
+                  name="areaStroke"
+                  min="0"
+                  step="0.05"
+                  value="0.2"
+                />
+              </label>
+            </div>
+          </div>
+            <div class="actions">
+              <button type="button" id="add-object">Objekt hinzufuegen</button>
+              <button type="button" class="secondary" id="clear-objects">
+                Objekte entfernen
+              </button>
+            </div>
+            <ul id="object-list" aria-live="polite"></ul>
+          </div>
+        </details>
         <div class="actions">
           <button type="submit">SVG aktualisieren</button>
           <button type="button" class="secondary" id="save-svg">
             SVG speichern
           </button>
+          <button type="button" class="secondary" id="export-function-call">
+            Funktionsaufruf exportieren
+          </button>
         </div>
       </form>
       <section id="preview" aria-live="polite"></section>
+      <section>
+        <label for="function-call-output">Funktionsaufruf fuer Einbindung</label>
+        <textarea
+          id="function-call-output"
+          readonly
+          placeholder="Hier erscheint der exportierte Funktionsaufruf."
+        ></textarea>
+      </section>
     </main>
+    <script src="koordinatensystem-svg.js"></script>
     <script>
       (() => {
-        const form = document.getElementById("config-form");
-        const preview = document.getElementById("preview");
-        const output = document.getElementById("svg-output");
-        const saveButton = document.getElementById("save-svg");
-        let currentSVG = "";
-        const clampMargin = (value, width, height) =>
-          Math.min(value, width / 2, height / 2);
-        const parseNumber = (el, fallback, minValue = undefined) => {
-          const value = Number.parseFloat(el.value);
-          if (!Number.isFinite(value)) {
-            return fallback;
-          }
-          if (typeof minValue === "number" && value < minValue) {
-            return fallback;
-          }
-          return value;
-        };
-        const fmt = (value) =>
-          Number.parseFloat(value.toFixed(4)).toString().replace(/\.0+$/, "");
-        const buildGrid = (cfg, spacing, strokeWidth, color) => {
-          if (!spacing || spacing <= 0 || strokeWidth <= 0) {
-            return "";
-          }
-          const lines = [];
-          const startX = cfg.margin;
-          const endX = cfg.width - cfg.margin;
-          const startY = cfg.margin;
-          const endY = cfg.height - cfg.margin;
-          const epsilon = 1e-6;
-          let index = 0;
-          while (true) {
-            const x = startX + index * spacing;
-            if (x > endX + epsilon) {
-              break;
-            }
-            lines.push(
-              `<line x1="${fmt(x)}" y1="${fmt(startY)}" x2="${fmt(
-                x
-              )}" y2="${fmt(endY)}" stroke="${color}" stroke-width="${fmt(
-                strokeWidth
-              )}mm" />`
-            );
-            index += 1;
-          }
-          index = 0;
-          while (true) {
-            const y = startY + index * spacing;
-            if (y > endY + epsilon) {
-              break;
-            }
-            lines.push(
-              `<line x1="${fmt(startX)}" y1="${fmt(y)}" x2="${fmt(
-                endX
-              )}" y2="${fmt(y)}" stroke="${color}" stroke-width="${fmt(
-                strokeWidth
-              )}mm" />`
-            );
-            index += 1;
-          }
-          return lines.join("\n          ");
-        };
-        const buildAxes = (cfg) => {
-          if (cfg.axisStroke <= 0) {
-            return "";
-          }
-          const startX = cfg.margin;
-          const endX = cfg.width - cfg.margin;
-          const startY = cfg.margin;
-          const endY = cfg.height - cfg.margin;
-          const arrow = cfg.arrowSize;
-          const strokeWidth = fmt(cfg.axisStroke);
-          const axisColor = cfg.axisColor;
-          const elements = [
-            `<line x1="${fmt(startX)}" y1="${fmt(startY)}" x2="${fmt(
-              endX
-            )}" y2="${fmt(
-              startY
-            )}" stroke="${axisColor}" stroke-width="${strokeWidth}mm" stroke-linecap="square" />`,
-            `<line x1="${fmt(startX)}" y1="${fmt(startY)}" x2="${fmt(
-              startX
-            )}" y2="${fmt(
-              endY
-            )}" stroke="${axisColor}" stroke-width="${strokeWidth}mm" stroke-linecap="square" />`,
-          ];
-          if (arrow > 0) {
-            elements.push(
-              `<path d="M ${fmt(endX - arrow)} ${fmt(
-                startY - arrow / 2
-              )} L ${fmt(endX)} ${fmt(startY)} L ${fmt(endX - arrow)} ${fmt(
-                startY + arrow / 2
-              )}" fill="none" stroke="${axisColor}" stroke-width="${strokeWidth}mm" stroke-linecap="round" stroke-linejoin="round" />`,
-              `<path d="M ${fmt(startX - arrow / 2)} ${fmt(
-                endY - arrow
-              )} L ${fmt(startX)} ${fmt(endY)} L ${fmt(
-                startX + arrow / 2
-              )} ${fmt(
-                endY - arrow
-              )}" fill="none" stroke="${axisColor}" stroke-width="${strokeWidth}mm" stroke-linecap="round" stroke-linejoin="round" />`
-            );
-          }
-          return elements.join("\n          ");
-        };
-        const buildTicks = (cfg) => {
-          if (!cfg.showTicks) {
-            return "";
-          }
-          const {
-            tickSpacingX,
-            tickSpacingY,
-            tickLength,
-            tickStroke,
-            tickColor,
-            tickLabelFontSize,
-            tickLabelOffset,
-            tickLabelColor,
-            showTickLabels,
-            tickValueStepX,
-            tickValueStepY,
-          } = cfg;
-          if (
-            (!tickSpacingX || tickSpacingX <= 0) &&
-            (!tickSpacingY || tickSpacingY <= 0)
-          ) {
-            return "";
-          }
-          if (!tickLength || tickLength <= 0 || tickStroke <= 0) {
-            return "";
-          }
-          const valueStepX = tickValueStepX > 0 ? tickValueStepX : 1;
-          const valueStepY = tickValueStepY > 0 ? tickValueStepY : 1;
-          const labelOffset = Math.max(0, tickLabelOffset || 0);
-          const labelFontSize = tickLabelFontSize > 0 ? tickLabelFontSize : 3;
-          const tickLen = Math.max(0, tickLength || 0);
-          const startX = cfg.margin;
-          const endX = cfg.width - cfg.margin;
-          const startY = cfg.margin;
-          const endY = cfg.height - cfg.margin;
-          const strokeWidth = fmt(tickStroke);
-          const formattedLength = tickLen;
-          const labels = [];
-          const elements = [];
-          const createLabel = (x, y, value, anchor, baseline) => {
-            if (!showTickLabels) {
-              return;
-            }
-            labels.push(`
-              <g transform="translate(${fmt(x)} ${fmt(y)}) scale(1 -1)">
-                <text
-                  text-anchor="${anchor}"
-                  dominant-baseline="${baseline}"
-                  font-size="${fmt(labelFontSize)}mm"
-                  fill="${tickLabelColor}"
-                >${value}</text>
-              </g>`);
-          };
-          if (tickSpacingX && tickSpacingX > 0) {
-            const count = Math.floor((endX - startX) / tickSpacingX);
-            for (let i = 0; i <= count; i += 1) {
-              const x = startX + i * tickSpacingX;
-              const isArrowTick = i === count;
-              if (!isArrowTick) {
-                elements.push(
-                  `<line x1="${fmt(x)}" y1="${fmt(startY)}" x2="${fmt(
-                    x
-                  )}" y2="${fmt(
-                    startY - formattedLength
-                  )}" stroke="${tickColor}" stroke-width="${strokeWidth}mm" stroke-linecap="round" />`
-                );
-                const labelValue = fmt(i * valueStepX);
-                createLabel(
-                  x,
-                  startY - formattedLength - labelOffset,
-                  labelValue,
-                  "middle",
-                  "hanging"
-                );
-              }
-            }
-          }
-          if (tickSpacingY && tickSpacingY > 0) {
-            const count = Math.floor((endY - startY) / tickSpacingY);
-            for (let i = 0; i <= count; i += 1) {
-              const y = startY + i * tickSpacingY;
-              const isArrowTick = i === count;
-              if (!isArrowTick) {
-                elements.push(
-                  `<line x1="${fmt(startX)}" y1="${fmt(y)}" x2="${fmt(
-                    startX - formattedLength
-                  )}" y2="${fmt(
-                    y
-                  )}" stroke="${tickColor}" stroke-width="${strokeWidth}mm" stroke-linecap="round" />`
-                );
-                const labelValue = fmt(i * valueStepY);
-                createLabel(
-                  startX - formattedLength - labelOffset,
-                  y,
-                  labelValue,
-                  "end",
-                  "middle"
-                );
-              }
-            }
-          }
-          return [elements.join("\n          "), labels.join("\n          ")]
-            .filter(Boolean)
-            .join("\n          ");
-        };
-        const getConfig = () => {
-          const elements = form.elements;
-          const width = parseNumber(elements.width, 210, 1);
-          const height = parseNumber(elements.height, 210, 1);
-          const marginRaw = parseNumber(elements.margin, 10, 0);
-          const cfg = {
-            width,
-            height,
-            margin: clampMargin(marginRaw, width, height),
-            background: elements.background.value || "#ffffff",
-            showMinor: elements.showMinor.checked,
-            minorSpacing: parseNumber(elements.minorSpacing, 5, 0),
-            minorStroke: parseNumber(elements.minorStroke, 0.1, 0),
-            minorColor: elements.minorColor.value || "#d0d0d0",
-            showMajor: elements.showMajor.checked,
-            majorSpacing: parseNumber(elements.majorSpacing, 10, 0),
-            majorStroke: parseNumber(elements.majorStroke, 0.3, 0),
-            majorColor: elements.majorColor.value || "#9b9b9b",
-            axisStroke: parseNumber(elements.axisStroke, 0.5, 0),
-            axisColor: elements.axisColor.value || "#000000",
-            arrowSize: parseNumber(elements.arrowSize, 4, 0),
-            showTicks: elements.showTicks.checked,
-            tickSpacingX: parseNumber(elements.tickSpacingX, 10, 0),
-            tickSpacingY: parseNumber(elements.tickSpacingY, 10, 0),
-            tickLength: parseNumber(elements.tickLength, 3, 0),
-            tickStroke: parseNumber(elements.tickStroke, 0.1, 0),
-            tickColor: elements.tickColor.value || "#000000",
-            showTickLabels: elements.showTickLabels.checked,
-            tickLabelOffset: parseNumber(elements.tickLabelOffset, 2, 0),
-            tickLabelFontSize: parseNumber(elements.tickLabelFontSize, 3, 0),
-            tickLabelColor: elements.tickLabelColor.value || "#000000",
-            tickValueStepX: parseNumber(elements.tickValueStepX, 1, 0),
-            tickValueStepY: parseNumber(elements.tickValueStepY, 1, 0),
-          };
-          return cfg;
-        };
-        const buildSVG = (cfg) => {
-          const gridMinor =
-            cfg.showMinor && cfg.minorSpacing > 0
-              ? buildGrid(
-                  cfg,
-                  cfg.minorSpacing,
-                  cfg.minorStroke,
-                  cfg.minorColor
-                )
-              : "";
-          const gridMajor =
-            cfg.showMajor && cfg.majorSpacing > 0
-              ? buildGrid(
-                  cfg,
-                  cfg.majorSpacing,
-                  cfg.majorStroke,
-                  cfg.majorColor
-                )
-              : "";
-          const axes = buildAxes(cfg);
-          const ticks = buildTicks(cfg);
-          return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="${fmt(cfg.width)}mm"
-     height="${fmt(cfg.height)}mm"
-     viewBox="0 0 ${fmt(cfg.width)} ${fmt(cfg.height)}">
-  <rect x="0" y="0" width="${fmt(cfg.width)}" height="${fmt(
-            cfg.height
-          )}" fill="${cfg.background}" />
-  <g transform="translate(0 ${fmt(cfg.height)}) scale(1 -1)">
-    ${gridMinor ? `<g>\n          ${gridMinor}\n        </g>` : ""}
-    ${gridMajor ? `<g>\n          ${gridMajor}\n        </g>` : ""}
-    <g>
-          ${axes}
-    </g>
-    ${ticks ? `<g>\n          ${ticks}\n        </g>` : ""}
-  </g>
-</svg>`;
-        };
-        const updateSVG = () => {
-          const cfg = getConfig();
-          const svg = buildSVG(cfg);
-          currentSVG = svg;
-          preview.innerHTML = svg;
-          if (output) {
-            output.value = svg;
-          }
-        };
-        const downloadSVG = () => {
-          if (!currentSVG) {
-            updateSVG();
-          }
-          const blob = new Blob([currentSVG], { type: "image/svg+xml" });
-          const blobUrl = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = blobUrl;
-          link.download = "koordinatensystem.svg";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          setTimeout(() => URL.revokeObjectURL(blobUrl), 1500);
-        };
-        form.addEventListener("submit", (event) => {
-          event.preventDefault();
-          updateSVG();
-        });
-        form.addEventListener("input", () => {
-          updateSVG();
-        });
-        saveButton.addEventListener("click", downloadSVG);
-        updateSVG();
+        window.koordinatensystemApp = window.initKoordinatensystemGenerator();
       })();
     </script>
   </body>
 </html>
+
