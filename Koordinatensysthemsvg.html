@@ -193,6 +193,27 @@
         font-size: 0.9rem;
         background: #ffffff;
       }
+      .info-card {
+        border: 1px solid #c9c9c9;
+        border-radius: 0.5rem;
+        background: #ffffff;
+        padding: 0.9rem 1rem;
+      }
+      .info-card p {
+        margin: 0.35rem 0;
+      }
+      .inline-code {
+        font-family: "Fira Code", "Cascadia Code", monospace;
+        font-size: 0.9em;
+        background: #f1f3f5;
+        padding: 0.05rem 0.25rem;
+        border-radius: 0.25rem;
+      }
+      .settings-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 0.5rem;
+      }
       @media (max-width: 700px) {
         body {
           padding: 1.25rem;
@@ -209,7 +230,37 @@
           erzeugen. Alle Laengenangaben beziehen sich auf Millimeter (mm).
         </p>
       </header>
+      <section class="info-card" aria-label="Hinweise zur Nutzung">
+        <p>
+          Zweck 1: SVG in dieser Seite erzeugen, Vorschau pruefen und mit
+          <span class="inline-code">SVG speichern</span> exportieren.
+        </p>
+        <p>
+          Zweck 2: Einstellungen vorbereiten und mit
+          <span class="inline-code">Funktionsaufruf exportieren</span> den Code
+          fuer eine andere Webseite erzeugen.
+        </p>
+        <p>
+          Wichtig: In dieser Generator-Seite wird die Vorschau standardmaessig in
+          das Element <span class="inline-code">#preview</span> gerendert. Im
+          exportierten Beispiel bestimmst du das Ziel-Element auf deiner Seite
+          selbst (z.B. <span class="inline-code">#mein-svg-ziel</span>).
+        </p>
+        <p>
+          Falls du die komplette UI in eine andere Seite einbindest, kannst du
+          das Vorschau-Ziel beim Start ueber
+          <span class="inline-code">previewId</span> oder
+          <span class="inline-code">preview</span> an
+          <span class="inline-code">initKoordinatensystemGenerator(...)</span>
+          uebergeben.
+        </p>
+      </section>
       <form id="config-form">
+        <div class="settings-toolbar">
+          <button type="button" class="secondary" id="toggle-settings-panels">
+            Alle Bereiche zuklappen
+          </button>
+        </div>
         <details class="top-section" open>
           <summary>Grundgroesse</summary>
           <div class="section-body">
@@ -254,7 +305,7 @@
             </div>
           </div>
         </details>
-        <details class="top-section" open>
+        <details class="top-section">
           <summary>Gitter</summary>
           <div class="section-body">
           <details class="subsection" open>
@@ -325,7 +376,7 @@
           </details>
           </div>
         </details>
-        <details class="top-section" open>
+        <details class="top-section">
           <summary>Achsen</summary>
           <div class="section-body">
             <details class="subsection" open>
@@ -570,7 +621,7 @@
             </details>
           </div>
         </details>
-        <details class="top-section" open>
+        <details class="top-section">
           <summary>Dynamische Objekte</summary>
           <div class="section-body">
             <div class="field-grid">

@@ -1115,6 +1115,10 @@
         : document.getElementById(
             options.exportFunctionCallButtonId || "export-function-call"
           );
+    const toggleSettingsPanelsButton =
+      options.toggleSettingsPanelsButton instanceof HTMLElement
+        ? options.toggleSettingsPanelsButton
+        : document.getElementById(options.toggleSettingsPanelsButtonId || "toggle-settings-panels");
     const functionCallOutput =
       options.functionCallOutput instanceof HTMLElement
         ? options.functionCallOutput
@@ -1208,11 +1212,16 @@
       const exportObjects = objects.map((obj) => serializeObject(obj));
       return [
         "// benoetigt koordinatensystem-svg.js",
+        "// Erzeugt nur den SVG-String. Wohin er gerendert wird, bestimmst du selbst.",
         `const config = ${JSON.stringify(config, null, 2)};`,
         `const objects = ${JSON.stringify(exportObjects, null, 2)};`,
         "const generator = new KoordinatensystemSVG(config);",
         "generator.setObjects(objects);",
         "const svg = generator.buildSVG();",
+        "",
+        "// Beispiel: SVG in ein Ziel-Element deiner Seite schreiben",
+        'const target = document.getElementById("mein-svg-ziel");',
+        "if (target) target.innerHTML = svg;",
       ].join("\n");
     };
 
@@ -1257,9 +1266,30 @@
     if (exportFunctionCallButton) {
       exportFunctionCallButton.addEventListener("click", exportFunctionCall);
     }
+    const topSections = () => Array.from(form.querySelectorAll("details.top-section"));
+    const updateToggleSettingsPanelsButton = () => {
+      if (!(toggleSettingsPanelsButton instanceof HTMLButtonElement)) return;
+      const sections = topSections();
+      const allOpen = sections.length > 0 && sections.every((section) => section.open);
+      toggleSettingsPanelsButton.textContent = allOpen
+        ? "Alle Bereiche zuklappen"
+        : "Alle Bereiche aufklappen";
+    };
+    if (toggleSettingsPanelsButton) {
+      toggleSettingsPanelsButton.addEventListener("click", () => {
+        const sections = topSections();
+        const allOpen = sections.length > 0 && sections.every((section) => section.open);
+        for (const section of sections) section.open = !allOpen;
+        updateToggleSettingsPanelsButton();
+      });
+    }
+    for (const section of topSections()) {
+      section.addEventListener("toggle", updateToggleSettingsPanelsButton);
+    }
 
     renderObjects();
     updateSVG();
+    updateToggleSettingsPanelsButton();
 
     return {
       generator,
