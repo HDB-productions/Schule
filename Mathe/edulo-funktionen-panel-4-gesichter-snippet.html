@@ -214,6 +214,250 @@
     background: #f6f9fe;
   }
 
+  #f4g-edulo-panel .f4g-task {
+    display: grid;
+    gap: 10px;
+  }
+
+  #f4g-edulo-panel .f4g-task-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  #f4g-edulo-panel .f4g-task-head h4 {
+    margin: 0;
+    color: #234a8b;
+  }
+
+  #f4g-edulo-panel .f4g-task-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    border: 1px solid #dbe7f4;
+    background: #f7fbff;
+    font-weight: 700;
+  }
+
+  #f4g-edulo-panel .f4g-task-score-value {
+    min-width: 2ch;
+    text-align: right;
+    color: #1f3f7b;
+  }
+
+  #f4g-edulo-panel .f4g-task-board {
+    display: grid;
+    grid-template-columns: minmax(260px, 1.15fr) minmax(220px, 0.85fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  #f4g-edulo-panel .f4g-task-plot {
+    border: 1px solid #dfe8f3;
+    border-radius: 10px;
+    background: #fbfdff;
+    padding: 8px;
+  }
+
+  #f4g-edulo-panel .f4g-task-plot svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  #f4g-edulo-panel .f4g-task-controls {
+    display: grid;
+    gap: 10px;
+    border: 1px solid #e4ecf6;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 10px;
+  }
+
+  #f4g-edulo-panel .f4g-task-question {
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  #f4g-edulo-panel .f4g-task-hint {
+    font-size: 0.88rem;
+    color: var(--f4g-muted);
+  }
+
+  #f4g-edulo-panel .f4g-task-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+
+  #f4g-edulo-panel .f4g-task-input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 9px;
+    border: 1px solid #cad8e8;
+    font: inherit;
+  }
+
+  #f4g-edulo-panel .f4g-task-input:focus {
+    outline: 2px solid rgba(47, 95, 208, 0.2);
+    border-color: #8fb0dc;
+  }
+
+  #f4g-edulo-panel .f4g-task-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #f4g-edulo-panel .f4g-task-btn {
+    border: 1px solid #bfd3ea;
+    background: #ffffff;
+    color: #223041;
+    border-radius: 9px;
+    padding: 7px 10px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  #f4g-edulo-panel .f4g-task-btn:hover {
+    background: #f7fbff;
+  }
+
+  #f4g-edulo-panel .f4g-task-btn--primary {
+    background: #2f5fd0;
+    color: #fff;
+    border-color: #2a57bf;
+  }
+
+  #f4g-edulo-panel .f4g-task-btn--primary:hover {
+    background: #2956c1;
+  }
+
+  #f4g-edulo-panel .f4g-task-feedback {
+    min-height: 1.4em;
+    font-weight: 700;
+  }
+
+  #f4g-edulo-panel .f4g-task-feedback.is-ok {
+    color: #1f7a3f;
+  }
+
+  #f4g-edulo-panel .f4g-task-feedback.is-bad {
+    color: #b02828;
+  }
+
+  #f4g-edulo-panel .f4g-term-layout {
+    display: grid;
+    gap: 12px;
+  }
+
+  #f4g-edulo-panel .f4g-term-block {
+    padding: 11px 12px;
+    border: 1px solid #dee8f3;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #ffffff, #fbfdff);
+  }
+
+  #f4g-edulo-panel .f4g-term-block > h4 {
+    margin: 0 0 8px;
+    color: #234a8b;
+    font-size: 0.98rem;
+  }
+
+  #f4g-edulo-panel .f4g-term-block > p + p {
+    margin-top: 6px;
+  }
+
+  #f4g-edulo-panel .f4g-term-list {
+    margin: 8px 0 0 18px;
+    padding: 0;
+  }
+
+  #f4g-edulo-panel .f4g-term-list li + li {
+    margin-top: 4px;
+  }
+
+  #f4g-edulo-panel .f4g-term-subgrid {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  #f4g-edulo-panel .f4g-term-sub {
+    padding: 10px 10px;
+    border: 1px solid #e4ecf6;
+    border-radius: 10px;
+    background: #ffffff;
+  }
+
+  #f4g-edulo-panel .f4g-term-sub h5 {
+    margin: 0 0 6px;
+    color: #294b87;
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+
+  #f4g-edulo-panel .f4g-term-sub p + p {
+    margin-top: 6px;
+  }
+
+  #f4g-edulo-panel .f4g-term-example {
+    margin-top: 8px;
+    padding: 8px 9px;
+    border: 1px solid #dfe8f4;
+    border-radius: 9px;
+    background: #f9fbff;
+  }
+
+  #f4g-edulo-panel .f4g-term-example-title {
+    margin: 0 0 4px;
+    font-weight: 700;
+    color: #234a8b;
+  }
+
+  #f4g-edulo-panel .f4g-term-pre {
+    margin: 6px 0 0;
+    padding: 8px 9px;
+    border: 1px solid #dbe6f2;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #223041;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
+  }
+
+  #f4g-edulo-panel .f4g-term-note {
+    margin-top: 7px;
+    padding: 7px 9px;
+    border-radius: 9px;
+    border: 1px solid #dde8f5;
+    background: #f6f9fe;
+  }
+
+  #f4g-edulo-panel .f4g-term-note.is-warm {
+    border-color: #f0dfbf;
+    background: #fff9ee;
+  }
+
+  #f4g-edulo-panel .f4g-term-callout {
+    margin-top: 10px;
+    padding: 8px 9px;
+    border: 1px solid #dbe7f3;
+    border-radius: 9px;
+    background: #f5f9ff;
+  }
+
+  #f4g-edulo-panel .f4g-mono {
+    font-family: Consolas, "Courier New", monospace;
+  }
+
   #f4g-edulo-panel .f4g-placeholder {
     color: var(--f4g-muted);
     font-style: italic;
@@ -263,6 +507,12 @@
     }
 
     #f4g-edulo-panel .f4g-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 860px) {
+    #f4g-edulo-panel .f4g-task-board {
       grid-template-columns: 1fr;
     }
   }
@@ -448,13 +698,106 @@
             </section>
           </div>
         </section>
+
+        <section class="f4g-dia-block" aria-label="Aufgaben">
+          <div class="f4g-task" id="f4g-diagramm-task">
+            <div class="f4g-task-head">
+              <h4>Aufgaben</h4>
+              <div class="f4g-task-score" aria-live="polite">
+                Punkte:
+                <span class="f4g-task-score-value" data-role="score-value">0</span>
+              </div>
+            </div>
+
+            <div class="f4g-task-board">
+              <div class="f4g-task-plot" data-role="plot" aria-label="Koordinatensystem mit Geraden"></div>
+
+              <div class="f4g-task-controls">
+                <div class="f4g-task-question" data-role="question">Lade Aufgabe…</div>
+                <div class="f4g-task-hint">Lies den Wert direkt am Diagramm ab und gib den Funktionswert ein.</div>
+
+                <div class="f4g-task-row">
+                  <input class="f4g-task-input" data-role="answer-input" type="text" inputmode="numeric" placeholder="Antwort eingeben">
+                  <button class="f4g-task-btn f4g-task-btn--primary" type="button" data-role="check-btn">Prüfen</button>
+                </div>
+
+                <div class="f4g-task-buttons">
+                  <button class="f4g-task-btn" type="button" data-role="new-btn">Neue Aufgabe</button>
+                </div>
+
+                <div class="f4g-task-feedback" data-role="feedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
 
     <div class="f4g-detail f4g-detail--term">
-      <div class="f4g-chip">Funktionsgleichung</div>
-      <h3>Platzhalter für Zusatztext: Funktionsgleichung</h3>
-      <p class="f4g-placeholder">Hier kommt später deine Erklärung zur Funktionsgleichung hin (Rechenvorschrift, genaue Berechnung, Allgemeinheit).</p>
+      <h3>Funktionsgleichungen</h3>
+
+      <div class="f4g-term-layout">
+        <section class="f4g-term-block" aria-label="Was ist eine Funktionsgleichung">
+          <h4>Was ist eine Funktionsgleichung?</h4>
+   
+          <p>Eine Funktionsgleichung beschreibt mit Hilfe von Zahlen, Variablen und Rechenzeichen, wie der Funktionswert <strong>f(x)</strong> aus einem Argument (x-Wert) berechnet wird.</p>
+          <p>Für den Funktionswert an der Stelle x schreibt man <strong>f(x)</strong> (ausgesprochen: "f von x"). Die Funktionsgleichung ordnet jedem x-Wert genau einen Funktionswert <strong>f(x)=y</strong> zu.</p>
+
+          <div class="f4g-term-callout">
+            <p><strong>Vorteil:</strong> Funktionsgleichungen ermöglichen es, Funktionswerte exakt zu berechnen. Man kann damit jeden beliebigen Funktionswert bestimmen, ohne ein Diagramm zeichnen zu müssen.</p>
+            <p>Funktionsgleichungen sind daher besonders genau und vollständig. Sie enthalten alle Informationen über die Funktion und erlauben exakte Berechnungen.</p>
+          </div>
+
+          <div class="f4g-term-note">
+            <p><strong>Grenze:</strong> Funktionsgleichungen sind weniger anschaulich als Diagramme. Der Verlauf und die Form der Funktion sind nicht direkt sichtbar und müssen erst berechnet oder gezeichnet werden.</p>
+          </div>
+        </section>
+
+        <section class="f4g-term-block" aria-label="Spezielle Wertepaare bestimmen">
+          <h4>Spezielle Wertepaare bestimmen</h4>
+          <p>Ist die Gleichung bekannt und man sucht ein spezielles Wertepaar, gibt es 2 Fälle:</p>
+
+          <div class="f4g-term-subgrid">
+            <section class="f4g-term-sub" aria-label="Fall a y-Wert zu gegebenem x-Wert">
+              <h5>a) Der y-Wert zu einer bestimmten Stelle x soll berechnet werden</h5>
+              <p>Der x-Wert kann einfach in die Gleichung eingesetzt werden.</p>
+
+              <div class="f4g-term-example">
+                <p class="f4g-term-example-title">Beispiel</p>
+                <p><span class="f4g-mono">f(x)=3x+4</span> &nbsp;&nbsp; Gesucht ist der Funktionswert an der Stelle 
+                  <span class="f4g-mono">x=2</span>.</p>
+                <pre class="f4g-term-pre">f(2)=3·2+4      2 für x einsetzen
+f(2)=6+4
+f(2)=10         Lösung: (2;10)</pre>
+                <p class="f4g-term-note">f(2)=10 ist der Funktionswert an der Stelle x=2.</p>
+              </div>
+
+              <div class="f4g-term-note is-warm">
+                <p>Den Funktionswert, der zu <strong>x=0</strong> gehört, nennt man <strong>y-Achsenabschnitt</strong> oder <strong>Startwert</strong>. Der y-Achsenabschnitt ist der Punkt, an dem die Funktion die y-Achse schneidet.</p>
+              </div>
+            </section>
+
+            <section class="f4g-term-sub" aria-label="Fall b x-Wert zu gegebenem y-Wert">
+              <h5>b) Der x-Wert zu einem bestimmten y-Wert soll gefunden werden</h5>
+              <p>Der y-Wert kann in die Gleichung für <strong>f(x)</strong> bzw. <strong>y</strong> eingesetzt werden. Anschließend muss die Gleichung mit <strong>Äquivalenzumformungen</strong> gelöst werden.</p>
+
+              <div class="f4g-term-example">
+                <p class="f4g-term-example-title">Beispiel</p>
+                <p><span class="f4g-mono">f(x)=3x+4</span> &nbsp;&nbsp; Gesucht ist der x-Wert, für den <span class="f4g-mono">y=13</span> ist.</p>
+                <pre class="f4g-term-pre">f(x)=3·x+4   |13 für y bzw. f(x) einsetzen
+13=3·x+4     |-4
+9=3·x        |:3
+3=x           Lösung: (3;13)</pre>
+                <p class="f4g-term-note">f(x)=13 ist der Funktionswert an der Stelle x=3.</p>
+              </div>
+
+              <div class="f4g-term-note is-warm">
+                <p>Den x-Wert, der zu <strong>y=0</strong> gehört, nennt man <strong>Nullstelle</strong>. Die Nullstelle ist der Punkt, an dem die Funktion die x-Achse schneidet.</p>
+              </div>
+            </section>
+          </div>
+        </section>
+      </div>
     </div>
 
     <div class="f4g-detail f4g-detail--table">
@@ -471,3 +814,513 @@
   </div>
 </div>
 
+<script>
+(function () {
+  var root = document.getElementById("f4g-edulo-panel");
+  if (!root || root.dataset.f4gTaskInit === "1") {
+    return;
+  }
+  root.dataset.f4gTaskInit = "1";
+
+  var taskRoot = root.querySelector("#f4g-diagramm-task");
+  if (!taskRoot) {
+    return;
+  }
+
+  var plotEl = taskRoot.querySelector('[data-role="plot"]');
+  var questionEl = taskRoot.querySelector('[data-role="question"]');
+  var inputEl = taskRoot.querySelector('[data-role="answer-input"]');
+  var checkBtn = taskRoot.querySelector('[data-role="check-btn"]');
+  var newBtn = taskRoot.querySelector('[data-role="new-btn"]');
+  var feedbackEl = taskRoot.querySelector('[data-role="feedback"]');
+  var scoreEl = taskRoot.querySelector('[data-role="score-value"]');
+
+  var state = {
+    score: 0,
+    bestScore: 0,
+    task: null,
+    answered: false,
+    hintLevel: 0
+  };
+
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function pick(arr) {
+    return arr[randInt(0, arr.length - 1)];
+  }
+
+  function parseNumericInput(value) {
+    if (value == null) {
+      return null;
+    }
+    var raw = String(value).trim().replace(",", ".");
+    if (raw === "") {
+      return null;
+    }
+    var n = Number(raw);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function findEduloE3Field() {
+    var docs = [document];
+    try {
+      if (window.parent && window.parent !== window && window.parent.document) {
+        docs.push(window.parent.document);
+      }
+    } catch (e) {
+      /* Zugriff auf parent kann in Edulo/Cross-Origin blockiert sein */
+    }
+
+    var selectors = ["#e3", '[name="e3"]', 'input[id="e3"]', 'textarea[id="e3"]'];
+
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+      for (var s = 0; s < selectors.length; s++) {
+        var el = doc.querySelector(selectors[s]);
+        if (!el) {
+          continue;
+        }
+        if (el.tagName !== "INPUT" && el.tagName !== "TEXTAREA") {
+          var nested = el.querySelector("input, textarea");
+          if (nested) {
+            el = nested;
+          }
+        }
+        if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+          return el;
+        }
+      }
+    }
+    return null;
+  }
+
+  function getEduloCandidateDocs() {
+    var docs = [document];
+    try {
+      if (window.parent && window.parent !== window && window.parent.document) {
+        docs.push(window.parent.document);
+      }
+    } catch (e) {
+      /* Zugriff auf parent kann in Edulo/Cross-Origin blockiert sein */
+    }
+    return docs;
+  }
+
+  function loadScoreFromEdulo() {
+    var field = findEduloE3Field();
+    if (!field) {
+      return 0;
+    }
+    var value = parseInt(String(field.value || "").trim(), 10);
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function findEduloE4Slots() {
+    var docs = getEduloCandidateDocs();
+    var found = [];
+    var seen = [];
+
+    function addSlot(el, indexHint) {
+      if (!el) {
+        return;
+      }
+      for (var i = 0; i < seen.length; i++) {
+        if (seen[i] === el) {
+          return;
+        }
+      }
+      seen.push(el);
+      found.push({
+        el: el,
+        index: Number.isFinite(indexHint) ? indexHint : 9999 + found.length
+      });
+    }
+
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+
+      var container = doc.querySelector("#e4");
+      if (container) {
+        var innerSlots = container.querySelectorAll("input, textarea");
+        if (innerSlots.length > 1) {
+          for (var c = 0; c < innerSlots.length; c++) {
+            addSlot(innerSlots[c], c + 1);
+          }
+        }
+      }
+
+      var allFields = doc.querySelectorAll("input, textarea");
+      for (var a = 0; a < allFields.length; a++) {
+        var field = allFields[a];
+        var id = field.id || "";
+        var name = field.name || "";
+        var key = id || name;
+        if (!key) {
+          continue;
+        }
+
+        var m = key.match(/^e4(?:[_\-. ]?)(\d{1,2})$/i);
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+          continue;
+        }
+
+        // Fallback für Varianten wie e4_1_input etc.
+        m = key.match(/^e4(?:[_\-. ]?)(\d{1,2})\D+/i);
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+        }
+      }
+    }
+
+    found.sort(function (a, b) {
+      return a.index - b.index;
+    });
+
+    var slots = [];
+    for (var i2 = 0; i2 < found.length; i2++) {
+      slots.push(found[i2].el);
+    }
+    return slots;
+  }
+
+  function loadMilestoneScoreFromEdulo() {
+    var slots = findEduloE4Slots();
+    if (!slots.length) {
+      return 0;
+    }
+    var count = 0;
+    for (var i = 0; i < Math.min(10, slots.length); i++) {
+      if (String(slots[i].value || "").trim() === "1") {
+        count++;
+      }
+    }
+    return count * 10;
+  }
+
+  function saveScoreToEdulo(score) {
+    var field = findEduloE3Field();
+    if (!field) {
+      return false;
+    }
+    field.value = String(score);
+    try {
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (e) {
+      // IE/ältere Event-Implementierungen in eingebetteten Umgebungen
+      var ev1 = document.createEvent("Event");
+      ev1.initEvent("input", true, true);
+      field.dispatchEvent(ev1);
+      var ev2 = document.createEvent("Event");
+      ev2.initEvent("change", true, true);
+      field.dispatchEvent(ev2);
+    }
+    return true;
+  }
+
+  function dispatchFieldEvents(field) {
+    try {
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (e) {
+      var ev1 = document.createEvent("Event");
+      ev1.initEvent("input", true, true);
+      field.dispatchEvent(ev1);
+      var ev2 = document.createEvent("Event");
+      ev2.initEvent("change", true, true);
+      field.dispatchEvent(ev2);
+    }
+  }
+
+  function syncMilestonesToEdulo(scoreForMilestones) {
+    var slots = findEduloE4Slots();
+    if (!slots.length) {
+      return false;
+    }
+
+    var reached = Math.floor(Math.max(0, scoreForMilestones) / 10);
+    if (reached > 10) {
+      reached = 10;
+    }
+
+    var limit = Math.min(10, slots.length);
+    for (var i = 0; i < limit; i++) {
+      var targetValue = i < reached ? "1" : "";
+      if (String(slots[i].value || "") !== targetValue) {
+        slots[i].value = targetValue;
+        dispatchFieldEvents(slots[i]);
+      }
+    }
+    return true;
+  }
+
+  function updateScoreDisplay() {
+    scoreEl.textContent = String(state.score);
+    saveScoreToEdulo(state.score);
+    syncMilestonesToEdulo(state.bestScore);
+  }
+
+  function setFeedback(message, kind) {
+    feedbackEl.textContent = message || "";
+    feedbackEl.className = "f4g-task-feedback";
+    if (kind === "ok") {
+      feedbackEl.classList.add("is-ok");
+    } else if (kind === "bad") {
+      feedbackEl.classList.add("is-bad");
+    }
+  }
+
+  function generateTask() {
+    var slopes = [-3, -2, -1, 1, 2, 3];
+
+    for (var tries = 0; tries < 300; tries++) {
+      var xMax = randInt(4, 6);
+      var xMin = -xMax;
+      var yMax = randInt(5, 8);
+      var yMin = -yMax;
+      var m = pick(slopes);
+      var b = randInt(-(yMax - 2), yMax - 2);
+      var xAsk = randInt(xMin + 1, xMax - 1);
+      var yAsk = m * xAsk + b;
+
+      if (yAsk < yMin || yAsk > yMax) {
+        continue;
+      }
+
+      var yLeft = m * xMin + b;
+      var yRight = m * xMax + b;
+      if ((yLeft < yMin && yRight < yMin) || (yLeft > yMax && yRight > yMax)) {
+        continue;
+      }
+
+      var visibleIntPoints = 0;
+      for (var x = xMin; x <= xMax; x++) {
+        var y = m * x + b;
+        if (y >= yMin && y <= yMax) {
+          visibleIntPoints++;
+        }
+      }
+      if (visibleIntPoints < 4) {
+        continue;
+      }
+
+      return {
+        xMin: xMin,
+        xMax: xMax,
+        yMin: yMin,
+        yMax: yMax,
+        m: m,
+        b: b,
+        xAsk: xAsk,
+        yAsk: yAsk
+      };
+    }
+
+    return {
+      xMin: -5,
+      xMax: 5,
+      yMin: -6,
+      yMax: 6,
+      m: 2,
+      b: 1,
+      xAsk: 3,
+      yAsk: 7
+    };
+  }
+
+  function svgLine(x1, y1, x2, y2, attrs) {
+    return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" ' + attrs + ' />';
+  }
+
+  function svgText(x, y, text, attrs) {
+    return '<text x="' + x + '" y="' + y + '" ' + attrs + '>' + text + "</text>";
+  }
+
+  function drawTask(task) {
+    var width = 460;
+    var height = 300;
+    var margin = { left: 42, right: 14, top: 12, bottom: 34 };
+    var plotW = width - margin.left - margin.right;
+    var plotH = height - margin.top - margin.bottom;
+    var clipId = "f4g-clip-" + Math.random().toString(36).slice(2, 8);
+
+    function xToPx(x) {
+      return margin.left + ((x - task.xMin) / (task.xMax - task.xMin)) * plotW;
+    }
+
+    function yToPx(y) {
+      return margin.top + plotH - ((y - task.yMin) / (task.yMax - task.yMin)) * plotH;
+    }
+
+    var xAxisVisible = task.xMin <= 0 && task.xMax >= 0;
+    var yAxisVisible = task.yMin <= 0 && task.yMax >= 0;
+    var yAxisX = xAxisVisible ? xToPx(0) : margin.left;
+    var xAxisY = yAxisVisible ? yToPx(0) : (margin.top + plotH);
+
+    var svg = [];
+    svg.push('<svg viewBox="0 0 ' + width + " " + height + '" role="img" aria-label="Zufälliges Koordinatensystem mit einer Geraden">');
+    svg.push('<defs><clipPath id="' + clipId + '"><rect x="' + margin.left + '" y="' + margin.top + '" width="' + plotW + '" height="' + plotH + '" rx="6"></rect></clipPath></defs>');
+    svg.push('<rect x="0" y="0" width="' + width + '" height="' + height + '" rx="10" fill="#ffffff"></rect>');
+    svg.push('<rect x="' + margin.left + '" y="' + margin.top + '" width="' + plotW + '" height="' + plotH + '" rx="6" fill="#fbfdff" stroke="#dfe8f3"></rect>');
+
+    for (var x = task.xMin; x <= task.xMax; x++) {
+      var xPx = xToPx(x);
+      svg.push(svgLine(xPx, margin.top, xPx, margin.top + plotH, 'stroke="#e6eef7" stroke-width="1"'));
+      var xLabelHighlight = state.hintLevel >= 1 && x === task.xAsk;
+      var xLabelFill = xLabelHighlight ? "#cf5b2e" : "#5f6f80";
+      var xLabelWeight = xLabelHighlight ? "700" : "400";
+      svg.push(svgText(xPx, xAxisY + 18, String(x), 'text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="' + xLabelFill + '" font-weight="' + xLabelWeight + '"'));
+    }
+
+    for (var y = task.yMin; y <= task.yMax; y++) {
+      var yPx = yToPx(y);
+      svg.push(svgLine(margin.left, yPx, margin.left + plotW, yPx, 'stroke="#e6eef7" stroke-width="1"'));
+      if (y !== 0) {
+        var yLabelFill = state.hintLevel >= 2 && y === task.yAsk ? "#cf5b2e" : "#5f6f80";
+        var yLabelWeight = state.hintLevel >= 2 && y === task.yAsk ? "700" : "400";
+        svg.push(svgText(yAxisX - 8, yPx + 4, String(y), 'text-anchor="end" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="' + yLabelFill + '" font-weight="' + yLabelWeight + '"'));
+      }
+    }
+
+    if (yAxisVisible) {
+      svg.push(svgLine(margin.left, xAxisY, margin.left + plotW, xAxisY, 'stroke="#4a5867" stroke-width="2"'));
+      svg.push('<polygon points="' + (margin.left + plotW) + ',' + xAxisY + ' ' + (margin.left + plotW - 8) + ',' + (xAxisY - 4) + ' ' + (margin.left + plotW - 8) + ',' + (xAxisY + 4) + '" fill="#4a5867"></polygon>');
+      svg.push(svgText(margin.left + plotW + 4, xAxisY, "x", 'text-anchor="start" dominant-baseline="central" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" font-weight="700" fill="#4a5867"'));
+    }
+    if (xAxisVisible) {
+      svg.push(svgLine(yAxisX, margin.top + plotH, yAxisX, margin.top, 'stroke="#4a5867" stroke-width="2"'));
+      svg.push('<polygon points="' + yAxisX + ',' + margin.top + ' ' + (yAxisX - 4) + ',' + (margin.top + 8) + ' ' + (yAxisX + 4) + ',' + (margin.top + 8) + '" fill="#4a5867"></polygon>');
+      svg.push(svgText(yAxisX + 8, margin.top + 12, "y", 'text-anchor="start" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" font-weight="700" fill="#4a5867"'));
+    }
+
+    var xAskPx = xToPx(task.xAsk);
+    if (state.hintLevel >= 1) {
+      svg.push(svgLine(xAskPx, margin.top, xAskPx, margin.top + plotH, 'stroke="#cf5b2e" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.7"'));
+    }
+
+    var lineX1 = task.xMin;
+    var lineY1 = task.m * lineX1 + task.b;
+    var lineX2 = task.xMax;
+    var lineY2 = task.m * lineX2 + task.b;
+
+    svg.push('<g clip-path="url(#' + clipId + ')">');
+    svg.push(svgLine(xToPx(lineX1), yToPx(lineY1), xToPx(lineX2), yToPx(lineY2), 'stroke="#2f5fd0" stroke-width="3.2"'));
+    if (state.hintLevel >= 2) {
+      svg.push(svgLine(yAxisX, yToPx(task.yAsk), xAskPx, yToPx(task.yAsk), 'stroke="#cf5b2e" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.75"'));
+    }
+    svg.push('</g>');
+
+    // Markiere die x-Stelle auf der x-Achse, aber nicht den Funktionswert selbst
+    if (yAxisVisible && state.hintLevel >= 1) {
+      svg.push('<circle cx="' + xAskPx + '" cy="' + yToPx(0) + '" r="3.4" fill="#cf5b2e" stroke="#ffffff" stroke-width="1.2"></circle>');
+    }
+
+    svg.push("</svg>");
+    plotEl.innerHTML = svg.join("");
+  }
+
+  function formatQuestion(task) {
+    return "Ermittle f(" + task.xAsk + ") anhand des Diagramms.";
+  }
+
+  function newTask(fromUser) {
+    var skippedOpenTask = !!(fromUser && state.task && !state.answered);
+    if (skippedOpenTask) {
+      state.score -= 1;
+      updateScoreDisplay();
+      setFeedback("Aufgabe übersprungen. (-1 Punkt)", "bad");
+    }
+    state.task = generateTask();
+    state.answered = false;
+    state.hintLevel = 0;
+    drawTask(state.task);
+    questionEl.textContent = formatQuestion(state.task);
+    inputEl.value = "";
+    inputEl.disabled = false;
+    checkBtn.disabled = false;
+    if (!skippedOpenTask) {
+      setFeedback("", "");
+    }
+    inputEl.focus();
+  }
+
+  function checkAnswer() {
+    if (!state.task || state.answered) {
+      return;
+    }
+    var userValue = parseNumericInput(inputEl.value);
+    if (userValue === null) {
+      setFeedback("Bitte gib eine Zahl ein.", "bad");
+      return;
+    }
+
+    if (userValue === state.task.yAsk) {
+      state.answered = true;
+      inputEl.disabled = true;
+      checkBtn.disabled = true;
+      state.score += 1;
+      if (state.score > state.bestScore) {
+        state.bestScore = state.score;
+      }
+      updateScoreDisplay();
+      setFeedback("Richtig. f(" + state.task.xAsk + ") = " + state.task.yAsk + ". (+1 Punkt)", "ok");
+    } else {
+      if (state.hintLevel === 0) {
+        state.score -= 1;
+        updateScoreDisplay();
+        state.hintLevel = 1;
+        drawTask(state.task);
+        setFeedback("Falsch. (-1 Punkt) Betrachte den x-Wert x = " + state.task.xAsk + " auf der x-Achse (gestrichelte Linie) und lies dann den y-Wert ab. Du hast noch eine zweite Chance.", "bad");
+        try {
+          inputEl.focus();
+          inputEl.select();
+        } catch (e) {
+          inputEl.focus();
+        }
+        return;
+      }
+
+      if (state.hintLevel === 1) {
+        state.score -= 1;
+        updateScoreDisplay();
+        state.hintLevel = 2;
+        drawTask(state.task);
+        setFeedback("Noch falsch. (-1 Punkt) Nutze jetzt zusätzlich die waagerechte gestrichelte Linie als Hinweis und lies den y-Wert an der y-Achse ab. Du hast noch eine letzte Chance.", "bad");
+        try {
+          inputEl.focus();
+          inputEl.select();
+        } catch (e) {
+          inputEl.focus();
+        }
+        return;
+      }
+
+      state.answered = true;
+      inputEl.disabled = true;
+      checkBtn.disabled = true;
+      state.score -= 1;
+      updateScoreDisplay();
+      setFeedback("Nicht richtig. Gesucht war f(" + state.task.xAsk + ") = " + state.task.yAsk + ". (-1 Punkt)", "bad");
+    }
+  }
+
+  checkBtn.addEventListener("click", checkAnswer);
+  newBtn.addEventListener("click", function () {
+    newTask(true);
+  });
+  inputEl.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      checkAnswer();
+    }
+  });
+
+  state.score = loadScoreFromEdulo();
+  state.bestScore = Math.max(state.score, loadMilestoneScoreFromEdulo());
+  updateScoreDisplay();
+  newTask(false);
+})();
+</script>
