@@ -454,6 +454,69 @@
     background: #f5f9ff;
   }
 
+  #f4g-edulo-panel .f4g-term-task-board {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) minmax(240px, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  #f4g-edulo-panel .f4g-term-task-preview {
+    border: 1px solid #e0e9f3;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 10px;
+    display: grid;
+    gap: 8px;
+  }
+
+  #f4g-edulo-panel .f4g-term-task-preview-label {
+    font-size: 0.84rem;
+    color: var(--f4g-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  #f4g-edulo-panel .f4g-term-task-equation {
+    border: 1px solid #dde7f3;
+    border-radius: 9px;
+    background: linear-gradient(180deg, #ffffff, #f9fbff);
+    padding: 10px;
+  }
+
+  #f4g-edulo-panel .f4g-term-task-equation-main {
+    margin: 0;
+    font-size: 1.12rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #1f3046;
+  }
+
+  #f4g-edulo-panel .f4g-term-task-equation-main .lhs {
+    color: #2f5fd0;
+  }
+
+  #f4g-edulo-panel .f4g-term-task-equation-main .rhs {
+    color: #cf5b2e;
+  }
+
+  #f4g-edulo-panel .f4g-term-task-type {
+    font-size: 0.9rem;
+    color: #2a3a4c;
+    line-height: 1.4;
+  }
+
+  #f4g-edulo-panel .f4g-term-task-note {
+    font-size: 0.84rem;
+    color: var(--f4g-muted);
+    line-height: 1.35;
+    border: 1px solid #e5edf6;
+    background: #fbfdff;
+    border-radius: 8px;
+    padding: 8px;
+  }
+
   #f4g-edulo-panel .f4g-mono {
     font-family: Consolas, "Courier New", monospace;
   }
@@ -513,6 +576,10 @@
 
   @media (max-width: 860px) {
     #f4g-edulo-panel .f4g-task-board {
+      grid-template-columns: 1fr;
+    }
+
+    #f4g-edulo-panel .f4g-term-task-board {
       grid-template-columns: 1fr;
     }
   }
@@ -797,6 +864,48 @@ f(2)=10         Lösung: (2;10)</pre>
             </section>
           </div>
         </section>
+
+        <section class="f4g-term-block" aria-label="Aufgaben zu Funktionsgleichungen">
+          <div class="f4g-task" id="f4g-term-task">
+            <div class="f4g-task-head">
+              <h4>Aufgaben</h4>
+              <div class="f4g-task-score" aria-live="polite">
+                Punkte:
+                <span class="f4g-task-score-value" data-role="score-value">0</span>
+              </div>
+            </div>
+
+            <div class="f4g-term-task-board">
+              <div class="f4g-term-task-preview">
+                <div class="f4g-term-task-preview-label">Gegebene Funktionsgleichung</div>
+                <div class="f4g-term-task-equation">
+                  <p class="f4g-term-task-equation-main" data-role="equation">
+                    <span class="lhs">f(x)</span> = <span class="rhs">3x + 4</span>
+                  </p>
+                </div>
+                <div class="f4g-term-task-type" data-role="task-kind">Lade Aufgabe…</div>
+                <div class="f4g-term-task-note">Es wird zufällig nach einem Funktionswert oder nach der zugehörigen Stelle gefragt.</div>
+              </div>
+
+              <div class="f4g-task-controls">
+                <div class="f4g-task-question" data-role="question">Lade Aufgabe…</div>
+                <div class="f4g-task-hint">Gib den gesuchten Wert ein. Es werden lineare Funktionsgleichungen verwendet.</div>
+
+                <div class="f4g-task-row">
+                  <input class="f4g-task-input" data-role="answer-input" type="text" inputmode="numeric" placeholder="Antwort eingeben">
+                  <button class="f4g-task-btn f4g-task-btn--primary" type="button" data-role="check-btn">Prüfen</button>
+                </div>
+
+                <div class="f4g-task-buttons">
+                  <button class="f4g-task-btn" type="button" data-role="new-btn">Neue Aufgabe</button>
+                </div>
+
+                <div class="f4g-task-feedback" data-role="feedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
 
@@ -1304,6 +1413,444 @@ f(2)=10         Lösung: (2;10)</pre>
       state.score -= 1;
       updateScoreDisplay();
       setFeedback("Nicht richtig. Gesucht war f(" + state.task.xAsk + ") = " + state.task.yAsk + ". (-1 Punkt)", "bad");
+    }
+  }
+
+  checkBtn.addEventListener("click", checkAnswer);
+  newBtn.addEventListener("click", function () {
+    newTask(true);
+  });
+  inputEl.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      checkAnswer();
+    }
+  });
+
+  state.score = loadScoreFromEdulo();
+  state.bestScore = Math.max(state.score, loadMilestoneScoreFromEdulo());
+  updateScoreDisplay();
+  newTask(false);
+})();
+</script>
+
+<script>
+(function () {
+  var root = document.getElementById("f4g-edulo-panel");
+  if (!root || root.dataset.f4gTermTaskInit === "1") {
+    return;
+  }
+  root.dataset.f4gTermTaskInit = "1";
+
+  var taskRoot = root.querySelector("#f4g-term-task");
+  if (!taskRoot) {
+    return;
+  }
+
+  var equationEl = taskRoot.querySelector('[data-role="equation"]');
+  var kindEl = taskRoot.querySelector('[data-role="task-kind"]');
+  var questionEl = taskRoot.querySelector('[data-role="question"]');
+  var inputEl = taskRoot.querySelector('[data-role="answer-input"]');
+  var checkBtn = taskRoot.querySelector('[data-role="check-btn"]');
+  var newBtn = taskRoot.querySelector('[data-role="new-btn"]');
+  var feedbackEl = taskRoot.querySelector('[data-role="feedback"]');
+  var scoreEl = taskRoot.querySelector('[data-role="score-value"]');
+
+  var state = {
+    score: 0,
+    bestScore: 0,
+    task: null,
+    solved: false,
+    finished: false
+  };
+
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function pick(arr) {
+    return arr[randInt(0, arr.length - 1)];
+  }
+
+  function parseNumericInput(value) {
+    if (value == null) {
+      return null;
+    }
+    var raw = String(value).trim().replace(",", ".");
+    if (raw === "") {
+      return null;
+    }
+    var n = Number(raw);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function getEduloCandidateDocs() {
+    var docs = [document];
+    try {
+      if (window.parent && window.parent !== window && window.parent.document) {
+        docs.push(window.parent.document);
+      }
+    } catch (e) {
+      /* Zugriff auf parent kann in Edulo/Cross-Origin blockiert sein */
+    }
+    return docs;
+  }
+
+  function findEduloSingleField(baseName) {
+    var docs = getEduloCandidateDocs();
+    var selectors = ["#" + baseName, '[name="' + baseName + '"]', 'input[id="' + baseName + '"]', 'textarea[id="' + baseName + '"]'];
+
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+      for (var s = 0; s < selectors.length; s++) {
+        var el = doc.querySelector(selectors[s]);
+        if (!el) {
+          continue;
+        }
+        if (el.tagName !== "INPUT" && el.tagName !== "TEXTAREA") {
+          var nested = el.querySelector("input, textarea");
+          if (nested) {
+            el = nested;
+          }
+        }
+        if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+          return el;
+        }
+      }
+    }
+    return null;
+  }
+
+  function findEduloSlots(baseName) {
+    var docs = getEduloCandidateDocs();
+    var found = [];
+    var seen = [];
+
+    function addSlot(el, indexHint) {
+      if (!el) {
+        return;
+      }
+      for (var i = 0; i < seen.length; i++) {
+        if (seen[i] === el) {
+          return;
+        }
+      }
+      seen.push(el);
+      found.push({
+        el: el,
+        index: Number.isFinite(indexHint) ? indexHint : 9999 + found.length
+      });
+    }
+
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+      var container = doc.querySelector("#" + baseName);
+      if (container) {
+        var innerSlots = container.querySelectorAll("input, textarea");
+        if (innerSlots.length > 1) {
+          for (var c = 0; c < innerSlots.length; c++) {
+            addSlot(innerSlots[c], c + 1);
+          }
+        }
+      }
+
+      var allFields = doc.querySelectorAll("input, textarea");
+      for (var a = 0; a < allFields.length; a++) {
+        var field = allFields[a];
+        var id = field.id || "";
+        var name = field.name || "";
+        var key = id || name;
+        if (!key) {
+          continue;
+        }
+
+        var m = key.match(new RegExp("^" + baseName + "(?:[_\\-. ]?)(\\d{1,2})$", "i"));
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+          continue;
+        }
+
+        m = key.match(new RegExp("^" + baseName + "(?:[_\\-. ]?)(\\d{1,2})\\D+", "i"));
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+        }
+      }
+    }
+
+    found.sort(function (a, b) { return a.index - b.index; });
+    var slots = [];
+    for (var i2 = 0; i2 < found.length; i2++) {
+      slots.push(found[i2].el);
+    }
+    return slots;
+  }
+
+  function dispatchFieldEvents(field) {
+    try {
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (e) {
+      var ev1 = document.createEvent("Event");
+      ev1.initEvent("input", true, true);
+      field.dispatchEvent(ev1);
+      var ev2 = document.createEvent("Event");
+      ev2.initEvent("change", true, true);
+      field.dispatchEvent(ev2);
+    }
+  }
+
+  function loadScoreFromEdulo() {
+    var field = findEduloSingleField("e5");
+    if (!field) {
+      return 0;
+    }
+    var value = parseInt(String(field.value || "").trim(), 10);
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function saveScoreToEdulo(score) {
+    var field = findEduloSingleField("e5");
+    if (!field) {
+      return false;
+    }
+    field.value = String(score);
+    dispatchFieldEvents(field);
+    return true;
+  }
+
+  function loadMilestoneScoreFromEdulo() {
+    var slots = findEduloSlots("e6");
+    if (!slots.length) {
+      return 0;
+    }
+    var count = 0;
+    for (var i = 0; i < Math.min(10, slots.length); i++) {
+      if (String(slots[i].value || "").trim() === "1") {
+        count++;
+      }
+    }
+    return count * 10;
+  }
+
+  function syncMilestonesToEdulo(bestScore) {
+    var slots = findEduloSlots("e6");
+    if (!slots.length) {
+      return false;
+    }
+    var reached = Math.floor(Math.max(0, bestScore) / 10);
+    if (reached > 10) {
+      reached = 10;
+    }
+    var limit = Math.min(10, slots.length);
+    for (var i = 0; i < limit; i++) {
+      var targetValue = i < reached ? "1" : "";
+      if (String(slots[i].value || "") !== targetValue) {
+        slots[i].value = targetValue;
+        dispatchFieldEvents(slots[i]);
+      }
+    }
+    return true;
+  }
+
+  function updateScoreDisplay() {
+    scoreEl.textContent = String(state.score);
+    saveScoreToEdulo(state.score);
+    syncMilestonesToEdulo(state.bestScore);
+  }
+
+  function setFeedback(message, kind) {
+    feedbackEl.textContent = message || "";
+    feedbackEl.className = "f4g-task-feedback";
+    if (kind === "ok") {
+      feedbackEl.classList.add("is-ok");
+    } else if (kind === "bad") {
+      feedbackEl.classList.add("is-bad");
+    }
+  }
+
+  function formatLinearText(m, b) {
+    var mPart;
+    if (m === 1) {
+      mPart = "x";
+    } else if (m === -1) {
+      mPart = "-x";
+    } else {
+      mPart = String(m) + "x";
+    }
+
+    if (b === 0) {
+      return mPart;
+    }
+    if (b > 0) {
+      return mPart + " + " + b;
+    }
+    return mPart + " - " + Math.abs(b);
+  }
+
+  function setEquationDisplay(task) {
+    equationEl.innerHTML = '<span class="lhs">f(x)</span> = <span class="rhs">' + formatLinearText(task.m, task.b) + '</span>';
+  }
+
+  function generateLinearBase() {
+    var slopes = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5];
+    var m = pick(slopes);
+    var b = randInt(-12, 12);
+    return { m: m, b: b };
+  }
+
+  function generateTermTask() {
+    var special = Math.random() < 0.10;
+
+    if (special) {
+      if (Math.random() < 0.5) {
+        // y-Achsenabschnitt (x = 0)
+        var baseA = generateLinearBase();
+        return {
+          m: baseA.m,
+          b: baseA.b,
+          mode: "y_intercept",
+          answer: baseA.b,
+          question: "Bestimme den y-Achsenabschnitt (Startwert).",
+          kindText: "Sonderfall: x = 0 (y-Achsenabschnitt / Startwert)"
+        };
+      }
+
+      // Nullstelle (f(x) = 0) mit ganzzahliger Lösung
+      var slopes = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5];
+      var m0 = pick(slopes);
+      var xZero = randInt(-8, 8);
+      var b0 = -m0 * xZero;
+      return {
+        m: m0,
+        b: b0,
+        mode: "zero",
+        answer: xZero,
+        question: "Bestimme die Nullstelle.",
+        kindText: "Sonderfall: f(x) = 0 (Nullstelle)"
+      };
+    }
+
+    var base = generateLinearBase();
+    if (Math.random() < 0.5) {
+      var xVal = randInt(-8, 8);
+      while (xVal === 0) {
+        xVal = randInt(-8, 8);
+      }
+      return {
+        m: base.m,
+        b: base.b,
+        mode: "y_from_x",
+        x: xVal,
+        answer: base.m * xVal + base.b,
+        question: "Bestimme f(" + xVal + ").",
+        kindText: "Gesucht: Funktionswert zu gegebenem x-Wert"
+      };
+    }
+
+    var xSolution = randInt(-8, 8);
+    while (xSolution === 0) {
+      xSolution = randInt(-8, 8);
+    }
+    var yTarget = base.m * xSolution + base.b;
+    while (yTarget === 0) {
+      xSolution = randInt(-8, 8);
+      while (xSolution === 0) {
+        xSolution = randInt(-8, 8);
+      }
+      yTarget = base.m * xSolution + base.b;
+    }
+    return {
+      m: base.m,
+      b: base.b,
+      mode: "x_from_y",
+      y: yTarget,
+      answer: xSolution,
+      question: "Für welchen x-Wert gilt f(x) = " + yTarget + "?",
+      kindText: "Gesucht: x-Wert zu gegebenem Funktionswert"
+    };
+  }
+
+  function explainCorrect(task) {
+    if (task.mode === "y_intercept") {
+      return "Richtig. Der y-Achsenabschnitt (Startwert) ist " + task.answer + ". (+1 Punkt)";
+    }
+    if (task.mode === "zero") {
+      return "Richtig. Die Nullstelle ist x = " + task.answer + ". (+1 Punkt)";
+    }
+    if (task.mode === "y_from_x") {
+      return "Richtig. f(" + task.x + ") = " + task.answer + ". (+1 Punkt)";
+    }
+    return "Richtig. Für f(x) = " + task.y + " gilt x = " + task.answer + ". (+1 Punkt)";
+  }
+
+  function explainWrong(task) {
+    if (task.mode === "y_intercept") {
+      return "Nicht richtig. Der y-Achsenabschnitt (Startwert) ist " + task.answer + ". (-1 Punkt)";
+    }
+    if (task.mode === "zero") {
+      return "Nicht richtig. Die Nullstelle ist x = " + task.answer + ". (-1 Punkt)";
+    }
+    if (task.mode === "y_from_x") {
+      return "Nicht richtig. Es gilt f(" + task.x + ") = " + task.answer + ". (-1 Punkt)";
+    }
+    return "Nicht richtig. Für f(x) = " + task.y + " gilt x = " + task.answer + ". (-1 Punkt)";
+  }
+
+  function renderTask(task) {
+    setEquationDisplay(task);
+    kindEl.textContent = task.kindText;
+    questionEl.textContent = task.question;
+  }
+
+  function newTask(fromUser) {
+    var skippedUnsolved = !!(fromUser && state.task && !state.solved);
+    if (skippedUnsolved) {
+      state.score -= 1;
+      updateScoreDisplay();
+      setFeedback("Aufgabe übersprungen. (-1 Punkt)", "bad");
+    } else {
+      setFeedback("", "");
+    }
+
+    state.task = generateTermTask();
+    state.solved = false;
+    state.finished = false;
+    renderTask(state.task);
+    inputEl.value = "";
+    inputEl.disabled = false;
+    checkBtn.disabled = false;
+    try {
+      inputEl.focus();
+    } catch (e) {}
+  }
+
+  function checkAnswer() {
+    if (!state.task || state.finished) {
+      return;
+    }
+    var value = parseNumericInput(inputEl.value);
+    if (value === null) {
+      setFeedback("Bitte gib eine Zahl ein.", "bad");
+      return;
+    }
+
+    state.finished = true;
+    inputEl.disabled = true;
+    checkBtn.disabled = true;
+
+    if (value === state.task.answer) {
+      state.solved = true;
+      state.score += 1;
+      if (state.score > state.bestScore) {
+        state.bestScore = state.score;
+      }
+      updateScoreDisplay();
+      setFeedback(explainCorrect(state.task), "ok");
+    } else {
+      state.solved = false;
+      state.score -= 1;
+      updateScoreDisplay();
+      setFeedback(explainWrong(state.task), "bad");
     }
   }
 
