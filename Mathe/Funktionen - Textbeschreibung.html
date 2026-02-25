@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Textbeschreibung einer Funktion</title>
+  <link rel="stylesheet" href="funktionen-4-gesichter.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">4 Gesichter einer Funktion</p>
+      <h1>Textbeschreibung: Beschreibung in Worten</h1>
+      <p>Die Textbeschreibung erklaert eine Funktion als Regel oder Alltagssituation. Sie sagt in Worten, was Eingabe und Ausgabe bedeuten und wie die Zuordnung funktioniert.</p>
+      <nav class="top-nav" aria-label="Seitennavigation">
+        <a class="nav-link" href="Funktionen - 4 Gesichter.html">Uebersicht</a>
+        <a class="nav-link" href="Funktionen - Graph.html">Graph</a>
+        <a class="nav-link" href="Funktionen - Funktionsgleichung.html">Funktionsgleichung</a>
+        <a class="nav-link" href="Funktionen - Wertepaare.html">Wertepaare</a>
+        <a class="nav-link is-active" href="Funktionen - Textbeschreibung.html" aria-current="page">Textbeschreibung</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2>Beispiel einer Textbeschreibung</h2>
+        <div class="two-col">
+          <div class="story-card">
+            <p class="story-quote">
+              Eine Taxifahrt kostet <span class="keyword">1 EUR Grundpreis</span> und danach
+              <span class="keyword">2 EUR pro gefahrenem Kilometer</span>.
+              Die gefahrenen Kilometer nennt man <span class="keyword">x</span>, den Gesamtpreis <span class="keyword">K(x)</span>.
+            </p>
+            <div class="translation-ladder">
+              <div class="ladder-step">
+                <div class="ladder-icon text">T</div>
+                <div>
+                  <strong>Text lesen</strong><br>
+                  Grundpreis + Preis pro Kilometer erkennen
+                </div>
+                <span class="arrow-hint">Schluesselwoerter markieren</span>
+              </div>
+              <div class="ladder-step">
+                <div class="ladder-icon term">=</div>
+                <div>
+                  <strong>Term bilden</strong><br>
+                  <span class="mono">K(x) = 2x + 1</span>
+                </div>
+                <span class="arrow-hint">Einheiten mitdenken</span>
+              </div>
+              <div class="ladder-step">
+                <div class="ladder-icon table">W</div>
+                <div>
+                  <strong>Beispiele pruefen</strong><br>
+                  0 km -&gt; 1 EUR, 3 km -&gt; 7 EUR
+                </div>
+                <span class="arrow-hint">Plausibilitaet testen</span>
+              </div>
+              <div class="ladder-step">
+                <div class="ladder-icon graph">G</div>
+                <div>
+                  <strong>Graph zeichnen</strong><br>
+                  Steigende Gerade mit Startwert 1
+                </div>
+                <span class="arrow-hint">Verlauf sichtbar machen</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stage">
+            <h3>Was ist bei Texten besonders wichtig?</h3>
+            <ul class="list">
+              <li><strong>Bedeutung der Variablen:</strong> Was ist <span class="mono">x</span>? Was ist <span class="mono">y</span> bzw. <span class="mono">K(x)</span>?</li>
+              <li><strong>Einheiten:</strong> Hier z. B. Kilometer und Euro.</li>
+              <li><strong>Startwert:</strong> &quot;Grundpreis&quot; deutet auf einen festen Betrag hin.</li>
+              <li><strong>Veraenderung pro Einheit:</strong> &quot;pro Kilometer&quot; beschreibt die Steigung.</li>
+            </ul>
+            <div class="subtle-box" style="margin-top:0.7rem;">
+              <h3>Typische Text-Schluesselwoerter</h3>
+              <div class="focus-strip">
+                <span class="focus-pill">pro ...</span>
+                <span class="focus-pill">je ...</span>
+                <span class="focus-pill">Startwert</span>
+                <span class="focus-pill">Grundpreis</span>
+                <span class="focus-pill">nimmt zu um ...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Wofuer ist die Textbeschreibung besonders sinnvoll?</h2>
+        <div class="two-col equal">
+          <div class="stage">
+            <h3>Staerken</h3>
+            <ul class="list">
+              <li>Sie zeigt den <strong>Sachzusammenhang</strong> und die Bedeutung der Zahlen.</li>
+              <li>Sie hilft zu entscheiden, welche Werte sinnvoll sind (z. B. keine negativen Kilometer).</li>
+              <li>Sie ist oft der Startpunkt in Sachaufgaben.</li>
+              <li>Sie macht deutlich, welche Groessen miteinander verknuepft sind.</li>
+            </ul>
+          </div>
+          <div class="stage">
+            <h3>Grenzen</h3>
+            <ul class="list">
+              <li>Texte koennen ungenau oder missverstaendlich formuliert sein.</li>
+              <li>Zum Rechnen ist ein Term meist schneller und klarer.</li>
+              <li>Der Verlauf ist nicht direkt sichtbar wie im Graphen.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Text in Mathematik uebersetzen (Kurzschema)</h2>
+        <div class="card-grid">
+          <article class="card">
+            <h3>1. Groessen bestimmen</h3>
+            <p>Welche Groesse ist die Eingabe? Welche ist die Ausgabe?</p>
+          </article>
+          <article class="card">
+            <h3>2. Startwert finden</h3>
+            <p>Gibt es einen festen Anfangswert (z. B. Grundpreis)?</p>
+          </article>
+          <article class="card">
+            <h3>3. Aenderung pro Einheit</h3>
+            <p>Wie stark aendert sich die Ausgabe pro Schritt der Eingabe?</p>
+          </article>
+          <article class="card">
+            <h3>4. Mit Beispielen pruefen</h3>
+            <p>Ein paar Werte einsetzen und auf Plausibilitaet testen.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel tight">
+        <div class="footer-nav">
+          <a href="Funktionen - Wertepaare.html">Zurueck: Wertepaare</a>
+          <a href="Funktionen - 4 Gesichter.html">Zur Uebersicht</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

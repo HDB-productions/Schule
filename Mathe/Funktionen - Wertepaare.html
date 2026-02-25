@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wertepaare einer Funktion</title>
+  <link rel="stylesheet" href="funktionen-4-gesichter.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">4 Gesichter einer Funktion</p>
+      <h1>Wertepaare: Konkrete Beispiele der Zuordnung</h1>
+      <p>Wertepaare zeigen einzelne Zuordnungen einer Funktion. Jedes Paar hat die Form <span class="mono">(x|y)</span> und sagt: Dem Wert <span class="mono">x</span> wird genau der Wert <span class="mono">y</span> zugeordnet.</p>
+      <nav class="top-nav" aria-label="Seitennavigation">
+        <a class="nav-link" href="Funktionen - 4 Gesichter.html">Uebersicht</a>
+        <a class="nav-link" href="Funktionen - Graph.html">Graph</a>
+        <a class="nav-link" href="Funktionen - Funktionsgleichung.html">Funktionsgleichung</a>
+        <a class="nav-link is-active" href="Funktionen - Wertepaare.html" aria-current="page">Wertepaare</a>
+        <a class="nav-link" href="Funktionen - Textbeschreibung.html">Textbeschreibung</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel">
+        <p class="example-badge">Beispiel-Funktion: <span class="mono">f(x) = 2x + 1</span></p>
+        <div class="two-col">
+          <div class="stage stage-scroll">
+            <h3>Wertetabelle</h3>
+            <table class="pair-table" aria-label="Wertetabelle der Funktion f von x gleich 2x plus 1">
+              <thead>
+                <tr>
+                  <th>x</th>
+                  <th>y = f(x)</th>
+                  <th>Wertepaar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>-2</td>
+                  <td>-3</td>
+                  <td class="mono">(-2|-3)</td>
+                </tr>
+                <tr>
+                  <td>-1</td>
+                  <td>-1</td>
+                  <td class="mono">(-1|-1)</td>
+                </tr>
+                <tr>
+                  <td>0</td>
+                  <td>1</td>
+                  <td class="mono">(0|1)</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>3</td>
+                  <td class="mono">(1|3)</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>5</td>
+                  <td class="mono">(2|5)</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="tiny-note">Die Tabelle zeigt nur einige Werte. Eine Funktion hat meistens unendlich viele moegliche Wertepaare.</p>
+          </div>
+
+          <div class="stage">
+            <h3>Bildlich: Punkte aus Wertepaaren</h3>
+            <svg viewBox="0 0 340 250" role="img" aria-label="Koordinatensystem mit einzelnen eingezeichneten Punkte aus einer Wertetabelle">
+              <rect x="0" y="0" width="340" height="250" rx="12" fill="#fbfdff"/>
+              <g stroke="#e1ecf4" stroke-width="1">
+                <line x1="20" y1="30" x2="320" y2="30"/>
+                <line x1="20" y1="55" x2="320" y2="55"/>
+                <line x1="20" y1="80" x2="320" y2="80"/>
+                <line x1="20" y1="105" x2="320" y2="105"/>
+                <line x1="20" y1="130" x2="320" y2="130"/>
+                <line x1="20" y1="155" x2="320" y2="155"/>
+                <line x1="20" y1="180" x2="320" y2="180"/>
+                <line x1="20" y1="205" x2="320" y2="205"/>
+                <line x1="20" y1="230" x2="320" y2="230"/>
+                <line x1="45" y1="10" x2="45" y2="240"/>
+                <line x1="70" y1="10" x2="70" y2="240"/>
+                <line x1="95" y1="10" x2="95" y2="240"/>
+                <line x1="120" y1="10" x2="120" y2="240"/>
+                <line x1="145" y1="10" x2="145" y2="240"/>
+                <line x1="170" y1="10" x2="170" y2="240"/>
+                <line x1="195" y1="10" x2="195" y2="240"/>
+                <line x1="220" y1="10" x2="220" y2="240"/>
+                <line x1="245" y1="10" x2="245" y2="240"/>
+                <line x1="270" y1="10" x2="270" y2="240"/>
+                <line x1="295" y1="10" x2="295" y2="240"/>
+              </g>
+              <g stroke="#2f3948" stroke-width="2">
+                <line x1="20" y1="130" x2="323" y2="130"/>
+                <line x1="170" y1="240" x2="170" y2="12"/>
+              </g>
+              <polygon points="323,130 314,126 314,134" fill="#2f3948"/>
+              <polygon points="170,12 166,20 174,20" fill="#2f3948"/>
+              <line x1="120" y1="205" x2="220" y2="55" stroke="#2f5fd0" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.8"/>
+              <g fill="#0d7c7c" stroke="#fff" stroke-width="2">
+                <circle cx="120" cy="205" r="5"/>
+                <circle cx="145" cy="155" r="5"/>
+                <circle cx="170" cy="105" r="5"/>
+                <circle cx="195" cy="55" r="5"/>
+              </g>
+              <g fill="#607182" font-family="Trebuchet MS, Verdana, sans-serif" font-size="11">
+                <text x="312" y="124">x</text>
+                <text x="177" y="21">y</text>
+                <text x="164" y="145">0</text>
+                <text x="193" y="145">1</text>
+                <text x="218" y="145">2</text>
+                <text x="139" y="145">-1</text>
+                <text x="114" y="145">-2</text>
+              </g>
+              <rect x="18" y="14" width="186" height="24" rx="8" fill="rgba(255,255,255,0.9)" stroke="#d6dfeb"/>
+              <text x="27" y="30" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">Einzelne Wertepaare als Punkte</text>
+            </svg>
+            <p class="tiny-note">Wenn viele Punkte auf einer Linie/Kurve liegen, erkennt man den zugrunde liegenden Graphen.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Wofuer sind Wertepaare besonders sinnvoll?</h2>
+        <div class="two-col equal">
+          <div class="stage">
+            <h3>Staerken</h3>
+            <ul class="list">
+              <li>Sehr gut fuer konkrete Beispiele und Kontrollen.</li>
+              <li>Hilfreich bei Messdaten oder Experimenten.</li>
+              <li>Praktisch als Zwischenschritt vom Term zum Graphen.</li>
+              <li>Man kann Muster entdecken (z. B. konstante Differenzen).</li>
+            </ul>
+          </div>
+          <div class="stage">
+            <h3>Grenzen</h3>
+            <ul class="list">
+              <li>Man sieht den gesamten Verlauf nur teilweise.</li>
+              <li>Zwischenwerte sind nicht automatisch sichtbar.</li>
+              <li>Ohne Funktionsgleichung ist Vorhersagen oft schwerer.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Vom Wertetabelle-Muster zur Regel</h2>
+        <p>In der Tabelle sieht man hier: Wenn <span class="mono">x</span> um 1 steigt, steigt <span class="mono">y</span> immer um 2. Ausserdem gilt bei <span class="mono">x=0</span>: <span class="mono">y=1</span>. Das fuehrt zur Gleichung <span class="mono">f(x)=2x+1</span>.</p>
+        <p class="footnote">Wertepaare sind also oft die Bruecke zwischen Beobachtung (Daten) und mathematischer Regel (Funktionsgleichung).</p>
+      </section>
+
+      <section class="panel tight">
+        <div class="footer-nav">
+          <a href="Funktionen - Funktionsgleichung.html">Zurueck: Funktionsgleichung</a>
+          <a href="Funktionen - Textbeschreibung.html">Weiter: Textbeschreibung</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

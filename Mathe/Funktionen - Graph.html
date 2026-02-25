@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graph einer Funktion</title>
+  <link rel="stylesheet" href="funktionen-4-gesichter.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">4 Gesichter einer Funktion</p>
+      <h1>Graph: Bild im Koordinatensystem</h1>
+      <p>Der Graph zeigt die Funktion als Menge von Punkten im Koordinatensystem. Jeder Punkt hat die Form <span class="mono">(x|y)</span> mit <span class="mono">y = f(x)</span>.</p>
+      <nav class="top-nav" aria-label="Seitennavigation">
+        <a class="nav-link" href="Funktionen - 4 Gesichter.html">Uebersicht</a>
+        <a class="nav-link is-active" href="Funktionen - Graph.html" aria-current="page">Graph</a>
+        <a class="nav-link" href="Funktionen - Funktionsgleichung.html">Funktionsgleichung</a>
+        <a class="nav-link" href="Funktionen - Wertepaare.html">Wertepaare</a>
+        <a class="nav-link" href="Funktionen - Textbeschreibung.html">Textbeschreibung</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel">
+        <p class="example-badge">Beispiel-Funktion: <span class="mono">f(x) = 2x + 1</span></p>
+        <div class="two-col">
+          <div class="stage">
+            <h3>Beispiel-Graph (Gerade)</h3>
+            <svg viewBox="0 0 420 280" role="img" aria-label="Koordinatensystem mit dem Graphen der Funktion f von x gleich 2x plus 1">
+              <rect x="0" y="0" width="420" height="280" rx="12" fill="#fbfdff"/>
+              <g stroke="#e1eaf3" stroke-width="1">
+                <line x1="10" y1="20" x2="410" y2="20"/>
+                <line x1="10" y1="40" x2="410" y2="40"/>
+                <line x1="10" y1="60" x2="410" y2="60"/>
+                <line x1="10" y1="80" x2="410" y2="80"/>
+                <line x1="10" y1="100" x2="410" y2="100"/>
+                <line x1="10" y1="120" x2="410" y2="120"/>
+                <line x1="10" y1="140" x2="410" y2="140"/>
+                <line x1="10" y1="160" x2="410" y2="160"/>
+                <line x1="10" y1="180" x2="410" y2="180"/>
+                <line x1="10" y1="200" x2="410" y2="200"/>
+                <line x1="10" y1="220" x2="410" y2="220"/>
+                <line x1="10" y1="240" x2="410" y2="240"/>
+
+                <line x1="60" y1="10" x2="60" y2="270"/>
+                <line x1="110" y1="10" x2="110" y2="270"/>
+                <line x1="160" y1="10" x2="160" y2="270"/>
+                <line x1="210" y1="10" x2="210" y2="270"/>
+                <line x1="260" y1="10" x2="260" y2="270"/>
+                <line x1="310" y1="10" x2="310" y2="270"/>
+                <line x1="360" y1="10" x2="360" y2="270"/>
+              </g>
+
+              <g stroke="#2f3948" stroke-width="2.2">
+                <line x1="10" y1="140" x2="407" y2="140"/>
+                <line x1="210" y1="270" x2="210" y2="13"/>
+              </g>
+              <polygon points="407,140 398,136 398,144" fill="#2f3948"/>
+              <polygon points="210,13 206,22 214,22" fill="#2f3948"/>
+
+              <g fill="#607182" font-family="Trebuchet MS, Verdana, sans-serif" font-size="11">
+                <text x="400" y="134">x</text>
+                <text x="218" y="22">y</text>
+                <text x="54" y="156">-3</text>
+                <text x="104" y="156">-2</text>
+                <text x="154" y="156">-1</text>
+                <text x="214" y="156">0</text>
+                <text x="255" y="156">1</text>
+                <text x="305" y="156">2</text>
+                <text x="355" y="156">3</text>
+                <text x="218" y="245">-5</text>
+                <text x="218" y="205">-3</text>
+                <text x="218" y="165">-1</text>
+                <text x="218" y="125">1</text>
+                <text x="218" y="85">3</text>
+                <text x="218" y="45">5</text>
+              </g>
+
+              <line x1="60" y1="240" x2="360" y2="0" stroke="#2f5fd0" stroke-width="3.5"/>
+
+              <g stroke="#cf5b2e" stroke-width="1.7" stroke-dasharray="5 4" fill="none">
+                <line x1="310" y1="140" x2="310" y2="40"/>
+                <line x1="210" y1="40" x2="310" y2="40"/>
+              </g>
+
+              <g fill="#cf5b2e" stroke="#fff" stroke-width="2">
+                <circle cx="110" cy="200" r="5.5"/>
+                <circle cx="160" cy="160" r="5.5"/>
+                <circle cx="210" cy="120" r="5.5"/>
+                <circle cx="260" cy="80" r="5.5"/>
+                <circle cx="310" cy="40" r="5.5"/>
+              </g>
+
+              <rect x="16" y="16" width="156" height="28" rx="8" fill="rgba(255,255,255,0.9)" stroke="#d6dfeb"/>
+              <text x="25" y="34" font-family="Trebuchet MS, Verdana, sans-serif" font-size="13" fill="#1b2430">Gerade zu f(x) = 2x + 1</text>
+            </svg>
+            <p class="tiny-note">Die markierten Punkte sind einzelne Wertepaare der Funktion, z. B. <span class="mono">(2|5)</span>.</p>
+          </div>
+
+          <div class="panel tight" style="margin:0; background:transparent; border:0; box-shadow:none; padding:0;">
+            <div class="subtle-box">
+              <h3>Was zeigt der Graph?</h3>
+              <ul class="list">
+                <li>Jeder Punkt auf der Linie steht fuer eine richtige Zuordnung der Funktion.</li>
+                <li>Die Lage der Linie zeigt den <strong>Verlauf</strong> (hier: steigende Gerade).</li>
+                <li>Am Graphen kann man Werte <strong>ablesen</strong> oder <strong>abschaetzen</strong>.</li>
+              </ul>
+            </div>
+            <div class="subtle-box" style="margin-top:0.7rem;">
+              <h3>Besonders sinnvoll fuer</h3>
+              <div class="focus-strip">
+                <span class="focus-pill">Verlaeufe vergleichen</span>
+                <span class="focus-pill">Nullstellen sehen</span>
+                <span class="focus-pill">Schnittpunkte erkennen</span>
+                <span class="focus-pill">Trend / Steigung verstehen</span>
+              </div>
+            </div>
+            <div class="subtle-box" style="margin-top:0.7rem;">
+              <h3>Typische Frage, die der Graph gut beantwortet</h3>
+              <p>Wie veraendert sich <span class="mono">y</span>, wenn <span class="mono">x</span> groesser wird? Bei <span class="mono">f(x)=2x+1</span> steigt <span class="mono">y</span> pro Schritt in <span class="mono">x</span> um <strong>2</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Staerken und Grenzen der Darstellung</h2>
+        <div class="two-col equal">
+          <div class="stage">
+            <h3>Staerken des Graphen</h3>
+            <ul class="list">
+              <li>Sehr anschaulich: Man sieht Muster schnell.</li>
+              <li>Gut fuer Vergleiche zwischen mehreren Funktionen.</li>
+              <li>Hilft beim Verstehen von Steigung, Extrempunkten oder Wendungen.</li>
+              <li>Geeignet zum groben Ablesen auch ohne Rechnungen.</li>
+            </ul>
+          </div>
+          <div class="stage">
+            <h3>Grenzen des Graphen</h3>
+            <ul class="list">
+              <li>Abgelesene Werte sind oft nur ungefaehr.</li>
+              <li>Ohne Beschriftung/Skalierung kann man leicht falsch lesen.</li>
+              <li>Fuer exakte Berechnungen ist die Funktionsgleichung meist besser.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Verbindung zu den anderen Gesichtern</h2>
+        <p>Der Graph entsteht aus <strong>Wertepaaren</strong> oder direkt aus der <strong>Funktionsgleichung</strong>. In Sachaufgaben liefert oft zuerst die <strong>Textbeschreibung</strong> die Bedeutung von Achsen und Einheiten.</p>
+        <p class="footnote">Beispiel: Aus <span class="mono">f(x)=2x+1</span> berechnest du <span class="mono">(0|1)</span>, <span class="mono">(1|3)</span>, <span class="mono">(2|5)</span> und zeichnest die Punkte ein. Danach verbindest du sie zur Geraden.</p>
+      </section>
+
+      <section class="panel tight">
+        <div class="footer-nav">
+          <a href="Funktionen - 4 Gesichter.html">Zur Uebersicht</a>
+          <a href="Funktionen - Funktionsgleichung.html">Weiter: Funktionsgleichung</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

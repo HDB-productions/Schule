@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Die 4 Gesichter einer Funktion</title>
+  <link rel="stylesheet" href="funktionen-4-gesichter.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">Mathe · Funktionen verstehen</p>
+      <h1>Die 4 Gesichter einer Funktion</h1>
+      <p>Eine Funktion beschreibt eine Zuordnung: Jedem <strong>x</strong>-Wert wird genau ein <strong>y</strong>-Wert zugeordnet. Diese Zuordnung kann man auf verschiedene Arten darstellen. Je nach Aufgabe ist eine Darstellungsform besonders praktisch.</p>
+      <p class="muted">Diese Uebersichtsseite fuehrt zu vier Detailseiten: <strong>Graph</strong>, <strong>Funktionsgleichung</strong>, <strong>Wertepaare</strong> und <strong>Textbeschreibung</strong>.</p>
+      <nav class="top-nav" aria-label="Seitennavigation">
+        <a class="nav-link is-active" href="Funktionen - 4 Gesichter.html" aria-current="page">Uebersicht</a>
+        <a class="nav-link" href="Funktionen - Graph.html">Graph</a>
+        <a class="nav-link" href="Funktionen - Funktionsgleichung.html">Funktionsgleichung</a>
+        <a class="nav-link" href="Funktionen - Wertepaare.html">Wertepaare</a>
+        <a class="nav-link" href="Funktionen - Textbeschreibung.html">Textbeschreibung</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel merksatz">
+        <strong>Merksatz:</strong> Es sind nicht vier verschiedene Inhalte, sondern <strong>vier Sichtweisen auf dieselbe Funktion</strong>. Gute Mathearbeit bedeutet oft: schnell zwischen den Darstellungen wechseln.
+      </section>
+
+      <section class="panel">
+        <h2>Die vier Kategorien im Ueberblick</h2>
+        <div class="card-grid">
+          <article class="card">
+            <div class="mini-visual" aria-hidden="true">
+              <svg viewBox="0 0 220 120">
+                <rect x="0" y="0" width="220" height="120" rx="10" fill="#fbfdff"/>
+                <g stroke="#d5e0ec" stroke-width="1">
+                  <line x1="20" y1="20" x2="20" y2="100"/>
+                  <line x1="60" y1="20" x2="60" y2="100"/>
+                  <line x1="100" y1="20" x2="100" y2="100"/>
+                  <line x1="140" y1="20" x2="140" y2="100"/>
+                  <line x1="180" y1="20" x2="180" y2="100"/>
+                  <line x1="20" y1="20" x2="200" y2="20"/>
+                  <line x1="20" y1="40" x2="200" y2="40"/>
+                  <line x1="20" y1="60" x2="200" y2="60"/>
+                  <line x1="20" y1="80" x2="200" y2="80"/>
+                  <line x1="20" y1="100" x2="200" y2="100"/>
+                </g>
+                <g stroke="#3c4b5a" stroke-width="2">
+                  <line x1="20" y1="60" x2="205" y2="60"/>
+                  <line x1="100" y1="108" x2="100" y2="12"/>
+                </g>
+                <line x1="40" y1="92" x2="170" y2="28" stroke="#2f5fd0" stroke-width="3"/>
+                <circle cx="100" cy="60" r="4" fill="#cf5b2e"/>
+                <circle cx="140" cy="44" r="4" fill="#cf5b2e"/>
+              </svg>
+            </div>
+            <h3>Graph</h3>
+            <p><strong>Bild im Koordinatensystem</strong>. Man sieht den Verlauf einer Funktion als Linie oder Kurve.</p>
+            <div class="tag-row">
+              <span class="tag graph">Verlauf sehen</span>
+              <span class="tag graph">Schaetzen</span>
+            </div>
+            <a class="card-link" href="Funktionen - Graph.html">Zur Graph-Seite</a>
+          </article>
+
+          <article class="card">
+            <div class="mini-visual" aria-hidden="true">
+              <svg viewBox="0 0 220 120">
+                <rect x="0" y="0" width="220" height="120" rx="10" fill="#fffdf8"/>
+                <rect x="16" y="18" width="188" height="36" rx="10" fill="#ffffff" stroke="#f0d8c8"/>
+                <text x="28" y="43" font-family="Trebuchet MS, Verdana, sans-serif" font-size="22" font-weight="700" fill="#2f5fd0">f(x)</text>
+                <text x="78" y="43" font-family="Trebuchet MS, Verdana, sans-serif" font-size="22" font-weight="700" fill="#1b2430">=</text>
+                <text x="106" y="43" font-family="Trebuchet MS, Verdana, sans-serif" font-size="22" font-weight="700" fill="#cf5b2e">2x</text>
+                <text x="145" y="43" font-family="Trebuchet MS, Verdana, sans-serif" font-size="22" font-weight="700" fill="#1b2430">+</text>
+                <text x="170" y="43" font-family="Trebuchet MS, Verdana, sans-serif" font-size="22" font-weight="700" fill="#0d7c7c">1</text>
+                <rect x="18" y="68" width="52" height="22" rx="7" fill="#fff" stroke="#d8dde6"/>
+                <rect x="84" y="68" width="52" height="22" rx="7" fill="#fff" stroke="#d8dde6"/>
+                <rect x="150" y="68" width="52" height="22" rx="7" fill="#fff" stroke="#d8dde6"/>
+                <text x="31" y="83" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">x=3</text>
+                <text x="90" y="83" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">2·3=6</text>
+                <text x="160" y="83" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">6+1=7</text>
+                <path d="M71 79 H82" stroke="#6e7a87" stroke-width="2" marker-end="url(#a1)"/>
+                <path d="M137 79 H148" stroke="#6e7a87" stroke-width="2" marker-end="url(#a1)"/>
+                <defs>
+                  <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                    <path d="M0 0 L8 4 L0 8 Z" fill="#6e7a87"/>
+                  </marker>
+                </defs>
+              </svg>
+            </div>
+            <h3>Funktionsgleichung</h3>
+            <p><strong>Rechenvorschrift als Term</strong>. Sie beschreibt genau, wie aus <strong>x</strong> der zugeordnete Wert berechnet wird.</p>
+            <div class="tag-row">
+              <span class="tag term">Genau rechnen</span>
+              <span class="tag term">Allgemein</span>
+            </div>
+            <a class="card-link" href="Funktionen - Funktionsgleichung.html">Zur Gleichungs-Seite</a>
+          </article>
+
+          <article class="card">
+            <div class="mini-visual" aria-hidden="true">
+              <svg viewBox="0 0 220 120">
+                <rect x="0" y="0" width="220" height="120" rx="10" fill="#f8fffe"/>
+                <rect x="16" y="14" width="92" height="92" rx="8" fill="#fff" stroke="#cfe5e5"/>
+                <line x1="16" y1="38" x2="108" y2="38" stroke="#cfe5e5"/>
+                <line x1="62" y1="14" x2="62" y2="106" stroke="#cfe5e5"/>
+                <line x1="16" y1="60" x2="108" y2="60" stroke="#cfe5e5"/>
+                <line x1="16" y1="82" x2="108" y2="82" stroke="#cfe5e5"/>
+                <text x="34" y="31" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" font-weight="700" fill="#0d7c7c">x</text>
+                <text x="78" y="31" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" font-weight="700" fill="#0d7c7c">y</text>
+                <text x="30" y="53" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">0</text>
+                <text x="78" y="53" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">1</text>
+                <text x="30" y="75" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">1</text>
+                <text x="78" y="75" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">3</text>
+                <text x="30" y="97" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">2</text>
+                <text x="78" y="97" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">5</text>
+                <circle cx="154" cy="82" r="3.5" fill="#2f5fd0"/>
+                <circle cx="176" cy="70" r="3.5" fill="#2f5fd0"/>
+                <circle cx="198" cy="58" r="3.5" fill="#2f5fd0"/>
+                <path d="M151 84 L197 58" stroke="#2f5fd0" stroke-width="2" opacity="0.75"/>
+                <g stroke="#d7e5ef" stroke-width="1">
+                  <line x1="130" y1="38" x2="208" y2="38"/>
+                  <line x1="130" y1="58" x2="208" y2="58"/>
+                  <line x1="130" y1="78" x2="208" y2="78"/>
+                  <line x1="130" y1="98" x2="208" y2="98"/>
+                </g>
+              </svg>
+            </div>
+            <h3>Wertepaare</h3>
+            <p><strong>Konkrete Beispiele der Zuordnung</strong>. Man listet einzelne Paare <span class="mono">(x|y)</span> auf.</p>
+            <div class="tag-row">
+              <span class="tag table">Beispiele</span>
+              <span class="tag table">Daten</span>
+            </div>
+            <a class="card-link" href="Funktionen - Wertepaare.html">Zur Wertepaar-Seite</a>
+          </article>
+
+          <article class="card">
+            <div class="mini-visual" aria-hidden="true">
+              <svg viewBox="0 0 220 120">
+                <rect x="0" y="0" width="220" height="120" rx="10" fill="#fbf8ff"/>
+                <rect x="14" y="16" width="192" height="50" rx="10" fill="#fff" stroke="#e0d7f1"/>
+                <text x="26" y="36" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">&quot;1 EUR Grundpreis und</text>
+                <text x="26" y="54" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#1b2430">2 EUR pro Kilometer&quot;</text>
+                <rect x="14" y="78" width="60" height="24" rx="8" fill="#fff" stroke="#d9ddea"/>
+                <rect x="82" y="78" width="56" height="24" rx="8" fill="#fff" stroke="#d9ddea"/>
+                <rect x="146" y="78" width="60" height="24" rx="8" fill="#fff" stroke="#d9ddea"/>
+                <text x="28" y="94" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#7a4cb8">Text</text>
+                <text x="92" y="94" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#cf5b2e">Term</text>
+                <text x="154" y="94" font-family="Trebuchet MS, Verdana, sans-serif" font-size="12" fill="#2f5fd0">Graph</text>
+                <path d="M74 90 H80" stroke="#6e7a87" stroke-width="2" marker-end="url(#a2)"/>
+                <path d="M138 90 H144" stroke="#6e7a87" stroke-width="2" marker-end="url(#a2)"/>
+                <defs>
+                  <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                    <path d="M0 0 L8 4 L0 8 Z" fill="#6e7a87"/>
+                  </marker>
+                </defs>
+              </svg>
+            </div>
+            <h3>Textbeschreibung</h3>
+            <p><strong>Beschreibung in Worten</strong>. Die Funktion wird als Sachsituation oder Regel erklaert.</p>
+            <div class="tag-row">
+              <span class="tag text">Verstehen</span>
+              <span class="tag text">Sachaufgaben</span>
+            </div>
+            <a class="card-link" href="Funktionen - Textbeschreibung.html">Zur Text-Seite</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>So haengen die Darstellungen zusammen</h2>
+        <p>Aufgaben werden leichter, wenn du zwischen den Darstellungen wechseln kannst. Beispiel: Aus einer <strong>Textbeschreibung</strong> stellst du eine <strong>Funktionsgleichung</strong> auf, berechnest daraus einige <strong>Wertepaare</strong> und zeichnest dann den <strong>Graphen</strong>.</p>
+        <div class="translation-ladder">
+          <div class="ladder-step">
+            <div class="ladder-icon text">T</div>
+            <div>
+              <strong>Textbeschreibung</strong><br>
+              &quot;1 EUR Grundpreis und 2 EUR pro Kilometer&quot;
+            </div>
+            <span class="arrow-hint">Formuliere die Rechenregel</span>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon term">=</div>
+            <div>
+              <strong>Funktionsgleichung</strong><br>
+              <span class="mono">K(x) = 2x + 1</span>
+            </div>
+            <span class="arrow-hint">Setze Werte ein</span>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon table">W</div>
+            <div>
+              <strong>Wertepaare</strong><br>
+              <span class="mono">(0|1), (1|3), (2|5), (3|7)</span>
+            </div>
+            <span class="arrow-hint">Punkte ins Koordinatensystem</span>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon graph">G</div>
+            <div>
+              <strong>Graph</strong><br>
+              Gerade durch die Punkte
+            </div>
+            <span class="arrow-hint">Verlauf sichtbar</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Wann welche Darstellung?</h2>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Wenn du schnell sehen willst, was passiert</h3>
+            <p>Nutze den <strong>Graphen</strong>. Man erkennt Anstieg, Nullstellen, Schnittpunkte und Trends auf einen Blick.</p>
+          </article>
+          <article class="card">
+            <h3>Wenn du genau rechnen willst</h3>
+            <p>Nutze die <strong>Funktionsgleichung</strong>. Damit kannst du jeden Wert praezise berechnen.</p>
+          </article>
+          <article class="card">
+            <h3>Wenn du Beispiele oder Messdaten hast</h3>
+            <p>Nutze <strong>Wertepaare</strong>. Sie sind ideal zum Sammeln, Pruefen und Vergleichen konkreter Zuordnungen.</p>
+          </article>
+          <article class="card">
+            <h3>Wenn die Aufgabe aus dem Alltag kommt</h3>
+            <p>Starte mit der <strong>Textbeschreibung</strong>. Dort verstehst du, was die Variablen und Einheiten bedeuten.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel tight">
+        <div class="footer-nav">
+          <a href="MatheIndex.html">Zurueck zu MatheIndex</a>
+          <a href="Funktionen - Graph.html">Weiter: Graph</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

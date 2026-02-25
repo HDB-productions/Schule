@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funktionsgleichung einer Funktion</title>
+  <link rel="stylesheet" href="funktionen-4-gesichter.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">4 Gesichter einer Funktion</p>
+      <h1>Funktionsgleichung: Rechenvorschrift als Term</h1>
+      <p>Die Funktionsgleichung beschreibt <strong>allgemein</strong>, wie aus einem Eingabewert <span class="mono">x</span> der Ausgabewert <span class="mono">y</span> berechnet wird. Sie ist die praeziseste Darstellungsform zum Rechnen.</p>
+      <nav class="top-nav" aria-label="Seitennavigation">
+        <a class="nav-link" href="Funktionen - 4 Gesichter.html">Uebersicht</a>
+        <a class="nav-link" href="Funktionen - Graph.html">Graph</a>
+        <a class="nav-link is-active" href="Funktionen - Funktionsgleichung.html" aria-current="page">Funktionsgleichung</a>
+        <a class="nav-link" href="Funktionen - Wertepaare.html">Wertepaare</a>
+        <a class="nav-link" href="Funktionen - Textbeschreibung.html">Textbeschreibung</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel">
+        <p class="example-badge">Beispiel-Funktion: <span class="mono">f(x) = 2x + 1</span></p>
+        <div class="two-col">
+          <div class="stage">
+            <h3>Die Gleichung lesen und verstehen</h3>
+            <div class="equation-display">
+              <p class="equation-large">
+                <span class="fn">f(x)</span> = <span class="term-a">2x</span> + <span class="term-b">1</span>
+              </p>
+              <div class="legend-grid">
+                <div class="legend-card">
+                  <strong><span class="mono">x</span></strong>
+                  Eingabewert (unabhaengige Variable)
+                </div>
+                <div class="legend-card">
+                  <strong><span class="mono">2x</span></strong>
+                  Veraenderungsteil: x wird mit 2 multipliziert
+                </div>
+                <div class="legend-card">
+                  <strong><span class="mono">+1</span></strong>
+                  Startwert / y-Achsenabschnitt (bei x = 0)
+                </div>
+                <div class="legend-card">
+                  <strong><span class="mono">f(x)</span></strong>
+                  Ausgabewert der Funktion
+                </div>
+              </div>
+            </div>
+
+            <h3 style="margin-top:0.8rem;">Rechenweg als Bild</h3>
+            <div class="flow-strip" aria-label="Schrittfolge fuer x gleich 3">
+              <span class="flow-step">x = 3</span>
+              <span class="flow-arrow">-&gt;</span>
+              <span class="flow-step">2 · 3 = 6</span>
+              <span class="flow-arrow">-&gt;</span>
+              <span class="flow-step">6 + 1 = 7</span>
+              <span class="flow-arrow">-&gt;</span>
+              <span class="flow-step">f(3) = 7</span>
+            </div>
+          </div>
+
+          <div class="stage">
+            <h3>Warum ist die Funktionsgleichung so wichtig?</h3>
+            <ul class="list">
+              <li>Sie gilt fuer <strong>alle</strong> erlaubten x-Werte.</li>
+              <li>Mit ihr kannst du Werte exakt berechnen (ohne Ablesefehler).</li>
+              <li>Sie ist die Grundlage fuer Umformungen, Gleichungen und Beweise.</li>
+              <li>Aus ihr kannst du Wertepaare und Graphen erzeugen.</li>
+            </ul>
+
+            <div class="subtle-box" style="margin-top:0.75rem;">
+              <h3>Besonders sinnvoll fuer</h3>
+              <div class="focus-strip">
+                <span class="focus-pill">genaue Ergebnisse</span>
+                <span class="focus-pill">beliebige x-Werte</span>
+                <span class="focus-pill">Termumformungen</span>
+                <span class="focus-pill">allgemeine Aussagen</span>
+              </div>
+            </div>
+
+            <div class="subtle-box" style="margin-top:0.75rem;">
+              <h3>Grenze</h3>
+              <p>Die Gleichung zeigt den Verlauf nicht so anschaulich wie ein Graph. Zum schnellen Verstehen einer Entwicklung ist der Graph oft intuitiver.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Von der Gleichung zu Wertepaaren und Graph</h2>
+        <div class="split-stage">
+          <div class="stage">
+            <h3>Beispielwerte ausrechnen</h3>
+            <table class="pair-table" aria-label="Werte fuer die Funktion f von x gleich 2x plus 1">
+              <thead>
+                <tr>
+                  <th>x</th>
+                  <th>Rechnung</th>
+                  <th>y = f(x)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>-1</td>
+                  <td class="mono">2·(-1)+1</td>
+                  <td>-1</td>
+                </tr>
+                <tr>
+                  <td>0</td>
+                  <td class="mono">2·0+1</td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td class="mono">2·1+1</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td class="mono">2·2+1</td>
+                  <td>5</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="stage">
+            <h3>Was man an der Gleichung direkt erkennt</h3>
+            <ul class="list">
+              <li><span class="mono">+1</span> bedeutet: Der Graph schneidet die y-Achse bei <span class="mono">1</span>.</li>
+              <li>Der Faktor <span class="mono">2</span> bedeutet: Geht x um 1 hoch, steigt y um 2.</li>
+              <li>Deshalb ist der Graph eine steigende Gerade.</li>
+            </ul>
+            <p class="tiny-note">Bei linearen Funktionen der Form <span class="mono">f(x)=mx+b</span> ist <span class="mono">m</span> die Steigung und <span class="mono">b</span> der y-Achsenabschnitt.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel tight">
+        <div class="footer-nav">
+          <a href="Funktionen - Graph.html">Zurueck: Graph</a>
+          <a href="Funktionen - Wertepaare.html">Weiter: Wertepaare</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
