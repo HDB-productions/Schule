@@ -567,13 +567,11 @@ body{
     const t = ease(p);
 
     if (state.transition.type === "morph") {
-      const fromLayout = computeLayout(state.transition.from, state.size);
-      const toLayout = computeLayout(state.transition.to, state.size);
       const interp = interpolateScene(state.transition.from, state.transition.to, t);
-      const interpLayout = interpolateLayout(fromLayout, toLayout, t);
+      const interpLayout = computeLayout(interp, state.size);
       drawSceneCubes(interp, interpLayout, 1);
-      drawSceneOverlay(state.transition.from, fromLayout, 1 - t);
-      drawSceneOverlay(state.transition.to, toLayout, t);
+      drawSceneOverlay(state.transition.from, computeLayout(state.transition.from, state.size), 1 - t);
+      drawSceneOverlay(state.transition.to, computeLayout(state.transition.to, state.size), t);
     } else {
       drawScene(state.transition.from, 1 - t);
       drawScene(state.transition.to, t);
@@ -650,16 +648,6 @@ body{
     const ox = left - bounds.minX * s;
     const oy = top - bounds.minY * s;
     return { s, dxf, dyf, ox, oy };
-  }
-
-  function interpolateLayout(a, b, t) {
-    return {
-      s: lerp(a.s, b.s, t),
-      dxf: a.dxf,
-      dyf: a.dyf,
-      ox: lerp(a.ox, b.ox, t),
-      oy: lerp(a.oy, b.oy, t)
-    };
   }
 
   function cubeBoundsPx(cube, layout) {
@@ -851,7 +839,7 @@ body{
       }
 
       drawBraceV(braceX, top, bottom, 24, alpha);
-      drawText("3 · 4", braceX - 32, (top + bottom) / 2, alpha, {
+      drawText("3 · 4", braceX - 36, (top + bottom) / 2, alpha, {
         font: Math.round(layout.s * 0.42),
         weight: 800,
         align: "right",
