@@ -1,0 +1,1093 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kommutativ- und Assoziativgesetz mit Wuerfeln</title>
+<style>
+:root{
+  --bg1:#eaf4ff;
+  --bg2:#fff7ea;
+  --card:#ffffff;
+  --ink:#1f2937;
+  --muted:#5b6472;
+  --line:#c8d8ee;
+  --shadow:0 14px 34px rgba(15, 38, 73, .10);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 520px at 10% -5%, rgba(106,168,255,.24), transparent 60%),
+    radial-gradient(900px 440px at 100% 0%, rgba(255,169,92,.18), transparent 58%),
+    linear-gradient(160deg,var(--bg1),var(--bg2));
+  font-family:"Trebuchet MS", Verdana, sans-serif;
+  padding:18px;
+}
+.page{max-width:1100px;margin:0 auto;display:grid;gap:14px}
+.card{
+  background:var(--card);
+  border:2px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+}
+.hero{padding:16px 18px 14px}
+.hero h1{
+  margin:0 0 8px;
+  color:#0b4f88;
+  font-size:clamp(1.35rem,1.1rem + 1vw,2rem);
+}
+.hero p{margin:6px 0;color:var(--muted);line-height:1.45}
+.hero .lead{color:#243243;font-weight:700}
+.wissen{padding:14px 14px 12px;display:grid;gap:12px}
+.ribbon{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:linear-gradient(135deg,#ff4f84,#f03b62);
+  color:#fff;
+  font-weight:800;
+  letter-spacing:.02em;
+  padding:6px 11px;
+  border-radius:999px;
+  width:max-content;
+}
+.wissen-grid{display:grid;grid-template-columns:1fr 2fr;gap:12px;align-items:start}
+.law-box{
+  border:2px solid #f4b3c4;
+  background:linear-gradient(180deg,#fff6f9,#fffafb);
+  border-radius:14px;
+  padding:12px;
+}
+.law-box h2{margin:0 0 8px;color:#8a1238;font-size:1.05rem}
+.law-item{
+  width:100%;
+  display:block;
+  text-align:left;
+  padding:9px 10px;
+  border:1px solid #f2cfda;
+  border-radius:10px;
+  background:#fff;
+  appearance:none;
+  font:inherit;
+  color:inherit;
+  cursor:pointer;
+  transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .14s ease;
+}
+.law-item + .law-item{margin-top:10px}
+.law-item:hover{border-color:#e9a9bd;box-shadow:0 4px 14px rgba(130,23,65,.08)}
+.law-item:focus-visible{outline:3px solid rgba(236,72,153,.28);outline-offset:2px}
+.law-item.active{
+  border-color:#e0618e;
+  background:linear-gradient(180deg,#fff9fc,#fff2f7);
+  box-shadow:0 7px 16px rgba(190, 35, 102, .10), inset 0 0 0 1px rgba(224, 97, 142, .18);
+  transform:translateY(-1px);
+}
+.law-item strong{display:block;margin-bottom:4px;color:#7c1d3e}
+.law-item p{margin:0;color:#4b5563;line-height:1.4}
+.formula{
+  margin-top:6px;
+  padding:6px 8px;
+  border-radius:8px;
+  background:#f8fbff;
+  border:1px solid #dae8f7;
+  color:#10395f;
+  font:700 1rem/1.25 Consolas, "Courier New", monospace;
+}
+.law-example{
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px dashed #d9e7f6;
+}
+.example-label{
+  margin:0 0 4px;
+  color:#516173;
+  font-weight:700;
+  font-size:.9rem;
+}
+.example-formula{
+  color:#10395f;
+  font:700 .98rem/1.25 Consolas, "Courier New", monospace;
+}
+.law-item.active .formula{border-color:#cfe0f3;background:#fbfdff}
+.law-item.active .law-example{border-top-color:#cfe0f3}
+.viz-panel{
+  border:2px solid #d6e4f5;
+  background:linear-gradient(180deg,#f8fbff,#ffffff);
+  border-radius:14px;
+  padding:10px;
+  display:grid;
+  gap:8px;
+}
+.viz-head{display:grid;gap:2px}
+.viz-head h3{margin:0;color:#0b4f88;font-size:1rem}
+.viz-head p{margin:3px 0 0;color:var(--muted);line-height:1.35}
+.law-badge{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid #cfe0f3;
+  background:#eef6ff;
+  border-radius:999px;
+  padding:4px 8px;
+  color:#0f4f80;
+  font-weight:800;
+  font-size:.9rem;
+  width:max-content;
+}
+.expr-wrap{display:grid;gap:6px}
+.expr-title{margin:0;color:#334155;font-weight:700;font-size:.92rem;line-height:1.35}
+.expr-controls{display:flex;gap:8px;flex-wrap:wrap}
+.expr-btn{
+  border:2px solid #c6d9ed;
+  background:#fff;
+  color:#23445f;
+  border-radius:10px;
+  padding:6px 10px;
+  font:700 .94rem/1.1 inherit;
+  cursor:pointer;
+  transition:background .12s ease,border-color .12s ease,transform .12s ease;
+}
+.expr-btn:hover{background:#f6fbff;border-color:#9ec4e7}
+.expr-btn:focus-visible{outline:3px solid rgba(59,130,246,.22);outline-offset:2px}
+.expr-btn.active{border-color:#0f6db0;background:#eaf5ff;color:#0c4e7f;transform:translateY(-1px)}
+.expr-btn.muted{border-style:dashed}
+.viz-stage{
+  border:1px solid #dbe7f4;
+  border-radius:12px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#eef5ff,#fdfefe);
+}
+#vizCanvas{display:block;width:100%;height:auto;aspect-ratio:16/11}
+.viz-note{
+  min-height:20px;
+  color:#334155;
+  font:700 .94rem/1.25 Consolas, "Courier New", monospace;
+  background:#f7fbff;
+  border:1px solid #d6e7f7;
+  border-radius:9px;
+  padding:7px 8px;
+  white-space:pre-line;
+}
+.small-help{margin:0;color:#64748b;font-size:.86rem;line-height:1.3}
+@media (max-width: 900px){
+  .wissen-grid{grid-template-columns:1fr}
+}
+@media (max-width: 640px){
+  body{padding:10px}
+  .hero,.wissen{padding:12px}
+  .expr-controls{gap:6px}
+  .expr-btn{padding:6px 8px;font-size:.9rem}
+  #vizCanvas{aspect-ratio:14/11}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <section class="card hero">
+    <h1>Rechengesetze der Multiplikation mit Wuerfeln</h1>
+    <p class="lead">Auch bei der Multiplikation darf man Faktoren vertauschen (kommutativ) und Klammern anders setzen (assoziativ), ohne dass sich das Ergebnis aendert.</p>
+    <p>Die Wuerfelbilder helfen dabei, die Gesetze zu sehen: Derselbe Wuerfelquader kann auf verschiedene Arten gruppiert und gezaehlt werden.</p>
+  </section>
+
+  <section class="card wissen" aria-labelledby="wissenTitel">
+    <span class="ribbon">Wissen</span>
+    <div class="wissen-grid">
+      <div class="law-box">
+        <h2 id="wissenTitel">Kommutativgesetz und Assoziativgesetz</h2>
+        <button type="button" class="law-item law-select active" id="lawComm" data-law="comm" aria-pressed="true">
+          <strong>Kommutativgesetz</strong>
+          <p>Beim Multiplizieren duerfen Faktoren vertauscht werden.</p>
+          <div class="formula">a · b = b · a</div>
+          <div class="law-example">
+            <p class="example-label">Beispiel:</p>
+            <div class="example-formula">4 · 3 = 3 · 4</div>
+          </div>
+        </button>
+        <button type="button" class="law-item law-select" id="lawAssoc" data-law="assoc" aria-pressed="false">
+          <strong>Assoziativgesetz</strong>
+          <p>Beim Multiplizieren duerfen Klammern unterschiedlich gesetzt werden.</p>
+          <div class="formula">(a · b) · c = a · (b · c)</div>
+          <div class="law-example">
+            <p class="example-label">Beispiel:</p>
+            <div class="example-formula">(4 · 3) · 2 = 4 · (3 · 2)</div>
+          </div>
+        </button>
+      </div>
+
+      <section class="viz-panel" aria-labelledby="vizTitel">
+        <div class="viz-head">
+          <h3 id="vizTitel">Visualisierung der Gesetze</h3>
+          <p id="vizSubtitle">Klicke das Gesetz, das visualisiert werden soll, im Wissenskasten an.</p>
+        </div>
+        <span id="lawBadge" class="law-badge">Kommutativgesetz</span>
+
+        <div class="expr-wrap">
+          <p id="exprTitle" class="expr-title">Vergleiche die Darstellungen. Klicke dazu eine der drei Darstellungsformen an.</p>
+          <div id="exprControls" class="expr-controls" aria-label="Darstellungen"></div>
+        </div>
+
+        <div class="viz-stage">
+          <canvas id="vizCanvas" aria-label="Visualisierung von Kommutativ- und Assoziativgesetz mit Wuerfeln"></canvas>
+        </div>
+
+        <div id="vizNote" class="viz-note"></div>
+      </section>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  const COMM_COLORS = ["#7bc8ff", "#f7a5bc", "#b8dc7d", "#f6b56f"];
+  const ROW_COLORS = ["#7ccfff", "#ffd166", "#c5a4ff"];
+  const ASSOC_LAYER_COLORS = ["#7bc8ff", "#ffb1c5", "#c0dc7a"];
+  const ASSOC_DEPTH_COLORS = ["#7bc8ff", "#cfe8ff"];
+  const BASE_12 = "#97d1ff";
+  const BASE_24 = "#8ec8ff";
+  const INK = "#17324c";
+  const reducedMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+  const ui = {
+    lawComm: document.getElementById("lawComm"),
+    lawAssoc: document.getElementById("lawAssoc"),
+    lawBadge: document.getElementById("lawBadge"),
+    vizSubtitle: document.getElementById("vizSubtitle"),
+    exprTitle: document.getElementById("exprTitle"),
+    exprControls: document.getElementById("exprControls"),
+    vizNote: document.getElementById("vizNote"),
+    canvas: document.getElementById("vizCanvas")
+  };
+
+  const ctx = ui.canvas.getContext("2d");
+
+  const state = {
+    law: "comm",
+    commView: "total",
+    assocView: "base",
+    size: { w: 0, h: 0 },
+    transition: null,
+    scene: null,
+    raf: 0
+  };
+
+  const COMM_OPTIONS = [
+    { id: "total", label: "12" },
+    { id: "prod43", label: "4 · 3" },
+    { id: "prod34", label: "3 · 4" }
+  ];
+
+  const ASSOC_OPTIONS = [
+    { id: "base", label: "24" },
+    { id: "layers3", label: "(2 · 4) · 3" },
+    { id: "depth2", label: "2 · (4 · 3)" }
+  ];
+
+  function clamp(v, min, max) {
+    return Math.min(max, Math.max(min, v));
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function ease(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function parseColor(input) {
+    if (!input || typeof input !== "string") return { r: 128, g: 128, b: 128 };
+    if (input[0] === "#") {
+      const raw = input.slice(1);
+      const hex = raw.length === 3 ? raw.split("").map(ch => ch + ch).join("") : raw;
+      return {
+        r: parseInt(hex.slice(0, 2), 16),
+        g: parseInt(hex.slice(2, 4), 16),
+        b: parseInt(hex.slice(4, 6), 16)
+      };
+    }
+    const m = input.match(/rgba?\(([^)]+)\)/i);
+    if (m) {
+      const p = m[1].split(",").map(x => Number(x.trim()));
+      return { r: p[0] || 0, g: p[1] || 0, b: p[2] || 0 };
+    }
+    return { r: 128, g: 128, b: 128 };
+  }
+
+  function colorCss(c) {
+    return "rgb(" + Math.round(c.r) + ", " + Math.round(c.g) + ", " + Math.round(c.b) + ")";
+  }
+
+  function mixColor(a, b, t) {
+    const c1 = parseColor(a);
+    const c2 = parseColor(b);
+    const u = clamp(t, 0, 1);
+    return colorCss({
+      r: lerp(c1.r, c2.r, u),
+      g: lerp(c1.g, c2.g, u),
+      b: lerp(c1.b, c2.b, u)
+    });
+  }
+
+  function shade(color, amount) {
+    return mixColor(color, amount >= 0 ? "#ffffff" : "#0f172a", Math.abs(amount));
+  }
+
+  function fitCanvas() {
+    const rect = ui.canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.max(1, Math.round(rect.width));
+    const h = Math.max(1, Math.round(rect.height));
+    if (w === state.size.w && h === state.size.h && ui.canvas.width === Math.round(w * dpr) && ui.canvas.height === Math.round(h * dpr)) return;
+    ui.canvas.width = Math.round(w * dpr);
+    ui.canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    state.size = { w, h };
+  }
+
+  function currentSceneSpec() {
+    return state.law === "comm"
+      ? { law: "comm", view: state.commView }
+      : { law: "assoc", view: state.assocView };
+  }
+
+  function buildScene(spec) {
+    return spec.law === "comm" ? buildCommScene(spec.view) : buildAssocScene(spec.view);
+  }
+
+  function buildCommScene(view) {
+    const cubes = [];
+    const gapX = 0.92;
+    const gapZ = 0.92;
+    for (let z = 0; z < 3; z++) {
+      for (let x = 0; x < 4; x++) {
+        let wx = x;
+        let wz = z;
+        if (view === "prod43") wx = x * (1 + gapX);
+        if (view === "prod34") wz = z * (1 + gapZ);
+
+        let color = BASE_12;
+        if (view === "prod43") color = COMM_COLORS[x];
+        if (view === "prod34") color = ROW_COLORS[2 - z];
+        if (view === "total") color = mixColor(BASE_12, "#ffffff", x * 0.06 + (2 - z) * 0.04);
+
+        cubes.push({
+          id: "c-" + x + "-" + z,
+          ix: x,
+          iy: 0,
+          iz: z,
+          x: wx,
+          y: 0,
+          z: wz,
+          color
+        });
+      }
+    }
+    return { law: "comm", view, key: "comm:" + view, cubes };
+  }
+
+  function buildAssocScene(view) {
+    const cubes = [];
+    const gapH = 0.95;
+    const gapD = 1.25;
+    for (let z = 0; z < 3; z++) {
+      for (let y = 0; y < 2; y++) {
+        for (let x = 0; x < 4; x++) {
+          let wy = y;
+          let wz = z;
+          if (view === "layers3") wz = z * (1 + gapH);
+          if (view === "depth2") wy = y * (1 + gapD);
+
+          let color = BASE_24;
+          if (view === "layers3") color = ASSOC_LAYER_COLORS[2 - z];
+          if (view === "depth2") color = y === 0 ? ASSOC_DEPTH_COLORS[0] : ASSOC_DEPTH_COLORS[1];
+          if (view === "base") {
+            const tint = x * 0.035 + (2 - z) * 0.03 + y * 0.08;
+            color = mixColor(BASE_24, "#ffffff", tint);
+          }
+
+          cubes.push({
+            id: "a-" + x + "-" + y + "-" + z,
+            ix: x,
+            iy: y,
+            iz: z,
+            x,
+            y: wy,
+            z: wz,
+            color
+          });
+        }
+      }
+    }
+    return { law: "assoc", view, key: "assoc:" + view, cubes };
+  }
+
+  function canMorph(a, b) {
+    if (!a || !b) return false;
+    if (a.law !== b.law || a.cubes.length !== b.cubes.length) return false;
+    const ids = new Set(b.cubes.map(c => c.id));
+    for (const c of a.cubes) if (!ids.has(c.id)) return false;
+    return true;
+  }
+
+  function interpolateScene(a, b, t) {
+    const mapB = new Map(b.cubes.map(c => [c.id, c]));
+    const cubes = a.cubes.map(c => {
+      const d = mapB.get(c.id);
+      return {
+        id: c.id,
+        ix: d.ix,
+        iy: d.iy,
+        iz: d.iz,
+        x: lerp(c.x, d.x, t),
+        y: lerp(c.y, d.y, t),
+        z: lerp(c.z, d.z, t),
+        color: mixColor(c.color, d.color, t)
+      };
+    });
+    return { law: b.law, view: b.view, key: b.key + ":interp", cubes };
+  }
+
+  function setLaw(law) {
+    if (state.law === law) {
+      if (law === "comm") state.commView = "total";
+      else state.assocView = "base";
+    } else {
+      state.law = law;
+      if (law === "comm") state.commView = "total";
+      if (law === "assoc") state.assocView = "base";
+    }
+    refreshControls();
+    transitionTo(buildScene(currentSceneSpec()));
+  }
+
+  function setExpression(id) {
+    if (state.law === "comm") {
+      if (state.commView === id) return;
+      state.commView = id;
+    } else {
+      if (state.assocView === id) return;
+      state.assocView = id;
+    }
+    refreshControls();
+    transitionTo(buildScene(currentSceneSpec()));
+  }
+
+  function transitionTo(nextScene) {
+    if (state.scene && state.scene.key === nextScene.key) {
+      scheduleRender();
+      return;
+    }
+    const fromScene = state.transition ? state.transition.to : state.scene;
+    state.scene = nextScene;
+    if (!fromScene || reducedMotion) {
+      state.transition = null;
+      scheduleRender();
+      return;
+    }
+    const morph = canMorph(fromScene, nextScene);
+    state.transition = {
+      from: fromScene,
+      to: nextScene,
+      start: performance.now(),
+      dur: morph ? 620 : 360,
+      type: morph ? "morph" : "cross"
+    };
+    scheduleRender();
+  }
+
+  function refreshControls() {
+    const isComm = state.law === "comm";
+    ui.lawComm.classList.toggle("active", isComm);
+    ui.lawAssoc.classList.toggle("active", !isComm);
+    ui.lawComm.setAttribute("aria-pressed", String(isComm));
+    ui.lawAssoc.setAttribute("aria-pressed", String(!isComm));
+
+    ui.lawBadge.textContent = isComm ? "Kommutativgesetz" : "Assoziativgesetz";
+    ui.vizSubtitle.textContent = "Klicke das Gesetz, das visualisiert werden soll, im Wissenskasten an.";
+    ui.exprTitle.textContent = "Vergleiche die Darstellungen. Klicke dazu eine der drei Darstellungsformen an.";
+    ui.exprControls.innerHTML = "";
+
+    const options = isComm ? COMM_OPTIONS : ASSOC_OPTIONS;
+    const active = isComm ? state.commView : state.assocView;
+    for (const opt of options) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "expr-btn";
+      btn.textContent = opt.label;
+      const activeHere = active === opt.id;
+      btn.classList.toggle("active", activeHere);
+      btn.setAttribute("aria-pressed", String(activeHere));
+      btn.addEventListener("click", () => setExpression(opt.id));
+      ui.exprControls.appendChild(btn);
+    }
+
+    ui.vizNote.textContent = panelText();
+  }
+
+  function panelText() {
+    if (state.law === "comm") {
+      if (state.commView === "total") {
+        return "Kompakter Block aus 12 Würfeln\nBreite: 4 Höhe: 3 Tiefe:1 Gesamtanzahl 12";
+      }
+      if (state.commView === "prod43") {
+        return "4 Säulen mit jeweils 3 Würfeln ergeben 12 Würfel\n4 · 3 = 12";
+      }
+      return "3 Reihen mit jeweils 4 Würfeln ergeben 12 Würfel\n3 · 4 = 12";
+    }
+
+    if (state.assocView === "base") {
+      return "Kompakter Block aus 24 Würfeln\nBreite: 4 Höhe: 3 Tiefe:2 Gesamtanzahl 24";
+    }
+    if (state.assocView === "layers3") {
+      return "3 Platten mit jeweils 8 (2 · 4) Würfeln sind 24 Würfel.\n(2 · 4) · 3 = 24";
+    }
+    return "2 Platten mit jeweils 12 (4 · 3) Würfeln sind 24 Würfel.\n2 · (4 · 3) = 24";
+  }
+
+  function scheduleRender() {
+    if (state.raf) return;
+    state.raf = requestAnimationFrame(renderFrame);
+  }
+
+  function renderFrame(ts) {
+    state.raf = 0;
+    fitCanvas();
+    drawBackground(ctx, state.size);
+
+    if (!state.transition) {
+      drawScene(state.scene, 1);
+      return;
+    }
+
+    const p = clamp((ts - state.transition.start) / state.transition.dur, 0, 1);
+    const t = ease(p);
+
+    if (state.transition.type === "morph") {
+      const fromLayout = computeLayout(state.transition.from, state.size);
+      const toLayout = computeLayout(state.transition.to, state.size);
+      const interp = interpolateScene(state.transition.from, state.transition.to, t);
+      const interpLayout = interpolateLayout(fromLayout, toLayout, t);
+      drawSceneCubes(interp, interpLayout, 1);
+      drawSceneOverlay(state.transition.from, fromLayout, 1 - t);
+      drawSceneOverlay(state.transition.to, toLayout, t);
+    } else {
+      drawScene(state.transition.from, 1 - t);
+      drawScene(state.transition.to, t);
+    }
+
+    if (p < 1) {
+      scheduleRender();
+    } else {
+      state.transition = null;
+      scheduleRender();
+    }
+  }
+
+  function drawBackground(ctx2, size) {
+    ctx2.clearRect(0, 0, size.w, size.h);
+    const g = ctx2.createLinearGradient(0, 0, 0, size.h);
+    g.addColorStop(0, "#f3f9ff");
+    g.addColorStop(1, "#fffef9");
+    ctx2.fillStyle = g;
+    ctx2.fillRect(0, 0, size.w, size.h);
+    ctx2.save();
+    ctx2.strokeStyle = "rgba(31,71,111,.06)";
+    ctx2.lineWidth = 1;
+    for (let i = 1; i <= 5; i++) {
+      const y = size.h * (0.14 + i * 0.13);
+      ctx2.beginPath();
+      ctx2.moveTo(0, y);
+      ctx2.lineTo(size.w, y);
+      ctx2.stroke();
+    }
+    ctx2.restore();
+  }
+
+  function getMargins(scene) {
+    const key = scene.law + ":" + scene.view;
+    if (key === "comm:prod43") return { l: 18, r: 20, t: 20, b: 116 };
+    if (key === "comm:prod34") return { l: 128, r: 16, t: 18, b: 54 };
+    if (key === "assoc:layers3") return { l: 186, r: 22, t: 20, b: 42 };
+    if (key === "assoc:depth2") return { l: 10, r: 170, t: 18, b: 132 };
+    if (key === "assoc:base") return { l: 18, r: 18, t: 18, b: 34 };
+    return { l: 18, r: 18, t: 18, b: 34 };
+  }
+
+  function unitCubeBounds(cube, dxf, dyf) {
+    const ux = cube.x + cube.y * dxf;
+    const uy = -cube.z - cube.y * dyf;
+    return { minX: ux, maxX: ux + 1 + dxf, minY: uy - 1 - dyf, maxY: uy };
+  }
+
+  function unitSceneBounds(scene, dxf, dyf) {
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const cube of scene.cubes) {
+      const b = unitCubeBounds(cube, dxf, dyf);
+      if (b.minX < minX) minX = b.minX;
+      if (b.minY < minY) minY = b.minY;
+      if (b.maxX > maxX) maxX = b.maxX;
+      if (b.maxY > maxY) maxY = b.maxY;
+    }
+    return { minX, minY, maxX, maxY };
+  }
+
+  function computeLayout(scene, size) {
+    const dxf = 0.56;
+    const dyf = 0.35;
+    const margins = getMargins(scene);
+    const bounds = unitSceneBounds(scene, dxf, dyf);
+    const unitW = Math.max(0.001, bounds.maxX - bounds.minX);
+    const unitH = Math.max(0.001, bounds.maxY - bounds.minY);
+    const availW = Math.max(40, size.w - margins.l - margins.r);
+    const availH = Math.max(40, size.h - margins.t - margins.b);
+    const s = clamp(Math.min(availW / unitW, availH / unitH), 9, 68);
+    const left = margins.l + (availW - unitW * s) / 2;
+    const top = margins.t + (availH - unitH * s) / 2;
+    const ox = left - bounds.minX * s;
+    const oy = top - bounds.minY * s;
+    return { s, dxf, dyf, ox, oy };
+  }
+
+  function interpolateLayout(a, b, t) {
+    return {
+      s: lerp(a.s, b.s, t),
+      dxf: a.dxf,
+      dyf: a.dyf,
+      ox: lerp(a.ox, b.ox, t),
+      oy: lerp(a.oy, b.oy, t)
+    };
+  }
+
+  function cubeBoundsPx(cube, layout) {
+    const { s, dxf, dyf, ox, oy } = layout;
+    const bx = ox + (cube.x + cube.y * dxf) * s;
+    const by = oy + (-cube.z - cube.y * dyf) * s;
+    return { minX: bx, maxX: bx + (1 + dxf) * s, minY: by - (1 + dyf) * s, maxY: by };
+  }
+
+  function cubeFrontCenterPx(cube, layout) {
+    const { s, dxf, dyf, ox, oy } = layout;
+    return {
+      x: ox + (cube.x + cube.y * dxf + 0.5) * s,
+      y: oy + (-cube.z - cube.y * dyf - 0.5) * s
+    };
+  }
+
+  function mergeBounds(list, layout) {
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const cube of list) {
+      const b = cubeBoundsPx(cube, layout);
+      if (b.minX < minX) minX = b.minX;
+      if (b.minY < minY) minY = b.minY;
+      if (b.maxX > maxX) maxX = b.maxX;
+      if (b.maxY > maxY) maxY = b.maxY;
+    }
+    return { minX, minY, maxX, maxY, cx: (minX + maxX) / 2, cy: (minY + maxY) / 2 };
+  }
+
+  function scenePixelBounds(scene, layout) {
+    return mergeBounds(scene.cubes, layout);
+  }
+
+  function sortCubes(a, b) {
+    if (a.y !== b.y) return b.y - a.y;
+    if (a.z !== b.z) return a.z - b.z;
+    return a.x - b.x;
+  }
+
+  function drawScene(scene, alpha) {
+    const layout = computeLayout(scene, state.size);
+    drawSceneCubes(scene, layout, alpha);
+    drawSceneOverlay(scene, layout, alpha);
+  }
+
+  function drawSceneCubes(scene, layout, alpha) {
+    const b = scenePixelBounds(scene, layout);
+    const cubes = scene.cubes.slice().sort(sortCubes);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    for (const cube of cubes) drawCube(cube, layout);
+    ctx.restore();
+  }
+
+  function drawCube(cube, layout) {
+    const { s, dxf, dyf, ox, oy } = layout;
+    const bx = ox + (cube.x + cube.y * dxf) * s;
+    const by = oy + (-cube.z - cube.y * dyf) * s;
+    const dx = dxf * s;
+    const dy = dyf * s;
+
+    const front = { x: bx, y: by - s, w: s, h: s };
+    const top = [
+      { x: bx, y: by - s },
+      { x: bx + dx, y: by - s - dy },
+      { x: bx + s + dx, y: by - s - dy },
+      { x: bx + s, y: by - s }
+    ];
+    const side = [
+      { x: bx + s, y: by },
+      { x: bx + s + dx, y: by - dy },
+      { x: bx + s + dx, y: by - s - dy },
+      { x: bx + s, y: by - s }
+    ];
+
+    ctx.fillStyle = shade(cube.color, -0.10);
+    polygon(side, "rgba(15,23,42,.14)");
+    ctx.fillStyle = shade(cube.color, 0.12);
+    polygon(top, "rgba(255,255,255,.36)");
+    ctx.fillStyle = cube.color;
+    ctx.fillRect(front.x, front.y, front.w, front.h);
+    ctx.strokeStyle = "rgba(15,23,42,.16)";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(front.x + 0.5, front.y + 0.5, front.w - 1, front.h - 1);
+  }
+
+  function polygon(points, stroke) {
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+    ctx.closePath();
+    ctx.fill();
+    if (stroke) {
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
+  function drawShadow(x, y, rx, ry, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = "rgba(15,23,42,.18)";
+    ctx.beginPath();
+    ctx.ellipse(x, y, Math.max(6, rx), Math.max(4, ry), 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawSceneOverlay(scene, layout, alpha) {
+    if (alpha <= 0.001) return;
+    if (scene.law === "comm") drawCommOverlay(scene, layout, alpha);
+    else drawAssocOverlay(scene, layout, alpha);
+  }
+
+  function drawCommOverlay(scene, layout, alpha) {
+    if (scene.view === "total") {
+      const b = scenePixelBounds(scene, layout);
+      drawText("12 Würfel", (b.minX + b.maxX) / 2, Math.max(18, b.minY - 16), alpha, {
+        font: Math.round(layout.s * 0.46),
+        weight: 800,
+        align: "center",
+        baseline: "middle",
+        color: "#0f4f80"
+      });
+      return;
+    }
+
+    if (scene.view === "prod43") {
+      const columns = [];
+      for (let x = 0; x < 4; x++) {
+        const group = scene.cubes.filter(c => c.ix === x);
+        const b = mergeBounds(group, layout);
+        const anchorCube = group.find(c => c.iz === 0) || group[0];
+        const front = cubeFrontCenterPx(anchorCube, layout);
+        columns.push({ bounds: b, cx: front.x });
+      }
+
+      const centers = columns.map(c => c.cx);
+      const topY = Math.min(...columns.map(c => c.bounds.minY));
+      const bottomY = Math.max(...columns.map(c => c.bounds.maxY));
+      const midPlusY = (topY + bottomY) / 2;
+      const sumY = bottomY + 22;
+
+      for (let i = 0; i < columns.length - 1; i++) {
+        const xMid = (columns[i].bounds.maxX + columns[i + 1].bounds.minX) / 2;
+        drawText("+", xMid, midPlusY, alpha, { font: Math.round(layout.s * 0.64), weight: 800, align: "center", color: "#334155" });
+      }
+
+      for (let i = 0; i < centers.length; i++) {
+        drawText("3", centers[i], sumY, alpha, { font: Math.round(layout.s * 0.42), weight: 800, align: "center", baseline: "middle", color: INK });
+      }
+      for (let i = 0; i < centers.length - 1; i++) {
+        drawText("+", (centers[i] + centers[i + 1]) / 2, sumY, alpha, { font: Math.round(layout.s * 0.42), weight: 800, align: "center", baseline: "middle", color: "#334155" });
+      }
+
+      const braceY = sumY + 22;
+      drawBraceH(centers[0] - layout.s * 0.32, centers[3] + layout.s * 0.32, braceY, 24, alpha);
+      drawText("4 · 3", (centers[0] + centers[3]) / 2, braceY + 38, alpha, {
+        font: Math.round(layout.s * 0.42),
+        weight: 800,
+        align: "center",
+        baseline: "middle",
+        color: INK
+      });
+      return;
+    }
+
+    if (scene.view === "prod34") {
+      const rows = [];
+      for (let z = 2; z >= 0; z--) {
+        const group = scene.cubes.filter(c => c.iz === z);
+        const b = mergeBounds(group, layout);
+        const centers = group.map(c => cubeFrontCenterPx(c, layout));
+        const cy = centers.reduce((sum, p) => sum + p.y, 0) / centers.length;
+        rows.push({ z, bounds: b, cy });
+      }
+
+      const labelX = Math.min(...rows.map(r => r.bounds.minX)) - 34;
+      const braceX = labelX - 28;
+      const top = rows[0].cy - layout.s * 0.3;
+      const bottom = rows[rows.length - 1].cy + layout.s * 0.3;
+
+      rows.forEach(r => {
+        drawText("4", labelX, r.cy, alpha, { font: Math.round(layout.s * 0.42), weight: 800, align: "center", baseline: "middle", color: INK });
+      });
+      for (let i = 0; i < rows.length - 1; i++) {
+        drawText("+", labelX, (rows[i].cy + rows[i + 1].cy) / 2, alpha, { font: Math.round(layout.s * 0.42), weight: 800, align: "center", baseline: "middle", color: "#334155" });
+      }
+
+      drawBraceV(braceX, top, bottom, 24, alpha);
+      drawText("3 · 4", braceX - 32, (top + bottom) / 2, alpha, {
+        font: Math.round(layout.s * 0.42),
+        weight: 800,
+        align: "right",
+        baseline: "middle",
+        color: INK
+      });
+    }
+  }
+
+  function drawAssocOverlay(scene, layout, alpha) {
+    if (scene.view === "base") {
+      const b = scenePixelBounds(scene, layout);
+      drawText("24 Würfel", (b.minX + b.maxX) / 2, Math.max(18, b.minY - 16), alpha, {
+        font: Math.round(layout.s * 0.44),
+        weight: 800,
+        align: "center",
+        baseline: "middle",
+        color: "#0f4f80"
+      });
+      return;
+    }
+
+    if (scene.view === "layers3") {
+      const layers = [];
+      for (let z = 2; z >= 0; z--) {
+        const group = scene.cubes.filter(c => c.iz === z);
+        const b = mergeBounds(group, layout);
+        layers.push({ z, bounds: b, cy: (b.minY + b.maxY) / 2 });
+      }
+
+      const textX = Math.min(...layers.map(l => l.bounds.minX)) - 42;
+      const braceX = textX - 30;
+      const top = layers[0].cy - layout.s * 0.34;
+      const bottom = layers[layers.length - 1].cy + layout.s * 0.34;
+      const exprY = (top + bottom) / 2;
+      const exprX = braceX - 30;
+
+      layers.forEach(layer => {
+        drawText("2 · 4", textX, layer.cy, alpha, { font: Math.round(layout.s * 0.30), weight: 800, align: "center", baseline: "middle", color: INK, family: "Consolas, Courier New, monospace" });
+      });
+      for (let i = 0; i < layers.length - 1; i++) {
+        const yMid = (layers[i].cy + layers[i + 1].cy) / 2;
+        drawText("+", textX, yMid, alpha, { font: Math.round(layout.s * 0.38), weight: 800, align: "center", baseline: "middle", color: "#334155" });
+      }
+
+      drawBraceV(braceX, top, bottom, 24, alpha);
+      drawText("(2 · 4) · 3", exprX, exprY, alpha, {
+        font: Math.round(layout.s * 0.30),
+        weight: 800,
+        align: "right",
+        baseline: "middle",
+        color: INK,
+        family: "Consolas, Courier New, monospace"
+      });
+      return;
+    }
+
+    if (scene.view === "depth2") {
+      const frontLayer = mergeBounds(scene.cubes.filter(c => c.iy === 0), layout);
+      const backLayer = mergeBounds(scene.cubes.filter(c => c.iy === 1), layout);
+      const labelFont = Math.round(layout.s * 0.30);
+      const labelOffsetX = layout.s * 0.34;
+      const labelOffsetY = layout.s * 0.40;
+      const frontLabel = { x: frontLayer.maxX + labelOffsetX, y: frontLayer.maxY + labelOffsetY };
+      const backLabel = { x: backLayer.maxX + labelOffsetX, y: backLayer.maxY + labelOffsetY };
+      const braceRefOffsetX = layout.s * 0.56;
+      const braceRefOffsetY = layout.s * 0.66;
+      const braceRefFront = { x: frontLayer.maxX + braceRefOffsetX, y: frontLayer.maxY + braceRefOffsetY };
+      const braceRefBack = { x: backLayer.maxX + braceRefOffsetX, y: backLayer.maxY + braceRefOffsetY };
+      const a = { x: braceRefBack.x - layout.s * 0.10, y: braceRefBack.y };
+      const b = { x: braceRefFront.x - layout.s * 0.10, y: braceRefFront.y };
+      const adx = b.x - a.x;
+      const ady = b.y - a.y;
+      const alen = Math.max(0.001, Math.hypot(adx, ady));
+      const ax = adx / alen;
+      const ay = ady / alen;
+      const n1 = { x: -ay, y: ax };
+      const n2 = { x: ay, y: -ax };
+      const normal = (n1.x + n1.y) < (n2.x + n2.y) ? n1 : n2;
+      const braceShift = layout.s * 0.34;
+      const braceExtend = layout.s * 0.34;
+      const p1 = { x: a.x - normal.x * braceShift - ax * braceExtend, y: a.y - normal.y * braceShift - ay * braceExtend };
+      const p2 = { x: b.x - normal.x * braceShift + ax * braceExtend, y: b.y - normal.y * braceShift + ay * braceExtend };
+      const brace = drawBraceLine(p1, p2, normal, 20, alpha);
+      let labelAngle = Math.atan2(brace.axis.y, brace.axis.x) + Math.PI / 2;
+      if (labelAngle > Math.PI / 2) labelAngle -= Math.PI;
+      if (labelAngle < -Math.PI / 2) labelAngle += Math.PI;
+      drawText("4 · 3", frontLabel.x, frontLabel.y, alpha, {
+        font: labelFont, weight: 800, align: "center", baseline: "middle", color: INK, family: "Consolas, Courier New, monospace", angle: labelAngle
+      });
+      drawText("4 · 3", backLabel.x, backLabel.y, alpha, {
+        font: labelFont, weight: 800, align: "center", baseline: "middle", color: INK, family: "Consolas, Courier New, monospace", angle: labelAngle
+      });
+      drawText("+", (frontLabel.x + backLabel.x) / 2, (frontLabel.y + backLabel.y) / 2, alpha, {
+        font: Math.round(layout.s * 0.36), weight: 800, align: "center", baseline: "middle", color: "#334155", angle: labelAngle
+      });
+      const spikeDir = { x: -brace.normal.x, y: -brace.normal.y };
+      drawText(
+        "2 · (4 · 3)",
+        brace.tip.x + spikeDir.x * (layout.s * 0.52) - brace.axis.x * (layout.s * 0.10),
+        brace.tip.y + spikeDir.y * (layout.s * 0.52) - brace.axis.y * (layout.s * 0.10),
+        alpha,
+        { font: labelFont, weight: 800, align: "left", baseline: "middle", color: INK, family: "Consolas, Courier New, monospace" }
+      );
+    }
+  }
+
+  function drawBraceH(x1, x2, y, h, alpha) {
+    return drawBraceLine({ x: x1, y }, { x: x2, y }, { x: 0, y: -1 }, h, alpha);
+  }
+
+  function drawBraceV(x, y1, y2, w, alpha) {
+    return drawBraceLine({ x, y: y1 }, { x, y: y2 }, { x: 1, y: 0 }, w, alpha);
+  }
+
+  function drawBraceLine(p1, p2, normalVec, size, alpha) {
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const len = Math.max(0.001, Math.hypot(dx, dy));
+    const ax = dx / len;
+    const ay = dy / len;
+
+    let nx = normalVec.x;
+    let ny = normalVec.y;
+    const nLen = Math.hypot(nx, ny) || 1;
+    nx /= nLen;
+    ny /= nLen;
+
+    const hook = Math.min(Math.max(size, 10), len * 0.33);
+    const shoulder = Math.min(Math.max(hook * 0.95, 8), len * 0.24);
+    const spikeHalf = Math.min(Math.max(hook * 0.95, 10), len * 0.20);
+    const spikeDepth = Math.max(hook * 0.95, 12);
+
+    const startHook = { x: p1.x + nx * hook, y: p1.y + ny * hook };
+    const endHook = { x: p2.x + nx * hook, y: p2.y + ny * hook };
+    const startShoulder = { x: p1.x + ax * shoulder, y: p1.y + ay * shoulder };
+    const endShoulder = { x: p2.x - ax * shoulder, y: p2.y - ay * shoulder };
+    const mid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+    const midL = { x: mid.x - ax * spikeHalf, y: mid.y - ay * spikeHalf };
+    const midR = { x: mid.x + ax * spikeHalf, y: mid.y + ay * spikeHalf };
+    const tip = { x: mid.x - nx * spikeDepth, y: mid.y - ny * spikeDepth };
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    ctx.moveTo(startHook.x, startHook.y);
+    ctx.quadraticCurveTo(p1.x, p1.y, startShoulder.x, startShoulder.y);
+    ctx.lineTo(midL.x, midL.y);
+    ctx.lineTo(tip.x, tip.y);
+    ctx.lineTo(midR.x, midR.y);
+    ctx.lineTo(endShoulder.x, endShoulder.y);
+    ctx.quadraticCurveTo(p2.x, p2.y, endHook.x, endHook.y);
+    ctx.strokeStyle = "rgba(255,255,255,.96)";
+    ctx.lineWidth = 7;
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(18,72,113,.99)";
+    ctx.lineWidth = 3.6;
+    ctx.stroke();
+    ctx.restore();
+
+    return { mid, tip, normal: { x: nx, y: ny }, axis: { x: ax, y: ay } };
+  }
+
+  function drawText(text, x, y, alpha, opt) {
+    const o = opt || {};
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    const fontSize = o.font || 18;
+    const weight = o.weight || 700;
+    const family = o.family || "Trebuchet MS, Verdana, sans-serif";
+    ctx.font = weight + " " + fontSize + "px " + family;
+    if (typeof o.angle === "number") {
+      ctx.translate(x, y);
+      ctx.rotate(o.angle);
+      x = 0;
+      y = 0;
+    }
+    ctx.textAlign = o.align || "center";
+    ctx.textBaseline = o.baseline || "middle";
+    ctx.fillStyle = o.color || INK;
+    ctx.fillText(text, x, y);
+    ctx.restore();
+  }
+
+  function drawTag(x, y, text, alpha, opt) {
+    const o = opt || {};
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.font = "800 15px Consolas, Courier New, monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    const m = ctx.measureText(text);
+    const w = m.width + 18;
+    const h = 28;
+    const l = x - w / 2;
+    const t = y - h / 2;
+    roundRect(l, t, w, h, 10);
+    ctx.fillStyle = o.fill || "rgba(255,255,255,.94)";
+    ctx.fill();
+    ctx.strokeStyle = o.stroke || "rgba(25,70,109,.18)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = o.color || "#0f4f80";
+    ctx.fillText(text, x, y + 0.5);
+    ctx.restore();
+  }
+
+  function roundRect(x, y, w, h, r) {
+    const rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.lineTo(x + w - rr, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + rr);
+    ctx.lineTo(x + w, y + h - rr);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - rr, y + h);
+    ctx.lineTo(x + rr, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - rr);
+    ctx.lineTo(x, y + rr);
+    ctx.quadraticCurveTo(x, y, x + rr, y);
+    ctx.closePath();
+  }
+
+  ui.lawComm.addEventListener("click", () => setLaw("comm"));
+  ui.lawAssoc.addEventListener("click", () => setLaw("assoc"));
+  window.addEventListener("resize", () => {
+    fitCanvas();
+    scheduleRender();
+  });
+
+  state.scene = buildScene(currentSceneSpec());
+  refreshControls();
+  fitCanvas();
+  scheduleRender();
+})();
+</script>
+</body>
+</html>
