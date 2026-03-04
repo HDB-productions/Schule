@@ -37,7 +37,7 @@ body{
 .hero h1{
   margin:0 0 8px;
   color:#0b4f88;
-  font-size:clamp(1.35rem,1.1rem + 1vw,2rem);
+  font-size:clamp(22px,18px + 1vw,32px);
 }
 .hero p{margin:6px 0;color:var(--muted);line-height:1.45}
 .hero .lead{color:#243243;font-weight:700}
@@ -54,14 +54,14 @@ body{
   border-radius:999px;
   width:max-content;
 }
-.wissen-grid{display:grid;grid-template-columns:1fr 2fr;gap:12px;align-items:start}
+.wissen-grid{display:grid;grid-template-columns:2fr 3fr;gap:12px;align-items:start}
 .law-box{
   border:2px solid #f4b3c4;
   background:linear-gradient(180deg,#fff6f9,#fffafb);
   border-radius:14px;
   padding:12px;
 }
-.law-box h2{margin:0 0 8px;color:#8a1238;font-size:1.05rem}
+.law-box h2{margin:0 0 8px;color:#8a1238;font-size:17px}
 .law-item{
   width:100%;
   display:block;
@@ -94,7 +94,7 @@ body{
   background:#f8fbff;
   border:1px solid #dae8f7;
   color:#10395f;
-  font:700 1rem/1.25 Consolas, "Courier New", monospace;
+  font:700 16px/1.25 Consolas, "Courier New", monospace;
 }
 .law-example{
   margin-top:8px;
@@ -105,11 +105,11 @@ body{
   margin:0 0 4px;
   color:#516173;
   font-weight:700;
-  font-size:.9rem;
+  font-size:14px;
 }
 .example-formula{
   color:#10395f;
-  font:700 .98rem/1.25 Consolas, "Courier New", monospace;
+  font:700 16px/1.25 Consolas, "Courier New", monospace;
 }
 .law-item.active .formula{border-color:#cfe0f3;background:#fbfdff}
 .law-item.active .law-example{border-top-color:#cfe0f3}
@@ -122,7 +122,7 @@ body{
   gap:8px;
 }
 .viz-head{display:grid;gap:2px}
-.viz-head h3{margin:0;color:#0b4f88;font-size:1rem}
+.viz-head h3{margin:0;color:#0b4f88;font-size:16px}
 .viz-head p{margin:3px 0 0;color:var(--muted);line-height:1.35}
 .law-badge{
   display:inline-flex;
@@ -133,11 +133,11 @@ body{
   padding:4px 8px;
   color:#0f4f80;
   font-weight:800;
-  font-size:.9rem;
+  font-size:14px;
   width:max-content;
 }
 .expr-wrap{display:grid;gap:6px}
-.expr-title{margin:0;color:#334155;font-weight:700;font-size:.92rem;line-height:1.35}
+.expr-title{margin:0;color:#334155;font-weight:700;font-size:15px;line-height:1.35}
 .expr-controls{display:flex;gap:8px;flex-wrap:wrap}
 .expr-btn{
   border:2px solid #c6d9ed;
@@ -145,7 +145,7 @@ body{
   color:#23445f;
   border-radius:10px;
   padding:6px 10px;
-  font:700 .94rem/1.1 inherit;
+  font:700 15px/1.1 inherit;
   cursor:pointer;
   transition:background .12s ease,border-color .12s ease,transform .12s ease;
 }
@@ -163,14 +163,279 @@ body{
 .viz-note{
   min-height:20px;
   color:#334155;
-  font:700 .94rem/1.25 Consolas, "Courier New", monospace;
+  font:700 15px/1.25 Consolas, "Courier New", monospace;
   background:#f7fbff;
   border:1px solid #d6e7f7;
   border-radius:9px;
   padding:7px 8px;
   white-space:pre-line;
 }
-.small-help{margin:0;color:#64748b;font-size:.86rem;line-height:1.3}
+.small-help{margin:0;color:#64748b;font-size:14px;line-height:1.3}
+.use-case{padding:14px}
+.use-case h2{margin:0 0 8px;color:#0b4f88;font-size:17px}
+.use-case p{margin:0 0 8px;color:#4b5563;line-height:1.45}
+.use-case .example-line{
+  margin:8px 0 10px;
+  padding:8px 10px;
+  border:1px solid #d6e7f7;
+  border-radius:10px;
+  background:#f8fbff;
+  color:#10395f;
+  font:700 16px/1.35 Consolas, "Courier New", monospace;
+  white-space:pre-line;
+}
+.use-task{
+  margin-top:10px;
+  border:2px solid #dce9f8;
+  border-radius:12px;
+  background:linear-gradient(180deg,#fbfdff,#f7fbff);
+  padding:10px;
+  position:relative;
+}
+.use-task h3{margin:0 34px 6px 0;color:#184a74;font-size:16px}
+.use-task p{margin:0 0 8px}
+.task-reset-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:28px;
+  height:28px;
+  border-radius:999px;
+  border:2px solid #c6d9ed;
+  background:#fff;
+  color:#23445f;
+  font:800 16px/1 inherit;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.task-reset-btn:hover{background:#f6fbff;border-color:#9ec4e7}
+.task-reset-btn:focus-visible{outline:3px solid rgba(59,130,246,.22);outline-offset:2px}
+.task-list{display:grid;gap:10px}
+.pow-task{
+  border:1px solid #d7e6f7;
+  border-radius:10px;
+  background:#fff;
+  padding:9px;
+}
+.pow-line{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+}
+.pow-label{
+  min-width:64px;
+  color:#10395f;
+  font-weight:800;
+  padding-top:3px;
+}
+.pow-found{
+  flex:1 1 280px;
+  color:#334155;
+  line-height:1.4;
+}
+.pair-chip{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid #cfe0f3;
+  background:#eef6ff;
+  color:#0f4f80;
+  border-radius:999px;
+  padding:3px 8px;
+  margin:2px 6px 2px 0;
+  font:700 15px/1.1 Consolas, "Courier New", monospace;
+}
+.pow-choices{
+  margin-top:8px;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.num-btn{
+  border:2px solid #c6d9ed;
+  background:#fff;
+  color:#23445f;
+  border-radius:10px;
+  padding:5px 8px;
+  min-width:40px;
+  font:700 15px/1.05 Consolas, "Courier New", monospace;
+  cursor:pointer;
+}
+.num-btn:hover{background:#f6fbff;border-color:#9ec4e7}
+.num-btn.active{border-color:#0f6db0;background:#eaf5ff;color:#0c4e7f}
+.num-btn.used{opacity:.45;background:#f3f5f7;color:#6b7280;border-color:#d2d8e0;cursor:not-allowed}
+.pow-status{margin-top:6px;min-height:20px;color:#4b5563;font-weight:700}
+.pow-status.ok{color:#0f8a4f}
+.pow-status.err{color:#c13232}
+.pow-done{
+  margin-top:8px;
+  border:1px solid #d6e7f7;
+  background:#f7fbff;
+  color:#34516d;
+  border-radius:10px;
+  padding:7px 9px;
+  font-weight:800;
+}
+.pow-done.complete{
+  border-color:#bfe4cb;
+  background:#effcf2;
+  color:#106b3d;
+}
+.task-toolbar{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin:6px 0 8px;
+}
+.task-toolbar .spacer{flex:1 1 auto}
+.adv-score{
+  border:1px solid #d6e7f7;
+  background:#f7fbff;
+  border-radius:10px;
+  padding:6px 9px;
+  font-weight:800;
+  color:#23445f;
+}
+.adv-step-card{
+  margin-top:10px;
+  border:1px solid #d7e6f7;
+  border-radius:10px;
+  background:#fff;
+  padding:9px;
+}
+.adv-step-card h4{
+  margin:0 0 4px;
+  color:#0e4f89;
+  font-size:15px;
+}
+.adv-step-card p{
+  margin:0;
+  color:#4b5563;
+}
+.plain-btn{
+  border:2px solid #c6d9ed;
+  background:#fff;
+  color:#23445f;
+  border-radius:10px;
+  padding:6px 10px;
+  font:700 14px/1.1 inherit;
+  cursor:pointer;
+}
+.plain-btn:hover{background:#f6fbff;border-color:#9ec4e7}
+.plain-btn:disabled{opacity:.55;cursor:not-allowed;background:#f3f5f7}
+.adv-board{
+  border:1px solid #d7e6f7;
+  border-radius:10px;
+  background:#fff;
+  padding:10px;
+  min-height:56px;
+}
+.adv-row{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.adv-token{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:34px;
+  color:#10395f;
+  font:700 16px/1.2 Consolas, "Courier New", monospace;
+}
+.adv-factor{
+  border:2px solid #c6d9ed;
+  background:#fff;
+  color:#23445f;
+  border-radius:10px;
+  padding:6px 10px;
+  min-width:46px;
+  font:700 16px/1.1 Consolas, "Courier New", monospace;
+  cursor:pointer;
+}
+.adv-factor:hover{background:#f6fbff;border-color:#9ec4e7}
+.adv-factor.active{border-color:#0f6db0;background:#eaf5ff;color:#0c4e7f}
+.adv-factor.bracketed{border-color:#2d7b53;background:#eefcf4}
+.adv-factor.done{border-color:#bfe4cb;background:#effcf2;color:#106b3d}
+.adv-factor.pick{box-shadow:inset 0 0 0 2px rgba(15,109,176,.35)}
+.adv-factor.gs{
+  border-left-width:3px;
+  border-top-width:3px;
+  border-bottom-width:3px;
+  border-left-color:#2d7b53;
+  border-top-color:#2d7b53;
+  border-bottom-color:#2d7b53;
+  border-radius:10px 4px 4px 10px;
+}
+.adv-factor.ge{
+  border-right-width:3px;
+  border-top-width:3px;
+  border-bottom-width:3px;
+  border-right-color:#2d7b53;
+  border-top-color:#2d7b53;
+  border-bottom-color:#2d7b53;
+  border-radius:4px 10px 10px 4px;
+}
+.adv-factor.gm{
+  border-top-width:3px;
+  border-bottom-width:3px;
+  border-top-color:#2d7b53;
+  border-bottom-color:#2d7b53;
+  border-radius:4px;
+}
+.adv-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+.adv-eqline{
+  margin-top:8px;
+  min-height:20px;
+  color:#1f3e64;
+  font:700 14px/1.3 Consolas, "Courier New", monospace;
+}
+.adv-help{
+  margin-top:8px;
+  color:#4b5563;
+  line-height:1.35;
+}
+.adv-log{
+  margin-top:8px;
+  min-height:20px;
+  color:#34516d;
+  font:700 14px/1.3 Consolas, "Courier New", monospace;
+}
+.adv-log.ok{color:#0f8a4f}
+.adv-log.err{color:#c13232}
+.adv-calc{
+  margin-top:8px;
+  min-height:28px;
+}
+.adv-calc-line{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  color:#1f3e64;
+  font:700 15px/1.25 Consolas, "Courier New", monospace;
+}
+.adv-inp{
+  width:92px;
+  border:2px solid #50759d;
+  border-radius:7px;
+  padding:4px 6px;
+  font:700 15px/1.2 Consolas, "Courier New", monospace;
+}
+.adv-inp:focus{
+  outline:2px solid #73a7df;
+  border-color:#326fa9;
+}
+.hide{display:none}
 @media (max-width: 900px){
   .wissen-grid{grid-template-columns:1fr}
 }
@@ -178,12 +443,13 @@ body{
   body{padding:10px}
   .hero,.wissen{padding:12px}
   .expr-controls{gap:6px}
-  .expr-btn{padding:6px 8px;font-size:.9rem}
+  .expr-btn{padding:6px 8px;font-size:14px}
   #vizCanvas{aspect-ratio:14/11}
 }
 </style>
 </head>
 <body>
+<div data-edulo-widget-key="RECHENGESETZE_MULTIPLIKATION_WUERFEL" style="display:none"></div>
 <main class="page">
   <section class="card hero">
     <h1>Rechengesetze der Multiplikation mit Wuerfeln</h1>
@@ -236,10 +502,88 @@ body{
       </section>
     </div>
   </section>
+
+  <section class="card use-case" aria-labelledby="nutzenTitel">
+    <h2 id="nutzenTitel">Vorteile nutzen mit Rechengesetzen</h2>
+    <p>Die Rechengesetze kann man nutzen, um bei Multiplikationen mit vielen Zahlen vorteilhaft zu rechnen. Durch Vertauschen der Faktoren (kommutativ) und geschicktes Klammern (assoziativ) kann man Zahlen zusammenfassen, die leichter zu rechnen sind.</p>
+    <p>Ähnlich wie beim Addieren ist es oft besonders praktisch, wenn man auf Zehnerpotenzen kommt, also auf <strong>10, 100, 1000</strong> usw. Beim Multiplizieren mit solchen Zahlen hängt man nur Nullen an.</p>
+    <div class="example-line">Beispiel:
+25 · 7 · 4 = (25 · 4) · 7 = 100 · 7 = 700</div>
+    <p>Um zu erkennen, welche Faktoren vorteilhaft sind, muss man wie beim Plusrechnen wissen, welche Zahlen gut zusammenpassen.</p>
+
+    <div class="use-task">
+      <h3>Aufgabe 1</h3>
+      <button id="resetPowerTasksBtn" class="task-reset-btn" type="button" title="Aufgabe zurücksetzen" aria-label="Aufgabe zurücksetzen">↺</button>
+      <p>Finde alle Zahlenpaare, die zusammen die gesuchte Zehnerpotenz ergeben. Klicke dafür nacheinander die zusammen passenden Zahlen an.</p>
+      <div id="powerTaskList" class="task-list" aria-live="polite"></div>
+    </div>
+
+    <div class="use-task">
+      <h3>Aufgabe 2</h3>
+      <button id="resetAdvancedTaskBtn" class="task-reset-btn" type="button" title="Aufgabe zurücksetzen" aria-label="Aufgabe zurücksetzen">↺</button>
+      <p>Ordne die Faktoren vorteilhaft, setze Klammern und rechne schrittweise. Es gibt 5 Zahlen: zwei Vorteilspaare und eine Zahl, die zu keinem Vorteilspaar passt.</p>
+      <div class="task-toolbar">
+        <button id="newAdvancedTaskBtn" class="plain-btn" type="button">Neue Aufgabe</button>
+        <div class="spacer"></div>
+        <div class="adv-score">Punkte: <span id="advancedTaskPoints">0</span></div>
+      </div>
+
+      <div id="adv2Card0" class="adv-step-card">
+        <h4>Originalaufgabe</h4>
+        <p id="adv2Text0">Das ist die Ausgangsreihenfolge der 5 Faktoren.</p>
+        <div id="adv2Eq0" class="adv-eqline"></div>
+      </div>
+
+      <div id="adv2Card1" class="adv-step-card">
+        <h4>Schritt 1: Reihenfolge ändern (Kommutativgesetz)</h4>
+        <p id="adv2Text1">Klicke nacheinander zwei Zahlen an, um ihre Position zu tauschen. Bringe zwei Vorteilspaare nebeneinander.</p>
+        <div id="adv2Wrap1" class="adv-board"><div id="adv2Row1" class="adv-row" aria-live="polite"></div></div>
+        <div id="adv2Eq1" class="adv-eqline"></div>
+        <div id="adv2Act1" class="adv-actions">
+          <button id="adv2Check1Btn" class="plain-btn" type="button">Schritt 1 prüfen</button>
+        </div>
+        <div id="adv2Msg1" class="pow-status"></div>
+      </div>
+
+      <div id="adv2Card2" class="adv-step-card hide">
+        <h4>Schritt 2: Klammern setzen (Assoziativgesetz)</h4>
+        <p id="adv2Text2">Klicke Start und Ende für jede Klammer. Es sollen zwei Klammern um die Vorteilspaare gesetzt werden.</p>
+        <div id="adv2Wrap2" class="adv-board"><div id="adv2Row2" class="adv-row" aria-live="polite"></div></div>
+        <div id="adv2Eq2" class="adv-eqline"></div>
+        <div id="adv2Act2" class="adv-actions">
+          <button id="adv2ClearBracketsBtn" class="plain-btn" type="button">Klammern löschen</button>
+          <button id="adv2Check2Btn" class="plain-btn" type="button">Schritt 2 prüfen</button>
+        </div>
+        <div id="adv2Msg2" class="pow-status"></div>
+      </div>
+
+      <div id="adv2Card3" class="adv-step-card hide">
+        <h4>Schritt 3: Klammerprodukte berechnen</h4>
+        <p id="adv2Text3">Trage die beiden Zwischenergebnisse direkt in die Aufgabe ein.</p>
+        <div id="adv2Eq3" class="adv-eqline"></div>
+        <div id="adv2Calc3" class="adv-calc"></div>
+        <div id="adv2Act3" class="adv-actions">
+          <button id="adv2Check3Btn" class="plain-btn" type="button">Schritt 3 prüfen</button>
+        </div>
+        <div id="adv2Msg3" class="pow-status"></div>
+      </div>
+
+      <div id="adv2Card4" class="adv-step-card hide">
+        <h4>Schritt 4: Endergebnis</h4>
+        <p id="adv2Text4">Berechne jetzt das Endergebnis.</p>
+        <div id="adv2Eq4" class="adv-eqline"></div>
+        <div id="adv2Calc4" class="adv-calc"></div>
+        <div id="adv2Act4" class="adv-actions">
+          <button id="adv2Check4Btn" class="plain-btn" type="button">Endergebnis prüfen</button>
+        </div>
+        <div id="adv2Msg4" class="pow-status"></div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <script>
-(() => {
+(async () => {
   "use strict";
 
   const COMM_COLORS = ["#7bc8ff", "#f7a5bc", "#b8dc7d", "#f6b56f"];
@@ -259,7 +603,53 @@ body{
     exprTitle: document.getElementById("exprTitle"),
     exprControls: document.getElementById("exprControls"),
     vizNote: document.getElementById("vizNote"),
-    canvas: document.getElementById("vizCanvas")
+    canvas: document.getElementById("vizCanvas"),
+    powerTaskList: document.getElementById("powerTaskList"),
+    resetPowerTasksBtn: document.getElementById("resetPowerTasksBtn"),
+    newAdvancedTaskBtn: document.getElementById("newAdvancedTaskBtn"),
+    resetAdvancedTaskBtn: document.getElementById("resetAdvancedTaskBtn"),
+    advancedTaskBoard: document.getElementById("advancedTaskBoard"),
+    advancedTaskCalc: document.getElementById("advancedTaskCalc"),
+    advancedOrderDoneBtn: document.getElementById("advancedOrderDoneBtn"),
+    advancedComputeBtn: document.getElementById("advancedComputeBtn"),
+    advancedTaskStatus: document.getElementById("advancedTaskStatus"),
+    advancedTaskHelp: document.getElementById("advancedTaskHelp"),
+    advancedTaskLog: document.getElementById("advancedTaskLog"),
+    advancedTaskPoints: document.getElementById("advancedTaskPoints"),
+    adv2Row0: document.getElementById("adv2Row0"),
+    adv2Text0: document.getElementById("adv2Text0"),
+    adv2Eq0: document.getElementById("adv2Eq0"),
+    adv2Card1: document.getElementById("adv2Card1"),
+    adv2Text1: document.getElementById("adv2Text1"),
+    adv2Wrap1: document.getElementById("adv2Wrap1"),
+    adv2Row1: document.getElementById("adv2Row1"),
+    adv2Eq1: document.getElementById("adv2Eq1"),
+    adv2Act1: document.getElementById("adv2Act1"),
+    adv2Check1Btn: document.getElementById("adv2Check1Btn"),
+    adv2Msg1: document.getElementById("adv2Msg1"),
+    adv2Card2: document.getElementById("adv2Card2"),
+    adv2Text2: document.getElementById("adv2Text2"),
+    adv2Wrap2: document.getElementById("adv2Wrap2"),
+    adv2Row2: document.getElementById("adv2Row2"),
+    adv2Eq2: document.getElementById("adv2Eq2"),
+    adv2Act2: document.getElementById("adv2Act2"),
+    adv2ClearBracketsBtn: document.getElementById("adv2ClearBracketsBtn"),
+    adv2Check2Btn: document.getElementById("adv2Check2Btn"),
+    adv2Msg2: document.getElementById("adv2Msg2"),
+    adv2Card3: document.getElementById("adv2Card3"),
+    adv2Text3: document.getElementById("adv2Text3"),
+    adv2Eq3: document.getElementById("adv2Eq3"),
+    adv2Calc3: document.getElementById("adv2Calc3"),
+    adv2Act3: document.getElementById("adv2Act3"),
+    adv2Check3Btn: document.getElementById("adv2Check3Btn"),
+    adv2Msg3: document.getElementById("adv2Msg3"),
+    adv2Card4: document.getElementById("adv2Card4"),
+    adv2Text4: document.getElementById("adv2Text4"),
+    adv2Eq4: document.getElementById("adv2Eq4"),
+    adv2Calc4: document.getElementById("adv2Calc4"),
+    adv2Act4: document.getElementById("adv2Act4"),
+    adv2Check4Btn: document.getElementById("adv2Check4Btn"),
+    adv2Msg4: document.getElementById("adv2Msg4")
   };
 
   const ctx = ui.canvas.getContext("2d");
@@ -286,6 +676,80 @@ body{
     { id: "depth2", label: "2 · (4 · 3)" }
   ];
 
+  const POWER_TASK_DEFS = [
+    {
+      key: "a",
+      label: "a) 10",
+      target: 10,
+      pairs: [[1, 10], [5, 2]],
+      choices: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    },
+    {
+      key: "b",
+      label: "b) 100",
+      target: 100,
+      pairs: [[1, 100], [2, 50], [4, 25], [5, 20], [10, 10]],
+      choices: [1, 2, 4, 5, 8, 10, 12, 15, 16, 20, 25, 30, 40, 50, 60, 80, 100]
+    },
+    {
+      key: "c",
+      label: "c) 1000",
+      target: 1000,
+      pairs: [[1, 1000], [2, 500], [4, 250], [5, 200], [8, 125], [10, 100], [20, 50], [25, 40]],
+      choices: [1, 2, 4, 5, 8, 10, 16, 20, 25, 32, 40, 50, 60, 75, 80, 100, 125, 160, 200, 250, 400, 500, 800, 1000]
+    }
+  ];
+
+  const powerTasks = new Map();
+  const ADV_TASK_SCORE_STORAGE_KEY = "rechengesetze-multiplikation-advanced-score-v1";
+  const ADV_TASK_STATE_STORAGE_KEY = "rechengesetze-multiplikation-advanced-state-v1";
+  const ADV_SCORE_FLAG_COUNT = 10; // Felder 16..25 bei START_INDEX=1
+
+  const ADV_VALID_PAIRS = (() => {
+    const seen = new Set();
+    const out = [];
+    const excluded = new Set([pairKey(10, 10), pairKey(10, 100)]);
+    for (const def of POWER_TASK_DEFS) {
+      for (const p of def.pairs) {
+        if (p[0] === 1 || p[1] === 1) continue;
+        const k = pairKey(p[0], p[1]);
+        if (excluded.has(k)) continue;
+        if (seen.has(k)) continue;
+        seen.add(k);
+        out.push([Math.min(p[0], p[1]), Math.max(p[0], p[1])]);
+      }
+    }
+    return out;
+  })();
+
+  const ADV_VALID_PAIR_KEY_SET = new Set(ADV_VALID_PAIRS.map(p => pairKey(p[0], p[1])));
+
+  const advancedTaskState = {
+    points: 0,
+    factors: [],
+    selectedIndices: [],
+    bracket: null,
+    phase: "idle", // idle | reorder | pair | compute | solved
+    targetProduct: 1,
+    lastResult: "",
+    message: "",
+    computeInput: ""
+  };
+  const ADV2_FLOW_STORAGE_KEY = "rechengesetze-multiplikation-advanced-flow-v2";
+  const adv2 = {
+    task: null,
+    order: [],
+    pickSwapIndex: -1,
+    pickBracketIndex: -1,
+    brackets: [],
+    step1Done: false,
+    step2Done: false,
+    step3Done: false,
+    solved: false,
+    inputs: { g1: "", g2: "", fin: "" },
+    calc3: null
+  };
+
   function clamp(v, min, max) {
     return Math.min(max, Math.max(min, v));
   }
@@ -293,6 +757,39 @@ body{
   function lerp(a, b, t) {
     return a + (b - a) * t;
   }
+
+  function pairKey(a, b) {
+    return a < b ? a + "|" + b : b + "|" + a;
+  }
+
+  function buildPowerPairOrderIndex() {
+    const map = new Map();
+    let counter = 1;
+    for (const def of POWER_TASK_DEFS) {
+      for (const p of def.pairs) {
+        map.set(def.key + ":" + pairKey(p[0], p[1]), counter++);
+      }
+    }
+    return map;
+  }
+
+  // Reihenfolge der Edulo-Cloze-Felder bei SCORE_PREFIX = "e2_cloze_text_input_" (START_INDEX = 1):
+  //  1: a) 1·10
+  //  2: a) 2·5
+  //  3: b) 1·100
+  //  4: b) 2·50
+  //  5: b) 4·25
+  //  6: b) 5·20
+  //  7: b) 10·10
+  //  8: c) 1·1000
+  //  9: c) 2·500
+  // 10: c) 4·250
+  // 11: c) 5·200
+  // 12: c) 8·125
+  // 13: c) 10·100
+  // 14: c) 20·50
+  // 15: c) 25·40
+  const POWER_PAIR_ORDER_INDEX = buildPowerPairOrderIndex();
 
   function ease(t) {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -567,11 +1064,13 @@ body{
     const t = ease(p);
 
     if (state.transition.type === "morph") {
+      const fromLayout = computeLayout(state.transition.from, state.size);
+      const toLayout = computeLayout(state.transition.to, state.size);
       const interp = interpolateScene(state.transition.from, state.transition.to, t);
-      const interpLayout = computeLayout(interp, state.size);
+      const interpLayout = interpolateLayout(fromLayout, toLayout, t);
       drawSceneCubes(interp, interpLayout, 1);
-      drawSceneOverlay(state.transition.from, computeLayout(state.transition.from, state.size), 1 - t);
-      drawSceneOverlay(state.transition.to, computeLayout(state.transition.to, state.size), t);
+      drawSceneOverlay(state.transition.from, fromLayout, 1 - t);
+      drawSceneOverlay(state.transition.to, toLayout, t);
     } else {
       drawScene(state.transition.from, 1 - t);
       drawScene(state.transition.to, t);
@@ -648,6 +1147,16 @@ body{
     const ox = left - bounds.minX * s;
     const oy = top - bounds.minY * s;
     return { s, dxf, dyf, ox, oy };
+  }
+
+  function interpolateLayout(a, b, t) {
+    return {
+      s: lerp(a.s, b.s, t),
+      dxf: a.dxf,
+      dyf: a.dyf,
+      ox: lerp(a.ox, b.ox, t),
+      oy: lerp(a.oy, b.oy, t)
+    };
   }
 
   function cubeBoundsPx(cube, layout) {
@@ -1064,8 +1573,1732 @@ body{
     ctx.closePath();
   }
 
+  const EDULO_WIDGET_MARKER = "EDULO_WIDGET_KEY:RECHENGESETZE_MULTIPLIKATION_WUERFEL";
+
+  async function loadEduloWidgetParams() {
+    const qs = new URLSearchParams(window.location.search);
+    const dataUrl = qs.get("data");
+    if (!dataUrl) return {};
+
+    try {
+      const url = dataUrl.startsWith("http") ? dataUrl : (window.location.origin + dataUrl);
+      const res = await fetch(url, { credentials: "include" });
+      if (!res.ok) return {};
+
+      const json = await res.json();
+      const contents = json.contents || json.modules || (json.body && json.body.contents) || [];
+      const list = Array.isArray(contents) ? contents : [];
+
+      let me = null;
+      for (const c of list) {
+        const html = c && (c.html || (c.content && c.content.html) || "");
+        if (typeof html === "string" && (
+          html.includes(EDULO_WIDGET_MARKER)
+          || html.includes('data-edulo-widget-key="RECHENGESETZE_MULTIPLIKATION_WUERFEL"')
+        )) {
+          me = c;
+          break;
+        }
+      }
+      if (!me) return {};
+
+      const out = {};
+      for (const p of (me.parameters || [])) {
+        if (p && p.name) out[String(p.name)] = p.value == null ? "" : String(p.value);
+      }
+      return out;
+    } catch (_e) {
+      return {};
+    }
+  }
+
+  function firstParam(widgetParams, urlParams, names) {
+    for (const name of names) {
+      if (widgetParams && Object.prototype.hasOwnProperty.call(widgetParams, name)) {
+        const v = String(widgetParams[name] || "").trim();
+        if (v) return v;
+      }
+      if (urlParams && urlParams.has(name)) {
+        const v = String(urlParams.get(name) || "").trim();
+        if (v) return v;
+      }
+    }
+    return "";
+  }
+
+  async function parseEduloConfig() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const widgetParams = await loadEduloWidgetParams();
+    const hasDataParam = urlParams.has("data");
+
+    const checkButtonId = firstParam(widgetParams, urlParams, [
+      "eduloCheckButtonId", "edulo_check_button_id", "CHECK_ID", "EDULO_CHECK_BUTTON_ID"
+    ]);
+    const checkSelector = firstParam(widgetParams, urlParams, [
+      "eduloCheckSelector", "edulo_check_selector", "CHECK_SELECTOR", "EDULO_CHECK_SELECTOR"
+    ]);
+    const checkText = firstParam(widgetParams, urlParams, [
+      "CHECK_TEXT", "eduloCheckText", "edulo_check_text"
+    ]) || "prüfen";
+    const sumId = firstParam(widgetParams, urlParams, [
+      "SUM_ID", "sumId", "scoreSumId", "eduloSumId", "edulo_sum_id"
+    ]);
+    const scorePrefixParam = firstParam(widgetParams, urlParams, [
+      "SCORE_PREFIX", "scorePrefix", "eduloScorePrefix", "edulo_score_prefix"
+    ]);
+    let scorePrefix = scorePrefixParam;
+    const scoreStartRaw = firstParam(widgetParams, urlParams, [
+      "START_INDEX", "startIndex", "SCORE_START_INDEX", "scoreStartIndex"
+    ]);
+    const parsedStart = Number.parseInt(scoreStartRaw || "1", 10);
+    let scoreStartIndex = Number.isFinite(parsedStart) && parsedStart > 0 ? parsedStart : 1;
+    if (!scorePrefix) scorePrefix = "e2_cloze_text_input_";
+    if (!scoreStartIndex || scoreStartIndex < 1) scoreStartIndex = 1;
+
+    const enabled = urlParams.get("edulo") === "1"
+      || hasDataParam
+      || !!scorePrefixParam
+      || !!sumId
+      || !!checkButtonId
+      || !!checkSelector;
+
+    return {
+      enabled,
+      checkButtonId,
+      checkSelector,
+      checkText,
+      sumId,
+      scorePrefix,
+      scoreStartIndex,
+      params: widgetParams,
+      urlParams
+    };
+  }
+
+  const eduloConfig = await parseEduloConfig();
+  const POWER_TASK_STORAGE_KEY = "rechengesetze-multiplikation-paare-v1";
+
+  if (eduloConfig.enabled && eduloConfig.scorePrefix) {
+    await waitForEduloField(eduloConfig.scorePrefix + String(eduloConfig.scoreStartIndex));
+  }
+
+  function tryDocs() {
+    const docs = [document];
+    try {
+      if (window.parent && window.parent !== window && window.parent.document) docs.push(window.parent.document);
+    } catch (_e) {}
+    try {
+      if (window.top && window.top !== window.parent && window.top !== window && window.top.document) docs.push(window.top.document);
+    } catch (_e) {}
+    return docs;
+  }
+
+  function findInDocs(id, selector) {
+    for (const doc of tryDocs()) {
+      if (id) {
+        const byId = doc.getElementById(id);
+        if (byId) return byId;
+      }
+      if (selector) {
+        const bySel = doc.querySelector(selector);
+        if (bySel) return bySel;
+      }
+    }
+    return null;
+  }
+
+  async function waitForEduloField(id, tries, delay) {
+    const maxTries = typeof tries === "number" ? tries : 20;
+    const waitMs = typeof delay === "number" ? delay : 200;
+    for (let i = 0; i < maxTries; i++) {
+      const el = findInDocs(id, "");
+      if (el) return el;
+      await new Promise(r => setTimeout(r, waitMs));
+    }
+    return null;
+  }
+
+  function setNativeValue(el, value) {
+    if (!el) return false;
+    if (!("value" in el)) {
+      el.textContent = value;
+      return true;
+    }
+    try {
+      const proto = Object.getPrototypeOf(el);
+      const desc = proto ? Object.getOwnPropertyDescriptor(proto, "value") : null;
+      if (desc && typeof desc.set === "function") desc.set.call(el, value);
+      else el.value = value;
+    } catch (_e) {
+      try { el.value = value; } catch (_e2) { return false; }
+    }
+    return true;
+  }
+
+  function findCheckButtonByText(textLower) {
+    if (!textLower) return null;
+    const docs = tryDocs();
+    const orderedDocs = docs.filter(d => d !== document).concat(docs.filter(d => d === document));
+    const selectors = "button,[role='button'],a[role='button'],input[type='button'],input[type='submit']";
+
+    for (const mode of ["exact", "contains"]) {
+      for (const doc of orderedDocs) {
+        const all = doc.querySelectorAll ? doc.querySelectorAll(selectors) : [];
+        for (const b of all) {
+          // In unserem Widget gibt es viele lokale "... prüfen"-Buttons; die dürfen nicht als Edulo-Prüfbutton erkannt werden.
+          if (doc === document) {
+            try {
+              if (b.closest && (b.closest(".use-task") || b.closest(".wissen") || b.closest(".viz-panel"))) continue;
+            } catch (_e) {}
+          }
+
+          const t = String(b.textContent || b.value || "").trim().toLowerCase();
+          const a = String(b.getAttribute ? (b.getAttribute("aria-label") || "") : "").trim().toLowerCase();
+          const match = mode === "exact"
+            ? (t === textLower || a === textLower)
+            : (t.includes(textLower) || a.includes(textLower));
+          if (match) return b;
+        }
+      }
+    }
+    return null;
+  }
+
+  function getFieldTextValue(el) {
+    if (!el) return "";
+    return ("value" in el) ? el.value : el.textContent;
+  }
+
+  function getAdvancedScoreMilestoneFieldId(flagIndex) {
+    if (!eduloConfig.scorePrefix) return "";
+    if (flagIndex < 0 || flagIndex >= ADV_SCORE_FLAG_COUNT) return "";
+    return eduloConfig.scorePrefix + String(eduloConfig.scoreStartIndex + 15 + flagIndex);
+  }
+
+  function readAdvancedScoreFromEdulo() {
+    if (!eduloConfig.sumId) return null;
+    const input = findInDocs(eduloConfig.sumId, "");
+    if (!input) return null;
+    const raw = String(getFieldTextValue(input) || "").trim();
+    const value = Number.parseInt(raw, 10);
+    return Number.isFinite(value) && value >= 0 ? value : 0;
+  }
+
+  function loadAdvancedScoreLocal() {
+    try {
+      const raw = localStorage.getItem(ADV_TASK_SCORE_STORAGE_KEY);
+      const n = Number.parseInt(String(raw || "0"), 10);
+      return Number.isFinite(n) && n >= 0 ? n : 0;
+    } catch (_e) {
+      return 0;
+    }
+  }
+
+  function saveAdvancedScoreLocal(value) {
+    try { localStorage.setItem(ADV_TASK_SCORE_STORAGE_KEY, String(value)); } catch (_e) {}
+  }
+
+  function loadAdvancedTaskStateLocal() {
+    try {
+      const raw = localStorage.getItem(ADV_TASK_STATE_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : null;
+      return parsed && typeof parsed === "object" ? parsed : null;
+    } catch (_e) {
+      return null;
+    }
+  }
+
+  function saveAdvancedTaskStateLocal() {
+    const payload = {
+      factors: advancedTaskState.factors.slice(),
+      selectedIndices: advancedTaskState.selectedIndices.slice(),
+      bracket: advancedTaskState.bracket ? [advancedTaskState.bracket[0], advancedTaskState.bracket[1]] : null,
+      phase: advancedTaskState.phase,
+      targetProduct: advancedTaskState.targetProduct,
+      lastResult: advancedTaskState.lastResult || "",
+      message: advancedTaskState.message || "",
+      computeInput: advancedTaskState.computeInput || ""
+    };
+    try { localStorage.setItem(ADV_TASK_STATE_STORAGE_KEY, JSON.stringify(payload)); } catch (_e) {}
+  }
+
+  function clearAdvancedTaskStateLocal() {
+    try { localStorage.removeItem(ADV_TASK_STATE_STORAGE_KEY); } catch (_e) {}
+  }
+
+  function countScoreMilestoneFlags(points) {
+    let count = 0;
+    for (let i = 0; i < ADV_SCORE_FLAG_COUNT; i++) {
+      if (points >= Math.pow(2, i)) count++;
+    }
+    return count;
+  }
+
+  async function writeAdvancedScoreToEdulo(points) {
+    if (eduloConfig.sumId) {
+      await setFieldValueWithRetry(eduloConfig.sumId, String(points), 10, 200);
+    }
+
+    if (isEduloFieldTruthMode()) {
+      for (let i = 0; i < ADV_SCORE_FLAG_COUNT; i++) {
+        const fieldId = getAdvancedScoreMilestoneFieldId(i);
+        const shouldSet = points >= Math.pow(2, i);
+        await setFieldValueWithRetry(fieldId, shouldSet ? "1" : "", 10, 200);
+      }
+    }
+  }
+
+  function syncAdvancedScoreFromTruth() {
+    const eduloValue = readAdvancedScoreFromEdulo();
+    if (eduloValue != null) {
+      advancedTaskState.points = eduloValue;
+      saveAdvancedScoreLocal(eduloValue);
+    } else {
+      advancedTaskState.points = loadAdvancedScoreLocal();
+    }
+    updateAdvancedPointsView();
+  }
+
+  function isEduloFieldTruthMode() {
+    return !!(eduloConfig && eduloConfig.enabled && eduloConfig.scorePrefix);
+  }
+
+  function syncPowerTasksFromEduloTruth() {
+    if (!isEduloFieldTruthMode()) return;
+    buildPowerTasks();
+  }
+
+  function syncAllFromEduloTruth() {
+    if (isEduloFieldTruthMode()) syncPowerTasksFromEduloTruth();
+    if (eduloConfig.enabled) syncAdvancedScoreFromTruth();
+  }
+
+  function schedulePowerTaskSyncFromEdulo() {
+    if (!eduloConfig.enabled) return;
+    setTimeout(syncAllFromEduloTruth, 120);
+    setTimeout(syncAllFromEduloTruth, 500);
+  }
+
+  function attachCheckButtonSyncHandler(btn) {
+    if (!btn || btn.__powerTaskSyncBound) return;
+    btn.__powerTaskSyncBound = true;
+    btn.addEventListener("click", () => {
+      schedulePowerTaskSyncFromEdulo();
+    });
+  }
+
+  function ensureCheckButtonSyncBound() {
+    if (!isEduloFieldTruthMode()) return;
+    const btn = findInDocs(eduloConfig.checkButtonId, eduloConfig.checkSelector)
+      || findCheckButtonByText(String(eduloConfig.checkText || "prüfen").toLowerCase());
+    if (btn) attachCheckButtonSyncHandler(btn);
+  }
+
+  async function warmUpEduloBindings() {
+    if (!eduloConfig.enabled) return;
+    for (let i = 0; i < 25; i++) {
+      ensureCheckButtonSyncBound();
+      const btn = findInDocs(eduloConfig.checkButtonId, eduloConfig.checkSelector)
+        || findCheckButtonByText(String(eduloConfig.checkText || "prüfen").toLowerCase());
+      if (btn) return;
+      await new Promise(r => setTimeout(r, 200));
+    }
+  }
+
+  function setFieldValueIfExists(fieldId, value) {
+    if (!fieldId) return false;
+    const input = findInDocs(fieldId, "");
+    if (!input) return false;
+    if (!setNativeValue(input, value)) return false;
+    try {
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (_e) {
+      return false;
+    }
+    return true;
+  }
+
+  async function setFieldValueWithRetry(fieldId, value, tries, delay) {
+    const maxTries = typeof tries === "number" ? tries : 10;
+    const waitMs = typeof delay === "number" ? delay : 200;
+    for (let i = 0; i < maxTries; i++) {
+      if (setFieldValueIfExists(fieldId, value)) return true;
+      await new Promise(r => setTimeout(r, waitMs));
+    }
+    return false;
+  }
+
+  function sanitizePairKey(pairK) {
+    return pairK.replace(/\|/g, "_");
+  }
+
+  function getSequentialPairFieldId(taskKey, pairK) {
+    if (!eduloConfig.scorePrefix) return "";
+    const orderIndex = POWER_PAIR_ORDER_INDEX.get(taskKey + ":" + pairK);
+    if (!orderIndex) return "";
+    // Bei START_INDEX = 1 ergibt sich exakt: e2_cloze_text_input_<orderIndex>
+    return eduloConfig.scorePrefix + String(eduloConfig.scoreStartIndex + orderIndex - 1);
+  }
+
+  function getPairFieldId(taskKey, pairK) {
+    return getSequentialPairFieldId(taskKey, pairK);
+  }
+
+  function readPairSolvedFromEdulo(taskKey, pairK) {
+    const fieldId = getPairFieldId(taskKey, pairK);
+    if (!fieldId) return false;
+    const input = findInDocs(fieldId, "");
+    if (!input) return false;
+    const val = ("value" in input) ? input.value : input.textContent;
+    return String(val || "").trim() === "1";
+  }
+
+  async function markEduloPairSolved(taskKey, pairK) {
+    const fieldId = getPairFieldId(taskKey, pairK);
+    if (!fieldId) return;
+    await setFieldValueWithRetry(fieldId, "1", 10, 200);
+    triggerEduloCheck();
+  }
+
+  function loadPowerProgress() {
+    try {
+      const raw = localStorage.getItem(POWER_TASK_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (_e) {
+      return {};
+    }
+  }
+
+  function savePowerProgress() {
+    const out = {};
+    for (const [taskKey, task] of powerTasks) {
+      out[taskKey] = Array.from(task.foundPairKeys);
+    }
+    try {
+      localStorage.setItem(POWER_TASK_STORAGE_KEY, JSON.stringify(out));
+    } catch (_e) {}
+  }
+
+  function triggerEduloCheck() {
+    ensureCheckButtonSyncBound();
+    const checkBtn = findInDocs(eduloConfig.checkButtonId, eduloConfig.checkSelector)
+      || findCheckButtonByText(String(eduloConfig.checkText || "prüfen").toLowerCase());
+    if (checkBtn && typeof checkBtn.click === "function") {
+      try { checkBtn.click(); } catch (_e) {}
+    }
+  }
+
+  async function resetPowerTasksProgress() {
+    try { localStorage.removeItem(POWER_TASK_STORAGE_KEY); } catch (_e) {}
+
+    if (isEduloFieldTruthMode()) {
+      await waitForEduloField(eduloConfig.scorePrefix + String(eduloConfig.scoreStartIndex), 20, 200);
+      for (const def of POWER_TASK_DEFS) {
+        for (const p of def.pairs) {
+          const k = pairKey(p[0], p[1]);
+          const fieldId = getPairFieldId(def.key, k);
+          await setFieldValueWithRetry(fieldId, "", 10, 200);
+        }
+      }
+    }
+
+    buildPowerTasks();
+    if (eduloConfig.enabled) triggerEduloCheck();
+  }
+
+  function buildPowerTasks() {
+    if (!ui.powerTaskList) return;
+    ui.powerTaskList.innerHTML = "";
+    powerTasks.clear();
+
+    const useEduloTruth = isEduloFieldTruthMode();
+    const saved = useEduloTruth ? {} : loadPowerProgress();
+
+    for (const def of POWER_TASK_DEFS) {
+      const stateTask = {
+        def,
+        selected: [],
+        usedIndices: new Set(),
+        foundPairKeys: new Set(),
+        solved: false,
+        pairKeySet: new Set(def.pairs.map(p => pairKey(p[0], p[1])))
+      };
+
+      const wrap = document.createElement("div");
+      wrap.className = "pow-task";
+
+      const line = document.createElement("div");
+      line.className = "pow-line";
+
+      const label = document.createElement("div");
+      label.className = "pow-label";
+      label.textContent = def.label;
+
+      const found = document.createElement("div");
+      found.className = "pow-found";
+      found.innerHTML = "<strong>=</strong> ?"; // replaced after first hit
+
+      line.appendChild(label);
+      line.appendChild(found);
+
+      const choices = document.createElement("div");
+      choices.className = "pow-choices";
+
+      def.choices.forEach((value, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "num-btn";
+        btn.textContent = String(value);
+        btn.dataset.index = String(index);
+        btn.dataset.value = String(value);
+        btn.addEventListener("click", () => onPowerChoiceClick(def.key, index));
+        choices.appendChild(btn);
+      });
+
+      const status = document.createElement("div");
+      status.className = "pow-status";
+
+      const done = document.createElement("div");
+      done.className = "pow-done";
+      done.textContent = "0 von " + def.pairs.length + " Paaren gefunden";
+
+      wrap.appendChild(line);
+      wrap.appendChild(choices);
+      wrap.appendChild(status);
+      wrap.appendChild(done);
+      ui.powerTaskList.appendChild(wrap);
+
+      stateTask.el = { wrap, found, choices, status, done };
+      powerTasks.set(def.key, stateTask);
+
+      if (!useEduloTruth) {
+        const savedPairs = Array.isArray(saved[def.key]) ? saved[def.key] : [];
+        for (const k of savedPairs) {
+          if (stateTask.pairKeySet.has(k)) stateTask.foundPairKeys.add(k);
+        }
+      }
+      for (const p of def.pairs) {
+        const k = pairKey(p[0], p[1]);
+        const solvedInEdulo = readPairSolvedFromEdulo(def.key, k);
+        if (solvedInEdulo) stateTask.foundPairKeys.add(k);
+        else if (useEduloTruth) stateTask.foundPairKeys.delete(k);
+      }
+      applyFoundPairsToUsedIndices(stateTask);
+      finalizeTaskIfCompleted(stateTask, false);
+      updatePowerTaskView(stateTask);
+    }
+
+    if (useEduloTruth) savePowerProgress();
+  }
+
+  function applyFoundPairsToUsedIndices(task) {
+    task.usedIndices.clear();
+    const remaining = new Set(task.foundPairKeys);
+    for (const p of task.def.pairs) {
+      const key = pairKey(p[0], p[1]);
+      if (!remaining.has(key)) continue;
+      remaining.delete(key);
+      const [a, b] = p;
+      if (a === b) {
+        const idx = task.def.choices.findIndex((v, i) => v === a && !task.usedIndices.has(i));
+        if (idx >= 0) task.usedIndices.add(idx);
+      } else {
+        const i1 = task.def.choices.findIndex((v, i) => v === a && !task.usedIndices.has(i));
+        const i2 = task.def.choices.findIndex((v, i) => v === b && !task.usedIndices.has(i));
+        if (i1 >= 0) task.usedIndices.add(i1);
+        if (i2 >= 0) task.usedIndices.add(i2);
+      }
+    }
+  }
+
+  function finalizeTaskIfCompleted(task, triggerEdulo) {
+    if (task.foundPairKeys.size !== task.pairKeySet.size) return false;
+    task.solved = true;
+    task.el.choices.classList.add("hide");
+    task.el.done.classList.add("complete");
+    task.el.done.textContent = "Super, alle Paare gefunden.";
+    setPowerStatus(task, "", "");
+    return true;
+  }
+
+  function updatePowerTaskView(task) {
+    const { def, el } = task;
+    const chips = [];
+    for (const p of def.pairs) {
+      const key = pairKey(p[0], p[1]);
+      if (task.foundPairKeys.has(key)) chips.push("= " + p[0] + " · " + p[1]);
+    }
+    el.found.innerHTML = chips.length
+      ? chips.map(txt => "<span class=\"pair-chip\">" + txt + "</span>").join("")
+      : "<strong>=</strong> ?";
+
+    if (!task.solved) {
+      el.done.classList.remove("complete");
+      el.done.textContent = task.foundPairKeys.size + " von " + task.def.pairs.length + " Paaren gefunden";
+    }
+
+    const buttons = el.choices.querySelectorAll(".num-btn");
+    buttons.forEach(btn => {
+      const idx = Number(btn.dataset.index);
+      btn.classList.toggle("used", task.usedIndices.has(idx));
+      btn.disabled = task.usedIndices.has(idx) || task.solved;
+      const active = task.selected.includes(idx);
+      btn.classList.toggle("active", active);
+      if (btn.disabled) btn.classList.remove("active");
+    });
+  }
+
+  function setPowerStatus(task, text, cls) {
+    task.el.status.textContent = text || "";
+    task.el.status.className = "pow-status" + (cls ? " " + cls : "");
+  }
+
+  function onPowerChoiceClick(taskKey, index) {
+    const task = powerTasks.get(taskKey);
+    if (!task || task.solved || task.usedIndices.has(index)) return;
+
+    const pos = task.selected.indexOf(index);
+    if (pos >= 0) {
+      if (task.selected.length === 1) {
+        const v = task.def.choices[index];
+        const selfKey = pairKey(v, v);
+        if (v * v === task.def.target && task.pairKeySet.has(selfKey) && !task.foundPairKeys.has(selfKey)) {
+          task.selected.push(index);
+        } else {
+          task.selected.splice(pos, 1);
+          updatePowerTaskView(task);
+          return;
+        }
+      } else {
+        task.selected.splice(pos, 1);
+        updatePowerTaskView(task);
+        return;
+      }
+    } else {
+      task.selected.push(index);
+    }
+    if (task.selected.length > 2) task.selected = [task.selected[task.selected.length - 1]];
+    updatePowerTaskView(task);
+
+    if (task.selected.length < 2) {
+      setPowerStatus(task, "Jetzt eine zweite Zahl auswählen.", "");
+      return;
+    }
+
+    const [i1, i2] = task.selected;
+    const a = task.def.choices[i1];
+    const b = task.def.choices[i2];
+    const key = pairKey(a, b);
+
+    if (a * b === task.def.target && task.pairKeySet.has(key) && !task.foundPairKeys.has(key)) {
+      task.foundPairKeys.add(key);
+      if (i1 === i2) {
+        task.usedIndices.add(i1);
+      } else {
+        task.usedIndices.add(i1);
+        task.usedIndices.add(i2);
+      }
+      task.selected = [];
+      setPowerStatus(task, "Richtig.", "ok");
+      savePowerProgress();
+      void markEduloPairSolved(task.def.key, key);
+      updatePowerTaskView(task);
+
+      finalizeTaskIfCompleted(task, true);
+      updatePowerTaskView(task);
+      return;
+    }
+
+    task.selected = [];
+    if (a * b === task.def.target && task.foundPairKeys.has(key)) {
+      setPowerStatus(task, "Dieses Paar hast du schon gefunden.", "err");
+    } else {
+      setPowerStatus(task, "Das passt nicht zur gesuchten Zehnerpotenz.", "err");
+    }
+    updatePowerTaskView(task);
+  }
+
+  function setAdvancedStatus(text, cls) {
+    if (!ui.advancedTaskStatus) return;
+    ui.advancedTaskStatus.textContent = text || "";
+    ui.advancedTaskStatus.className = "pow-status" + (cls ? " " + cls : "");
+  }
+
+  function setAdvancedLog(text, cls) {
+    if (!ui.advancedTaskLog) return;
+    ui.advancedTaskLog.textContent = text || "";
+    ui.advancedTaskLog.className = "adv-log" + (cls ? " " + cls : "");
+  }
+
+  function updateAdvancedPointsView() {
+    if (ui.advancedTaskPoints) ui.advancedTaskPoints.textContent = String(advancedTaskState.points || 0);
+  }
+
+  function parseIntStrict(raw) {
+    const s = String(raw || "").trim();
+    if (!/^[-]?\d+$/.test(s)) return null;
+    return Number(s);
+  }
+
+  function shuffleArray(values) {
+    const arr = values.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  function pickRandomAdvancedChallenge() {
+    const p1 = ADV_VALID_PAIRS[Math.floor(Math.random() * ADV_VALID_PAIRS.length)];
+    let p2 = ADV_VALID_PAIRS[Math.floor(Math.random() * ADV_VALID_PAIRS.length)];
+    if (ADV_VALID_PAIRS.length > 1) {
+      let guard = 0;
+      while (pairKey(p1[0], p1[1]) === pairKey(p2[0], p2[1]) && guard < 10) {
+        p2 = ADV_VALID_PAIRS[Math.floor(Math.random() * ADV_VALID_PAIRS.length)];
+        guard++;
+      }
+    }
+    const factors = shuffleArray([p1[0], p1[1], p2[0], p2[1]]);
+    return {
+      factors,
+      targetProduct: factors.reduce((acc, v) => acc * v, 1)
+    };
+  }
+
+  function restoreAdvancedTaskFromLocal() {
+    const saved = loadAdvancedTaskStateLocal();
+    if (!saved) return false;
+    if (!Array.isArray(saved.factors) || !saved.factors.length) return false;
+    const validFactors = saved.factors.every(v => Number.isFinite(v) && v > 0);
+    if (!validFactors) return false;
+
+    advancedTaskState.factors = saved.factors.slice();
+    advancedTaskState.selectedIndices = Array.isArray(saved.selectedIndices)
+      ? saved.selectedIndices.filter(i => Number.isInteger(i) && i >= 0 && i < advancedTaskState.factors.length).slice(0, 2)
+      : [];
+    advancedTaskState.bracket = Array.isArray(saved.bracket) && saved.bracket.length === 2
+      ? [saved.bracket[0], saved.bracket[1]]
+      : null;
+    advancedTaskState.phase = typeof saved.phase === "string" ? saved.phase : "reorder";
+    advancedTaskState.targetProduct = Number.isFinite(saved.targetProduct) && saved.targetProduct > 0
+      ? saved.targetProduct
+      : advancedTaskState.factors.reduce((acc, v) => acc * v, 1);
+    advancedTaskState.lastResult = typeof saved.lastResult === "string" ? saved.lastResult : "";
+    advancedTaskState.message = typeof saved.message === "string" ? saved.message : "";
+    advancedTaskState.computeInput = typeof saved.computeInput === "string" ? saved.computeInput : "";
+    return true;
+  }
+
+  function startAdvancedTask(newChallenge) {
+    const challenge = newChallenge || pickRandomAdvancedChallenge();
+    advancedTaskState.factors = challenge.factors.slice();
+    advancedTaskState.selectedIndices = [];
+    advancedTaskState.bracket = null;
+    advancedTaskState.phase = "reorder";
+    advancedTaskState.targetProduct = challenge.targetProduct;
+    advancedTaskState.lastResult = "";
+    advancedTaskState.message = "";
+    advancedTaskState.computeInput = "";
+    setAdvancedStatus("Zuerst zwei Zahlen anklicken, um ihre Positionen zu tauschen.", "");
+    setAdvancedLog("", "");
+    renderAdvancedTask();
+    saveAdvancedTaskStateLocal();
+  }
+
+  function validateAdvancedBracketSelection(i1, i2) {
+    const a = advancedTaskState.factors[i1];
+    const b = advancedTaskState.factors[i2];
+    if (!Number.isFinite(a) || !Number.isFinite(b)) return { ok: false, reason: "ungueltig" };
+    const adjacent = Math.abs(i1 - i2) === 1;
+    if (!adjacent) return { ok: false, reason: "nicht-nebeneinander" };
+    const key = pairKey(a, b);
+    if (!ADV_VALID_PAIR_KEY_SET.has(key)) return { ok: false, reason: "kein-vorteilspaar", key };
+    return { ok: true, key, a, b };
+  }
+
+  function renderAdvancedTask() {
+    if (!ui.advancedTaskBoard) return;
+    ui.advancedTaskBoard.innerHTML = "";
+    if (ui.advancedTaskCalc) ui.advancedTaskCalc.innerHTML = "";
+
+    const row = document.createElement("div");
+    row.className = "adv-row";
+
+    const factors = advancedTaskState.factors;
+    const bracket = advancedTaskState.bracket;
+    const minB = bracket ? Math.min(bracket[0], bracket[1]) : -1;
+    const maxB = bracket ? Math.max(bracket[0], bracket[1]) : -1;
+
+    factors.forEach((value, index) => {
+      if (index > 0) {
+        const dot = document.createElement("span");
+        dot.className = "adv-token";
+        dot.textContent = "·";
+        row.appendChild(dot);
+      }
+
+      if (bracket && index === minB) {
+        const lp = document.createElement("span");
+        lp.className = "adv-token";
+        lp.textContent = "(";
+        row.appendChild(lp);
+      }
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "adv-factor";
+      btn.textContent = String(value);
+      btn.dataset.index = String(index);
+      if (advancedTaskState.selectedIndices.includes(index)) btn.classList.add("active");
+      if (bracket && index >= minB && index <= maxB) btn.classList.add("bracketed");
+      if (advancedTaskState.phase === "solved") btn.classList.add("done");
+      btn.addEventListener("click", () => onAdvancedFactorClick(index));
+      row.appendChild(btn);
+
+      if (bracket && index === maxB) {
+        const rp = document.createElement("span");
+        rp.className = "adv-token";
+        rp.textContent = ")";
+        row.appendChild(rp);
+      }
+    });
+
+    if (!factors.length) {
+      const empty = document.createElement("div");
+      empty.className = "adv-token";
+      empty.textContent = "Neue Aufgabe starten";
+      row.appendChild(empty);
+    }
+
+    ui.advancedTaskBoard.appendChild(row);
+
+    if (ui.advancedTaskCalc && advancedTaskState.phase === "compute" && bracket) {
+      const i1 = Math.min(bracket[0], bracket[1]);
+      const i2 = Math.max(bracket[0], bracket[1]);
+      const a = factors[i1];
+      const b = factors[i2];
+      const calcLine = document.createElement("div");
+      calcLine.className = "adv-calc-line";
+
+      const left = document.createElement("span");
+      left.textContent = "(" + a + " · " + b + ") =";
+      calcLine.appendChild(left);
+
+      const inp = document.createElement("input");
+      inp.type = "text";
+      inp.inputMode = "numeric";
+      inp.className = "adv-inp";
+      inp.placeholder = "?";
+      inp.value = advancedTaskState.computeInput || "";
+      inp.addEventListener("input", () => {
+        advancedTaskState.computeInput = inp.value;
+        saveAdvancedTaskStateLocal();
+      });
+      inp.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          void onAdvancedCompute();
+        }
+      });
+      calcLine.appendChild(inp);
+
+      ui.advancedTaskCalc.appendChild(calcLine);
+      setTimeout(() => {
+        try { inp.focus(); inp.select(); } catch (_e) {}
+      }, 0);
+    }
+
+    if (ui.advancedTaskHelp) {
+      let help = "";
+      if (advancedTaskState.phase === "reorder") help = "Schritt 1: Zahlen durch Anklicken vertauschen. Danach auf „Reihenfolge fertig“ klicken.";
+      else if (advancedTaskState.phase === "pair") help = "Schritt 2: Klicke zwei benachbarte Zahlen an, die ein Vorteilspaar bilden.";
+      else if (advancedTaskState.phase === "compute") help = "Schritt 3: Rechne das Klammerprodukt aus, trage es ein und prüfe es.";
+      else if (advancedTaskState.phase === "solved") help = "Aufgabe gelöst. Für einen weiteren Punkt „Neue Aufgabe“ klicken.";
+      else help = "";
+      if (advancedTaskState.lastResult) help += (help ? " " : "") + advancedTaskState.lastResult;
+      ui.advancedTaskHelp.textContent = help;
+    }
+
+    if (ui.advancedOrderDoneBtn) {
+      ui.advancedOrderDoneBtn.disabled = !(advancedTaskState.phase === "reorder" && advancedTaskState.factors.length > 1);
+    }
+    if (ui.advancedComputeBtn) {
+      ui.advancedComputeBtn.textContent = (advancedTaskState.phase === "compute" && advancedTaskState.bracket)
+        ? "Ergebnis prüfen"
+        : "Klammer berechnen";
+      ui.advancedComputeBtn.disabled = !(advancedTaskState.phase === "compute" && advancedTaskState.bracket);
+    }
+  }
+
+  function onAdvancedFactorClick(index) {
+    if (!Number.isInteger(index)) return;
+    if (!advancedTaskState.factors.length) return;
+    if (advancedTaskState.phase === "solved") return;
+
+    if (advancedTaskState.phase === "compute") {
+      setAdvancedStatus("Erst Ergebnis prüfen, dann weiterarbeiten.", "");
+      return;
+    }
+
+    const pos = advancedTaskState.selectedIndices.indexOf(index);
+    if (pos >= 0) {
+      advancedTaskState.selectedIndices.splice(pos, 1);
+      renderAdvancedTask();
+      saveAdvancedTaskStateLocal();
+      return;
+    }
+
+    advancedTaskState.selectedIndices.push(index);
+    if (advancedTaskState.selectedIndices.length > 2) {
+      advancedTaskState.selectedIndices = [advancedTaskState.selectedIndices[1]];
+    }
+
+    if (advancedTaskState.phase === "reorder") {
+      if (advancedTaskState.selectedIndices.length === 2) {
+        const [i1, i2] = advancedTaskState.selectedIndices;
+        const tmp = advancedTaskState.factors[i1];
+        advancedTaskState.factors[i1] = advancedTaskState.factors[i2];
+        advancedTaskState.factors[i2] = tmp;
+        advancedTaskState.selectedIndices = [];
+        setAdvancedStatus("Positionen getauscht. Du kannst weiter tauschen oder „Reihenfolge fertig“ klicken.", "");
+      }
+      renderAdvancedTask();
+      saveAdvancedTaskStateLocal();
+      return;
+    }
+
+    if (advancedTaskState.phase === "pair") {
+      if (advancedTaskState.selectedIndices.length < 2) {
+        setAdvancedStatus("Jetzt die zweite Zahl (benachbart) auswählen.", "");
+        renderAdvancedTask();
+        saveAdvancedTaskStateLocal();
+        return;
+      }
+      const [i1, i2] = advancedTaskState.selectedIndices;
+      const check = validateAdvancedBracketSelection(i1, i2);
+      if (!check.ok) {
+        advancedTaskState.selectedIndices = [];
+        advancedTaskState.bracket = null;
+        if (check.reason === "nicht-nebeneinander") setAdvancedStatus("Die Zahlen müssen nebeneinander stehen.", "err");
+        else if (check.reason === "kein-vorteilspaar") setAdvancedStatus("Das ist kein Vorteilspaar aus den Aufgaben.", "err");
+        else setAdvancedStatus("Diese Auswahl ist nicht möglich.", "err");
+        renderAdvancedTask();
+        saveAdvancedTaskStateLocal();
+        return;
+      }
+      advancedTaskState.bracket = [Math.min(i1, i2), Math.max(i1, i2)];
+      advancedTaskState.selectedIndices = [];
+      advancedTaskState.phase = "compute";
+      advancedTaskState.computeInput = "";
+      setAdvancedStatus("Klammer gesetzt. Ergebnis eintragen und prüfen.", "ok");
+      renderAdvancedTask();
+      saveAdvancedTaskStateLocal();
+    }
+  }
+
+  function onAdvancedOrderDone() {
+    if (advancedTaskState.phase !== "reorder") return;
+    advancedTaskState.selectedIndices = [];
+    advancedTaskState.bracket = null;
+    advancedTaskState.computeInput = "";
+    advancedTaskState.phase = "pair";
+    setAdvancedStatus("Wähle jetzt ein benachbartes Vorteilspaar für die Klammer.", "");
+    renderAdvancedTask();
+    saveAdvancedTaskStateLocal();
+  }
+
+  async function awardAdvancedPoint() {
+    advancedTaskState.points = (advancedTaskState.points || 0) + 1;
+    saveAdvancedScoreLocal(advancedTaskState.points);
+    updateAdvancedPointsView();
+    await writeAdvancedScoreToEdulo(advancedTaskState.points);
+    if (eduloConfig.enabled) triggerEduloCheck();
+  }
+
+  async function onAdvancedCompute() {
+    if (advancedTaskState.phase !== "compute" || !advancedTaskState.bracket) return;
+    const i1 = advancedTaskState.bracket[0];
+    const i2 = advancedTaskState.bracket[1];
+    const check = validateAdvancedBracketSelection(i1, i2);
+    if (!check.ok) {
+      advancedTaskState.bracket = null;
+      advancedTaskState.computeInput = "";
+      advancedTaskState.phase = "pair";
+      setAdvancedStatus("Klammer ist nicht mehr gültig. Bitte neu wählen.", "err");
+      renderAdvancedTask();
+      saveAdvancedTaskStateLocal();
+      return;
+    }
+
+    const product = check.a * check.b;
+    const entered = parseIntStrict(advancedTaskState.computeInput);
+    if (entered === null) {
+      setAdvancedStatus("Trage ein ganzzahliges Ergebnis ein.", "err");
+      setAdvancedLog("", "");
+      renderAdvancedTask();
+      return;
+    }
+    if (entered !== product) {
+      setAdvancedStatus("Das Klammerprodukt stimmt noch nicht.", "err");
+      setAdvancedLog("(" + check.a + " · " + check.b + ") ist nicht " + entered + ".", "err");
+      renderAdvancedTask();
+      return;
+    }
+
+    advancedTaskState.factors.splice(i1, 2, product);
+    advancedTaskState.lastResult = "(" + check.a + " · " + check.b + ") = " + product;
+    advancedTaskState.bracket = null;
+    advancedTaskState.selectedIndices = [];
+    advancedTaskState.computeInput = "";
+
+    if (advancedTaskState.factors.length === 1) {
+      advancedTaskState.phase = "solved";
+      const finalVal = advancedTaskState.factors[0];
+      setAdvancedStatus("Richtig gelöst.", "ok");
+      setAdvancedLog("Ergebnis: " + finalVal + "   (+1 Punkt)", "ok");
+      clearAdvancedTaskStateLocal();
+      renderAdvancedTask();
+      await awardAdvancedPoint();
+      return;
+    }
+
+    advancedTaskState.phase = "reorder";
+    setAdvancedStatus("Teilprodukt berechnet. Ordne jetzt die verbleibenden Zahlen neu.", "ok");
+    setAdvancedLog("Teilprodukt: " + product, "");
+    renderAdvancedTask();
+    saveAdvancedTaskStateLocal();
+  }
+
+  async function resetAdvancedTaskProgress() {
+    advancedTaskState.points = 0;
+    saveAdvancedScoreLocal(0);
+    clearAdvancedTaskStateLocal();
+
+    if (eduloConfig.enabled) {
+      if (eduloConfig.sumId) {
+        await setFieldValueWithRetry(eduloConfig.sumId, "", 10, 200);
+      }
+      if (isEduloFieldTruthMode()) {
+        await waitForEduloField(eduloConfig.scorePrefix + String(eduloConfig.scoreStartIndex), 20, 200);
+        for (let i = 0; i < ADV_SCORE_FLAG_COUNT; i++) {
+          const fieldId = getAdvancedScoreMilestoneFieldId(i);
+          await setFieldValueWithRetry(fieldId, "", 10, 200);
+        }
+      }
+    }
+
+    updateAdvancedPointsView();
+    startAdvancedTask();
+    if (eduloConfig.enabled) triggerEduloCheck();
+  }
+
+  function initAdvancedTask() {
+    syncAdvancedScoreFromTruth();
+
+    if (!restoreAdvancedTaskFromLocal()) {
+      startAdvancedTask();
+    } else {
+      if (!advancedTaskState.phase) advancedTaskState.phase = "reorder";
+      setAdvancedStatus("Aufgabe wiederhergestellt.", "");
+      setAdvancedLog("", "");
+      renderAdvancedTask();
+      saveAdvancedTaskStateLocal();
+    }
+  }
+
+  function adv2Msg(el, text, cls) {
+    if (!el) return;
+    el.textContent = text || "";
+    el.className = "pow-status" + (cls ? " " + cls : "");
+  }
+
+  function adv2Val(id) {
+    if (!adv2.task || !adv2.task.tokens || !adv2.task.tokens[id]) return 0;
+    return Number(adv2.task.tokens[id].v || 0);
+  }
+
+  function adv2Vals(ids) {
+    return ids.map(adv2Val);
+  }
+
+  function adv2Product(vals) {
+    return vals.reduce((acc, v) => acc * v, 1);
+  }
+
+  function adv2Expr(order, brackets) {
+    const bs = {};
+    const groups = Array.isArray(brackets) ? brackets.slice().sort((a, b) => a.a - b.a) : [];
+    groups.forEach(g => { bs[g.a] = g; });
+    const out = [];
+    for (let i = 0; i < order.length;) {
+      const g = bs[i];
+      if (g) {
+        const vals = adv2Vals(order.slice(g.a, g.b + 1));
+        out.push("(" + vals.join(" · ") + ")");
+        i = g.b + 1;
+      } else {
+        out.push(String(adv2Val(order[i])));
+        i++;
+      }
+    }
+    return out.join(" · ");
+  }
+
+  function adv2ClearMessages() {
+    adv2Msg(ui.adv2Msg1, "", "");
+    adv2Msg(ui.adv2Msg2, "", "");
+    adv2Msg(ui.adv2Msg3, "", "");
+    adv2Msg(ui.adv2Msg4, "", "");
+  }
+
+  function adv2ResetFlowState(task) {
+    adv2.task = task || null;
+    adv2.order = task ? task.orig.slice() : [];
+    adv2.pickSwapIndex = -1;
+    adv2.pickBracketIndex = -1;
+    adv2.brackets = [];
+    adv2.step1Done = false;
+    adv2.step2Done = false;
+    adv2.step3Done = false;
+    adv2.solved = false;
+    adv2.inputs = { g1: "", g2: "", fin: "" };
+    adv2.calc3 = null;
+  }
+
+  function adv2SaveFlow() {
+    const payload = {
+      task: adv2.task,
+      order: adv2.order.slice(),
+      pickSwapIndex: adv2.pickSwapIndex,
+      pickBracketIndex: adv2.pickBracketIndex,
+      brackets: adv2.brackets.map(g => ({ a: g.a, b: g.b })),
+      step1Done: !!adv2.step1Done,
+      step2Done: !!adv2.step2Done,
+      step3Done: !!adv2.step3Done,
+      solved: !!adv2.solved,
+      inputs: Object.assign({}, adv2.inputs)
+    };
+    try { localStorage.setItem(ADV2_FLOW_STORAGE_KEY, JSON.stringify(payload)); } catch (_e) {}
+  }
+
+  function adv2ClearFlow() {
+    try { localStorage.removeItem(ADV2_FLOW_STORAGE_KEY); } catch (_e) {}
+  }
+
+  function adv2IsValidTaskShape(task) {
+    if (!task || typeof task !== "object") return false;
+    if (!task.tokens || typeof task.tokens !== "object") return false;
+    if (!Array.isArray(task.orig) || task.orig.length !== 5) return false;
+    if (!Number.isFinite(task.total) || task.total <= 0) return false;
+    return task.orig.every(id => task.tokens[id] && Number.isFinite(task.tokens[id].v));
+  }
+
+  function adv2LoadFlow() {
+    try {
+      const raw = localStorage.getItem(ADV2_FLOW_STORAGE_KEY);
+      const saved = raw ? JSON.parse(raw) : null;
+      if (!saved || typeof saved !== "object" || !adv2IsValidTaskShape(saved.task)) return false;
+
+      const validIds = new Set(saved.task.orig);
+      const order = Array.isArray(saved.order) ? saved.order.slice() : saved.task.orig.slice();
+      if (order.length !== 5 || order.some(id => !validIds.has(id))) return false;
+      const counts = new Map();
+      order.forEach(id => counts.set(id, (counts.get(id) || 0) + 1));
+      if (saved.task.orig.some(id => counts.get(id) !== 1)) return false;
+
+      adv2ResetFlowState(saved.task);
+      adv2.order = order;
+      adv2.pickSwapIndex = Number.isInteger(saved.pickSwapIndex) ? saved.pickSwapIndex : -1;
+      adv2.pickBracketIndex = Number.isInteger(saved.pickBracketIndex) ? saved.pickBracketIndex : -1;
+      adv2.brackets = Array.isArray(saved.brackets)
+        ? saved.brackets
+            .filter(g => g && Number.isInteger(g.a) && Number.isInteger(g.b))
+            .map(g => ({ a: g.a, b: g.b }))
+        : [];
+      adv2.step1Done = !!saved.step1Done;
+      adv2.step2Done = !!saved.step2Done;
+      adv2.step3Done = !!saved.step3Done;
+      adv2.solved = !!saved.solved;
+      adv2.inputs = Object.assign({ g1: "", g2: "", fin: "" }, saved.inputs || {});
+      if (adv2.step2Done) adv2.calc3 = adv2BuildCalc3Model();
+      return true;
+    } catch (_e) {
+      return false;
+    }
+  }
+
+  function adv2FindBracketAt(index) {
+    for (let k = 0; k < adv2.brackets.length; k++) {
+      const g = adv2.brackets[k];
+      if (index >= g.a && index <= g.b) return { g, k };
+    }
+    return null;
+  }
+
+  function adv2OverlapsBracket(a, b) {
+    return adv2.brackets.some(g => !(b < g.a || a > g.b));
+  }
+
+  function adv2RenderRow(container, order, mode) {
+    if (!container) return;
+    container.innerHTML = "";
+
+    order.forEach((id, i) => {
+      if (i > 0) {
+        const dot = document.createElement("span");
+        dot.className = "adv-token";
+        dot.textContent = "·";
+        container.appendChild(dot);
+      }
+
+      const isRead = mode === "read";
+      const btn = document.createElement(isRead ? "span" : "button");
+      if (!isRead) btn.type = "button";
+      btn.className = "adv-factor";
+      btn.textContent = String(adv2Val(id));
+      btn.dataset.index = String(i);
+
+      if (mode === "step1" && adv2.pickSwapIndex === i) btn.classList.add("pick");
+      if (mode === "step2") {
+        if (adv2.pickBracketIndex === i) btn.classList.add("pick");
+        const hit = adv2FindBracketAt(i);
+        if (hit) {
+          btn.classList.add("bracketed");
+          if (i === hit.g.a && i === hit.g.b) {
+            btn.classList.add("gs", "ge");
+          } else if (i === hit.g.a) {
+            btn.classList.add("gs");
+          } else if (i === hit.g.b) {
+            btn.classList.add("ge");
+          } else {
+            btn.classList.add("gm");
+          }
+        }
+      }
+
+      const disabled = (mode === "step1" && adv2.step1Done) || (mode === "step2" && adv2.step2Done);
+      if (!isRead) btn.disabled = !!disabled;
+
+      if (mode === "step1" && !adv2.step1Done) {
+        btn.addEventListener("click", () => adv2OnStep1Click(i));
+      } else if (mode === "step2" && !adv2.step2Done) {
+        btn.addEventListener("click", () => adv2OnStep2Click(i));
+      }
+
+      container.appendChild(btn);
+    });
+  }
+
+  function adv2AdjacentEdges(order) {
+    const edges = [];
+    for (let i = 0; i < order.length - 1; i++) {
+      const a = adv2Val(order[i]);
+      const b = adv2Val(order[i + 1]);
+      const k = pairKey(a, b);
+      if (ADV_VALID_PAIR_KEY_SET.has(k)) {
+        edges.push({ a: i, b: i + 1, key: k, vals: [a, b] });
+      }
+    }
+    return edges;
+  }
+
+  function adv2FindTwoDisjointAdjacentPairs(order) {
+    const edges = adv2AdjacentEdges(order);
+    for (let i = 0; i < edges.length; i++) {
+      for (let j = i + 1; j < edges.length; j++) {
+        if (edges[j].a > edges[i].b || edges[i].a > edges[j].b) {
+          return [edges[i], edges[j]].sort((x, y) => x.a - y.a);
+        }
+      }
+    }
+    return null;
+  }
+
+  function adv2CanUseAsExtra(extra, baseValues) {
+    if (!Number.isFinite(extra) || extra <= 1) return false;
+    if (baseValues.includes(extra)) {
+      // Gleiche Zahl ist erlaubt, aber nicht wenn dadurch ein weiteres Vorteilspaar entstehen kann.
+    }
+    for (const v of baseValues) {
+      if (ADV_VALID_PAIR_KEY_SET.has(pairKey(extra, v))) return false;
+    }
+    return true;
+  }
+
+  function adv2GenerateTask() {
+    const extraCandidates = [3, 6, 7, 9, 11, 12, 14, 15, 18, 21, 22, 24, 27, 28, 30, 33, 35, 36, 45];
+    for (let t = 0; t < 220; t++) {
+      const p1 = ADV_VALID_PAIRS[Math.floor(Math.random() * ADV_VALID_PAIRS.length)];
+      let p2 = ADV_VALID_PAIRS[Math.floor(Math.random() * ADV_VALID_PAIRS.length)];
+      let guard = 0;
+      while (ADV_VALID_PAIRS.length > 1 && pairKey(p1[0], p1[1]) === pairKey(p2[0], p2[1]) && guard < 40) {
+        p2 = ADV_VALID_PAIRS[Math.floor(Math.random() * ADV_VALID_PAIRS.length)];
+        guard++;
+      }
+
+      const baseValues = [p1[0], p1[1], p2[0], p2[1]];
+      const extras = shuffleArray(extraCandidates).filter(x => adv2CanUseAsExtra(x, baseValues));
+      if (!extras.length) continue;
+      const extra = extras[0];
+
+      const ids = ["t1", "t2", "t3", "t4", "t5"];
+      const values = [p1[0], p1[1], p2[0], p2[1], extra];
+      const tokens = {};
+      ids.forEach((id, i) => { tokens[id] = { v: values[i] }; });
+
+      let orig = shuffleArray(ids);
+      let reshuffleGuard = 0;
+      while (adv2FindTwoDisjointAdjacentPairs(orig) && reshuffleGuard < 40) {
+        orig = shuffleArray(ids);
+        reshuffleGuard++;
+      }
+      if (adv2FindTwoDisjointAdjacentPairs(orig)) continue;
+
+      const total = values.reduce((acc, v) => acc * v, 1);
+      return { tokens, orig, total };
+    }
+
+    const fallback = {
+      tokens: { t1: { v: 2 }, t2: { v: 5 }, t3: { v: 25 }, t4: { v: 40 }, t5: { v: 7 } },
+      orig: ["t1", "t3", "t5", "t2", "t4"],
+      total: 7000
+    };
+    if (adv2FindTwoDisjointAdjacentPairs(fallback.orig)) {
+      fallback.orig = ["t1", "t5", "t3", "t2", "t4"];
+    }
+    return fallback;
+  }
+
+  function adv2BuildCalc3Model() {
+    if (!adv2.step2Done || adv2.brackets.length !== 2) return null;
+    const groups = adv2.brackets.slice().sort((a, b) => a.a - b.a);
+    const starts = {};
+    groups.forEach(g => { starts[g.a] = g; });
+    const tok = [];
+    const out = [];
+    let gi = 1;
+
+    for (let i = 0; i < adv2.order.length;) {
+      const g = starts[i];
+      if (g) {
+        const ids = adv2.order.slice(g.a, g.b + 1);
+        const vals = adv2Vals(ids);
+        const k = "g" + gi++;
+        tok.push({ t: "g", k, e: adv2Product(vals), txt: "(" + vals.join(" · ") + ")" });
+        out.push("(" + vals.join(" · ") + ")");
+        i = g.b + 1;
+      } else {
+        const v = adv2Val(adv2.order[i]);
+        tok.push({ t: "s", e: v });
+        out.push(String(v));
+        i++;
+      }
+    }
+    return { tok, ex: out.join(" · "), tot: adv2.task.total };
+  }
+
+  function adv2BuildFinalModel() {
+    if (!adv2.calc3) return null;
+    const out = [];
+    for (const t of adv2.calc3.tok) {
+      if (t.t === "g") {
+        const n = parseIntStrict(adv2.inputs[t.k]);
+        if (n === null) return null;
+        out.push(n);
+      } else {
+        out.push(t.e);
+      }
+    }
+    return {
+      factors: out,
+      ex: out.join(" · "),
+      tot: adv2.task ? adv2.task.total : 0
+    };
+  }
+
+  function adv2RenderCalc3() {
+    if (!ui.adv2Calc3) return;
+    ui.adv2Calc3.innerHTML = "";
+    if (!adv2.step2Done || !adv2.calc3) return;
+
+    const line = document.createElement("div");
+    line.className = "adv-calc-line";
+    adv2.calc3.tok.forEach((t, ix) => {
+      if (ix) {
+        const dot = document.createElement("span");
+        dot.textContent = "·";
+        line.appendChild(dot);
+      }
+      if (t.t === "g") {
+        const inp = document.createElement("input");
+        inp.type = "text";
+        inp.className = "adv-inp";
+        inp.inputMode = "numeric";
+        inp.placeholder = "?";
+        inp.value = adv2.inputs[t.k] || "";
+        inp.disabled = adv2.step3Done;
+        inp.addEventListener("input", () => {
+          adv2.inputs[t.k] = inp.value.trim();
+          adv2SaveFlow();
+        });
+        inp.addEventListener("keydown", e => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            adv2CheckStep3();
+          }
+        });
+        line.appendChild(inp);
+      } else {
+        const s = document.createElement("span");
+        s.className = "adv-token";
+        s.textContent = String(t.e);
+        line.appendChild(s);
+      }
+    });
+    ui.adv2Calc3.appendChild(line);
+  }
+
+  function adv2RenderCalc4() {
+    if (!ui.adv2Calc4) return;
+    ui.adv2Calc4.innerHTML = "";
+    if (!adv2.step3Done) return;
+    const m = adv2BuildFinalModel();
+    if (!m) return;
+
+    const line = document.createElement("div");
+    line.className = "adv-calc-line";
+    m.factors.forEach((v, ix) => {
+      if (ix) {
+        const dot = document.createElement("span");
+        dot.textContent = "·";
+        line.appendChild(dot);
+      }
+      const s = document.createElement("span");
+      s.className = "adv-token";
+      s.textContent = String(v);
+      line.appendChild(s);
+    });
+
+    const eq = document.createElement("span");
+    eq.textContent = "=";
+    line.appendChild(eq);
+
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.className = "adv-inp";
+    inp.inputMode = "numeric";
+    inp.placeholder = "?";
+    inp.value = adv2.inputs.fin || "";
+    inp.addEventListener("input", () => {
+      adv2.inputs.fin = inp.value.trim();
+      adv2SaveFlow();
+    });
+    inp.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        void adv2CheckStep4();
+      }
+    });
+    line.appendChild(inp);
+    ui.adv2Calc4.appendChild(line);
+  }
+
+  function adv2RenderAll() {
+    if (!adv2.task) return;
+
+    if (ui.adv2Card2) ui.adv2Card2.classList.toggle("hide", !adv2.step1Done);
+    if (ui.adv2Card3) ui.adv2Card3.classList.toggle("hide", !adv2.step2Done);
+    if (ui.adv2Card4) ui.adv2Card4.classList.toggle("hide", !adv2.step3Done);
+    if (ui.adv2Text0) ui.adv2Text0.classList.add("hide");
+    adv2RenderRow(ui.adv2Row1, adv2.order, "step1");
+    if (ui.adv2Row2 && adv2.step1Done) adv2RenderRow(ui.adv2Row2, adv2.order, "step2");
+
+    if (ui.adv2Eq0) ui.adv2Eq0.textContent = adv2Expr(adv2.task.orig, []);
+    if (ui.adv2Eq1) ui.adv2Eq1.textContent = adv2Expr(adv2.order, []);
+    if (ui.adv2Eq2) ui.adv2Eq2.textContent = adv2.step1Done ? adv2Expr(adv2.order, adv2.brackets) : "";
+    if (ui.adv2Eq3) {
+      if (adv2.step3Done) {
+        const m3 = adv2BuildFinalModel();
+        ui.adv2Eq3.textContent = m3 ? m3.ex : "";
+      } else {
+        ui.adv2Eq3.textContent = (adv2.step2Done && adv2.calc3) ? adv2.calc3.ex : "";
+      }
+    }
+    if (ui.adv2Eq4) {
+      const m = adv2.step3Done ? adv2BuildFinalModel() : null;
+      ui.adv2Eq4.textContent = (m ? (adv2.solved ? (m.ex + " = " + (adv2.inputs.fin || "")) : "") : "");
+    }
+
+    adv2RenderCalc3();
+    adv2RenderCalc4();
+
+    const collapse1 = adv2.step1Done;
+    if (ui.adv2Text1) ui.adv2Text1.classList.toggle("hide", collapse1);
+    if (ui.adv2Wrap1) ui.adv2Wrap1.classList.toggle("hide", collapse1);
+    if (ui.adv2Act1) ui.adv2Act1.classList.toggle("hide", collapse1);
+    if (ui.adv2Msg1) ui.adv2Msg1.classList.toggle("hide", collapse1);
+
+    const collapse2 = adv2.step2Done;
+    if (ui.adv2Text2) ui.adv2Text2.classList.toggle("hide", collapse2);
+    if (ui.adv2Wrap2) ui.adv2Wrap2.classList.toggle("hide", collapse2);
+    if (ui.adv2Act2) ui.adv2Act2.classList.toggle("hide", collapse2);
+    if (ui.adv2Msg2) ui.adv2Msg2.classList.toggle("hide", collapse2);
+
+    const collapse3 = adv2.step3Done;
+    if (ui.adv2Text3) ui.adv2Text3.classList.toggle("hide", collapse3);
+    if (ui.adv2Calc3) ui.adv2Calc3.classList.toggle("hide", collapse3);
+    if (ui.adv2Act3) ui.adv2Act3.classList.toggle("hide", collapse3);
+    if (ui.adv2Msg3) ui.adv2Msg3.classList.toggle("hide", collapse3);
+
+    const collapse4 = adv2.solved;
+    if (ui.adv2Text4) ui.adv2Text4.classList.toggle("hide", collapse4);
+    if (ui.adv2Calc4) ui.adv2Calc4.classList.toggle("hide", collapse4);
+    if (ui.adv2Act4) ui.adv2Act4.classList.toggle("hide", collapse4);
+    if (ui.adv2Msg4) ui.adv2Msg4.classList.toggle("hide", collapse4);
+
+    if (ui.adv2Check1Btn) ui.adv2Check1Btn.disabled = adv2.step1Done;
+    if (ui.adv2ClearBracketsBtn) ui.adv2ClearBracketsBtn.disabled = adv2.step2Done || adv2.brackets.length === 0;
+    if (ui.adv2Check2Btn) ui.adv2Check2Btn.disabled = adv2.step2Done;
+    if (ui.adv2Check3Btn) ui.adv2Check3Btn.disabled = !adv2.step2Done || adv2.step3Done;
+    if (ui.adv2Check4Btn) ui.adv2Check4Btn.disabled = !adv2.step3Done || adv2.solved;
+  }
+
+  function adv2OnStep1Click(index) {
+    if (adv2.step1Done) return;
+    if (adv2.pickSwapIndex < 0) {
+      adv2.pickSwapIndex = index;
+      adv2Msg(ui.adv2Msg1, "Erste Zahl gewählt. Jetzt zweite Zahl zum Tauschen anklicken.", "");
+      adv2RenderAll();
+      adv2SaveFlow();
+      return;
+    }
+    if (adv2.pickSwapIndex === index) {
+      adv2.pickSwapIndex = -1;
+      adv2Msg(ui.adv2Msg1, "", "");
+      adv2RenderAll();
+      adv2SaveFlow();
+      return;
+    }
+    const i1 = adv2.pickSwapIndex;
+    const i2 = index;
+    const tmp = adv2.order[i1];
+    adv2.order[i1] = adv2.order[i2];
+    adv2.order[i2] = tmp;
+    adv2.pickSwapIndex = -1;
+    adv2Msg(ui.adv2Msg1, "Positionen getauscht.", "");
+    adv2RenderAll();
+    adv2SaveFlow();
+  }
+
+  function adv2OnStep2Click(index) {
+    if (!adv2.step1Done || adv2.step2Done) return;
+    if (adv2.pickBracketIndex < 0) {
+      adv2.pickBracketIndex = index;
+      adv2Msg(ui.adv2Msg2, "Start gewählt. Jetzt Endfeld anklicken.", "");
+      adv2RenderAll();
+      adv2SaveFlow();
+      return;
+    }
+
+    const a = Math.min(adv2.pickBracketIndex, index);
+    const b = Math.max(adv2.pickBracketIndex, index);
+    adv2.pickBracketIndex = -1;
+
+    if (b - a < 1) {
+      adv2Msg(ui.adv2Msg2, "Markiere mindestens zwei Faktoren.", "err");
+      adv2RenderAll();
+      adv2SaveFlow();
+      return;
+    }
+    if (adv2.brackets.length >= 2) {
+      adv2Msg(ui.adv2Msg2, "Für diese Aufgabe genügen zwei Klammern.", "err");
+      adv2RenderAll();
+      adv2SaveFlow();
+      return;
+    }
+    if (adv2OverlapsBracket(a, b)) {
+      adv2Msg(ui.adv2Msg2, "Klammern dürfen sich nicht überschneiden.", "err");
+      adv2RenderAll();
+      adv2SaveFlow();
+      return;
+    }
+    adv2.brackets.push({ a, b });
+    adv2.brackets.sort((x, y) => x.a - y.a);
+    adv2Msg(ui.adv2Msg2, "Klammer gesetzt.", "");
+    adv2RenderAll();
+    adv2SaveFlow();
+  }
+
+  function adv2CheckStep1() {
+    if (adv2.step1Done) return;
+    const okPairs = adv2FindTwoDisjointAdjacentPairs(adv2.order);
+    if (!okPairs) {
+      adv2Msg(ui.adv2Msg1, "Noch nicht. Bringe zwei Vorteilspaare nebeneinander.", "err");
+      return;
+    }
+    adv2.step1Done = true;
+    adv2.pickSwapIndex = -1;
+    adv2Msg(ui.adv2Msg1, "Richtig. Jetzt können die Klammern gesetzt werden.", "ok");
+    adv2RenderAll();
+    adv2SaveFlow();
+  }
+
+  function adv2ClearBrackets() {
+    if (adv2.step2Done) return;
+    adv2.brackets = [];
+    adv2.pickBracketIndex = -1;
+    adv2Msg(ui.adv2Msg2, "Klammern gelöscht.", "");
+    adv2RenderAll();
+    adv2SaveFlow();
+  }
+
+  function adv2CheckStep2() {
+    if (!adv2.step1Done || adv2.step2Done) return;
+    if (adv2.brackets.length !== 2) {
+      adv2Msg(ui.adv2Msg2, "Setze zwei Klammern um die Vorteilspaare.", "err");
+      return;
+    }
+
+    for (const g of adv2.brackets) {
+      if (g.b - g.a !== 1) {
+        adv2Msg(ui.adv2Msg2, "Jede Klammer soll genau zwei Faktoren enthalten.", "err");
+        return;
+      }
+      const vals = adv2Vals(adv2.order.slice(g.a, g.b + 1));
+      if (!ADV_VALID_PAIR_KEY_SET.has(pairKey(vals[0], vals[1]))) {
+        adv2Msg(ui.adv2Msg2, "Noch nicht optimal. Klammern müssen Vorteilspaare umfassen.", "err");
+        return;
+      }
+    }
+
+    adv2.step2Done = true;
+    adv2.pickBracketIndex = -1;
+    adv2.calc3 = adv2BuildCalc3Model();
+    adv2.inputs.g1 = adv2.inputs.g1 || "";
+    adv2.inputs.g2 = adv2.inputs.g2 || "";
+    adv2Msg(ui.adv2Msg2, "Sehr gut. Die Klammern sind sinnvoll gesetzt.", "ok");
+    adv2RenderAll();
+    adv2SaveFlow();
+  }
+
+  function adv2CheckStep3() {
+    if (!adv2.step2Done || adv2.step3Done || !adv2.calc3) return;
+    for (const t of adv2.calc3.tok) {
+      if (t.t !== "g") continue;
+      const n = parseIntStrict(adv2.inputs[t.k]);
+      if (n === null || n !== t.e) {
+        adv2Msg(ui.adv2Msg3, "Ein Klammerprodukt stimmt noch nicht.", "err");
+        return;
+      }
+    }
+    adv2.step3Done = true;
+    adv2Msg(ui.adv2Msg3, "Richtig. Jetzt noch das Endergebnis berechnen.", "ok");
+    adv2RenderAll();
+    adv2SaveFlow();
+    if (eduloConfig.enabled) triggerEduloCheck();
+  }
+
+  async function adv2CheckStep4() {
+    if (!adv2.step3Done) return;
+    const n = parseIntStrict(adv2.inputs.fin);
+    if (n === null) {
+      adv2Msg(ui.adv2Msg4, "Trage ein ganzzahliges Endergebnis ein.", "err");
+      return;
+    }
+    if (!adv2.task || n !== adv2.task.total) {
+      adv2Msg(ui.adv2Msg4, "Das Endergebnis ist noch nicht korrekt.", "err");
+      return;
+    }
+
+    if (!adv2.solved) {
+      adv2.solved = true;
+      await awardAdvancedPoint();
+    }
+    adv2Msg(ui.adv2Msg4, "Perfekt. Aufgabe vollständig richtig gerechnet.", "ok");
+    adv2RenderAll();
+    adv2SaveFlow();
+  }
+
+  function adv2NewTask() {
+    const task = adv2GenerateTask();
+    adv2ResetFlowState(task);
+    adv2ClearMessages();
+    adv2RenderAll();
+    adv2SaveFlow();
+  }
+
+  async function adv2ResetTaskAndPoints() {
+    advancedTaskState.points = 0;
+    saveAdvancedScoreLocal(0);
+    updateAdvancedPointsView();
+
+    if (eduloConfig.enabled) {
+      if (eduloConfig.sumId) {
+        await setFieldValueWithRetry(eduloConfig.sumId, "", 10, 200);
+      }
+      if (isEduloFieldTruthMode()) {
+        await waitForEduloField(eduloConfig.scorePrefix + String(eduloConfig.scoreStartIndex), 20, 200);
+        for (let i = 0; i < ADV_SCORE_FLAG_COUNT; i++) {
+          const fieldId = getAdvancedScoreMilestoneFieldId(i);
+          await setFieldValueWithRetry(fieldId, "", 10, 200);
+        }
+      }
+    }
+
+    adv2ClearFlow();
+    adv2NewTask();
+    if (eduloConfig.enabled) triggerEduloCheck();
+  }
+
+  function adv2InitTask() {
+    syncAdvancedScoreFromTruth();
+    adv2ClearMessages();
+    if (!adv2LoadFlow()) adv2NewTask();
+    else {
+      if (adv2.step2Done) adv2.calc3 = adv2BuildCalc3Model();
+      adv2RenderAll();
+    }
+  }
+
   ui.lawComm.addEventListener("click", () => setLaw("comm"));
   ui.lawAssoc.addEventListener("click", () => setLaw("assoc"));
+  if (ui.resetPowerTasksBtn) {
+    ui.resetPowerTasksBtn.addEventListener("click", () => { void resetPowerTasksProgress(); });
+  }
+  if (ui.newAdvancedTaskBtn) {
+    ui.newAdvancedTaskBtn.addEventListener("click", () => {
+      adv2NewTask();
+    });
+  }
+  if (ui.resetAdvancedTaskBtn) {
+    ui.resetAdvancedTaskBtn.addEventListener("click", () => { void adv2ResetTaskAndPoints(); });
+  }
+  if (ui.adv2Check1Btn) {
+    ui.adv2Check1Btn.addEventListener("click", adv2CheckStep1);
+  }
+  if (ui.adv2ClearBracketsBtn) {
+    ui.adv2ClearBracketsBtn.addEventListener("click", adv2ClearBrackets);
+  }
+  if (ui.adv2Check2Btn) {
+    ui.adv2Check2Btn.addEventListener("click", adv2CheckStep2);
+  }
+  if (ui.adv2Check3Btn) {
+    ui.adv2Check3Btn.addEventListener("click", adv2CheckStep3);
+  }
+  if (ui.adv2Check4Btn) {
+    ui.adv2Check4Btn.addEventListener("click", () => { void adv2CheckStep4(); });
+  }
+  if (ui.advancedOrderDoneBtn) {
+    ui.advancedOrderDoneBtn.addEventListener("click", onAdvancedOrderDone);
+  }
+  if (ui.advancedComputeBtn) {
+    ui.advancedComputeBtn.addEventListener("click", () => { void onAdvancedCompute(); });
+  }
   window.addEventListener("resize", () => {
     fitCanvas();
     scheduleRender();
@@ -1073,6 +3306,9 @@ body{
 
   state.scene = buildScene(currentSceneSpec());
   refreshControls();
+  await warmUpEduloBindings();
+  buildPowerTasks();
+  adv2InitTask();
   fitCanvas();
   scheduleRender();
 })();

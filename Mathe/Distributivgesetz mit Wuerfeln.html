@@ -1,0 +1,2092 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Distributivgesetz mit Würfeln</title>
+<style>
+:root{
+  --bg1:#eaf4ff;
+  --bg2:#fff7ea;
+  --card:#ffffff;
+  --ink:#1f2937;
+  --muted:#5b6472;
+  --line:#c8d8ee;
+  --shadow:0 14px 34px rgba(15, 38, 73, .10);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 520px at 10% -5%, rgba(106,168,255,.24), transparent 60%),
+    radial-gradient(900px 440px at 100% 0%, rgba(255,169,92,.18), transparent 58%),
+    linear-gradient(160deg,var(--bg1),var(--bg2));
+  font-family:"Trebuchet MS", Verdana, sans-serif;
+  padding:18px;
+}
+.page{max-width:1100px;margin:0 auto;display:grid;gap:14px}
+.card{
+  background:var(--card);
+  border:2px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+}
+.hero{padding:16px 18px 14px}
+.hero h1{
+  margin:0 0 8px;
+  color:#0b4f88;
+  font-size:clamp(22px,18px + 1vw,32px);
+}
+.hero p{margin:6px 0;color:var(--muted);line-height:1.45}
+.hero .lead{color:#243243;font-weight:700}
+
+.wissen{padding:14px 14px 12px;display:grid;gap:12px}
+.ribbon{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:linear-gradient(135deg,#ff4f84,#f03b62);
+  color:#fff;
+  font-weight:800;
+  letter-spacing:.02em;
+  padding:6px 11px;
+  border-radius:999px;
+  width:max-content;
+}
+.wissen-grid{display:grid;grid-template-columns:2fr 3fr;gap:12px;align-items:start}
+.law-box{
+  border:2px solid #f4b3c4;
+  background:linear-gradient(180deg,#fff6f9,#fffafb);
+  border-radius:14px;
+  padding:12px;
+}
+.law-box h2{margin:0 0 8px;color:#8a1238;font-size:17px}
+.law-item{
+  width:100%;
+  display:block;
+  text-align:left;
+  padding:9px 10px;
+  border:1px solid #f2cfda;
+  border-radius:10px;
+  background:#fff;
+  appearance:none;
+  font:inherit;
+  color:inherit;
+  cursor:pointer;
+  transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .14s ease;
+}
+.law-item + .law-item{margin-top:10px}
+.law-item:hover{border-color:#e9a9bd;box-shadow:0 4px 14px rgba(130,23,65,.08)}
+.law-item:focus-visible{outline:3px solid rgba(236,72,153,.28);outline-offset:2px}
+.law-item.active{
+  border-color:#e0618e;
+  background:linear-gradient(180deg,#fff9fc,#fff2f7);
+  box-shadow:0 7px 16px rgba(190, 35, 102, .10), inset 0 0 0 1px rgba(224, 97, 142, .18);
+  transform:translateY(-1px);
+}
+.law-item strong{display:block;margin-bottom:4px;color:#7c1d3e}
+.law-item p{margin:0;color:#4b5563;line-height:1.4}
+.formula{
+  margin-top:6px;
+  padding:6px 8px;
+  border-radius:8px;
+  background:#f8fbff;
+  border:1px solid #dae8f7;
+  color:#10395f;
+  font:700 16px/1.25 Consolas, "Courier New", monospace;
+}
+.law-item.active .formula{border-color:#cfe0f3;background:#fbfdff}
+.keep{
+  color:#0f5f9b;
+  background:rgba(15,95,155,.12);
+  border:1px solid rgba(15,95,155,.22);
+  border-radius:6px;
+  padding:0 3px;
+}
+.law-example{
+  margin-top:10px;
+  border-top:1px dashed #e2b8c7;
+  padding-top:8px;
+  display:grid;
+  gap:6px;
+  color:#374151;
+}
+.example-label{
+  font-weight:700;
+  color:#7c1d3e;
+  font-size:15px;
+}
+.example-grid{
+  width:100%;
+  max-width:460px;
+  display:grid;
+  gap:2px;
+}
+.eq-row,
+.eq-brace-row{
+  display:grid;
+  grid-template-columns:repeat(15,minmax(0,1fr));
+  align-items:center;
+}
+.eq-row{min-height:32px}
+.eq-brace-row{min-height:18px}
+.eq-token{
+  text-align:center;
+  font:700 21px/1 "Trebuchet MS", Verdana, sans-serif;
+  color:#111827;
+  white-space:nowrap;
+}
+.eq-token.keep-blue{color:#1d4ed8}
+.eq-token.final{font-size:38px}
+.eq-underbrace{
+  width:100%;
+  height:16px;
+}
+.eq-underbrace path{
+  fill:none;
+  stroke:#111827;
+  stroke-width:3.2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.aus-wissen{
+  padding:12px 14px;
+  display:grid;
+  gap:6px;
+}
+.aus-wissen h2{
+  margin:0;
+  color:#0b4f88;
+  font-size:18px;
+}
+.aus-wissen p{
+  margin:0;
+  color:#4b5563;
+  line-height:1.4;
+}
+
+.aus-task{
+  padding:14px;
+  display:grid;
+  gap:10px;
+}
+.aus-task h2{
+  margin:0;
+  color:#0b4f88;
+  font-size:18px;
+}
+.aus-task p{
+  margin:0;
+  color:#4b5563;
+  line-height:1.4;
+}
+.aus-problem{
+  border:1px solid #d6e7f7;
+  background:#f7fbff;
+  border-radius:10px;
+  padding:10px 12px;
+  font:700 22px/1.2 Consolas, "Courier New", monospace;
+  color:#17324c;
+}
+.aus-steps{
+  display:grid;
+  gap:10px;
+}
+.aus-step{
+  border:1px solid #d6e7f7;
+  background:#f8fbff;
+  border-radius:12px;
+  padding:10px;
+  display:grid;
+  gap:8px;
+}
+.aus-step h3{
+  margin:0;
+  color:#184a74;
+  font-size:17px;
+}
+.aus-step p{
+  margin:0;
+  color:#4b5563;
+  line-height:1.35;
+}
+.aus-line{
+  font:700 22px/1.2 Consolas, "Courier New", monospace;
+  color:#17324c;
+  white-space:nowrap;
+}
+.aus-input-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.aus-input-row.split{
+  gap:6px;
+}
+.eq-sign,
+.eq-op{
+  font:700 30px/1 "Trebuchet MS", Verdana, sans-serif;
+  color:#17324c;
+}
+.aus-input-row input{
+  min-width:0;
+  flex:0 0 auto;
+  width:auto;
+  max-width:100%;
+  border:2px solid #c8d8ee;
+  background:#fff;
+  border-radius:10px;
+  padding:10px 12px;
+  font:700 20px/1.2 Consolas, "Courier New", monospace;
+  color:#17324c;
+}
+.aus-input-row input.small{
+  width:auto;
+}
+.aus-input-row input.active{
+  border-color:#0f6db0;
+  background:#eef7ff;
+}
+.aus-step-hint{
+  border:1px dashed #d6b2bf;
+  background:#fff7fb;
+  border-radius:10px;
+  padding:8px 10px;
+  color:#7c1d3e;
+  font:700 18px/1.25 Consolas, "Courier New", monospace;
+}
+.hint-title{
+  font:700 14px/1.2 "Trebuchet MS", Verdana, sans-serif;
+  margin-bottom:3px;
+}
+.hide{display:none !important}
+.aus-keypad{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+.kp-btn{
+  border:2px solid #c6d9ed;
+  background:#fff;
+  color:#17324c;
+  border-radius:10px;
+  padding:10px 0;
+  font:700 18px/1 "Trebuchet MS", Verdana, sans-serif;
+  cursor:pointer;
+}
+.kp-btn:hover{background:#f6fbff;border-color:#9ec4e7}
+.kp-btn:focus-visible{outline:3px solid rgba(59,130,246,.24);outline-offset:2px}
+.kp-btn.wide{grid-column:span 2}
+.kp-btn.check{
+  background:#eaf9f0;
+  border-color:#9ad9b4;
+  color:#11613c;
+}
+.kp-btn.delete{
+  background:#fff6f6;
+  border-color:#efc2c2;
+  color:#8b1e1e;
+}
+.aus-meta{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.aus-points{
+  border:1px solid #d6e7f7;
+  background:#f7fbff;
+  border-radius:999px;
+  padding:4px 10px;
+  font:700 15px/1.2 "Trebuchet MS", Verdana, sans-serif;
+  color:#17324c;
+}
+.aus-reset{
+  margin-left:auto;
+  border:1px solid #d8e3f0;
+  background:#fff;
+  color:#334155;
+  border-radius:8px;
+  padding:6px 10px;
+  font:700 14px/1.1 "Trebuchet MS", Verdana, sans-serif;
+  cursor:pointer;
+}
+.aus-reset:hover{background:#f7fafc}
+.aus-next{
+  border:1px solid #9ad9b4;
+  background:#eaf9f0;
+  color:#11613c;
+  border-radius:8px;
+  padding:6px 12px;
+  font:700 14px/1.1 "Trebuchet MS", Verdana, sans-serif;
+  cursor:pointer;
+}
+.aus-next:hover{background:#dff4e9}
+.aus-progress-wrap{
+  width:100%;
+  display:grid;
+  gap:6px;
+}
+.aus-progress-grid{
+  position:relative;
+  width:100%;
+  height:16px;
+  border:1px solid #cfe0f1;
+  border-radius:999px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#f8fcff,#eef5fb);
+}
+.aus-progress-fill{
+  position:absolute;
+  inset:0 auto 0 0;
+  width:0%;
+  background:linear-gradient(90deg,#36b36c,#1f9d58);
+  border-right:1px solid rgba(16,102,54,.45);
+  transition:width .2s ease;
+  z-index:1;
+}
+.aus-progress-lines{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:2;
+}
+.aus-progress-line{
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:1px;
+  background:rgba(15,95,155,.24);
+  transform:translateX(-0.5px);
+}
+.aus-progress-line.major{
+  width:2px;
+  background:rgba(15,95,155,.48);
+  transform:translateX(-1px);
+}
+.aus-progress-text{
+  text-align:right;
+  font:700 13px/1.1 "Trebuchet MS", Verdana, sans-serif;
+  color:#35506a;
+}
+.aus-feedback{
+  min-height:22px;
+  font-weight:700;
+}
+.aus-feedback.ok{color:#0f8a4f}
+.aus-feedback.err{color:#c13232}
+
+.viz-panel{
+  border:2px solid #d6e4f5;
+  background:linear-gradient(180deg,#f8fbff,#ffffff);
+  border-radius:14px;
+  padding:10px;
+  display:grid;
+  gap:8px;
+}
+.viz-head{display:grid;gap:2px}
+.viz-head h3{margin:0;color:#0b4f88;font-size:16px}
+.viz-head p{margin:3px 0 0;color:var(--muted);line-height:1.35}
+.law-badge{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid #cfe0f3;
+  background:#eef6ff;
+  border-radius:999px;
+  padding:4px 8px;
+  color:#0f4f80;
+  font-weight:800;
+  font-size:14px;
+  width:max-content;
+}
+.expr-wrap{display:grid;gap:6px}
+.expr-title{margin:0;color:#334155;font-weight:700;font-size:15px;line-height:1.35}
+.expr-controls{display:flex;gap:8px;flex-wrap:wrap}
+.expr-btn{
+  border:2px solid #c6d9ed;
+  background:#fff;
+  color:#23445f;
+  border-radius:10px;
+  padding:6px 10px;
+  font:700 15px/1.1 inherit;
+  cursor:pointer;
+  transition:background .12s ease,border-color .12s ease,transform .12s ease;
+}
+.expr-btn:hover{background:#f6fbff;border-color:#9ec4e7}
+.expr-btn:focus-visible{outline:3px solid rgba(59,130,246,.22);outline-offset:2px}
+.expr-btn.active{border-color:#0f6db0;background:#eaf5ff;color:#0c4e7f;transform:translateY(-1px)}
+
+.viz-stage{
+  border:1px solid #dbe7f4;
+  border-radius:12px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#eef5ff,#fdfefe);
+}
+#vizCanvas{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:16/11;
+}
+.viz-note{
+  min-height:20px;
+  color:#334155;
+  font:700 15px/1.25 Consolas, "Courier New", monospace;
+  background:#f7fbff;
+  border:1px solid #d6e7f7;
+  border-radius:9px;
+  padding:7px 8px;
+  white-space:pre-line;
+}
+
+@media (max-width: 900px){
+  .wissen-grid{grid-template-columns:1fr}
+}
+@media (max-width: 640px){
+  body{padding:10px}
+  .hero,.wissen{padding:12px}
+  .expr-controls{gap:6px}
+  .expr-btn{padding:6px 8px;font-size:14px}
+  #vizCanvas{aspect-ratio:14/11}
+  .aus-problem{font-size:20px}
+  .aus-line{font-size:20px}
+  .aus-input-row input{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div data-edulo-widget-key="DISTRIBUTIVGESETZ_WUERFEL" style="display:none"></div>
+<main class="page">
+  <section class="card hero">
+    <h1>Rechengesetze der Multiplikation: Distributivgesetz</h1>
+    <p class="lead">Auch beim Multiplizieren mit einer Summe oder Differenz gibt es eine Rechenregel, die zum vorteilhaften Rechnen genutzt werden kann. Eine Multiplikation mit einer Summe oder Differenz lässt sich in mehrere Multiplikationen zerlegen, ohne dass sich das Ergebnis verändert.</p>
+    <p>Die Würfelbilder helfen dabei, das Gesetz zu erkennen: Derselbe Würfelquader kann auf verschiedene Arten gruppiert und gezählt werden.</p>
+  </section>
+
+  <section class="card wissen" aria-labelledby="wissenTitel">
+    <span class="ribbon">Wissen</span>
+    <div class="wissen-grid">
+      <div class="law-box">
+        <h2 id="wissenTitel">Distributivgesetz</h2>
+        <button type="button" class="law-item law-select active" id="lawPlus" data-law="plus" aria-pressed="true">
+          <strong>Distributivgesetz (+)</strong>
+          <p>Multiplikation mit einer Summe kann in zwei Produkte zerlegt werden.</p>
+          <div class="formula"><span class="keep">a</span> · (b + c) = <span class="keep">a</span> · b + <span class="keep">a</span> · c</div>
+          <div class="law-example">
+            <span class="example-label">Beispiel:</span>
+            <div class="example-grid" aria-hidden="true">
+              <div class="eq-row">
+                <span class="eq-token keep-blue" style="grid-column:1">3</span>
+                <span class="eq-token" style="grid-column:2">·</span>
+                <span class="eq-token" style="grid-column:3">(</span>
+                <span class="eq-token" style="grid-column:4">4</span>
+                <span class="eq-token" style="grid-column:5">+</span>
+                <span class="eq-token" style="grid-column:6">2</span>
+                <span class="eq-token" style="grid-column:7">)</span>
+                <span class="eq-token" style="grid-column:8">=</span>
+                <span class="eq-token keep-blue" style="grid-column:9">3</span>
+                <span class="eq-token" style="grid-column:10">·</span>
+                <span class="eq-token" style="grid-column:11">4</span>
+                <span class="eq-token" style="grid-column:12">+</span>
+                <span class="eq-token keep-blue" style="grid-column:13">3</span>
+                <span class="eq-token" style="grid-column:14">·</span>
+                <span class="eq-token" style="grid-column:15">2</span>
+              </div>
+              <div class="eq-brace-row">
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:3 / 8"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:9 / 12"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:13 / 16"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+              </div>
+
+              <div class="eq-row">
+                <span class="eq-token keep-blue" style="grid-column:1">3</span>
+                <span class="eq-token" style="grid-column:2">·</span>
+                <span class="eq-token" style="grid-column:5">6</span>
+                <span class="eq-token" style="grid-column:8">=</span>
+                <span class="eq-token" style="grid-column:10">12</span>
+                <span class="eq-token" style="grid-column:12">+</span>
+                <span class="eq-token" style="grid-column:14">6</span>
+              </div>
+              <div class="eq-brace-row">
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:1 / 6"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:10 / 15"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+              </div>
+
+              <div class="eq-row">
+                <span class="eq-token final" style="grid-column:3">18</span>
+                <span class="eq-token final" style="grid-column:8">=</span>
+                <span class="eq-token final" style="grid-column:12">18</span>
+              </div>
+            </div>
+          </div>
+        </button>
+        <button type="button" class="law-item law-select" id="lawMinus" data-law="minus" aria-pressed="false">
+          <strong>Distributivgesetz (-)</strong>
+          <p>Multiplikation mit einer Differenz kann in zwei Produkte zerlegt werden.</p>
+          <div class="formula"><span class="keep">a</span> · (b - c) = <span class="keep">a</span> · b - <span class="keep">a</span> · c</div>
+          <div class="law-example">
+            <span class="example-label">Beispiel:</span>
+            <div class="example-grid" aria-hidden="true">
+              <div class="eq-row">
+                <span class="eq-token keep-blue" style="grid-column:1">3</span>
+                <span class="eq-token" style="grid-column:2">·</span>
+                <span class="eq-token" style="grid-column:3">(</span>
+                <span class="eq-token" style="grid-column:4">6</span>
+                <span class="eq-token" style="grid-column:5">-</span>
+                <span class="eq-token" style="grid-column:6">2</span>
+                <span class="eq-token" style="grid-column:7">)</span>
+                <span class="eq-token" style="grid-column:8">=</span>
+                <span class="eq-token keep-blue" style="grid-column:9">3</span>
+                <span class="eq-token" style="grid-column:10">·</span>
+                <span class="eq-token" style="grid-column:11">6</span>
+                <span class="eq-token" style="grid-column:12">-</span>
+                <span class="eq-token keep-blue" style="grid-column:13">3</span>
+                <span class="eq-token" style="grid-column:14">·</span>
+                <span class="eq-token" style="grid-column:15">2</span>
+              </div>
+              <div class="eq-brace-row">
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:3 / 8"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:9 / 12"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:13 / 16"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+              </div>
+
+              <div class="eq-row">
+                <span class="eq-token keep-blue" style="grid-column:1">3</span>
+                <span class="eq-token" style="grid-column:2">·</span>
+                <span class="eq-token" style="grid-column:5">4</span>
+                <span class="eq-token" style="grid-column:8">=</span>
+                <span class="eq-token" style="grid-column:10">18</span>
+                <span class="eq-token" style="grid-column:12">-</span>
+                <span class="eq-token" style="grid-column:14">6</span>
+              </div>
+              <div class="eq-brace-row">
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:1 / 6"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+                <svg class="eq-underbrace" viewBox="0 0 100 18" preserveAspectRatio="none" style="grid-column:10 / 15"><path d="M1 1 Q1 10 10 10 L42 10 L50 17 L58 10 L90 10 Q99 10 99 1"/></svg>
+              </div>
+
+              <div class="eq-row">
+                <span class="eq-token final" style="grid-column:3">12</span>
+                <span class="eq-token final" style="grid-column:8">=</span>
+                <span class="eq-token final" style="grid-column:12">12</span>
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <section class="viz-panel" aria-labelledby="vizTitel">
+        <div class="viz-head">
+          <h3 id="vizTitel">Visualisierung der Gesetze</h3>
+          <p>Klicke das Gesetz im Wissenskasten an und vergleiche die beiden Darstellungsformen.</p>
+        </div>
+        <span id="lawBadge" class="law-badge">Distributivgesetz (+)</span>
+
+        <div class="expr-wrap">
+          <p id="exprTitle" class="expr-title">Wähle eine Darstellung:</p>
+          <div id="exprControls" class="expr-controls" aria-label="Darstellungen"></div>
+        </div>
+
+        <div class="viz-stage">
+          <canvas id="vizCanvas" width="920" height="620" aria-label="Visualisierung des Distributivgesetzes mit Würfeln"></canvas>
+        </div>
+
+        <div id="vizNote" class="viz-note"></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="card aus-wissen">
+    <h2>Wissen: Ausmultiplizieren</h2>
+    <p>Beim Ausmultiplizieren wechselt man von der Klammerdarstellung zur Form ohne Klammer.</p>
+  </section>
+
+  <section class="card aus-task" aria-labelledby="ausTaskTitel">
+    <h2 id="ausTaskTitel">Aufgabe</h2>
+    <div class="aus-problem" id="distProblem">4 · (10 - 1)</div>
+
+    <div class="aus-steps">
+      <section class="aus-step" id="distStep1">
+        <h3>Schritt 1</h3>
+        <p>Löse die Klammer auf wie im Beispiel.</p>
+        <div class="aus-line" id="distStep1LineBase">4 · (10 - 1)</div>
+        <div class="aus-input-row">
+          <span class="eq-sign">=</span>
+          <input id="distStep1Input" type="text" readonly aria-readonly="true" autocomplete="off" />
+        </div>
+        <div id="distStep1Hint" class="aus-step-hint" hidden>
+          <div class="hint-title">Beispiel:</div>
+          <div id="distStep1HintRule">a · (b - c) = a · b - a · c</div>
+        </div>
+      </section>
+
+      <section class="aus-step hide" id="distStep2">
+        <h3>Schritt 2</h3>
+        <p>Multipliziere die ausmultiplizierte Form.</p>
+        <div class="aus-line" id="distStep2LineBase">4 · (10 - 1)</div>
+        <div class="aus-line" id="distStep2LineExpanded">= 4 · 10 - 4 · 1</div>
+        <div class="aus-input-row split">
+          <span class="eq-sign">=</span>
+          <input id="distStep2InputLeft" class="small" type="text" readonly aria-readonly="true" autocomplete="off" />
+          <span id="distStep2Op" class="eq-op">-</span>
+          <input id="distStep2InputRight" class="small" type="text" readonly aria-readonly="true" autocomplete="off" />
+        </div>
+      </section>
+
+      <section class="aus-step hide" id="distStep3">
+        <h3>Schritt 3</h3>
+        <p>Berechne das Ergebnis.</p>
+        <div class="aus-line" id="distStep3LineBase">4 · (10 - 1)</div>
+        <div class="aus-line" id="distStep3LineExpanded">= 4 · 10 - 4 · 1</div>
+        <div class="aus-line" id="distStep3LineProducts">= 40 - 4</div>
+        <div class="aus-input-row">
+          <span class="eq-sign">=</span>
+          <input id="distStep3Input" type="text" readonly aria-readonly="true" autocomplete="off" />
+        </div>
+      </section>
+    </div>
+
+    <div class="aus-keypad" id="distKeypad" aria-label="Rechentastatur">
+      <button class="kp-btn" data-key="1" type="button">1</button>
+      <button class="kp-btn" data-key="2" type="button">2</button>
+      <button class="kp-btn" data-key="3" type="button">3</button>
+      <button class="kp-btn" data-key="+" type="button">+</button>
+      <button class="kp-btn" data-key="4" type="button">4</button>
+      <button class="kp-btn" data-key="5" type="button">5</button>
+      <button class="kp-btn" data-key="6" type="button">6</button>
+      <button class="kp-btn" data-key="-" type="button">-</button>
+      <button class="kp-btn" data-key="7" type="button">7</button>
+      <button class="kp-btn" data-key="8" type="button">8</button>
+      <button class="kp-btn" data-key="9" type="button">9</button>
+      <button class="kp-btn" data-key="*" type="button">·</button>
+      <button class="kp-btn wide" data-key="0" type="button">0</button>
+      <button class="kp-btn delete" data-key="back" type="button">Löschen</button>
+      <button class="kp-btn check" data-key="check" type="button">Prüfen</button>
+    </div>
+
+    <div class="aus-meta">
+      <div class="aus-points">Punkte: <span id="distPoints">0</span></div>
+      <button id="distNextBtn" class="aus-next hide" type="button">Neue Aufgabe</button>
+      <button id="distResetBtn" class="aus-reset" type="button">Zurücksetzen</button>
+    </div>
+    <div class="aus-progress-wrap" aria-label="Fortschritt">
+      <div class="aus-progress-grid">
+        <div id="distProgressFill" class="aus-progress-fill"></div>
+        <div id="distProgressLines" class="aus-progress-lines"></div>
+      </div>
+      <div class="aus-progress-text"><span id="distProgressPercent">0</span>%</div>
+    </div>
+
+    <div id="distFeedback" class="aus-feedback" aria-live="polite"></div>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  const ui = {
+    lawPlus: document.getElementById("lawPlus"),
+    lawMinus: document.getElementById("lawMinus"),
+    lawBadge: document.getElementById("lawBadge"),
+    exprControls: document.getElementById("exprControls"),
+    vizNote: document.getElementById("vizNote"),
+    canvas: document.getElementById("vizCanvas")
+  };
+  const ctx = ui.canvas.getContext("2d");
+
+  const PLUS_OPTIONS = [
+    { id: "group", label: "(4 + 2) · 3" },
+    { id: "sum", label: "4 · 3 + 2 · 3" }
+  ];
+  const MINUS_OPTIONS = [
+    { id: "group", label: "(6 - 2) · 3" },
+    { id: "diff", label: "6 · 3 - 2 · 3" }
+  ];
+
+  const state = {
+    law: "plus",
+    plusView: "group",
+    minusView: "group",
+    transition: null,
+    raf: 0
+  };
+
+  const CFG = {
+    cube: 46,
+    step: 46,
+    depth: 14,
+    baseX: 172,
+    baseY: 190,
+    splitGap: 95
+  };
+
+  function currentView() {
+    return state.law === "plus" ? state.plusView : state.minusView;
+  }
+
+  function currentSpec() {
+    return { law: state.law, view: currentView() };
+  }
+
+  function shade(hex, amount) {
+    const raw = hex.replace("#", "");
+    const r = Number.parseInt(raw.slice(0, 2), 16);
+    const g = Number.parseInt(raw.slice(2, 4), 16);
+    const b = Number.parseInt(raw.slice(4, 6), 16);
+    const rr = Math.max(0, Math.min(255, r + amount));
+    const gg = Math.max(0, Math.min(255, g + amount));
+    const bb = Math.max(0, Math.min(255, b + amount));
+    return "#" + [rr, gg, bb].map(v => v.toString(16).padStart(2, "0")).join("");
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function easeInOut(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function layoutFor(spec) {
+    const out = [];
+
+    if (spec.law === "plus") {
+      const split = spec.view === "sum";
+      const gap = split ? CFG.splitGap : 0;
+
+      for (let c = 0; c < 6; c++) {
+        const rightBlock = c >= 4;
+        const x = CFG.baseX + c * CFG.step + (rightBlock ? gap : 0);
+        const showSide = split ? (c === 3 || c === 5) : (c === 5);
+        for (let r = 0; r < 3; r++) {
+          const y = CFG.baseY + r * CFG.step;
+          const id = "c" + c + "r" + r;
+          const color = rightBlock ? "#f8b26a" : "#7ecbff";
+          out.push({
+            id,
+            col: c,
+            row: r,
+            rightBlock,
+            group: rightBlock ? "right" : "left",
+            law: "plus",
+            x,
+            y,
+            color,
+            showSide,
+            showTop: r === 0,
+            style: "solid",
+            alpha: 1,
+            z: 1
+          });
+        }
+      }
+      return out;
+    }
+
+    const overlay = spec.view === "group";
+
+    for (let c = 0; c < 6; c++) {
+      const x = CFG.baseX + c * CFG.step;
+      const isRemovedArea = overlay && c >= 4;
+      for (let r = 0; r < 3; r++) {
+        const y = CFG.baseY + r * CFG.step;
+        out.push({
+          id: "c" + c + "r" + r,
+          col: c,
+          row: r,
+          group: "pos",
+          law: "minus",
+          x,
+          y,
+          color: isRemovedArea ? "#bcd8ea" : "#7ecbff",
+          showSide: c === 5,
+          showTop: r === 0,
+          style: "solid",
+          alpha: 1,
+          z: 1
+        });
+      }
+    }
+
+    const negBaseX = overlay ? (CFG.baseX + 4 * CFG.step) : (CFG.baseX + 6 * CFG.step + CFG.splitGap + 26);
+    const negBaseY = CFG.baseY;
+    for (let c = 0; c < 2; c++) {
+      for (let r = 0; r < 3; r++) {
+        const y = negBaseY + r * CFG.step;
+        out.push({
+          id: "n" + c + "r" + r,
+          col: c,
+          row: r,
+          group: "neg",
+          law: "minus",
+          x: negBaseX + c * CFG.step,
+          y,
+          color: "#f59aa1",
+          showSide: c === 1,
+          showTop: r === 0,
+          style: overlay ? "ghost" : "solid",
+          alpha: overlay ? 0.42 : 1,
+          z: overlay ? 3 : 2
+        });
+      }
+    }
+
+    return out;
+  }
+
+  function mergedLayout(from, to, t) {
+    const fromMap = new Map(from.map(c => [c.id, c]));
+    const toMap = new Map(to.map(c => [c.id, c]));
+    const idSet = new Set([...fromMap.keys(), ...toMap.keys()]);
+    const mix = [];
+
+    for (const id of idSet) {
+      const a = fromMap.get(id);
+      const b = toMap.get(id);
+      if (a && b) {
+        mix.push({
+          id,
+          col: b.col,
+          row: b.row,
+          rightBlock: b.rightBlock,
+          group: b.group,
+          law: b.law,
+          x: lerp(a.x, b.x, t),
+          y: lerp(a.y, b.y, t),
+          color: b.color,
+          showSide: t < 0.5 ? a.showSide : b.showSide,
+          showTop: t < 0.5 ? a.showTop : b.showTop,
+          style: t < 0.5 ? a.style : b.style,
+          alpha: lerp(a.alpha == null ? 1 : a.alpha, b.alpha == null ? 1 : b.alpha, t),
+          z: lerp(a.z == null ? 1 : a.z, b.z == null ? 1 : b.z, t)
+        });
+      } else if (!a && b) {
+        mix.push({
+          ...b,
+          alpha: (b.alpha == null ? 1 : b.alpha) * t
+        });
+      } else if (a && !b) {
+        mix.push({
+          ...a,
+          alpha: (a.alpha == null ? 1 : a.alpha) * (1 - t)
+        });
+      }
+    }
+    return mix;
+  }
+
+  function bounds(cubes, predicate) {
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (const c of cubes) {
+      if ((c.alpha == null ? 1 : c.alpha) < 0.03) continue;
+      if (!predicate(c)) continue;
+      minX = Math.min(minX, c.x);
+      minY = Math.min(minY, c.y - CFG.depth);
+      maxX = Math.max(maxX, c.x + CFG.cube + CFG.depth);
+      maxY = Math.max(maxY, c.y + CFG.cube);
+    }
+    if (!Number.isFinite(minX)) return null;
+    return { minX, minY, maxX, maxY, cx: (minX + maxX) / 2, cy: (minY + maxY) / 2 };
+  }
+
+  function drawCube(c) {
+    if ((c.alpha == null ? 1 : c.alpha) <= 0.01) return;
+
+    const s = CFG.cube;
+    const d = CFG.depth;
+    const x = c.x;
+    const y = c.y;
+    const front = c.color;
+    const top = shade(front, 24);
+    const side = shade(front, -22);
+
+    ctx.save();
+    ctx.globalAlpha = c.alpha == null ? 1 : c.alpha;
+    if (c.style === "ghost") {
+      ctx.setLineDash([7, 5]);
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = "rgba(130, 34, 52, .78)";
+    } else {
+      ctx.setLineDash([]);
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = "rgba(23,50,76,.35)";
+    }
+
+    if (c.showTop) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + d, y - d);
+      ctx.lineTo(x + s + d, y - d);
+      ctx.lineTo(x + s, y);
+      ctx.closePath();
+      ctx.fillStyle = top;
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    if (c.showSide) {
+      ctx.beginPath();
+      ctx.moveTo(x + s, y);
+      ctx.lineTo(x + s + d, y - d);
+      ctx.lineTo(x + s + d, y + s - d);
+      ctx.lineTo(x + s, y + s);
+      ctx.closePath();
+      ctx.fillStyle = side;
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    ctx.rect(x, y, s, s);
+    ctx.fillStyle = front;
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawText(text, x, y, opt) {
+    const o = opt || {};
+    ctx.save();
+    ctx.fillStyle = o.color || "#17324c";
+    ctx.textAlign = o.align || "center";
+    ctx.textBaseline = "middle";
+    ctx.font = (o.weight || 700) + " " + (o.size || 22) + "px " + (o.family || "Trebuchet MS, Verdana, sans-serif");
+    ctx.fillText(text, x, y);
+    ctx.restore();
+  }
+
+  function drawBraceLine(p1, p2, normalVec, size) {
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const len = Math.max(0.001, Math.hypot(dx, dy));
+    const ax = dx / len;
+    const ay = dy / len;
+
+    let nx = normalVec.x;
+    let ny = normalVec.y;
+    const nLen = Math.hypot(nx, ny) || 1;
+    nx /= nLen;
+    ny /= nLen;
+
+    const hook = Math.min(Math.max(size, 10), len * 0.33);
+    const shoulder = Math.min(Math.max(hook * 0.95, 8), len * 0.24);
+    const spikeHalf = Math.min(Math.max(hook * 0.95, 10), len * 0.20);
+    const spikeDepth = Math.max(hook * 0.95, 12);
+
+    const startHook = { x: p1.x + nx * hook, y: p1.y + ny * hook };
+    const endHook = { x: p2.x + nx * hook, y: p2.y + ny * hook };
+    const startShoulder = { x: p1.x + ax * shoulder, y: p1.y + ay * shoulder };
+    const endShoulder = { x: p2.x - ax * shoulder, y: p2.y - ay * shoulder };
+    const mid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+    const midL = { x: mid.x - ax * spikeHalf, y: mid.y - ay * spikeHalf };
+    const midR = { x: mid.x + ax * spikeHalf, y: mid.y + ay * spikeHalf };
+    const tip = { x: mid.x - nx * spikeDepth, y: mid.y - ny * spikeDepth };
+
+    ctx.save();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    ctx.moveTo(startHook.x, startHook.y);
+    ctx.quadraticCurveTo(p1.x, p1.y, startShoulder.x, startShoulder.y);
+    ctx.lineTo(midL.x, midL.y);
+    ctx.lineTo(tip.x, tip.y);
+    ctx.lineTo(midR.x, midR.y);
+    ctx.lineTo(endShoulder.x, endShoulder.y);
+    ctx.quadraticCurveTo(p2.x, p2.y, endHook.x, endHook.y);
+    ctx.strokeStyle = "rgba(255,255,255,.96)";
+    ctx.lineWidth = 6.2;
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(18,72,113,.98)";
+    ctx.lineWidth = 3.2;
+    ctx.stroke();
+    ctx.restore();
+
+    return { mid, tip, normal: { x: nx, y: ny } };
+  }
+
+  function drawBraceH(x1, x2, y, size, normalY) {
+    return drawBraceLine({ x: x1, y }, { x: x2, y }, { x: 0, y: normalY }, size);
+  }
+
+  function drawBraceV(x, y1, y2, size, normalX) {
+    return drawBraceLine({ x, y: y1 }, { x, y: y2 }, { x: normalX, y: 0 }, size);
+  }
+
+  function drawDimH(x1, x2, y, label, place) {
+    const normalY = place === "above" ? 1 : -1;
+    const brace = drawBraceH(x1, x2, y, 20, normalY);
+    const dy = place === "above" ? -24 : 30;
+    drawText(label, brace.mid.x, brace.mid.y + dy, {
+      size: 22,
+      weight: 800,
+      color: "#17324c",
+      family: "Consolas, Courier New, monospace"
+    });
+  }
+
+  function drawDimV(x, y1, y2, label, place) {
+    const normalX = place === "right" ? -1 : 1;
+    const brace = drawBraceV(x, y1, y2, 20, normalX);
+    const dx = place === "right" ? 24 : -30;
+    drawText(label, brace.mid.x + dx, brace.mid.y, {
+      size: 22,
+      weight: 800,
+      color: "#17324c",
+      family: "Consolas, Courier New, monospace"
+    });
+  }
+
+  function drawOverlay(spec, cubes) {
+    if (spec.law === "plus") {
+      const left = bounds(cubes, c => c.law === "plus" && c.group === "left");
+      const right = bounds(cubes, c => c.law === "plus" && c.group === "right");
+      const all = bounds(cubes, c => c.law === "plus");
+      if (!left || !right || !all) return;
+
+      const signX = (left.maxX + right.minX) / 2;
+      const signY = (left.cy + right.cy) / 2;
+      const topY = Math.max(28, all.minY - 26);
+
+      if (spec.view === "group") {
+        drawText("18", all.cx, topY, { size: 46, weight: 800, color: "#1d4ed8", family: "Trebuchet MS, Verdana, sans-serif" });
+        drawText("3 · 6 = 18", all.cx, all.cy + 2, { size: 22, weight: 800, color: "#1d4ed8", family: "Consolas, Courier New, monospace" });
+        drawDimH(all.minX + 6, all.maxX - 6, all.maxY + 30, "4 + 2 = 6", "below");
+        drawDimV(all.minX - 34, all.minY + 4, all.maxY - 4, "3", "left");
+      } else {
+        const eqX = right.maxX + 30;
+        const resX = eqX + 24;
+        drawText("12", left.cx, topY, { size: 42, weight: 800, color: "#1d4ed8", family: "Trebuchet MS, Verdana, sans-serif" });
+        drawText("+", signX, topY + 2, { size: 44, weight: 900, color: "#1d4ed8" });
+        drawText("6", right.cx, topY, { size: 42, weight: 800, color: "#1d4ed8", family: "Trebuchet MS, Verdana, sans-serif" });
+        drawText("=", eqX, topY + 2, { size: 38, weight: 900, color: "#1d4ed8" });
+        drawText("18", resX, topY, { size: 42, weight: 800, color: "#1d4ed8", align: "left", family: "Trebuchet MS, Verdana, sans-serif" });
+
+        drawText("+", signX, signY, { size: 34, weight: 900, color: "#2b4760" });
+        drawText("3 · 4 = 12", left.cx, left.cy + 2, { size: 22, weight: 800, color: "#1d4ed8", family: "Consolas, Courier New, monospace" });
+        drawText("3 · 2 = 6", right.cx, right.cy + 2, { size: 22, weight: 800, color: "#1d4ed8", family: "Consolas, Courier New, monospace" });
+        drawDimH(left.minX + 6, left.maxX - 6, left.maxY + 30, "4", "below");
+        drawDimH(right.minX + 6, right.maxX - 6, right.maxY + 30, "2", "below");
+        drawDimV(left.minX - 34, all.minY + 4, all.maxY - 4, "3", "left");
+      }
+      return;
+    }
+
+    const pos = bounds(cubes, c => c.law === "minus" && c.group === "pos");
+    const neg = bounds(cubes, c => c.law === "minus" && c.group === "neg");
+    if (!pos || !neg) return;
+    const remain = bounds(cubes, c => c.law === "minus" && c.group === "pos" && c.col < 4);
+    const topY = Math.max(28, Math.min(pos.minY, neg.minY) - 26);
+
+    if (spec.view === "group") {
+      if (remain) {
+        drawText("12", remain.cx, topY, { size: 46, weight: 800, color: "#1d4ed8", family: "Trebuchet MS, Verdana, sans-serif" });
+        drawText("3 · 4 = 12", remain.cx, remain.cy + 2, { size: 22, weight: 800, color: "#1d4ed8", family: "Consolas, Courier New, monospace" });
+        drawDimH(remain.minX + 6, remain.maxX - 6, pos.maxY + 30, "6 - 2 = 4", "below");
+      }
+      drawDimV(pos.minX - 34, pos.minY + 4, pos.maxY - 4, "3", "left");
+    } else {
+      const minusX = (pos.maxX + neg.minX) / 2;
+      const minusY = (pos.cy + neg.cy) / 2;
+      const eqX = neg.maxX + 30;
+      const resX = eqX + 24;
+      drawText("18", pos.cx, topY, { size: 42, weight: 800, color: "#1d4ed8", family: "Trebuchet MS, Verdana, sans-serif" });
+      drawText("-", minusX, topY + 2, { size: 44, weight: 900, color: "#1d4ed8" });
+      drawText("6", neg.cx, topY, { size: 42, weight: 800, color: "#1d4ed8", family: "Trebuchet MS, Verdana, sans-serif" });
+      drawText("=", eqX, topY + 2, { size: 38, weight: 900, color: "#1d4ed8" });
+      drawText("12", resX, topY, { size: 42, weight: 800, color: "#1d4ed8", align: "left", family: "Trebuchet MS, Verdana, sans-serif" });
+
+      drawText("-", minusX, minusY, { size: 42, weight: 900, color: "#2b4760" });
+      drawText("3 · 6 = 18", pos.cx, pos.cy + 2, { size: 22, weight: 800, color: "#1d4ed8", family: "Consolas, Courier New, monospace" });
+      drawText("3 · 2 = 6", neg.cx, neg.cy + 2, { size: 22, weight: 800, color: "#1d4ed8", family: "Consolas, Courier New, monospace" });
+      drawDimH(pos.minX + 6, pos.maxX - 6, pos.maxY + 30, "6", "below");
+      drawDimH(neg.minX + 6, neg.maxX - 6, neg.maxY + 30, "2", "below");
+      drawDimV(pos.minX - 34, pos.minY + 4, pos.maxY - 4, "3", "left");
+    }
+  }
+
+  function panelText(spec) {
+    if (spec.law === "plus") {
+      if (spec.view === "group") return "Kompakter Block: (4 + 2) · 3 = 6 · 3 = 18";
+      return "Zerlegt: 4 · 3 + 2 · 3 = 12 + 6 = 18";
+    }
+    if (spec.view === "group") return "Die roten 2 · 3 Würfel liegen auf den rechten 2 Spalten: übrig bleiben 4 · 3 = 12.";
+    return "Getrennt dargestellt: 6 · 3 - 2 · 3 = 18 - 6 = 12";
+  }
+
+  function drawScene() {
+    const w = ui.canvas.width;
+    const h = ui.canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    ctx.fillStyle = "rgba(255,255,255,.55)";
+    ctx.fillRect(0, 0, w, h);
+
+    const now = performance.now();
+    let spec = currentSpec();
+    let cubes = layoutFor(spec);
+
+    if (state.transition) {
+      const tr = state.transition;
+      const raw = (now - tr.start) / tr.duration;
+      const p = Math.max(0, Math.min(1, raw));
+      const e = easeInOut(p);
+      cubes = mergedLayout(tr.from, tr.to, e);
+      spec = tr.toSpec;
+      if (p >= 1) state.transition = null;
+    }
+
+    const sorted = cubes.slice().sort((a, b) => {
+      if ((a.z || 0) !== (b.z || 0)) return (a.z || 0) - (b.z || 0);
+      if (a.y !== b.y) return b.y - a.y;
+      return a.x - b.x;
+    });
+    for (const c of sorted) drawCube(c);
+    drawOverlay(spec, cubes);
+
+    ui.vizNote.textContent = panelText(spec);
+
+    if (state.transition) scheduleRender();
+  }
+
+  function scheduleRender() {
+    if (state.raf) return;
+    state.raf = requestAnimationFrame(() => {
+      state.raf = 0;
+      drawScene();
+    });
+  }
+
+  function startTransition(fromSpec, toSpec) {
+    state.transition = {
+      from: layoutFor(fromSpec),
+      to: layoutFor(toSpec),
+      toSpec,
+      start: performance.now(),
+      duration: 420
+    };
+    scheduleRender();
+  }
+
+  function setLaw(nextLaw) {
+    if (state.law === nextLaw) return;
+    const from = currentSpec();
+    state.law = nextLaw;
+    const to = currentSpec();
+    refreshControls();
+    startTransition(from, to);
+    ui.vizNote.textContent = panelText(to);
+    if (!from) scheduleRender();
+  }
+
+  function setExpr(nextView) {
+    const fromSpec = currentSpec();
+    if (state.law === "plus") {
+      if (state.plusView === nextView) return;
+      state.plusView = nextView;
+    } else {
+      if (state.minusView === nextView) return;
+      state.minusView = nextView;
+    }
+    const toSpec = currentSpec();
+    refreshControls();
+    startTransition(fromSpec, toSpec);
+    ui.vizNote.textContent = panelText(toSpec);
+    if (!fromSpec) scheduleRender();
+  }
+
+  function refreshControls() {
+    const plusActive = state.law === "plus";
+    ui.lawPlus.classList.toggle("active", plusActive);
+    ui.lawMinus.classList.toggle("active", !plusActive);
+    ui.lawPlus.setAttribute("aria-pressed", plusActive ? "true" : "false");
+    ui.lawMinus.setAttribute("aria-pressed", plusActive ? "false" : "true");
+
+    ui.lawBadge.textContent = plusActive ? "Distributivgesetz (+)" : "Distributivgesetz (-)";
+
+    const options = plusActive ? PLUS_OPTIONS : MINUS_OPTIONS;
+    const active = plusActive ? state.plusView : state.minusView;
+    ui.exprControls.innerHTML = "";
+
+    for (const opt of options) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "expr-btn";
+      btn.textContent = opt.label;
+      btn.classList.toggle("active", active === opt.id);
+      btn.addEventListener("click", () => setExpr(opt.id));
+      ui.exprControls.appendChild(btn);
+    }
+  }
+
+  ui.lawPlus.addEventListener("click", () => setLaw("plus"));
+  ui.lawMinus.addEventListener("click", () => setLaw("minus"));
+
+  refreshControls();
+  ui.vizNote.textContent = panelText(currentSpec());
+  drawScene();
+})();
+</script>
+<script>
+(async () => {
+  "use strict";
+
+  const ui = {
+    problem: document.getElementById("distProblem"),
+    step1: document.getElementById("distStep1"),
+    step2: document.getElementById("distStep2"),
+    step3: document.getElementById("distStep3"),
+    step1LineBase: document.getElementById("distStep1LineBase"),
+    step2LineBase: document.getElementById("distStep2LineBase"),
+    step2LineExpanded: document.getElementById("distStep2LineExpanded"),
+    step3LineBase: document.getElementById("distStep3LineBase"),
+    step3LineExpanded: document.getElementById("distStep3LineExpanded"),
+    step3LineProducts: document.getElementById("distStep3LineProducts"),
+    step1Input: document.getElementById("distStep1Input"),
+    step2InputLeft: document.getElementById("distStep2InputLeft"),
+    step2InputRight: document.getElementById("distStep2InputRight"),
+    step3Input: document.getElementById("distStep3Input"),
+    step2Op: document.getElementById("distStep2Op"),
+    step1Hint: document.getElementById("distStep1Hint"),
+    step1HintRule: document.getElementById("distStep1HintRule"),
+    keypad: document.getElementById("distKeypad"),
+    feedback: document.getElementById("distFeedback"),
+    points: document.getElementById("distPoints"),
+    progressFill: document.getElementById("distProgressFill"),
+    progressLines: document.getElementById("distProgressLines"),
+    progressPercent: document.getElementById("distProgressPercent"),
+    nextBtn: document.getElementById("distNextBtn"),
+    resetBtn: document.getElementById("distResetBtn")
+  };
+  if (!ui.problem || !ui.step1Input || !ui.step2InputLeft || !ui.step2InputRight || !ui.step3Input || !ui.keypad) return;
+
+  const STORAGE_KEY = "distributiv-ausmultiplizieren-v1";
+  const SCORE_FLAG_COUNT = 10;
+  const SCORE_MILESTONES = Array.from({ length: SCORE_FLAG_COUNT }, (_, i) => Math.pow(2, i));
+  const EDULO_WIDGET_KEY = "DISTRIBUTIVGESETZ_WUERFEL";
+
+  const state = {
+    step: 1,
+    activeField: "s1",
+    task: null,
+    expansion: null,
+    showStep1Hint: false,
+    s1: "",
+    s2Left: "",
+    s2Right: "",
+    s3: "",
+    solved: false,
+    points: 0
+  };
+
+  const POWERS = [10, 100, 1000];
+  const PAIR_POWER_CASES = [
+    { a: 25, mate: 4 },
+    { a: 4, mate: 25 },
+    { a: 125, mate: 8 },
+    { a: 8, mate: 125 },
+    { a: 50, mate: 2 },
+    { a: 2, mate: 50 },
+    { a: 20, mate: 5 },
+    { a: 5, mate: 20 },
+    { a: 200, mate: 5 },
+    { a: 5, mate: 200 },
+    { a: 250, mate: 4 },
+    { a: 4, mate: 250 },
+    { a: 500, mate: 2 },
+    { a: 2, mate: 500 },
+    { a: 40, mate: 25 },
+    { a: 25, mate: 40 }
+  ];
+
+  function formatBase(task) {
+    return task.a + " · (" + task.b + " " + task.op + " " + task.c + ")";
+  }
+
+  function formatExpanded(task, leftFactor, rightFactor) {
+    return task.a + " · " + leftFactor + " " + task.op + " " + task.a + " · " + rightFactor;
+  }
+
+  function formatProducts(task, leftProduct, rightProduct) {
+    return leftProduct + " " + task.op + " " + rightProduct;
+  }
+
+  function prettyExpr(raw) {
+    return String(raw || "")
+      .replace(/\*/g, " · ")
+      .replace(/\+/g, " + ")
+      .replace(/-/g, " - ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function setInputWidthByChars(el, chars, minCh, maxCh) {
+    if (!el) return;
+    const n = Math.max(minCh, Math.min(maxCh, Math.max(1, chars) + 3));
+    el.style.width = "min(100%, calc(" + n + "ch + 1.2rem))";
+  }
+
+  function parseIntStrict(raw) {
+    const text = String(raw || "").trim();
+    if (!/^-?\d+$/.test(text)) return null;
+    return Number.parseInt(text, 10);
+  }
+
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function isTwoDigit(n) {
+    return n >= 10 && n <= 99;
+  }
+
+  function isPowerValue(n) {
+    return POWERS.includes(n);
+  }
+
+  function isAllowedExtra(n) {
+    return n <= 3 || isPowerValue(n);
+  }
+
+  function randomChoice(values) {
+    if (!values || !values.length) return null;
+    return values[randomInt(0, values.length - 1)];
+  }
+
+  function pickThirdValue(a, op, upperLimit, avoidValue) {
+    const upper = Number.isFinite(upperLimit) ? upperLimit : Infinity;
+    const canUsePower = Math.random() < 0.55;
+    let powerOptions = POWERS.filter(p => p !== avoidValue && p <= upper);
+
+    if (isTwoDigit(a)) {
+      if (canUsePower && powerOptions.length) {
+        return randomChoice(powerOptions);
+      }
+      const maxSmall = Math.max(1, Math.min(3, upper));
+      return randomInt(1, maxSmall);
+    }
+
+    if (canUsePower && powerOptions.length) {
+      return randomChoice(powerOptions);
+    }
+
+    const maxSmall = Math.max(1, Math.min(3, upper));
+    return randomInt(1, maxSmall);
+  }
+
+  function progressPercentForPoints(points) {
+    if (points <= 0) return 0;
+    const total = SCORE_MILESTONES.length;
+
+    if (points < SCORE_MILESTONES[0]) {
+      return Math.max(0, Math.min(100, (points / SCORE_MILESTONES[0]) * (100 / total)));
+    }
+
+    for (let i = 0; i < SCORE_MILESTONES.length; i++) {
+      const cur = SCORE_MILESTONES[i];
+      if (points === cur) {
+        return ((i + 1) / total) * 100;
+      }
+      const next = SCORE_MILESTONES[i + 1];
+      if (next != null && points < next) {
+        const segmentStart = (i + 1) / total;
+        const frac = (points - cur) / (next - cur);
+        return (segmentStart + (frac * (1 / total))) * 100;
+      }
+    }
+    return 100;
+  }
+
+  function buildProgressRaster() {
+    if (!ui.progressLines) return;
+    ui.progressLines.innerHTML = "";
+
+    // Bis zu einem sinnvollen Bereich fein auflösen; danach nur Hauptmarken.
+    const rasterMaxPoints = 64;
+    const used = new Set();
+
+    function addLine(percent, major) {
+      const p = Math.max(0, Math.min(100, percent));
+      const key = p.toFixed(4);
+      if (used.has(key)) return;
+      used.add(key);
+      const line = document.createElement("span");
+      line.className = "aus-progress-line" + (major ? " major" : "");
+      line.style.left = p + "%";
+      ui.progressLines.appendChild(line);
+    }
+
+    for (let p = 1; p <= rasterMaxPoints; p++) {
+      addLine(progressPercentForPoints(p), SCORE_MILESTONES.includes(p));
+    }
+
+    for (const m of SCORE_MILESTONES) {
+      const pct = progressPercentForPoints(m);
+      if (pct > 0 && pct < 100) addLine(pct, true);
+    }
+  }
+
+  function setFeedback(text, kind) {
+    ui.feedback.textContent = text || "";
+    ui.feedback.classList.remove("ok", "err");
+    if (kind) ui.feedback.classList.add(kind);
+  }
+
+  function setActiveField(fieldId) {
+    state.activeField = fieldId;
+    refreshTaskUI();
+  }
+
+  function refreshTaskUI() {
+    if (!state.task) return;
+    const base = formatBase(state.task);
+    ui.problem.textContent = base;
+    ui.step1LineBase.textContent = base;
+    ui.step2LineBase.textContent = base;
+    ui.step3LineBase.textContent = base;
+    ui.step2Op.textContent = state.task.op;
+
+    ui.step1.classList.remove("hide");
+    ui.step2.classList.toggle("hide", state.step < 2);
+    ui.step3.classList.toggle("hide", state.step < 3);
+    ui.keypad.classList.toggle("hide", state.solved);
+    if (ui.nextBtn) ui.nextBtn.classList.toggle("hide", !state.solved);
+
+    ui.step1Input.value = prettyExpr(state.s1);
+    ui.step2InputLeft.value = state.s2Left;
+    ui.step2InputRight.value = state.s2Right;
+    ui.step3Input.value = state.s3;
+
+    ui.step1Input.classList.toggle("active", !state.solved && state.activeField === "s1" && state.step === 1);
+    ui.step2InputLeft.classList.toggle("active", !state.solved && state.activeField === "s2l" && state.step === 2);
+    ui.step2InputRight.classList.toggle("active", !state.solved && state.activeField === "s2r" && state.step === 2);
+    ui.step3Input.classList.toggle("active", !state.solved && state.activeField === "s3" && state.step === 3);
+
+    ui.step1Hint.hidden = !state.showStep1Hint;
+    ui.step1HintRule.textContent = state.task.op === "+"
+      ? "a · (b + c) = a · b + a · c"
+      : "a · (b - c) = a · b - a · c";
+
+    if (state.expansion) {
+      ui.step2LineExpanded.textContent = "= " + formatExpanded(state.task, state.expansion.leftFactor, state.expansion.rightFactor);
+      ui.step3LineExpanded.textContent = "= " + formatExpanded(state.task, state.expansion.leftFactor, state.expansion.rightFactor);
+      ui.step3LineProducts.textContent = "= " + formatProducts(state.task, state.expansion.leftProduct, state.expansion.rightProduct);
+    } else {
+      ui.step2LineExpanded.textContent = "= ?";
+      ui.step3LineExpanded.textContent = "= ?";
+      ui.step3LineProducts.textContent = "= ?";
+    }
+
+    const exp1a = state.task.a + "*" + state.task.b + state.task.op + state.task.a + "*" + state.task.c;
+    const exp1b = state.task.op === "+"
+      ? state.task.a + "*" + state.task.c + "+" + state.task.a + "*" + state.task.b
+      : exp1a;
+    const expectedStep1 = Math.max(prettyExpr(exp1a).length, prettyExpr(exp1b).length);
+    const shownStep1 = prettyExpr(state.s1).length;
+    setInputWidthByChars(ui.step1Input, Math.max(expectedStep1, shownStep1), 12, 36);
+
+    const pLen = Math.max(String(state.task.a * state.task.b).length, String(state.task.a * state.task.c).length);
+    setInputWidthByChars(ui.step2InputLeft, Math.max(pLen, String(state.s2Left || "").length), 4, 12);
+    setInputWidthByChars(ui.step2InputRight, Math.max(pLen, String(state.s2Right || "").length), 4, 12);
+
+    const rLen = Math.max(String(state.task.result).length, String(state.s3 || "").length);
+    setInputWidthByChars(ui.step3Input, rLen, 6, 16);
+  }
+
+  function generateTask() {
+    const mode = Math.random() < 0.5 ? "pairPower" : "termPower";
+    const op = Math.random() < 0.5 ? "+" : "-";
+
+    if (mode === "pairPower") {
+      const pair = PAIR_POWER_CASES[randomInt(0, PAIR_POWER_CASES.length - 1)];
+      const upper = op === "-" ? Math.max(1, pair.mate - 1) : Infinity;
+      let extra = pickThirdValue(pair.a, op, upper, pair.mate);
+      if (op === "-" && extra >= pair.mate) extra = Math.max(1, pair.mate - 1);
+      if (!isAllowedExtra(extra)) {
+        const upper = op === "-" ? Math.max(1, pair.mate - 1) : Infinity;
+        extra = pickThirdValue(pair.a, op, upper, pair.mate);
+        if (!isAllowedExtra(extra)) extra = Math.min(3, op === "-" ? Math.max(1, pair.mate - 1) : 3);
+      }
+
+      let b;
+      let c;
+      if (op === "+") {
+        if (Math.random() < 0.5) {
+          b = pair.mate;
+          c = extra;
+        } else {
+          b = extra;
+          c = pair.mate;
+        }
+      } else {
+        b = pair.mate;
+        c = extra;
+      }
+
+      const a = pair.a;
+      const result = op === "+" ? a * (b + c) : a * (b - c);
+      return { a, b, c, op, result, mode };
+    }
+
+    const aCandidates = [3, 4, 5, 6, 8, 9, 12, 15, 18, 20, 24, 25, 40, 50, 75, 125];
+    const a = randomChoice(aCandidates);
+    const power = randomChoice(POWERS);
+    const upper = op === "-" ? Math.max(1, power - 1) : Infinity;
+    let other = pickThirdValue(a, op, upper, power);
+    if (!isAllowedExtra(other)) {
+      other = pickThirdValue(a, op, upper, power);
+      if (!isAllowedExtra(other)) other = Math.min(3, upper);
+    }
+    let b;
+    let c;
+    if (op === "+") {
+      if (Math.random() < 0.5) {
+        b = power;
+        c = other;
+      } else {
+        b = other;
+        c = power;
+      }
+    } else {
+      b = power;
+      c = other;
+    }
+    const result = op === "+" ? a * (b + c) : a * (b - c);
+    return { a, b, c, op, result, mode };
+  }
+
+  function newTask() {
+    state.task = generateTask();
+    state.step = 1;
+    state.activeField = "s1";
+    state.expansion = null;
+    state.showStep1Hint = false;
+    state.s1 = "";
+    state.s2Left = "";
+    state.s2Right = "";
+    state.s3 = "";
+    state.solved = false;
+    setFeedback("", "");
+    refreshTaskUI();
+  }
+
+  function parseProduct(term) {
+    const m = term.match(/^(\d+)\*(\d+)$/);
+    if (!m) return null;
+    return [Number.parseInt(m[1], 10), Number.parseInt(m[2], 10)];
+  }
+
+  function classifyTerm(termPair, task) {
+    if (!termPair) return "";
+    const x = termPair[0];
+    const y = termPair[1];
+    if ((x === task.a && y === task.b) || (x === task.b && y === task.a)) return "ab";
+    if ((x === task.a && y === task.c) || (x === task.c && y === task.a)) return "ac";
+    return "";
+  }
+
+  function parseExpansion(raw, task) {
+    const text = String(raw || "").replace(/\s+/g, "");
+    if (!text) return null;
+
+    if (task.op === "+") {
+      if (!/^[0-9*+]+$/.test(text)) return null;
+      const parts = text.split("+");
+      if (parts.length !== 2) return null;
+      const p1 = parseProduct(parts[0]);
+      const p2 = parseProduct(parts[1]);
+      const t1 = classifyTerm(p1, task);
+      const t2 = classifyTerm(p2, task);
+      if (!((t1 === "ab" && t2 === "ac") || (t1 === "ac" && t2 === "ab"))) return null;
+
+      const leftFactor = t1 === "ab" ? task.b : task.c;
+      const rightFactor = t2 === "ab" ? task.b : task.c;
+      return {
+        leftFactor,
+        rightFactor,
+        leftProduct: task.a * leftFactor,
+        rightProduct: task.a * rightFactor,
+        normalized: task.a + "*" + leftFactor + "+" + task.a + "*" + rightFactor
+      };
+    }
+
+    if (!/^[0-9*\-]+$/.test(text)) return null;
+    const parts = text.split("-");
+    if (parts.length !== 2) return null;
+    const p1 = parseProduct(parts[0]);
+    const p2 = parseProduct(parts[1]);
+    if (classifyTerm(p1, task) !== "ab" || classifyTerm(p2, task) !== "ac") return null;
+    return {
+      leftFactor: task.b,
+      rightFactor: task.c,
+      leftProduct: task.a * task.b,
+      rightProduct: task.a * task.c,
+      normalized: task.a + "*" + task.b + "-" + task.a + "*" + task.c
+    };
+  }
+
+  function deleteLast() {
+    if (state.activeField === "s1") state.s1 = state.s1.slice(0, -1);
+    if (state.activeField === "s2l") state.s2Left = state.s2Left.slice(0, -1);
+    if (state.activeField === "s2r") state.s2Right = state.s2Right.slice(0, -1);
+    if (state.activeField === "s3") state.s3 = state.s3.slice(0, -1);
+    refreshTaskUI();
+  }
+
+  function appendToActive(key) {
+    if (state.activeField === "s1") {
+      if (!/^[0-9+\-*]$/.test(key)) return;
+      state.s1 += key;
+      refreshTaskUI();
+      return;
+    }
+
+    if (state.activeField === "s2l" || state.activeField === "s2r") {
+      if (!/^[0-9]$/.test(key)) return;
+      if (state.activeField === "s2l") state.s2Left += key;
+      else state.s2Right += key;
+      refreshTaskUI();
+      return;
+    }
+
+    if (state.activeField === "s3") {
+      if (/^[0-9]$/.test(key)) {
+        state.s3 += key;
+      } else if (key === "-" && state.s3.length === 0) {
+        state.s3 = "-";
+      }
+      refreshTaskUI();
+    }
+  }
+
+  function refreshPointsUI() {
+    ui.points.textContent = String(state.points);
+    const pct = progressPercentForPoints(state.points);
+    if (ui.progressFill) ui.progressFill.style.width = pct.toFixed(2) + "%";
+    if (ui.progressPercent) ui.progressPercent.textContent = String(Math.round(pct));
+  }
+
+  function loadLocalPoints() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const value = Number.parseInt(String(raw || "0"), 10);
+      return Number.isFinite(value) && value >= 0 ? value : 0;
+    } catch (_e) {
+      return 0;
+    }
+  }
+
+  function saveLocalPoints(points) {
+    try { localStorage.setItem(STORAGE_KEY, String(points)); } catch (_e) {}
+  }
+
+  async function loadEduloWidgetParams() {
+    const qs = new URLSearchParams(window.location.search);
+    const dataUrl = qs.get("data");
+    if (!dataUrl) return {};
+
+    try {
+      const url = dataUrl.startsWith("http") ? dataUrl : (window.location.origin + dataUrl);
+      const res = await fetch(url, { credentials: "include" });
+      if (!res.ok) return {};
+
+      const json = await res.json();
+      const contents = json.contents || json.modules || (json.body && json.body.contents) || [];
+      const list = Array.isArray(contents) ? contents : [];
+
+      let me = null;
+      for (const c of list) {
+        const html = c && (c.html || (c.content && c.content.html) || "");
+        if (typeof html === "string" && html.includes('data-edulo-widget-key="' + EDULO_WIDGET_KEY + '"')) {
+          me = c;
+          break;
+        }
+      }
+      if (!me) return {};
+
+      const out = {};
+      for (const p of (me.parameters || [])) {
+        if (p && p.name) out[String(p.name)] = p.value == null ? "" : String(p.value);
+      }
+      return out;
+    } catch (_e) {
+      return {};
+    }
+  }
+
+  function firstParam(widgetParams, urlParams, names) {
+    for (const name of names) {
+      if (widgetParams && Object.prototype.hasOwnProperty.call(widgetParams, name)) {
+        const w = String(widgetParams[name] || "").trim();
+        if (w) return w;
+      }
+      if (urlParams && urlParams.has(name)) {
+        const u = String(urlParams.get(name) || "").trim();
+        if (u) return u;
+      }
+    }
+    return "";
+  }
+
+  async function parseEduloConfig() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const widgetParams = await loadEduloWidgetParams();
+    const hasData = urlParams.has("data");
+
+    const checkButtonId = firstParam(widgetParams, urlParams, [
+      "CHECK_ID", "checkId", "eduloCheckButtonId", "edulo_check_button_id"
+    ]);
+    const checkSelector = firstParam(widgetParams, urlParams, [
+      "CHECK_SELECTOR", "checkSelector", "eduloCheckSelector", "edulo_check_selector"
+    ]);
+    const checkText = firstParam(widgetParams, urlParams, [
+      "CHECK_TEXT", "checkText", "eduloCheckText", "edulo_check_text"
+    ]) || "prüfen";
+    const sumId = firstParam(widgetParams, urlParams, [
+      "SUM_ID", "sumId", "scoreSumId", "eduloSumId", "edulo_sum_id"
+    ]);
+    const scorePrefixParam = firstParam(widgetParams, urlParams, [
+      "SCORE_PREFIX", "scorePrefix", "eduloScorePrefix", "edulo_score_prefix"
+    ]);
+    const startRaw = firstParam(widgetParams, urlParams, [
+      "START_INDEX", "startIndex", "scoreStartIndex", "SCORE_START_INDEX"
+    ]);
+    let scoreStartIndex = Number.parseInt(startRaw || "1", 10);
+    if (!Number.isFinite(scoreStartIndex) || scoreStartIndex < 1) scoreStartIndex = 1;
+
+    let scorePrefix = scorePrefixParam;
+    if (!scorePrefix) scorePrefix = "e2_cloze_text_input_";
+
+    const enabled = urlParams.get("edulo") === "1"
+      || hasData
+      || !!scorePrefixParam
+      || !!sumId
+      || !!checkButtonId
+      || !!checkSelector;
+
+    return {
+      enabled,
+      checkButtonId,
+      checkSelector,
+      checkText,
+      sumId,
+      scorePrefix,
+      scoreStartIndex
+    };
+  }
+
+  const edulo = await parseEduloConfig();
+
+  function tryDocs() {
+    const docs = [document];
+    try {
+      if (window.parent && window.parent !== window && window.parent.document) docs.push(window.parent.document);
+    } catch (_e) {}
+    try {
+      if (window.top && window.top !== window && window.top !== window.parent && window.top.document) docs.push(window.top.document);
+    } catch (_e) {}
+    return docs;
+  }
+
+  function findInDocs(id, selector) {
+    for (const doc of tryDocs()) {
+      if (id) {
+        const byId = doc.getElementById(id);
+        if (byId) return byId;
+      }
+      if (selector) {
+        const bySel = doc.querySelector(selector);
+        if (bySel) return bySel;
+      }
+    }
+    return null;
+  }
+
+  async function waitForEduloField(id, tries, delay) {
+    const maxTries = typeof tries === "number" ? tries : 20;
+    const waitMs = typeof delay === "number" ? delay : 200;
+    for (let i = 0; i < maxTries; i++) {
+      const el = findInDocs(id, "");
+      if (el) return el;
+      await new Promise(r => setTimeout(r, waitMs));
+    }
+    return null;
+  }
+
+  function setNativeValue(el, value) {
+    if (!el) return false;
+    if (!("value" in el)) {
+      el.textContent = value;
+      return true;
+    }
+    try {
+      const proto = Object.getPrototypeOf(el);
+      const desc = proto ? Object.getOwnPropertyDescriptor(proto, "value") : null;
+      if (desc && typeof desc.set === "function") desc.set.call(el, value);
+      else el.value = value;
+    } catch (_e) {
+      try { el.value = value; } catch (_e2) { return false; }
+    }
+    return true;
+  }
+
+  function setFieldValueIfExists(fieldId, value) {
+    if (!fieldId) return false;
+    const input = findInDocs(fieldId, "");
+    if (!input) return false;
+    if (!setNativeValue(input, value)) return false;
+    try {
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (_e) {
+      return false;
+    }
+    return true;
+  }
+
+  async function setFieldValueWithRetry(fieldId, value, tries, delay) {
+    const maxTries = typeof tries === "number" ? tries : 10;
+    const waitMs = typeof delay === "number" ? delay : 200;
+    for (let i = 0; i < maxTries; i++) {
+      if (setFieldValueIfExists(fieldId, value)) return true;
+      await new Promise(r => setTimeout(r, waitMs));
+    }
+    return false;
+  }
+
+  function findCheckButtonByText(textLower) {
+    if (!textLower) return null;
+    const selector = "button,[role='button'],a[role='button'],input[type='button'],input[type='submit']";
+    for (const doc of tryDocs()) {
+      const all = doc.querySelectorAll ? doc.querySelectorAll(selector) : [];
+      for (const b of all) {
+        try {
+          if (doc === document && b.closest && b.closest(".aus-task")) continue;
+        } catch (_e) {}
+        const t = String(b.textContent || b.value || "").trim().toLowerCase();
+        const a = String(b.getAttribute ? (b.getAttribute("aria-label") || "") : "").trim().toLowerCase();
+        if (t === textLower || a === textLower || t.includes(textLower) || a.includes(textLower)) return b;
+      }
+    }
+    return null;
+  }
+
+  function triggerEduloCheck() {
+    if (!edulo.enabled) return;
+    const btn = findInDocs(edulo.checkButtonId, edulo.checkSelector)
+      || findCheckButtonByText(String(edulo.checkText || "prüfen").toLowerCase());
+    if (btn && typeof btn.click === "function") {
+      try { btn.click(); } catch (_e) {}
+    }
+  }
+
+  function getFlagFieldId(index) {
+    if (!edulo.scorePrefix) return "";
+    return edulo.scorePrefix + String(edulo.scoreStartIndex + index);
+  }
+
+  function readTextValue(el) {
+    if (!el) return "";
+    return ("value" in el) ? (el.value || "") : (el.textContent || "");
+  }
+
+  function readPointsFromSumField() {
+    if (!edulo.sumId) return null;
+    const el = findInDocs(edulo.sumId, "");
+    if (!el) return null;
+    const raw = String(readTextValue(el)).trim();
+    const n = Number.parseInt(raw, 10);
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  }
+
+  async function writeFlagFieldsFromPoints(points) {
+    if (edulo.scorePrefix) {
+      for (let i = 0; i < SCORE_FLAG_COUNT; i++) {
+        const shouldSet = points >= SCORE_MILESTONES[i];
+        await setFieldValueWithRetry(getFlagFieldId(i), shouldSet ? "1" : "", 10, 200);
+      }
+    }
+  }
+
+  async function writeEduloScore(points) {
+    if (!edulo.enabled) return;
+    if (edulo.sumId) {
+      await setFieldValueWithRetry(edulo.sumId, String(points), 10, 200);
+    }
+    await writeFlagFieldsFromPoints(points);
+  }
+
+  async function syncPointsFromTruth() {
+    if (!edulo.enabled) return;
+
+    // SUM_ID ist die Master-Quelle für die konkrete Punktzahl.
+    if (edulo.sumId) {
+      const bySum = readPointsFromSumField();
+      if (bySum != null) {
+        state.points = bySum;
+        saveLocalPoints(state.points);
+        refreshPointsUI();
+        await writeFlagFieldsFromPoints(state.points);
+        return;
+      }
+    }
+
+    // Fallback ohne SUM_ID: lokale Punkte beibehalten und Flags daraus setzen.
+    await writeFlagFieldsFromPoints(state.points);
+  }
+
+  function attachCheckSync(button) {
+    if (!button || button.__distSyncBound) return;
+    button.__distSyncBound = true;
+    button.addEventListener("click", () => {
+      setTimeout(() => { void syncPointsFromTruth(); }, 140);
+      setTimeout(() => { void syncPointsFromTruth(); }, 520);
+    });
+  }
+
+  async function warmUpCheckSync() {
+    if (!edulo.enabled) return;
+    for (let i = 0; i < 25; i++) {
+      const btn = findInDocs(edulo.checkButtonId, edulo.checkSelector)
+        || findCheckButtonByText(String(edulo.checkText || "prüfen").toLowerCase());
+      if (btn) {
+        attachCheckSync(btn);
+        return;
+      }
+      await new Promise(r => setTimeout(r, 200));
+    }
+  }
+
+  async function persistPoints(points) {
+    state.points = points;
+    saveLocalPoints(points);
+    refreshPointsUI();
+    await writeEduloScore(points);
+    triggerEduloCheck();
+  }
+
+  async function resetProgress() {
+    state.points = 0;
+    saveLocalPoints(0);
+    refreshPointsUI();
+    if (edulo.enabled) {
+      if (edulo.sumId) await setFieldValueWithRetry(edulo.sumId, "0", 10, 200);
+      if (edulo.scorePrefix) {
+        for (let i = 0; i < SCORE_FLAG_COUNT; i++) {
+          await setFieldValueWithRetry(getFlagFieldId(i), "", 10, 200);
+        }
+      }
+      triggerEduloCheck();
+    }
+    newTask();
+    setFeedback("Fortschritt zurückgesetzt.", "");
+  }
+
+  async function checkTask() {
+    if (!state.task) return;
+    if (state.solved) return;
+    if (state.step === 1) {
+      const parsed = parseExpansion(state.s1, state.task);
+      if (!parsed) {
+        state.showStep1Hint = true;
+        refreshTaskUI();
+        setFeedback("Schritt 1 ist noch nicht korrekt. Schau auf das Beispiel.", "err");
+        return;
+      }
+      state.expansion = parsed;
+      state.s1 = parsed.normalized;
+      state.step = 2;
+      state.activeField = "s2l";
+      state.showStep1Hint = false;
+      refreshTaskUI();
+      setFeedback("Schritt 1 richtig. Jetzt Schritt 2.", "ok");
+      return;
+    }
+
+    if (state.step === 2) {
+      const left = parseIntStrict(state.s2Left);
+      const right = parseIntStrict(state.s2Right);
+      if (!state.expansion || left == null || right == null) {
+        setFeedback("Bitte beide Produkte in Schritt 2 eingeben.", "err");
+        return;
+      }
+      if (left !== state.expansion.leftProduct || right !== state.expansion.rightProduct) {
+        setFeedback("Schritt 2 ist noch nicht korrekt.", "err");
+        return;
+      }
+      state.step = 3;
+      state.activeField = "s3";
+      refreshTaskUI();
+      setFeedback("Schritt 2 richtig. Jetzt Schritt 3.", "ok");
+      return;
+    }
+
+    const result = parseIntStrict(state.s3);
+    if (result == null || result !== state.task.result) {
+      setFeedback("Schritt 3 ist noch nicht korrekt.", "err");
+      return;
+    }
+    await persistPoints(state.points + 1);
+    state.solved = true;
+    state.activeField = "";
+    refreshTaskUI();
+    setFeedback("Richtig. Klicke auf „Neue Aufgabe“.", "ok");
+  }
+
+  ui.step1Input.addEventListener("click", () => { if (state.step === 1) setActiveField("s1"); });
+  ui.step2InputLeft.addEventListener("click", () => { if (state.step === 2) setActiveField("s2l"); });
+  ui.step2InputRight.addEventListener("click", () => { if (state.step === 2) setActiveField("s2r"); });
+  ui.step3Input.addEventListener("click", () => { if (state.step === 3) setActiveField("s3"); });
+  ui.step1Input.addEventListener("keydown", e => e.preventDefault());
+  ui.step2InputLeft.addEventListener("keydown", e => e.preventDefault());
+  ui.step2InputRight.addEventListener("keydown", e => e.preventDefault());
+  ui.step3Input.addEventListener("keydown", e => e.preventDefault());
+
+  ui.keypad.addEventListener("click", (e) => {
+    if (state.solved) return;
+    const btn = e.target.closest("button[data-key]");
+    if (!btn) return;
+    const key = String(btn.dataset.key || "");
+    if (key === "back") {
+      deleteLast();
+      return;
+    }
+    if (key === "check") {
+      void checkTask();
+      return;
+    }
+    appendToActive(key);
+  });
+
+  if (ui.resetBtn) {
+    ui.resetBtn.addEventListener("click", () => {
+      void resetProgress();
+    });
+  }
+  if (ui.nextBtn) {
+    ui.nextBtn.addEventListener("click", () => {
+      newTask();
+    });
+  }
+
+  state.points = loadLocalPoints();
+  buildProgressRaster();
+  refreshPointsUI();
+
+  if (edulo.enabled && edulo.scorePrefix) {
+    await waitForEduloField(edulo.scorePrefix + String(edulo.scoreStartIndex), 20, 200);
+  }
+  await syncPointsFromTruth();
+  await warmUpCheckSync();
+
+  newTask();
+})();
+</script>
+</body>
+</html>
+
