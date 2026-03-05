@@ -169,6 +169,7 @@ body{
 }
 
 .aus-task{
+  position:relative;
   padding:14px;
   display:grid;
   gap:10px;
@@ -315,6 +316,13 @@ body{
   cursor:pointer;
 }
 .aus-reset:hover{background:#f7fafc}
+.aus-reset-corner{
+  position:absolute;
+  top:10px;
+  right:10px;
+  margin-left:0;
+  z-index:2;
+}
 .aus-next{
   border:1px solid #9ad9b4;
   background:#eaf9f0;
@@ -604,7 +612,8 @@ body{
   </section>
 
   <section class="card aus-task" aria-labelledby="ausTaskTitel">
-    <h2 id="ausTaskTitel">Aufgabe</h2>
+    <h2 id="ausTaskTitel">Aufgabe 1</h2>
+    <button id="distResetBtn" class="aus-reset aus-reset-corner" type="button">Zurücksetzen</button>
     <div class="aus-problem" id="distProblem">4 · (10 - 1)</div>
 
     <div class="aus-steps">
@@ -669,7 +678,6 @@ body{
     <div class="aus-meta">
       <div class="aus-points">Punkte: <span id="distPoints">0</span></div>
       <button id="distNextBtn" class="aus-next hide" type="button">Neue Aufgabe</button>
-      <button id="distResetBtn" class="aus-reset" type="button">Zurücksetzen</button>
     </div>
     <div class="aus-progress-wrap" aria-label="Fortschritt">
       <div class="aus-progress-grid">
@@ -680,6 +688,90 @@ body{
     </div>
 
     <div id="distFeedback" class="aus-feedback" aria-live="polite"></div>
+  </section>
+
+  <section class="card aus-wissen">
+    <h2>Wissen: Ausklammern</h2>
+    <p>Beim Ausklammern zieht man den gemeinsamen Faktor vor die Klammer: aus a · b + a · c wird a · (b + c). Danach berechnest du zuerst b + c und anschließend das Endergebnis.</p>
+  </section>
+
+  <section class="card aus-task" aria-labelledby="factTaskTitel">
+    <h2 id="factTaskTitel">Aufgabe 2</h2>
+    <button id="factResetBtn" class="aus-reset aus-reset-corner" type="button">Zurücksetzen</button>
+    <div class="aus-problem" id="factProblem">4 · 10 + 4 · 1</div>
+
+    <div class="aus-steps">
+      <section class="aus-step" id="factStep1">
+        <h3>Schritt 1</h3>
+        <p>Forme in die Klammerform um.</p>
+        <div class="aus-line" id="factStep1LineBase">4 · 10 + 4 · 1</div>
+        <div class="aus-input-row">
+          <span class="eq-sign">=</span>
+          <input id="factStep1Input" type="text" readonly aria-readonly="true" autocomplete="off" />
+        </div>
+        <div id="factStep1Hint" class="aus-step-hint" hidden>
+          <div class="hint-title">Regel:</div>
+          <div id="factStep1HintRule">a · b + a · c = a · (b + c)</div>
+        </div>
+      </section>
+
+      <section class="aus-step hide" id="factStep2">
+        <h3>Schritt 2</h3>
+        <p>Berechne die Klammer b + c.</p>
+        <div class="aus-line" id="factStep2LineBase">4 · 10 + 4 · 1</div>
+        <div class="aus-line" id="factStep2LineFactored">= 4 · (10 + 1)</div>
+        <div class="aus-input-row">
+          <span class="eq-sign">=</span>
+          <span id="factStep2MulPrefix" class="eq-op">4 ·</span>
+          <input id="factStep2Input" class="small" type="text" readonly aria-readonly="true" autocomplete="off" />
+        </div>
+      </section>
+
+      <section class="aus-step hide" id="factStep3">
+        <h3>Schritt 3</h3>
+        <p>Berechne das Endergebnis.</p>
+        <div class="aus-line" id="factStep3LineBase">4 · 10 + 4 · 1</div>
+        <div class="aus-line" id="factStep3LineFactored">= 4 · (10 + 1)</div>
+        <div class="aus-line" id="factStep3LineInner">= 4 · 11</div>
+        <div class="aus-input-row">
+          <span class="eq-sign">=</span>
+          <input id="factStep3Input" type="text" readonly aria-readonly="true" autocomplete="off" />
+        </div>
+      </section>
+    </div>
+
+    <div class="aus-keypad" id="factKeypad" aria-label="Rechentastatur Ausklammern">
+      <button class="kp-btn" data-key="1" type="button">1</button>
+      <button class="kp-btn" data-key="2" type="button">2</button>
+      <button class="kp-btn" data-key="3" type="button">3</button>
+      <button class="kp-btn" data-key="+" type="button">+</button>
+      <button class="kp-btn" data-key="4" type="button">4</button>
+      <button class="kp-btn" data-key="5" type="button">5</button>
+      <button class="kp-btn" data-key="6" type="button">6</button>
+      <button class="kp-btn" data-key="*" type="button">·</button>
+      <button class="kp-btn" data-key="7" type="button">7</button>
+      <button class="kp-btn" data-key="8" type="button">8</button>
+      <button class="kp-btn" data-key="9" type="button">9</button>
+      <button class="kp-btn" data-key="(" type="button">(</button>
+      <button class="kp-btn" data-key="0" type="button">0</button>
+      <button class="kp-btn" data-key=")" type="button">)</button>
+      <button class="kp-btn delete" data-key="back" type="button">Löschen</button>
+      <button class="kp-btn check" data-key="check" type="button">Prüfen</button>
+    </div>
+
+    <div class="aus-meta">
+      <div class="aus-points">Punkte: <span id="factPoints">0</span></div>
+      <button id="factNextBtn" class="aus-next hide" type="button">Neue Aufgabe</button>
+    </div>
+    <div class="aus-progress-wrap" aria-label="Fortschritt Ausklammern">
+      <div class="aus-progress-grid">
+        <div id="factProgressFill" class="aus-progress-fill"></div>
+        <div id="factProgressLines" class="aus-progress-lines"></div>
+      </div>
+      <div class="aus-progress-text"><span id="factProgressPercent">0</span>%</div>
+    </div>
+
+    <div id="factFeedback" class="aus-feedback" aria-live="polite"></div>
   </section>
 </main>
 
@@ -1720,6 +1812,10 @@ body{
   }
 
   function firstParam(widgetParams, urlParams, names) {
+    function normKey(key) {
+      return String(key || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    }
+
     for (const name of names) {
       if (widgetParams && Object.prototype.hasOwnProperty.call(widgetParams, name)) {
         const w = String(widgetParams[name] || "").trim();
@@ -1730,6 +1826,26 @@ body{
         if (u) return u;
       }
     }
+
+    const wanted = new Set(names.map(normKey));
+    if (widgetParams) {
+      for (const key of Object.keys(widgetParams)) {
+        if (!wanted.has(normKey(key))) continue;
+        const v = String(widgetParams[key] || "").trim();
+        if (v) return v;
+      }
+    }
+    if (urlParams && typeof urlParams.forEach === "function") {
+      let found = "";
+      urlParams.forEach((value, key) => {
+        if (found) return;
+        if (!wanted.has(normKey(key))) return;
+        const v = String(value || "").trim();
+        if (v) found = v;
+      });
+      if (found) return found;
+    }
+
     return "";
   }
 
@@ -1747,7 +1863,7 @@ body{
     const checkText = firstParam(widgetParams, urlParams, [
       "CHECK_TEXT", "checkText", "eduloCheckText", "edulo_check_text"
     ]) || "prüfen";
-    const sumId = firstParam(widgetParams, urlParams, [
+    let sumId = firstParam(widgetParams, urlParams, [
       "SUM_ID", "sumId", "scoreSumId", "eduloSumId", "edulo_sum_id"
     ]);
     const scorePrefixParam = firstParam(widgetParams, urlParams, [
@@ -1761,6 +1877,11 @@ body{
 
     let scorePrefix = scorePrefixParam;
     if (!scorePrefix) scorePrefix = "e2_cloze_text_input_";
+    if (!sumId) {
+      const m = String(scorePrefix).match(/^e(\d+)_cloze_text_input_$/);
+      if (m) sumId = "e" + String(Number.parseInt(m[1], 10) + 1) + "_text_input";
+      else sumId = "e3_text_input";
+    }
 
     const enabled = urlParams.get("edulo") === "1"
       || hasData
@@ -1807,11 +1928,51 @@ body{
     return null;
   }
 
+  function pickEduloFieldElement(el) {
+    if (!el) return null;
+    if ("value" in el) return el;
+    if (el.querySelector) {
+      const inner = el.querySelector("input,textarea,select,[contenteditable='true'],[contenteditable='']");
+      if (inner) return inner;
+    }
+    return el;
+  }
+
+  function findFieldInDocs(fieldId) {
+    const baseId = String(fieldId || "").trim();
+    if (!baseId) return null;
+    const variants = [baseId];
+    if (!/_\d+$/.test(baseId)) {
+      variants.push(baseId + "_1");
+      variants.push(baseId + "_0");
+    }
+
+    for (const doc of tryDocs()) {
+      for (const id of variants) {
+        const exact = doc.getElementById ? doc.getElementById(id) : null;
+        const picked = pickEduloFieldElement(exact);
+        if (picked) return picked;
+      }
+      if (doc.querySelectorAll) {
+        const all = doc.querySelectorAll("[id]");
+        for (const node of all) {
+          const id = String(node.id || "");
+          if (!id) continue;
+          if (id === baseId || id.startsWith(baseId + "_")) {
+            const picked = pickEduloFieldElement(node);
+            if (picked) return picked;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
   async function waitForEduloField(id, tries, delay) {
     const maxTries = typeof tries === "number" ? tries : 20;
     const waitMs = typeof delay === "number" ? delay : 200;
     for (let i = 0; i < maxTries; i++) {
-      const el = findInDocs(id, "");
+      const el = findFieldInDocs(id);
       if (el) return el;
       await new Promise(r => setTimeout(r, waitMs));
     }
@@ -1837,16 +1998,24 @@ body{
 
   function setFieldValueIfExists(fieldId, value) {
     if (!fieldId) return false;
-    const input = findInDocs(fieldId, "");
+    const input = findFieldInDocs(fieldId);
     if (!input) return false;
     if (!setNativeValue(input, value)) return false;
     try {
       input.dispatchEvent(new Event("input", { bubbles: true }));
       input.dispatchEvent(new Event("change", { bubbles: true }));
+      input.dispatchEvent(new Event("keyup", { bubbles: true }));
+      input.dispatchEvent(new Event("blur"));
+      input.dispatchEvent(new Event("focusout", { bubbles: true }));
     } catch (_e) {
       return false;
     }
     return true;
+  }
+
+  function hasEduloField(fieldId) {
+    if (!fieldId) return false;
+    return !!findFieldInDocs(fieldId);
   }
 
   async function setFieldValueWithRetry(fieldId, value, tries, delay) {
@@ -1862,11 +2031,23 @@ body{
   function findCheckButtonByText(textLower) {
     if (!textLower) return null;
     const selector = "button,[role='button'],a[role='button'],input[type='button'],input[type='submit']";
-    for (const doc of tryDocs()) {
+    const docs = tryDocs();
+    const orderedDocs = docs.filter(d => d !== document).concat(docs.filter(d => d === document));
+
+    function isInsideLocalTask(el) {
+      let cur = el;
+      while (cur && cur !== document) {
+        if (cur.classList && cur.classList.contains("aus-task")) return true;
+        cur = cur.parentElement;
+      }
+      return false;
+    }
+
+    for (const doc of orderedDocs) {
       const all = doc.querySelectorAll ? doc.querySelectorAll(selector) : [];
       for (const b of all) {
         try {
-          if (doc === document && b.closest && b.closest(".aus-task")) continue;
+          if (doc === document && isInsideLocalTask(b)) continue;
         } catch (_e) {}
         const t = String(b.textContent || b.value || "").trim().toLowerCase();
         const a = String(b.getAttribute ? (b.getAttribute("aria-label") || "") : "").trim().toLowerCase();
@@ -1897,18 +2078,24 @@ body{
 
   function readPointsFromSumField() {
     if (!edulo.sumId) return null;
-    const el = findInDocs(edulo.sumId, "");
+    const el = findFieldInDocs(edulo.sumId);
     if (!el) return null;
     const raw = String(readTextValue(el)).trim();
+    if (!raw) return null;
     const n = Number.parseInt(raw, 10);
-    return Number.isFinite(n) && n >= 0 ? n : 0;
+    return Number.isFinite(n) && n >= 0 ? n : null;
   }
 
-  async function writeFlagFieldsFromPoints(points) {
+  async function writeFlagFieldsFromPoints(points, options) {
+    const opts = options || {};
+    const waitForField = !!opts.waitForField;
     if (edulo.scorePrefix) {
+      const firstFlag = getFlagFieldId(0);
+      if (waitForField) await waitForEduloField(firstFlag, 60, 200);
+      if (!hasEduloField(firstFlag)) return;
       for (let i = 0; i < SCORE_FLAG_COUNT; i++) {
         const shouldSet = points >= SCORE_MILESTONES[i];
-        await setFieldValueWithRetry(getFlagFieldId(i), shouldSet ? "1" : "", 10, 200);
+        await setFieldValueWithRetry(getFlagFieldId(i), shouldSet ? "1" : "", 12, 200);
       }
     }
   }
@@ -1916,9 +2103,10 @@ body{
   async function writeEduloScore(points) {
     if (!edulo.enabled) return;
     if (edulo.sumId) {
-      await setFieldValueWithRetry(edulo.sumId, String(points), 10, 200);
+      await waitForEduloField(edulo.sumId, 60, 200);
+      await setFieldValueWithRetry(edulo.sumId, String(points), 12, 200);
     }
-    await writeFlagFieldsFromPoints(points);
+    await writeFlagFieldsFromPoints(points, { waitForField: true });
   }
 
   async function syncPointsFromTruth() {
@@ -1934,6 +2122,13 @@ body{
         await writeFlagFieldsFromPoints(state.points);
         return;
       }
+      if (hasEduloField(edulo.sumId)) {
+        // Feld existiert, aber ist leer/ungültig: lokale Punkte übernehmen.
+        await writeEduloScore(state.points);
+      }
+      // SUM_ID konfiguriert, Feld aber noch nicht verfügbar:
+      // nichts zurückschreiben, um externe Werte nicht zu überschreiben.
+      return;
     }
 
     // Fallback ohne SUM_ID: lokale Punkte beibehalten und Flags daraus setzen.
@@ -1951,7 +2146,7 @@ body{
 
   async function warmUpCheckSync() {
     if (!edulo.enabled) return;
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 60; i++) {
       const btn = findInDocs(edulo.checkButtonId, edulo.checkSelector)
         || findCheckButtonByText(String(edulo.checkText || "prüfen").toLowerCase());
       if (btn) {
@@ -1975,12 +2170,11 @@ body{
     saveLocalPoints(0);
     refreshPointsUI();
     if (edulo.enabled) {
-      if (edulo.sumId) await setFieldValueWithRetry(edulo.sumId, "0", 10, 200);
-      if (edulo.scorePrefix) {
-        for (let i = 0; i < SCORE_FLAG_COUNT; i++) {
-          await setFieldValueWithRetry(getFlagFieldId(i), "", 10, 200);
-        }
+      if (edulo.sumId) {
+        await waitForEduloField(edulo.sumId, 60, 200);
+        await setFieldValueWithRetry(edulo.sumId, "0", 12, 200);
       }
+      await writeFlagFieldsFromPoints(0, { waitForField: true });
       triggerEduloCheck();
     }
     newTask();
@@ -2065,6 +2259,9 @@ body{
 
   if (ui.resetBtn) {
     ui.resetBtn.addEventListener("click", () => {
+      const warn = "Achtung durch das zurücksetzen gehen alle erreichten Punkte unwiederbringlich verloren.";
+      if (!window.confirm(warn)) return;
+      if (!window.confirm("Möchtest du wirklich zurücksetzen?")) return;
       void resetProgress();
     });
   }
@@ -2078,15 +2275,943 @@ body{
   buildProgressRaster();
   refreshPointsUI();
 
-  if (edulo.enabled && edulo.scorePrefix) {
-    await waitForEduloField(edulo.scorePrefix + String(edulo.scoreStartIndex), 20, 200);
+  if (edulo.enabled) {
+    if (edulo.sumId) await waitForEduloField(edulo.sumId, 60, 200);
+    else if (edulo.scorePrefix) await waitForEduloField(edulo.scorePrefix + String(edulo.scoreStartIndex), 60, 200);
   }
   await syncPointsFromTruth();
   await warmUpCheckSync();
+  setTimeout(() => { void syncPointsFromTruth(); }, 1200);
+  setTimeout(() => { void syncPointsFromTruth(); }, 3500);
+  setTimeout(() => { void syncPointsFromTruth(); }, 7000);
+
+  newTask();
+})();
+</script>
+<script>
+(async () => {
+  "use strict";
+
+  const ui = {
+    problem: document.getElementById("factProblem"),
+    step1: document.getElementById("factStep1"),
+    step2: document.getElementById("factStep2"),
+    step3: document.getElementById("factStep3"),
+    step1LineBase: document.getElementById("factStep1LineBase"),
+    step2LineBase: document.getElementById("factStep2LineBase"),
+    step2LineFactored: document.getElementById("factStep2LineFactored"),
+    step3LineBase: document.getElementById("factStep3LineBase"),
+    step3LineFactored: document.getElementById("factStep3LineFactored"),
+    step3LineInner: document.getElementById("factStep3LineInner"),
+    step2MulPrefix: document.getElementById("factStep2MulPrefix"),
+    step1Input: document.getElementById("factStep1Input"),
+    step2Input: document.getElementById("factStep2Input"),
+    step3Input: document.getElementById("factStep3Input"),
+    step1Hint: document.getElementById("factStep1Hint"),
+    step1HintRule: document.getElementById("factStep1HintRule"),
+    keypad: document.getElementById("factKeypad"),
+    feedback: document.getElementById("factFeedback"),
+    points: document.getElementById("factPoints"),
+    progressFill: document.getElementById("factProgressFill"),
+    progressLines: document.getElementById("factProgressLines"),
+    progressPercent: document.getElementById("factProgressPercent"),
+    nextBtn: document.getElementById("factNextBtn"),
+    resetBtn: document.getElementById("factResetBtn")
+  };
+  if (!ui.problem || !ui.step1Input || !ui.step2Input || !ui.step3Input || !ui.keypad) return;
+
+  const STORAGE_KEY = "distributiv-ausklammern-v1";
+  const SCORE_FLAG_COUNT = 10;
+  const SCORE_MILESTONES = Array.from({ length: SCORE_FLAG_COUNT }, (_, i) => Math.pow(2, i));
+  const EDULO_WIDGET_KEY = "DISTRIBUTIVGESETZ_WUERFEL";
+  const POWER_TARGETS = [10, 100, 1000];
+  const POWER_FACTORS = [2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 40, 50];
+  const ADV_PAIR_TARGETS = [
+    { a: 2, mate: 5 },
+    { a: 5, mate: 2 },
+    { a: 4, mate: 25 },
+    { a: 25, mate: 4 },
+    { a: 8, mate: 125 },
+    { a: 125, mate: 8 },
+    { a: 2, mate: 50 },
+    { a: 50, mate: 2 },
+    { a: 5, mate: 20 },
+    { a: 20, mate: 5 },
+    { a: 4, mate: 250 },
+    { a: 250, mate: 4 },
+    { a: 2, mate: 500 },
+    { a: 500, mate: 2 },
+    { a: 25, mate: 40 },
+    { a: 40, mate: 25 }
+  ];
+  const SUM_SPLIT_PREFS = [1, 2, 3, 4, 5, 8, 9, 10, 20, 25, 30, 40, 50, 60, 75, 80, 90, 100, 125, 200, 250, 400, 500];
+
+  const state = {
+    step: 1,
+    activeField: "s1",
+    task: null,
+    s1: "",
+    s2: "",
+    s3: "",
+    solved: false,
+    showStep1Hint: false,
+    points: 0
+  };
+
+  function formatBase(task) {
+    return task.a + " · " + task.b + " + " + task.a + " · " + task.c;
+  }
+
+  function formatFactored(task) {
+    return task.a + " · (" + task.b + " + " + task.c + ")";
+  }
+
+  function normalizeExpr(raw) {
+    return String(raw || "")
+      .replace(/\u00d7/g, "*")
+      .replace(/\u00b7/g, "*")
+      .replace(/\s+/g, "")
+      .trim();
+  }
+
+  function prettyExpr(raw) {
+    return String(raw || "")
+      .replace(/\*/g, " · ")
+      .replace(/\+/g, " + ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function setInputWidthByChars(el, chars, minCh, maxCh) {
+    if (!el) return;
+    const n = Math.max(minCh, Math.min(maxCh, Math.max(1, chars) + 3));
+    el.style.width = "min(100%, calc(" + n + "ch + 1.2rem))";
+  }
+
+  function parseIntStrict(raw) {
+    const text = String(raw || "").trim();
+    if (!/^\d+$/.test(text)) return null;
+    return Number.parseInt(text, 10);
+  }
+
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function randomChoice(values) {
+    if (!values || !values.length) return null;
+    return values[randomInt(0, values.length - 1)];
+  }
+
+  function splitSum(sum, options) {
+    const opts = options || {};
+    const requireDistinct = !!opts.requireDistinct;
+    const avoidValues = Array.isArray(opts.avoidValues) ? opts.avoidValues : [];
+    const avoidSet = new Set(avoidValues.filter(v => Number.isFinite(v)));
+    const candidates = [];
+
+    for (const v of SUM_SPLIT_PREFS) {
+      if (v > 0 && v < sum) {
+        candidates.push([v, sum - v]);
+        candidates.push([sum - v, v]);
+      }
+    }
+
+    const maxSmall = Math.min(20, Math.max(1, sum - 1));
+    for (let v = 1; v <= maxSmall; v++) {
+      if (v >= sum) break;
+      candidates.push([v, sum - v]);
+      candidates.push([sum - v, v]);
+    }
+
+    const unique = [];
+    const seen = new Set();
+    for (const pair of candidates) {
+      const b = pair[0];
+      const c = pair[1];
+      if (!Number.isFinite(b) || !Number.isFinite(c) || b <= 0 || c <= 0) continue;
+      if (requireDistinct && b === c) continue;
+      if (avoidSet.has(b) || avoidSet.has(c)) continue;
+      const key = b + "|" + c;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      unique.push([b, c]);
+    }
+
+    return unique.length ? randomChoice(unique) : null;
+  }
+
+  function generatePowerTargetTask() {
+    for (let i = 0; i < 80; i++) {
+      const r = Math.random();
+      const sum = r < 0.45 ? 10 : (r < 0.9 ? 100 : 1000);
+      const factors = sum === 1000 ? [2, 3, 4, 5, 8] : POWER_FACTORS;
+      const a = randomChoice(factors);
+      const split = splitSum(sum, { requireDistinct: true, avoidValues: [a] });
+      if (!split) continue;
+      return {
+        a,
+        b: split[0],
+        c: split[1],
+        sum,
+        result: a * sum,
+        targetType: "power"
+      };
+    }
+    return null;
+  }
+
+  function generatePairTargetTask() {
+    const pool = ADV_PAIR_TARGETS.filter(p => p.mate >= 3);
+    for (let i = 0; i < 80; i++) {
+      const pair = randomChoice(pool);
+      if (!pair) continue;
+      const a = pair.a;
+      const sum = pair.mate;
+      const split = splitSum(sum, { requireDistinct: true, avoidValues: [a] });
+      if (!split) continue;
+      return {
+        a,
+        b: split[0],
+        c: split[1],
+        sum,
+        result: a * sum,
+        targetType: "pair"
+      };
+    }
+    return null;
+  }
+
+  function generateTask() {
+    for (let i = 0; i < 150; i++) {
+      const mode = Math.random() < 0.55 ? "power" : "pair";
+      const task = mode === "power" ? generatePowerTargetTask() : generatePairTargetTask();
+      if (!task) continue;
+      if (task.b <= 0 || task.c <= 0) continue;
+      if (!POWER_TARGETS.includes(task.sum) && !ADV_PAIR_TARGETS.some(p => p.a === task.a && p.mate === task.sum)) continue;
+      return task;
+    }
+    return { a: 4, b: 10, c: 1, sum: 11, result: 44, targetType: "power" };
+  }
+
+  function parseFactoring(raw, task) {
+    const text = normalizeExpr(raw);
+    if (!text) return null;
+
+    let factor = null;
+    let x = null;
+    let y = null;
+
+    let m = text.match(/^(\d+)\*\((\d+)\+(\d+)\)$/);
+    if (m) {
+      factor = Number.parseInt(m[1], 10);
+      x = Number.parseInt(m[2], 10);
+      y = Number.parseInt(m[3], 10);
+    } else {
+      m = text.match(/^\((\d+)\+(\d+)\)\*(\d+)$/);
+      if (!m) return null;
+      factor = Number.parseInt(m[3], 10);
+      x = Number.parseInt(m[1], 10);
+      y = Number.parseInt(m[2], 10);
+    }
+
+    if (factor !== task.a) return null;
+    const sameOrder = x === task.b && y === task.c;
+    const swappedOrder = x === task.c && y === task.b;
+    if (!sameOrder && !swappedOrder) return null;
+
+    return task.a + "*(" + task.b + "+" + task.c + ")";
+  }
+
+  function progressPercentForPoints(points) {
+    if (points <= 0) return 0;
+    const total = SCORE_MILESTONES.length;
+
+    if (points < SCORE_MILESTONES[0]) {
+      return Math.max(0, Math.min(100, (points / SCORE_MILESTONES[0]) * (100 / total)));
+    }
+
+    for (let i = 0; i < SCORE_MILESTONES.length; i++) {
+      const cur = SCORE_MILESTONES[i];
+      if (points === cur) {
+        return ((i + 1) / total) * 100;
+      }
+      const next = SCORE_MILESTONES[i + 1];
+      if (next != null && points < next) {
+        const segmentStart = (i + 1) / total;
+        const frac = (points - cur) / (next - cur);
+        return (segmentStart + (frac * (1 / total))) * 100;
+      }
+    }
+    return 100;
+  }
+
+  function buildProgressRaster() {
+    if (!ui.progressLines) return;
+    ui.progressLines.innerHTML = "";
+    const rasterMaxPoints = 64;
+    const used = new Set();
+
+    function addLine(percent, major) {
+      const p = Math.max(0, Math.min(100, percent));
+      const key = p.toFixed(4);
+      if (used.has(key)) return;
+      used.add(key);
+      const line = document.createElement("span");
+      line.className = "aus-progress-line" + (major ? " major" : "");
+      line.style.left = p + "%";
+      ui.progressLines.appendChild(line);
+    }
+
+    for (let p = 1; p <= rasterMaxPoints; p++) {
+      addLine(progressPercentForPoints(p), SCORE_MILESTONES.includes(p));
+    }
+
+    for (const m of SCORE_MILESTONES) {
+      const pct = progressPercentForPoints(m);
+      if (pct > 0 && pct < 100) addLine(pct, true);
+    }
+  }
+
+  function setFeedback(text, kind) {
+    ui.feedback.textContent = text || "";
+    ui.feedback.classList.remove("ok", "err");
+    if (kind) ui.feedback.classList.add(kind);
+  }
+
+  function setActiveField(fieldId) {
+    state.activeField = fieldId;
+    refreshTaskUI();
+  }
+
+  function refreshTaskUI() {
+    if (!state.task) return;
+    const base = formatBase(state.task);
+    const factored = formatFactored(state.task);
+    ui.problem.textContent = base;
+    ui.step1LineBase.textContent = base;
+    ui.step2LineBase.textContent = base;
+    ui.step2LineFactored.textContent = "= " + factored;
+    if (ui.step2MulPrefix) ui.step2MulPrefix.textContent = state.task.a + " ·";
+    ui.step3LineBase.textContent = base;
+    ui.step3LineFactored.textContent = "= " + factored;
+    ui.step3LineInner.textContent = "= " + state.task.a + " · " + state.task.sum;
+
+    ui.step1.classList.remove("hide");
+    ui.step2.classList.toggle("hide", state.step < 2);
+    ui.step3.classList.toggle("hide", state.step < 3);
+    ui.keypad.classList.toggle("hide", state.solved);
+    if (ui.nextBtn) ui.nextBtn.classList.toggle("hide", !state.solved);
+
+    ui.step1Input.value = prettyExpr(state.s1);
+    ui.step2Input.value = state.s2;
+    ui.step3Input.value = state.s3;
+
+    ui.step1Input.classList.toggle("active", !state.solved && state.step === 1 && state.activeField === "s1");
+    ui.step2Input.classList.toggle("active", !state.solved && state.step === 2 && state.activeField === "s2");
+    ui.step3Input.classList.toggle("active", !state.solved && state.step === 3 && state.activeField === "s3");
+
+    ui.step1Hint.hidden = !state.showStep1Hint;
+    ui.step1HintRule.textContent = "a · b + a · c = a · (b + c)";
+
+    const expectedStep1 = prettyExpr(state.task.a + "*(" + state.task.b + "+" + state.task.c + ")").length;
+    const shownStep1 = prettyExpr(state.s1).length;
+    setInputWidthByChars(ui.step1Input, Math.max(expectedStep1, shownStep1), 12, 34);
+
+    setInputWidthByChars(
+      ui.step2Input,
+      Math.max(String(state.task.sum).length, String(state.s2 || "").length),
+      4,
+      12
+    );
+    setInputWidthByChars(
+      ui.step3Input,
+      Math.max(String(state.task.result).length, String(state.s3 || "").length),
+      6,
+      16
+    );
+  }
+
+  function newTask() {
+    state.task = generateTask();
+    state.step = 1;
+    state.activeField = "s1";
+    state.s1 = "";
+    state.s2 = "";
+    state.s3 = "";
+    state.solved = false;
+    state.showStep1Hint = false;
+    setFeedback("", "");
+    refreshTaskUI();
+  }
+
+  function deleteLast() {
+    if (state.activeField === "s1") state.s1 = state.s1.slice(0, -1);
+    if (state.activeField === "s2") state.s2 = state.s2.slice(0, -1);
+    if (state.activeField === "s3") state.s3 = state.s3.slice(0, -1);
+    refreshTaskUI();
+  }
+
+  function appendToActive(key) {
+    if (state.activeField === "s1") {
+      if (!/^[0-9+*()]$/.test(key)) return;
+      state.s1 += key;
+      refreshTaskUI();
+      return;
+    }
+
+    if (state.activeField === "s2" || state.activeField === "s3") {
+      if (!/^[0-9]$/.test(key)) return;
+      if (state.activeField === "s2") state.s2 += key;
+      else state.s3 += key;
+      refreshTaskUI();
+    }
+  }
+
+  function refreshPointsUI() {
+    ui.points.textContent = String(state.points);
+    const pct = progressPercentForPoints(state.points);
+    if (ui.progressFill) ui.progressFill.style.width = pct.toFixed(2) + "%";
+    if (ui.progressPercent) ui.progressPercent.textContent = String(Math.round(pct));
+  }
+
+  function loadLocalPoints() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const value = Number.parseInt(String(raw || "0"), 10);
+      return Number.isFinite(value) && value >= 0 ? value : 0;
+    } catch (_e) {
+      return 0;
+    }
+  }
+
+  function saveLocalPoints(points) {
+    try { localStorage.setItem(STORAGE_KEY, String(points)); } catch (_e) {}
+  }
+
+  async function loadEduloWidgetParams() {
+    const qs = new URLSearchParams(window.location.search);
+    const dataUrl = qs.get("data");
+    if (!dataUrl) return {};
+
+    try {
+      const url = dataUrl.startsWith("http") ? dataUrl : (window.location.origin + dataUrl);
+      const res = await fetch(url, { credentials: "include" });
+      if (!res.ok) return {};
+
+      const json = await res.json();
+      const contents = json.contents || json.modules || (json.body && json.body.contents) || [];
+      const list = Array.isArray(contents) ? contents : [];
+
+      let me = null;
+      for (const c of list) {
+        const html = c && (c.html || (c.content && c.content.html) || "");
+        if (typeof html === "string" && html.includes('data-edulo-widget-key="' + EDULO_WIDGET_KEY + '"')) {
+          me = c;
+          break;
+        }
+      }
+      if (!me) return {};
+
+      const out = {};
+      for (const p of (me.parameters || [])) {
+        if (p && p.name) out[String(p.name)] = p.value == null ? "" : String(p.value);
+      }
+      return out;
+    } catch (_e) {
+      return {};
+    }
+  }
+
+  function firstParam(widgetParams, urlParams, names) {
+    function normKey(key) {
+      return String(key || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    }
+
+    for (const name of names) {
+      if (widgetParams && Object.prototype.hasOwnProperty.call(widgetParams, name)) {
+        const w = String(widgetParams[name] || "").trim();
+        if (w) return w;
+      }
+      if (urlParams && urlParams.has(name)) {
+        const u = String(urlParams.get(name) || "").trim();
+        if (u) return u;
+      }
+    }
+
+    const wanted = new Set(names.map(normKey));
+    if (widgetParams) {
+      for (const key of Object.keys(widgetParams)) {
+        if (!wanted.has(normKey(key))) continue;
+        const v = String(widgetParams[key] || "").trim();
+        if (v) return v;
+      }
+    }
+    if (urlParams && typeof urlParams.forEach === "function") {
+      let found = "";
+      urlParams.forEach((value, key) => {
+        if (found) return;
+        if (!wanted.has(normKey(key))) return;
+        const v = String(value || "").trim();
+        if (v) found = v;
+      });
+      if (found) return found;
+    }
+
+    return "";
+  }
+
+  async function parseEduloConfig() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const widgetParams = await loadEduloWidgetParams();
+    const hasData = urlParams.has("data");
+
+    const checkButtonId = firstParam(widgetParams, urlParams, [
+      "CHECK_ID", "checkId", "eduloCheckButtonId", "edulo_check_button_id"
+    ]);
+    const checkSelector = firstParam(widgetParams, urlParams, [
+      "CHECK_SELECTOR", "checkSelector", "eduloCheckSelector", "edulo_check_selector"
+    ]);
+    const checkText = firstParam(widgetParams, urlParams, [
+      "CHECK_TEXT", "checkText", "eduloCheckText", "edulo_check_text"
+    ]) || "prüfen";
+    const scorePrefix1 = firstParam(widgetParams, urlParams, [
+      "SCORE_PREFIX", "scorePrefix", "eduloScorePrefix", "edulo_score_prefix"
+    ]) || "e2_cloze_text_input_";
+    const startRaw1 = firstParam(widgetParams, urlParams, [
+      "START_INDEX", "startIndex", "scoreStartIndex", "SCORE_START_INDEX"
+    ]);
+    let scoreStartIndex1 = Number.parseInt(startRaw1 || "1", 10);
+    if (!Number.isFinite(scoreStartIndex1) || scoreStartIndex1 < 1) scoreStartIndex1 = 1;
+
+    let sumId2 = firstParam(widgetParams, urlParams, [
+      "SUM_ID2", "sumId2", "scoreSumId2", "eduloSumId2", "edulo_sum_id2"
+    ]);
+    let scorePrefix2 = firstParam(widgetParams, urlParams, [
+      "SCORE_PREFIX2", "scorePrefix2", "eduloScorePrefix2", "edulo_score_prefix2"
+    ]);
+    if (!scorePrefix2) {
+      const m = String(scorePrefix1).match(/^e(\d+)_cloze_text_input_$/);
+      if (m) scorePrefix2 = "e" + String(Number.parseInt(m[1], 10) + 3) + "_cloze_text_input_";
+      else scorePrefix2 = "e5_cloze_text_input_";
+    }
+    if (!sumId2) {
+      const m = String(scorePrefix2).match(/^e(\d+)_cloze_text_input_$/);
+      if (m) sumId2 = "e" + String(Number.parseInt(m[1], 10) + 1) + "_text_input";
+      else sumId2 = "e6_text_input";
+    }
+    const startRaw2 = firstParam(widgetParams, urlParams, [
+      "START_INDEX2", "startIndex2", "scoreStartIndex2", "SCORE_START_INDEX2"
+    ]);
+    const hasExplicitStart2 = String(startRaw2 || "").trim().length > 0;
+    let scoreStartIndex2 = Number.parseInt(startRaw2 || "", 10);
+    if (!Number.isFinite(scoreStartIndex2) || scoreStartIndex2 < 1) {
+      const samePrefix = !!scorePrefix2 && scorePrefix2 === scorePrefix1;
+      if (!hasExplicitStart2 && samePrefix) scoreStartIndex2 = scoreStartIndex1 + SCORE_FLAG_COUNT;
+      else scoreStartIndex2 = 1;
+    }
+
+    const enabled = urlParams.get("edulo") === "1"
+      || hasData
+      || !!sumId2
+      || !!scorePrefix2
+      || !!checkButtonId
+      || !!checkSelector;
+
+    return {
+      enabled,
+      checkButtonId,
+      checkSelector,
+      checkText,
+      sumId2,
+      scorePrefix2,
+      scoreStartIndex2
+    };
+  }
+
+  const edulo = await parseEduloConfig();
+
+  function tryDocs() {
+    const docs = [document];
+    try {
+      if (window.parent && window.parent !== window && window.parent.document) docs.push(window.parent.document);
+    } catch (_e) {}
+    try {
+      if (window.top && window.top !== window && window.top !== window.parent && window.top.document) docs.push(window.top.document);
+    } catch (_e) {}
+    return docs;
+  }
+
+  function findInDocs(id, selector) {
+    for (const doc of tryDocs()) {
+      if (id) {
+        const byId = doc.getElementById(id);
+        if (byId) return byId;
+      }
+      if (selector) {
+        const bySel = doc.querySelector(selector);
+        if (bySel) return bySel;
+      }
+    }
+    return null;
+  }
+
+  function pickEduloFieldElement(el) {
+    if (!el) return null;
+    if ("value" in el) return el;
+    if (el.querySelector) {
+      const inner = el.querySelector("input,textarea,select,[contenteditable='true'],[contenteditable='']");
+      if (inner) return inner;
+    }
+    return el;
+  }
+
+  function findFieldInDocs(fieldId) {
+    const baseId = String(fieldId || "").trim();
+    if (!baseId) return null;
+    const variants = [baseId];
+    if (!/_\d+$/.test(baseId)) {
+      variants.push(baseId + "_1");
+      variants.push(baseId + "_0");
+    }
+
+    for (const doc of tryDocs()) {
+      for (const id of variants) {
+        const exact = doc.getElementById ? doc.getElementById(id) : null;
+        const picked = pickEduloFieldElement(exact);
+        if (picked) return picked;
+      }
+      if (doc.querySelectorAll) {
+        const all = doc.querySelectorAll("[id]");
+        for (const node of all) {
+          const id = String(node.id || "");
+          if (!id) continue;
+          if (id === baseId || id.startsWith(baseId + "_")) {
+            const picked = pickEduloFieldElement(node);
+            if (picked) return picked;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  async function waitForEduloField(id, tries, delay) {
+    const maxTries = typeof tries === "number" ? tries : 20;
+    const waitMs = typeof delay === "number" ? delay : 200;
+    for (let i = 0; i < maxTries; i++) {
+      const el = findFieldInDocs(id);
+      if (el) return el;
+      await new Promise(r => setTimeout(r, waitMs));
+    }
+    return null;
+  }
+
+  function setNativeValue(el, value) {
+    if (!el) return false;
+    if (!("value" in el)) {
+      el.textContent = value;
+      return true;
+    }
+    try {
+      const proto = Object.getPrototypeOf(el);
+      const desc = proto ? Object.getOwnPropertyDescriptor(proto, "value") : null;
+      if (desc && typeof desc.set === "function") desc.set.call(el, value);
+      else el.value = value;
+    } catch (_e) {
+      try { el.value = value; } catch (_e2) { return false; }
+    }
+    return true;
+  }
+
+  function setFieldValueIfExists(fieldId, value) {
+    if (!fieldId) return false;
+    const input = findFieldInDocs(fieldId);
+    if (!input) return false;
+    if (!setNativeValue(input, value)) return false;
+    try {
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      input.dispatchEvent(new Event("keyup", { bubbles: true }));
+      input.dispatchEvent(new Event("blur"));
+      input.dispatchEvent(new Event("focusout", { bubbles: true }));
+    } catch (_e) {
+      return false;
+    }
+    return true;
+  }
+
+  function hasEduloField(fieldId) {
+    if (!fieldId) return false;
+    return !!findFieldInDocs(fieldId);
+  }
+
+  async function setFieldValueWithRetry(fieldId, value, tries, delay) {
+    const maxTries = typeof tries === "number" ? tries : 10;
+    const waitMs = typeof delay === "number" ? delay : 200;
+    for (let i = 0; i < maxTries; i++) {
+      if (setFieldValueIfExists(fieldId, value)) return true;
+      await new Promise(r => setTimeout(r, waitMs));
+    }
+    return false;
+  }
+
+  function findCheckButtonByText(textLower) {
+    if (!textLower) return null;
+    const selector = "button,[role='button'],a[role='button'],input[type='button'],input[type='submit']";
+    const docs = tryDocs();
+    const orderedDocs = docs.filter(d => d !== document).concat(docs.filter(d => d === document));
+
+    function isInsideLocalTask(el) {
+      let cur = el;
+      while (cur && cur !== document) {
+        if (cur.classList && cur.classList.contains("aus-task")) return true;
+        cur = cur.parentElement;
+      }
+      return false;
+    }
+
+    for (const doc of orderedDocs) {
+      const all = doc.querySelectorAll ? doc.querySelectorAll(selector) : [];
+      for (const b of all) {
+        try {
+          if (doc === document && isInsideLocalTask(b)) continue;
+        } catch (_e) {}
+        const t = String(b.textContent || b.value || "").trim().toLowerCase();
+        const a = String(b.getAttribute ? (b.getAttribute("aria-label") || "") : "").trim().toLowerCase();
+        if (t === textLower || a === textLower || t.includes(textLower) || a.includes(textLower)) return b;
+      }
+    }
+    return null;
+  }
+
+  function triggerEduloCheck() {
+    if (!edulo.enabled) return;
+    const btn = findInDocs(edulo.checkButtonId, edulo.checkSelector)
+      || findCheckButtonByText(String(edulo.checkText || "prüfen").toLowerCase());
+    if (btn && typeof btn.click === "function") {
+      try { btn.click(); } catch (_e) {}
+    }
+  }
+
+  function getFlagFieldId(index) {
+    if (!edulo.scorePrefix2) return "";
+    return edulo.scorePrefix2 + String(edulo.scoreStartIndex2 + index);
+  }
+
+  function readTextValue(el) {
+    if (!el) return "";
+    return ("value" in el) ? (el.value || "") : (el.textContent || "");
+  }
+
+  function readPointsFromSumField() {
+    if (!edulo.sumId2) return null;
+    const el = findFieldInDocs(edulo.sumId2);
+    if (!el) return null;
+    const raw = String(readTextValue(el)).trim();
+    if (!raw) return null;
+    const n = Number.parseInt(raw, 10);
+    return Number.isFinite(n) && n >= 0 ? n : null;
+  }
+
+  async function writeFlagFieldsFromPoints(points, options) {
+    const opts = options || {};
+    const waitForField = !!opts.waitForField;
+    if (edulo.scorePrefix2) {
+      const firstFlag = getFlagFieldId(0);
+      if (waitForField) await waitForEduloField(firstFlag, 60, 200);
+      if (!hasEduloField(firstFlag)) return;
+      for (let i = 0; i < SCORE_FLAG_COUNT; i++) {
+        const shouldSet = points >= SCORE_MILESTONES[i];
+        await setFieldValueWithRetry(getFlagFieldId(i), shouldSet ? "1" : "", 12, 200);
+      }
+    }
+  }
+
+  async function writeEduloScore(points) {
+    if (!edulo.enabled) return;
+    if (edulo.sumId2) {
+      await waitForEduloField(edulo.sumId2, 60, 200);
+      await setFieldValueWithRetry(edulo.sumId2, String(points), 12, 200);
+    }
+    await writeFlagFieldsFromPoints(points, { waitForField: true });
+  }
+
+  async function syncPointsFromTruth() {
+    if (!edulo.enabled) return;
+
+    if (edulo.sumId2) {
+      const bySum = readPointsFromSumField();
+      if (bySum != null) {
+        state.points = bySum;
+        saveLocalPoints(state.points);
+        refreshPointsUI();
+        await writeFlagFieldsFromPoints(state.points);
+        return;
+      }
+      if (hasEduloField(edulo.sumId2)) {
+        await writeEduloScore(state.points);
+      }
+      return;
+    }
+
+    await writeFlagFieldsFromPoints(state.points);
+  }
+
+  function attachCheckSync(button) {
+    if (!button || button.__distOutSyncBound) return;
+    button.__distOutSyncBound = true;
+    button.addEventListener("click", () => {
+      setTimeout(() => { void syncPointsFromTruth(); }, 140);
+      setTimeout(() => { void syncPointsFromTruth(); }, 520);
+    });
+  }
+
+  async function warmUpCheckSync() {
+    if (!edulo.enabled) return;
+    for (let i = 0; i < 60; i++) {
+      const btn = findInDocs(edulo.checkButtonId, edulo.checkSelector)
+        || findCheckButtonByText(String(edulo.checkText || "prüfen").toLowerCase());
+      if (btn) {
+        attachCheckSync(btn);
+        return;
+      }
+      await new Promise(r => setTimeout(r, 200));
+    }
+  }
+
+  async function persistPoints(points) {
+    state.points = points;
+    saveLocalPoints(points);
+    refreshPointsUI();
+    await writeEduloScore(points);
+    triggerEduloCheck();
+  }
+
+  async function resetProgress() {
+    state.points = 0;
+    saveLocalPoints(0);
+    refreshPointsUI();
+    if (edulo.enabled) {
+      if (edulo.sumId2) {
+        await waitForEduloField(edulo.sumId2, 60, 200);
+        await setFieldValueWithRetry(edulo.sumId2, "0", 12, 200);
+      }
+      await writeFlagFieldsFromPoints(0, { waitForField: true });
+      triggerEduloCheck();
+    }
+    newTask();
+    setFeedback("Fortschritt zurückgesetzt.", "");
+  }
+
+  async function checkTask() {
+    if (!state.task || state.solved) return;
+
+    if (state.step === 1) {
+      const normalized = parseFactoring(state.s1, state.task);
+      if (!normalized) {
+        state.showStep1Hint = true;
+        refreshTaskUI();
+        setFeedback("Schritt 1 ist noch nicht korrekt. Nutze die Ausklammer-Regel.", "err");
+        return;
+      }
+      state.s1 = normalized;
+      state.step = 2;
+      state.activeField = "s2";
+      state.showStep1Hint = false;
+      refreshTaskUI();
+      setFeedback("Schritt 1 richtig. Jetzt b + c berechnen.", "ok");
+      return;
+    }
+
+    if (state.step === 2) {
+      const sum = parseIntStrict(state.s2);
+      if (sum == null) {
+        setFeedback("Bitte das Ergebnis von b + c eingeben.", "err");
+        return;
+      }
+      if (sum !== state.task.sum) {
+        setFeedback("Schritt 2 ist noch nicht korrekt.", "err");
+        return;
+      }
+      state.step = 3;
+      state.activeField = "s3";
+      refreshTaskUI();
+      setFeedback("Schritt 2 richtig. Jetzt das Endergebnis.", "ok");
+      return;
+    }
+
+    const result = parseIntStrict(state.s3);
+    if (result == null || result !== state.task.result) {
+      setFeedback("Schritt 3 ist noch nicht korrekt.", "err");
+      return;
+    }
+    await persistPoints(state.points + 1);
+    state.solved = true;
+    state.activeField = "";
+    refreshTaskUI();
+    setFeedback("Richtig. Klicke auf „Neue Aufgabe“.", "ok");
+  }
+
+  ui.step1Input.addEventListener("click", () => { if (state.step === 1) setActiveField("s1"); });
+  ui.step2Input.addEventListener("click", () => { if (state.step === 2) setActiveField("s2"); });
+  ui.step3Input.addEventListener("click", () => { if (state.step === 3) setActiveField("s3"); });
+  ui.step1Input.addEventListener("keydown", e => e.preventDefault());
+  ui.step2Input.addEventListener("keydown", e => e.preventDefault());
+  ui.step3Input.addEventListener("keydown", e => e.preventDefault());
+
+  ui.keypad.addEventListener("click", (e) => {
+    if (state.solved) return;
+    const btn = e.target.closest("button[data-key]");
+    if (!btn) return;
+    const key = String(btn.dataset.key || "");
+    if (key === "back") {
+      deleteLast();
+      return;
+    }
+    if (key === "check") {
+      void checkTask();
+      return;
+    }
+    appendToActive(key);
+  });
+
+  if (ui.resetBtn) {
+    ui.resetBtn.addEventListener("click", () => {
+      const warn = "Achtung durch das zurücksetzen gehen alle erreichten Punkte unwiederbringlich verloren.";
+      if (!window.confirm(warn)) return;
+      if (!window.confirm("Möchtest du wirklich zurücksetzen?")) return;
+      void resetProgress();
+    });
+  }
+  if (ui.nextBtn) {
+    ui.nextBtn.addEventListener("click", () => {
+      newTask();
+    });
+  }
+
+  state.points = loadLocalPoints();
+  buildProgressRaster();
+  refreshPointsUI();
+
+  if (edulo.enabled) {
+    if (edulo.sumId2) await waitForEduloField(edulo.sumId2, 60, 200);
+    else if (edulo.scorePrefix2) await waitForEduloField(edulo.scorePrefix2 + String(edulo.scoreStartIndex2), 60, 200);
+  }
+  await syncPointsFromTruth();
+  await warmUpCheckSync();
+  setTimeout(() => { void syncPointsFromTruth(); }, 1200);
+  setTimeout(() => { void syncPointsFromTruth(); }, 3500);
+  setTimeout(() => { void syncPointsFromTruth(); }, 7000);
 
   newTask();
 })();
 </script>
 </body>
 </html>
+
+
+
+
+
 
