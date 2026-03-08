@@ -53,8 +53,8 @@
 
   #f4g-edulo-panel .f4g-card {
     display: grid;
+    grid-template-rows: auto auto 1fr auto;
     gap: 8px;
-    align-content: start;
     padding: 10px;
     border: 1px solid var(--f4g-line);
     border-radius: 14px;
@@ -62,12 +62,13 @@
     cursor: pointer;
     transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
     user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  #f4g-edulo-panel .f4g-card:hover {
+  #f4g-edulo-panel .f4g-card:active {
     transform: translateY(-1px);
     border-color: #b8cbe2;
-    box-shadow: 0 6px 18px rgba(16, 32, 56, 0.06);
   }
 
   #f4g-edulo-panel .f4g-thumb {
@@ -93,6 +94,26 @@
     font-size: 16px;
     color: var(--f4g-muted);
     line-height: 1.25;
+  }
+
+  #f4g-edulo-panel .f4g-card-score {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid #e4edf6;
+    font-size: 14px;
+    color: var(--f4g-muted);
+    line-height: 1.2;
+  }
+
+  #f4g-edulo-panel .f4g-card-score-value {
+    min-width: 2ch;
+    text-align: right;
+    font-weight: 700;
+    color: #1f3f7b;
   }
 
   #f4g-edulo-panel .f4g-detail-box {
@@ -369,6 +390,61 @@
     font-size: 16px;
   }
 
+  #f4g-edulo-panel .f4g-collapse-heading {
+    margin: 0 !important;
+  }
+
+  #f4g-edulo-panel .f4g-collapse-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  #f4g-edulo-panel .f4g-collapse-title {
+    flex: 1 1 auto;
+  }
+
+  #f4g-edulo-panel .f4g-dia-block > h4 .f4g-collapse-title,
+  #f4g-edulo-panel .f4g-term-block > h4 .f4g-collapse-title {
+    color: #234a8b;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  #f4g-edulo-panel .f4g-collapse-toggle-indicator {
+    flex: 0 0 auto;
+    color: var(--f4g-muted);
+    font-size: 16px;
+    line-height: 1;
+    transition: transform 0.12s ease;
+  }
+
+  #f4g-edulo-panel .f4g-collapse.is-open .f4g-collapse-toggle-indicator {
+    transform: rotate(90deg);
+  }
+
+  #f4g-edulo-panel .f4g-collapse-body {
+    margin-top: 8px;
+  }
+
+  #f4g-edulo-panel .f4g-dia-block .f4g-collapse-body > p + p {
+    margin-top: 7px;
+  }
+
+  #f4g-edulo-panel .f4g-term-block .f4g-collapse-body > p + p {
+    margin-top: 6px;
+  }
+
   #f4g-edulo-panel .f4g-term-block > p + p {
     margin-top: 6px;
   }
@@ -461,6 +537,10 @@
     align-items: start;
   }
 
+  #f4g-edulo-panel #f4g-value-task .f4g-term-task-board {
+    grid-template-columns: minmax(220px, 2fr) minmax(280px, 3fr);
+  }
+
   #f4g-edulo-panel .f4g-term-task-preview {
     border: 1px solid #e0e9f3;
     border-radius: 10px;
@@ -517,6 +597,154 @@
     padding: 8px;
   }
 
+  #f4g-edulo-panel .f4g-value-forms {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  #f4g-edulo-panel .f4g-value-form-demo {
+    margin-top: 8px;
+    padding: 8px 9px;
+    border: 1px solid #dfe8f4;
+    border-radius: 9px;
+    background: #f9fbff;
+    color: #223041;
+  }
+
+  #f4g-edulo-panel .f4g-value-form-demo p + p {
+    margin-top: 4px;
+  }
+
+  #f4g-edulo-panel .f4g-value-form-demo.is-mono {
+    font-family: Consolas, "Courier New", monospace;
+  }
+
+  #f4g-edulo-panel .f4g-value-indent {
+    margin-left: 16px;
+  }
+
+  #f4g-edulo-panel .f4g-value-mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+
+  #f4g-edulo-panel .f4g-value-mini-table th,
+  #f4g-edulo-panel .f4g-value-mini-table td {
+    border: 1px solid #dbe6f2;
+    padding: 6px 8px;
+    text-align: center;
+  }
+
+  #f4g-edulo-panel .f4g-value-mini-table th {
+    background: #edf5ff;
+    color: #234a8b;
+    font-weight: 700;
+  }
+
+  #f4g-edulo-panel .f4g-value-mini-table td {
+    background: #ffffff;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-card {
+    border: 1px solid #dde7f3;
+    border-radius: 9px;
+    background: linear-gradient(180deg, #ffffff, #f9fbff);
+    padding: 10px;
+    display: grid;
+    gap: 6px;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-kind {
+    font-size: 16px;
+    font-weight: 700;
+    color: #234a8b;
+    line-height: 1.3;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-helper {
+    color: var(--f4g-muted);
+    line-height: 1.4;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-table-wrap {
+    overflow-x: auto;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-table {
+    width: 100%;
+    min-width: 430px;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-table th,
+  #f4g-edulo-panel .f4g-value-task-table td {
+    border: 1px solid #dbe6f2;
+    padding: 9px 10px;
+    vertical-align: middle;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-table th {
+    background: #f3f8ff;
+    color: #234a8b;
+    text-align: left;
+    font-weight: 700;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-table td {
+    background: #ffffff;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-input {
+    width: 100%;
+    min-width: 72px;
+  }
+
+  #f4g-edulo-panel .f4g-value-task-alt {
+    min-width: 190px;
+    line-height: 1.4;
+  }
+
+  #f4g-edulo-panel .f4g-value-alt-box.is-mono {
+    font-family: Consolas, "Courier New", monospace;
+  }
+
+  #f4g-edulo-panel .f4g-text-task-context {
+    border: 1px solid #dde7f3;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ffffff, #f9fbff);
+    padding: 11px 12px;
+    line-height: 1.5;
+    color: #223041;
+  }
+
+  #f4g-edulo-panel .f4g-text-task-hint {
+    margin-top: 8px;
+    padding: 8px 9px;
+    border: 1px solid #f0dfbf;
+    border-radius: 9px;
+    background: #fff9ee;
+    line-height: 1.4;
+  }
+
+  #f4g-edulo-panel .f4g-text-choice-grid {
+    display: grid;
+    gap: 8px;
+  }
+
+  #f4g-edulo-panel .f4g-text-choice-btn {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 11px 12px;
+    font-weight: 700;
+  }
+
+  #f4g-edulo-panel .f4g-text-choice-btn[disabled] {
+    cursor: default;
+    opacity: 0.72;
+  }
+
   #f4g-edulo-panel .f4g-mono {
     font-family: Consolas, "Courier New", monospace;
   }
@@ -555,6 +783,14 @@
   @keyframes f4gFadeIn {
     from { opacity: 0; transform: translateY(2px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (hover: hover) {
+    #f4g-edulo-panel .f4g-card:hover {
+      transform: translateY(-1px);
+      border-color: #b8cbe2;
+      box-shadow: 0 6px 18px rgba(16, 32, 56, 0.06);
+    }
   }
 
   @media (max-width: 900px) {
@@ -623,6 +859,7 @@
           <circle cx="96" cy="44" r="3.5" fill="#cf5b2e"/>
         </svg>
       </div>
+      <div class="f4g-card-score">Punkte <span class="f4g-card-score-value" data-role="nav-score-diagramm">0</span></div>
     </label>
 
     <label class="f4g-card" for="f4g-tab-term">
@@ -642,6 +879,7 @@
           </text>
         </svg>
       </div>
+      <div class="f4g-card-score">Punkte <span class="f4g-card-score-value" data-role="nav-score-term">0</span></div>
     </label>
 
     <label class="f4g-card" for="f4g-tab-table">
@@ -693,6 +931,7 @@
           <circle cx="140.2" cy="70" r="2.6" fill="#2f5fd0" stroke="#ffffff" stroke-width="0.8"/>
         </svg>
       </div>
+      <div class="f4g-card-score">Punkte <span class="f4g-card-score-value" data-role="nav-score-table">0</span></div>
     </label>
 
     <label class="f4g-card" for="f4g-tab-text">
@@ -712,6 +951,7 @@
           <rect x="84" y="61" width="41" height="5" rx="2.5" fill="#e3efff"/>
         </svg>
       </div>
+      <div class="f4g-card-score">Punkte <span class="f4g-card-score-value" data-role="nav-score-text">0</span></div>
     </label>
   </div>
 
@@ -910,18 +1150,358 @@ f(2)=10         Lösung: (2;10)</pre>
     </div>
 
     <div class="f4g-detail f4g-detail--table">
-      <div class="f4g-chip">Wertepaare</div>
-      <h3>Platzhalter für Zusatztext: Wertepaare</h3>
-      <p class="f4g-placeholder">Hier kommt später deine Erklärung zu Wertepaaren hin (konkrete Beispiele, Tabelle, Messdaten, Kontrolle).</p>
+      <h3>Wertepaare</h3>
+
+      <div class="f4g-term-layout">
+        <section class="f4g-term-block" aria-label="Was sind Wertepaare">
+          <h4>Was sind Wertepaare?</h4>
+          <p>Ein Wertepaar beschreibt, welcher <strong>y-Wert</strong> zu einem bestimmten <strong>x-Wert</strong> gehört. Es hält also eine konkrete Zuordnung fest.</p>
+          <p>Für Funktionen bedeutet das:</p>
+          <p>Zu einer Stelle <strong>x</strong> gehört genau ein Funktionswert <strong>y</strong>.</p>
+          <p>Das Wertepaar <strong>(2 | 3)</strong> sagt zum Beispiel:</p>
+          <p class="f4g-value-indent">An der Stelle <strong>x = 2</strong> hat die Funktion den Wert <strong>y = 3</strong>.</p>
+
+          <div class="f4g-term-callout">
+            <p><strong>Vorteil:</strong> Wertepaare sind exakt. Der zugehörige Wert steht direkt da und muss nicht wie bei einer Funktionsgleichung erst berechnet werden.</p>
+            <p>Sie sind deshalb praktisch, wenn einzelne Funktionswerte schnell abgelesen, notiert oder kontrolliert werden sollen.</p>
+          </div>
+
+          <div class="f4g-term-note">
+            <p><strong>Grenze:</strong> Mit Wertepaaren kann man nur eine begrenzte Menge an Werten sinnvoll angeben. Eine Funktionsgleichung beschreibt dagegen unendlich viele passende Werte.</p>
+            <p>Außerdem sind einzelne Wertepaare weniger anschaulich als ein Diagramm. Trends und Verläufe erkennt man im Bild meist schneller.</p>
+          </div>
+        </section>
+
+        <section class="f4g-term-block" aria-label="Verschiedene Darstellungsformen von Wertepaaren">
+          <h4>Verschiedene Darstellungsformen</h4>
+          <p>Dasselbe Wertepaar kann in unterschiedlichen Schreibweisen dargestellt werden. Inhaltlich bleibt die Aussage immer gleich: Zu <strong>x = 2</strong> gehört <strong>y = 3</strong>.</p>
+
+          <div class="f4g-term-subgrid f4g-value-forms">
+            <section class="f4g-term-sub" aria-label="Darstellung als Tabelle">
+              <h5>Tabelle</h5>
+              <p>In einer Tabelle stehen x- und y-Wert gemeinsam in einer Zeile oder Spalte.</p>
+              <div class="f4g-value-form-demo">
+                <table class="f4g-value-mini-table" aria-label="Beispiel für eine Tabelle mit einem Wertepaar">
+                  <tbody>
+                    <tr>
+                      <th scope="col">x</th>
+                      <th scope="col">y</th>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>3</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="f4g-term-sub" aria-label="Darstellung als Zuordnung mit Pfeil">
+              <h5>Zuordnung mit Pfeil</h5>
+              <p>Der Pfeil zeigt: Aus dem x-Wert 2 wird der zugehörige y-Wert 3.</p>
+              <div class="f4g-value-form-demo is-mono">2 -&gt; 3</div>
+            </section>
+
+            <section class="f4g-term-sub" aria-label="Darstellung als einfaches Wertepaar">
+              <h5>Einfaches Wertepaar</h5>
+              <p>Die beiden Zahlen werden direkt als x- und y-Wert notiert.</p>
+              <div class="f4g-value-form-demo is-mono">x = 2, y = 3</div>
+            </section>
+
+            <section class="f4g-term-sub" aria-label="Darstellung als Funktionswert">
+              <h5>Funktionswert</h5>
+              <p>Hier wird gesagt, welchen Wert die Funktion an einer bestimmten Stelle hat.</p>
+              <div class="f4g-value-form-demo is-mono">f(2) = 3</div>
+            </section>
+
+            <section class="f4g-term-sub" aria-label="Darstellung als Koordinatenpaar">
+              <h5>Koordinatenpaar</h5>
+              <p>Bei Funktionen schreibt man oft ein Paar mit senkrechtem Strich zwischen x und y.</p>
+              <div class="f4g-value-form-demo is-mono">(2 | 3)</div>
+            </section>
+
+            <section class="f4g-term-sub" aria-label="Darstellung in Worten">
+              <h5>Verbale Beschreibung</h5>
+              <p>Das Wertepaar kann auch als Satz formuliert werden.</p>
+              <div class="f4g-value-form-demo">Der Funktionswert an der Stelle 2 ist 3.</div>
+            </section>
+          </div>
+
+          <div class="f4g-term-note is-warm">
+            <p><strong>Sonderfälle:</strong></p>
+            <ul class="f4g-term-list">
+              <li>Bei der <strong>Nullstelle</strong> gilt immer <strong>y = 0</strong>.</li>
+              <li>Beim <strong>y-Achsenabschnitt</strong> oder <strong>Startwert</strong> gilt immer <strong>x = 0</strong>.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="f4g-term-block" aria-label="Aufgaben zu Wertepaaren">
+          <div class="f4g-task" id="f4g-value-task">
+            <div class="f4g-task-head">
+              <h4>Aufgaben</h4>
+              <div class="f4g-task-score" aria-live="polite">
+                Punkte:
+                <span class="f4g-task-score-value" data-role="score-value">0</span>
+              </div>
+            </div>
+
+            <div class="f4g-term-task-board">
+              <div class="f4g-term-task-preview">
+                <div class="f4g-term-task-preview-label">Aufgabentyp</div>
+                <div class="f4g-value-task-card">
+                  <div class="f4g-value-task-kind" data-role="task-kind">Lade Aufgabe…</div>
+                  <p class="f4g-value-task-helper" data-role="task-helper" hidden></p>
+                </div>
+                <div class="f4g-term-task-note">Rechts steht dieselbe Information in einer anderen Schreibweise.</div>
+              </div>
+
+              <div class="f4g-task-controls">
+                <div class="f4g-task-question" data-role="question">Lade Aufgabe…</div>
+
+                <div class="f4g-value-task-table-wrap">
+                  <table class="f4g-value-task-table" aria-label="Tabelle zum Eintragen eines Wertepaares">
+                    <thead>
+                      <tr>
+                        <th scope="col">x</th>
+                        <th scope="col">y</th>
+                        <th scope="col">Alternative Schreibweise</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input class="f4g-task-input f4g-value-task-input" data-role="x-input" type="text" inputmode="text" placeholder="x eingeben">
+                        </td>
+                        <td>
+                          <input class="f4g-task-input f4g-value-task-input" data-role="y-input" type="text" inputmode="text" placeholder="y eingeben">
+                        </td>
+                        <td class="f4g-value-task-alt" data-role="alt-display">Lade Aufgabe…</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="f4g-task-hint">Beide Werte müssen stimmen.</div>
+
+                <div class="f4g-task-buttons">
+                  <button class="f4g-task-btn f4g-task-btn--primary" type="button" data-role="check-btn">Prüfen</button>
+                  <button class="f4g-task-btn" type="button" data-role="new-btn">Neue Aufgabe</button>
+                </div>
+
+                <div class="f4g-task-feedback" data-role="feedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
 
     <div class="f4g-detail f4g-detail--text">
-      <div class="f4g-chip">Textbeschreibung</div>
-      <h3>Platzhalter für Zusatztext: Textbeschreibung</h3>
-      <p class="f4g-placeholder">Hier kommt später deine Erklärung zur Textbeschreibung hin (Sachzusammenhang, Variablenbedeutung, Einheiten).</p>
+      <h3>Textbeschreibung</h3>
+
+      <div class="f4g-term-layout">
+        <section class="f4g-term-block" aria-label="Was ist eine Textbeschreibung">
+          <h4>Was ist eine Textbeschreibung?</h4>
+          <p>Eine Textbeschreibung beschreibt eine Funktion in einem realen Zusammenhang. Sie erklärt, wofür die Größen stehen und was die Werte in der Situation bedeuten.</p>
+          <p>Bei Anwendungsaufgaben ist sie oft der <strong>erste Schritt</strong> und der <strong>letzte Schritt</strong>: Zuerst beschreibt sie den Kontext der Aufgabe, am Ende wird die Lösung wieder passend zu diesem Kontext formuliert.</p>
+
+          <div class="f4g-term-callout">
+            <p><strong>Vorteil:</strong> Die Textform stellt den Bezug zum echten Problem her. Man sieht nicht nur Zahlen, sondern versteht, was die Funktion inhaltlich beschreibt.</p>
+            <p>Dadurch wird klarer, welche Größen zusammenhängen und warum ein Ergebnis sinnvoll oder unsinnig sein kann.</p>
+          </div>
+
+          <div class="f4g-term-note">
+            <p><strong>Grenze:</strong> Aus einem Text kann man Werte nicht so schnell ablesen wie aus einer Tabelle oder einem Diagramm. Wichtige Informationen müssen oft erst herausgesucht und in eine mathematische Form übersetzt werden.</p>
+            <p>Außerdem können Texte ungenau sein, wenn nicht klar beschrieben wird, welche Größen sich wie verändern.</p>
+          </div>
+        </section>
+
+        <section class="f4g-term-block" aria-label="Vom Kontext zur Mathematik">
+          <h4>Vom Kontext zur Mathematik</h4>
+          <p>Der übliche Weg bei Sachaufgaben ist:</p>
+          <ol>
+            <li>Die Aufgabe beschreibt zuerst den Kontext.</li>
+            <li>Dann zieht man die nötigen Informationen aus dem Text heraus und stellt damit eine passende Gleichung auf.</li>
+            <li>Mit der Gleichung wird danach je nach Aufgabe ein Diagramm erstellt oder es werden interessante Werte berechnet.</li>
+            <li>Am Ende wird das Ergebnis wieder in einem Satz mit Bezug zum Kontext formuliert.</li>
+          </ol>
+
+          <div class="f4g-term-note">
+            <p><strong>Merke:</strong> Die Textbeschreibung sagt meist auch, was <strong>x</strong> und <strong>y</strong> bedeuten und welche Einheiten dazugehören.</p>
+          </div>
+        </section>
+
+        <section class="f4g-term-block" aria-label="Funktionstyp erkennen">
+          <h4>Funktionstyp erkennen</h4>
+          <p>Es gibt viele verschiedene Funktionstypen. Der erste Schritt ist meist zu erkennen, welcher Funktionstyp in der beschriebenen Situation vorliegt.</p>
+
+          <div class="f4g-term-subgrid">
+            <section class="f4g-term-sub" aria-label="Antiproportionale Funktion">
+              <h5>Antiproportional</h5>
+              <p>Wenn sich der <strong>x-Wert</strong> um einen bestimmten Faktor verändert, muss der <strong>y-Wert</strong> durch diesen Faktor geteilt werden.</p>
+              <p>Typisch ist also: Verdopplung von <strong>x</strong> führt zur Halbierung von <strong>y</strong>. Außerdem bleibt oft das Produkt <strong>x · y</strong> konstant.</p>
+              <div class="f4g-value-form-demo">
+                <p><strong>Beispiel:</strong> Acht Arbeiter brauchen 6 Stunden für dieselbe Arbeit.</p>
+                <p>Wenn 16 Arbeiter mitarbeiten, braucht man nur 3 Stunden. Doppelt so viele Arbeiter benötigen also ungefähr halb so viel Zeit.</p>
+                <p>Das Produkt aus Arbeitern und Zeit bleibt dabei konstant. Die insgesamt verrichtete Arbeit wird nur anders aufgeteilt.</p>
+              </div>
+            </section>
+
+            <section class="f4g-term-sub" aria-label="Proportionale Funktion">
+              <h5>Proportional</h5>
+              <p>Die proportionale Funktion ist ein Sonderfall der linearen Funktionen. Wenn sich der <strong>x-Wert</strong> um einen bestimmten Faktor verändert, dann verändert sich der <strong>y-Wert</strong> um denselben Faktor.</p>
+              <p>Dabei bleibt der Quotient <strong>y / x</strong> konstant. Es gibt keinen zusätzlichen Startwert.</p>
+              <div class="f4g-value-form-demo">
+                <p><strong>Beispiel:</strong> Beim Obststand kosten 2 kg Bananen 4 Euro.</p>
+                <p>Kauft man 4 kg Bananen, zahlt man 8 Euro. Doppelt so viele Bananen bedeuten also doppelt so hohe Kosten.</p>
+                <p>Der Quotient aus Preis und Kilogrammzahl bleibt konstant: 4 Euro : 2 kg = 2 Euro pro kg und 8 Euro : 4 kg = ebenfalls 2 Euro pro kg.</p>
+              </div>
+            </section>
+
+            <section class="f4g-term-sub" aria-label="Allgemeine lineare Funktion">
+              <h5>Allgemeine lineare Funktion</h5>
+              <p>Eine allgemeine lineare Funktion entsteht aus einer proportionalen Funktion durch einen zusätzlichen <strong>Startwert</strong>. Deshalb ist sie gewissermaßen eine verschobene proportionale Funktion.</p>
+              <p>Wichtig ist: Pro Schritt in <strong>x</strong> ändert sich <strong>y</strong> immer um denselben Betrag. Wegen des Startwerts verdoppelt sich <strong>y</strong> aber nicht automatisch, wenn sich <strong>x</strong> verdoppelt.</p>
+              <div class="f4g-value-form-demo">
+                <p><strong>Beispiel:</strong> Ein Baum ist schon 1,4 Meter hoch und wächst jedes Jahr 25 cm.</p>
+                <p>Es gibt also eine Anfangshöhe und danach kommt pro Jahr immer derselbe Betrag dazu. Genau das ist typisch für eine lineare Situation.</p>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="f4g-term-block" aria-label="Aufgaben zu Textbeschreibungen">
+          <div class="f4g-task" id="f4g-text-task">
+            <div class="f4g-task-head">
+              <h4>Aufgaben</h4>
+              <div class="f4g-task-score" aria-live="polite">
+                Punkte:
+                <span class="f4g-task-score-value" data-role="score-value">0</span>
+              </div>
+            </div>
+
+            <div class="f4g-term-task-board">
+              <div class="f4g-term-task-preview">
+                <div class="f4g-term-task-preview-label">Kontext</div>
+                <div class="f4g-text-task-context" data-role="context">Lade Aufgabe…</div>
+                <div class="f4g-text-task-hint" data-role="context-hint" hidden></div>
+                <div class="f4g-term-task-note">Entscheide, ob der Zusammenhang linear, proportional oder antiproportional ist. Es gibt 100 verschiedene Kontexte.</div>
+              </div>
+
+              <div class="f4g-task-controls">
+                <div class="f4g-task-question" data-role="question">Lade Aufgabe…</div>
+
+                <div class="f4g-text-choice-grid" aria-label="Antwortmöglichkeiten">
+                  <button class="f4g-task-btn f4g-text-choice-btn" type="button" data-role="choice-btn" data-choice="linear">Linear</button>
+                  <button class="f4g-task-btn f4g-text-choice-btn" type="button" data-role="choice-btn" data-choice="proportional">Proportional</button>
+                  <button class="f4g-task-btn f4g-text-choice-btn" type="button" data-role="choice-btn" data-choice="antiproportional">Antiproportional</button>
+                </div>
+
+                <div class="f4g-task-hint">Wähle den Funktionstyp, der am besten zum beschriebenen Zusammenhang passt.</div>
+
+                <div class="f4g-task-buttons">
+                  <button class="f4g-task-btn" type="button" data-role="new-btn">Neue Aufgabe</button>
+                </div>
+
+                <div class="f4g-task-feedback" data-role="feedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
-  </div>
 </div>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById("f4g-edulo-panel");
+  if (!root || root.dataset.f4gCollapseInit === "1") {
+    return;
+  }
+  root.dataset.f4gCollapseInit = "1";
+
+  var blocks = root.querySelectorAll(".f4g-dia-block, .f4g-term-block");
+  var collapsibles = [];
+
+  function setOpen(block, open) {
+    var body = block.querySelector(".f4g-collapse-body");
+    var button = block.querySelector(".f4g-collapse-toggle");
+    if (!body || !button) {
+      return;
+    }
+    block.classList.toggle("is-open", !!open);
+    body.hidden = !open;
+    button.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  function closeAll() {
+    for (var i = 0; i < collapsibles.length; i++) {
+      setOpen(collapsibles[i], false);
+    }
+  }
+
+  for (var i = 0; i < blocks.length; i++) {
+    var block = blocks[i];
+    if (block.querySelector(".f4g-task")) {
+      continue;
+    }
+
+    var heading = block.querySelector("h4");
+    if (!heading) {
+      continue;
+    }
+
+    var title = heading.textContent.trim();
+    var body = document.createElement("div");
+    body.className = "f4g-collapse-body";
+    body.hidden = true;
+
+    while (heading.nextSibling) {
+      body.appendChild(heading.nextSibling);
+    }
+
+    heading.classList.add("f4g-collapse-heading");
+    heading.textContent = "";
+
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "f4g-collapse-toggle";
+    button.setAttribute("aria-expanded", "false");
+
+    var titleSpan = document.createElement("span");
+    titleSpan.className = "f4g-collapse-title";
+    titleSpan.textContent = title;
+
+    var indicator = document.createElement("span");
+    indicator.className = "f4g-collapse-toggle-indicator";
+    indicator.setAttribute("aria-hidden", "true");
+    indicator.textContent = ">";
+
+    button.appendChild(titleSpan);
+    button.appendChild(indicator);
+    heading.appendChild(button);
+    block.appendChild(body);
+    block.classList.add("f4g-collapse");
+
+    (function (currentBlock) {
+      button.addEventListener("click", function () {
+        setOpen(currentBlock, !currentBlock.classList.contains("is-open"));
+      });
+    })(block);
+
+    collapsibles.push(block);
+  }
+
+  var tabs = root.querySelectorAll(".f4g-tab-input");
+  for (var t = 0; t < tabs.length; t++) {
+    tabs[t].addEventListener("change", closeAll);
+  }
+
+  closeAll();
+})();
+</script>
 
 <script>
 (function () {
@@ -1437,6 +2017,711 @@ f(2)=10         Lösung: (2;10)</pre>
 <script>
 (function () {
   var root = document.getElementById("f4g-edulo-panel");
+  if (!root || root.dataset.f4gTextTaskInit === "1") {
+    return;
+  }
+  root.dataset.f4gTextTaskInit = "1";
+
+  var taskRoot = root.querySelector("#f4g-text-task");
+  if (!taskRoot) {
+    return;
+  }
+
+  var contextEl = taskRoot.querySelector('[data-role="context"]');
+  var hintEl = taskRoot.querySelector('[data-role="context-hint"]');
+  var questionEl = taskRoot.querySelector('[data-role="question"]');
+  var choiceButtons = taskRoot.querySelectorAll('[data-role="choice-btn"]');
+  var newBtn = taskRoot.querySelector('[data-role="new-btn"]');
+  var feedbackEl = taskRoot.querySelector('[data-role="feedback"]');
+  var scoreEl = taskRoot.querySelector('[data-role="score-value"]');
+
+  var state = {
+    score: 0,
+    bestScore: 0,
+    taskIndex: -1,
+    solved: false,
+    finished: false,
+    attempts: 0,
+    remainingIndices: []
+  };
+
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function shuffle(arr) {
+    var copy = arr.slice();
+    for (var i = copy.length - 1; i > 0; i--) {
+      var j = randInt(0, i);
+      var tmp = copy[i];
+      copy[i] = copy[j];
+      copy[j] = tmp;
+    }
+    return copy;
+  }
+
+  function getEduloCandidateDocs() {
+    var docs = [document];
+    try {
+      if (window.parent && window.parent !== window && window.parent.document) {
+        docs.push(window.parent.document);
+      }
+    } catch (e) {
+      /* Zugriff auf parent kann in Edulo/Cross-Origin blockiert sein */
+    }
+    return docs;
+  }
+
+  function findEduloSingleField(baseName) {
+    var docs = getEduloCandidateDocs();
+    var selectors = ["#" + baseName, '[name="' + baseName + '"]', 'input[id="' + baseName + '"]', 'textarea[id="' + baseName + '"]'];
+
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+      for (var s = 0; s < selectors.length; s++) {
+        var el = doc.querySelector(selectors[s]);
+        if (!el) {
+          continue;
+        }
+        if (el.tagName !== "INPUT" && el.tagName !== "TEXTAREA") {
+          var nested = el.querySelector("input, textarea");
+          if (nested) {
+            el = nested;
+          }
+        }
+        if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+          return el;
+        }
+      }
+    }
+    return null;
+  }
+
+  function findEduloSlots(baseName) {
+    var docs = getEduloCandidateDocs();
+    var found = [];
+    var seen = [];
+
+    function addSlot(el, indexHint) {
+      if (!el) {
+        return;
+      }
+      for (var i = 0; i < seen.length; i++) {
+        if (seen[i] === el) {
+          return;
+        }
+      }
+      seen.push(el);
+      found.push({
+        el: el,
+        index: Number.isFinite(indexHint) ? indexHint : 9999 + found.length
+      });
+    }
+
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+      var container = doc.querySelector("#" + baseName);
+      if (container) {
+        var innerSlots = container.querySelectorAll("input, textarea");
+        if (innerSlots.length > 1) {
+          for (var c = 0; c < innerSlots.length; c++) {
+            addSlot(innerSlots[c], c + 1);
+          }
+        }
+      }
+
+      var allFields = doc.querySelectorAll("input, textarea");
+      for (var a = 0; a < allFields.length; a++) {
+        var field = allFields[a];
+        var id = field.id || "";
+        var name = field.name || "";
+        var key = id || name;
+        if (!key) {
+          continue;
+        }
+
+        var m = key.match(new RegExp("^" + baseName + "(?:[_\\-. ]?)(\\d{1,2})$", "i"));
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+          continue;
+        }
+
+        m = key.match(new RegExp("^" + baseName + "(?:[_\\-. ]?)(\\d{1,2})\\D+", "i"));
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+        }
+      }
+    }
+
+    found.sort(function (a, b) { return a.index - b.index; });
+    var slots = [];
+    for (var i2 = 0; i2 < found.length; i2++) {
+      slots.push(found[i2].el);
+    }
+    return slots;
+  }
+
+  function dispatchFieldEvents(field) {
+    try {
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (e) {
+      var ev1 = document.createEvent("Event");
+      ev1.initEvent("input", true, true);
+      field.dispatchEvent(ev1);
+      var ev2 = document.createEvent("Event");
+      ev2.initEvent("change", true, true);
+      field.dispatchEvent(ev2);
+    }
+  }
+
+  function loadScoreFromEdulo() {
+    var field = findEduloSingleField("e10");
+    if (!field) {
+      return 0;
+    }
+    var value = parseInt(String(field.value || "").trim(), 10);
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function saveScoreToEdulo(score) {
+    var field = findEduloSingleField("e10");
+    if (!field) {
+      return false;
+    }
+    field.value = String(score);
+    dispatchFieldEvents(field);
+    return true;
+  }
+
+  function loadMilestoneScoreFromEdulo() {
+    var slots = findEduloSlots("e11");
+    if (!slots.length) {
+      return 0;
+    }
+    var count = 0;
+    for (var i = 0; i < Math.min(10, slots.length); i++) {
+      if (String(slots[i].value || "").trim() === "1") {
+        count++;
+      }
+    }
+    return count * 10;
+  }
+
+  function syncMilestonesToEdulo(bestScore) {
+    var slots = findEduloSlots("e11");
+    if (!slots.length) {
+      return false;
+    }
+    var reached = Math.floor(Math.max(0, bestScore) / 10);
+    if (reached > 10) {
+      reached = 10;
+    }
+    var limit = Math.min(10, slots.length);
+    for (var i = 0; i < limit; i++) {
+      var targetValue = i < reached ? "1" : "";
+      if (String(slots[i].value || "") !== targetValue) {
+        slots[i].value = targetValue;
+        dispatchFieldEvents(slots[i]);
+      }
+    }
+    return true;
+  }
+
+  function updateScoreDisplay() {
+    scoreEl.textContent = String(state.score);
+    saveScoreToEdulo(state.score);
+    syncMilestonesToEdulo(state.bestScore);
+  }
+
+  function setFeedback(message, kind) {
+    feedbackEl.textContent = message || "";
+    feedbackEl.className = "f4g-task-feedback";
+    if (kind === "ok") {
+      feedbackEl.classList.add("is-ok");
+    } else if (kind === "bad") {
+      feedbackEl.classList.add("is-bad");
+    }
+  }
+
+  function setHint(text) {
+    if (!text) {
+      hintEl.textContent = "";
+      hintEl.hidden = true;
+      return;
+    }
+    hintEl.textContent = "Hinweis: " + text;
+    hintEl.hidden = false;
+  }
+
+  function setChoicesDisabled(disabled) {
+    for (var i = 0; i < choiceButtons.length; i++) {
+      choiceButtons[i].disabled = disabled;
+    }
+  }
+
+  function makeContext(text, type, reason) {
+    return {
+      text: text,
+      type: type,
+      reason: reason
+    };
+  }
+
+  var CONTEXT_TASKS = [
+    // Proportional
+    makeContext("Im Copyshop kostet jede Kopie 12 Cent.", "proportional", "Doppelt so viele Kopien bedeuten doppelt so hohe Kosten; es gibt keine Grundgebühr."),
+    makeContext("Auf dem Wochenmarkt kosten 1 kg Äpfel 3 Euro.", "proportional", "Doppelt so viele Kilogramm bedeuten doppelt so hohe Kosten; der Preis startet bei 0 Euro."),
+    makeContext("Eine Schülerin bekommt 8 Euro pro Nachhilfestunde.", "proportional", "Doppelt so viele Stunden bedeuten doppelt so viel Lohn; es gibt keinen festen Startbetrag."),
+    makeContext("Ein Wasserhahn füllt einen leeren Eimer mit 5 Litern pro Minute.", "proportional", "Die Wassermenge wächst von 0 an pro Minute immer im gleichen Verhältnis."),
+    makeContext("Ein Radfahrer fährt mit konstanter Geschwindigkeit los. Gesucht ist die Strecke nach einer bestimmten Zeit.", "proportional", "Doppelt so viel Zeit bedeutet doppelt so viel Strecke, wenn bei 0 Kilometer gestartet wird."),
+    makeContext("Für 4 Portionen Pfannkuchen braucht man 300 ml Milch. Gesucht wird die Milchmenge für andere Portionenzahlen.", "proportional", "Doppelt so viele Portionen brauchen doppelt so viel Milch; es gibt keinen Startwert."),
+    makeContext("Eine Kerze kostet im Laden 2 Euro pro Stück.", "proportional", "Doppelt so viele Kerzen bedeuten doppelt so hohe Kosten; ohne Stückzahl fallen keine Kosten an."),
+    makeContext("Ein Fahrradverleih ohne Grundgebühr kostet 4 Euro pro Stunde.", "proportional", "Ohne Grundgebühr wächst der Preis im gleichen Verhältnis wie die Mietzeit."),
+    makeContext("Mit 1 Liter Farbe kann man 6 Quadratmeter Wand streichen.", "proportional", "Doppelt so viel Fläche braucht doppelt so viel Farbe; der Zusammenhang startet bei 0."),
+    makeContext("Für einen Boden braucht man 25 Fliesen pro Quadratmeter.", "proportional", "Doppelt so viele Quadratmeter brauchen doppelt so viele Fliesen."),
+    makeContext("Benzin kostet 1,75 Euro pro Liter.", "proportional", "Doppelt so viele Liter bedeuten doppelt so hohe Kosten; ohne Liter keine Kosten."),
+    makeContext("Ein Drucker schafft 30 Seiten pro Minute, gestartet wird bei 0 Seiten.", "proportional", "Doppelt so viel Zeit bedeutet doppelt so viele gedruckte Seiten, solange bei 0 begonnen wird."),
+    makeContext("Jemand geht mit gleichmäßigem Tempo 110 Schritte pro Minute.", "proportional", "Doppelt so viel Zeit bedeutet doppelt so viele Schritte."),
+    makeContext("Ein Heft kostet 1,80 Euro.", "proportional", "Doppelt so viele Hefte bedeuten doppelt so hohe Kosten."),
+    makeContext("Jede Wasserflasche fasst 0,5 Liter. Gesucht ist die Gesamtmenge für verschiedene Flaschenzahlen.", "proportional", "Doppelt so viele Flaschen bedeuten doppelt so viel Gesamtinhalt."),
+    makeContext("Eine Tüte Popcorn kostet 3 Euro.", "proportional", "Doppelt so viele Tüten bedeuten doppelt so hohe Kosten."),
+    makeContext("Für 12 Muffins braucht man 240 g Mehl.", "proportional", "Doppelt so viele Muffins brauchen doppelt so viel Mehl."),
+    makeContext("Ein Sack Blumenerde enthält 40 Liter. Gesucht ist die Erdmenge für mehrere Säcke.", "proportional", "Doppelt so viele Säcke bedeuten doppelt so viele Liter Erde."),
+    makeContext("Ohne Grundpreis kostet Strom 32 Cent pro kWh.", "proportional", "Ohne Startkosten wachsen die Kosten im gleichen Verhältnis wie die verbrauchten kWh."),
+    makeContext("Ein Fotolabor berechnet 25 Cent pro Bild.", "proportional", "Doppelt so viele Bilder bedeuten doppelt so hohe Kosten."),
+    makeContext("Ein Konzertticket kostet 18 Euro. Gesucht sind die Gesamtkosten für mehrere Tickets.", "proportional", "Doppelt so viele Tickets bedeuten doppelt so hohe Gesamtkosten."),
+    makeContext("Ein leerer Sandbehälter wird mit 15 kg Sand pro Minute gefüllt.", "proportional", "Die Sandmenge wächst von 0 an pro Minute im gleichen Verhältnis."),
+    makeContext("Eine Packung Schrauben kostet 4 Euro.", "proportional", "Doppelt so viele Packungen bedeuten doppelt so hohe Kosten."),
+    makeContext("Babysitten wird mit 9 Euro pro Stunde bezahlt.", "proportional", "Doppelt so viele Stunden bedeuten doppelt so viel Lohn."),
+    makeContext("Eine Dusche verbraucht 11 Liter Wasser pro Minute.", "proportional", "Doppelt so viel Duschzeit bedeutet doppelt so viel Wasserverbrauch."),
+    makeContext("Jemand liest 20 Seiten pro Stunde und beginnt bei 0 gelesenen Seiten.", "proportional", "Doppelt so viel Zeit bedeutet doppelt so viele gelesene Seiten."),
+    makeContext("Jede Holzleiste ist 2 Meter lang. Gesucht ist die Gesamtlänge bei mehreren Leisten.", "proportional", "Doppelt so viele Leisten bedeuten doppelt so viel Gesamtlänge."),
+    makeContext("Jeder Saftbecher fasst 0,2 Liter.", "proportional", "Doppelt so viele Becher bedeuten doppelt so viel Saft."),
+    makeContext("Ein Spielchip kostet 50 Cent.", "proportional", "Doppelt so viele Chips bedeuten doppelt so hohe Kosten."),
+    makeContext("Ein Stoffladen verkauft Stoff für 7 Euro pro Meter.", "proportional", "Doppelt so viele Meter Stoff bedeuten doppelt so hohe Kosten."),
+    makeContext("Jeder Joghurtbecher enthält 150 g.", "proportional", "Doppelt so viele Becher bedeuten doppelt so viel Gesamtgewicht."),
+    makeContext("Eine Stickerseite hat 24 Sticker. Gesucht ist die Stickerzahl für mehrere Seiten.", "proportional", "Doppelt so viele Seiten bedeuten doppelt so viele Sticker."),
+    makeContext("Ein Download läuft konstant mit 5 MB pro Sekunde und startet bei 0 MB.", "proportional", "Doppelt so viel Zeit bedeutet doppelt so viele geladene Daten."),
+    makeContext("Ein Ballon wird gleichmäßig mit 2 Litern Luft pro Sekunde aufgepumpt und ist zu Beginn leer.", "proportional", "Das Luftvolumen wächst von 0 an im gleichen Verhältnis wie die Zeit."),
+
+    // Linear
+    makeContext("Ein Taxi verlangt 4 Euro Grundgebühr und 2 Euro pro Kilometer.", "linear", "Es gibt eine Grundgebühr als Startwert, danach kommt pro Kilometer immer derselbe Betrag dazu."),
+    makeContext("Ein Parkhaus berechnet 3 Euro Einfahrt und danach 1,50 Euro pro Stunde.", "linear", "Es gibt einen Startwert für die Einfahrt und anschließend wächst der Preis pro Stunde immer gleich."),
+    makeContext("Auf einem Konto liegen schon 120 Euro. Jede Woche kommen 15 Euro dazu.", "linear", "Es gibt ein Anfangsguthaben und danach nimmt der Betrag pro Woche immer um denselben Wert zu."),
+    makeContext("Ein Tank enthält bereits 18 Liter. Pro Minute fließen 3 Liter hinein.", "linear", "Es gibt schon eine Anfangsmenge und danach kommen pro Minute immer 3 Liter dazu."),
+    makeContext("Eine Kerze ist anfangs 20 cm hoch und brennt pro Stunde 2 cm ab.", "linear", "Es gibt eine Anfangshöhe und danach nimmt die Höhe pro Stunde immer um denselben Betrag ab."),
+    makeContext("Ein Baum ist schon 1,4 Meter hoch und wächst jedes Jahr 25 cm.", "linear", "Es gibt eine Anfangshöhe und danach wächst der Baum pro Jahr immer gleich viel."),
+    makeContext("Auf der Wiese liegen bereits 5 cm Schnee. Pro Stunde fallen 2 cm dazu.", "linear", "Es gibt schon eine Schneehöhe und danach kommt pro Stunde immer derselbe Betrag hinzu."),
+    makeContext("Zur Umrechnung in Fahrenheit gibt es einen Startwert von 32 und pro Celsiusgrad denselben Zuschlag.", "linear", "Der Zusammenhang hat den Startwert 32 und verändert sich pro Celsiusgrad immer um denselben Betrag."),
+    makeContext("In einer Badewanne sind schon 30 Liter Wasser. Pro Minute laufen weitere 6 Liter hinein.", "linear", "Es gibt schon Wasser als Startwert und danach kommen pro Minute immer 6 Liter dazu."),
+    makeContext("Ein Auto ist beim Start schon 50 km von der Stadt entfernt und fährt dann mit konstanter Geschwindigkeit weiter.", "linear", "Es gibt eine Anfangsentfernung und danach wächst die Strecke pro Zeiteinheit immer gleich."),
+    makeContext("Ein Kredit beträgt zu Beginn 900 Euro Schulden. Jeden Monat werden 60 Euro zurückgezahlt.", "linear", "Es gibt einen Startwert und danach wird die Schuld pro Monat immer um denselben Betrag kleiner."),
+    makeContext("Ein Handy hat zu Monatsbeginn 30 GB Datenvolumen. Pro gestreamter Stunde werden 1,5 GB verbraucht.", "linear", "Es gibt ein Startvolumen und danach nimmt es pro Stunde immer gleich viel ab."),
+    makeContext("Eine Wanderin startet auf 400 m Höhe und steigt dann pro Stunde 250 Höhenmeter.", "linear", "Es gibt eine Anfangshöhe und danach kommen pro Stunde immer dieselben Höhenmeter dazu."),
+    makeContext("Ein Fitnessstudio nimmt 25 Euro Grundgebühr und 6 Euro pro zusätzlichem Kurs.", "linear", "Es gibt einen festen Startpreis und danach wächst der Preis pro Kurs immer gleich."),
+    makeContext("Ein Paketdienst berechnet 5 Euro Grundpreis und 1 Euro pro Kilogramm.", "linear", "Es gibt einen Grundpreis und danach kommt pro Kilogramm immer derselbe Betrag hinzu."),
+    makeContext("Eine Verkäuferin erhält 900 Euro Grundgehalt und 12 Euro pro verkauftem Vertrag.", "linear", "Es gibt ein Grundgehalt und dazu kommt pro Vertrag immer derselbe Betrag."),
+    makeContext("Ein Wasserbehälter enthält zunächst 80 Liter. Pro Minute laufen 4 Liter ab.", "linear", "Es gibt eine Anfangsmenge und danach wird pro Minute immer derselbe Betrag weniger."),
+    makeContext("Ein Akku hat anfangs 100 Prozent und verliert pro Stunde 12 Prozent.", "linear", "Es gibt einen Startwert und danach sinkt der Wert pro Stunde immer gleich."),
+    makeContext("Ein Roman hat 320 Seiten. Pro Tag werden 25 Seiten gelesen; gesucht sind die verbleibenden Seiten.", "linear", "Es gibt eine Startseitenzahl und danach werden pro Tag immer gleich viele Seiten weniger."),
+    makeContext("Im Stadion sind schon 200 Zuschauer. Pro Minute kommen 35 dazu.", "linear", "Es gibt schon Besucher und danach wächst die Zahl pro Minute immer um denselben Wert."),
+    makeContext("An einer Wand sind bereits 10 Meter Zaun vorhanden. Pro neuem Element kommen 2 Meter dazu.", "linear", "Es gibt eine Anfangslänge und pro Element wird immer derselbe Betrag ergänzt."),
+    makeContext("Ein Backofen startet bei 20 Grad und heizt pro Minute um 15 Grad auf.", "linear", "Es gibt eine Anfangstemperatur und danach steigt die Temperatur pro Minute immer gleich."),
+    makeContext("In einem Aquarium sind schon 45 Liter Wasser. Ein Schlauch füllt pro Minute 3 Liter nach.", "linear", "Es gibt schon Wasser und danach kommt pro Minute immer derselbe Betrag hinzu."),
+    makeContext("Eine Bergbahn startet auf 600 m Höhe. Pro gefahrenem Kilometer gewinnt sie 80 Höhenmeter.", "linear", "Es gibt eine Anfangshöhe und danach kommen pro Kilometer immer gleich viele Höhenmeter dazu."),
+    makeContext("Ein Spendenkonto hat schon 500 Euro Startspende. Pro verkauftem Kuchen kommen 3 Euro dazu.", "linear", "Es gibt einen Startbetrag und pro Kuchen wächst der Betrag immer gleich."),
+    makeContext("Ein Mobilfunktarif hat 8 Euro Grundpreis und 2 Euro pro extra Gigabyte.", "linear", "Es gibt einen Grundpreis und danach steigt der Preis pro Gigabyte immer gleich."),
+    makeContext("Ein Verein verlangt 12 Euro Grundbeitrag und 4 Euro pro ausgeliehenem Materialstück.", "linear", "Es gibt einen festen Startbetrag und pro Stück kommt immer derselbe Betrag hinzu."),
+    makeContext("Ein Sparschwein enthält bereits 17 Euro. Jede Woche kommen 5 Euro hinzu.", "linear", "Es gibt einen Startwert und pro Woche kommt immer derselbe Betrag dazu."),
+    makeContext("Eine Läuferin hat vor der Messung schon 2 km Aufwärmstrecke zurückgelegt. Danach läuft sie konstant weiter.", "linear", "Es gibt eine Anfangsstrecke und danach wächst die Strecke pro Zeit immer gleich."),
+    makeContext("Ein Fass enthält nach dem ersten Regen schon 30 Liter. Jede weitere Regenstunde bringt 4 Liter dazu.", "linear", "Es gibt eine Anfangsmenge und danach kommt pro Stunde immer derselbe Betrag hinzu."),
+    makeContext("Bei einem Quiz gibt es 50 Startpunkte und pro richtiger Antwort 4 weitere Punkte.", "linear", "Es gibt einen Startwert und pro richtiger Antwort kommt immer derselbe Punktwert dazu."),
+    makeContext("Ein Gefrierschrank startet bei 18 Grad und kühlt pro Minute um 2 Grad ab.", "linear", "Es gibt eine Anfangstemperatur und danach sinkt sie pro Minute immer gleich."),
+    makeContext("Eine Zimmerpflanze ist schon 22 cm hoch und wächst jede Woche 1,5 cm.", "linear", "Es gibt eine Anfangshöhe und pro Woche wächst die Pflanze immer um denselben Betrag."),
+
+    // Antiproportional
+    makeContext("Je mehr Arbeiter gleichzeitig dieselbe Wand streichen, desto weniger Stunden dauert die Arbeit.", "antiproportional", "Doppelt so viele Arbeiter halbieren die benötigte Zeit bei derselben Arbeit."),
+    makeContext("Für dieselbe Strecke gilt: Je höher die Geschwindigkeit, desto kürzer die Fahrzeit.", "antiproportional", "Doppelte Geschwindigkeit bedeutet halbe Fahrzeit für dieselbe Strecke."),
+    makeContext("Eine Pizza wird unter unterschiedlich viele Kinder aufgeteilt. Gesucht sind die Stücke pro Kind.", "antiproportional", "Mehr Kinder bedeuten weniger Stücke pro Kind; die Gesamtzahl der Stücke bleibt gleich."),
+    makeContext("Mehr Pumpen füllen denselben Pool schneller. Gesucht ist die benötigte Zeit.", "antiproportional", "Doppelt so viele Pumpen halbieren die Zeit für denselben Pool."),
+    makeContext("Ein Rechteck hat immer die gleiche Fläche. Gesucht ist die Länge bei verschiedener Breite.", "antiproportional", "Wird die Breite verdoppelt, halbiert sich die Länge, damit die Fläche gleich bleibt."),
+    makeContext("Eine Klasse mit 30 Schülern wird in Teams aufgeteilt. Gesucht sind die Schüler pro Team.", "antiproportional", "Mehr Teams bedeuten weniger Schüler pro Team; insgesamt bleiben es 30 Schüler."),
+    makeContext("Für dieselben 12 Lernstunden in einer Woche gilt: Mehr Tage bedeuten weniger Lernzeit pro Tag.", "antiproportional", "Mehr Lerntage bedeuten weniger Stunden pro Tag, wenn die Gesamtlernzeit fest bleibt."),
+    makeContext("Mehr Maschinen produzieren dieselbe Stückzahl in kürzerer Zeit.", "antiproportional", "Doppelt so viele Maschinen halbieren die benötigte Zeit für dieselbe Menge."),
+    makeContext("Ein fester Restaurantpreis wird auf unterschiedlich viele Personen aufgeteilt. Gesucht ist der Preis pro Person.", "antiproportional", "Mehr Personen bedeuten weniger Kosten pro Person; der Gesamtpreis bleibt gleich."),
+    makeContext("Eine feste Last wird von mehreren Packeseln getragen. Gesucht ist die Last pro Esel.", "antiproportional", "Mehr Esel bedeuten weniger Last pro Esel bei derselben Gesamtlast."),
+    makeContext("24 Schülerinnen und Schüler werden in Gruppen eingeteilt. Gesucht ist die Gruppengröße.", "antiproportional", "Mehr Gruppen bedeuten kleinere Gruppen; insgesamt bleiben es 24 Kinder."),
+    makeContext("180 Kinder fahren auf Klassenfahrt. Gesucht ist, wie viele Kinder in jedem Bus sitzen, wenn sich die Zahl der Busse ändert.", "antiproportional", "Mehr Busse bedeuten weniger Kinder pro Bus bei gleichbleibender Gesamtzahl."),
+    makeContext("Ein Buch mit 300 Seiten soll in unterschiedlich vielen Tagen gelesen werden. Gesucht sind die Seiten pro Tag.", "antiproportional", "Mehr Tage bedeuten weniger Seiten pro Tag, wenn die Gesamtseitenzahl fest bleibt."),
+    makeContext("40 Schwimmer verteilen sich auf unterschiedlich viele Bahnen. Gesucht sind die Schwimmer pro Bahn.", "antiproportional", "Mehr Bahnen bedeuten weniger Schwimmer pro Bahn; insgesamt bleiben es 40 Schwimmer."),
+    makeContext("Mehr Wasserhähne bewässern denselben Garten in kürzerer Zeit.", "antiproportional", "Doppelt so viele Wasserhähne halbieren die Zeit für dieselbe Wassermenge."),
+    makeContext("28 Kinder setzen sich an unterschiedlich viele Tische. Gesucht sind die Kinder pro Tisch.", "antiproportional", "Mehr Tische bedeuten weniger Kinder pro Tisch bei gleicher Gesamtzahl."),
+    makeContext("120 Plätzchen werden auf unterschiedlich viele Bleche verteilt. Gesucht sind die Plätzchen pro Blech.", "antiproportional", "Mehr Bleche bedeuten weniger Plätzchen pro Blech bei gleicher Gesamtzahl."),
+    makeContext("Eine Werkstatt muss 24 Stunden am Tag besetzt sein. Gesucht sind die Stunden pro Schicht bei verschiedener Schichtzahl.", "antiproportional", "Mehr Schichten bedeuten weniger Stunden pro Schicht bei gleichbleibenden 24 Stunden."),
+    makeContext("16 Fahrgäste verteilen sich auf unterschiedlich viele Autos. Gesucht sind die Fahrgäste pro Auto.", "antiproportional", "Mehr Autos bedeuten weniger Fahrgäste pro Auto; insgesamt bleiben es 16 Fahrgäste."),
+    makeContext("240 Teile werden in unterschiedlich viele Kisten gepackt. Gesucht sind die Teile pro Kiste.", "antiproportional", "Mehr Kisten bedeuten weniger Teile pro Kiste bei gleicher Gesamtzahl."),
+    makeContext("30 Kinder übernachten in unterschiedlich vielen Zelten. Gesucht sind die Kinder pro Zelt.", "antiproportional", "Mehr Zelte bedeuten weniger Kinder pro Zelt; die Gesamtzahl bleibt 30."),
+    makeContext("Ein 60 Meter langes Seil wird in gleich lange Stücke geteilt. Gesucht ist die Länge eines Stücks bei verschiedener Stückzahl.", "antiproportional", "Mehr Stücke bedeuten kürzere Stücke bei gleichbleibender Gesamtlänge."),
+    makeContext("24 Liter Saft werden in unterschiedlich viele Flaschen gefüllt. Gesucht sind die Liter pro Flasche.", "antiproportional", "Mehr Flaschen bedeuten weniger Liter pro Flasche bei gleicher Gesamtmenge."),
+    makeContext("Ein fester Stapel Ziegel soll von verschieden vielen Arbeitern getragen werden. Gesucht ist die Menge pro Arbeiter.", "antiproportional", "Mehr Arbeiter bedeuten weniger Ziegel pro Arbeiter bei gleicher Gesamtmenge."),
+    makeContext("Mehr Kräne entladen dasselbe Schiff in kürzerer Zeit.", "antiproportional", "Doppelt so viele Kräne halbieren die Zeit für dieselbe Arbeit."),
+    makeContext("200 Pakete werden auf unterschiedlich viele Lieferwagen verteilt. Gesucht sind die Pakete pro Wagen.", "antiproportional", "Mehr Lieferwagen bedeuten weniger Pakete pro Wagen bei gleicher Gesamtzahl."),
+    makeContext("Mehr Maler streichen dieselbe Halle in kürzerer Zeit.", "antiproportional", "Doppelt so viele Maler halbieren die benötigte Zeit für dieselbe Fläche."),
+    makeContext("Mehr Drucker drucken dieselbe Seitenmenge in kürzerer Zeit.", "antiproportional", "Doppelt so viele Drucker halbieren die Zeit für dieselbe Seitenzahl."),
+    makeContext("Mehr Köche bereiten dasselbe Buffet in kürzerer Zeit vor.", "antiproportional", "Mehr Köche bedeuten weniger Zeit für dieselbe Arbeitsmenge."),
+    makeContext("Mehr Helfer packen dieselbe Zahl an Lebensmittelkisten in kürzerer Zeit.", "antiproportional", "Mehr Helfer bedeuten weniger Zeit für dieselbe Zahl an Kisten."),
+    makeContext("18 Kapitel sollen in unterschiedlich vielen Tagen gelesen werden. Gesucht sind die Kapitel pro Tag.", "antiproportional", "Mehr Tage bedeuten weniger Kapitel pro Tag bei gleicher Gesamtzahl."),
+    makeContext("120 Besucher werden auf unterschiedlich viele Servicekräfte verteilt. Gesucht sind die Besucher pro Servicekraft.", "antiproportional", "Mehr Servicekräfte bedeuten weniger Besucher pro Kraft bei gleichbleibender Gesamtzahl."),
+    makeContext("45 Ordner werden auf unterschiedlich viele Regale verteilt. Gesucht sind die Ordner pro Regal.", "antiproportional", "Mehr Regale bedeuten weniger Ordner pro Regal bei gleicher Gesamtzahl.")
+  ];
+
+  var CONTEXT_ASSIGNMENTS = [
+    // Proportional
+    "den Kopienzahlen die Kosten",
+    "den gekauften Kilogramm Äpfeln die Kosten",
+    "den Nachhilfestunden den Lohn",
+    "den vergangenen Minuten die Wassermenge im Eimer",
+    "der vergangenen Zeit die zurückgelegte Strecke",
+    "den Portionenzahlen die Milchmenge",
+    "den gekauften Kerzen die Kosten",
+    "den Mietstunden die Kosten",
+    "den Quadratmetern Wandfläche die benötigte Farbmenge",
+    "den Quadratmetern Bodenfläche die Zahl der Fliesen",
+    "den Litern Benzin die Kosten",
+    "den vergangenen Minuten die Zahl der gedruckten Seiten",
+    "den vergangenen Minuten die Schrittzahl",
+    "den gekauften Heften die Kosten",
+    "den Flaschenzahlen die Gesamtmenge Wasser",
+    "den gekauften Tüten Popcorn die Kosten",
+    "den Muffinzahlen die Mehlmenge",
+    "den Sackzahlen die Erdmenge",
+    "den verbrauchten Kilowattstunden die Kosten",
+    "den bestellten Bildern die Kosten",
+    "den Ticketzahlen die Gesamtkosten",
+    "den vergangenen Minuten die Sandmenge",
+    "den gekauften Packungen Schrauben die Kosten",
+    "den Arbeitsstunden den Lohn",
+    "der Duschzeit den Wasserverbrauch",
+    "den vergangenen Stunden die gelesenen Seiten",
+    "den Leistenzahlen die Gesamtlänge",
+    "den Becherzahlen die Saftmenge",
+    "den Chipzahlen die Kosten",
+    "den gekauften Metern Stoff die Kosten",
+    "den Becherzahlen das Gesamtgewicht",
+    "den Seitenzahlen die Stickerzahl",
+    "der verstrichenen Zeit die geladene Datenmenge",
+    "den vergangenen Sekunden das Luftvolumen im Ballon",
+
+    // Linear
+    "den gefahrenen Kilometern die Taxikosten",
+    "den Parkstunden die Kosten",
+    "den vergangenen Wochen das Kontoguthaben",
+    "den vergangenen Minuten die Tankmenge",
+    "den vergangenen Stunden die Kerzenhöhe",
+    "den vergangenen Jahren die Baumhöhe",
+    "den vergangenen Stunden die Schneehöhe",
+    "den Celsiusgraden die Temperatur in Fahrenheit",
+    "den vergangenen Minuten die Wassermenge in der Badewanne",
+    "der vergangenen Zeit die Entfernung zur Stadt",
+    "den vergangenen Monaten die Restschuld",
+    "den gestreamten Stunden das verbleibende Datenvolumen",
+    "den vergangenen Stunden die Höhe der Wanderin",
+    "den zusätzlichen Kursen die Gesamtkosten",
+    "den Kilogramm die Versandkosten",
+    "den verkauften Verträgen den Lohn",
+    "den vergangenen Minuten die Wassermenge im Behälter",
+    "den vergangenen Stunden den Akkustand",
+    "den vergangenen Tagen die verbleibenden Seiten",
+    "den vergangenen Minuten die Zuschauerzahl",
+    "den neuen Zaunelementen die gesamte Zaunlänge",
+    "den vergangenen Minuten die Ofentemperatur",
+    "den vergangenen Minuten die Wassermenge im Aquarium",
+    "den gefahrenen Kilometern die Höhe der Bergbahn",
+    "den verkauften Kuchen den Kontostand",
+    "den zusätzlichen Gigabyte die Kosten",
+    "den ausgeliehenen Materialstücken die Gesamtkosten",
+    "den vergangenen Wochen den Betrag im Sparschwein",
+    "der vergangenen Laufzeit die Gesamtstrecke",
+    "den weiteren Regenstunden die Wassermenge im Fass",
+    "den richtigen Antworten die Punktzahl",
+    "den vergangenen Minuten die Temperatur im Gefrierschrank",
+    "den vergangenen Wochen die Höhe der Zimmerpflanze",
+
+    // Antiproportional
+    "den Arbeiterzahlen die benötigte Zeit",
+    "der Geschwindigkeit die Fahrzeit",
+    "den Kinderzahlen die Stückzahl pro Kind",
+    "den Pumpenzahlen die benötigte Zeit",
+    "der Breite die Länge",
+    "den Teamzahlen die Schülerzahl pro Team",
+    "den Lerntagen die Lernzeit pro Tag",
+    "den Maschinenzahlen die Produktionszeit",
+    "den Personenzahlen die Kosten pro Person",
+    "den Packeselzahlen die Last pro Esel",
+    "den Gruppenzahlen die Gruppengröße",
+    "den Buszahlen die Kinderzahl pro Bus",
+    "den Tagen die Seitenzahl pro Tag",
+    "den Bahnen die Schwimmerzahl pro Bahn",
+    "den Wasserhähnen die Bewässerungszeit",
+    "den Tischzahlen die Kinderzahl pro Tisch",
+    "den Blechen die Plätzchenzahl pro Blech",
+    "den Schichtzahlen die Stunden pro Schicht",
+    "den Autozahlen die Fahrgäste pro Auto",
+    "den Kistenzahlen die Teilezahl pro Kiste",
+    "den Zeltzahlen die Kinderzahl pro Zelt",
+    "den Stückzahlen die Länge eines Stücks",
+    "den Flaschenzahlen die Liter pro Flasche",
+    "den Arbeiterzahlen die Ziegelmenge pro Arbeiter",
+    "den Kranzahlen die Entladezeit",
+    "den Lieferwagenzahlen die Paketzahl pro Wagen",
+    "den Malerzahlen die benötigte Zeit",
+    "den Druckerzahlen die Druckzeit",
+    "den Kochzahlen die Vorbereitungszeit",
+    "den Helferzahlen die Packzeit",
+    "den Tagen die Kapitelzahl pro Tag",
+    "den Servicekraftzahlen die Besucherzahl pro Servicekraft",
+    "den Regalzahlen die Ordnerzahl pro Regal"
+  ];
+
+  function typeLabel(type) {
+    if (type === "linear") {
+      return "Linear";
+    }
+    if (type === "proportional") {
+      return "Proportional";
+    }
+    return "Antiproportional";
+  }
+
+  function ensureRemainingIndices() {
+    if (state.remainingIndices.length) {
+      return;
+    }
+    var indices = [];
+    for (var i = 0; i < CONTEXT_TASKS.length; i++) {
+      indices.push(i);
+    }
+    state.remainingIndices = shuffle(indices);
+  }
+
+  function getCurrentTask() {
+    ensureRemainingIndices();
+    state.taskIndex = state.remainingIndices[0];
+    return CONTEXT_TASKS[state.taskIndex];
+  }
+
+  function moveCurrentTaskToEnd() {
+    if (state.remainingIndices.length > 1) {
+      var first = state.remainingIndices.shift();
+      state.remainingIndices.push(first);
+    }
+  }
+
+  function markCurrentTaskSolved() {
+    if (!state.remainingIndices.length) {
+      return;
+    }
+    state.remainingIndices.shift();
+    if (!state.remainingIndices.length) {
+      ensureRemainingIndices();
+    }
+  }
+
+  function explainCorrect(task) {
+    return "Richtig. " + typeLabel(task.type) + ": " + task.reason + " (+1 Punkt)";
+  }
+
+  function explainWrong(task) {
+    return "Nicht richtig. " + typeLabel(task.type) + ": " + task.reason + " (-1 Punkt)";
+  }
+
+  function renderTask(task) {
+    contextEl.textContent = task.text;
+    questionEl.textContent = "Welcher Funktionstyp passt zu diesem Kontext, wenn " + CONTEXT_ASSIGNMENTS[state.taskIndex] + " zugeordnet werden?";
+    setHint("");
+    setChoicesDisabled(false);
+  }
+
+  function newTask(fromUser) {
+    var hadTask = state.taskIndex !== -1;
+
+    if (fromUser && hadTask && !state.solved) {
+      if (!state.finished) {
+        state.score -= 1;
+        updateScoreDisplay();
+        setFeedback("Aufgabe übersprungen. (-1 Punkt)", "bad");
+      } else {
+        setFeedback("", "");
+      }
+      moveCurrentTaskToEnd();
+    } else if (!fromUser || state.solved) {
+      setFeedback("", "");
+    }
+
+    var task = getCurrentTask();
+    state.solved = false;
+    state.finished = false;
+    state.attempts = 0;
+    renderTask(task);
+  }
+
+  function handleChoice(choice) {
+    if (state.taskIndex === -1 || state.finished) {
+      return;
+    }
+
+    var task = CONTEXT_TASKS[state.taskIndex];
+
+    if (choice === task.type) {
+      state.finished = true;
+      state.solved = true;
+      setChoicesDisabled(true);
+      state.score += 1;
+      if (state.score > state.bestScore) {
+        state.bestScore = state.score;
+      }
+      markCurrentTaskSolved();
+      updateScoreDisplay();
+      setFeedback(explainCorrect(task), "ok");
+      return;
+    }
+
+    state.score -= 1;
+    updateScoreDisplay();
+    state.attempts += 1;
+    state.solved = false;
+
+    if (state.attempts === 1) {
+      setHint(task.reason);
+      setFeedback("Nicht richtig. (-1 Punkt) Lies den Hinweis zum Zusammenhang.", "bad");
+      return;
+    }
+
+    state.finished = true;
+    setChoicesDisabled(true);
+    setFeedback(explainWrong(task), "bad");
+  }
+
+  for (var b = 0; b < choiceButtons.length; b++) {
+    choiceButtons[b].addEventListener("click", function () {
+      handleChoice(this.getAttribute("data-choice"));
+    });
+  }
+
+  newBtn.addEventListener("click", function () {
+    newTask(true);
+  });
+
+  state.score = loadScoreFromEdulo();
+  state.bestScore = Math.max(state.score, loadMilestoneScoreFromEdulo());
+  updateScoreDisplay();
+  newTask(false);
+})();
+</script>
+
+<script>
+(function () {
+  var root = document.getElementById("f4g-edulo-panel");
+  if (!root || root.dataset.f4gTabsInit === "1") {
+    return;
+  }
+  root.dataset.f4gTabsInit = "1";
+
+  var cards = root.querySelectorAll(".f4g-grid .f4g-card");
+
+  function dispatchChange(target) {
+    try {
+      target.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (e) {
+      var ev = document.createEvent("Event");
+      ev.initEvent("change", true, true);
+      target.dispatchEvent(ev);
+    }
+  }
+
+  function activateCard(card) {
+    var targetId = card.getAttribute("for");
+    if (!targetId) {
+      return;
+    }
+    var target = root.querySelector("#" + targetId);
+    if (!target) {
+      return;
+    }
+    if (!target.checked) {
+      target.checked = true;
+      dispatchChange(target);
+    }
+  }
+
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].setAttribute("tabindex", "0");
+    cards[i].setAttribute("role", "button");
+
+    cards[i].addEventListener("click", function () {
+      activateCard(this);
+    });
+
+    cards[i].addEventListener("touchend", function (event) {
+      event.preventDefault();
+      activateCard(this);
+    }, { passive: false });
+
+    cards[i].addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        activateCard(this);
+      }
+    });
+  }
+})();
+</script>
+
+<script>
+(function () {
+  var root = document.getElementById("f4g-edulo-panel");
+  if (!root || root.dataset.f4gNavScoresInit === "1") {
+    return;
+  }
+  root.dataset.f4gNavScoresInit = "1";
+
+  var mappings = [
+    { taskSelector: "#f4g-diagramm-task", navRole: "nav-score-diagramm" },
+    { taskSelector: "#f4g-term-task", navRole: "nav-score-term" },
+    { taskSelector: "#f4g-value-task", navRole: "nav-score-table" },
+    { taskSelector: "#f4g-text-task", navRole: "nav-score-text" }
+  ];
+
+  function syncOne(mapping) {
+    var source = root.querySelector(mapping.taskSelector + ' [data-role="score-value"]');
+    var target = root.querySelector('[data-role="' + mapping.navRole + '"]');
+    if (!source || !target) {
+      return;
+    }
+    target.textContent = String(source.textContent || "0").trim() || "0";
+  }
+
+  for (var i = 0; i < mappings.length; i++) {
+    syncOne(mappings[i]);
+
+    (function (mapping) {
+      var source = root.querySelector(mapping.taskSelector + ' [data-role="score-value"]');
+      if (!source || typeof MutationObserver === "undefined") {
+        return;
+      }
+      var observer = new MutationObserver(function () {
+        syncOne(mapping);
+      });
+      observer.observe(source, { childList: true, characterData: true, subtree: true });
+    })(mappings[i]);
+  }
+})();
+</script>
+
+<script>
+(function () {
+  var root = document.getElementById("f4g-edulo-panel");
   if (!root || root.dataset.f4gTermTaskInit === "1") {
     return;
   }
@@ -1864,6 +3149,616 @@ f(2)=10         Lösung: (2;10)</pre>
       checkAnswer();
     }
   });
+
+  state.score = loadScoreFromEdulo();
+  state.bestScore = Math.max(state.score, loadMilestoneScoreFromEdulo());
+  updateScoreDisplay();
+  newTask(false);
+})();
+</script>
+
+<script>
+(function () {
+  var root = document.getElementById("f4g-edulo-panel");
+  if (!root || root.dataset.f4gValueTaskInit === "1") {
+    return;
+  }
+  root.dataset.f4gValueTaskInit = "1";
+
+  var taskRoot = root.querySelector("#f4g-value-task");
+  if (!taskRoot) {
+    return;
+  }
+
+  var kindEl = taskRoot.querySelector('[data-role="task-kind"]');
+  var helperEl = taskRoot.querySelector('[data-role="task-helper"]');
+  var questionEl = taskRoot.querySelector('[data-role="question"]');
+  var xInputEl = taskRoot.querySelector('[data-role="x-input"]');
+  var yInputEl = taskRoot.querySelector('[data-role="y-input"]');
+  var altDisplayEl = taskRoot.querySelector('[data-role="alt-display"]');
+  var checkBtn = taskRoot.querySelector('[data-role="check-btn"]');
+  var newBtn = taskRoot.querySelector('[data-role="new-btn"]');
+  var feedbackEl = taskRoot.querySelector('[data-role="feedback"]');
+  var scoreEl = taskRoot.querySelector('[data-role="score-value"]');
+
+  var state = {
+    score: 0,
+    bestScore: 0,
+    task: null,
+    solved: false,
+    finished: false,
+    attempts: 0,
+    remainingTypes: [],
+    typeVariants: {}
+  };
+
+  var TASK_TYPES = ["arrow", "pair", "function_value", "coordinate", "verbal", "zero", "y_intercept"];
+  var VARIABLE_ELIGIBLE_TYPES = ["arrow", "pair", "function_value", "coordinate", "verbal"];
+  var VARIABLE_NAMES = ["a", "b", "c"];
+
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function pick(arr) {
+    return arr[randInt(0, arr.length - 1)];
+  }
+
+  function shuffle(arr) {
+    var copy = arr.slice();
+    for (var i = copy.length - 1; i > 0; i--) {
+      var j = randInt(0, i);
+      var tmp = copy[i];
+      copy[i] = copy[j];
+      copy[j] = tmp;
+    }
+    return copy;
+  }
+
+  function normalizeAnswerToken(value) {
+    if (value == null) {
+      return null;
+    }
+    var raw = String(value).trim().replace(",", ".").replace(/\s+/g, "");
+    if (raw === "") {
+      return null;
+    }
+    var n = Number(raw);
+    if (Number.isFinite(n)) {
+      return String(n);
+    }
+    return raw.toLowerCase();
+  }
+
+  function getEduloCandidateDocs() {
+    var docs = [document];
+    try {
+      if (window.parent && window.parent !== window && window.parent.document) {
+        docs.push(window.parent.document);
+      }
+    } catch (e) {
+      /* Zugriff auf parent kann in Edulo/Cross-Origin blockiert sein */
+    }
+    return docs;
+  }
+
+  function findEduloSingleField(baseName) {
+    var docs = getEduloCandidateDocs();
+    var selectors = ["#" + baseName, '[name="' + baseName + '"]', 'input[id="' + baseName + '"]', 'textarea[id="' + baseName + '"]'];
+
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+      for (var s = 0; s < selectors.length; s++) {
+        var el = doc.querySelector(selectors[s]);
+        if (!el) {
+          continue;
+        }
+        if (el.tagName !== "INPUT" && el.tagName !== "TEXTAREA") {
+          var nested = el.querySelector("input, textarea");
+          if (nested) {
+            el = nested;
+          }
+        }
+        if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+          return el;
+        }
+      }
+    }
+    return null;
+  }
+
+  function findEduloSlots(baseName) {
+    var docs = getEduloCandidateDocs();
+    var found = [];
+    var seen = [];
+
+    function addSlot(el, indexHint) {
+      if (!el) {
+        return;
+      }
+      for (var i = 0; i < seen.length; i++) {
+        if (seen[i] === el) {
+          return;
+        }
+      }
+      seen.push(el);
+      found.push({
+        el: el,
+        index: Number.isFinite(indexHint) ? indexHint : 9999 + found.length
+      });
+    }
+
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+      var container = doc.querySelector("#" + baseName);
+      if (container) {
+        var innerSlots = container.querySelectorAll("input, textarea");
+        if (innerSlots.length > 1) {
+          for (var c = 0; c < innerSlots.length; c++) {
+            addSlot(innerSlots[c], c + 1);
+          }
+        }
+      }
+
+      var allFields = doc.querySelectorAll("input, textarea");
+      for (var a = 0; a < allFields.length; a++) {
+        var field = allFields[a];
+        var id = field.id || "";
+        var name = field.name || "";
+        var key = id || name;
+        if (!key) {
+          continue;
+        }
+
+        var m = key.match(new RegExp("^" + baseName + "(?:[_\\-. ]?)(\\d{1,2})$", "i"));
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+          continue;
+        }
+
+        m = key.match(new RegExp("^" + baseName + "(?:[_\\-. ]?)(\\d{1,2})\\D+", "i"));
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+        }
+      }
+    }
+
+    found.sort(function (a, b) { return a.index - b.index; });
+    var slots = [];
+    for (var i2 = 0; i2 < found.length; i2++) {
+      slots.push(found[i2].el);
+    }
+    return slots;
+  }
+
+  function dispatchFieldEvents(field) {
+    try {
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (e) {
+      var ev1 = document.createEvent("Event");
+      ev1.initEvent("input", true, true);
+      field.dispatchEvent(ev1);
+      var ev2 = document.createEvent("Event");
+      ev2.initEvent("change", true, true);
+      field.dispatchEvent(ev2);
+    }
+  }
+
+  function loadScoreFromEdulo() {
+    var field = findEduloSingleField("e8");
+    if (!field) {
+      return 0;
+    }
+    var value = parseInt(String(field.value || "").trim(), 10);
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function saveScoreToEdulo(score) {
+    var field = findEduloSingleField("e8");
+    if (!field) {
+      return false;
+    }
+    field.value = String(score);
+    dispatchFieldEvents(field);
+    return true;
+  }
+
+  function loadMilestoneScoreFromEdulo() {
+    var slots = findEduloSlots("e9");
+    if (!slots.length) {
+      return 0;
+    }
+    var count = 0;
+    for (var i = 0; i < Math.min(10, slots.length); i++) {
+      if (String(slots[i].value || "").trim() === "1") {
+        count++;
+      }
+    }
+    return count * 10;
+  }
+
+  function syncMilestonesToEdulo(bestScore) {
+    var slots = findEduloSlots("e9");
+    if (!slots.length) {
+      return false;
+    }
+    var reached = Math.floor(Math.max(0, bestScore) / 10);
+    if (reached > 10) {
+      reached = 10;
+    }
+    var limit = Math.min(10, slots.length);
+    for (var i = 0; i < limit; i++) {
+      var targetValue = i < reached ? "1" : "";
+      if (String(slots[i].value || "") !== targetValue) {
+        slots[i].value = targetValue;
+        dispatchFieldEvents(slots[i]);
+      }
+    }
+    return true;
+  }
+
+  function updateScoreDisplay() {
+    scoreEl.textContent = String(state.score);
+    saveScoreToEdulo(state.score);
+    syncMilestonesToEdulo(state.bestScore);
+  }
+
+  function setFeedback(message, kind) {
+    feedbackEl.textContent = message || "";
+    feedbackEl.className = "f4g-task-feedback";
+    if (kind === "ok") {
+      feedbackEl.classList.add("is-ok");
+    } else if (kind === "bad") {
+      feedbackEl.classList.add("is-bad");
+    }
+  }
+
+  function escapeHtml(text) {
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function setHelper(text) {
+    if (!text) {
+      helperEl.textContent = "";
+      helperEl.hidden = true;
+      return;
+    }
+    helperEl.textContent = text;
+    helperEl.hidden = false;
+  }
+
+  function ensureRemainingTypes() {
+    if (!state.remainingTypes.length) {
+      startNewTypeSet();
+    }
+  }
+
+  function getCurrentTaskType() {
+    ensureRemainingTypes();
+    return state.remainingTypes[0];
+  }
+
+  function buildSetVariantPlan(scoreAtSetStart) {
+    var plan = {};
+    var available = shuffle(VARIABLE_ELIGIBLE_TYPES);
+    var oneVarCount = 0;
+    var twoVarCount = 0;
+
+    if (scoreAtSetStart > 10) {
+      oneVarCount = randInt(1, Math.min(2, available.length));
+    }
+    if (scoreAtSetStart > 20) {
+      twoVarCount = randInt(1, Math.min(2, Math.max(0, available.length - oneVarCount)));
+    }
+
+    for (var i = 0; i < oneVarCount && available.length; i++) {
+      plan[available.shift()] = 1;
+    }
+    for (var j = 0; j < twoVarCount && available.length; j++) {
+      plan[available.shift()] = 2;
+    }
+
+    return plan;
+  }
+
+  function startNewTypeSet() {
+    state.remainingTypes = shuffle(TASK_TYPES);
+    state.typeVariants = buildSetVariantPlan(state.score);
+  }
+
+  function deferCurrentTaskType() {
+    if (state.remainingTypes.length > 1) {
+      var first = state.remainingTypes.shift();
+      state.remainingTypes.push(first);
+    }
+  }
+
+  function markTaskTypeSolved(type) {
+    var next = [];
+    var removed = false;
+
+    for (var i = 0; i < state.remainingTypes.length; i++) {
+      var item = state.remainingTypes[i];
+      if (!removed && item === type) {
+        removed = true;
+        continue;
+      }
+      next.push(item);
+    }
+
+    state.remainingTypes = next;
+    if (!state.remainingTypes.length) {
+      startNewTypeSet();
+    }
+  }
+
+  function getVariableModeForType(type) {
+    return state.typeVariants[type] || 0;
+  }
+
+  function buildAltBox(content, mono) {
+    var cls = mono ? "f4g-value-alt-box is-mono" : "f4g-value-alt-box";
+    return '<span class="' + cls + '">' + content + "</span>";
+  }
+
+  function randomPair() {
+    var x = randInt(-9, 9);
+    var y = randInt(-9, 9);
+    while (y === x) {
+      y = randInt(-9, 9);
+    }
+    return { x: String(x), y: String(y) };
+  }
+
+  function createTaskValues(variableMode) {
+    var pair = randomPair();
+    var x = pair.x;
+    var y = pair.y;
+
+    if (variableMode === 1) {
+      if (Math.random() < 0.5) {
+        x = pick(VARIABLE_NAMES);
+      } else {
+        y = pick(VARIABLE_NAMES);
+      }
+    } else if (variableMode === 2) {
+      var vars = shuffle(VARIABLE_NAMES).slice(0, 2);
+      x = vars[0];
+      y = vars[1];
+    }
+
+    return { x: x, y: y };
+  }
+
+  function generateValueTask(type) {
+    var variableMode = getVariableModeForType(type);
+    var pair = createTaskValues(variableMode);
+
+    if (type === "arrow") {
+      return {
+        mode: type,
+        x: pair.x,
+        y: pair.y,
+        kindText: "Darstellung: Zuordnung mit Pfeil",
+        helperText: 'Links steht der x-Wert, rechts der zugehörige y-Wert. Trage den Wert vor dem Pfeil in die x-Spalte und den Wert hinter dem Pfeil in die y-Spalte ein.',
+        question: "Übertrage die Zuordnung in das Wertepaar.",
+        altHtml: buildAltBox(escapeHtml(pair.x + " -> " + pair.y), true)
+      };
+    }
+
+    if (type === "pair") {
+      var pairNormalOrder = Math.random() < 0.5;
+      return {
+        mode: type,
+        x: pair.x,
+        y: pair.y,
+        kindText: "Darstellung: Einfaches Wertepaar",
+        helperText: "Die beiden Werte sind als x- und y-Wert notiert, die Reihenfolge kann aber vertauscht sein. Achte darauf, welcher Wert zu x und welcher zu y gehört.",
+        question: "Übertrage die Angaben in die Tabelle.",
+        altHtml: buildAltBox(pairNormalOrder ? ("x = " + escapeHtml(pair.x) + ", y = " + escapeHtml(pair.y)) : ("y = " + escapeHtml(pair.y) + ", x = " + escapeHtml(pair.x)), true)
+      };
+    }
+
+    if (type === "function_value") {
+      var functionNormalOrder = Math.random() < 0.5;
+      return {
+        mode: type,
+        x: pair.x,
+        y: pair.y,
+        kindText: "Darstellung: Funktionswert",
+        helperText: "Der Wert in der Klammer gehört immer zu x. Der andere Wert ist der Funktionswert y, auch wenn die beiden Seiten des Gleichheitszeichens vertauscht sind.",
+        question: "Bestimme aus der Funktionswertschreibweise das Wertepaar.",
+        altHtml: buildAltBox(functionNormalOrder ? ("f(" + escapeHtml(pair.x) + ") = " + escapeHtml(pair.y)) : (escapeHtml(pair.y) + " = f(" + escapeHtml(pair.x) + ")"), true)
+      };
+    }
+
+    if (type === "coordinate") {
+      return {
+        mode: type,
+        x: pair.x,
+        y: pair.y,
+        kindText: "Darstellung: Koordinatenpaar",
+        helperText: "Im Koordinatenpaar steht links vom Strich der x-Wert und rechts davon der y-Wert. Trage beide Werte passend in die Tabelle ein.",
+        question: "Lies das Koordinatenpaar ab und trage die Werte ein.",
+        altHtml: buildAltBox("(" + escapeHtml(pair.x) + " | " + escapeHtml(pair.y) + ")", true)
+      };
+    }
+
+    if (type === "verbal") {
+      var verbalNormalOrder = Math.random() < 0.5;
+      return {
+        mode: type,
+        x: pair.x,
+        y: pair.y,
+        kindText: "Darstellung: Verbale Beschreibung",
+        helperText: 'Im Satz nennt "an der Stelle ..." den x-Wert. Der Funktionswert ist der y-Wert, auch wenn die Satzreihenfolge variiert.',
+        question: "Lies den Satz und trage das passende Wertepaar ein.",
+        altHtml: buildAltBox(verbalNormalOrder ? ("Der Funktionswert an der Stelle " + escapeHtml(pair.x) + " ist " + escapeHtml(pair.y) + ".") : ("Der Funktionswert ist " + escapeHtml(pair.y) + " an der Stelle " + escapeHtml(pair.x) + "."), false)
+      };
+    }
+
+    if (type === "zero") {
+      var zeroX = randInt(-8, 8);
+      while (zeroX === 0) {
+        zeroX = randInt(-8, 8);
+      }
+      return {
+        mode: type,
+        x: String(zeroX),
+        y: "0",
+        kindText: "Sonderfall: Nullstelle",
+        helperText: "Bei einer Nullstelle ist der y-Wert immer 0. Trage den gegebenen x-Wert in die x-Spalte und 0 in die y-Spalte ein.",
+        question: "Trage das Wertepaar der Nullstelle in die Tabelle ein.",
+        altHtml: buildAltBox("Nullstelle: " + zeroX, false)
+      };
+    }
+
+    var interceptY = randInt(-8, 8);
+    while (interceptY === 0) {
+      interceptY = randInt(-8, 8);
+    }
+    return {
+      mode: "y_intercept",
+      x: "0",
+      y: String(interceptY),
+      kindText: "Sonderfall: y-Achsenabschnitt",
+      helperText: "Beim y-Achsenabschnitt ist der x-Wert immer 0. Trage also 0 in die x-Spalte und den angegebenen Wert in die y-Spalte ein.",
+      question: "Trage das Wertepaar des y-Achsenabschnitts in die Tabelle ein.",
+      altHtml: buildAltBox("y-Achsenabschnitt: " + interceptY, false)
+    };
+  }
+
+  function formatPair(task) {
+    return "(" + task.x + " | " + task.y + ")";
+  }
+
+  function explainCorrect(task) {
+    if (task.mode === "zero") {
+      return "Richtig. Die Nullstelle gehört zum Wertepaar " + formatPair(task) + ". (+1 Punkt)";
+    }
+    if (task.mode === "y_intercept") {
+      return "Richtig. Der y-Achsenabschnitt gehört zum Wertepaar " + formatPair(task) + ". (+1 Punkt)";
+    }
+    return "Richtig. Das Wertepaar ist " + formatPair(task) + ". (+1 Punkt)";
+  }
+
+  function explainWrong(task) {
+    if (task.mode === "zero") {
+      return "Nicht richtig. Die Nullstelle gehört zum Wertepaar " + formatPair(task) + ". (-1 Punkt)";
+    }
+    if (task.mode === "y_intercept") {
+      return "Nicht richtig. Der y-Achsenabschnitt gehört zum Wertepaar " + formatPair(task) + ". (-1 Punkt)";
+    }
+    return "Nicht richtig. Gesucht war das Wertepaar " + formatPair(task) + ". (-1 Punkt)";
+  }
+
+  function renderTask(task) {
+    kindEl.textContent = task.kindText;
+    setHelper("");
+    questionEl.textContent = task.question;
+    altDisplayEl.innerHTML = task.altHtml;
+  }
+
+  function newTask(fromUser) {
+    var hadUnsolvedTask = !!(fromUser && state.task && !state.solved);
+    var skippedUnsolved = !!(hadUnsolvedTask && !state.finished);
+    if (skippedUnsolved) {
+      state.score -= 1;
+      updateScoreDisplay();
+      setFeedback("Aufgabe übersprungen. (-1 Punkt)", "bad");
+    } else {
+      setFeedback("", "");
+    }
+
+    if (hadUnsolvedTask) {
+      deferCurrentTaskType();
+    }
+
+    state.task = generateValueTask(getCurrentTaskType());
+    state.solved = false;
+    state.finished = false;
+    state.attempts = 0;
+    renderTask(state.task);
+    xInputEl.value = "";
+    yInputEl.value = "";
+    xInputEl.disabled = false;
+    yInputEl.disabled = false;
+    checkBtn.disabled = false;
+    try {
+      xInputEl.focus();
+    } catch (e) {}
+  }
+
+  function checkAnswer() {
+    if (!state.task || state.finished) {
+      return;
+    }
+
+    var xValue = normalizeAnswerToken(xInputEl.value);
+    var yValue = normalizeAnswerToken(yInputEl.value);
+
+    if (xValue === null || yValue === null) {
+      setFeedback("Bitte gib sowohl einen x-Wert als auch einen y-Wert ein.", "bad");
+      return;
+    }
+
+    if (xValue === normalizeAnswerToken(state.task.x) && yValue === normalizeAnswerToken(state.task.y)) {
+      state.finished = true;
+      state.solved = true;
+      xInputEl.disabled = true;
+      yInputEl.disabled = true;
+      checkBtn.disabled = true;
+      state.score += 1;
+      if (state.score > state.bestScore) {
+        state.bestScore = state.score;
+      }
+      markTaskTypeSolved(state.task.mode);
+      updateScoreDisplay();
+      setFeedback(explainCorrect(state.task), "ok");
+    } else {
+      state.score -= 1;
+      updateScoreDisplay();
+      state.attempts += 1;
+      state.solved = false;
+
+      if (state.attempts === 1) {
+        setHelper(state.task.helperText);
+        setFeedback('Nicht richtig. (-1 Punkt) Beachte den Tipp unter "Aufgabentyp".', "bad");
+        try {
+          xInputEl.focus();
+          xInputEl.select();
+        } catch (e) {
+          xInputEl.focus();
+        }
+        return;
+      }
+
+      state.finished = true;
+      xInputEl.disabled = true;
+      yInputEl.disabled = true;
+      checkBtn.disabled = true;
+      setFeedback(explainWrong(state.task), "bad");
+    }
+  }
+
+  function onInputKeydown(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      checkAnswer();
+    }
+  }
+
+  checkBtn.addEventListener("click", checkAnswer);
+  newBtn.addEventListener("click", function () {
+    newTask(true);
+  });
+  xInputEl.addEventListener("keydown", onInputKeydown);
+  yInputEl.addEventListener("keydown", onInputKeydown);
 
   state.score = loadScoreFromEdulo();
   state.bestScore = Math.max(state.score, loadMilestoneScoreFromEdulo());
