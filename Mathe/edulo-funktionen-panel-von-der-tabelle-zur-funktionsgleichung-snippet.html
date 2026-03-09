@@ -1,0 +1,1987 @@
+<style>
+  #vtf-edulo-panel {
+    --vtf-bg: #f7fbff;
+    --vtf-card: #ffffff;
+    --vtf-line: #d7e2ee;
+    --vtf-ink: #1d2633;
+    --vtf-muted: #5a6a7a;
+    --vtf-accent: #2f5fd0;
+    --vtf-accent-soft: rgba(47, 95, 208, 0.1);
+    --vtf-shadow: 0 8px 24px rgba(16, 32, 56, 0.08);
+    font-family: "Trebuchet MS", Verdana, sans-serif;
+    color: var(--vtf-ink);
+    background: linear-gradient(180deg, #ffffff, var(--vtf-bg));
+    border: 1px solid var(--vtf-line);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: var(--vtf-shadow);
+  }
+
+  #vtf-edulo-panel * {
+    box-sizing: border-box;
+  }
+
+  #vtf-edulo-panel h2 {
+    margin: 0 0 6px;
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  #vtf-edulo-panel h3,
+  #vtf-edulo-panel h4,
+  #vtf-edulo-panel h5 {
+    margin: 0;
+    line-height: 1.28;
+  }
+
+  #vtf-edulo-panel p {
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  #vtf-edulo-panel .vtf-intro {
+    color: var(--vtf-muted);
+    margin-bottom: 14px;
+  }
+
+  #vtf-edulo-panel .vtf-tab-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #vtf-edulo-panel .vtf-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  #vtf-edulo-panel .vtf-card {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid var(--vtf-line);
+    border-radius: 14px;
+    background: var(--vtf-card);
+    cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+    user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+
+  #vtf-edulo-panel .vtf-card:active {
+    transform: translateY(-1px);
+    border-color: #b8cbe2;
+  }
+
+  #vtf-edulo-panel .vtf-card:focus-visible {
+    border-color: #8fb0dc;
+    box-shadow: 0 0 0 3px rgba(47, 95, 208, 0.14);
+  }
+
+  #vtf-edulo-panel .vtf-title {
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  #vtf-edulo-panel .vtf-sub {
+    color: var(--vtf-muted);
+    font-size: 15px;
+    line-height: 1.25;
+  }
+
+  #vtf-edulo-panel .vtf-thumb {
+    border: 1px solid #e4edf6;
+    border-radius: 10px;
+    background: #fbfdff;
+    padding: 4px;
+  }
+
+  #vtf-edulo-panel .vtf-thumb svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  #vtf-edulo-panel .vtf-card-score {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid #e4edf6;
+    font-size: 14px;
+    color: var(--vtf-muted);
+  }
+
+  #vtf-edulo-panel .vtf-card-score-value {
+    min-width: 2ch;
+    text-align: right;
+    font-weight: 700;
+    color: #1f3f7b;
+  }
+
+  #vtf-edulo-panel .vtf-detail-box {
+    border: 1px solid var(--vtf-line);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 12px;
+  }
+
+  #vtf-edulo-panel .vtf-detail {
+    display: none;
+    animation: vtfFadeIn 0.16s ease;
+    color: #223041;
+  }
+
+  #vtf-edulo-panel .vtf-detail > h3 {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e4edf7;
+    color: #1f3046;
+  }
+
+  #vtf-edulo-panel .vtf-layout {
+    display: grid;
+    gap: 12px;
+  }
+
+  #vtf-edulo-panel .vtf-block {
+    padding: 11px 12px;
+    border: 1px solid #dee8f3;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #ffffff, #fbfdff);
+    display: grid;
+    gap: 9px;
+  }
+
+  #vtf-edulo-panel .vtf-block > h4 {
+    color: #234a8b;
+    font-size: 16px;
+  }
+
+  #vtf-edulo-panel .vtf-list {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  #vtf-edulo-panel .vtf-list li + li {
+    margin-top: 4px;
+  }
+
+  #vtf-edulo-panel .vtf-chip {
+    display: inline-block;
+    width: fit-content;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid #d9e4f0;
+    background: #f8fbff;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  #vtf-edulo-panel .vtf-note {
+    padding: 8px 9px;
+    border: 1px solid #dde8f5;
+    border-radius: 9px;
+    background: #f6f9fe;
+  }
+
+  #vtf-edulo-panel .vtf-note.is-warm {
+    border-color: #f0dfbf;
+    background: #fff9ee;
+  }
+
+  #vtf-edulo-panel .vtf-example {
+    display: grid;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #dfe8f4;
+    border-radius: 10px;
+    background: #ffffff;
+  }
+
+  #vtf-edulo-panel .vtf-mini-table,
+  #vtf-edulo-panel .vtf-task-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+
+  #vtf-edulo-panel .vtf-mini-table th,
+  #vtf-edulo-panel .vtf-mini-table td,
+  #vtf-edulo-panel .vtf-task-table th,
+  #vtf-edulo-panel .vtf-task-table td {
+    border: 1px solid #dbe6f2;
+    padding: 7px 9px;
+    text-align: center;
+  }
+
+  #vtf-edulo-panel .vtf-mini-table th,
+  #vtf-edulo-panel .vtf-task-table th {
+    background: #edf5ff;
+    color: #234a8b;
+    font-weight: 700;
+  }
+
+  #vtf-edulo-panel .vtf-mini-table td,
+  #vtf-edulo-panel .vtf-task-table td {
+    background: #ffffff;
+  }
+
+  #vtf-edulo-panel .vtf-rule-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  #vtf-edulo-panel .vtf-rule-card {
+    padding: 10px;
+    border: 1px solid #e2eaf4;
+    border-radius: 10px;
+    background: #ffffff;
+    display: grid;
+    gap: 6px;
+  }
+
+  #vtf-edulo-panel .vtf-rule-card h5 {
+    color: #234a8b;
+    font-size: 15px;
+  }
+
+  #vtf-edulo-panel .vtf-mono {
+    font-family: Consolas, "Courier New", monospace;
+  }
+
+  #vtf-edulo-panel .vtf-frac {
+    display: inline-grid;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    align-items: center;
+    vertical-align: middle;
+    line-height: 1;
+    font-family: Consolas, "Courier New", monospace;
+  }
+
+  #vtf-edulo-panel .vtf-frac > span:first-child {
+    padding: 0 3px 2px;
+    border-bottom: 1.5px solid currentColor;
+  }
+
+  #vtf-edulo-panel .vtf-frac > span:last-child {
+    padding-top: 2px;
+  }
+
+  #vtf-edulo-panel .vtf-color-m {
+    color: #2f5fd0;
+    font-weight: 700;
+  }
+
+  #vtf-edulo-panel .vtf-color-b {
+    color: #cf5b2e;
+    font-weight: 700;
+  }
+
+  #vtf-edulo-panel .vtf-color-k {
+    color: #8a5b23;
+    font-weight: 700;
+  }
+
+  #vtf-edulo-panel .vtf-color-rel {
+    color: #7a4cb8;
+    font-weight: 700;
+  }
+
+  #vtf-edulo-panel .vtf-mini-table .vtf-mini-table-side {
+    width: 54px;
+    min-width: 54px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  #vtf-edulo-panel .vtf-mini-table .vtf-mini-table-side svg {
+    display: block;
+    width: 54px;
+    height: 72px;
+    overflow: visible;
+  }
+
+  #vtf-edulo-panel .vtf-mini-table .vtf-mini-table-side path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  #vtf-edulo-panel .vtf-mini-table .vtf-mini-table-side text {
+    fill: currentColor;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  #vtf-edulo-panel .vtf-task {
+    display: grid;
+    gap: 10px;
+  }
+
+  #vtf-edulo-panel .vtf-task-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  #vtf-edulo-panel .vtf-task-head h4 {
+    color: #234a8b;
+  }
+
+  #vtf-edulo-panel .vtf-task-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    border: 1px solid #dbe7f4;
+    background: #f7fbff;
+    font-weight: 700;
+  }
+
+  #vtf-edulo-panel .vtf-task-score-value {
+    min-width: 2ch;
+    text-align: right;
+    color: #1f3f7b;
+  }
+
+  #vtf-edulo-panel .vtf-task-board {
+    display: grid;
+    grid-template-columns: minmax(250px, 1fr) minmax(250px, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  #vtf-edulo-panel .vtf-preview {
+    border: 1px solid #e0e9f3;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 10px;
+    display: grid;
+    gap: 8px;
+  }
+
+  #vtf-edulo-panel .vtf-preview-label {
+    font-size: 14px;
+    color: var(--vtf-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  #vtf-edulo-panel .vtf-preview-note {
+    line-height: 1.4;
+    color: #314255;
+  }
+
+  #vtf-edulo-panel .vtf-preview-equation,
+  #vtf-edulo-panel .vtf-equation-live {
+    border: 1px solid #dde7f3;
+    border-radius: 9px;
+    background: linear-gradient(180deg, #ffffff, #f9fbff);
+    padding: 10px;
+    font-weight: 700;
+    color: #1f3046;
+  }
+
+  #vtf-edulo-panel .vtf-controls {
+    display: grid;
+    gap: 10px;
+    border: 1px solid #e4ecf6;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 10px;
+  }
+
+  #vtf-edulo-panel .vtf-question {
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  #vtf-edulo-panel .vtf-hint {
+    padding: 8px 9px;
+    border: 1px solid #f0dfbf;
+    border-radius: 9px;
+    background: #fff9ee;
+    color: #5b4a25;
+    line-height: 1.4;
+  }
+
+  #vtf-edulo-panel .vtf-type-group {
+    display: grid;
+    gap: 8px;
+  }
+
+  #vtf-edulo-panel .vtf-type-group[hidden] {
+    display: none;
+  }
+
+  #vtf-edulo-panel .vtf-type-label {
+    font-weight: 700;
+    color: #314255;
+  }
+
+  #vtf-edulo-panel .vtf-type-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #vtf-edulo-panel .vtf-type-btn {
+    border: 1px solid #bfd3ea;
+    background: #ffffff;
+    color: #223041;
+    border-radius: 9px;
+    padding: 7px 10px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  #vtf-edulo-panel .vtf-type-btn.is-active {
+    background: #2f5fd0;
+    border-color: #2a57bf;
+    color: #ffffff;
+  }
+
+  #vtf-edulo-panel .vtf-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  #vtf-edulo-panel .vtf-field {
+    display: grid;
+    gap: 4px;
+  }
+
+  #vtf-edulo-panel .vtf-field[hidden] {
+    display: none;
+  }
+
+  #vtf-edulo-panel .vtf-field span {
+    font-weight: 700;
+    color: #314255;
+  }
+
+  #vtf-edulo-panel .vtf-task-input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 9px;
+    border: 1px solid #cad8e8;
+    font: inherit;
+  }
+
+  #vtf-edulo-panel .vtf-task-input:focus {
+    outline: 2px solid rgba(47, 95, 208, 0.2);
+    border-color: #8fb0dc;
+  }
+
+  #vtf-edulo-panel .vtf-task-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #vtf-edulo-panel .vtf-task-btn {
+    border: 1px solid #bfd3ea;
+    background: #ffffff;
+    color: #223041;
+    border-radius: 9px;
+    padding: 7px 10px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  #vtf-edulo-panel .vtf-task-btn:hover,
+  #vtf-edulo-panel .vtf-type-btn:hover {
+    background: #f7fbff;
+  }
+
+  #vtf-edulo-panel .vtf-task-btn--primary {
+    background: #2f5fd0;
+    color: #fff;
+    border-color: #2a57bf;
+  }
+
+  #vtf-edulo-panel .vtf-task-btn--primary:hover {
+    background: #2956c1;
+  }
+
+  #vtf-edulo-panel .vtf-feedback {
+    min-height: 1.4em;
+    font-weight: 700;
+  }
+
+  #vtf-edulo-panel .vtf-feedback.is-ok {
+    color: #1f7a3f;
+  }
+
+  #vtf-edulo-panel .vtf-feedback.is-bad {
+    color: #b02828;
+  }
+
+  #vtf-edulo-panel #vtf-tab-prop:checked ~ .vtf-grid label[for="vtf-tab-prop"],
+  #vtf-edulo-panel #vtf-tab-anti:checked ~ .vtf-grid label[for="vtf-tab-anti"],
+  #vtf-edulo-panel #vtf-tab-linear:checked ~ .vtf-grid label[for="vtf-tab-linear"],
+  #vtf-edulo-panel #vtf-tab-mix:checked ~ .vtf-grid label[for="vtf-tab-mix"] {
+    border-color: var(--vtf-accent);
+    background: linear-gradient(180deg, #ffffff, var(--vtf-accent-soft));
+    box-shadow: inset 0 0 0 1px rgba(47, 95, 208, 0.1);
+  }
+
+  #vtf-edulo-panel #vtf-tab-prop:checked ~ .vtf-detail-box .vtf-detail--prop,
+  #vtf-edulo-panel #vtf-tab-anti:checked ~ .vtf-detail-box .vtf-detail--anti,
+  #vtf-edulo-panel #vtf-tab-linear:checked ~ .vtf-detail-box .vtf-detail--linear,
+  #vtf-edulo-panel #vtf-tab-mix:checked ~ .vtf-detail-box .vtf-detail--mix {
+    display: block;
+  }
+
+  @keyframes vtfFadeIn {
+    from { opacity: 0; transform: translateY(2px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (hover: hover) {
+    #vtf-edulo-panel .vtf-card:hover {
+      transform: translateY(-1px);
+      border-color: #b8cbe2;
+      box-shadow: 0 6px 18px rgba(16, 32, 56, 0.06);
+    }
+  }
+
+  @media (max-width: 900px) {
+    #vtf-edulo-panel .vtf-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #vtf-edulo-panel .vtf-rule-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 860px) {
+    #vtf-edulo-panel .vtf-task-board {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    #vtf-edulo-panel {
+      padding: 12px;
+      border-radius: 14px;
+    }
+
+    #vtf-edulo-panel .vtf-grid {
+      grid-template-columns: 1fr;
+    }
+
+    #vtf-edulo-panel .vtf-form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div id="vtf-edulo-panel">
+  <h2>Von der Tabelle zur Funktionsgleichung</h2>
+  <p class="vtf-intro">
+    Klicke auf einen Funktionstyp. Darunter findest du jeweils eine kurze Erklaerung und zufaellige Aufgaben.
+  </p>
+
+  <input class="vtf-tab-input" type="radio" name="vtf-tabs-edulo" id="vtf-tab-prop" checked>
+  <input class="vtf-tab-input" type="radio" name="vtf-tabs-edulo" id="vtf-tab-anti">
+  <input class="vtf-tab-input" type="radio" name="vtf-tabs-edulo" id="vtf-tab-linear">
+  <input class="vtf-tab-input" type="radio" name="vtf-tabs-edulo" id="vtf-tab-mix">
+
+  <div class="vtf-grid">
+    <label class="vtf-card" for="vtf-tab-prop">
+      <div class="vtf-title">Proportional</div>
+      <div class="vtf-sub"><span class="vtf-mono">f(x) = mx</span></div>
+      <div class="vtf-thumb" aria-hidden="true">
+        <svg viewBox="0 0 160 90">
+          <rect x="0" y="0" width="160" height="90" rx="8" fill="#fbfdff"/>
+          <rect x="8" y="12" width="52" height="62" rx="6" fill="#fff" stroke="#dbe6f2"/>
+          <line x1="34" y1="12" x2="34" y2="74" stroke="#dbe6f2"/>
+          <line x1="8" y1="28" x2="60" y2="28" stroke="#dbe6f2"/>
+          <line x1="8" y1="44" x2="60" y2="44" stroke="#dbe6f2"/>
+          <line x1="8" y1="60" x2="60" y2="60" stroke="#dbe6f2"/>
+          <text x="18" y="24" font-size="8" font-family="Trebuchet MS, Verdana, sans-serif" fill="#234a8b">x</text>
+          <text x="42" y="24" font-size="8" font-family="Trebuchet MS, Verdana, sans-serif" fill="#234a8b">y</text>
+          <text x="18" y="40" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">0</text>
+          <text x="42" y="40" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">0</text>
+          <text x="18" y="56" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">1</text>
+          <text x="42" y="56" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">3</text>
+          <text x="18" y="72" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">2</text>
+          <text x="42" y="72" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">6</text>
+          <g stroke="#37475a" stroke-width="1.8">
+            <line x1="78" y1="69" x2="150" y2="69"/>
+            <line x1="104" y1="81" x2="104" y2="12"/>
+          </g>
+          <line x1="104" y1="69" x2="142" y2="23" stroke="#2f5fd0" stroke-width="2.6"/>
+          <circle cx="117" cy="53" r="3.2" fill="#cf5b2e"/>
+          <circle cx="130" cy="37" r="3.2" fill="#cf5b2e"/>
+        </svg>
+      </div>
+      <div class="vtf-card-score">Punkte <span class="vtf-card-score-value" data-role="nav-score-prop">0</span></div>
+    </label>
+
+    <label class="vtf-card" for="vtf-tab-anti">
+      <div class="vtf-title">Antiproportional</div>
+      <div class="vtf-sub"><span class="vtf-mono">f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span></span></div>
+      <div class="vtf-thumb" aria-hidden="true">
+        <svg viewBox="0 0 160 90">
+          <rect x="0" y="0" width="160" height="90" rx="8" fill="#fffdf8"/>
+          <rect x="8" y="12" width="52" height="62" rx="6" fill="#fff" stroke="#eadfcf"/>
+          <line x1="34" y1="12" x2="34" y2="74" stroke="#eadfcf"/>
+          <line x1="8" y1="28" x2="60" y2="28" stroke="#eadfcf"/>
+          <line x1="8" y1="44" x2="60" y2="44" stroke="#eadfcf"/>
+          <line x1="8" y1="60" x2="60" y2="60" stroke="#eadfcf"/>
+          <text x="18" y="24" font-size="8" font-family="Trebuchet MS, Verdana, sans-serif" fill="#8a5b23">x</text>
+          <text x="42" y="24" font-size="8" font-family="Trebuchet MS, Verdana, sans-serif" fill="#8a5b23">y</text>
+          <text x="16" y="40" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">1</text>
+          <text x="38" y="40" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">12</text>
+          <text x="16" y="56" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">2</text>
+          <text x="40" y="56" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">6</text>
+          <text x="16" y="72" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">3</text>
+          <text x="40" y="72" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">4</text>
+          <g stroke="#e8eee9" stroke-width="1">
+            <line x1="92" y1="22" x2="92" y2="70"/>
+            <line x1="102" y1="22" x2="102" y2="70"/>
+            <line x1="112" y1="22" x2="112" y2="70"/>
+            <line x1="122" y1="22" x2="122" y2="70"/>
+            <line x1="132" y1="22" x2="132" y2="70"/>
+            <line x1="142" y1="22" x2="142" y2="70"/>
+            <line x1="82" y1="30" x2="148" y2="30"/>
+            <line x1="82" y1="38" x2="148" y2="38"/>
+            <line x1="82" y1="46" x2="148" y2="46"/>
+            <line x1="82" y1="54" x2="148" y2="54"/>
+            <line x1="82" y1="62" x2="148" y2="62"/>
+          </g>
+          <g stroke="#37475a" stroke-width="1.8">
+            <line x1="82" y1="70" x2="150" y2="70"/>
+            <line x1="82" y1="76" x2="82" y2="16"/>
+          </g>
+          <polyline points="92,22 97,38 102,46 107,50.8 112,54 117,56.3 122,58 127,59.3 132,60.4 137,61.3 142,62" fill="none" stroke="#cf7a2e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="92" cy="22" r="3.2" fill="#2f5fd0"/>
+          <circle cx="102" cy="46" r="3.2" fill="#2f5fd0"/>
+          <circle cx="112" cy="54" r="3.2" fill="#2f5fd0"/>
+          <circle cx="142" cy="62" r="3.2" fill="#2f5fd0"/>
+        </svg>
+      </div>
+      <div class="vtf-card-score">Punkte <span class="vtf-card-score-value" data-role="nav-score-anti">0</span></div>
+    </label>
+
+    <label class="vtf-card" for="vtf-tab-linear">
+      <div class="vtf-title">Linear</div>
+      <div class="vtf-sub"><span class="vtf-mono">f(x) = mx + b</span></div>
+      <div class="vtf-thumb" aria-hidden="true">
+        <svg viewBox="0 0 160 90">
+          <rect x="0" y="0" width="160" height="90" rx="8" fill="#f8fffe"/>
+          <rect x="8" y="12" width="52" height="62" rx="6" fill="#fff" stroke="#cfe7e4"/>
+          <line x1="34" y1="12" x2="34" y2="74" stroke="#cfe7e4"/>
+          <line x1="8" y1="28" x2="60" y2="28" stroke="#cfe7e4"/>
+          <line x1="8" y1="44" x2="60" y2="44" stroke="#cfe7e4"/>
+          <line x1="8" y1="60" x2="60" y2="60" stroke="#cfe7e4"/>
+          <text x="18" y="24" font-size="8" font-family="Trebuchet MS, Verdana, sans-serif" fill="#0d7c7c">x</text>
+          <text x="42" y="24" font-size="8" font-family="Trebuchet MS, Verdana, sans-serif" fill="#0d7c7c">y</text>
+          <text x="18" y="40" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">0</text>
+          <text x="42" y="40" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">2</text>
+          <text x="18" y="56" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">1</text>
+          <text x="42" y="56" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">5</text>
+          <text x="18" y="72" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">2</text>
+          <text x="42" y="72" font-size="7.5" font-family="Trebuchet MS, Verdana, sans-serif" fill="#1d2633">8</text>
+          <g stroke="#37475a" stroke-width="1.8">
+            <line x1="78" y1="69" x2="150" y2="69"/>
+            <line x1="96" y1="81" x2="96" y2="12"/>
+          </g>
+          <line x1="78" y1="56" x2="141" y2="20" stroke="#0d7c7c" stroke-width="2.6"/>
+          <circle cx="96" cy="46" r="3.2" fill="#cf5b2e"/>
+          <circle cx="114" cy="36" r="3.2" fill="#cf5b2e"/>
+        </svg>
+      </div>
+      <div class="vtf-card-score">Punkte <span class="vtf-card-score-value" data-role="nav-score-linear">0</span></div>
+    </label>
+
+    <label class="vtf-card" for="vtf-tab-mix">
+      <div class="vtf-title">Zufall</div>
+      <div class="vtf-sub">Typ erst erkennen, dann Gleichung bauen</div>
+      <div class="vtf-thumb" aria-hidden="true">
+        <svg viewBox="0 0 160 90">
+          <rect x="0" y="0" width="160" height="90" rx="8" fill="#fbf8ff"/>
+          <rect x="10" y="12" width="88" height="66" rx="10" fill="#fff" stroke="#e3d9f2"/>
+          <text x="19" y="29" font-size="7.2" font-family="Trebuchet MS, Verdana, sans-serif" fill="#234a8b">proportional</text>
+          <text x="19" y="47" font-size="7.2" font-family="Trebuchet MS, Verdana, sans-serif" fill="#8a5b23">antiproportional</text>
+          <text x="19" y="65" font-size="7.2" font-family="Trebuchet MS, Verdana, sans-serif" fill="#0d7c7c">linear</text>
+          <line x1="18" y1="34" x2="84" y2="34" stroke="#e7edf5"/>
+          <line x1="18" y1="52" x2="84" y2="52" stroke="#e7edf5"/>
+          <text x="100" y="49" font-size="14" font-family="Consolas, 'Courier New', monospace" font-weight="700" fill="#7a4cb8">f(x)=?</text>
+        </svg>
+      </div>
+      <div class="vtf-card-score">Punkte <span class="vtf-card-score-value" data-role="nav-score-mix">0</span></div>
+    </label>
+  </div>
+
+  <div class="vtf-detail-box">
+    <div class="vtf-detail vtf-detail--prop">
+      <h3>Proportionale Funktionen</h3>
+      <div class="vtf-layout">
+        <section class="vtf-block">
+          <h4>So erkennst du eine proportionale Tabelle</h4>
+          <ul class="vtf-list">
+            <li>Wenn <span class="vtf-mono">x</span> verdoppelt wird, verdoppelt sich auch <span class="vtf-mono">y</span>.</li>
+            <li>Der Quotient <span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span> ist f&uuml;r alle Wertepaare au&szlig;er bei <span class="vtf-mono">x = 0</span> gleich.</li>
+            <li>Zu <span class="vtf-mono">x = 0</span> geh&ouml;rt der Wert <span class="vtf-mono">y = 0</span>.</li>
+          </ul>
+          <div class="vtf-note">
+            Merke: Der konstante Quotient <span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span> ist gleichzeitig die Steigung <span class="vtf-mono vtf-color-m">m</span>.
+          </div>
+        </section>
+
+        <section class="vtf-block">
+          <h4>Von der Tabelle zur Gleichung</h4>
+          <div class="vtf-example">
+            <div class="vtf-chip">Beispiel</div>
+            <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine proportionale Funktion">
+              <thead>
+                <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>0</td><td>0</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+                <tr>
+                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
+                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                      <path d="M37 10 C14 18 14 54 37 62"/>
+                      <path d="M30 57 L37 62 L31 66"/>
+                      <text x="7" y="40">&middot;2</text>
+                    </svg>
+                  </td>
+                  <td>1</td>
+                  <td>3</td>
+                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
+                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                      <path d="M17 10 C40 18 40 54 17 62"/>
+                      <path d="M24 57 L17 62 L23 66"/>
+                      <text x="48" y="40" text-anchor="end">&middot;2</text>
+                    </svg>
+                  </td>
+                </tr>
+                <tr><td>2</td><td>6</td></tr>
+                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>4</td><td>12</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+              </tbody>
+            </table>
+            <ol class="vtf-list">
+              <li>Berechne <span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span>, zum Beispiel <span class="vtf-mono"><span class="vtf-frac"><span>6</span><span>2</span></span> = <span class="vtf-color-m">3</span></span>.</li>
+              <li>Der konstante Wert ist die Steigung <span class="vtf-mono vtf-color-m">m = 3</span>.</li>
+              <li>Setze <span class="vtf-mono vtf-color-m">m</span> in die Vorlage <span class="vtf-mono">f(x) = <span class="vtf-color-m">m</span>x</span> ein.</li>
+            </ol>
+            <div class="vtf-preview-equation">f(x) = <span class="vtf-color-m">3</span>x</div>
+          </div>
+        </section>
+
+        <section class="vtf-block">
+          <div class="vtf-task" id="vtf-prop-task">
+            <div class="vtf-task-head">
+              <h4>Aufgaben</h4>
+              <div class="vtf-task-score" aria-live="polite">
+                Punkte:
+                <span class="vtf-task-score-value" data-role="score-value">0</span>
+              </div>
+            </div>
+
+            <div class="vtf-task-board">
+              <div class="vtf-preview">
+                <div class="vtf-preview-label">Wertetabelle</div>
+                <div data-role="table-wrap">Lade Aufgabe...</div>
+                <div class="vtf-preview-note" data-role="task-kind">Quotient finden und daraus <span class="vtf-mono">m</span> bestimmen.</div>
+                <div class="vtf-preview-equation" data-role="task-note">Vorlage: f(x) = mx</div>
+              </div>
+
+              <div class="vtf-controls">
+                <div class="vtf-question" data-role="question">Lade Aufgabe...</div>
+                <div class="vtf-hint" data-role="hint" hidden></div>
+
+                <div class="vtf-type-group" data-role="type-group" hidden>
+                  <div class="vtf-type-label">Typ waehlen</div>
+                  <div class="vtf-type-buttons">
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="proportional">proportional</button>
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="antiproportional">antiproportional</button>
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="linear">linear</button>
+                  </div>
+                </div>
+
+                <div class="vtf-form-grid">
+                  <label class="vtf-field" data-role="primary-field">
+                    <span data-role="primary-label">m</span>
+                    <input class="vtf-task-input" data-role="primary-input" type="text" inputmode="decimal" placeholder="m">
+                  </label>
+                  <label class="vtf-field" data-role="secondary-field" hidden>
+                    <span data-role="secondary-label">b</span>
+                    <input class="vtf-task-input" data-role="secondary-input" type="text" inputmode="decimal" placeholder="b">
+                  </label>
+                </div>
+
+                <div class="vtf-equation-live" data-role="equation-preview">f(x) = mx</div>
+
+                <div class="vtf-task-buttons">
+                  <button class="vtf-task-btn vtf-task-btn--primary" type="button" data-role="check-btn">Pruefen</button>
+                  <button class="vtf-task-btn" type="button" data-role="new-btn">Neue Aufgabe</button>
+                </div>
+
+                <div class="vtf-feedback" data-role="feedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="vtf-detail vtf-detail--anti">
+      <h3>Antiproportionale Funktionen</h3>
+      <div class="vtf-layout">
+        <section class="vtf-block">
+          <h4>So erkennst du eine antiproportionale Tabelle</h4>
+          <ul class="vtf-list">
+            <li>Wenn <span class="vtf-mono">x</span> gr&ouml;&szlig;er wird, wird <span class="vtf-mono">y</span> kleiner.</li>
+            <li>Das Produkt <span class="vtf-mono">x &middot; y</span> ist in jeder Zeile gleich.</li>
+            <li>Die Gleichung hat die Form <span class="vtf-mono">f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span></span>.</li>
+          </ul>
+          <div class="vtf-note is-warm">
+            Merke: Bei antiproportionalen Funktionen darf <span class="vtf-mono">x</span> nicht 0 sein.
+          </div>
+        </section>
+
+        <section class="vtf-block">
+          <h4>Von der Tabelle zur Gleichung</h4>
+          <div class="vtf-example">
+            <div class="vtf-chip">Beispiel</div>
+            <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine antiproportionale Funktion">
+              <thead>
+                <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
+                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                      <path d="M37 10 C14 18 14 54 37 62"/>
+                      <path d="M30 57 L37 62 L31 66"/>
+                      <text x="7" y="40">&middot;2</text>
+                    </svg>
+                  </td>
+                  <td>1</td>
+                  <td>12</td>
+                  <td class="vtf-mini-table-side vtf-color-k" rowspan="2" aria-hidden="true">
+                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                      <path d="M17 10 C40 18 40 54 17 62"/>
+                      <path d="M24 57 L17 62 L23 66"/>
+                      <text x="48" y="40" text-anchor="end">:2</text>
+                    </svg>
+                  </td>
+                </tr>
+                <tr><td>2</td><td>6</td></tr>
+                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>3</td><td>4</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>6</td><td>2</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+              </tbody>
+            </table>
+            <ol class="vtf-list">
+              <li>Multipliziere <span class="vtf-mono">x &middot; y</span>, zum Beispiel <span class="vtf-mono">3 &middot; 4 = <span class="vtf-color-k">12</span></span>.</li>
+              <li>Der konstante Wert ist <span class="vtf-mono vtf-color-k">k = 12</span>.</li>
+              <li>Setze <span class="vtf-mono vtf-color-k">k</span> in die Vorlage <span class="vtf-mono">f(x) = <span class="vtf-frac"><span class="vtf-color-k">k</span><span>x</span></span></span> ein.</li>
+            </ol>
+            <div class="vtf-preview-equation">f(x) = <span class="vtf-frac"><span class="vtf-color-k">12</span><span>x</span></span></div>
+          </div>
+        </section>
+
+        <section class="vtf-block">
+          <div class="vtf-task" id="vtf-anti-task">
+            <div class="vtf-task-head">
+              <h4>Aufgaben</h4>
+              <div class="vtf-task-score" aria-live="polite">
+                Punkte:
+                <span class="vtf-task-score-value" data-role="score-value">0</span>
+              </div>
+            </div>
+
+            <div class="vtf-task-board">
+              <div class="vtf-preview">
+                <div class="vtf-preview-label">Wertetabelle</div>
+                <div data-role="table-wrap">Lade Aufgabe...</div>
+                <div class="vtf-preview-note" data-role="task-kind">Produkt finden und daraus <span class="vtf-mono">k</span> bestimmen.</div>
+                <div class="vtf-preview-equation" data-role="task-note">Vorlage: f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span></div>
+              </div>
+
+              <div class="vtf-controls">
+                <div class="vtf-question" data-role="question">Lade Aufgabe...</div>
+                <div class="vtf-hint" data-role="hint" hidden></div>
+
+                <div class="vtf-type-group" data-role="type-group" hidden>
+                  <div class="vtf-type-label">Typ waehlen</div>
+                  <div class="vtf-type-buttons">
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="proportional">proportional</button>
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="antiproportional">antiproportional</button>
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="linear">linear</button>
+                  </div>
+                </div>
+
+                <div class="vtf-form-grid">
+                  <label class="vtf-field" data-role="primary-field">
+                    <span data-role="primary-label">k</span>
+                    <input class="vtf-task-input" data-role="primary-input" type="text" inputmode="decimal" placeholder="k">
+                  </label>
+                  <label class="vtf-field" data-role="secondary-field" hidden>
+                    <span data-role="secondary-label">b</span>
+                    <input class="vtf-task-input" data-role="secondary-input" type="text" inputmode="decimal" placeholder="b">
+                  </label>
+                </div>
+
+                <div class="vtf-equation-live" data-role="equation-preview">f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span></div>
+
+                <div class="vtf-task-buttons">
+                  <button class="vtf-task-btn vtf-task-btn--primary" type="button" data-role="check-btn">Pruefen</button>
+                  <button class="vtf-task-btn" type="button" data-role="new-btn">Neue Aufgabe</button>
+                </div>
+
+                <div class="vtf-feedback" data-role="feedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="vtf-detail vtf-detail--linear">
+      <h3>Lineare Funktionen</h3>
+      <div class="vtf-layout">
+        <section class="vtf-block">
+          <h4>So erkennst du eine lineare Tabelle</h4>
+          <ul class="vtf-list">
+            <li>Wenn <span class="vtf-mono">x</span> um 1 steigt, veraendert sich <span class="vtf-mono">y</span> immer um denselben Betrag.</li>
+            <li>Diese konstante Aenderung ist die Steigung <span class="vtf-mono">m</span>.</li>
+            <li>Der Wert bei <span class="vtf-mono">x = 0</span> ist der Startwert <span class="vtf-mono">b</span>.</li>
+          </ul>
+          <div class="vtf-note">
+            Merke: Die Gleichung hat die Form <span class="vtf-mono">f(x) = mx + b</span>.
+          </div>
+        </section>
+
+        <section class="vtf-block">
+          <h4>Von der Tabelle zur Gleichung</h4>
+          <div class="vtf-example">
+            <div class="vtf-chip">Beispiel</div>
+            <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine lineare Funktion">
+              <thead>
+                <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>0</td><td>2</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+                <tr>
+                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
+                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                      <path d="M37 10 C14 18 14 54 37 62"/>
+                      <path d="M30 57 L37 62 L31 66"/>
+                      <text x="9" y="40">+1</text>
+                    </svg>
+                  </td>
+                  <td>1</td>
+                  <td>5</td>
+                  <td class="vtf-mini-table-side vtf-color-m" rowspan="2" aria-hidden="true">
+                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                      <path d="M17 10 C40 18 40 54 17 62"/>
+                      <path d="M24 57 L17 62 L23 66"/>
+                      <text x="45" y="40" text-anchor="end">+3</text>
+                    </svg>
+                  </td>
+                </tr>
+                <tr><td>2</td><td>8</td></tr>
+                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>3</td><td>11</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+              </tbody>
+            </table>
+            <ol class="vtf-list">
+              <li>Bestimme die Steigung <span class="vtf-mono vtf-color-m">m</span>:<br>Wenn <span class="vtf-mono">x</span> um <span class="vtf-color-rel">1</span> gr&ouml;&szlig;er wird, wird <span class="vtf-mono">y</span> jeweils um <span class="vtf-mono vtf-color-m">3</span> gr&ouml;&szlig;er.<br>Also gilt <span class="vtf-mono vtf-color-m">m = 3</span>.</li>
+              <li>Bestimme den Startwert <span class="vtf-mono vtf-color-b">b</span>:<br>Bei <span class="vtf-mono">x = 0</span> ist <span class="vtf-mono">y = 2</span>.<br>Also gilt <span class="vtf-mono vtf-color-b">b = 2</span>.</li>
+              <li>Setze <span class="vtf-mono vtf-color-m">m</span> und <span class="vtf-mono vtf-color-b">b</span> in die Gleichung ein:<br><span class="vtf-mono">f(x) = <span class="vtf-color-m">m</span>x + <span class="vtf-color-b">b</span></span></li>
+            </ol>
+            <div class="vtf-preview-equation">f(x) = <span class="vtf-color-m">3</span>x + <span class="vtf-color-b">2</span></div>
+          </div>
+          <div class="vtf-example">
+            <div class="vtf-chip">Auch wichtig</div>
+            <p>Manchmal steigt <span class="vtf-mono">x</span> nicht um 1, sondern zum Beispiel um 2.</p>
+            <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine lineare Funktion mit Schrittweite 2">
+              <thead>
+                <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>0</td><td>1</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+                <tr>
+                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
+                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                      <path d="M37 10 C14 18 14 54 37 62"/>
+                      <path d="M30 57 L37 62 L31 66"/>
+                      <text x="9" y="40">+2</text>
+                    </svg>
+                  </td>
+                  <td>2</td>
+                  <td>5</td>
+                  <td class="vtf-mini-table-side vtf-color-m" rowspan="2" aria-hidden="true">
+                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                      <path d="M17 10 C40 18 40 54 17 62"/>
+                      <path d="M24 57 L17 62 L23 66"/>
+                      <text x="45" y="40" text-anchor="end">+4</text>
+                    </svg>
+                  </td>
+                </tr>
+                <tr><td>4</td><td>9</td></tr>
+                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>6</td><td>13</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+              </tbody>
+            </table>
+            <ol class="vtf-list">
+              <li>Vergleiche die &Auml;nderungen:<br><span class="vtf-mono">x</span> wird jeweils um <span class="vtf-mono vtf-color-rel">2</span> gr&ouml;&szlig;er.<br><span class="vtf-mono">y</span> wird jeweils um <span class="vtf-mono vtf-color-m">4</span> gr&ouml;&szlig;er.</li>
+              <li>Bestimme die Steigung <span class="vtf-mono vtf-color-m">m</span>:<br>Gesucht ist, um wie viel <span class="vtf-mono">y</span> gr&ouml;&szlig;er wird, wenn <span class="vtf-mono">x</span> um 1 steigt.<br>Dazu teilt man die &Auml;nderung in y-Richtung durch die &Auml;nderung in x-Richtung.<br>Diese &Auml;nderungen nennt man <span class="vtf-mono">&Delta;y</span> und <span class="vtf-mono">&Delta;x</span>.<br><br>Hier gilt:<br>&Auml;nderung in y-Richtung: <span class="vtf-mono">&Delta;y = 4</span> und &Auml;nderung in x-Richtung: <span class="vtf-mono">&Delta;x = 2</span><br><br>Also:<br><span class="vtf-mono"><span class="vtf-frac"><span>&Delta;y</span><span>&Delta;x</span></span> = <span class="vtf-frac"><span>4</span><span>2</span></span> = <span class="vtf-color-m">2</span></span><br>Deshalb ist <span class="vtf-mono vtf-color-m">m = 2</span>.</li>
+              <li>Bestimme den Startwert <span class="vtf-mono vtf-color-b">b</span>:<br>Bei <span class="vtf-mono">x = 0</span> ist <span class="vtf-mono">y = 1</span>.<br>Also gilt <span class="vtf-mono vtf-color-b">b = 1</span>.</li>
+              <li>Setze <span class="vtf-mono vtf-color-m">m</span> und <span class="vtf-mono vtf-color-b">b</span> in die Gleichung ein:<br><span class="vtf-mono">f(x) = <span class="vtf-color-m">2</span>x + <span class="vtf-color-b">1</span></span></li>
+            </ol>
+            <div class="vtf-preview-equation">f(x) = <span class="vtf-color-m">2</span>x + <span class="vtf-color-b">1</span></div>
+          </div>
+        </section>
+
+        <section class="vtf-block">
+          <div class="vtf-task" id="vtf-linear-task">
+            <div class="vtf-task-head">
+              <h4>Aufgaben</h4>
+              <div class="vtf-task-score" aria-live="polite">
+                Punkte:
+                <span class="vtf-task-score-value" data-role="score-value">0</span>
+              </div>
+            </div>
+
+            <div class="vtf-task-board">
+              <div class="vtf-preview">
+                <div class="vtf-preview-label">Wertetabelle</div>
+                <div data-role="table-wrap">Lade Aufgabe...</div>
+                <div class="vtf-preview-note" data-role="task-kind">Zuerst die y-Differenz, dann den Startwert b lesen.</div>
+                <div class="vtf-preview-equation" data-role="task-note">Vorlage: f(x) = mx + b</div>
+              </div>
+
+              <div class="vtf-controls">
+                <div class="vtf-question" data-role="question">Lade Aufgabe...</div>
+                <div class="vtf-hint" data-role="hint" hidden></div>
+
+                <div class="vtf-type-group" data-role="type-group" hidden>
+                  <div class="vtf-type-label">Typ waehlen</div>
+                  <div class="vtf-type-buttons">
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="proportional">proportional</button>
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="antiproportional">antiproportional</button>
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="linear">linear</button>
+                  </div>
+                </div>
+
+                <div class="vtf-form-grid">
+                  <label class="vtf-field" data-role="primary-field">
+                    <span data-role="primary-label">m</span>
+                    <input class="vtf-task-input" data-role="primary-input" type="text" inputmode="decimal" placeholder="m">
+                  </label>
+                  <label class="vtf-field" data-role="secondary-field">
+                    <span data-role="secondary-label">b</span>
+                    <input class="vtf-task-input" data-role="secondary-input" type="text" inputmode="decimal" placeholder="b">
+                  </label>
+                </div>
+
+                <div class="vtf-equation-live" data-role="equation-preview">f(x) = mx + b</div>
+
+                <div class="vtf-task-buttons">
+                  <button class="vtf-task-btn vtf-task-btn--primary" type="button" data-role="check-btn">Pruefen</button>
+                  <button class="vtf-task-btn" type="button" data-role="new-btn">Neue Aufgabe</button>
+                </div>
+
+                <div class="vtf-feedback" data-role="feedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="vtf-detail vtf-detail--mix">
+      <h3>Zufall: Typ erkennen und Gleichung aufstellen</h3>
+      <div class="vtf-layout">
+        <section class="vtf-block">
+          <h4>So entscheidest du dich schnell</h4>
+          <div class="vtf-rule-grid">
+            <div class="vtf-rule-card">
+              <h5>Proportional</h5>
+              <p><span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span> bleibt gleich.</p>
+              <p>Die Gleichung ist <span class="vtf-mono">f(x) = mx</span>.</p>
+            </div>
+            <div class="vtf-rule-card">
+              <h5>Antiproportional</h5>
+              <p><span class="vtf-mono">x &middot; y</span> bleibt gleich.</p>
+              <p>Die Gleichung ist <span class="vtf-mono">f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span></span>.</p>
+            </div>
+            <div class="vtf-rule-card">
+              <h5>Linear</h5>
+              <p>Die y-Differenzen sind konstant.</p>
+              <p>Die Gleichung ist <span class="vtf-mono">f(x) = mx + b</span>.</p>
+            </div>
+          </div>
+          <div class="vtf-note is-warm">
+            Tipp: Schau nicht auf nur eine Zeile. Vergleiche immer mehrere Zeilen der Tabelle.
+          </div>
+        </section>
+
+        <section class="vtf-block">
+          <h4>Mischaufgaben</h4>
+          <p>Hier ist der Typ nicht vorgegeben. Waehle zuerst <strong>proportional</strong>, <strong>antiproportional</strong> oder <strong>linear</strong> und bestimme dann die passenden Werte.</p>
+        </section>
+
+        <section class="vtf-block">
+          <div class="vtf-task" id="vtf-mix-task">
+            <div class="vtf-task-head">
+              <h4>Aufgaben</h4>
+              <div class="vtf-task-score" aria-live="polite">
+                Punkte:
+                <span class="vtf-task-score-value" data-role="score-value">0</span>
+              </div>
+            </div>
+
+            <div class="vtf-task-board">
+              <div class="vtf-preview">
+                <div class="vtf-preview-label">Wertetabelle</div>
+                <div data-role="table-wrap">Lade Aufgabe...</div>
+                <div class="vtf-preview-note" data-role="task-kind">Finde zuerst den Typ, dann die Parameter.</div>
+                <div class="vtf-preview-equation" data-role="task-note">Moegliche Vorlagen: f(x) = mx, f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span> oder f(x) = mx + b</div>
+              </div>
+
+              <div class="vtf-controls">
+                <div class="vtf-question" data-role="question">Lade Aufgabe...</div>
+                <div class="vtf-hint" data-role="hint" hidden></div>
+
+                <div class="vtf-type-group" data-role="type-group">
+                  <div class="vtf-type-label">Typ waehlen</div>
+                  <div class="vtf-type-buttons">
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="proportional">proportional</button>
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="antiproportional">antiproportional</button>
+                    <button class="vtf-type-btn" type="button" data-role="type-btn" data-type="linear">linear</button>
+                  </div>
+                </div>
+
+                <div class="vtf-form-grid">
+                  <label class="vtf-field" data-role="primary-field">
+                    <span data-role="primary-label">Parameter</span>
+                    <input class="vtf-task-input" data-role="primary-input" type="text" inputmode="decimal" placeholder="z. B. 3">
+                  </label>
+                  <label class="vtf-field" data-role="secondary-field" hidden>
+                    <span data-role="secondary-label">b</span>
+                    <input class="vtf-task-input" data-role="secondary-input" type="text" inputmode="decimal" placeholder="b">
+                  </label>
+                </div>
+
+                <div class="vtf-equation-live" data-role="equation-preview">Waehle zuerst einen Typ.</div>
+
+                <div class="vtf-task-buttons">
+                  <button class="vtf-task-btn vtf-task-btn--primary" type="button" data-role="check-btn">Pruefen</button>
+                  <button class="vtf-task-btn" type="button" data-role="new-btn">Neue Aufgabe</button>
+                </div>
+
+                <div class="vtf-feedback" data-role="feedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById("vtf-edulo-panel");
+  if (!root || root.dataset.vtfCardsInit === "1") {
+    return;
+  }
+  root.dataset.vtfCardsInit = "1";
+
+  var cards = root.querySelectorAll(".vtf-card");
+
+  function dispatchChange(input) {
+    try {
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (e) {
+      var ev = document.createEvent("Event");
+      ev.initEvent("change", true, true);
+      input.dispatchEvent(ev);
+    }
+  }
+
+  function activateCard(card) {
+    var targetId = card.getAttribute("for");
+    if (!targetId) {
+      return;
+    }
+    var target = root.querySelector("#" + targetId);
+    if (!target) {
+      return;
+    }
+    target.checked = true;
+    dispatchChange(target);
+  }
+
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].tabIndex = 0;
+    cards[i].addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        activateCard(this);
+      }
+    });
+  }
+})();
+</script>
+
+<script>
+(function () {
+  var root = document.getElementById("vtf-edulo-panel");
+  if (!root || root.dataset.vtfTasksInit === "1") {
+    return;
+  }
+  root.dataset.vtfTasksInit = "1";
+
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function pick(arr) {
+    return arr[randInt(0, arr.length - 1)];
+  }
+
+  function shuffle(arr) {
+    var copy = arr.slice();
+    for (var i = copy.length - 1; i > 0; i--) {
+      var j = randInt(0, i);
+      var tmp = copy[i];
+      copy[i] = copy[j];
+      copy[j] = tmp;
+    }
+    return copy;
+  }
+
+  function getEduloCandidateDocs() {
+    var docs = [document];
+    try {
+      if (window.parent && window.parent !== window && window.parent.document) {
+        docs.push(window.parent.document);
+      }
+    } catch (e) {}
+    return docs;
+  }
+
+  function findEduloSingleField(baseName) {
+    var docs = getEduloCandidateDocs();
+    var selectors = ["#" + baseName, '[name="' + baseName + '"]', 'input[id="' + baseName + '"]', 'textarea[id="' + baseName + '"]'];
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+      for (var s = 0; s < selectors.length; s++) {
+        var el = doc.querySelector(selectors[s]);
+        if (!el) {
+          continue;
+        }
+        if (el.tagName !== "INPUT" && el.tagName !== "TEXTAREA") {
+          var nested = el.querySelector("input, textarea");
+          if (nested) {
+            el = nested;
+          }
+        }
+        if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+          return el;
+        }
+      }
+    }
+    return null;
+  }
+
+  function findEduloSlots(baseName) {
+    var docs = getEduloCandidateDocs();
+    var found = [];
+    var seen = [];
+
+    function addSlot(el, indexHint) {
+      if (!el) {
+        return;
+      }
+      for (var i = 0; i < seen.length; i++) {
+        if (seen[i] === el) {
+          return;
+        }
+      }
+      seen.push(el);
+      found.push({
+        el: el,
+        index: typeof indexHint === "number" && isFinite(indexHint) ? indexHint : 9999 + found.length
+      });
+    }
+
+    for (var d = 0; d < docs.length; d++) {
+      var doc = docs[d];
+      var container = doc.querySelector("#" + baseName);
+      if (container) {
+        var innerSlots = container.querySelectorAll("input, textarea");
+        if (innerSlots.length > 1) {
+          for (var c = 0; c < innerSlots.length; c++) {
+            addSlot(innerSlots[c], c + 1);
+          }
+        }
+      }
+
+      var allFields = doc.querySelectorAll("input, textarea");
+      for (var a = 0; a < allFields.length; a++) {
+        var field = allFields[a];
+        var id = field.id || "";
+        var name = field.name || "";
+        var key = id || name;
+        if (!key) {
+          continue;
+        }
+
+        var m = key.match(new RegExp("^" + baseName + "(?:[_\\-. ]?)(\\d{1,2})$", "i"));
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+          continue;
+        }
+
+        m = key.match(new RegExp("^" + baseName + "(?:[_\\-. ]?)(\\d{1,2})\\D+", "i"));
+        if (m) {
+          addSlot(field, parseInt(m[1], 10));
+        }
+      }
+    }
+
+    found.sort(function (a, b) {
+      return a.index - b.index;
+    });
+
+    var slots = [];
+    for (var i2 = 0; i2 < found.length; i2++) {
+      slots.push(found[i2].el);
+    }
+    return slots;
+  }
+
+  function dispatchFieldEvents(field) {
+    try {
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+    } catch (e) {
+      var ev1 = document.createEvent("Event");
+      ev1.initEvent("input", true, true);
+      field.dispatchEvent(ev1);
+      var ev2 = document.createEvent("Event");
+      ev2.initEvent("change", true, true);
+      field.dispatchEvent(ev2);
+    }
+  }
+
+  function createScoreStore(scoreBase, milestoneBase) {
+    return {
+      loadScore: function () {
+        var field = findEduloSingleField(scoreBase);
+        if (!field) {
+          return 0;
+        }
+        var value = parseInt(String(field.value || "").trim(), 10);
+        return isFinite(value) ? value : 0;
+      },
+      saveScore: function (score) {
+        var field = findEduloSingleField(scoreBase);
+        if (!field) {
+          return false;
+        }
+        field.value = String(score);
+        dispatchFieldEvents(field);
+        return true;
+      },
+      loadMilestones: function () {
+        var slots = findEduloSlots(milestoneBase);
+        if (!slots.length) {
+          return 0;
+        }
+        var count = 0;
+        for (var i = 0; i < Math.min(10, slots.length); i++) {
+          if (String(slots[i].value || "").trim() === "1") {
+            count++;
+          }
+        }
+        return count * 10;
+      },
+      syncMilestones: function (bestScore) {
+        var slots = findEduloSlots(milestoneBase);
+        if (!slots.length) {
+          return false;
+        }
+        var reached = Math.floor(Math.max(0, bestScore) / 10);
+        if (reached > 10) {
+          reached = 10;
+        }
+        var limit = Math.min(10, slots.length);
+        for (var i = 0; i < limit; i++) {
+          var targetValue = i < reached ? "1" : "";
+          if (String(slots[i].value || "") !== targetValue) {
+            slots[i].value = targetValue;
+            dispatchFieldEvents(slots[i]);
+          }
+        }
+        return true;
+      }
+    };
+  }
+
+  function parseNumber(value) {
+    if (value == null) {
+      return null;
+    }
+    var raw = String(value).trim().replace(",", ".");
+    if (raw === "") {
+      return null;
+    }
+    var n = Number(raw);
+    return typeof n === "number" && isFinite(n) ? n : null;
+  }
+
+  function sameNumber(a, b) {
+    return Math.abs(Number(a) - Number(b)) < 0.0000001;
+  }
+
+  function formatNumber(value) {
+    var rounded = Math.round(Number(value) * 1000) / 1000;
+    if (Math.abs(rounded - Math.round(rounded)) < 0.0000001) {
+      return String(Math.round(rounded));
+    }
+    return String(rounded).replace(".", ",");
+  }
+
+  function absoluteText(value) {
+    return formatNumber(Math.abs(Number(value)));
+  }
+
+  function coefficientText(value) {
+    if (sameNumber(value, 1)) {
+      return "";
+    }
+    if (sameNumber(value, -1)) {
+      return "-";
+    }
+    return formatNumber(value);
+  }
+
+  function typeLabel(type) {
+    if (type === "proportional") {
+      return "proportional";
+    }
+    if (type === "antiproportional") {
+      return "antiproportional";
+    }
+    return "linear";
+  }
+
+  function formatEquation(type, primary, secondary) {
+    if (type === "proportional") {
+      return "f(x) = " + coefficientText(primary) + "x";
+    }
+    if (type === "antiproportional") {
+      return "f(x) = " + formatNumber(primary) + " / x";
+    }
+
+    var text = "f(x) = " + coefficientText(primary) + "x";
+    if (sameNumber(secondary, 0)) {
+      return text;
+    }
+    if (secondary > 0) {
+      return text + " + " + formatNumber(secondary);
+    }
+    return text + " - " + absoluteText(secondary);
+  }
+
+  function coefficientHtml(value, className) {
+    if (sameNumber(value, 1)) {
+      return "";
+    }
+    if (sameNumber(value, -1)) {
+      return '<span class="' + className + '">-</span>';
+    }
+    return '<span class="' + className + '">' + formatNumber(value) + "</span>";
+  }
+
+  function formatTemplateEquationHtml(type) {
+    if (type === "proportional") {
+      return 'f(x) = <span class="vtf-color-m">m</span>x';
+    }
+    if (type === "antiproportional") {
+      return 'f(x) = <span class="vtf-frac"><span class="vtf-color-k">k</span><span>x</span></span>';
+    }
+    return 'f(x) = <span class="vtf-color-m">m</span>x + <span class="vtf-color-b">b</span>';
+  }
+
+  function formatEquationHtml(type, primary, secondary) {
+    if (type === "proportional") {
+      return 'f(x) = ' + coefficientHtml(primary, "vtf-color-m") + "x";
+    }
+    if (type === "antiproportional") {
+      return 'f(x) = <span class="vtf-frac"><span class="vtf-color-k">' + formatNumber(primary) + '</span><span>x</span></span>';
+    }
+
+    var text = 'f(x) = ' + coefficientHtml(primary, "vtf-color-m") + "x";
+    if (sameNumber(secondary, 0)) {
+      return text;
+    }
+    if (secondary > 0) {
+      return text + ' + <span class="vtf-color-b">' + formatNumber(secondary) + "</span>";
+    }
+    return text + ' - <span class="vtf-color-b">' + absoluteText(secondary) + "</span>";
+  }
+
+  function renderTable(rows) {
+    var html = '<table class="vtf-task-table" aria-label="Zufaellige Wertetabelle"><thead><tr><th>x</th><th>y</th></tr></thead><tbody>';
+    for (var i = 0; i < rows.length; i++) {
+      html += "<tr><td>" + formatNumber(rows[i].x) + "</td><td>" + formatNumber(rows[i].y) + "</td></tr>";
+    }
+    html += "</tbody></table>";
+    return html;
+  }
+
+  function getDivisors(n) {
+    var result = [];
+    for (var i = 1; i <= n; i++) {
+      if (n % i === 0) {
+        result.push(i);
+      }
+    }
+    return result;
+  }
+
+  function createProportionalTask() {
+    var factors = [-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6];
+    var m = pick(factors);
+    var base = pick([1, 1, 2, 3]);
+    var xs = [0, base, base * 2, base * 3];
+    var rows = [];
+    for (var i = 0; i < xs.length; i++) {
+      rows.push({ x: xs[i], y: xs[i] * m });
+    }
+    return {
+      answer: { type: "proportional", primary: m, secondary: 0 },
+      rows: rows,
+      question: "Bestimme die Steigung m und damit die Gleichung.",
+      kindText: "Quotient y/x vergleichen und daraus m bestimmen.",
+      previewNote: "Vorlage: f(x) = mx",
+      hint: "Teile in einer Zeile ausser bei x = 0 den y-Wert durch den x-Wert. Dieser Quotient y/x ist m."
+    };
+  }
+
+  function createAntiproportionalTask() {
+    var values = [-24, -18, -12, -8, 8, 12, 18, 24];
+    var k = pick(values);
+    var divisors = getDivisors(Math.abs(k));
+    var xs = shuffle(divisors).slice(0, 4);
+    xs.sort(function (a, b) { return a - b; });
+
+    var rows = [];
+    for (var i = 0; i < xs.length; i++) {
+      rows.push({ x: xs[i], y: k / xs[i] });
+    }
+
+    return {
+      answer: { type: "antiproportional", primary: k, secondary: 0 },
+      rows: rows,
+      question: "Bestimme den konstanten Wert k und damit die Gleichung.",
+      kindText: "Produkt x \u00B7 y vergleichen.",
+      previewNote: 'Vorlage: f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span>',
+      hint: "Multipliziere x und y. Das konstante Produkt x \u00B7 y ist k."
+    };
+  }
+
+  function createLinearTask() {
+    var slopes = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5];
+    var intercept = 0;
+    while (intercept === 0) {
+      intercept = randInt(-8, 8);
+    }
+    var m = pick(slopes);
+    var step = pick([1, 1, 2, 3]);
+    var deltaY = m * step;
+    var rows = [];
+    for (var i = 0; i <= 3; i++) {
+      var x = i * step;
+      rows.push({ x: x, y: m * x + intercept });
+    }
+    return {
+      answer: { type: "linear", primary: m, secondary: intercept },
+      rows: rows,
+      question: step === 1 ? "Bestimme m und b und stelle die lineare Gleichung auf." : "Bestimme m und b. Achte darauf: x steigt hier jeweils um " + step + ".",
+      kindText: step === 1 ? "Erst die y-Differenz, dann den Startwert b bestimmen." : "Hier gilt m = \u0394y/\u0394x. Teile also die y-Aenderung durch " + step + ".",
+      previewNote: "Vorlage: f(x) = mx + b",
+      hint: step === 1 ? "Vergleiche benachbarte y-Werte. Die konstante Differenz ist m. Der Wert bei x = 0 ist b." : "Von Zeile zu Zeile aendert sich y immer um " + formatNumber(deltaY) + ". Da x jeweils um " + step + " steigt, gilt m = \u0394y/\u0394x = " + formatNumber(deltaY) + " / " + step + ". Der Wert bei x = 0 ist b."
+    };
+  }
+
+  function createMixedTask() {
+    var kinds = [createProportionalTask, createAntiproportionalTask, createLinearTask];
+    var task = pick(kinds)();
+    task.question = "Waehle den Typ und bestimme dann die Funktionsgleichung.";
+    task.kindText = "Typ noch nicht verraten.";
+    task.previewNote = 'Pruefe Quotient y/x, Produkt x \u00B7 y oder konstante y-Differenz.';
+    task.hint = "Quotient y/x konstant -> proportional mit m. Produkt x \u00B7 y konstant -> antiproportional mit k. Bei linear gilt m = \u0394y/\u0394x.";
+    return task;
+  }
+
+  function initTask(taskSelector, scoreBase, milestoneBase, generator, allowTypeSelection) {
+    var taskRoot = root.querySelector(taskSelector);
+    if (!taskRoot) {
+      return;
+    }
+
+    var tableWrapEl = taskRoot.querySelector('[data-role="table-wrap"]');
+    var taskKindEl = taskRoot.querySelector('[data-role="task-kind"]');
+    var taskNoteEl = taskRoot.querySelector('[data-role="task-note"]');
+    var questionEl = taskRoot.querySelector('[data-role="question"]');
+    var hintEl = taskRoot.querySelector('[data-role="hint"]');
+    var primaryFieldEl = taskRoot.querySelector('[data-role="primary-field"]');
+    var secondaryFieldEl = taskRoot.querySelector('[data-role="secondary-field"]');
+    var primaryLabelEl = taskRoot.querySelector('[data-role="primary-label"]');
+    var secondaryLabelEl = taskRoot.querySelector('[data-role="secondary-label"]');
+    var primaryInputEl = taskRoot.querySelector('[data-role="primary-input"]');
+    var secondaryInputEl = taskRoot.querySelector('[data-role="secondary-input"]');
+    var equationPreviewEl = taskRoot.querySelector('[data-role="equation-preview"]');
+    var typeGroupEl = taskRoot.querySelector('[data-role="type-group"]');
+    var typeButtons = taskRoot.querySelectorAll('[data-role="type-btn"]');
+    var checkBtn = taskRoot.querySelector('[data-role="check-btn"]');
+    var newBtn = taskRoot.querySelector('[data-role="new-btn"]');
+    var feedbackEl = taskRoot.querySelector('[data-role="feedback"]');
+    var scoreEl = taskRoot.querySelector('[data-role="score-value"]');
+
+    var store = createScoreStore(scoreBase, milestoneBase);
+    var state = {
+      score: 0,
+      bestScore: 0,
+      task: null,
+      attempts: 0,
+      finished: false,
+      solved: false,
+      selectedType: null
+    };
+
+    function updateScoreDisplay() {
+      scoreEl.textContent = String(state.score);
+      store.saveScore(state.score);
+      store.syncMilestones(state.bestScore);
+    }
+
+    function setFeedback(message, kind) {
+      feedbackEl.textContent = message || "";
+      feedbackEl.className = "vtf-feedback";
+      if (kind === "ok") {
+        feedbackEl.classList.add("is-ok");
+      } else if (kind === "bad") {
+        feedbackEl.classList.add("is-bad");
+      }
+    }
+
+    function setHint(message) {
+      if (!message) {
+        hintEl.textContent = "";
+        hintEl.hidden = true;
+        return;
+      }
+      hintEl.textContent = "Hinweis: " + message;
+      hintEl.hidden = false;
+    }
+
+    function syncTypeButtons() {
+      for (var i = 0; i < typeButtons.length; i++) {
+        var button = typeButtons[i];
+        var active = button.getAttribute("data-type") === state.selectedType;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      }
+    }
+
+    function setTypeLayout(type) {
+      if (type === "proportional") {
+        primaryLabelEl.textContent = "m";
+        primaryInputEl.placeholder = "m";
+        secondaryFieldEl.hidden = true;
+      } else if (type === "antiproportional") {
+        primaryLabelEl.textContent = "k";
+        primaryInputEl.placeholder = "k";
+        secondaryFieldEl.hidden = true;
+      } else if (type === "linear") {
+        primaryLabelEl.textContent = "m";
+        primaryInputEl.placeholder = "m";
+        secondaryFieldEl.hidden = false;
+        secondaryLabelEl.textContent = "b";
+        secondaryInputEl.placeholder = "b";
+      } else {
+        primaryLabelEl.textContent = "Parameter";
+        primaryInputEl.placeholder = "z. B. 3";
+        secondaryFieldEl.hidden = true;
+      }
+      if (secondaryFieldEl.hidden) {
+        secondaryInputEl.value = "";
+      }
+      secondaryInputEl.disabled = secondaryFieldEl.hidden || checkBtn.disabled;
+      syncTypeButtons();
+      refreshEquationPreview();
+    }
+
+    function setSelectedType(type) {
+      state.selectedType = type;
+      setTypeLayout(type);
+    }
+
+    function refreshEquationPreview() {
+      var type = state.selectedType;
+      if (!type) {
+        equationPreviewEl.textContent = "Waehle zuerst einen Typ.";
+        return;
+      }
+
+      var primary = parseNumber(primaryInputEl.value);
+      var secondary = parseNumber(secondaryInputEl.value);
+
+      if (type === "linear") {
+        if (primary !== null && secondary !== null) {
+          equationPreviewEl.innerHTML = formatEquationHtml(type, primary, secondary);
+        } else {
+          equationPreviewEl.innerHTML = formatTemplateEquationHtml(type);
+        }
+        return;
+      }
+
+      if (primary !== null) {
+        equationPreviewEl.innerHTML = formatEquationHtml(type, primary, 0);
+        return;
+      }
+
+      equationPreviewEl.innerHTML = formatTemplateEquationHtml(type);
+    }
+
+    function setInputsDisabled(disabled) {
+      primaryInputEl.disabled = disabled;
+      secondaryInputEl.disabled = disabled || secondaryFieldEl.hidden;
+      checkBtn.disabled = disabled;
+      for (var i = 0; i < typeButtons.length; i++) {
+        typeButtons[i].disabled = disabled;
+      }
+    }
+
+    function buildCorrectMessage(task) {
+      return "Richtig. Die " + typeLabel(task.answer.type) + "e Gleichung lautet " + formatEquation(task.answer.type, task.answer.primary, task.answer.secondary) + ". (+1 Punkt)";
+    }
+
+    function buildWrongMessage(task) {
+      return "Nicht richtig. Gesucht war eine " + typeLabel(task.answer.type) + "e Funktion mit " + formatEquation(task.answer.type, task.answer.primary, task.answer.secondary) + ". (-1 Punkt)";
+    }
+
+    function renderTask(task) {
+      state.finished = false;
+      state.solved = false;
+      state.attempts = 0;
+
+      tableWrapEl.innerHTML = renderTable(task.rows);
+      taskKindEl.textContent = task.kindText;
+      taskNoteEl.innerHTML = task.previewNote;
+      questionEl.textContent = task.question;
+      setHint("");
+      setFeedback("", "");
+      primaryInputEl.value = "";
+      secondaryInputEl.value = "";
+      setInputsDisabled(false);
+
+      if (allowTypeSelection) {
+        typeGroupEl.hidden = false;
+        setSelectedType(null);
+      } else {
+        typeGroupEl.hidden = true;
+        setSelectedType(task.answer.type);
+      }
+
+      try {
+        primaryInputEl.focus();
+      } catch (e) {}
+    }
+
+    function newTask(fromUser) {
+      if (fromUser && state.task && !state.finished) {
+        state.score -= 1;
+        updateScoreDisplay();
+        setFeedback("Aufgabe uebersprungen. (-1 Punkt)", "bad");
+      } else {
+        setFeedback("", "");
+      }
+
+      state.task = generator();
+      renderTask(state.task);
+    }
+
+    function handleWrongAttempt() {
+      state.score -= 1;
+      updateScoreDisplay();
+      state.attempts += 1;
+
+      if (state.attempts === 1) {
+        setHint(state.task.hint);
+        setFeedback("Nicht richtig. (-1 Punkt) Nutze den Hinweis und pruefe die Tabelle noch einmal.", "bad");
+        try {
+          primaryInputEl.focus();
+          primaryInputEl.select();
+        } catch (e) {}
+        return;
+      }
+
+      state.finished = true;
+      setInputsDisabled(true);
+      setFeedback(buildWrongMessage(state.task), "bad");
+    }
+
+    function checkAnswer() {
+      if (!state.task || state.finished) {
+        return;
+      }
+
+      var chosenType = allowTypeSelection ? state.selectedType : state.task.answer.type;
+      if (allowTypeSelection && !chosenType) {
+        setFeedback("Waehle zuerst den Funktionstyp.", "bad");
+        return;
+      }
+
+      if (chosenType !== state.task.answer.type) {
+        handleWrongAttempt();
+        return;
+      }
+
+      var primary = parseNumber(primaryInputEl.value);
+      if (primary === null) {
+        setFeedback("Bitte gib einen Zahlenwert ein.", "bad");
+        return;
+      }
+
+      var secondary = 0;
+      if (chosenType === "linear") {
+        secondary = parseNumber(secondaryInputEl.value);
+        if (secondary === null) {
+          setFeedback("Bitte gib auch den Startwert b ein.", "bad");
+          return;
+        }
+      }
+
+      var ok = sameNumber(primary, state.task.answer.primary);
+      if (chosenType === "linear") {
+        ok = ok && sameNumber(secondary, state.task.answer.secondary);
+      }
+
+      if (!ok) {
+        handleWrongAttempt();
+        return;
+      }
+
+      state.finished = true;
+      state.solved = true;
+      setInputsDisabled(true);
+      state.score += 1;
+      if (state.score > state.bestScore) {
+        state.bestScore = state.score;
+      }
+      updateScoreDisplay();
+      setFeedback(buildCorrectMessage(state.task), "ok");
+    }
+
+    for (var i = 0; i < typeButtons.length; i++) {
+      typeButtons[i].addEventListener("click", function () {
+        if (this.disabled) {
+          return;
+        }
+        setSelectedType(this.getAttribute("data-type"));
+      });
+    }
+
+    function onInputKeydown(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        checkAnswer();
+      }
+    }
+
+    primaryInputEl.addEventListener("keydown", onInputKeydown);
+    secondaryInputEl.addEventListener("keydown", onInputKeydown);
+    primaryInputEl.addEventListener("input", refreshEquationPreview);
+    secondaryInputEl.addEventListener("input", refreshEquationPreview);
+    checkBtn.addEventListener("click", checkAnswer);
+    newBtn.addEventListener("click", function () {
+      newTask(true);
+    });
+
+    state.score = store.loadScore();
+    state.bestScore = Math.max(state.score, store.loadMilestones());
+    updateScoreDisplay();
+    newTask(false);
+  }
+
+  initTask("#vtf-prop-task", "e2", "e3", createProportionalTask, false);
+  initTask("#vtf-anti-task", "e4", "e5", createAntiproportionalTask, false);
+  initTask("#vtf-linear-task", "e6", "e7", createLinearTask, false);
+  initTask("#vtf-mix-task", "e8", "e9", createMixedTask, true);
+})();
+</script>
+
+<script>
+(function () {
+  var root = document.getElementById("vtf-edulo-panel");
+  if (!root || root.dataset.vtfNavScoresInit === "1") {
+    return;
+  }
+  root.dataset.vtfNavScoresInit = "1";
+
+  var mappings = [
+    { taskSelector: "#vtf-prop-task", navRole: "nav-score-prop" },
+    { taskSelector: "#vtf-anti-task", navRole: "nav-score-anti" },
+    { taskSelector: "#vtf-linear-task", navRole: "nav-score-linear" },
+    { taskSelector: "#vtf-mix-task", navRole: "nav-score-mix" }
+  ];
+
+  function syncOne(mapping) {
+    var source = root.querySelector(mapping.taskSelector + ' [data-role="score-value"]');
+    var target = root.querySelector('[data-role="' + mapping.navRole + '"]');
+    if (!source || !target) {
+      return;
+    }
+    target.textContent = String(source.textContent || "0").trim() || "0";
+  }
+
+  for (var i = 0; i < mappings.length; i++) {
+    syncOne(mappings[i]);
+    (function (mapping) {
+      var source = root.querySelector(mapping.taskSelector + ' [data-role="score-value"]');
+      if (!source || typeof MutationObserver === "undefined") {
+        return;
+      }
+      var observer = new MutationObserver(function () {
+        syncOne(mapping);
+      });
+      observer.observe(source, { childList: true, characterData: true, subtree: true });
+    })(mappings[i]);
+  }
+})();
+</script>
