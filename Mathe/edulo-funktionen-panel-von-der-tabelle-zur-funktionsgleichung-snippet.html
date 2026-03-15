@@ -165,6 +165,67 @@
     font-size: 16px;
   }
 
+  #vtf-edulo-panel .vtf-collapse {
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  #vtf-edulo-panel .vtf-collapse-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 12px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  #vtf-edulo-panel .vtf-collapse-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #vtf-edulo-panel .vtf-collapse-summary:focus-visible {
+    outline: 2px solid rgba(47, 95, 208, 0.22);
+    outline-offset: -2px;
+  }
+
+  #vtf-edulo-panel .vtf-collapse-title {
+    color: #234a8b;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.28;
+  }
+
+  #vtf-edulo-panel .vtf-collapse-summary::after {
+    content: "+";
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    border: 1px solid #d9e4f0;
+    background: #f8fbff;
+    color: #234a8b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  #vtf-edulo-panel .vtf-collapse[open] .vtf-collapse-summary::after {
+    content: "-";
+  }
+
+  #vtf-edulo-panel .vtf-collapse-body {
+    display: grid;
+    gap: 8px;
+    padding: 10px 12px 12px;
+    border-top: 1px solid #e6eef7;
+  }
+
   #vtf-edulo-panel .vtf-list {
     margin: 0;
     padding-left: 18px;
@@ -307,24 +368,27 @@
 
   #vtf-edulo-panel .vtf-mini-table .vtf-mini-table-side svg {
     display: block;
-    width: 54px;
-    height: 72px;
+    width: 30px;
+    height: auto;
+    margin: 0 auto;
     overflow: visible;
   }
 
   #vtf-edulo-panel .vtf-mini-table .vtf-mini-table-side path {
     fill: none;
     stroke: currentColor;
-    stroke-width: 2.5;
+    stroke-width: 2.3;
     stroke-linecap: round;
     stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
   }
 
   #vtf-edulo-panel .vtf-mini-table .vtf-mini-table-side text {
     fill: currentColor;
     font-family: Consolas, "Courier New", monospace;
-    font-size: 14px;
+    font-size: 30px;
     font-weight: 700;
+    dominant-baseline: middle;
   }
 
   #vtf-edulo-panel .vtf-task {
@@ -610,6 +674,14 @@
   <input class="vtf-tab-input" type="radio" name="vtf-tabs-edulo" id="vtf-tab-linear">
   <input class="vtf-tab-input" type="radio" name="vtf-tabs-edulo" id="vtf-tab-mix">
 
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <marker id="vtf-arrow-marker" viewBox="-4 -4 8 8" refX="0" refY="0" markerWidth="8" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M-4 -4 L0 0 L-4 4" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+  </svg>
+
   <div class="vtf-grid">
     <label class="vtf-card" for="vtf-tab-prop">
       <div class="vtf-title">Proportional</div>
@@ -742,58 +814,64 @@
     <div class="vtf-detail vtf-detail--prop">
       <h3>Proportionale Funktionen</h3>
       <div class="vtf-layout">
-        <section class="vtf-block">
-          <h4>So erkennst du eine proportionale Tabelle</h4>
-          <ul class="vtf-list">
-            <li>Wenn <span class="vtf-mono">x</span> verdoppelt wird, verdoppelt sich auch <span class="vtf-mono">y</span>.</li>
-            <li>Der Quotient <span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span> ist f&uuml;r alle Wertepaare au&szlig;er bei <span class="vtf-mono">x = 0</span> gleich.</li>
-            <li>Zu <span class="vtf-mono">x = 0</span> geh&ouml;rt der Wert <span class="vtf-mono">y = 0</span>.</li>
-          </ul>
-          <div class="vtf-note">
-            Merke: Der konstante Quotient <span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span> ist gleichzeitig die Steigung <span class="vtf-mono vtf-color-m">m</span>.
+        <details class="vtf-block vtf-collapse">
+          <summary class="vtf-collapse-summary">
+            <span class="vtf-collapse-title">So erkennst du eine proportionale Tabelle</span>
+          </summary>
+          <div class="vtf-collapse-body">
+            <ul class="vtf-list">
+              <li>Wenn <span class="vtf-mono">x</span> verdoppelt wird, verdoppelt sich auch <span class="vtf-mono">y</span>.</li>
+              <li>Der Quotient <span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span> ist f&uuml;r alle Wertepaare au&szlig;er bei <span class="vtf-mono">x = 0</span> gleich.</li>
+              <li>Zu <span class="vtf-mono">x = 0</span> geh&ouml;rt der Wert <span class="vtf-mono">y = 0</span>.</li>
+            </ul>
+            <div class="vtf-note">
+              Merke: Der konstante Quotient <span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span> ist gleichzeitig die Steigung <span class="vtf-mono vtf-color-m">m</span>.
+            </div>
           </div>
-        </section>
+        </details>
 
-        <section class="vtf-block">
-          <h4>Von der Tabelle zur Gleichung</h4>
-          <div class="vtf-example">
-            <div class="vtf-chip">Beispiel</div>
-            <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine proportionale Funktion">
-              <thead>
-                <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
-              </thead>
-              <tbody>
-                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>0</td><td>0</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
-                <tr>
-                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
-                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
-                      <path d="M37 10 C14 18 14 54 37 62"/>
-                      <path d="M30 57 L37 62 L31 66"/>
-                      <text x="7" y="40">&middot;2</text>
-                    </svg>
-                  </td>
-                  <td>1</td>
-                  <td>3</td>
-                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
-                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
-                      <path d="M17 10 C40 18 40 54 17 62"/>
-                      <path d="M24 57 L17 62 L23 66"/>
-                      <text x="48" y="40" text-anchor="end">&middot;2</text>
-                    </svg>
-                  </td>
-                </tr>
-                <tr><td>2</td><td>6</td></tr>
-                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>4</td><td>12</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
-              </tbody>
-            </table>
-            <ol class="vtf-list">
-              <li>Berechne <span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span>, zum Beispiel <span class="vtf-mono"><span class="vtf-frac"><span>6</span><span>2</span></span> = <span class="vtf-color-m">3</span></span>.</li>
-              <li>Der konstante Wert ist die Steigung <span class="vtf-mono vtf-color-m">m = 3</span>.</li>
-              <li>Setze <span class="vtf-mono vtf-color-m">m</span> in die Vorlage <span class="vtf-mono">f(x) = <span class="vtf-color-m">m</span>x</span> ein.</li>
-            </ol>
-            <div class="vtf-preview-equation">f(x) = <span class="vtf-color-m">3</span>x</div>
+        <details class="vtf-block vtf-collapse">
+          <summary class="vtf-collapse-summary">
+            <span class="vtf-collapse-title">Von der Tabelle zur Gleichung</span>
+          </summary>
+          <div class="vtf-collapse-body">
+            <div class="vtf-example">
+              <div class="vtf-chip">Beispiel</div>
+              <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine proportionale Funktion">
+                <thead>
+                  <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>0</td><td>0</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+                  <tr>
+                    <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
+                      <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                        <path d="M37 18 C14 24 14 48 37 54" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="10" y="36" text-anchor="end">&middot;2</text>
+                      </svg>
+                    </td>
+                    <td>1</td>
+                    <td>3</td>
+                    <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
+                      <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                        <path d="M17 18 C40 24 40 48 17 54" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="44" y="36" text-anchor="start">&middot;2</text>
+                      </svg>
+                    </td>
+                  </tr>
+                  <tr><td>2</td><td>6</td></tr>
+                  <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>4</td><td>12</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+                </tbody>
+              </table>
+              <ol class="vtf-list">
+                <li>Berechne <span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span>, zum Beispiel <span class="vtf-mono"><span class="vtf-frac"><span>6</span><span>2</span></span> = <span class="vtf-color-m">3</span></span>.</li>
+                <li>Der konstante Wert ist die Steigung <span class="vtf-mono vtf-color-m">m = 3</span>.</li>
+                <li>Setze <span class="vtf-mono vtf-color-m">m</span> in die Vorlage <span class="vtf-mono">f(x) = <span class="vtf-color-m">m</span>x</span> ein.</li>
+              </ol>
+              <div class="vtf-preview-equation">f(x) = <span class="vtf-color-m">3</span>x</div>
+            </div>
           </div>
-        </section>
+        </details>
 
         <section class="vtf-block">
           <div class="vtf-task" id="vtf-prop-task">
@@ -855,58 +933,64 @@
     <div class="vtf-detail vtf-detail--anti">
       <h3>Antiproportionale Funktionen</h3>
       <div class="vtf-layout">
-        <section class="vtf-block">
-          <h4>So erkennst du eine antiproportionale Tabelle</h4>
-          <ul class="vtf-list">
-            <li>Wenn <span class="vtf-mono">x</span> gr&ouml;&szlig;er wird, wird <span class="vtf-mono">y</span> kleiner.</li>
-            <li>Das Produkt <span class="vtf-mono">x &middot; y</span> ist in jeder Zeile gleich.</li>
-            <li>Die Gleichung hat die Form <span class="vtf-mono">f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span></span>.</li>
-          </ul>
-          <div class="vtf-note is-warm">
-            Merke: Bei antiproportionalen Funktionen darf <span class="vtf-mono">x</span> nicht 0 sein.
+        <details class="vtf-block vtf-collapse">
+          <summary class="vtf-collapse-summary">
+            <span class="vtf-collapse-title">So erkennst du eine antiproportionale Tabelle</span>
+          </summary>
+          <div class="vtf-collapse-body">
+            <ul class="vtf-list">
+              <li>Wenn <span class="vtf-mono">x</span> gr&ouml;&szlig;er wird, wird <span class="vtf-mono">y</span> kleiner.</li>
+              <li>Das Produkt <span class="vtf-mono">x &middot; y</span> ist in jeder Zeile gleich.</li>
+              <li>Die Gleichung hat die Form <span class="vtf-mono">f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span></span>.</li>
+            </ul>
+            <div class="vtf-note is-warm">
+              Merke: Bei antiproportionalen Funktionen darf <span class="vtf-mono">x</span> nicht 0 sein.
+            </div>
           </div>
-        </section>
+        </details>
 
-        <section class="vtf-block">
-          <h4>Von der Tabelle zur Gleichung</h4>
-          <div class="vtf-example">
-            <div class="vtf-chip">Beispiel</div>
-            <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine antiproportionale Funktion">
-              <thead>
-                <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
-                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
-                      <path d="M37 10 C14 18 14 54 37 62"/>
-                      <path d="M30 57 L37 62 L31 66"/>
-                      <text x="7" y="40">&middot;2</text>
-                    </svg>
-                  </td>
-                  <td>1</td>
-                  <td>12</td>
-                  <td class="vtf-mini-table-side vtf-color-k" rowspan="2" aria-hidden="true">
-                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
-                      <path d="M17 10 C40 18 40 54 17 62"/>
-                      <path d="M24 57 L17 62 L23 66"/>
-                      <text x="48" y="40" text-anchor="end">:2</text>
-                    </svg>
-                  </td>
-                </tr>
-                <tr><td>2</td><td>6</td></tr>
-                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>3</td><td>4</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
-                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>6</td><td>2</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
-              </tbody>
-            </table>
-            <ol class="vtf-list">
-              <li>Multipliziere <span class="vtf-mono">x &middot; y</span>, zum Beispiel <span class="vtf-mono">3 &middot; 4 = <span class="vtf-color-k">12</span></span>.</li>
-              <li>Der konstante Wert ist <span class="vtf-mono vtf-color-k">k = 12</span>.</li>
-              <li>Setze <span class="vtf-mono vtf-color-k">k</span> in die Vorlage <span class="vtf-mono">f(x) = <span class="vtf-frac"><span class="vtf-color-k">k</span><span>x</span></span></span> ein.</li>
-            </ol>
-            <div class="vtf-preview-equation">f(x) = <span class="vtf-frac"><span class="vtf-color-k">12</span><span>x</span></span></div>
+        <details class="vtf-block vtf-collapse">
+          <summary class="vtf-collapse-summary">
+            <span class="vtf-collapse-title">Von der Tabelle zur Gleichung</span>
+          </summary>
+          <div class="vtf-collapse-body">
+            <div class="vtf-example">
+              <div class="vtf-chip">Beispiel</div>
+              <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine antiproportionale Funktion">
+                <thead>
+                  <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
+                      <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                        <path d="M37 18 C14 24 14 48 37 54" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="10" y="36" text-anchor="end">&middot;2</text>
+                      </svg>
+                    </td>
+                    <td>1</td>
+                    <td>12</td>
+                    <td class="vtf-mini-table-side vtf-color-k" rowspan="2" aria-hidden="true">
+                      <svg viewBox="0 0 54 72" role="presentation" focusable="false">
+                        <path d="M17 18 C40 24 40 48 17 54" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="44" y="36" text-anchor="start">:2</text>
+                      </svg>
+                    </td>
+                  </tr>
+                  <tr><td>2</td><td>6</td></tr>
+                  <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>3</td><td>4</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+                  <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>6</td><td>2</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
+                </tbody>
+              </table>
+              <ol class="vtf-list">
+                <li>Multipliziere <span class="vtf-mono">x &middot; y</span>, zum Beispiel <span class="vtf-mono">3 &middot; 4 = <span class="vtf-color-k">12</span></span>.</li>
+                <li>Der konstante Wert ist <span class="vtf-mono vtf-color-k">k = 12</span>.</li>
+                <li>Setze <span class="vtf-mono vtf-color-k">k</span> in die Vorlage <span class="vtf-mono">f(x) = <span class="vtf-frac"><span class="vtf-color-k">k</span><span>x</span></span></span> ein.</li>
+              </ol>
+              <div class="vtf-preview-equation">f(x) = <span class="vtf-frac"><span class="vtf-color-k">12</span><span>x</span></span></div>
+            </div>
           </div>
-        </section>
+        </details>
 
         <section class="vtf-block">
           <div class="vtf-task" id="vtf-anti-task">
@@ -968,97 +1052,123 @@
     <div class="vtf-detail vtf-detail--linear">
       <h3>Lineare Funktionen</h3>
       <div class="vtf-layout">
-        <section class="vtf-block">
-          <h4>So erkennst du eine lineare Tabelle</h4>
-          <ul class="vtf-list">
-            <li>Wenn <span class="vtf-mono">x</span> um 1 steigt, veraendert sich <span class="vtf-mono">y</span> immer um denselben Betrag.</li>
-            <li>Diese konstante Aenderung ist die Steigung <span class="vtf-mono">m</span>.</li>
-            <li>Der Wert bei <span class="vtf-mono">x = 0</span> ist der Startwert <span class="vtf-mono">b</span>.</li>
-          </ul>
-          <div class="vtf-note">
-            Merke: Die Gleichung hat die Form <span class="vtf-mono">f(x) = mx + b</span>.
+        <details class="vtf-block vtf-collapse">
+          <summary class="vtf-collapse-summary">
+            <span class="vtf-collapse-title">So erkennst du eine lineare Tabelle</span>
+          </summary>
+          <div class="vtf-collapse-body">
+            <ul class="vtf-list">
+              <li>Wenn <span class="vtf-mono">x</span> um 1 steigt, veraendert sich <span class="vtf-mono">y</span> immer um denselben Betrag.</li>
+              <li>Diese konstante Aenderung ist die Steigung <span class="vtf-mono">m</span>.</li>
+              <li>Der Wert bei <span class="vtf-mono">x = 0</span> ist der Startwert <span class="vtf-mono">b</span>.</li>
+            </ul>
+            <div class="vtf-note">
+              Merke: Die Gleichung hat die Form <span class="vtf-mono">f(x) = mx + b</span>.
+            </div>
           </div>
-        </section>
+        </details>
 
-        <section class="vtf-block">
-          <h4>Von der Tabelle zur Gleichung</h4>
-          <div class="vtf-example">
-            <div class="vtf-chip">Beispiel</div>
-            <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine lineare Funktion">
-              <thead>
-                <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
-              </thead>
-              <tbody>
-                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>0</td><td>2</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
-                <tr>
-                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
-                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
-                      <path d="M37 10 C14 18 14 54 37 62"/>
-                      <path d="M30 57 L37 62 L31 66"/>
-                      <text x="9" y="40">+1</text>
-                    </svg>
-                  </td>
-                  <td>1</td>
-                  <td>5</td>
-                  <td class="vtf-mini-table-side vtf-color-m" rowspan="2" aria-hidden="true">
-                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
-                      <path d="M17 10 C40 18 40 54 17 62"/>
-                      <path d="M24 57 L17 62 L23 66"/>
-                      <text x="45" y="40" text-anchor="end">+3</text>
-                    </svg>
-                  </td>
-                </tr>
-                <tr><td>2</td><td>8</td></tr>
-                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>3</td><td>11</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
-              </tbody>
-            </table>
-            <ol class="vtf-list">
-              <li>Bestimme die Steigung <span class="vtf-mono vtf-color-m">m</span>:<br>Wenn <span class="vtf-mono">x</span> um <span class="vtf-color-rel">1</span> gr&ouml;&szlig;er wird, wird <span class="vtf-mono">y</span> jeweils um <span class="vtf-mono vtf-color-m">3</span> gr&ouml;&szlig;er.<br>Also gilt <span class="vtf-mono vtf-color-m">m = 3</span>.</li>
-              <li>Bestimme den Startwert <span class="vtf-mono vtf-color-b">b</span>:<br>Bei <span class="vtf-mono">x = 0</span> ist <span class="vtf-mono">y = 2</span>.<br>Also gilt <span class="vtf-mono vtf-color-b">b = 2</span>.</li>
-              <li>Setze <span class="vtf-mono vtf-color-m">m</span> und <span class="vtf-mono vtf-color-b">b</span> in die Gleichung ein:<br><span class="vtf-mono">f(x) = <span class="vtf-color-m">m</span>x + <span class="vtf-color-b">b</span></span></li>
-            </ol>
-            <div class="vtf-preview-equation">f(x) = <span class="vtf-color-m">3</span>x + <span class="vtf-color-b">2</span></div>
+        <details class="vtf-block vtf-collapse">
+          <summary class="vtf-collapse-summary">
+            <span class="vtf-collapse-title">Von der Tabelle zur Gleichung</span>
+          </summary>
+          <div class="vtf-collapse-body">
+            <div class="vtf-example">
+              <div class="vtf-chip">Beispiel</div>
+              <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine lineare Funktion">
+                <thead>
+                  <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="vtf-mini-table-side vtf-color-rel" rowspan="4" aria-hidden="true">
+                      <svg viewBox="0 0 54 144" role="presentation" focusable="false">
+                        <path d="M37 14 C16 20 16 44 37 50" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="10" y="32" text-anchor="end">+1</text>
+                        <path d="M37 54 C16 60 16 84 37 90" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="10" y="72" text-anchor="end">+1</text>
+                        <path d="M37 94 C16 100 16 124 37 130" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="10" y="112" text-anchor="end">+1</text>
+                      </svg>
+                    </td>
+                    <td>0</td>
+                    <td>2</td>
+                    <td class="vtf-mini-table-side vtf-color-m" rowspan="4" aria-hidden="true">
+                      <svg viewBox="0 0 54 144" role="presentation" focusable="false">
+                        <path d="M17 14 C38 20 38 44 17 50" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="44" y="32" text-anchor="start">+3</text>
+                        <path d="M17 54 C38 60 38 84 17 90" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="44" y="72" text-anchor="start">+3</text>
+                        <path d="M17 94 C38 100 38 124 17 130" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="44" y="112" text-anchor="start">+3</text>
+                      </svg>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>5</td>
+                  </tr>
+                  <tr><td>2</td><td>8</td></tr>
+                  <tr><td>3</td><td>11</td></tr>
+                </tbody>
+              </table>
+              <ol class="vtf-list">
+                <li>Bestimme die Steigung <span class="vtf-mono vtf-color-m">m</span>:<br>Wenn <span class="vtf-mono">x</span> um <span class="vtf-color-rel">1</span> gr&ouml;&szlig;er wird, wird <span class="vtf-mono">y</span> jeweils um <span class="vtf-mono vtf-color-m">3</span> gr&ouml;&szlig;er.<br>Also gilt <span class="vtf-mono vtf-color-m">m = 3</span>.</li>
+                <li>Bestimme den Startwert <span class="vtf-mono vtf-color-b">b</span>:<br>Bei <span class="vtf-mono">x = 0</span> ist <span class="vtf-mono">y = 2</span>.<br>Also gilt <span class="vtf-mono vtf-color-b">b = 2</span>.</li>
+                <li>Setze <span class="vtf-mono vtf-color-m">m</span> und <span class="vtf-mono vtf-color-b">b</span> in die Gleichung ein:<br><span class="vtf-mono">f(x) = <span class="vtf-color-m">m</span>x + <span class="vtf-color-b">b</span></span></li>
+              </ol>
+              <div class="vtf-preview-equation">f(x) = <span class="vtf-color-m">3</span>x + <span class="vtf-color-b">2</span></div>
+            </div>
+            <div class="vtf-example">
+              <div class="vtf-chip">Auch wichtig</div>
+              <p>Manchmal steigt <span class="vtf-mono">x</span> nicht um 1, sondern zum Beispiel um 2.</p>
+              <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine lineare Funktion mit Schrittweite 2">
+                <thead>
+                  <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="vtf-mini-table-side vtf-color-rel" rowspan="4" aria-hidden="true">
+                      <svg viewBox="0 0 54 144" role="presentation" focusable="false">
+                        <path d="M37 14 C16 20 16 44 37 50" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="10" y="32" text-anchor="end">+2</text>
+                        <path d="M37 54 C16 60 16 84 37 90" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="10" y="72" text-anchor="end">+2</text>
+                        <path d="M37 94 C16 100 16 124 37 130" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="10" y="112" text-anchor="end">+2</text>
+                      </svg>
+                    </td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td class="vtf-mini-table-side vtf-color-m" rowspan="4" aria-hidden="true">
+                      <svg viewBox="0 0 54 144" role="presentation" focusable="false">
+                        <path d="M17 14 C38 20 38 44 17 50" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="44" y="32" text-anchor="start">+4</text>
+                        <path d="M17 54 C38 60 38 84 17 90" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="44" y="72" text-anchor="start">+4</text>
+                        <path d="M17 94 C38 100 38 124 17 130" marker-end="url(#vtf-arrow-marker)"/>
+                        <text x="44" y="112" text-anchor="start">+4</text>
+                      </svg>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>5</td>
+                  </tr>
+                  <tr><td>4</td><td>9</td></tr>
+                  <tr><td>6</td><td>13</td></tr>
+                </tbody>
+              </table>
+              <ol class="vtf-list">
+                <li>Vergleiche die &Auml;nderungen:<br><span class="vtf-mono">x</span> wird jeweils um <span class="vtf-mono vtf-color-rel">2</span> gr&ouml;&szlig;er.<br><span class="vtf-mono">y</span> wird jeweils um <span class="vtf-mono vtf-color-m">4</span> gr&ouml;&szlig;er.</li>
+                <li>Bestimme die Steigung <span class="vtf-mono vtf-color-m">m</span>:<br>Gesucht ist, um wie viel <span class="vtf-mono">y</span> gr&ouml;&szlig;er wird, wenn <span class="vtf-mono">x</span> um 1 steigt.<br>Dazu teilt man die &Auml;nderung in y-Richtung durch die &Auml;nderung in x-Richtung.<br>Diese &Auml;nderungen nennt man <span class="vtf-mono">&Delta;y</span> und <span class="vtf-mono">&Delta;x</span>.<br><br>Hier gilt:<br>&Auml;nderung in y-Richtung: <span class="vtf-mono">&Delta;y = 4</span> und &Auml;nderung in x-Richtung: <span class="vtf-mono">&Delta;x = 2</span><br><br>Also:<br><span class="vtf-mono"><span class="vtf-frac"><span>&Delta;y</span><span>&Delta;x</span></span> = <span class="vtf-frac"><span>4</span><span>2</span></span> = <span class="vtf-color-m">2</span></span><br>Deshalb ist <span class="vtf-mono vtf-color-m">m = 2</span>.</li>
+                <li>Bestimme den Startwert <span class="vtf-mono vtf-color-b">b</span>:<br>Bei <span class="vtf-mono">x = 0</span> ist <span class="vtf-mono">y = 1</span>.<br>Also gilt <span class="vtf-mono vtf-color-b">b = 1</span>.</li>
+                <li>Setze <span class="vtf-mono vtf-color-m">m</span> und <span class="vtf-mono vtf-color-b">b</span> in die Gleichung ein:<br><span class="vtf-mono">f(x) = <span class="vtf-color-m">2</span>x + <span class="vtf-color-b">1</span></span></li>
+              </ol>
+              <div class="vtf-preview-equation">f(x) = <span class="vtf-color-m">2</span>x + <span class="vtf-color-b">1</span></div>
+            </div>
           </div>
-          <div class="vtf-example">
-            <div class="vtf-chip">Auch wichtig</div>
-            <p>Manchmal steigt <span class="vtf-mono">x</span> nicht um 1, sondern zum Beispiel um 2.</p>
-            <table class="vtf-mini-table" aria-label="Beispieltabelle fuer eine lineare Funktion mit Schrittweite 2">
-              <thead>
-                <tr><th class="vtf-mini-table-side" aria-hidden="true"></th><th>x</th><th>y</th><th class="vtf-mini-table-side" aria-hidden="true"></th></tr>
-              </thead>
-              <tbody>
-                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>0</td><td>1</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
-                <tr>
-                  <td class="vtf-mini-table-side vtf-color-rel" rowspan="2" aria-hidden="true">
-                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
-                      <path d="M37 10 C14 18 14 54 37 62"/>
-                      <path d="M30 57 L37 62 L31 66"/>
-                      <text x="9" y="40">+2</text>
-                    </svg>
-                  </td>
-                  <td>2</td>
-                  <td>5</td>
-                  <td class="vtf-mini-table-side vtf-color-m" rowspan="2" aria-hidden="true">
-                    <svg viewBox="0 0 54 72" role="presentation" focusable="false">
-                      <path d="M17 10 C40 18 40 54 17 62"/>
-                      <path d="M24 57 L17 62 L23 66"/>
-                      <text x="45" y="40" text-anchor="end">+4</text>
-                    </svg>
-                  </td>
-                </tr>
-                <tr><td>4</td><td>9</td></tr>
-                <tr><td class="vtf-mini-table-side" aria-hidden="true"></td><td>6</td><td>13</td><td class="vtf-mini-table-side" aria-hidden="true"></td></tr>
-              </tbody>
-            </table>
-            <ol class="vtf-list">
-              <li>Vergleiche die &Auml;nderungen:<br><span class="vtf-mono">x</span> wird jeweils um <span class="vtf-mono vtf-color-rel">2</span> gr&ouml;&szlig;er.<br><span class="vtf-mono">y</span> wird jeweils um <span class="vtf-mono vtf-color-m">4</span> gr&ouml;&szlig;er.</li>
-              <li>Bestimme die Steigung <span class="vtf-mono vtf-color-m">m</span>:<br>Gesucht ist, um wie viel <span class="vtf-mono">y</span> gr&ouml;&szlig;er wird, wenn <span class="vtf-mono">x</span> um 1 steigt.<br>Dazu teilt man die &Auml;nderung in y-Richtung durch die &Auml;nderung in x-Richtung.<br>Diese &Auml;nderungen nennt man <span class="vtf-mono">&Delta;y</span> und <span class="vtf-mono">&Delta;x</span>.<br><br>Hier gilt:<br>&Auml;nderung in y-Richtung: <span class="vtf-mono">&Delta;y = 4</span> und &Auml;nderung in x-Richtung: <span class="vtf-mono">&Delta;x = 2</span><br><br>Also:<br><span class="vtf-mono"><span class="vtf-frac"><span>&Delta;y</span><span>&Delta;x</span></span> = <span class="vtf-frac"><span>4</span><span>2</span></span> = <span class="vtf-color-m">2</span></span><br>Deshalb ist <span class="vtf-mono vtf-color-m">m = 2</span>.</li>
-              <li>Bestimme den Startwert <span class="vtf-mono vtf-color-b">b</span>:<br>Bei <span class="vtf-mono">x = 0</span> ist <span class="vtf-mono">y = 1</span>.<br>Also gilt <span class="vtf-mono vtf-color-b">b = 1</span>.</li>
-              <li>Setze <span class="vtf-mono vtf-color-m">m</span> und <span class="vtf-mono vtf-color-b">b</span> in die Gleichung ein:<br><span class="vtf-mono">f(x) = <span class="vtf-color-m">2</span>x + <span class="vtf-color-b">1</span></span></li>
-            </ol>
-            <div class="vtf-preview-equation">f(x) = <span class="vtf-color-m">2</span>x + <span class="vtf-color-b">1</span></div>
-          </div>
-        </section>
+        </details>
 
         <section class="vtf-block">
           <div class="vtf-task" id="vtf-linear-task">
@@ -1120,29 +1230,33 @@
     <div class="vtf-detail vtf-detail--mix">
       <h3>Zufall: Typ erkennen und Gleichung aufstellen</h3>
       <div class="vtf-layout">
-        <section class="vtf-block">
-          <h4>So entscheidest du dich schnell</h4>
-          <div class="vtf-rule-grid">
-            <div class="vtf-rule-card">
-              <h5>Proportional</h5>
-              <p><span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span> bleibt gleich.</p>
-              <p>Die Gleichung ist <span class="vtf-mono">f(x) = mx</span>.</p>
+        <details class="vtf-block vtf-collapse">
+          <summary class="vtf-collapse-summary">
+            <span class="vtf-collapse-title">So entscheidest du dich schnell</span>
+          </summary>
+          <div class="vtf-collapse-body">
+            <div class="vtf-rule-grid">
+              <div class="vtf-rule-card">
+                <h5>Proportional</h5>
+                <p><span class="vtf-mono"><span class="vtf-frac"><span>y</span><span>x</span></span></span> bleibt gleich.</p>
+                <p>Die Gleichung ist <span class="vtf-mono">f(x) = mx</span>.</p>
+              </div>
+              <div class="vtf-rule-card">
+                <h5>Antiproportional</h5>
+                <p><span class="vtf-mono">x &middot; y</span> bleibt gleich.</p>
+                <p>Die Gleichung ist <span class="vtf-mono">f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span></span>.</p>
+              </div>
+              <div class="vtf-rule-card">
+                <h5>Linear</h5>
+                <p>Die y-Differenzen sind konstant.</p>
+                <p>Die Gleichung ist <span class="vtf-mono">f(x) = mx + b</span>.</p>
+              </div>
             </div>
-            <div class="vtf-rule-card">
-              <h5>Antiproportional</h5>
-              <p><span class="vtf-mono">x &middot; y</span> bleibt gleich.</p>
-              <p>Die Gleichung ist <span class="vtf-mono">f(x) = <span class="vtf-frac"><span>k</span><span>x</span></span></span>.</p>
-            </div>
-            <div class="vtf-rule-card">
-              <h5>Linear</h5>
-              <p>Die y-Differenzen sind konstant.</p>
-              <p>Die Gleichung ist <span class="vtf-mono">f(x) = mx + b</span>.</p>
+            <div class="vtf-note is-warm">
+              Tipp: Schau nicht auf nur eine Zeile. Vergleiche immer mehrere Zeilen der Tabelle.
             </div>
           </div>
-          <div class="vtf-note is-warm">
-            Tipp: Schau nicht auf nur eine Zeile. Vergleiche immer mehrere Zeilen der Tabelle.
-          </div>
-        </section>
+        </details>
 
         <section class="vtf-block">
           <h4>Mischaufgaben</h4>
