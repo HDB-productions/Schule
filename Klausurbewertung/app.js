@@ -1,4 +1,4 @@
-(function () {
+ï»¿(function () {
   "use strict";
 
   var STORAGE_KEY = "klausurbewertung.nobuild.v1";
@@ -217,7 +217,7 @@
         sortIndex: 5,
         title: "Ergebnis korrekt",
         shortLabel: "",
-        richContent: "Das Endergebnis stimmt vollständig.",
+        richContent: "Das Endergebnis stimmt vollstÃ¤ndig.",
         printVisibility: "always",
         maxPoints: 2,
         isBonus: false,
@@ -269,9 +269,9 @@
         type: "criterion",
         parentId: task2a,
         sortIndex: 9,
-        title: "Bonus: eleganter Lösungsweg",
+        title: "Bonus: eleganter LÃ¶sungsweg",
         shortLabel: "",
-        richContent: "Alternative oder besonders effiziente Lösungsidee.",
+        richContent: "Alternative oder besonders effiziente LÃ¶sungsidee.",
         printVisibility: "always",
         maxPoints: 1,
         isBonus: true,
@@ -506,6 +506,13 @@
       return node.showSum;
     }
     return node.type === "section" || node.type === "task";
+  }
+
+  function getNodeBorderStyle(node) {
+    if (!node || node.type === "criterion") {
+      return "none";
+    }
+    return node.borderStyle || "none";
   }
 
   function isCriterionNode(node) {
@@ -953,7 +960,7 @@
   function importExamPayload(raw) {
     var parsed = JSON.parse(raw);
     if (!parsed || !parsed.metadata || !parsed.metadata.id || !Array.isArray(parsed.students) || !Array.isArray(parsed.structure)) {
-      throw new Error("Die JSON-Datei ist kein gültiger Klausurexport.");
+      throw new Error("Die JSON-Datei ist kein gÃ¼ltiger Klausurexport.");
     }
     return parsed;
   }
@@ -1120,7 +1127,7 @@
       <header class="topbar">
         <div>
           <h1>Klausurbewertung</h1>
-          <p class="muted-text">Lokal-first, statisch und direkt über index.html lauffähig.</p>
+          <p class="muted-text">Lokal-first, statisch und direkt Ã¼ber index.html lauffÃ¤hig.</p>
         </div>
         <div class="inline-actions wrap-actions">
           ${exam ? `<strong>${escapeHtml(exam.metadata.title || "Neue Klausur")}</strong>` : ""}
@@ -1133,9 +1140,9 @@
   function renderTabs() {
     var tabs = [
       { id: "archive", label: "Archiv" },
-      { id: "overview", label: "Übersicht" },
+      { id: "overview", label: "Ãœbersicht" },
       { id: "metadata", label: "Stammdaten" },
-      { id: "students", label: "Schüler" },
+      { id: "students", label: "SchÃ¼ler" },
       { id: "structure", label: "Erwartungshorizont" },
       { id: "matrix", label: "Matrix" },
       { id: "print", label: "Druck" }
@@ -1154,7 +1161,7 @@
     return `
       <section class="empty-state">
         <h2>No-Build-Version bereit</h2>
-        <p class="muted-text">Diese App läuft direkt lokal im Browser. Lege eine neue Klausur an oder starte mit einer Demo.</p>
+        <p class="muted-text">Diese App lÃ¤uft direkt lokal im Browser. Lege eine neue Klausur an oder starte mit einer Demo.</p>
         <div class="empty-state-actions">
           <button type="button" class="primary-button" data-action="create-exam">Neue Klausur</button>
           <button type="button" class="secondary-button" data-action="seed-demo">Demo laden</button>
@@ -1199,7 +1206,7 @@
                 <div class="inline-actions wrap-actions">
                   <button type="button" class="secondary-button" data-action="export-exam" data-exam-id="${exam.metadata.id}">Export</button>
                   <button type="button" class="secondary-button" data-action="duplicate-exam" data-exam-id="${exam.metadata.id}">Duplizieren</button>
-                  <button type="button" class="danger-button" data-action="delete-exam" data-exam-id="${exam.metadata.id}">Löschen</button>
+                  <button type="button" class="danger-button" data-action="delete-exam" data-exam-id="${exam.metadata.id}">LÃ¶schen</button>
                 </div>
               </article>
             `;
@@ -1216,8 +1223,8 @@
       <section class="panel stack-gap overview-view">
         <div class="panel-header">
           <div>
-            <h2>Deckblatt und Übersicht</h2>
-            <p class="muted-text">Stammdaten, Notenspiegel und Schülergesamtergebnisse.</p>
+            <h2>Deckblatt und Ãœbersicht</h2>
+            <p class="muted-text">Stammdaten, Notenspiegel und SchÃ¼lergesamtergebnisse.</p>
           </div>
         </div>
         <div class="overview-grid">
@@ -1237,7 +1244,7 @@
           <article class="subpanel">
             <h3>Kennzahlen</h3>
             <dl class="compact-definition-list">
-              <div><dt>Schülerzahl</dt><dd>${summary.studentSummaries.length}</dd></div>
+              <div><dt>SchÃ¼lerzahl</dt><dd>${summary.studentSummaries.length}</dd></div>
               <div><dt>Maximalpunkte</dt><dd>${summary.maxRegularPoints.toFixed(1)}</dd></div>
               <div><dt>Durchschnitt</dt><dd>${summary.averagePercent.toFixed(2)}%</dd></div>
               <div><dt>Hilfsmittelfrei</dt><dd>${escapeHtml(String(exam.metadata.anzahlHilfsmittelfreierAufgaben || "-"))}</dd></div>
@@ -1258,9 +1265,9 @@
             </table>
           </article>
           <article class="subpanel">
-            <h3>Schülerübersicht</h3>
+            <h3>SchÃ¼lerÃ¼bersicht</h3>
             <table class="simple-table">
-              <thead><tr><th>Schüler</th><th>Punkte</th><th>Bonus</th><th>Prozent</th><th>${escapeHtml(resultLabel)}</th></tr></thead>
+              <thead><tr><th>SchÃ¼ler</th><th>Punkte</th><th>Bonus</th><th>Prozent</th><th>${escapeHtml(resultLabel)}</th></tr></thead>
               <tbody>
                 ${summary.studentSummaries.map(function (entry) {
                   return `<tr>
@@ -1301,7 +1308,7 @@
             ["arbeitsNummer", "Nummer", metadata.arbeitsNummer || "", "text"],
             ["thema", "Thema", metadata.thema || "", "text"],
             ["lehrkraft", "Lehrkraft", metadata.lehrkraft || "", "text"],
-            ["lehrkraftKuerzel", "Kürzel", metadata.lehrkraftKuerzel || "", "text"]
+            ["lehrkraftKuerzel", "KÃ¼rzel", metadata.lehrkraftKuerzel || "", "text"]
           ].map(function (field) {
             return `<label class="field-group"><span>${field[1]}</span><input type="${field[3]}" value="${escapeHtml(field[2])}" data-meta-field="${field[0]}" /></label>`;
           }).join("")}
@@ -1314,7 +1321,7 @@
             <input type="text" value="${escapeHtml((metadata.aktivierteVarianten || []).join(", "))}" data-meta-field="aktivierteVarianten" placeholder="A, B" />
           </label>
           <label class="field-group">
-            <span>Notenschlüssel</span>
+            <span>NotenschlÃ¼ssel</span>
             <select data-meta-field="notenschluesselPreset">
               <option value="sek1"${attrSelected(metadata.notenschluesselPreset === "sek1")}>Sek I (1 bis 6)</option>
               <option value="oberstufe"${attrSelected(metadata.notenschluesselPreset === "oberstufe")}>Oberstufe (0 bis 15)</option>
@@ -1333,7 +1340,7 @@
               <h3>Notengrenzen</h3>
               <p class="muted-text">Hier legst du sowohl die Grenzwerte als auch die Bezeichnungen fest.</p>
             </div>
-            <button type="button" class="secondary-button" data-action="add-boundary">Grenze ergänzen</button>
+            <button type="button" class="secondary-button" data-action="add-boundary">Grenze ergÃ¤nzen</button>
           </div>
           <table class="simple-table">
             <thead><tr><th>${escapeHtml(resultLabel)}</th><th>ab Prozent</th><th></th></tr></thead>
@@ -1359,7 +1366,7 @@
       <section class="panel stack-gap students-view">
         <div class="panel-header">
           <div>
-            <h2>Schülerliste</h2>
+            <h2>SchÃ¼lerliste</h2>
             <p class="muted-text">CSV-Import, manuelle Pflege und Klassenlisten-Bibliothek.</p>
           </div>
           <div class="inline-actions wrap-actions">
@@ -1370,7 +1377,7 @@
           </div>
         </div>
         <article class="subpanel stack-gap">
-          <div class="panel-header"><div><h3>Neuen Schüler anlegen</h3></div></div>
+          <div class="panel-header"><div><h3>Neuen SchÃ¼ler anlegen</h3></div></div>
           <div class="inline-form wrap-actions">
             <input id="new-student-first" type="text" placeholder="Vorname" />
             <input id="new-student-last" type="text" placeholder="Nachname" />
@@ -1380,7 +1387,7 @@
                 return `<option value="${escapeHtml(variant)}">${escapeHtml(variant)}</option>`;
               }).join("")}
             </select>
-            <button type="button" class="primary-button" data-action="add-student">Schüler hinzufügen</button>
+            <button type="button" class="primary-button" data-action="add-student">SchÃ¼ler hinzufÃ¼gen</button>
           </div>
         </article>
         <article class="subpanel stack-gap">
@@ -1394,7 +1401,7 @@
                 return `<option value="${template.id}">${escapeHtml(template.name)}</option>`;
               }).join("")}
             </select>
-            <button type="button" class="secondary-button" data-action="apply-class-list">Übernehmen</button>
+            <button type="button" class="secondary-button" data-action="apply-class-list">Ãœbernehmen</button>
           </div>
         </article>
         <table class="simple-table">
@@ -1419,7 +1426,7 @@
                   <div class="inline-actions wrap-actions">
                     <button type="button" class="secondary-button tiny-button" data-action="move-student" data-student-id="${student.id}" data-direction="-1">Hoch</button>
                     <button type="button" class="secondary-button tiny-button" data-action="move-student" data-student-id="${student.id}" data-direction="1">Runter</button>
-                    <button type="button" class="danger-button tiny-button" data-action="remove-student" data-student-id="${student.id}">Löschen</button>
+                    <button type="button" class="danger-button tiny-button" data-action="remove-student" data-student-id="${student.id}">LÃ¶schen</button>
                   </div>
                 </td>
               </tr>`;
@@ -1439,6 +1446,34 @@
         return `<option value="${node.id}"${attrSelected(selectedParentId === node.id)}>${indent}${escapeHtml(node.title || "Block")}</option>`;
       })
       .join("");
+  }
+
+  function getBlockBorderLabel(style) {
+    switch (style) {
+      case "top":
+        return "Rand oben";
+      case "bottom":
+        return "Rand unten";
+      case "topBottom":
+        return "Rand oben/unten";
+      case "box":
+        return "Rahmen";
+      default:
+        return "";
+    }
+  }
+
+  function renderBorderStyleOptions(selectedStyle) {
+    var style = selectedStyle || "none";
+    return [
+      ["none", "Kein Rand"],
+      ["top", "Oben"],
+      ["bottom", "Unten"],
+      ["topBottom", "Oben + unten"],
+      ["box", "Rahmen"]
+    ].map(function (entry) {
+      return `<option value="${entry[0]}"${attrSelected(style === entry[0])}>${entry[1]}</option>`;
+    }).join("");
   }
 
   function renderStructureView(exam) {
@@ -1463,7 +1498,7 @@
           <div class="panel-header">
             <div>
               <h3>Bibliothek und Massenanlage</h3>
-              <p class="muted-text">Format für Schnellanlage: Name | Punkte</p>
+              <p class="muted-text">Format fÃ¼r Schnellanlage: Name | Punkte</p>
             </div>
           </div>
           <div class="inline-form wrap-actions">
@@ -1474,19 +1509,19 @@
                 return `<option value="${node.id}">${indent}${escapeHtml(node.title || "Block")}</option>`;
               }).join("")}
             </select>
-            <textarea id="bulk-criteria-text" rows="4" placeholder="Beispiel:\nRechenweg vollständig | 2\nErgebnis korrekt | 1"></textarea>
+            <textarea id="bulk-criteria-text" rows="4" placeholder="Beispiel:\nRechenweg vollstÃ¤ndig | 2\nErgebnis korrekt | 1"></textarea>
             <button type="button" class="secondary-button" data-action="add-bulk-criteria">Mehrere Kriterien anlegen</button>
           </div>
           <div class="inline-form wrap-actions">
-            <input id="taskblock-name" type="text" placeholder="Name für Aufgabenblock" />
+            <input id="taskblock-name" type="text" placeholder="Name fÃ¼r Aufgabenblock" />
             <button type="button" class="secondary-button" data-action="save-task-block" data-node-id="">Gesamte Struktur speichern</button>
             <select id="taskblock-select">
-              <option value="">Aufgabenblock einfügen</option>
+              <option value="">Aufgabenblock einfÃ¼gen</option>
               ${store.taskBlockLibrary.map(function (template) {
                 return `<option value="${template.id}">${escapeHtml(template.name)}</option>`;
               }).join("")}
             </select>
-            <button type="button" class="secondary-button" data-action="insert-task-block">Einfügen</button>
+            <button type="button" class="secondary-button" data-action="insert-task-block">EinfÃ¼gen</button>
           </div>
         </article>
         <div class="stack-gap">
@@ -1494,6 +1529,7 @@
             var isCriterion = isCriterionNode(node);
             var isHeading = getNodeIsHeading(node);
             var showSum = getNodeShowSum(node);
+            var borderStyle = getNodeBorderStyle(node);
             return `
               <article class="structure-row subpanel" draggable="true" data-node-id="${node.id}">
                 <div class="structure-header" style="padding-left:${node.depth * 18}px">
@@ -1502,7 +1538,8 @@
                     <span class="pill">${isCriterion ? "Kriterium" : "Block"}</span>
                     ${isCriterion && node.isBonus ? '<span class="pill pill-bonus">Bonus</span>' : ""}
                     ${!isCriterion && showSum ? '<span class="pill">Summe</span>' : ""}
-                    ${!isCriterion && isHeading ? '<span class="pill">Überschrift</span>' : ""}
+                    ${!isCriterion && isHeading ? '<span class="pill">Ãœberschrift</span>' : ""}
+                    ${!isCriterion && borderStyle !== "none" ? `<span class="pill">${escapeHtml(getBlockBorderLabel(borderStyle))}</span>` : ""}
                   </div>
                   <div class="inline-actions wrap-actions">
                     <button type="button" class="secondary-button tiny-button" data-action="add-node" data-node-type="block" data-parent-id="${node.id}">+ Block</button>
@@ -1523,7 +1560,7 @@
                   </label>
                   <label class="field-group"><span>Name</span><input value="${escapeHtml(node.title || "")}" data-node-id="${node.id}" data-node-field="title" /></label>
                   <label class="field-group">
-                    <span>Übergeordneter Block</span>
+                    <span>Ãœbergeordneter Block</span>
                     <select data-node-id="${node.id}" data-node-field="parentId">
                       <option value=""${attrSelected(!node.parentId)}>Oberste Ebene</option>
                       ${renderBlockParentOptions(flattened, node.id, node.parentId || "")}
@@ -1534,7 +1571,8 @@
                     <label class="field-group inline-checkbox"><span>Ist Bonus</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isBonus"${attrChecked(!!node.isBonus)} /></label>
                   ` : `
                     <label class="field-group inline-checkbox"><span>Summe anzeigen</span><input type="checkbox" data-node-id="${node.id}" data-node-field="showSum"${attrChecked(showSum)} /></label>
-                    <label class="field-group inline-checkbox"><span>Ist Überschrift</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isHeading"${attrChecked(isHeading)} /></label>
+                    <label class="field-group inline-checkbox"><span>Ist Ãœberschrift</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isHeading"${attrChecked(isHeading)} /></label>
+                    <label class="field-group"><span>Rand</span><select data-node-id="${node.id}" data-node-field="borderStyle">${renderBorderStyleOptions(borderStyle)}</select></label>
                   `}
                 </div>
                 ${isCriterion ? `
@@ -1544,13 +1582,13 @@
                   </div>
                   <div class="inline-actions wrap-actions">
                     <label class="secondary-button file-button">
-                      Bild einfügen
+                      Bild einfÃ¼gen
                       <input type="file" accept="image/*" data-role="node-image" data-node-id="${node.id}" />
                     </label>
                   </div>
                   <div class="markdown-preview">${renderMarkdown(node.richContent || "")}</div>
                 ` : `
-                  <div class="small-help">Blöcke strukturieren den Erwartungshorizont. Für Zeilen wie „Hilfsmittelfreier Teil“, „Aufgabe 1“ oder „a)“ legst du jeweils einen Block an.</div>
+                  <div class="small-help">BlÃ¶cke strukturieren den Erwartungshorizont. FÃ¼r Zeilen wie â€žHilfsmittelfreier Teilâ€œ, â€žAufgabe 1â€œ oder â€ža)â€œ legst du jeweils einen Block an. Optional kannst du einen Rand fÃ¼r die Druckausgabe wÃ¤hlen.</div>
                 `}
               </article>
             `;
@@ -1680,13 +1718,13 @@
 
   function getPrintRowWeight(row) {
     if (row.kind === "criterion") {
-      return Math.max(2, Math.ceil(String(row.bodyText || row.titleText || "").length / 180) + 1);
+      return Math.max(1, Math.ceil(String(row.bodyText || row.titleText || "").length / 220) + 1);
     }
     if (row.kind === "blockHeading") {
       return 2;
     }
     if (row.kind === "summary") {
-      return 8;
+      return 6;
     }
     return 1;
   }
@@ -1694,6 +1732,21 @@
   function buildPrintRowsForStudent(exam, studentId) {
     var rows = [];
     var childrenMap = getChildrenMap(exam.structure);
+
+    function applyBlockFrame(startIndex, endIndex, borderStyle) {
+      if (borderStyle === "none" || endIndex < startIndex) {
+        return;
+      }
+      for (var index = startIndex; index <= endIndex; index += 1) {
+        rows[index].frameStyle = borderStyle;
+        if (index === startIndex) {
+          rows[index].frameStart = true;
+        }
+        if (index === endIndex) {
+          rows[index].frameEnd = true;
+        }
+      }
+    }
 
     function addNodeRows(node, depth) {
       if (node.printVisibility === "hidden" || node.printVisibility === "screenOnly") {
@@ -1710,7 +1763,10 @@
           bodyText: node.richContent || "",
           achieved: entry ? Number(entry.achievedPoints) || 0 : 0,
           max: Number(node.maxPoints) || 0,
-          isBonus: !!node.isBonus
+          isBonus: !!node.isBonus,
+          frameStyle: "none",
+          frameStart: false,
+          frameEnd: false
         });
         return;
       }
@@ -1719,12 +1775,16 @@
         return;
       }
 
+      var startIndex = rows.length;
       var blockTitle = String(node.title || "").trim();
       if (blockTitle) {
         rows.push({
           kind: getNodeIsHeading(node) ? "blockHeading" : "blockInline",
           depth: depth,
-          titleText: blockTitle
+          titleText: blockTitle,
+          frameStyle: "none",
+          frameStart: false,
+          frameEnd: false
         });
       }
 
@@ -1740,9 +1800,14 @@
           depth: depth,
           label: getNodeIsHeading(node) && blockTitle ? "Summe " + blockTitle : "Summe",
           achieved: totals.achieved,
-          max: totals.max
+          max: totals.max,
+          frameStyle: "none",
+          frameStart: false,
+          frameEnd: false
         });
       }
+
+      applyBlockFrame(startIndex, rows.length - 1, getNodeBorderStyle(node));
     }
 
     (childrenMap.__root__ || []).forEach(function (node) {
@@ -1756,11 +1821,11 @@
     var pages = [];
     var current = [];
     var currentWeight = 0;
-    var maxWeight = 20;
+    var maxWeight = 24;
 
     rows.forEach(function (row) {
       var weight = getPrintRowWeight(row);
-      var reserveHeading = row.kind === "blockHeading" && currentWeight > 16;
+      var reserveHeading = row.kind === "blockHeading" && currentWeight > 20;
       if (current.length && (currentWeight + weight > maxWeight || reserveHeading)) {
         pages.push(current);
         current = [];
@@ -1785,8 +1850,82 @@
     return pages;
   }
 
-  function renderPrintMetaItem(label, value, className) {
-    return `<div class="print-meta-item ${className || ""}">${label ? `<span class="print-meta-label">${escapeHtml(label)}:</span>` : ""}<span class="print-meta-value">${escapeHtml(value || "")}</span></div>`;
+  function getPrintHeaderTitle(exam) {
+    var metadata = exam.metadata || {};
+    var title = String(metadata.title || "").trim();
+    if (title) {
+      return title;
+    }
+    var fallback = metadata.fach ? ("Klassenarbeit " + metadata.fach) : "Klassenarbeit";
+    if (metadata.arbeitsNummer) {
+      fallback += " " + metadata.arbeitsNummer;
+    }
+    if (metadata.thema) {
+      fallback += " (" + metadata.thema + ")";
+    }
+    return fallback;
+  }
+
+  function getPrintFrameClasses(row) {
+    var classes = [];
+    switch (row.frameStyle) {
+      case "top":
+        if (row.frameStart) {
+          classes.push("print-frame-top");
+        }
+        break;
+      case "bottom":
+        if (row.frameEnd) {
+          classes.push("print-frame-bottom");
+        }
+        break;
+      case "topBottom":
+        if (row.frameStart) {
+          classes.push("print-frame-top");
+        }
+        if (row.frameEnd) {
+          classes.push("print-frame-bottom");
+        }
+        break;
+      case "box":
+        classes.push("print-frame-box");
+        if (row.frameStart) {
+          classes.push("print-frame-start");
+        }
+        if (row.frameEnd) {
+          classes.push("print-frame-end");
+        }
+        break;
+      default:
+        break;
+    }
+    return classes.join(" ");
+  }
+
+  function renderPrintHeader(exam, student, pageIndex, pageCount) {
+    var metadata = exam.metadata || {};
+    var schemeLabel = getPrintSchemeLabel(metadata);
+    var classText = metadata.kursOderKlasse || "";
+    if (schemeLabel) {
+      classText += classText ? ` (${schemeLabel})` : schemeLabel;
+    }
+    var title = getPrintHeaderTitle(exam);
+    return `
+      <header class="print-header-card">
+        <div class="print-title-row">
+          <div class="print-title-main">${escapeHtml(title)}</div>
+          <div class="print-title-date">${escapeHtml(formatDate(metadata.termin) || "")}</div>
+        </div>
+        <div class="print-header-grid">
+          <div class="print-header-cell print-header-left"><span class="print-meta-label">Kurs/Klasse:</span><span class="print-meta-value">${escapeHtml(classText || "-")}</span></div>
+          <div class="print-header-cell print-header-center"><span class="print-meta-label">Name:</span><span class="print-meta-value">${escapeHtml(student.displayName || "")}</span></div>
+          <div class="print-header-cell print-header-right"><span class="print-meta-label">Lehrkraft:</span><span class="print-meta-value">${escapeHtml(metadata.lehrkraft || "")}</span></div>
+          <div class="print-header-cell print-header-left print-header-subline">${metadata.schuljahr ? `<span class="print-meta-label">Schuljahr:</span><span class="print-meta-value">${escapeHtml(metadata.schuljahr)}</span>` : ""}</div>
+          <div class="print-header-cell print-header-center print-header-subline"><span class="print-meta-label">Seite:</span><span class="print-meta-value">${pageIndex + 1} von ${pageCount}</span></div>
+          <div class="print-header-cell print-header-right print-header-subline">${metadata.arbeitsNummer ? `<span class="print-meta-label">Nr.:</span><span class="print-meta-value">${escapeHtml(metadata.arbeitsNummer)}</span>` : ""}</div>
+        </div>
+      </header>
+    `;
   }
 
   function renderPrintScore(achieved, max) {
@@ -1811,25 +1950,26 @@
   }
 
   function renderPrintRow(row) {
-    var indentStyle = `style="padding-left:${row.depth * 18}px"`;
+    var indentStyle = `padding-left:${row.depth * 12}px`;
+    var frameClasses = getPrintFrameClasses(row);
 
     if (row.kind === "spacer") {
       return '<tr class="print-row-spacer"><td colspan="3"></td></tr>';
     }
 
     if (row.kind === "blockHeading") {
-      return `<tr class="print-row-block-heading"><td class="print-marker-cell"></td><td class="print-content-cell" colspan="2" ${indentStyle}><div class="print-heading-block">${escapeHtml(row.titleText || "")}</div></td></tr>`;
+      return `<tr class="print-row-block-heading ${frameClasses}"><td class="print-marker-cell"></td><td class="print-content-cell" colspan="2" style="${indentStyle}"><div class="print-heading-block">${escapeHtml(row.titleText || "")}</div></td></tr>`;
     }
 
     if (row.kind === "blockInline") {
-      return `<tr class="print-row-block-inline"><td class="print-marker-cell"></td><td class="print-content-cell" colspan="2" ${indentStyle}><div class="print-heading-inline">${escapeHtml(row.titleText || "")}</div></td></tr>`;
+      return `<tr class="print-row-block-inline ${frameClasses}"><td class="print-marker-cell"></td><td class="print-content-cell" colspan="2" style="${indentStyle}"><div class="print-heading-inline">${escapeHtml(row.titleText || "")}</div></td></tr>`;
     }
 
     if (row.kind === "sum") {
-      return `<tr class="print-row-sum"><td class="print-marker-cell"></td><td class="print-content-cell" ${indentStyle}><strong>${escapeHtml(row.label || "Summe")}</strong></td><td class="print-score-cell">${renderPrintScore(row.achieved, row.max)}</td></tr>`;
+      return `<tr class="print-row-sum ${frameClasses}"><td class="print-marker-cell"></td><td class="print-content-cell" style="${indentStyle}"><strong>${escapeHtml(row.label || "Summe")}</strong></td><td class="print-score-cell">${renderPrintScore(row.achieved, row.max)}</td></tr>`;
     }
 
-    return `<tr class="print-row-criterion"><td class="print-marker-cell">${escapeHtml(row.marker || "")}</td><td class="print-content-cell" ${indentStyle}>${renderPrintCriterionContent(row)}</td><td class="print-score-cell">${renderPrintScore(row.achieved, row.max)}${row.isBonus ? '<div class="print-bonus-note">Bonus</div>' : ""}</td></tr>`;
+    return `<tr class="print-row-criterion ${frameClasses}"><td class="print-marker-cell">${escapeHtml(row.marker || "")}</td><td class="print-content-cell" style="${indentStyle}">${renderPrintCriterionContent(row)}</td><td class="print-score-cell">${renderPrintScore(row.achieved, row.max)}${row.isBonus ? '<div class="print-bonus-note">Bonus</div>' : ""}</td></tr>`;
   }
 
   function renderPrintSummary(exam, student, totals, scheme) {
@@ -1876,8 +2016,8 @@
         <div class="panel-header no-print">
           <div>
             <h2>Druckansicht</h2>
-            <p class="muted-text">Formaler Bewertungsbogen für den Browserdruck.</p>
-            <p class="small-help">Browser-Kopf- und Fußzeilen wie Datum oder Dateiname werden vom Browser gesteuert und müssen im Druckdialog deaktiviert werden.</p>
+            <p class="muted-text">Formaler Bewertungsbogen fÃ¼r den Browserdruck.</p>
+            <p class="small-help">Browser-Kopf- und FuÃŸzeilen wie Datum oder Dateiname werden vom Browser gesteuert und mÃ¼ssen im Druckdialog deaktiviert werden.</p>
           </div>
           <button type="button" class="primary-button" data-action="print">Sammel-PDF drucken</button>
         </div>
@@ -1885,27 +2025,10 @@
           ${students.map(function (student) {
             var rows = buildPrintRowsForStudent(exam, student.id);
             var totals = getStudentTotals(exam, student.id);
-            var pages = chunkRowsForPrint(rows, 8);
+            var pages = chunkRowsForPrint(rows, 6);
             return pages.map(function (pageRows, pageIndex) {
               return `<section class="print-sheet-page">
-                <header class="print-meta-header">
-                  <div class="print-meta-row">
-                    ${renderPrintMetaItem("Schuljahr", exam.metadata.schuljahr || "")}
-                    ${renderPrintMetaItem("Fach", exam.metadata.fach || "")}
-                    ${renderPrintMetaItem("Kurs/Klasse", exam.metadata.kursOderKlasse || "")}
-                    ${renderPrintMetaItem("", getPrintSchemeLabel(exam.metadata), "print-meta-scheme")}
-                    ${renderPrintMetaItem("Termin", formatDate(exam.metadata.termin) || "")}
-                  </div>
-                  <div class="print-meta-row">
-                    ${renderPrintMetaItem("Nummer", exam.metadata.arbeitsNummer || "")}
-                    ${renderPrintMetaItem("Thema", exam.metadata.thema || "", "print-meta-item-wide")}
-                    ${renderPrintMetaItem("Lehrkraft", exam.metadata.lehrkraft || "")}
-                  </div>
-                  <div class="print-meta-row print-meta-row-name">
-                    ${renderPrintMetaItem("Name", student.displayName || "", "print-meta-name")}
-                    ${renderPrintMetaItem("Seite", (pageIndex + 1) + " von " + pages.length, "print-meta-page")}
-                  </div>
-                </header>
+                ${renderPrintHeader(exam, student, pageIndex, pages.length)}
                 <table class="print-work-table">
                   <tbody>
                     ${pageRows.map(renderPrintRow).join("")}
@@ -1927,8 +2050,8 @@
       <div class="modal-backdrop">
         <div class="modal">
           <div class="modal-header">
-            <h3>Maximalpunkte ändern</h3>
-            <button type="button" class="secondary-button" data-action="close-modal">Schließen</button>
+            <h3>Maximalpunkte Ã¤ndern</h3>
+            <button type="button" class="secondary-button" data-action="close-modal">SchlieÃŸen</button>
           </div>
           <div class="modal-body">
             <p>Bereits eingetragene Leistungen existieren. Bitte festlegen, wie die bisherigen Punkte behandelt werden.</p>
@@ -1973,7 +2096,7 @@
       <main class="app-shell">
         ${renderTopBar(exam)}
         ${store.exams.length ? renderTabs() : ""}
-        ${ui.notice ? `<div class="notice-banner no-print"><div class="form-row"><span>${escapeHtml(ui.notice)}</span><button type="button" class="ghost-button" data-action="dismiss-notice">Schließen</button></div></div>` : ""}
+        ${ui.notice ? `<div class="notice-banner no-print"><div class="form-row"><span>${escapeHtml(ui.notice)}</span><button type="button" class="ghost-button" data-action="dismiss-notice">SchlieÃŸen</button></div></div>` : ""}
         ${store.exams.length || ui.activeTab === "archive" ? renderCurrentView(exam) : renderEmptyState()}
       </main>
       ${renderModal()}
@@ -2250,6 +2373,7 @@
         isScorable: isCriterion,
         showSum: isCriterion ? undefined : false,
         isHeading: isCriterion ? undefined : false,
+        borderStyle: isCriterion ? undefined : "none",
         variantScope: []
       });
       exam.metadata.updatedAt = nowIso();
@@ -2332,6 +2456,7 @@
             next.isScorable = true;
             next.maxPoints = next.maxPoints == null ? 1 : Math.max(0, Number(next.maxPoints) || 0);
             next.isBonus = !!next.isBonus;
+            next.borderStyle = undefined;
           } else {
             next.type = "block";
             next.isScorable = false;
@@ -2340,6 +2465,7 @@
             next.richContent = "";
             next.showSum = typeof next.showSum === "boolean" ? next.showSum : getNodeShowSum(node);
             next.isHeading = typeof next.isHeading === "boolean" ? next.isHeading : getNodeIsHeading(node);
+            next.borderStyle = next.borderStyle || getNodeBorderStyle(node);
           }
         } else if (field === "isBonus") {
           next.type = "criterion";
@@ -2348,6 +2474,14 @@
           if (next.maxPoints == null) {
             next.maxPoints = 1;
           }
+          next.borderStyle = undefined;
+        } else if (field === "borderStyle") {
+          next.type = "block";
+          next.isScorable = false;
+          next.borderStyle = value || "none";
+          next.isBonus = false;
+          next.maxPoints = undefined;
+          next.richContent = "";
         } else if (field === "showSum") {
           next.type = "block";
           next.isScorable = false;
@@ -2368,6 +2502,7 @@
           next.type = "criterion";
           next.isScorable = true;
           next.maxPoints = Math.max(0, Number(value) || 0);
+          next.borderStyle = undefined;
         } else {
           next[field] = value;
         }
@@ -2379,6 +2514,7 @@
           next.maxPoints = undefined;
           next.showSum = typeof next.showSum === "boolean" ? next.showSum : getNodeShowSum(node);
           next.isHeading = typeof next.isHeading === "boolean" ? next.isHeading : getNodeIsHeading(node);
+          next.borderStyle = next.borderStyle || getNodeBorderStyle(node);
         }
         return next;
       });
@@ -2416,7 +2552,7 @@
     mutateCurrentExam(function (exam) {
       return applyTaskBlockToExam(exam, template);
     });
-    showNotice("Aufgabenblock eingefügt: " + template.name);
+    showNotice("Aufgabenblock eingefÃ¼gt: " + template.name);
   }
 
   function addBulkCriteria() {
@@ -2515,7 +2651,7 @@
         render();
         break;
       case "clear-archive":
-        if (window.confirm("Lokales Archiv wirklich vollständig leeren?")) {
+        if (window.confirm("Lokales Archiv wirklich vollstÃ¤ndig leeren?")) {
           store = createEmptyStore();
           saveStore();
           ui.activeTab = "archive";
@@ -2540,7 +2676,7 @@
         render();
         break;
       case "delete-exam":
-        if (window.confirm("Klausur wirklich löschen?")) {
+        if (window.confirm("Klausur wirklich lÃ¶schen?")) {
           mutateStore(function (currentStore) {
             currentStore.exams = currentStore.exams.filter(function (exam) {
               return exam.metadata.id !== target.dataset.examId;
@@ -2712,7 +2848,7 @@
           exam.metadata.updatedAt = nowIso();
           return exam;
         });
-        showNotice(students.length + " Schüler importiert.");
+        showNotice(students.length + " SchÃ¼ler importiert.");
       }).catch(function (error) {
         showNotice(error.message || "CSV-Import fehlgeschlagen.");
       }).finally(function () {
@@ -2737,7 +2873,7 @@
           return exam;
         });
       }).catch(function () {
-        showNotice("Bild konnte nicht eingefügt werden.");
+        showNotice("Bild konnte nicht eingefÃ¼gt werden.");
       }).finally(function () {
         target.value = "";
       });
@@ -2808,4 +2944,6 @@
 
   render();
 })();
+
+
 
