@@ -15,12 +15,13 @@ interface PrintViewProps {
 
 interface PrintRow {
   nodeId: string;
-  depth: number;
+  indentDepth: number;
   title: string;
   richContent: string;
   maxPoints?: number;
   isScorable?: boolean;
   isBonus?: boolean;
+  isHeadingOnly: boolean;
 }
 
 const estimateWeight = (row: PrintRow): number => {
@@ -56,20 +57,52 @@ const getStudents = (exam: ExamRecord): Student[] =>
   exam.students.slice().sort((left, right) => left.sortIndex - right.sortIndex).filter((student) => student.aktiv);
 
 export const PrintView = ({ exam }: PrintViewProps) => {
+  const effectiveIndentDepth = useMemo(() => {
+    const nodeMap = new Map(exam.structure.map((node) => [node.id, node]));
+    const cache = new Map<string, number>();
+
+    const resolveDepth = (nodeId: string): number => {
+      const cached = cache.get(nodeId);
+      if (cached !== undefined) {
+        return cached;
+      }
+
+      const node = nodeMap.get(nodeId);
+      if (!node || !node.parentId) {
+        cache.set(nodeId, 0);
+        return 0;
+      }
+
+      const parent = nodeMap.get(node.parentId);
+      if (!parent) {
+        cache.set(nodeId, 0);
+        return 0;
+      }
+
+      const parentDepth = resolveDepth(parent.id);
+      const depth = parent.type === "headingOnly" ? parentDepth : parentDepth + 1;
+      cache.set(nodeId, depth);
+      return depth;
+    };
+
+    return resolveDepth;
+  }, [exam.structure]);
+
   const rows = useMemo(
     () =>
       flattenStructure(exam.structure)
         .filter((node) => node.printVisibility !== "hidden" && node.printVisibility !== "screenOnly")
         .map((node) => ({
           nodeId: node.id,
-          depth: node.depth,
+          indentDepth: node.type === "headingOnly" ? 0 : effectiveIndentDepth(node.id),
           title: node.title,
           richContent: node.richContent,
           maxPoints: node.maxPoints,
           isScorable: node.isScorable,
-          isBonus: node.isBonus
+          isBonus: node.isBonus,
+          isHeadingOnly: node.type === "headingOnly"
         })),
-    [exam.structure]
+    [exam.structure, effectiveIndentDepth]
   );
   const students = useMemo(() => getStudents(exam), [exam]);
   const scheme = resolveGradeScheme(exam.metadata);
@@ -116,13 +149,16 @@ export const PrintView = ({ exam }: PrintViewProps) => {
                 <tbody>
                   {pageRows.map((row) => {
                     const totalsForRow = getNodeTotalsForStudent(exam, row.nodeId, student.id);
+                    const rowPadding = `${12 + row.indentDepth * 16}px`;
                     return (
                       <tr key={row.nodeId}>
-                        <td style={{ paddingLeft: `${12 + row.depth * 16}px` }}>
+                        <td style={{ paddingLeft: rowPadding }}>
                           <strong>{row.title || "-"}</strong>
                           {row.isBonus ? <div>Bonus</div> : null}
                         </td>
-                        <td><MarkdownPreview content={row.richContent} /></td>
+                        <td className={row.isHeadingOnly ? "" : "print-inline-content"} style={{ paddingLeft: rowPadding }}>
+                          {row.isHeadingOnly ? null : <MarkdownPreview content={row.richContent} />}
+                        </td>
                         <td>
                           {row.isScorable
                             ? `${totalsForRow.achieved.toFixed(1)} / ${(row.maxPoints ?? 0).toFixed(1)}`

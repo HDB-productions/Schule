@@ -445,6 +445,19 @@ a {
   align-items: flex-end;
 }
 
+.print-inline-content .markdown-preview {
+  display: inline;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.print-inline-content .markdown-preview p {
+  display: inline;
+  margin: 0;
+}
+
 .grade-table {
   width: auto;
   min-width: 180px;
