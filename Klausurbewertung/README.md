@@ -1,83 +1,46 @@
 ﻿# Klausurbewertung
 
-Lokale, statische Web-App zur Korrektur von Klassenarbeiten und Klausuren. Die Anwendung ist als React-/TypeScript-/Vite-Projekt aufgebaut, speichert alle Fachdaten lokal im Browser und ist für statisches Hosting, insbesondere GitHub Pages, ausgelegt.
+Lokale, statische Web-App zur Korrektur von Klassenarbeiten und Klausuren. Die Anwendung läuft jetzt direkt über `index.html` im Browser und benötigt weder Node.js noch einen Build-Schritt.
 
-## Status
+## Start
 
-Der fachliche MVP ist umgesetzt mit Fokus auf Kernlogik und Alltagstauglichkeit:
+1. Ordner `Klausurbewertung` öffnen.
+2. `index.html` im Browser starten.
+
+Empfohlen:
+
+- aktueller Desktop-Browser wie Edge oder Chrome
+- für PDF-Ausgabe den Browserdruck `Als PDF speichern`
+
+## Technischer Stand
+
+Die lauffähige Runtime besteht aus:
+
+- `index.html`
+- `app.js`
+- `styles.css`
+
+Diese drei Dateien genügen für den lokalen Betrieb per Doppelklick auf `index.html`.
+
+## Enthaltene Funktionen
 
 - lokale Archivverwaltung mehrerer Klausuren
 - Stammdaten inklusive editierbarer Notengrenzen
 - Schülerverwaltung mit CSV-Import, manueller Pflege und Klassenlisten-Bibliothek
-- Erwartungshorizont-Editor mit Strukturblöcken, Kriterien, Bonus, Markdown/LaTeX und Bild-Einbettung per Data-URL
+- Erwartungshorizont-Editor mit Strukturblöcken, Kriterien, Bonus, Markdown-ähnlicher Vorschau und Bild-Einbettung per Data-URL
 - Aufgabenblock-Bibliothek zur Wiederverwendung alter Teilstrukturen
 - Bewertungsmatrix mit Sticky-Bereichen, Tastaturnavigation und Blockaktionen
 - Notenberechnung für Sek I, Oberstufe und Symbolskala
 - Bonuslogik und kontrollierte Änderung von Maximalpunkten
 - JSON-Import/Export kompletter Klausuren
 - formale Druckansicht für Sammel-PDF über den Browserdruck
-- Tests für die kritische Berechnungslogik
 
-## Annahmen
+## Wichtige Annahmen
 
 - Die beiden genannten Referenzdateien waren im Workspace nicht vorhanden und konnten daher nicht analysiert werden.
-- Die App speichert lokal per `localStorage`. Das ist für eine einzelne Lehrkraft robust genug und ohne zusätzliche Browser-API nutzbar. Für sehr große eingebettete Bilder ist IndexedDB perspektivisch sinnvoll, aber für den MVP nicht zwingend.
-- Der PDF-Weg ist bewusst browserbasiert: Die Druckansicht ist formal aufbereitet und wird über `window.print()` als PDF ausgegeben. Das bleibt vektororientiert und vermeidet Screenshot-PDFs.
-- Bilder in Kriterien werden als Data-URL direkt im Rich-Content gespeichert. Dadurch bleiben Export/Import ohne zusätzliche Dateiverwaltung vollständig.
+- Die App speichert lokal per `localStorage`.
+- Bilder in Kriterien werden als Data-URL direkt im JSON mitgeführt.
 - A/B-Varianten sind im Datenmodell berücksichtigt. Im MVP ist die Struktur noch gemeinsam, Schüler können aber Varianten zugewiesen bekommen.
-
-## Projektstart
-
-Voraussetzung: lokale Node.js-Installation.
-
-```bash
-cd Klausurbewertung
-npm install
-npm run dev
-```
-
-Für Build und lokale Vorschau:
-
-```bash
-npm run build
-npm run preview
-```
-
-Für Tests:
-
-```bash
-npm run test
-```
-
-## Wichtiger Hinweis zur aktuellen Umgebung
-
-In der aktuellen Arbeitsumgebung standen `node` und `npm` nicht im PATH zur Verfügung. Deshalb konnte ich den Build hier nicht ausführen. Der Code ist strukturiert und auf lauffähige Vite-/React-Konfiguration ausgelegt, sollte aber lokal nach Installation von Node einmal gebaut und getestet werden.
-
-## Architekturüberblick
-
-### 1. UI
-
-- `src/components/App.tsx`: zentrale Orchestrierung, Tabs, lokale Archiv- und Klausuraktionen
-- `src/components/ArchiveView.tsx`: Archivseite für Öffnen, Duplizieren, Löschen, Import/Export
-- `src/components/MetadataPanel.tsx`: Stammdaten und editierbare Notengrenzen
-- `src/components/StudentManager.tsx`: Schülerpflege, CSV-Import, Klassenlisten-Bibliothek
-- `src/components/StructureEditor.tsx`: Erwartungshorizont-Editor mit Mehrfachanlage, Blockbibliothek und DnD-Reihenfolge
-- `src/components/EvaluationMatrix.tsx`: Kernraster für die Korrektur
-- `src/components/OverviewPanel.tsx`: Deckblatt-/Übersichtsseite
-- `src/components/PrintView.tsx`: druckoptimierte Sammelausgabe
-
-### 2. Domänenlogik
-
-- `src/domain/types.ts`: zentrale Typen und Datenstrukturen
-- `src/domain/gradePresets.ts`: Standard-Notenschlüssel
-- `src/domain/logic.ts`: reine Funktionen für Rundung, Prozentumrechnung, Summen, Bonus, Noten und Reskalierung
-
-Die fachlich kritischen Regeln liegen absichtlich nicht in UI-Komponenten.
-
-### 3. Persistenz
-
-- `src/store/repository.ts`: Laden, Speichern, Demo-Daten, JSON-Import/Export und Bibliotheksobjekte
-- lokaler Schlüssel: `klausurbewertung.store.v1`
 
 ## Datenmodell
 
@@ -150,25 +113,14 @@ Die kanonische Größe ist `achievedPoints`.
 
 ## Fachregeln
 
-### Rundung und Prozent
-
 - Punkte werden in 0,5-Schritten gespeichert.
-- Prozentangaben werden über `percentToPoints()` in Punkte umgerechnet.
-- Es wird immer auf halbe Punkte abgerundet: `floor(value * 2) / 2`.
-
-### Bonus
-
-- Bonuskriterien erhöhen nur die erreichten Punkte.
-- Bonus erhöht nicht die reguläre Maximalpunktzahl.
+- Prozentangaben werden über Abrundung auf halbe Punkte in Punkte umgerechnet.
+- Es gilt immer `floor(value * 2) / 2`.
+- Bonus erhöht nur die erreichten Punkte, nicht die reguläre Maximalpunktzahl.
 - Dadurch kann der Prozentwert über 100 % liegen.
-- Die beste Note bleibt durch die obere Grenzdefinition gedeckelt.
-
-### Änderung von Maximalpunkten
-
-Die App bietet zwei Modi:
-
-- `absolute`: eingetragene Punkte bleiben erhalten, werden aber bei Bedarf auf die neue Obergrenze begrenzt
-- `proportional`: vorhandene Leistungen werden prozentual auf die neue Maximalpunktzahl übertragen und erneut auf 0,5 abgerundet
+- Bei Änderung von Maximalpunkten gibt es zwei Modi:
+  - absolute Punkte beibehalten
+  - proportional mitskalieren
 
 ## CSV-Import
 
@@ -189,50 +141,20 @@ Exportiert wird jeweils eine vollständige Klausur als JSON-Datei mit:
 - Bewertungen
 - Notengrenzen
 - Bonuskriterien
-- Rich-Content inklusive Data-URL-Bildern
-
-Hinweis:
-
-- Der Export ist klausurbezogen, nicht archivbezogen.
-- Beim JSON-Import wird eine neue lokale Klausur mit neuer ID angelegt.
+- Rich-Content inklusive eingebetteter Bilder
 
 ## Druck / PDF
 
-Die Druckansicht ist über den Tab `Druck` erreichbar.
+Der Tab `Druck` erzeugt eine formale Browser-Druckansicht mit:
 
-Enthalten pro Schüler:
-
-- Kopf mit Stammdaten
-- Name
-- Fach / Klasse / Datum
-- Seitenzählung innerhalb des Schülerbogens
-- vollständige Struktur
-- Punkte je Kriterium
-- Summen pro Block
-- Gesamtpunkte, Bonus, Prozent, Note
+- Kopf je Schülerbogen
+- Seitenzählung pro Schülerbogen
+- vollständigem Erwartungshorizont
+- Einzelpunkten und Summen
+- Gesamtpunkten, Bonus, Prozent und Endnote
 - Notengrenzen-Tabelle
 - Kürzelfeld der Lehrkraft
 
-Empfohlener Ablauf:
+## Hinweis zu den übrigen Projektdateien
 
-1. Tab `Druck` öffnen.
-2. `Sammel-PDF drucken` klicken.
-3. Im Browser `Als PDF speichern` wählen.
-
-## Tests
-
-Die Tests liegen in `src/test/logic.test.ts` und decken die geforderten Kernregeln ab:
-
-- Rundung auf 0,5
-- Prozent -> Punkte
-- Notenberechnung
-- Bonuslogik
-- Maximalpunktänderung in beiden Modi
-
-## Nächste sinnvolle Ausbaustufen
-
-- Migration von `localStorage` auf IndexedDB für sehr große Bildmengen
-- feinere Variantenlogik auf Kriteriumsebene
-- explizite Undo-/Redo-Historie
-- stabileres Drag-and-Drop mit hierarchischem Umhängen
-- echte PWA-Installation mit Service Worker
+Im Ordner liegen noch die früher erzeugten React-/Vite-Dateien (`src`, `package.json`, `vite.config.ts` usw.). Diese sind nicht mehr nötig, damit die App läuft. Maßgeblich für den direkten Start sind jetzt `index.html`, `app.js` und `styles.css`.
