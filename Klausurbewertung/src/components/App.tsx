@@ -124,6 +124,18 @@ const collectTaskBlockNodes = (structure: StructureNode[], nodeId: string | null
   return structure.filter((node) => ids.has(node.id));
 };
 
+const getDefaultTaskBlockName = (exam: ExamRecord, nodeId: string | null): string => {
+  if (nodeId) {
+    const sourceNode = exam.structure.find((node) => node.id === nodeId);
+    const nodeTitle = sourceNode?.title.trim();
+    if (nodeTitle) {
+      return nodeTitle;
+    }
+  }
+
+  return exam.metadata.title.trim() || (nodeId ? "Aufgabenblock" : "Struktur");
+};
+
 const buildClassTemplatePayload = (exam: ExamRecord): ClassListTemplate["students"] =>
   exam.students.map((student) => ({
     vorname: student.vorname,
@@ -336,13 +348,14 @@ export const App = () => {
     if (!currentExam) {
       return;
     }
+    const resolvedName = name.trim() || getDefaultTaskBlockName(currentExam, nodeId);
     const nodes = collectTaskBlockNodes(currentExam.structure, nodeId);
-    const template = createTaskBlockTemplate(name, nodes);
+    const template = createTaskBlockTemplate(resolvedName, nodes);
     mutateStore((current) => ({
       ...current,
       taskBlockLibrary: [template, ...current.taskBlockLibrary]
     }));
-    setNotice(`Aufgabenblock gespeichert: ${name}`);
+    setNotice(`Aufgabenblock gespeichert: ${resolvedName}`);
   };
 
   const insertTaskBlock = (templateId: string) => {
@@ -568,3 +581,4 @@ export const App = () => {
     </main>
   );
 };
+

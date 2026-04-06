@@ -87,6 +87,29 @@
     return new Intl.DateTimeFormat("de-DE").format(date);
   }
 
+  function formatDateTime(value) {
+    if (!value) {
+      return "";
+    }
+    var date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+    return new Intl.DateTimeFormat("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(date);
+  }
+
+  function formatTaskBlockOptionLabel(template) {
+    var name = String(template && template.name ? template.name : "").trim() || "Aufgabenblock";
+    var createdAt = formatDateTime(template && template.createdAt ? template.createdAt : "");
+    return createdAt ? name + " (kopiert " + createdAt + ")" : name;
+  }
+
   function sortBySortIndex(items) {
     return items.slice().sort(function (a, b) {
       if (a.sortIndex !== b.sortIndex) {
@@ -1055,6 +1078,20 @@
     return renumberSortIndices(next);
   }
 
+  function getDefaultTaskBlockName(exam, nodeId) {
+    if (nodeId) {
+      var sourceNode = exam.structure.find(function (node) {
+        return node.id === nodeId;
+      });
+      var nodeTitle = sourceNode && sourceNode.title ? sourceNode.title.trim() : "";
+      if (nodeTitle) {
+        return nodeTitle;
+      }
+    }
+    var examTitle = exam && exam.metadata && exam.metadata.title ? exam.metadata.title.trim() : "";
+    return examTitle || (nodeId ? "Aufgabenblock" : "Struktur");
+  }
+
   var store = loadStore();
   var ui = {
     activeTab: store.exams.length ? "overview" : "archive",
@@ -1066,6 +1103,8 @@
     suppressMatrixFocusRestore: false,
     matrixScroll: null,
     imageResize: null,
+    openParentPickerNodeId: null,
+    editingNodeId: null,
     collapsedNodeIds: {}
   };
 
@@ -1502,29 +1541,193 @@
     }).join("");
   }
 
+  function getBorderStyleButtonLabel(style) {
+    switch (style) {
+      case "top":
+        return "R↑";
+      case "bottom":
+        return "R↓";
+      case "topBottom":
+        return "R↕";
+      case "box":
+        return "R□";
+      default:
+        return "R0";
+    }
+  }
+
+  function renderStructureToggleButton(options) {
+    var classes = "ghost-button tiny-button structure-flag-button" + (options.active ? " structure-flag-active" : "");
+    var fieldAttribute = options.field ? ` data-node-field="${options.field}"` : "";
+    return `<button type="button" class="${classes}" data-action="${options.action}" data-node-id="${options.nodeId}"${fieldAttribute} title="${escapeHtml(options.title)}" aria-pressed="${options.active ? "true" : "false"}">${escapeHtml(options.label)}</button>`;
+  }
+
+  function renderNodeKindSwitch(nodeId, isCriterion) {
+    return `
+      <div class="segmented-control structure-kind-switch" aria-label="Typ umschalten">
+        <button type="button" class="tiny-button${isCriterion ? "" : " segmented-active"}" data-action="set-node-kind" data-node-id="${nodeId}" data-node-kind="block">Block</button>
+        <button type="button" class="tiny-button${isCriterion ? " segmented-active" : ""}" data-action="set-node-kind" data-node-id="${nodeId}" data-node-kind="criterion">Krit.</button>
+      </div>
+    `;
+  }
+
+  function renderBlockHeaderControls(node, showSum, isHeading, borderStyle) {
+    var borderLabel = getBlockBorderLabel(borderStyle) || "Kein Rand";
+    return [
+      renderStructureToggleButton({
+        action: "toggle-node-flag",
+        nodeId: node.id,
+        field: "showSum",
+        label: "Σ",
+        title: showSum ? "Summenzeile ausblenden" : "Summenzeile einblenden",
+        active: showSum
+      }),
+      renderStructureToggleButton({
+        action: "toggle-node-flag",
+        nodeId: node.id,
+        field: "isHeading",
+        label: "Ü",
+        title: isHeading ? "Überschrift-Modus deaktivieren" : "Als Überschrift markieren",
+        active: isHeading
+      }),
+      renderStructureToggleButton({
+        action: "cycle-node-border",
+        nodeId: node.id,
+        label: getBorderStyleButtonLabel(borderStyle),
+        title: "Rand wechseln. Aktuell: " + borderLabel,
+        active: borderStyle !== "none"
+      })
+    ].join("");
+  }
+
+  function renderCriterionHeaderControls(node) {
+    return `
+      <label class="structure-points-shell" title="Maximalpunkte">
+        <span>P</span>
+        <input class="structure-points-input" type="number" min="0" step="0.5" value="${escapeHtml(String(node.maxPoints || 0))}" data-node-id="${node.id}" data-node-field="maxPoints" />
+      </label>
+      ${renderStructureToggleButton({
+        action: "toggle-node-flag",
+        nodeId: node.id,
+        field: "isBonus",
+        label: "B",
+        title: node.isBonus ? "Bonus deaktivieren" : "Als Bonus markieren",
+        active: !!node.isBonus
+      })}
+    `;
+  }
+
+  function renderStructureParentPicker(flattened, node, isOpen) {
+    if (!isOpen) {
+      return "";
+    }
+    return `
+      <div class="structure-inline-panel structure-parent-picker">
+        <label class="field-group structure-parent-field">
+          <span>Position</span>
+          <select data-node-id="${node.id}" data-node-field="parentId">
+            <option value=""${attrSelected(!node.parentId)}>Oberste Ebene</option>
+            ${renderBlockParentOptions(flattened, node.id, node.parentId || "")}
+          </select>
+        </label>
+      </div>
+    `;
+  }
+
+  function renderCriterionContent(node, isEditorOpen) {
+    if (isEditorOpen) {
+      return `
+        <div class="structure-criterion-editor">
+          <div class="field-group">
+            <span>Text</span>
+            <textarea rows="4" data-node-id="${node.id}" data-node-field="richContent">${escapeHtml(node.richContent || "")}</textarea>
+          </div>
+          <div class="inline-actions wrap-actions structure-text-tools">
+            <label class="secondary-button file-button tiny-button">
+              Bild
+              <input type="file" accept="image/*" data-role="node-image" data-node-id="${node.id}" />
+            </label>
+          </div>
+        </div>
+      `;
+    }
+
+    return `<div class="markdown-preview" data-preview-node-id="${node.id}">${renderMarkdown(node.richContent || "", { editableImages: true, nodeId: node.id })}</div>`;
+  }
+
+  function renderStructureNodes(exam, flattened, childrenMap, parentId, lineage) {
+    var key = parentId || "__root__";
+    var nodes = childrenMap[key] || [];
+
+    return nodes.map(function (node) {
+      if (lineage.indexOf(node.id) !== -1) {
+        return "";
+      }
+
+      var isCriterion = isCriterionNode(node);
+      var isHeading = getNodeIsHeading(node);
+      var showSum = getNodeShowSum(node);
+      var borderStyle = getNodeBorderStyle(node);
+      var isCollapsed = !!ui.collapsedNodeIds[node.id];
+      var isParentPickerOpen = ui.openParentPickerNodeId === node.id;
+      var isEditorOpen = ui.editingNodeId === node.id;
+      var childMarkup = isCollapsed ? "" : renderStructureNodes(exam, flattened, childrenMap, node.id, lineage.concat(node.id));
+      var positionButton = renderStructureToggleButton({
+        action: "toggle-node-parent-picker",
+        nodeId: node.id,
+        label: "Pos.",
+        title: isParentPickerOpen ? "Positionierung ausblenden" : "Positionierung ändern",
+        active: isParentPickerOpen
+      });
+      var editButton = isCriterion
+        ? renderStructureToggleButton({
+            action: "toggle-node-editor",
+            nodeId: node.id,
+            label: "✎",
+            title: isEditorOpen ? "Bearbeitung schließen" : "Text bearbeiten",
+            active: isEditorOpen
+          })
+        : "";
+
+      return `
+        <article class="structure-row subpanel structure-row-${isCriterion ? "criterion" : "block"}${isCollapsed ? " structure-row-collapsed" : ""}" data-node-id="${node.id}">
+          <div class="structure-header">
+            <div class="structure-meta structure-header-main">
+              <button type="button" class="ghost-button tiny-button collapse-toggle" data-action="toggle-node-collapse" data-node-id="${node.id}" aria-expanded="${isCollapsed ? "false" : "true"}" title="${isCollapsed ? "Aufklappen" : "Einklappen"}">${isCollapsed ? "▸" : "▾"}</button>
+              <span class="drag-handle" draggable="true" data-role="drag-handle" data-node-id="${node.id}" title="Zum Umordnen ziehen">⋮⋮</span>
+              <input class="structure-title-input" value="${escapeHtml(node.title || "")}" placeholder="${isCriterion ? "Kriterium" : "Block"}" data-node-id="${node.id}" data-node-field="title" />
+              ${renderNodeKindSwitch(node.id, isCriterion)}
+              ${isCriterion ? renderCriterionHeaderControls(node) : renderBlockHeaderControls(node, showSum, isHeading, borderStyle)}
+            </div>
+            <div class="inline-actions wrap-actions structure-row-actions">
+              <button type="button" class="secondary-button tiny-button" data-action="add-node" data-node-type="block" data-parent-id="${node.id}" title="Untergeordneten Block anlegen">+B</button>
+              <button type="button" class="secondary-button tiny-button" data-action="add-node" data-node-type="criterion" data-parent-id="${node.id}" title="Untergeordnetes Kriterium anlegen">+K</button>
+              <button type="button" class="secondary-button tiny-button" data-action="save-task-block" data-node-id="${node.id}" title="Als Aufgabenblock sichern">Sich.</button>
+              ${positionButton}
+              ${editButton}
+              <button type="button" class="secondary-button tiny-button" data-action="move-node" data-node-id="${node.id}" data-direction="-1" title="Nach oben verschieben">↑</button>
+              <button type="button" class="secondary-button tiny-button" data-action="move-node" data-node-id="${node.id}" data-direction="1" title="Nach unten verschieben">↓</button>
+              <button type="button" class="danger-button tiny-button" data-action="remove-node" data-node-id="${node.id}" title="Element entfernen">×</button>
+            </div>
+          </div>
+          ${renderStructureParentPicker(flattened, node, isParentPickerOpen)}
+          ${!isCollapsed && isCriterion ? `
+            <div class="structure-row-body">
+              ${renderCriterionContent(node, isEditorOpen)}
+            </div>
+          ` : ""}
+          ${!isCollapsed && childMarkup ? `<div class="structure-children">${childMarkup}</div>` : ""}
+        </article>
+      `;
+    }).join("");
+  }
+
   function renderStructureView(exam) {
     var flattened = flattenStructure(exam.structure);
     var blockNodes = flattened.filter(function (node) {
       return isBlockNode(node);
     });
-    var collapsedNodes = ui.collapsedNodeIds || {};
-    var nodeById = {};
-    var visibleNodes;
-
-    flattened.forEach(function (node) {
-      nodeById[node.id] = node;
-    });
-
-    visibleNodes = flattened.filter(function (node) {
-      var parentId = node.parentId;
-      while (parentId) {
-        if (collapsedNodes[parentId]) {
-          return false;
-        }
-        parentId = nodeById[parentId] ? nodeById[parentId].parentId : null;
-      }
-      return true;
-    });
+    var childrenMap = getChildrenMap(exam.structure);
 
     return `
       <section class="panel stack-gap structure-view">
@@ -1562,86 +1765,14 @@
             <select id="taskblock-select">
               <option value="">Aufgabenblock einfügen</option>
               ${store.taskBlockLibrary.map(function (template) {
-                return `<option value="${template.id}">${escapeHtml(template.name)}</option>`;
+                return `<option value="${template.id}">${escapeHtml(formatTaskBlockOptionLabel(template))}</option>`;
               }).join("")}
             </select>
             <button type="button" class="secondary-button" data-action="insert-task-block">Einfügen</button>
           </div>
         </article>
-        <div class="stack-gap">
-          ${visibleNodes.map(function (node) {
-            var isCriterion = isCriterionNode(node);
-            var isHeading = getNodeIsHeading(node);
-            var showSum = getNodeShowSum(node);
-            var borderStyle = getNodeBorderStyle(node);
-            var isCollapsed = !!collapsedNodes[node.id];
-            return `
-              <article class="structure-row subpanel${isCollapsed ? " structure-row-collapsed" : ""}" data-node-id="${node.id}">
-                <div class="structure-header" style="padding-left:${node.depth * 18}px">
-                  <div class="structure-meta">
-                    <button type="button" class="ghost-button tiny-button collapse-toggle" data-action="toggle-node-collapse" data-node-id="${node.id}" aria-expanded="${isCollapsed ? "false" : "true"}" title="${isCollapsed ? "Aufklappen" : "Einklappen"}">${isCollapsed ? "▸" : "▾"}</button>
-                    <span class="drag-handle" draggable="true" data-role="drag-handle" data-node-id="${node.id}" title="Zum Umordnen ziehen">⋮⋮</span>
-                    <strong>${escapeHtml(node.title || (isCriterion ? "Kriterium" : "Block"))}</strong>
-                    <span class="pill">${isCriterion ? "Kriterium" : "Block"}</span>
-                    ${isCriterion && node.isBonus ? '<span class="pill pill-bonus">Bonus</span>' : ""}
-                    ${!isCriterion && showSum ? '<span class="pill">Summe</span>' : ""}
-                    ${!isCriterion && isHeading ? '<span class="pill">Überschrift</span>' : ""}
-                    ${!isCriterion && borderStyle !== "none" ? `<span class="pill">${escapeHtml(getBlockBorderLabel(borderStyle))}</span>` : ""}
-                  </div>
-                  <div class="inline-actions wrap-actions">
-                    <button type="button" class="secondary-button tiny-button" data-action="add-node" data-node-type="block" data-parent-id="${node.id}">+ Block</button>
-                    <button type="button" class="secondary-button tiny-button" data-action="add-node" data-node-type="criterion" data-parent-id="${node.id}">+ Kriterium</button>
-                    <button type="button" class="secondary-button tiny-button" data-action="save-task-block" data-node-id="${node.id}">Block sichern</button>
-                    <button type="button" class="secondary-button tiny-button" data-action="move-node" data-node-id="${node.id}" data-direction="-1">Hoch</button>
-                    <button type="button" class="secondary-button tiny-button" data-action="move-node" data-node-id="${node.id}" data-direction="1">Runter</button>
-                    <button type="button" class="danger-button tiny-button" data-action="remove-node" data-node-id="${node.id}">Entfernen</button>
-                  </div>
-                </div>
-                ${isCollapsed ? '' : `
-                  <div class="structure-form-grid">
-                    <label class="field-group">
-                      <span>Typ</span>
-                      <select data-node-id="${node.id}" data-node-field="nodeKind">
-                        <option value="block"${attrSelected(!isCriterion)}>Block</option>
-                        <option value="criterion"${attrSelected(isCriterion)}>Kriterium</option>
-                      </select>
-                    </label>
-                    <label class="field-group"><span>Name</span><input value="${escapeHtml(node.title || "")}" data-node-id="${node.id}" data-node-field="title" /></label>
-                    <label class="field-group">
-                      <span>Übergeordneter Block</span>
-                      <select data-node-id="${node.id}" data-node-field="parentId">
-                        <option value=""${attrSelected(!node.parentId)}>Oberste Ebene</option>
-                        ${renderBlockParentOptions(flattened, node.id, node.parentId || "")}
-                      </select>
-                    </label>
-                    ${isCriterion ? `
-                      <label class="field-group"><span>Maximalpunkte</span><input type="number" min="0" step="0.5" value="${escapeHtml(String(node.maxPoints || 0))}" data-node-id="${node.id}" data-node-field="maxPoints" /></label>
-                      <label class="field-group inline-checkbox"><span>Ist Bonus</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isBonus"${attrChecked(!!node.isBonus)} /></label>
-                    ` : `
-                      <label class="field-group inline-checkbox"><span>Summe anzeigen</span><input type="checkbox" data-node-id="${node.id}" data-node-field="showSum"${attrChecked(showSum)} /></label>
-                      <label class="field-group inline-checkbox"><span>Ist Überschrift</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isHeading"${attrChecked(isHeading)} /></label>
-                      <label class="field-group"><span>Rand</span><select data-node-id="${node.id}" data-node-field="borderStyle">${renderBorderStyleOptions(borderStyle)}</select></label>
-                    `}
-                  </div>
-                  ${isCriterion ? `
-                    <div class="field-group">
-                      <span>Text</span>
-                      <textarea rows="5" data-node-id="${node.id}" data-node-field="richContent">${escapeHtml(node.richContent || "")}</textarea>
-                    </div>
-                    <div class="inline-actions wrap-actions">
-                      <label class="secondary-button file-button">
-                        Bild einfügen
-                        <input type="file" accept="image/*" data-role="node-image" data-node-id="${node.id}" />
-                      </label>
-                    </div>
-                    <div class="markdown-preview" data-preview-node-id="${node.id}">${renderMarkdown(node.richContent || "", { editableImages: true, nodeId: node.id })}</div>
-                  ` : `
-                    <div class="small-help">Blöcke strukturieren den Erwartungshorizont. Für Zeilen wie „Hilfsmittelfreier Teil“, „Aufgabe 1“ oder „a)“ legst du jeweils einen Block an. Optional kannst du einen Rand für die Druckausgabe wählen.</div>
-                  `}
-                `}
-              </article>
-            `;
-          }).join("")}
+        <div class="stack-gap structure-list">
+          ${renderStructureNodes(exam, flattened, childrenMap, null, [])}
         </div>
       </section>
     `;
@@ -2613,6 +2744,10 @@
   }
 
   function removeNode(nodeId) {
+    ui.openParentPickerNodeId = null;
+    if (ui.editingNodeId === nodeId) {
+      ui.editingNodeId = null;
+    }
     mutateCurrentExam(function (exam) {
       var ids = new Set([nodeId]);
       var changed = true;
@@ -2624,6 +2759,9 @@
             changed = true;
           }
         });
+      }
+      if (ui.editingNodeId && ids.has(ui.editingNodeId)) {
+        ui.editingNodeId = null;
       }
       exam.structure = exam.structure.filter(function (node) {
         return !ids.has(node.id);
@@ -2729,6 +2867,7 @@
           next.richContent = "";
         } else if (field === "parentId") {
           next.parentId = value || null;
+          ui.openParentPickerNodeId = null;
         } else if (field === "maxPoints") {
           next.type = "criterion";
           next.isScorable = true;
@@ -2754,13 +2893,78 @@
     });
   }
 
+  function getStructureFlagState(node, field) {
+    if (!node) {
+      return false;
+    }
+    if (field === "showSum") {
+      return getNodeShowSum(node);
+    }
+    if (field === "isHeading") {
+      return getNodeIsHeading(node);
+    }
+    if (field === "isBonus") {
+      return !!node.isBonus;
+    }
+    return !!node[field];
+  }
+
+  function toggleNodeFlag(nodeId, field) {
+    var currentExam = getCurrentExam();
+    if (!currentExam) {
+      return;
+    }
+    var node = currentExam.structure.find(function (entry) {
+      return entry.id === nodeId;
+    });
+    if (!node) {
+      return;
+    }
+    updateNodeField(nodeId, field, "", !getStructureFlagState(node, field));
+  }
+
+  function toggleNodeParentPicker(nodeId) {
+    ui.openParentPickerNodeId = ui.openParentPickerNodeId === nodeId ? null : nodeId;
+    render();
+  }
+
+  function toggleNodeEditor(nodeId) {
+    ui.editingNodeId = ui.editingNodeId === nodeId ? null : nodeId;
+    ui.collapsedNodeIds[nodeId] = false;
+    render();
+  }
+
+  function cycleNodeBorder(nodeId) {
+    var currentExam = getCurrentExam();
+    if (!currentExam) {
+      return;
+    }
+    var node = currentExam.structure.find(function (entry) {
+      return entry.id === nodeId;
+    });
+    if (!node) {
+      return;
+    }
+    var currentStyle = getNodeBorderStyle(node);
+    var nextStyle = currentStyle === "none"
+      ? "top"
+      : currentStyle === "top"
+        ? "bottom"
+        : currentStyle === "bottom"
+          ? "topBottom"
+          : currentStyle === "topBottom"
+            ? "box"
+            : "none";
+    updateNodeField(nodeId, "borderStyle", nextStyle, false);
+  }
+
   function saveTaskBlock() {
     var currentExam = getCurrentExam();
     if (!currentExam) {
       return;
     }
     var nodeId = eventTargetDataset.nodeId || "";
-    var name = getValue("taskblock-name").trim() || (nodeId ? "Aufgabenblock" : (currentExam.metadata.title || "Struktur"));
+    var name = getValue("taskblock-name").trim() || getDefaultTaskBlockName(currentExam, nodeId || null);
     var nodes = collectTaskBlockNodes(currentExam.structure, nodeId || null);
     mutateStore(function (currentStore) {
       currentStore.taskBlockLibrary.unshift(createTaskBlockTemplate(name, nodes));
@@ -3002,6 +3206,21 @@
         break;
       case "add-node":
         addNode(target.dataset.nodeType, target.dataset.parentId || null);
+        break;
+      case "set-node-kind":
+        updateNodeField(target.dataset.nodeId, "nodeKind", target.dataset.nodeKind || "block", false);
+        break;
+      case "toggle-node-flag":
+        toggleNodeFlag(target.dataset.nodeId, target.dataset.nodeField);
+        break;
+      case "toggle-node-parent-picker":
+        toggleNodeParentPicker(target.dataset.nodeId);
+        break;
+      case "toggle-node-editor":
+        toggleNodeEditor(target.dataset.nodeId);
+        break;
+      case "cycle-node-border":
+        cycleNodeBorder(target.dataset.nodeId);
         break;
       case "remove-node":
         removeNode(target.dataset.nodeId);
@@ -3263,34 +3482,4 @@
 
   render();
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

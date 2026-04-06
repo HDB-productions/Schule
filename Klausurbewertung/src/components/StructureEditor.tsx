@@ -1,7 +1,7 @@
 ﻿import { DragEvent, useMemo, useState } from "react";
 import { StructureNode, StructureNodeType, TaskBlockTemplate } from "../domain/types";
 import { flattenStructure } from "../domain/logic";
-import { readFileAsDataUrl } from "../lib/utils";
+import { formatDateTime, readFileAsDataUrl } from "../lib/utils";
 import { MarkdownPreview } from "./MarkdownPreview";
 
 interface StructureEditorProps {
@@ -15,6 +15,12 @@ interface StructureEditorProps {
 }
 
 const nonScorableTypes: StructureNodeType[] = ["section", "task", "subtask", "spacer", "headingOnly"];
+
+const formatTaskBlockOptionLabel = (template: TaskBlockTemplate): string => {
+  const name = String(template.name || "").trim() || "Aufgabenblock";
+  const createdAt = formatDateTime(template.createdAt);
+  return createdAt ? `${name} (kopiert ${createdAt})` : name;
+};
 
 export const StructureEditor = ({
   structure,
@@ -151,7 +157,7 @@ export const StructureEditor = ({
           <select defaultValue="" onChange={(event) => event.target.value && onInsertTaskBlock(event.target.value)}>
             <option value="">Aufgabenblock einfügen</option>
             {taskBlockLibrary.map((template) => (
-              <option key={template.id} value={template.id}>{template.name}</option>
+              <option key={template.id} value={template.id}>{formatTaskBlockOptionLabel(template)}</option>
             ))}
           </select>
         </div>
@@ -267,3 +273,4 @@ export const StructureEditor = ({
     </section>
   );
 };
+
