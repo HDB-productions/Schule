@@ -1,4 +1,4 @@
-ï»¿(function () {
+(function () {
   "use strict";
 
   var STORAGE_KEY = "klausurbewertung.nobuild.v1";
@@ -106,6 +106,21 @@
     });
   }
 
+  function getDefaultResultLabel(presetId) {
+    switch (presetId) {
+      case "sek1":
+        return "Note";
+      case "oberstufe":
+        return "Notenpunkte";
+      case "symbol":
+        return "Bewertung";
+      case "custom":
+        return "Bewertung";
+      default:
+        return "Bewertung";
+    }
+  }
+
   function createEmptyStore() {
     return {
       version: 1,
@@ -119,7 +134,10 @@
   function createDemoStructure() {
     var section1 = createId("node");
     var task1 = createId("node");
+    var task1a = createId("node");
+    var task1b = createId("node");
     var task2 = createId("node");
+    var task2a = createId("node");
     var criterion1 = createId("node");
     var criterion2 = createId("node");
     var criterion3 = createId("node");
@@ -128,31 +146,50 @@
     return [
       {
         id: section1,
-        type: "section",
+        type: "block",
         parentId: null,
         sortIndex: 0,
         title: "Hilfsmittelfreier Teil",
         shortLabel: "",
         richContent: "",
-        printVisibility: "always"
+        printVisibility: "always",
+        isScorable: false,
+        showSum: true,
+        isHeading: true
       },
       {
         id: task1,
-        type: "task",
+        type: "block",
         parentId: section1,
         sortIndex: 1,
         title: "Aufgabe 1",
         shortLabel: "",
-        richContent: "Terme vereinfachen und Ergebnisse begrÃ¼nden.",
-        printVisibility: "always"
+        richContent: "",
+        printVisibility: "always",
+        isScorable: false,
+        showSum: true,
+        isHeading: true
+      },
+      {
+        id: task1a,
+        type: "block",
+        parentId: task1,
+        sortIndex: 2,
+        title: "a)",
+        shortLabel: "",
+        richContent: "",
+        printVisibility: "always",
+        isScorable: false,
+        showSum: false,
+        isHeading: false
       },
       {
         id: criterion1,
         type: "criterion",
-        parentId: task1,
-        sortIndex: 2,
+        parentId: task1a,
+        sortIndex: 3,
         title: "Rechenweg nachvollziehbar",
-        shortLabel: "1a",
+        shortLabel: "",
         richContent: "Alle Zwischenschritte sind sauber notiert.",
         printVisibility: "always",
         maxPoints: 3,
@@ -161,13 +198,26 @@
         variantScope: []
       },
       {
+        id: task1b,
+        type: "block",
+        parentId: task1,
+        sortIndex: 4,
+        title: "b)",
+        shortLabel: "",
+        richContent: "",
+        printVisibility: "always",
+        isScorable: false,
+        showSum: false,
+        isHeading: false
+      },
+      {
         id: criterion2,
         type: "criterion",
-        parentId: task1,
-        sortIndex: 3,
+        parentId: task1b,
+        sortIndex: 5,
         title: "Ergebnis korrekt",
-        shortLabel: "1b",
-        richContent: "Das Endergebnis stimmt vollstÃ¤ndig.",
+        shortLabel: "",
+        richContent: "Das Endergebnis stimmt vollständig.",
         printVisibility: "always",
         maxPoints: 2,
         isBonus: false,
@@ -176,21 +226,37 @@
       },
       {
         id: task2,
-        type: "task",
+        type: "block",
         parentId: null,
-        sortIndex: 4,
+        sortIndex: 6,
         title: "Aufgabe 2",
         shortLabel: "",
-        richContent: "Geometrische Anwendung mit kurzer BegrÃ¼ndung.",
-        printVisibility: "always"
+        richContent: "",
+        printVisibility: "always",
+        isScorable: false,
+        showSum: true,
+        isHeading: true
+      },
+      {
+        id: task2a,
+        type: "block",
+        parentId: task2,
+        sortIndex: 7,
+        title: "a)",
+        shortLabel: "",
+        richContent: "",
+        printVisibility: "always",
+        isScorable: false,
+        showSum: false,
+        isHeading: false
       },
       {
         id: criterion3,
         type: "criterion",
-        parentId: task2,
-        sortIndex: 5,
+        parentId: task2a,
+        sortIndex: 8,
         title: "Skizze und Ansatz",
-        shortLabel: "2a",
+        shortLabel: "",
         richContent: "Geeignete Skizze mit passenden Bezeichnungen.",
         printVisibility: "always",
         maxPoints: 4,
@@ -201,11 +267,11 @@
       {
         id: criterion4,
         type: "criterion",
-        parentId: task2,
-        sortIndex: 6,
-        title: "Bonus: eleganter LÃ¶sungsweg",
-        shortLabel: "2b",
-        richContent: "Alternative oder besonders effiziente LÃ¶sungsidee.",
+        parentId: task2a,
+        sortIndex: 9,
+        title: "Bonus: eleganter Lösungsweg",
+        shortLabel: "",
+        richContent: "Alternative oder besonders effiziente Lösungsidee.",
         printVisibility: "always",
         maxPoints: 1,
         isBonus: true,
@@ -229,6 +295,7 @@
         thema: "",
         lehrkraft: "",
         lehrkraftKuerzel: "",
+        resultLabel: getDefaultResultLabel("sek1"),
         notenschluesselPreset: "sek1",
         benutzerdefinierteNotengrenzen: clonePresetBoundaries("sek1"),
         anzahlHilfsmittelfreierAufgaben: "",
@@ -256,6 +323,7 @@
         thema: "Terme und Geometrie",
         lehrkraft: "Lehrkraft",
         lehrkraftKuerzel: "LKR",
+        resultLabel: getDefaultResultLabel("sek1"),
         notenschluesselPreset: "sek1",
         benutzerdefinierteNotengrenzen: clonePresetBoundaries("sek1"),
         anzahlHilfsmittelfreierAufgaben: 1,
@@ -414,6 +482,38 @@
           : clonePresetBoundaries(metadata.notenschluesselPreset)
       )
     };
+  }
+
+  function getResultLabel(metadata) {
+    return metadata && metadata.resultLabel ? metadata.resultLabel : getDefaultResultLabel(metadata ? metadata.notenschluesselPreset : "custom");
+  }
+
+  function getNodeIsHeading(node) {
+    if (!node || node.type === "criterion") {
+      return false;
+    }
+    if (typeof node.isHeading === "boolean") {
+      return node.isHeading;
+    }
+    return node.type === "section" || node.type === "task" || node.type === "headingOnly";
+  }
+
+  function getNodeShowSum(node) {
+    if (!node || node.type === "criterion") {
+      return false;
+    }
+    if (typeof node.showSum === "boolean") {
+      return node.showSum;
+    }
+    return node.type === "section" || node.type === "task";
+  }
+
+  function isCriterionNode(node) {
+    return !!(node && node.type === "criterion" && node.isScorable);
+  }
+
+  function isBlockNode(node) {
+    return !!node && node.type !== "spacer" && !isCriterionNode(node);
   }
 
   function getGradeFromPercent(percent, metadata) {
@@ -853,7 +953,7 @@
   function importExamPayload(raw) {
     var parsed = JSON.parse(raw);
     if (!parsed || !parsed.metadata || !parsed.metadata.id || !Array.isArray(parsed.students) || !Array.isArray(parsed.structure)) {
-      throw new Error("Die JSON-Datei ist kein gÃ¼ltiger Klausurexport.");
+      throw new Error("Die JSON-Datei ist kein gültiger Klausurexport.");
     }
     return parsed;
   }
@@ -1020,7 +1120,7 @@
       <header class="topbar">
         <div>
           <h1>Klausurbewertung</h1>
-          <p class="muted-text">Lokal-first, statisch und direkt Ã¼ber index.html lauffÃ¤hig.</p>
+          <p class="muted-text">Lokal-first, statisch und direkt über index.html lauffähig.</p>
         </div>
         <div class="inline-actions wrap-actions">
           ${exam ? `<strong>${escapeHtml(exam.metadata.title || "Neue Klausur")}</strong>` : ""}
@@ -1033,9 +1133,9 @@
   function renderTabs() {
     var tabs = [
       { id: "archive", label: "Archiv" },
-      { id: "overview", label: "Ãœbersicht" },
+      { id: "overview", label: "Übersicht" },
       { id: "metadata", label: "Stammdaten" },
-      { id: "students", label: "SchÃ¼ler" },
+      { id: "students", label: "Schüler" },
       { id: "structure", label: "Erwartungshorizont" },
       { id: "matrix", label: "Matrix" },
       { id: "print", label: "Druck" }
@@ -1054,7 +1154,7 @@
     return `
       <section class="empty-state">
         <h2>No-Build-Version bereit</h2>
-        <p class="muted-text">Diese App lÃ¤uft direkt lokal im Browser. Lege eine neue Klausur an oder starte mit einer Demo.</p>
+        <p class="muted-text">Diese App läuft direkt lokal im Browser. Lege eine neue Klausur an oder starte mit einer Demo.</p>
         <div class="empty-state-actions">
           <button type="button" class="primary-button" data-action="create-exam">Neue Klausur</button>
           <button type="button" class="secondary-button" data-action="seed-demo">Demo laden</button>
@@ -1099,7 +1199,7 @@
                 <div class="inline-actions wrap-actions">
                   <button type="button" class="secondary-button" data-action="export-exam" data-exam-id="${exam.metadata.id}">Export</button>
                   <button type="button" class="secondary-button" data-action="duplicate-exam" data-exam-id="${exam.metadata.id}">Duplizieren</button>
-                  <button type="button" class="danger-button" data-action="delete-exam" data-exam-id="${exam.metadata.id}">LÃ¶schen</button>
+                  <button type="button" class="danger-button" data-action="delete-exam" data-exam-id="${exam.metadata.id}">Löschen</button>
                 </div>
               </article>
             `;
@@ -1111,12 +1211,13 @@
 
   function renderOverviewView(exam) {
     var summary = summarizeExam(exam);
+    var resultLabel = getResultLabel(exam.metadata);
     return `
       <section class="panel stack-gap overview-view">
         <div class="panel-header">
           <div>
-            <h2>Deckblatt und Ãœbersicht</h2>
-            <p class="muted-text">Stammdaten, Notenspiegel und SchÃ¼lergesamtergebnisse.</p>
+            <h2>Deckblatt und Übersicht</h2>
+            <p class="muted-text">Stammdaten, Notenspiegel und Schülergesamtergebnisse.</p>
           </div>
         </div>
         <div class="overview-grid">
@@ -1136,10 +1237,11 @@
           <article class="subpanel">
             <h3>Kennzahlen</h3>
             <dl class="compact-definition-list">
-              <div><dt>SchÃ¼lerzahl</dt><dd>${summary.studentSummaries.length}</dd></div>
+              <div><dt>Schülerzahl</dt><dd>${summary.studentSummaries.length}</dd></div>
               <div><dt>Maximalpunkte</dt><dd>${summary.maxRegularPoints.toFixed(1)}</dd></div>
               <div><dt>Durchschnitt</dt><dd>${summary.averagePercent.toFixed(2)}%</dd></div>
               <div><dt>Hilfsmittelfrei</dt><dd>${escapeHtml(String(exam.metadata.anzahlHilfsmittelfreierAufgaben || "-"))}</dd></div>
+              <div><dt>Ergebnisbezeichnung</dt><dd>${escapeHtml(resultLabel)}</dd></div>
             </dl>
           </article>
         </div>
@@ -1147,7 +1249,7 @@
           <article class="subpanel">
             <h3>Notenspiegel</h3>
             <table class="simple-table">
-              <thead><tr><th>Label</th><th>Anzahl</th><th>ab %</th></tr></thead>
+              <thead><tr><th>${escapeHtml(resultLabel)}</th><th>Anzahl</th><th>ab %</th></tr></thead>
               <tbody>
                 ${summary.scheme.boundaries.map(function (boundary) {
                   return `<tr><td>${escapeHtml(boundary.label)}</td><td>${summary.distribution[boundary.label] || 0}</td><td>${boundary.minPercent.toFixed(1)}%</td></tr>`;
@@ -1156,9 +1258,9 @@
             </table>
           </article>
           <article class="subpanel">
-            <h3>SchÃ¼lerÃ¼bersicht</h3>
+            <h3>Schülerübersicht</h3>
             <table class="simple-table">
-              <thead><tr><th>SchÃ¼ler</th><th>Punkte</th><th>Bonus</th><th>Prozent</th><th>Note</th></tr></thead>
+              <thead><tr><th>Schüler</th><th>Punkte</th><th>Bonus</th><th>Prozent</th><th>${escapeHtml(resultLabel)}</th></tr></thead>
               <tbody>
                 ${summary.studentSummaries.map(function (entry) {
                   return `<tr>
@@ -1180,6 +1282,7 @@
   function renderMetadataView(exam) {
     var metadata = exam.metadata;
     var boundaries = resolveGradeScheme(metadata).boundaries;
+    var resultLabel = getResultLabel(metadata);
     return `
       <section class="panel stack-gap metadata-view">
         <div class="panel-header">
@@ -1198,12 +1301,9 @@
             ["arbeitsNummer", "Nummer", metadata.arbeitsNummer || "", "text"],
             ["thema", "Thema", metadata.thema || "", "text"],
             ["lehrkraft", "Lehrkraft", metadata.lehrkraft || "", "text"],
-            ["lehrkraftKuerzel", "KÃ¼rzel", metadata.lehrkraftKuerzel || "", "text"]
+            ["lehrkraftKuerzel", "Kürzel", metadata.lehrkraftKuerzel || "", "text"]
           ].map(function (field) {
-            return `<label class="field-group">
-              <span>${field[1]}</span>
-              <input type="${field[3]}" value="${escapeHtml(field[2])}" data-meta-field="${field[0]}" />
-            </label>`;
+            return `<label class="field-group"><span>${field[1]}</span><input type="${field[3]}" value="${escapeHtml(field[2])}" data-meta-field="${field[0]}" /></label>`;
           }).join("")}
           <label class="field-group">
             <span>Hilfsmittelfreie Aufgaben</span>
@@ -1214,7 +1314,7 @@
             <input type="text" value="${escapeHtml((metadata.aktivierteVarianten || []).join(", "))}" data-meta-field="aktivierteVarianten" placeholder="A, B" />
           </label>
           <label class="field-group">
-            <span>NotenschlÃ¼ssel</span>
+            <span>Notenschlüssel</span>
             <select data-meta-field="notenschluesselPreset">
               <option value="sek1"${attrSelected(metadata.notenschluesselPreset === "sek1")}>Sek I (1 bis 6)</option>
               <option value="oberstufe"${attrSelected(metadata.notenschluesselPreset === "oberstufe")}>Oberstufe (0 bis 15)</option>
@@ -1222,17 +1322,21 @@
               <option value="custom"${attrSelected(metadata.notenschluesselPreset === "custom")}>Benutzerdefiniert</option>
             </select>
           </label>
+          <label class="field-group">
+            <span>Bezeichnung im Druck</span>
+            <input type="text" value="${escapeHtml(resultLabel)}" data-meta-field="resultLabel" placeholder="z. B. Note oder Notenpunkte" />
+          </label>
         </div>
         <article class="subpanel stack-gap">
           <div class="panel-header">
             <div>
               <h3>Notengrenzen</h3>
-              <p class="muted-text">Die Grenzen aktualisieren die Note sofort.</p>
+              <p class="muted-text">Hier legst du sowohl die Grenzwerte als auch die Bezeichnungen fest.</p>
             </div>
-            <button type="button" class="secondary-button" data-action="add-boundary">Grenze ergÃ¤nzen</button>
+            <button type="button" class="secondary-button" data-action="add-boundary">Grenze ergänzen</button>
           </div>
           <table class="simple-table">
-            <thead><tr><th>Label</th><th>ab Prozent</th><th></th></tr></thead>
+            <thead><tr><th>${escapeHtml(resultLabel)}</th><th>ab Prozent</th><th></th></tr></thead>
             <tbody>
               ${boundaries.map(function (boundary) {
                 return `<tr>
@@ -1255,7 +1359,7 @@
       <section class="panel stack-gap students-view">
         <div class="panel-header">
           <div>
-            <h2>SchÃ¼lerliste</h2>
+            <h2>Schülerliste</h2>
             <p class="muted-text">CSV-Import, manuelle Pflege und Klassenlisten-Bibliothek.</p>
           </div>
           <div class="inline-actions wrap-actions">
@@ -1266,7 +1370,7 @@
           </div>
         </div>
         <article class="subpanel stack-gap">
-          <div class="panel-header"><div><h3>Neuen SchÃ¼ler anlegen</h3></div></div>
+          <div class="panel-header"><div><h3>Neuen Schüler anlegen</h3></div></div>
           <div class="inline-form wrap-actions">
             <input id="new-student-first" type="text" placeholder="Vorname" />
             <input id="new-student-last" type="text" placeholder="Nachname" />
@@ -1276,7 +1380,7 @@
                 return `<option value="${escapeHtml(variant)}">${escapeHtml(variant)}</option>`;
               }).join("")}
             </select>
-            <button type="button" class="primary-button" data-action="add-student">SchÃ¼ler hinzufÃ¼gen</button>
+            <button type="button" class="primary-button" data-action="add-student">Schüler hinzufügen</button>
           </div>
         </article>
         <article class="subpanel stack-gap">
@@ -1290,7 +1394,7 @@
                 return `<option value="${template.id}">${escapeHtml(template.name)}</option>`;
               }).join("")}
             </select>
-            <button type="button" class="secondary-button" data-action="apply-class-list">Ãœbernehmen</button>
+            <button type="button" class="secondary-button" data-action="apply-class-list">Übernehmen</button>
           </div>
         </article>
         <table class="simple-table">
@@ -1313,9 +1417,9 @@
                 <td><input type="checkbox" data-student-id="${student.id}" data-student-field="aktiv"${attrChecked(student.aktiv)} /></td>
                 <td>
                   <div class="inline-actions wrap-actions">
-                    <button type="button" class="secondary-button tiny-button" data-action="move-student" data-student-id="${student.id}" data-direction="-1">â†‘</button>
-                    <button type="button" class="secondary-button tiny-button" data-action="move-student" data-student-id="${student.id}" data-direction="1">â†“</button>
-                    <button type="button" class="danger-button tiny-button" data-action="remove-student" data-student-id="${student.id}">LÃ¶schen</button>
+                    <button type="button" class="secondary-button tiny-button" data-action="move-student" data-student-id="${student.id}" data-direction="-1">Hoch</button>
+                    <button type="button" class="secondary-button tiny-button" data-action="move-student" data-student-id="${student.id}" data-direction="1">Runter</button>
+                    <button type="button" class="danger-button tiny-button" data-action="remove-student" data-student-id="${student.id}">Löschen</button>
                   </div>
                 </td>
               </tr>`;
@@ -1325,22 +1429,22 @@
       </section>
     `;
   }
-  function renderParentOptions(flattened, currentNodeId, selectedParentId) {
+  function renderBlockParentOptions(flattened, currentNodeId, selectedParentId) {
     return flattened
       .filter(function (node) {
-        return node.id !== currentNodeId && node.type !== "criterion";
+        return node.id !== currentNodeId && isBlockNode(node);
       })
       .map(function (node) {
         var indent = Array(node.depth + 1).join("&nbsp;&nbsp;");
-        return `<option value="${node.id}"${attrSelected(selectedParentId === node.id)}>${indent}${escapeHtml(node.title || node.type)}</option>`;
+        return `<option value="${node.id}"${attrSelected(selectedParentId === node.id)}>${indent}${escapeHtml(node.title || "Block")}</option>`;
       })
       .join("");
   }
 
   function renderStructureView(exam) {
     var flattened = flattenStructure(exam.structure);
-    var nonScorableNodes = flattened.filter(function (node) {
-      return node.type !== "criterion";
+    var blockNodes = flattened.filter(function (node) {
+      return isBlockNode(node);
     });
 
     return `
@@ -1348,11 +1452,10 @@
         <div class="panel-header">
           <div>
             <h2>Erwartungshorizont</h2>
-            <p class="muted-text">Freie Struktur, Mehrfachanlage, Bibliothek und direkte Bearbeitung.</p>
+            <p class="muted-text">Vereinfachtes Modell mit nur zwei Typen: Block und Kriterium.</p>
           </div>
           <div class="inline-actions wrap-actions">
-            <button type="button" class="secondary-button" data-action="add-node" data-node-type="section" data-parent-id="">Abschnitt</button>
-            <button type="button" class="secondary-button" data-action="add-node" data-node-type="task" data-parent-id="">Aufgabe</button>
+            <button type="button" class="secondary-button" data-action="add-node" data-node-type="block" data-parent-id="">Block</button>
             <button type="button" class="secondary-button" data-action="add-node" data-node-type="criterion" data-parent-id="">Kriterium</button>
           </div>
         </div>
@@ -1360,94 +1463,95 @@
           <div class="panel-header">
             <div>
               <h3>Bibliothek und Massenanlage</h3>
-              <p class="muted-text">Format fÃ¼r Schnellanlage: Titel | Punkte</p>
+              <p class="muted-text">Format für Schnellanlage: Name | Punkte</p>
             </div>
           </div>
           <div class="inline-form wrap-actions">
             <select id="bulk-parent-id">
               <option value="">Oberste Ebene</option>
-              ${nonScorableNodes.map(function (node) {
+              ${blockNodes.map(function (node) {
                 var indent = Array(node.depth + 1).join("&nbsp;&nbsp;");
-                return `<option value="${node.id}">${indent}${escapeHtml(node.title || node.type)}</option>`;
+                return `<option value="${node.id}">${indent}${escapeHtml(node.title || "Block")}</option>`;
               }).join("")}
             </select>
-            <textarea id="bulk-criteria-text" rows="4" placeholder="Beispiel:\nRechenweg vollstÃ¤ndig | 2\nErgebnis korrekt | 1"></textarea>
+            <textarea id="bulk-criteria-text" rows="4" placeholder="Beispiel:\nRechenweg vollständig | 2\nErgebnis korrekt | 1"></textarea>
             <button type="button" class="secondary-button" data-action="add-bulk-criteria">Mehrere Kriterien anlegen</button>
           </div>
           <div class="inline-form wrap-actions">
-            <input id="taskblock-name" type="text" placeholder="Name fÃ¼r Aufgabenblock" />
+            <input id="taskblock-name" type="text" placeholder="Name für Aufgabenblock" />
             <button type="button" class="secondary-button" data-action="save-task-block" data-node-id="">Gesamte Struktur speichern</button>
             <select id="taskblock-select">
-              <option value="">Aufgabenblock einfÃ¼gen</option>
+              <option value="">Aufgabenblock einfügen</option>
               ${store.taskBlockLibrary.map(function (template) {
                 return `<option value="${template.id}">${escapeHtml(template.name)}</option>`;
               }).join("")}
             </select>
-            <button type="button" class="secondary-button" data-action="insert-task-block">EinfÃ¼gen</button>
+            <button type="button" class="secondary-button" data-action="insert-task-block">Einfügen</button>
           </div>
         </article>
         <div class="stack-gap">
           ${flattened.map(function (node) {
+            var isCriterion = isCriterionNode(node);
+            var isHeading = getNodeIsHeading(node);
+            var showSum = getNodeShowSum(node);
             return `
               <article class="structure-row subpanel" draggable="true" data-node-id="${node.id}">
                 <div class="structure-header" style="padding-left:${node.depth * 18}px">
                   <div class="structure-meta">
-                    <strong>${escapeHtml(node.title || "Ohne Titel")}</strong>
-                    <span class="pill">${escapeHtml(node.type)}</span>
-                    ${node.isBonus ? '<span class="pill pill-bonus">Bonus</span>' : ""}
+                    <strong>${escapeHtml(node.title || (isCriterion ? "Kriterium" : "Block"))}</strong>
+                    <span class="pill">${isCriterion ? "Kriterium" : "Block"}</span>
+                    ${isCriterion && node.isBonus ? '<span class="pill pill-bonus">Bonus</span>' : ""}
+                    ${!isCriterion && showSum ? '<span class="pill">Summe</span>' : ""}
+                    ${!isCriterion && isHeading ? '<span class="pill">Überschrift</span>' : ""}
                   </div>
                   <div class="inline-actions wrap-actions">
+                    <button type="button" class="secondary-button tiny-button" data-action="add-node" data-node-type="block" data-parent-id="${node.id}">+ Block</button>
                     <button type="button" class="secondary-button tiny-button" data-action="add-node" data-node-type="criterion" data-parent-id="${node.id}">+ Kriterium</button>
-                    <button type="button" class="secondary-button tiny-button" data-action="add-node" data-node-type="subtask" data-parent-id="${node.id}">+ Unterpunkt</button>
                     <button type="button" class="secondary-button tiny-button" data-action="save-task-block" data-node-id="${node.id}">Block sichern</button>
-                    <button type="button" class="secondary-button tiny-button" data-action="move-node" data-node-id="${node.id}" data-direction="-1">â†‘</button>
-                    <button type="button" class="secondary-button tiny-button" data-action="move-node" data-node-id="${node.id}" data-direction="1">â†“</button>
+                    <button type="button" class="secondary-button tiny-button" data-action="move-node" data-node-id="${node.id}" data-direction="-1">Hoch</button>
+                    <button type="button" class="secondary-button tiny-button" data-action="move-node" data-node-id="${node.id}" data-direction="1">Runter</button>
                     <button type="button" class="danger-button tiny-button" data-action="remove-node" data-node-id="${node.id}">Entfernen</button>
                   </div>
                 </div>
                 <div class="structure-form-grid">
-                  <label class="field-group"><span>Titel</span><input value="${escapeHtml(node.title || "")}" data-node-id="${node.id}" data-node-field="title" /></label>
                   <label class="field-group">
                     <span>Typ</span>
-                    <select data-node-id="${node.id}" data-node-field="type">
-                      ${["section", "task", "subtask", "criterion", "spacer", "headingOnly"].map(function (type) {
-                        return `<option value="${type}"${attrSelected(node.type === type)}>${type}</option>`;
-                      }).join("")}
+                    <select data-node-id="${node.id}" data-node-field="nodeKind">
+                      <option value="block"${attrSelected(!isCriterion)}>Block</option>
+                      <option value="criterion"${attrSelected(isCriterion)}>Kriterium</option>
                     </select>
                   </label>
+                  <label class="field-group"><span>Name</span><input value="${escapeHtml(node.title || "")}" data-node-id="${node.id}" data-node-field="title" /></label>
                   <label class="field-group">
-                    <span>Elternelement</span>
+                    <span>Übergeordneter Block</span>
                     <select data-node-id="${node.id}" data-node-field="parentId">
                       <option value=""${attrSelected(!node.parentId)}>Oberste Ebene</option>
-                      ${renderParentOptions(flattened, node.id, node.parentId || "")}
+                      ${renderBlockParentOptions(flattened, node.id, node.parentId || "")}
                     </select>
                   </label>
-                  <label class="field-group">
-                    <span>Drucksichtbarkeit</span>
-                    <select data-node-id="${node.id}" data-node-field="printVisibility">
-                      <option value="always"${attrSelected(node.printVisibility === "always")}>Immer</option>
-                      <option value="screenOnly"${attrSelected(node.printVisibility === "screenOnly")}>Nur Bildschirm</option>
-                      <option value="printOnly"${attrSelected(node.printVisibility === "printOnly")}>Nur Druck</option>
-                      <option value="hidden"${attrSelected(node.printVisibility === "hidden")}>Ausblenden</option>
-                    </select>
-                  </label>
-                  ${node.type === "criterion" ? `
+                  ${isCriterion ? `
                     <label class="field-group"><span>Maximalpunkte</span><input type="number" min="0" step="0.5" value="${escapeHtml(String(node.maxPoints || 0))}" data-node-id="${node.id}" data-node-field="maxPoints" /></label>
-                    <label class="field-group"><span>Kurzlabel</span><input value="${escapeHtml(node.shortLabel || "")}" data-node-id="${node.id}" data-node-field="shortLabel" /></label>
-                    <label class="field-group inline-checkbox"><span>Bonus</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isBonus"${attrChecked(!!node.isBonus)} /></label>
-                  ` : ""}
+                    <label class="field-group inline-checkbox"><span>Ist Bonus</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isBonus"${attrChecked(!!node.isBonus)} /></label>
+                  ` : `
+                    <label class="field-group inline-checkbox"><span>Summe anzeigen</span><input type="checkbox" data-node-id="${node.id}" data-node-field="showSum"${attrChecked(showSum)} /></label>
+                    <label class="field-group inline-checkbox"><span>Ist Überschrift</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isHeading"${attrChecked(isHeading)} /></label>
+                  `}
                 </div>
-                <div class="field-group">
-                  <span>Rich Content / Markdown</span>
-                  <textarea rows="5" data-node-id="${node.id}" data-node-field="richContent">${escapeHtml(node.richContent || "")}</textarea>
-                </div>
-                <div class="inline-actions wrap-actions">
-                  <label class="secondary-button file-button">
-                    Bild einfÃ¼gen
-                    <input type="file" accept="image/*" data-role="node-image" data-node-id="${node.id}" />
-                  </label>
-                </div>
-                <div class="markdown-preview">${renderMarkdown(node.richContent || "")}</div>
+                ${isCriterion ? `
+                  <div class="field-group">
+                    <span>Text</span>
+                    <textarea rows="5" data-node-id="${node.id}" data-node-field="richContent">${escapeHtml(node.richContent || "")}</textarea>
+                  </div>
+                  <div class="inline-actions wrap-actions">
+                    <label class="secondary-button file-button">
+                      Bild einfügen
+                      <input type="file" accept="image/*" data-role="node-image" data-node-id="${node.id}" />
+                    </label>
+                  </div>
+                  <div class="markdown-preview">${renderMarkdown(node.richContent || "")}</div>
+                ` : `
+                  <div class="small-help">Blöcke strukturieren den Erwartungshorizont. Für Zeilen wie „Hilfsmittelfreier Teil“, „Aufgabe 1“ oder „a)“ legst du jeweils einen Block an.</div>
+                `}
               </article>
             `;
           }).join("")}
@@ -1543,15 +1647,121 @@
     `;
   }
 
-  function chunkRowsForPrint(rows) {
+  function formatNumberDe(value, digits) {
+    return Number(value || 0).toFixed(digits).replace(".", ",");
+  }
+
+  function formatPointValue(value) {
+    var number = Number(value || 0);
+    if (Math.abs(number - Math.round(number)) < 0.001) {
+      return String(Math.round(number));
+    }
+    return number.toFixed(1).replace(".", ",");
+  }
+
+  function formatPercentValue(value) {
+    return formatNumberDe(value, 2) + "%";
+  }
+
+  function getPrintSchemeLabel(metadata) {
+    switch (metadata.notenschluesselPreset) {
+      case "sek1":
+        return "Sek I";
+      case "oberstufe":
+        return "Oberstufe";
+      case "symbol":
+        return "Bewertung";
+      case "custom":
+        return "Benutzerdefiniert";
+      default:
+        return "";
+    }
+  }
+
+  function getPrintRowWeight(row) {
+    if (row.kind === "criterion") {
+      return Math.max(2, Math.ceil(String(row.bodyText || row.titleText || "").length / 180) + 1);
+    }
+    if (row.kind === "blockHeading") {
+      return 2;
+    }
+    if (row.kind === "summary") {
+      return 8;
+    }
+    return 1;
+  }
+
+  function buildPrintRowsForStudent(exam, studentId) {
+    var rows = [];
+    var childrenMap = getChildrenMap(exam.structure);
+
+    function addNodeRows(node, depth) {
+      if (node.printVisibility === "hidden" || node.printVisibility === "screenOnly") {
+        return;
+      }
+
+      if (isCriterionNode(node)) {
+        var entry = exam.evaluations[evaluationKey(studentId, node.id)];
+        rows.push({
+          kind: "criterion",
+          depth: depth,
+          marker: "",
+          titleText: node.title || "",
+          bodyText: node.richContent || "",
+          achieved: entry ? Number(entry.achievedPoints) || 0 : 0,
+          max: Number(node.maxPoints) || 0,
+          isBonus: !!node.isBonus
+        });
+        return;
+      }
+
+      if (!isBlockNode(node)) {
+        return;
+      }
+
+      var blockTitle = String(node.title || "").trim();
+      if (blockTitle) {
+        rows.push({
+          kind: getNodeIsHeading(node) ? "blockHeading" : "blockInline",
+          depth: depth,
+          titleText: blockTitle
+        });
+      }
+
+      var children = childrenMap[node.id] || [];
+      children.forEach(function (child) {
+        addNodeRows(child, depth + 1);
+      });
+
+      if (getNodeShowSum(node) && getDescendantCriterionIds(exam.structure, node.id).length) {
+        var totals = getNodeTotalsForStudent(exam, node.id, studentId);
+        rows.push({
+          kind: "sum",
+          depth: depth,
+          label: getNodeIsHeading(node) && blockTitle ? "Summe " + blockTitle : "Summe",
+          achieved: totals.achieved,
+          max: totals.max
+        });
+      }
+    }
+
+    (childrenMap.__root__ || []).forEach(function (node) {
+      addNodeRows(node, 0);
+    });
+
+    return rows;
+  }
+
+  function chunkRowsForPrint(rows, summaryWeight) {
     var pages = [];
     var current = [];
     var currentWeight = 0;
-    var maxWeight = 16;
+    var maxWeight = 20;
 
     rows.forEach(function (row) {
-      var weight = row.isScorable ? Math.max(2, Math.ceil((row.richContent || "").length / 160) + 1) : 1;
-      if (current.length && currentWeight + weight > maxWeight) {
+      var weight = getPrintRowWeight(row);
+      var reserveHeading = row.kind === "blockHeading" && currentWeight > 16;
+      if (current.length && (currentWeight + weight > maxWeight || reserveHeading)) {
         pages.push(current);
         current = [];
         currentWeight = 0;
@@ -1563,13 +1773,101 @@
     if (current.length) {
       pages.push(current);
     }
+
+    if (!pages.length) {
+      pages.push([]);
+    }
+
+    if (summaryWeight && currentWeight + summaryWeight > maxWeight) {
+      pages.push([]);
+    }
+
     return pages;
   }
 
-  function renderPrintView(exam) {
-    var printRows = flattenStructure(exam.structure).filter(function (node) {
-      return node.printVisibility !== "hidden" && node.printVisibility !== "screenOnly";
+  function renderPrintMetaItem(label, value, className) {
+    return `<div class="print-meta-item ${className || ""}">${label ? `<span class="print-meta-label">${escapeHtml(label)}:</span>` : ""}<span class="print-meta-value">${escapeHtml(value || "")}</span></div>`;
+  }
+
+  function renderPrintScore(achieved, max) {
+    return `<div class="print-score-bracket"><span>(</span><span class="print-score-value">${formatPointValue(achieved)}</span><span>/</span><span class="print-score-value">${formatPointValue(max)}</span><span>)</span></div>`;
+  }
+
+  function renderPrintCriterionContent(row) {
+    var parts = [];
+    var titleText = String(row.titleText || "").trim();
+    var bodyText = String(row.bodyText || "").trim();
+
+    if (titleText) {
+      parts.push(`<div class="print-criterion-title">${escapeHtml(titleText)}</div>`);
+    }
+    if (bodyText && bodyText !== titleText) {
+      parts.push(`<div class="print-criterion-body">${renderMarkdown(bodyText)}</div>`);
+    }
+    if (!parts.length) {
+      parts.push('<div class="print-criterion-title">Ohne Inhalt</div>');
+    }
+    return parts.join("");
+  }
+
+  function renderPrintRow(row) {
+    var indentStyle = `style="padding-left:${row.depth * 18}px"`;
+
+    if (row.kind === "spacer") {
+      return '<tr class="print-row-spacer"><td colspan="3"></td></tr>';
+    }
+
+    if (row.kind === "blockHeading") {
+      return `<tr class="print-row-block-heading"><td class="print-marker-cell"></td><td class="print-content-cell" colspan="2" ${indentStyle}><div class="print-heading-block">${escapeHtml(row.titleText || "")}</div></td></tr>`;
+    }
+
+    if (row.kind === "blockInline") {
+      return `<tr class="print-row-block-inline"><td class="print-marker-cell"></td><td class="print-content-cell" colspan="2" ${indentStyle}><div class="print-heading-inline">${escapeHtml(row.titleText || "")}</div></td></tr>`;
+    }
+
+    if (row.kind === "sum") {
+      return `<tr class="print-row-sum"><td class="print-marker-cell"></td><td class="print-content-cell" ${indentStyle}><strong>${escapeHtml(row.label || "Summe")}</strong></td><td class="print-score-cell">${renderPrintScore(row.achieved, row.max)}</td></tr>`;
+    }
+
+    return `<tr class="print-row-criterion"><td class="print-marker-cell">${escapeHtml(row.marker || "")}</td><td class="print-content-cell" ${indentStyle}>${renderPrintCriterionContent(row)}</td><td class="print-score-cell">${renderPrintScore(row.achieved, row.max)}${row.isBonus ? '<div class="print-bonus-note">Bonus</div>' : ""}</td></tr>`;
+  }
+
+  function renderPrintSummary(exam, student, totals, scheme) {
+    var horizontalBoundaries = scheme.boundaries.slice().sort(function (a, b) {
+      return a.minPercent - b.minPercent;
     });
+    var resultLabel = getResultLabel(exam.metadata);
+    return `
+      <section class="print-summary-block">
+        <div class="print-summary-grid">
+          <div class="print-summary-label">Gesamtpunktzahl</div>
+          <div class="print-summary-value">${renderPrintScore(totals.totalAchieved, totals.maxRegular)}</div>
+          <div class="print-summary-label">In Prozent</div>
+          <div class="print-summary-value">${formatPercentValue(totals.percent)}</div>
+          <div class="print-summary-label">${escapeHtml(resultLabel)}</div>
+          <div class="print-summary-value print-summary-note-line"><span class="print-summary-note">${escapeHtml(totals.gradeLabel)}</span><span class="print-summary-teacher">${escapeHtml(exam.metadata.lehrkraftKuerzel || "")}</span></div>
+        </div>
+        <table class="print-grade-horizontal">
+          <thead>
+            <tr><th colspan="${horizontalBoundaries.length + 1}">Notengrenzen</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>${escapeHtml(resultLabel)}</th>${horizontalBoundaries.map(function (boundary) {
+              return `<td>${escapeHtml(boundary.label)}</td>`;
+            }).join("")}</tr>
+            <tr><th>Ab Prozent</th>${horizontalBoundaries.map(function (boundary) {
+              return `<td>${formatNumberDe(boundary.minPercent, 1)}%</td>`;
+            }).join("")}</tr>
+            <tr><th>Ab Punktzahl</th>${horizontalBoundaries.map(function (boundary) {
+              return `<td>${formatPointValue(roundDownToHalf((boundary.minPercent / 100) * totals.maxRegular))}</td>`;
+            }).join("")}</tr>
+          </tbody>
+        </table>
+      </section>
+    `;
+  }
+
+  function renderPrintView(exam) {
     var students = getActiveStudents(exam);
     var scheme = resolveGradeScheme(exam.metadata);
 
@@ -1578,35 +1876,42 @@
         <div class="panel-header no-print">
           <div>
             <h2>Druckansicht</h2>
-            <p class="muted-text">Formale Sammelausgabe fÃ¼r den Browserdruck.</p>
+            <p class="muted-text">Formaler Bewertungsbogen für den Browserdruck.</p>
+            <p class="small-help">Browser-Kopf- und Fußzeilen wie Datum oder Dateiname werden vom Browser gesteuert und müssen im Druckdialog deaktiviert werden.</p>
           </div>
           <button type="button" class="primary-button" data-action="print">Sammel-PDF drucken</button>
         </div>
         <div class="print-document">
           ${students.map(function (student) {
-            var pages = chunkRowsForPrint(printRows);
+            var rows = buildPrintRowsForStudent(exam, student.id);
             var totals = getStudentTotals(exam, student.id);
+            var pages = chunkRowsForPrint(rows, 8);
             return pages.map(function (pageRows, pageIndex) {
               return `<section class="print-sheet-page">
-                <header class="print-sheet-header">
-                  <div><h3>${escapeHtml(exam.metadata.title || "Klausur")}</h3><p>${escapeHtml(student.displayName)}</p></div>
-                  <div class="print-header-meta"><span>${escapeHtml(exam.metadata.fach || "")}</span><span>${escapeHtml(exam.metadata.kursOderKlasse || "")}</span><span>${escapeHtml(formatDate(exam.metadata.termin) || "")}</span><span>Seite ${pageIndex + 1} von ${pages.length}</span></div>
+                <header class="print-meta-header">
+                  <div class="print-meta-row">
+                    ${renderPrintMetaItem("Schuljahr", exam.metadata.schuljahr || "")}
+                    ${renderPrintMetaItem("Fach", exam.metadata.fach || "")}
+                    ${renderPrintMetaItem("Kurs/Klasse", exam.metadata.kursOderKlasse || "")}
+                    ${renderPrintMetaItem("", getPrintSchemeLabel(exam.metadata), "print-meta-scheme")}
+                    ${renderPrintMetaItem("Termin", formatDate(exam.metadata.termin) || "")}
+                  </div>
+                  <div class="print-meta-row">
+                    ${renderPrintMetaItem("Nummer", exam.metadata.arbeitsNummer || "")}
+                    ${renderPrintMetaItem("Thema", exam.metadata.thema || "", "print-meta-item-wide")}
+                    ${renderPrintMetaItem("Lehrkraft", exam.metadata.lehrkraft || "")}
+                  </div>
+                  <div class="print-meta-row print-meta-row-name">
+                    ${renderPrintMetaItem("Name", student.displayName || "", "print-meta-name")}
+                    ${renderPrintMetaItem("Seite", (pageIndex + 1) + " von " + pages.length, "print-meta-page")}
+                  </div>
                 </header>
-                <table class="print-table">
-                  <thead><tr><th>Struktur / Kriterium</th><th>Inhalt</th><th>Punkte</th></tr></thead>
+                <table class="print-work-table">
                   <tbody>
-                    ${pageRows.map(function (row) {
-                      var rowTotals = getNodeTotalsForStudent(exam, row.id, student.id);
-                      return `<tr><td style="padding-left:${12 + row.depth * 16}px"><strong>${escapeHtml(row.title || row.type)}</strong>${row.isBonus ? "<div>Bonus</div>" : ""}</td><td><div class="markdown-preview">${renderMarkdown(row.richContent || "")}</div></td><td>${row.isScorable ? `${rowTotals.achieved.toFixed(1)} / ${Number(row.maxPoints || 0).toFixed(1)}` : `${rowTotals.achieved.toFixed(1)} / ${rowTotals.max.toFixed(1)}`}</td></tr>`;
-                    }).join("")}
+                    ${pageRows.map(renderPrintRow).join("")}
                   </tbody>
                 </table>
-                <footer class="print-sheet-footer">
-                  <div><strong>Gesamt:</strong> ${totals.totalAchieved.toFixed(1)} / ${totals.maxRegular.toFixed(1)} Punkte | Bonus ${totals.bonusAchieved.toFixed(1)} | ${totals.percent.toFixed(2)}% | Note ${escapeHtml(totals.gradeLabel)} | KÃ¼rzel ${escapeHtml(exam.metadata.lehrkraftKuerzel || "_____")}</div>
-                  <table class="grade-table"><thead><tr><th>Label</th><th>ab %</th></tr></thead><tbody>${scheme.boundaries.map(function (boundary) {
-                    return `<tr><td>${escapeHtml(boundary.label)}</td><td>${boundary.minPercent.toFixed(1)}%</td></tr>`;
-                  }).join("")}</tbody></table>
-                </footer>
+                ${pageIndex === pages.length - 1 ? renderPrintSummary(exam, student, totals, scheme) : ""}
               </section>`;
             }).join("");
           }).join("")}
@@ -1622,8 +1927,8 @@
       <div class="modal-backdrop">
         <div class="modal">
           <div class="modal-header">
-            <h3>Maximalpunkte Ã¤ndern</h3>
-            <button type="button" class="secondary-button" data-action="close-modal">SchlieÃŸen</button>
+            <h3>Maximalpunkte ändern</h3>
+            <button type="button" class="secondary-button" data-action="close-modal">Schließen</button>
           </div>
           <div class="modal-body">
             <p>Bereits eingetragene Leistungen existieren. Bitte festlegen, wie die bisherigen Punkte behandelt werden.</p>
@@ -1668,7 +1973,7 @@
       <main class="app-shell">
         ${renderTopBar(exam)}
         ${store.exams.length ? renderTabs() : ""}
-        ${ui.notice ? `<div class="notice-banner no-print"><div class="form-row"><span>${escapeHtml(ui.notice)}</span><button type="button" class="ghost-button" data-action="dismiss-notice">SchlieÃŸen</button></div></div>` : ""}
+        ${ui.notice ? `<div class="notice-banner no-print"><div class="form-row"><span>${escapeHtml(ui.notice)}</span><button type="button" class="ghost-button" data-action="dismiss-notice">Schließen</button></div></div>` : ""}
         ${store.exams.length || ui.activeTab === "archive" ? renderCurrentView(exam) : renderEmptyState()}
       </main>
       ${renderModal()}
@@ -1763,14 +2068,22 @@
     mutateCurrentExam(function (exam) {
       var metadata = exam.metadata;
       if (field === "notenschluesselPreset") {
+        var previousPreset = metadata.notenschluesselPreset || "custom";
+        var previousDefaultLabel = getDefaultResultLabel(previousPreset);
+        var currentLabel = String(metadata.resultLabel || "").trim();
         metadata.notenschluesselPreset = value;
         metadata.benutzerdefinierteNotengrenzen = value === "custom" ? metadata.benutzerdefinierteNotengrenzen : clonePresetBoundaries(value);
+        if (!currentLabel || currentLabel === previousDefaultLabel) {
+          metadata.resultLabel = getDefaultResultLabel(value);
+        }
       } else if (field === "aktivierteVarianten") {
         metadata.aktivierteVarianten = String(value).split(",").map(function (item) {
           return item.trim();
         }).filter(Boolean);
       } else if (field === "anzahlHilfsmittelfreierAufgaben") {
         metadata.anzahlHilfsmittelfreierAufgaben = value === "" ? "" : Number(value);
+      } else if (field === "resultLabel") {
+        metadata.resultLabel = String(value || "").trim();
       } else {
         metadata[field] = value;
       }
@@ -1922,18 +2235,21 @@
 
   function addNode(nodeType, parentId) {
     mutateCurrentExam(function (exam) {
+      var isCriterion = nodeType === "criterion";
       exam.structure.push({
         id: createId("node"),
-        type: nodeType,
+        type: isCriterion ? "criterion" : "block",
         parentId: parentId || null,
         sortIndex: exam.structure.length,
-        title: nodeType === "criterion" ? "Neues Kriterium" : "Neuer Block",
+        title: isCriterion ? "Neues Kriterium" : "Neuer Block",
         shortLabel: "",
         richContent: "",
         printVisibility: "always",
-        maxPoints: nodeType === "criterion" ? 1 : undefined,
+        maxPoints: isCriterion ? 1 : undefined,
         isBonus: false,
-        isScorable: nodeType === "criterion",
+        isScorable: isCriterion,
+        showSum: isCriterion ? undefined : false,
+        isHeading: isCriterion ? undefined : false,
         variantScope: []
       });
       exam.metadata.updatedAt = nowIso();
@@ -2010,24 +2326,59 @@
           return node;
         }
         var next = deepClone(node);
-        if (field === "type") {
-          next.type = value;
-          next.isScorable = value === "criterion";
-          if (value !== "criterion") {
+        if (field === "nodeKind") {
+          if (value === "criterion") {
+            next.type = "criterion";
+            next.isScorable = true;
+            next.maxPoints = next.maxPoints == null ? 1 : Math.max(0, Number(next.maxPoints) || 0);
+            next.isBonus = !!next.isBonus;
+          } else {
+            next.type = "block";
+            next.isScorable = false;
             next.maxPoints = undefined;
             next.isBonus = false;
-          } else if (next.maxPoints == null) {
-            next.maxPoints = 1;
+            next.richContent = "";
+            next.showSum = typeof next.showSum === "boolean" ? next.showSum : getNodeShowSum(node);
+            next.isHeading = typeof next.isHeading === "boolean" ? next.isHeading : getNodeIsHeading(node);
           }
         } else if (field === "isBonus") {
-          next.isBonus = !!checked;
+          next.type = "criterion";
           next.isScorable = true;
+          next.isBonus = !!checked;
+          if (next.maxPoints == null) {
+            next.maxPoints = 1;
+          }
+        } else if (field === "showSum") {
+          next.type = "block";
+          next.isScorable = false;
+          next.showSum = !!checked;
+          next.isBonus = false;
+          next.maxPoints = undefined;
+          next.richContent = "";
+        } else if (field === "isHeading") {
+          next.type = "block";
+          next.isScorable = false;
+          next.isHeading = !!checked;
+          next.isBonus = false;
+          next.maxPoints = undefined;
+          next.richContent = "";
         } else if (field === "parentId") {
           next.parentId = value || null;
         } else if (field === "maxPoints") {
+          next.type = "criterion";
+          next.isScorable = true;
           next.maxPoints = Math.max(0, Number(value) || 0);
         } else {
           next[field] = value;
+        }
+
+        if (next.type !== "criterion") {
+          next.type = "block";
+          next.isScorable = false;
+          next.isBonus = false;
+          next.maxPoints = undefined;
+          next.showSum = typeof next.showSum === "boolean" ? next.showSum : getNodeShowSum(node);
+          next.isHeading = typeof next.isHeading === "boolean" ? next.isHeading : getNodeIsHeading(node);
         }
         return next;
       });
@@ -2065,7 +2416,7 @@
     mutateCurrentExam(function (exam) {
       return applyTaskBlockToExam(exam, template);
     });
-    showNotice("Aufgabenblock eingefÃ¼gt: " + template.name);
+    showNotice("Aufgabenblock eingefügt: " + template.name);
   }
 
   function addBulkCriteria() {
@@ -2164,7 +2515,7 @@
         render();
         break;
       case "clear-archive":
-        if (window.confirm("Lokales Archiv wirklich vollstÃ¤ndig leeren?")) {
+        if (window.confirm("Lokales Archiv wirklich vollständig leeren?")) {
           store = createEmptyStore();
           saveStore();
           ui.activeTab = "archive";
@@ -2189,7 +2540,7 @@
         render();
         break;
       case "delete-exam":
-        if (window.confirm("Klausur wirklich lÃ¶schen?")) {
+        if (window.confirm("Klausur wirklich löschen?")) {
           mutateStore(function (currentStore) {
             currentStore.exams = currentStore.exams.filter(function (exam) {
               return exam.metadata.id !== target.dataset.examId;
@@ -2287,7 +2638,14 @@
         batchSetStudentPercent(target.dataset.studentId, Number(target.dataset.percent));
         break;
       case "print":
-        window.print();
+        (function () {
+          var previousTitle = document.title;
+          document.title = getCurrentExam() ? (getCurrentExam().metadata.title || "") : "";
+          window.print();
+          window.setTimeout(function () {
+            document.title = previousTitle;
+          }, 300);
+        })();
         break;
       case "close-modal":
         ui.pendingMaxChange = null;
@@ -2354,7 +2712,7 @@
           exam.metadata.updatedAt = nowIso();
           return exam;
         });
-        showNotice(students.length + " SchÃ¼ler importiert.");
+        showNotice(students.length + " Schüler importiert.");
       }).catch(function (error) {
         showNotice(error.message || "CSV-Import fehlgeschlagen.");
       }).finally(function () {
@@ -2379,7 +2737,7 @@
           return exam;
         });
       }).catch(function () {
-        showNotice("Bild konnte nicht eingefÃ¼gt werden.");
+        showNotice("Bild konnte nicht eingefügt werden.");
       }).finally(function () {
         target.value = "";
       });
@@ -2450,5 +2808,4 @@
 
   render();
 })();
-
 
