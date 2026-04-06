@@ -1058,7 +1058,8 @@
     notice: "",
     pendingMaxChange: null,
     draggedNodeId: null,
-    matrixFocus: null
+    matrixFocus: null,
+    imageResize: null
   };
 
   var appRoot = document.getElementById("app");
@@ -1070,9 +1071,40 @@
     return condition ? " checked" : "";
   }
 
-  function renderInlineMarkdown(text) {
+  function parseImageMeta(rawAlt) {
+    var text = String(rawAlt || "");
+    var match = text.match(/^(.*?)(?:\|w=(\d+))?$/);
+    return {
+      alt: match ? match[1] : text,
+      width: match && match[2] ? Number(match[2]) || null : null
+    };
+  }
+
+  function buildImageMetaText(alt, width) {
+    var cleanAlt = String(alt || "").trim();
+    var roundedWidth = Math.max(48, Math.round(Number(width) || 0));
+    return roundedWidth ? (cleanAlt ? cleanAlt + "|w=" + roundedWidth : "|w=" + roundedWidth) : cleanAlt;
+  }
+
+  function renderImageMarkup(rawAlt, src, options) {
+    var meta = parseImageMeta(rawAlt);
+    var widthStyle = meta.width ? ` style="width:${meta.width}px"` : "";
+    var imageHtml = `<img alt="${meta.alt}" src="${src}"${widthStyle} />`;
+
+    if (options && options.editableImages && options.nodeId) {
+      var imageIndex = options.imageIndexCounter || 0;
+      options.imageIndexCounter = imageIndex + 1;
+      return `<span class="markdown-image-shell" data-node-id="${options.nodeId}" data-image-index="${imageIndex}"><span class="markdown-image-frame">${imageHtml}<button type="button" class="markdown-image-resize-handle" data-role="resize-image" data-node-id="${options.nodeId}" data-image-index="${imageIndex}" aria-label="Bildgröße ändern"></button></span></span>`;
+    }
+
+    return imageHtml;
+  }
+
+  function renderInlineMarkdown(text, options) {
     return String(text)
-      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" />')
+      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, function (_, altText, src) {
+        return renderImageMarkup(altText, src, options);
+      })
       .replace(/`([^`]+)`/g, "<code>$1</code>")
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
       .replace(/\*([^*]+)\*/g, "<em>$1</em>")
@@ -1080,11 +1112,12 @@
       .replace(/\n/g, "<br />");
   }
 
-  function renderMarkdown(content) {
+  function renderMarkdown(content, options) {
     if (!content || !String(content).trim()) {
       return '<span class="muted-text">Kein Inhalt</span>';
     }
 
+    var renderOptions = Object.assign({ imageIndexCounter: 0 }, options || {});
     var escaped = escapeHtml(String(content)).replace(/\r\n/g, "\n");
     escaped = escaped.replace(/\$\$([\s\S]+?)\$\$/g, function (_, formula) {
       return "\n<div class=\"math-block\">" + formula.trim() + "</div>\n";
@@ -1101,7 +1134,7 @@
       if (/^#{1,6}\s/.test(block)) {
         var level = block.match(/^#+/)[0].length;
         var headingText = block.replace(/^#{1,6}\s*/, "");
-        return "<h" + level + ">" + renderInlineMarkdown(headingText) + "</h" + level + ">";
+        return "<h" + level + ">" + renderInlineMarkdown(headingText, renderOptions) + "</h" + level + ">";
       }
       var lines = block.split("\n");
       var isList = lines.every(function (line) {
@@ -1109,10 +1142,10 @@
       });
       if (isList) {
         return "<ul>" + lines.map(function (line) {
-          return "<li>" + renderInlineMarkdown(line.replace(/^[-*]\s+/, "")) + "</li>";
+          return "<li>" + renderInlineMarkdown(line.replace(/^[-*]\s+/, ""), renderOptions) + "</li>";
         }).join("") + "</ul>";
       }
-      return "<p>" + renderInlineMarkdown(block) + "</p>";
+      return "<p>" + renderInlineMarkdown(block, renderOptions) + "</p>";
     }).join("");
   }
 
@@ -1586,7 +1619,7 @@
                       <input type="file" accept="image/*" data-role="node-image" data-node-id="${node.id}" />
                     </label>
                   </div>
-                  <div class="markdown-preview">${renderMarkdown(node.richContent || "")}</div>
+                  <div class="markdown-preview" data-preview-node-id="${node.id}">${renderMarkdown(node.richContent || "", { editableImages: true, nodeId: node.id })}</div>
                 ` : `
                   <div class="small-help">Blöcke strukturieren den Erwartungshorizont. Für Zeilen wie „Hilfsmittelfreier Teil“, „Aufgabe 1“ oder „a)“ legst du jeweils einen Block an. Optional kannst du einen Rand für die Druckausgabe wählen.</div>
                 `}
@@ -2159,6 +2192,35 @@
     if (element) {
       element.value = "";
     }
+  }
+
+  function updateImageWidthInContent(content, imageIndex, nextWidth) {
+    var targetIndex = Number(imageIndex);
+    var currentIndex = -1;
+    var roundedWidth = Math.max(48, Math.round(Number(nextWidth) || 0));
+    return String(content || "").replace(/!\[([^\]]*)\]\(([^)]+)\)/g, function (match, rawAlt, src) {
+      currentIndex += 1;
+      if (currentIndex !== targetIndex) {
+        return match;
+      }
+      var meta = parseImageMeta(rawAlt);
+      return "![" + buildImageMetaText(meta.alt, roundedWidth) + "](" + src + ")";
+    });
+  }
+
+  function updateNodeImageWidth(nodeId, imageIndex, nextWidth) {
+    mutateCurrentExam(function (exam) {
+      exam.structure = exam.structure.map(function (node) {
+        if (node.id !== nodeId) {
+          return node;
+        }
+        var copy = deepClone(node);
+        copy.richContent = updateImageWidthInContent(copy.richContent || "", imageIndex, nextWidth);
+        return copy;
+      });
+      exam.metadata.updatedAt = nowIso();
+      return exam;
+    });
   }
 
   function handleCreateExam() {
@@ -2887,6 +2949,51 @@
     }
   });
 
+  appRoot.addEventListener("pointerdown", function (event) {
+    var target = event.target;
+    if (!target.matches("[data-role='resize-image']")) {
+      return;
+    }
+    var shell = target.closest(".markdown-image-shell");
+    var preview = target.closest(".markdown-preview");
+    var image = shell ? shell.querySelector("img") : null;
+    if (!shell || !preview || !image) {
+      return;
+    }
+    event.preventDefault();
+    ui.imageResize = {
+      nodeId: target.dataset.nodeId,
+      imageIndex: Number(target.dataset.imageIndex),
+      startX: event.clientX,
+      startWidth: image.getBoundingClientRect().width,
+      maxWidth: Math.max(120, preview.clientWidth - 24),
+      shell: shell,
+      image: image
+    };
+    document.body.classList.add("image-resize-active");
+  });
+
+  window.addEventListener("pointermove", function (event) {
+    if (!ui.imageResize) {
+      return;
+    }
+    event.preventDefault();
+    var nextWidth = Math.max(48, Math.min(ui.imageResize.maxWidth, ui.imageResize.startWidth + (event.clientX - ui.imageResize.startX)));
+    ui.imageResize.image.style.width = Math.round(nextWidth) + "px";
+  });
+
+  window.addEventListener("pointerup", function () {
+    if (!ui.imageResize) {
+      return;
+    }
+    var finalWidth = Math.round(ui.imageResize.image.getBoundingClientRect().width);
+    var nodeId = ui.imageResize.nodeId;
+    var imageIndex = ui.imageResize.imageIndex;
+    ui.imageResize = null;
+    document.body.classList.remove("image-resize-active");
+    updateNodeImageWidth(nodeId, imageIndex, finalWidth);
+  });
+
   appRoot.addEventListener("keydown", function (event) {
     var target = event.target;
     if (!target.matches(".matrix-input")) {
@@ -2944,6 +3051,9 @@
 
   render();
 })();
+
+
+
 
 
 
