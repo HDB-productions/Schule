@@ -288,6 +288,8 @@
         id: createId("exam"),
         title: "Neue Klausur",
         schuljahr: "",
+        halbjahr: "HJ1",
+        typ: "Klassenarbeit",
         fach: "",
         kursOderKlasse: "",
         termin: "",
@@ -316,6 +318,8 @@
         id: createId("exam"),
         title: "Demo-Klausur",
         schuljahr: "2025/2026",
+        halbjahr: "HJ1",
+        typ: "Klassenarbeit",
         fach: "Mathematik",
         kursOderKlasse: "5G1",
         termin: createdAt.slice(0, 10),
@@ -1266,6 +1270,8 @@
             <dl class="compact-definition-list">
               <div><dt>Titel</dt><dd>${escapeHtml(exam.metadata.title || "-")}</dd></div>
               <div><dt>Schuljahr</dt><dd>${escapeHtml(exam.metadata.schuljahr || "-")}</dd></div>
+              <div><dt>Halbjahr</dt><dd>${escapeHtml(exam.metadata.halbjahr || "-")}</dd></div>
+              <div><dt>Typ</dt><dd>${escapeHtml(exam.metadata.typ || "-")}</dd></div>
               <div><dt>Fach</dt><dd>${escapeHtml(exam.metadata.fach || "-")}</dd></div>
               <div><dt>Klasse/Kurs</dt><dd>${escapeHtml(exam.metadata.kursOderKlasse || "-")}</dd></div>
               <div><dt>Termin</dt><dd>${escapeHtml(formatDate(exam.metadata.termin) || "-")}</dd></div>
@@ -1332,40 +1338,21 @@
           </div>
         </div>
         <div class="form-grid">
-          ${[
-            ["title", "Titel", metadata.title || "", "text"],
-            ["schuljahr", "Schuljahr", metadata.schuljahr || "", "text"],
-            ["fach", "Fach", metadata.fach || "", "text"],
-            ["kursOderKlasse", "Kurs/Klasse", metadata.kursOderKlasse || "", "text"],
-            ["termin", "Termin", metadata.termin || "", "date"],
-            ["arbeitsNummer", "Nummer", metadata.arbeitsNummer || "", "text"],
-            ["thema", "Thema", metadata.thema || "", "text"],
-            ["lehrkraft", "Lehrkraft", metadata.lehrkraft || "", "text"],
-            ["lehrkraftKuerzel", "Kürzel", metadata.lehrkraftKuerzel || "", "text"]
-          ].map(function (field) {
-            return `<label class="field-group"><span>${field[1]}</span><input type="${field[3]}" value="${escapeHtml(field[2])}" data-meta-field="${field[0]}" /></label>`;
-          }).join("")}
-          <label class="field-group">
-            <span>Hilfsmittelfreie Aufgaben</span>
-            <input type="number" min="0" step="1" value="${escapeHtml(String(metadata.anzahlHilfsmittelfreierAufgaben || ""))}" data-meta-field="anzahlHilfsmittelfreierAufgaben" />
-          </label>
-          <label class="field-group">
-            <span>Aktive Varianten</span>
-            <input type="text" value="${escapeHtml((metadata.aktivierteVarianten || []).join(", "))}" data-meta-field="aktivierteVarianten" placeholder="A, B" />
-          </label>
-          <label class="field-group">
-            <span>Notenschlüssel</span>
-            <select data-meta-field="notenschluesselPreset">
-              <option value="sek1"${attrSelected(metadata.notenschluesselPreset === "sek1")}>Sek I (1 bis 6)</option>
-              <option value="oberstufe"${attrSelected(metadata.notenschluesselPreset === "oberstufe")}>Oberstufe (0 bis 15)</option>
-              <option value="symbol"${attrSelected(metadata.notenschluesselPreset === "symbol")}>++ / + / o / - / --</option>
-              <option value="custom"${attrSelected(metadata.notenschluesselPreset === "custom")}>Benutzerdefiniert</option>
-            </select>
-          </label>
-          <label class="field-group">
-            <span>Bezeichnung im Druck</span>
-            <input type="text" value="${escapeHtml(resultLabel)}" data-meta-field="resultLabel" placeholder="z. B. Note oder Notenpunkte" />
-          </label>
+          <label class="field-group"><span>Titel</span><input type="text" value="${escapeHtml(metadata.title || "")}" data-meta-field="title" /></label>
+          <label class="field-group"><span>Schuljahr</span><input type="text" value="${escapeHtml(metadata.schuljahr || "")}" data-meta-field="schuljahr" /></label>
+          <label class="field-group"><span>Halbjahr</span><select data-meta-field="halbjahr"><option value="HJ1"${attrSelected((metadata.halbjahr || "HJ1") === "HJ1")}>HJ1</option><option value="HJ2"${attrSelected((metadata.halbjahr || "") === "HJ2")}>HJ2</option></select></label>
+          <label class="field-group"><span>Typ</span><select data-meta-field="typ"><option value="Klassenarbeit"${attrSelected((metadata.typ || "Klassenarbeit") === "Klassenarbeit")}>Klassenarbeit</option><option value="Klausur"${attrSelected((metadata.typ || "") === "Klausur")}>Klausur</option><option value="Test"${attrSelected((metadata.typ || "") === "Test")}>Test</option></select></label>
+          <label class="field-group"><span>Fach</span><input type="text" value="${escapeHtml(metadata.fach || "")}" data-meta-field="fach" /></label>
+          <label class="field-group"><span>Klasse/Kurs</span><input type="text" value="${escapeHtml(metadata.kursOderKlasse || "")}" data-meta-field="kursOderKlasse" /></label>
+          <label class="field-group"><span>Termin</span><input type="date" value="${escapeHtml(metadata.termin || "")}" data-meta-field="termin" /></label>
+          <label class="field-group"><span>Nummer</span><input type="text" value="${escapeHtml(metadata.arbeitsNummer || "")}" data-meta-field="arbeitsNummer" /></label>
+          <label class="field-group"><span>Thema</span><input type="text" value="${escapeHtml(metadata.thema || "")}" data-meta-field="thema" /></label>
+          <label class="field-group"><span>Lehrkraft</span><input type="text" value="${escapeHtml(metadata.lehrkraft || "")}" data-meta-field="lehrkraft" /></label>
+          <label class="field-group"><span>Kürzel</span><input type="text" value="${escapeHtml(metadata.lehrkraftKuerzel || "")}" data-meta-field="lehrkraftKuerzel" /></label>
+          <label class="field-group"><span>Hilfsmittelfreie Aufgaben</span><input type="number" min="0" step="1" value="${escapeHtml(String(metadata.anzahlHilfsmittelfreierAufgaben || ""))}" data-meta-field="anzahlHilfsmittelfreierAufgaben" /></label>
+          <label class="field-group"><span>Aktive Varianten</span><input type="text" value="${escapeHtml((metadata.aktivierteVarianten || []).join(", "))}" data-meta-field="aktivierteVarianten" placeholder="A, B" /></label>
+          <label class="field-group"><span>Notenschlüssel</span><select data-meta-field="notenschluesselPreset"><option value="sek1"${attrSelected(metadata.notenschluesselPreset === "sek1")}>Sek I (1 bis 6)</option><option value="oberstufe"${attrSelected(metadata.notenschluesselPreset === "oberstufe")}>Oberstufe (0 bis 15)</option><option value="symbol"${attrSelected(metadata.notenschluesselPreset === "symbol")}>++ / + / o / - / --</option><option value="custom"${attrSelected(metadata.notenschluesselPreset === "custom")}>Benutzerdefiniert</option></select></label>
+          <label class="field-group"><span>Bezeichnung im Druck</span><input type="text" value="${escapeHtml(resultLabel)}" data-meta-field="resultLabel" placeholder="z. B. Note oder Notenpunkte" /></label>
         </div>
         <article class="subpanel stack-gap">
           <div class="panel-header">
@@ -1885,18 +1872,20 @@
 
   function getPrintHeaderTitle(exam) {
     var metadata = exam.metadata || {};
-    var title = String(metadata.title || "").trim();
-    if (title) {
-      return title;
+    var parts = [];
+    if (metadata.typ) {
+      parts.push(String(metadata.typ).trim());
     }
-    var fallback = metadata.fach ? ("Klassenarbeit " + metadata.fach) : "Klassenarbeit";
+    if (metadata.fach) {
+      parts.push(String(metadata.fach).trim());
+    }
     if (metadata.arbeitsNummer) {
-      fallback += " " + metadata.arbeitsNummer;
+      parts.push("Nr: " + String(metadata.arbeitsNummer).trim());
     }
     if (metadata.thema) {
-      fallback += " (" + metadata.thema + ")";
+      parts.push("(" + String(metadata.thema).trim() + ")");
     }
-    return fallback;
+    return parts.join(" ").trim() || "Leistungsnachweis";
   }
 
   function getPrintFrameClasses(row) {
@@ -1937,11 +1926,6 @@
 
   function renderPrintHeader(exam, student, pageIndex, pageCount) {
     var metadata = exam.metadata || {};
-    var schemeLabel = getPrintSchemeLabel(metadata);
-    var classText = metadata.kursOderKlasse || "";
-    if (schemeLabel) {
-      classText += classText ? ` (${schemeLabel})` : schemeLabel;
-    }
     var title = getPrintHeaderTitle(exam);
     return `
       <header class="print-header-card">
@@ -1950,13 +1934,11 @@
           <div class="print-title-date">${escapeHtml(formatDate(metadata.termin) || "")}</div>
         </div>
         <div class="print-header-grid">
-          <div class="print-header-cell print-header-left"><span class="print-meta-label">Kurs/Klasse:</span><span class="print-meta-value">${escapeHtml(classText || "-")}</span></div>
+          <div class="print-header-cell print-header-left"><span class="print-meta-label">Klasse/Kurs:</span><span class="print-meta-value">${escapeHtml(metadata.kursOderKlasse || "-")}</span></div>
           <div class="print-header-cell print-header-center"><span class="print-meta-label">Name:</span><span class="print-meta-value">${escapeHtml(student.displayName || "")}</span></div>
           <div class="print-header-cell print-header-right"><span class="print-meta-label">Lehrkraft:</span><span class="print-meta-value">${escapeHtml(metadata.lehrkraft || "")}</span></div>
-          <div class="print-header-cell print-header-left print-header-subline">${metadata.schuljahr ? `<span class="print-meta-label">Schuljahr:</span><span class="print-meta-value">${escapeHtml(metadata.schuljahr)}</span>` : ""}</div>
-          <div class="print-header-cell print-header-center print-header-subline"><span class="print-meta-label">Seite:</span><span class="print-meta-value">${pageIndex + 1} von ${pageCount}</span></div>
-          <div class="print-header-cell print-header-right print-header-subline">${metadata.arbeitsNummer ? `<span class="print-meta-label">Nr.:</span><span class="print-meta-value">${escapeHtml(metadata.arbeitsNummer)}</span>` : ""}</div>
         </div>
+        <div class="print-page-row">Seite: ${pageIndex + 1} von ${pageCount}</div>
       </header>
     `;
   }
@@ -1985,24 +1967,28 @@
   function renderPrintRow(row) {
     var indentStyle = `padding-left:${row.depth * 12}px`;
     var frameClasses = getPrintFrameClasses(row);
+    var rowClass = ["print-work-row", "print-row-" + row.kind];
+    if (frameClasses) {
+      rowClass.push(frameClasses);
+    }
 
     if (row.kind === "spacer") {
-      return '<tr class="print-row-spacer"><td colspan="3"></td></tr>';
+      return `<div class="${rowClass.join(" ")}"><div class="print-spacer-cell"></div></div>`;
     }
 
     if (row.kind === "blockHeading") {
-      return `<tr class="print-row-block-heading ${frameClasses}"><td class="print-marker-cell"></td><td class="print-content-cell" colspan="2" style="${indentStyle}"><div class="print-heading-block">${escapeHtml(row.titleText || "")}</div></td></tr>`;
+      return `<div class="${rowClass.join(" ")}"><div class="print-marker-cell"></div><div class="print-content-cell print-content-span" style="${indentStyle}"><div class="print-heading-block">${escapeHtml(row.titleText || "")}</div></div></div>`;
     }
 
     if (row.kind === "blockInline") {
-      return `<tr class="print-row-block-inline ${frameClasses}"><td class="print-marker-cell"></td><td class="print-content-cell" colspan="2" style="${indentStyle}"><div class="print-heading-inline">${escapeHtml(row.titleText || "")}</div></td></tr>`;
+      return `<div class="${rowClass.join(" ")}"><div class="print-marker-cell"></div><div class="print-content-cell print-content-span" style="${indentStyle}"><div class="print-heading-inline">${escapeHtml(row.titleText || "")}</div></div></div>`;
     }
 
     if (row.kind === "sum") {
-      return `<tr class="print-row-sum ${frameClasses}"><td class="print-marker-cell"></td><td class="print-content-cell" style="${indentStyle}"><strong>${escapeHtml(row.label || "Summe")}</strong></td><td class="print-score-cell">${renderPrintScore(row.achieved, row.max)}</td></tr>`;
+      return `<div class="${rowClass.join(" ")}"><div class="print-marker-cell"></div><div class="print-content-cell" style="${indentStyle}"><strong>${escapeHtml(row.label || "Summe")}</strong></div><div class="print-score-cell">${renderPrintScore(row.achieved, row.max)}</div></div>`;
     }
 
-    return `<tr class="print-row-criterion ${frameClasses}"><td class="print-marker-cell">${escapeHtml(row.marker || "")}</td><td class="print-content-cell" style="${indentStyle}">${renderPrintCriterionContent(row)}</td><td class="print-score-cell">${renderPrintScore(row.achieved, row.max)}${row.isBonus ? '<div class="print-bonus-note">Bonus</div>' : ""}</td></tr>`;
+    return `<div class="${rowClass.join(" ")}"><div class="print-marker-cell">${escapeHtml(row.marker || "")}</div><div class="print-content-cell" style="${indentStyle}">${renderPrintCriterionContent(row)}</div><div class="print-score-cell">${renderPrintScore(row.achieved, row.max)}${row.isBonus ? '<div class="print-bonus-note">Bonus</div>' : ""}</div></div>`;
   }
 
   function renderPrintSummary(exam, student, totals, scheme) {
@@ -2045,11 +2031,11 @@
     var scheme = resolveGradeScheme(exam.metadata);
 
     return `
-      <section class="panel stack-gap print-panel">
+      <section class="panel stack-gap print-panel print-live-preview">
         <div class="panel-header no-print">
           <div>
             <h2>Druckansicht</h2>
-            <p class="muted-text">Formaler Bewertungsbogen für den Browserdruck.</p>
+            <p class="muted-text">Live-Vorschau des späteren PDF-Bogens im A4-Format.</p>
             <p class="small-help">Browser-Kopf- und Fußzeilen wie Datum oder Dateiname werden vom Browser gesteuert und müssen im Druckdialog deaktiviert werden.</p>
           </div>
           <button type="button" class="primary-button" data-action="print">Sammel-PDF drucken</button>
@@ -2062,11 +2048,9 @@
             return pages.map(function (pageRows, pageIndex) {
               return `<section class="print-sheet-page">
                 ${renderPrintHeader(exam, student, pageIndex, pages.length)}
-                <table class="print-work-table">
-                  <tbody>
-                    ${pageRows.map(renderPrintRow).join("")}
-                  </tbody>
-                </table>
+                <div class="print-work-list">
+                  ${pageRows.map(renderPrintRow).join("")}
+                </div>
                 ${pageIndex === pages.length - 1 ? renderPrintSummary(exam, student, totals, scheme) : ""}
               </section>`;
             }).join("");
@@ -3051,6 +3035,11 @@
 
   render();
 })();
+
+
+
+
+
 
 
 
