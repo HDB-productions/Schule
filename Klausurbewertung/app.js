@@ -1063,7 +1063,10 @@
     pendingMaxChange: null,
     draggedNodeId: null,
     matrixFocus: null,
-    imageResize: null
+    suppressMatrixFocusRestore: false,
+    matrixScroll: null,
+    imageResize: null,
+    collapsedNodeIds: {}
   };
 
   var appRoot = document.getElementById("app");
@@ -1256,6 +1259,7 @@
   function renderOverviewView(exam) {
     var summary = summarizeExam(exam);
     var resultLabel = getResultLabel(exam.metadata);
+    var totalStudents = summary.studentSummaries.length || 1;
     return `
       <section class="panel stack-gap overview-view">
         <div class="panel-header">
@@ -1298,7 +1302,9 @@
               <thead><tr><th>${escapeHtml(resultLabel)}</th><th>Anzahl</th><th>ab %</th></tr></thead>
               <tbody>
                 ${summary.scheme.boundaries.map(function (boundary) {
-                  return `<tr><td>${escapeHtml(boundary.label)}</td><td>${summary.distribution[boundary.label] || 0}</td><td>${boundary.minPercent.toFixed(1)}%</td></tr>`;
+                  var count = summary.distribution[boundary.label] || 0;
+                  var share = ((count / totalStudents) * 100).toFixed(1);
+                  return `<tr><td>${escapeHtml(boundary.label)}</td><td>${count} (${share}%)</td><td>${boundary.minPercent.toFixed(1)}%</td></tr>`;
                 }).join("")}
               </tbody>
             </table>
@@ -1501,6 +1507,24 @@
     var blockNodes = flattened.filter(function (node) {
       return isBlockNode(node);
     });
+    var collapsedNodes = ui.collapsedNodeIds || {};
+    var nodeById = {};
+    var visibleNodes;
+
+    flattened.forEach(function (node) {
+      nodeById[node.id] = node;
+    });
+
+    visibleNodes = flattened.filter(function (node) {
+      var parentId = node.parentId;
+      while (parentId) {
+        if (collapsedNodes[parentId]) {
+          return false;
+        }
+        parentId = nodeById[parentId] ? nodeById[parentId].parentId : null;
+      }
+      return true;
+    });
 
     return `
       <section class="panel stack-gap structure-view">
@@ -1545,15 +1569,18 @@
           </div>
         </article>
         <div class="stack-gap">
-          ${flattened.map(function (node) {
+          ${visibleNodes.map(function (node) {
             var isCriterion = isCriterionNode(node);
             var isHeading = getNodeIsHeading(node);
             var showSum = getNodeShowSum(node);
             var borderStyle = getNodeBorderStyle(node);
+            var isCollapsed = !!collapsedNodes[node.id];
             return `
-              <article class="structure-row subpanel" draggable="true" data-node-id="${node.id}">
+              <article class="structure-row subpanel${isCollapsed ? " structure-row-collapsed" : ""}" data-node-id="${node.id}">
                 <div class="structure-header" style="padding-left:${node.depth * 18}px">
                   <div class="structure-meta">
+                    <button type="button" class="ghost-button tiny-button collapse-toggle" data-action="toggle-node-collapse" data-node-id="${node.id}" aria-expanded="${isCollapsed ? "false" : "true"}" title="${isCollapsed ? "Aufklappen" : "Einklappen"}">${isCollapsed ? "▸" : "▾"}</button>
+                    <span class="drag-handle" draggable="true" data-role="drag-handle" data-node-id="${node.id}" title="Zum Umordnen ziehen">⋮⋮</span>
                     <strong>${escapeHtml(node.title || (isCriterion ? "Kriterium" : "Block"))}</strong>
                     <span class="pill">${isCriterion ? "Kriterium" : "Block"}</span>
                     ${isCriterion && node.isBonus ? '<span class="pill pill-bonus">Bonus</span>' : ""}
@@ -1570,45 +1597,47 @@
                     <button type="button" class="danger-button tiny-button" data-action="remove-node" data-node-id="${node.id}">Entfernen</button>
                   </div>
                 </div>
-                <div class="structure-form-grid">
-                  <label class="field-group">
-                    <span>Typ</span>
-                    <select data-node-id="${node.id}" data-node-field="nodeKind">
-                      <option value="block"${attrSelected(!isCriterion)}>Block</option>
-                      <option value="criterion"${attrSelected(isCriterion)}>Kriterium</option>
-                    </select>
-                  </label>
-                  <label class="field-group"><span>Name</span><input value="${escapeHtml(node.title || "")}" data-node-id="${node.id}" data-node-field="title" /></label>
-                  <label class="field-group">
-                    <span>Übergeordneter Block</span>
-                    <select data-node-id="${node.id}" data-node-field="parentId">
-                      <option value=""${attrSelected(!node.parentId)}>Oberste Ebene</option>
-                      ${renderBlockParentOptions(flattened, node.id, node.parentId || "")}
-                    </select>
-                  </label>
-                  ${isCriterion ? `
-                    <label class="field-group"><span>Maximalpunkte</span><input type="number" min="0" step="0.5" value="${escapeHtml(String(node.maxPoints || 0))}" data-node-id="${node.id}" data-node-field="maxPoints" /></label>
-                    <label class="field-group inline-checkbox"><span>Ist Bonus</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isBonus"${attrChecked(!!node.isBonus)} /></label>
-                  ` : `
-                    <label class="field-group inline-checkbox"><span>Summe anzeigen</span><input type="checkbox" data-node-id="${node.id}" data-node-field="showSum"${attrChecked(showSum)} /></label>
-                    <label class="field-group inline-checkbox"><span>Ist Überschrift</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isHeading"${attrChecked(isHeading)} /></label>
-                    <label class="field-group"><span>Rand</span><select data-node-id="${node.id}" data-node-field="borderStyle">${renderBorderStyleOptions(borderStyle)}</select></label>
-                  `}
-                </div>
-                ${isCriterion ? `
-                  <div class="field-group">
-                    <span>Text</span>
-                    <textarea rows="5" data-node-id="${node.id}" data-node-field="richContent">${escapeHtml(node.richContent || "")}</textarea>
-                  </div>
-                  <div class="inline-actions wrap-actions">
-                    <label class="secondary-button file-button">
-                      Bild einfügen
-                      <input type="file" accept="image/*" data-role="node-image" data-node-id="${node.id}" />
+                ${isCollapsed ? '' : `
+                  <div class="structure-form-grid">
+                    <label class="field-group">
+                      <span>Typ</span>
+                      <select data-node-id="${node.id}" data-node-field="nodeKind">
+                        <option value="block"${attrSelected(!isCriterion)}>Block</option>
+                        <option value="criterion"${attrSelected(isCriterion)}>Kriterium</option>
+                      </select>
                     </label>
+                    <label class="field-group"><span>Name</span><input value="${escapeHtml(node.title || "")}" data-node-id="${node.id}" data-node-field="title" /></label>
+                    <label class="field-group">
+                      <span>Übergeordneter Block</span>
+                      <select data-node-id="${node.id}" data-node-field="parentId">
+                        <option value=""${attrSelected(!node.parentId)}>Oberste Ebene</option>
+                        ${renderBlockParentOptions(flattened, node.id, node.parentId || "")}
+                      </select>
+                    </label>
+                    ${isCriterion ? `
+                      <label class="field-group"><span>Maximalpunkte</span><input type="number" min="0" step="0.5" value="${escapeHtml(String(node.maxPoints || 0))}" data-node-id="${node.id}" data-node-field="maxPoints" /></label>
+                      <label class="field-group inline-checkbox"><span>Ist Bonus</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isBonus"${attrChecked(!!node.isBonus)} /></label>
+                    ` : `
+                      <label class="field-group inline-checkbox"><span>Summe anzeigen</span><input type="checkbox" data-node-id="${node.id}" data-node-field="showSum"${attrChecked(showSum)} /></label>
+                      <label class="field-group inline-checkbox"><span>Ist Überschrift</span><input type="checkbox" data-node-id="${node.id}" data-node-field="isHeading"${attrChecked(isHeading)} /></label>
+                      <label class="field-group"><span>Rand</span><select data-node-id="${node.id}" data-node-field="borderStyle">${renderBorderStyleOptions(borderStyle)}</select></label>
+                    `}
                   </div>
-                  <div class="markdown-preview" data-preview-node-id="${node.id}">${renderMarkdown(node.richContent || "", { editableImages: true, nodeId: node.id })}</div>
-                ` : `
-                  <div class="small-help">Blöcke strukturieren den Erwartungshorizont. Für Zeilen wie „Hilfsmittelfreier Teil“, „Aufgabe 1“ oder „a)“ legst du jeweils einen Block an. Optional kannst du einen Rand für die Druckausgabe wählen.</div>
+                  ${isCriterion ? `
+                    <div class="field-group">
+                      <span>Text</span>
+                      <textarea rows="5" data-node-id="${node.id}" data-node-field="richContent">${escapeHtml(node.richContent || "")}</textarea>
+                    </div>
+                    <div class="inline-actions wrap-actions">
+                      <label class="secondary-button file-button">
+                        Bild einfügen
+                        <input type="file" accept="image/*" data-role="node-image" data-node-id="${node.id}" />
+                      </label>
+                    </div>
+                    <div class="markdown-preview" data-preview-node-id="${node.id}">${renderMarkdown(node.richContent || "", { editableImages: true, nodeId: node.id })}</div>
+                  ` : `
+                    <div class="small-help">Blöcke strukturieren den Erwartungshorizont. Für Zeilen wie „Hilfsmittelfreier Teil“, „Aufgabe 1“ oder „a)“ legst du jeweils einen Block an. Optional kannst du einen Rand für die Druckausgabe wählen.</div>
+                  `}
                 `}
               </article>
             `;
@@ -1617,7 +1646,6 @@
       </section>
     `;
   }
-
   function getMatrixCellValue(entry, mode) {
     if (!entry || entry.isUnset) {
       return "";
@@ -1644,29 +1672,36 @@
 
     var bodyRows = rows.map(function (row) {
       var label = `<td class="sticky-col matrix-label-col" style="padding-left:${16 + row.depth * 18}px"><div class="matrix-label-cell"><strong>${escapeHtml(row.title || row.type)}</strong>${row.isScorable ? `<span class="muted-text">${Number(row.maxPoints || 0).toFixed(1)} P${row.isBonus ? " +Bonus" : ""}</span>` : ""}</div></td>`;
-      var actionCell = row.isScorable
-        ? `<td class="matrix-meta-col"><div class="inline-actions wrap-actions"><button type="button" class="secondary-button tiny-button" data-action="set-criterion-percent" data-criterion-id="${row.id}" data-percent="0">0%</button><button type="button" class="secondary-button tiny-button" data-action="set-criterion-percent" data-criterion-id="${row.id}" data-percent="100">100%</button></div></td>`
-        : `<td class="matrix-meta-col"><span class="muted-text">Summe</span></td>`;
 
       var studentCells = students.map(function (student, studentIndex) {
+        var cellActions = `<div class="matrix-cell-actions"><button type="button" class="secondary-button tiny-button" data-action="set-node-student-percent" data-node-id="${row.id}" data-student-id="${student.id}" data-percent="0">0%</button><button type="button" class="secondary-button tiny-button" data-action="set-node-student-percent" data-node-id="${row.id}" data-student-id="${student.id}" data-percent="100">100%</button></div>`;
         if (!row.isScorable) {
           var totals = getNodeTotalsForStudent(exam, row.id, student.id);
-          return `<td class="matrix-summary-cell">${totals.achieved.toFixed(1)} / ${totals.max.toFixed(1)}</td>`;
+          return `<td class="matrix-summary-cell"><div class="matrix-summary-stack"><div class="matrix-cell-summary">${totals.achieved.toFixed(1)} / ${totals.max.toFixed(1)}</div>${cellActions}</div></td>`;
         }
         var entry = exam.evaluations[evaluationKey(student.id, row.id)];
         var stateClass = getHighlightState(exam.metadata, entry && !entry.isUnset ? entry.derivedPercent : null);
+        var secondaryValue = "offen";
+        if (entry && !entry.isUnset) {
+          secondaryValue = ui.scoreMode === "points"
+            ? `${Number(entry.derivedPercent).toFixed(1)} %`
+            : `${Number(entry.achievedPoints).toFixed(1)} P`;
+        }
         return `<td class="matrix-input-cell matrix-${stateClass}">
-          <input class="matrix-input" type="number" step="${ui.scoreMode === "points" ? "0.5" : "0.1"}" min="0" ${ui.scoreMode === "points" ? `max="${escapeHtml(String(row.maxPoints || 0))}"` : ""}
-            value="${escapeHtml(getMatrixCellValue(entry, ui.scoreMode))}"
-            data-student-id="${student.id}" data-criterion-id="${row.id}" data-matrix-row="${scorableIndexMap[row.id]}" data-matrix-col="${studentIndex}" />
-          <small>${entry && !entry.isUnset ? `${Number(entry.achievedPoints).toFixed(1)} P` : "offen"}</small>
+          <div class="matrix-input-row">
+            <input class="matrix-input" type="number" step="${ui.scoreMode === "points" ? "0.5" : "0.1"}" min="0" ${ui.scoreMode === "points" ? `max="${escapeHtml(String(row.maxPoints || 0))}"` : ""}
+              value="${escapeHtml(getMatrixCellValue(entry, ui.scoreMode))}"
+              data-student-id="${student.id}" data-criterion-id="${row.id}" data-matrix-row="${scorableIndexMap[row.id]}" data-matrix-col="${studentIndex}" />
+            <span class="matrix-input-unit">${ui.scoreMode === "points" ? "P" : "%"}</span>
+          </div>
+          <div class="matrix-cell-meta-row"><small class="matrix-secondary-value">${secondaryValue}</small>${cellActions}</div>
         </td>`;
       }).join("");
 
-      return `<tr class="${row.isScorable ? "criterion-row" : "structure-only-row"}">${label}${actionCell}${studentCells}</tr>`;
+      return `<tr class="${row.isScorable ? "criterion-row" : "structure-only-row"}">${label}${studentCells}</tr>`;
     }).join("");
 
-    var totalRow = `<tr class="matrix-final-row"><td class="sticky-col matrix-label-col">Gesamt</td><td class="matrix-meta-col">Note</td>${students.map(function (student) {
+    var totalRow = `<tr class="matrix-final-row"><td class="sticky-col matrix-label-col">Gesamt</td>${students.map(function (student) {
       var totals = getStudentTotals(exam, student.id);
       return `<td><strong>${totals.totalAchieved.toFixed(1)} / ${totals.maxRegular.toFixed(1)}</strong><div>${totals.percent.toFixed(2)}%</div><div>${escapeHtml(totals.gradeLabel)}</div></td>`;
     }).join("")}</tr>`;
@@ -1683,23 +1718,26 @@
             <button type="button" class="${ui.scoreMode === "percent" ? "segmented-active" : ""}" data-action="set-score-mode" data-mode="percent">Prozentmodus</button>
           </div>
         </div>
-        <div class="matrix-wrapper">
-          <table class="matrix-table">
-            <thead>
-              <tr>
-                <th class="sticky-col sticky-head matrix-label-col">Struktur / Kriterium</th>
-                <th class="sticky-head matrix-meta-col">Aktionen</th>
-                ${students.map(function (student) {
-                  var totals = getStudentTotals(exam, student.id);
-                  return `<th class="sticky-head matrix-student-head"><div class="student-head"><strong>${escapeHtml(student.displayName)}</strong><span>${student.variante ? `Variante ${escapeHtml(student.variante)}` : ""}</span><span>${totals.totalAchieved.toFixed(1)} / ${totals.maxRegular.toFixed(1)} Punkte</span><span>${totals.percent.toFixed(2)}% | ${escapeHtml(totals.gradeLabel)}</span><div class="inline-actions wrap-actions"><button type="button" class="secondary-button tiny-button" data-action="set-student-percent" data-student-id="${student.id}" data-percent="0">0%</button><button type="button" class="secondary-button tiny-button" data-action="set-student-percent" data-student-id="${student.id}" data-percent="100">100%</button></div></div></th>`;
-                }).join("")}
-              </tr>
-            </thead>
-            <tbody>
-              ${bodyRows}
-              ${totalRow}
-            </tbody>
-          </table>
+        <div class="matrix-scroll-shell" data-role="matrix-scroll-shell">
+          <div class="matrix-wrapper" data-role="matrix-scroll-main">
+            <table class="matrix-table" data-role="matrix-scroll-table">
+              <thead>
+                <tr>
+                  <th class="sticky-col sticky-head matrix-label-col">Struktur / Kriterium</th>
+                  ${students.map(function (student) {
+                    return `<th class="sticky-head matrix-student-head"><div class="student-head"><strong>${escapeHtml(student.displayName)}</strong></div></th>`;
+                  }).join("")}
+                </tr>
+              </thead>
+              <tbody>
+                ${bodyRows}
+                ${totalRow}
+              </tbody>
+            </table>
+          </div>
+          <div class="matrix-bottom-scroll no-print" data-role="matrix-scroll-bar" aria-hidden="true">
+            <div class="matrix-bottom-scroll-inner" data-role="matrix-scroll-inner"></div>
+          </div>
         </div>
       </section>
     `;
@@ -1736,9 +1774,35 @@
     }
   }
 
+  function getPrintableRowText(row) {
+    return String(row.bodyText || row.titleText || "")
+      .replace(/!\[[^\]]*\]\((?:data:[^)]+|[^)]+)\)/g, " [Bild] ")
+      .replace(/\$\$[\s\S]+?\$\$/g, " Formelblock ")
+      .replace(/\$[^$\n]+\$/g, " Formel ")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function isPrintHeadingRow(row) {
+    return !!row && (row.kind === "blockHeading" || row.kind === "blockInline");
+  }
+
   function getPrintRowWeight(row) {
     if (row.kind === "criterion") {
-      return Math.max(1, Math.ceil(String(row.bodyText || row.titleText || "").length / 220) + 1);
+      var raw = String(row.bodyText || row.titleText || "");
+      var printableText = getPrintableRowText(row);
+      var textWeight = Math.max(1, Math.ceil(printableText.length / 260));
+      var imageMatches = raw.match(/!\[([^\]]*)\]\((?:data:[^)]+|[^)]+)\)/g) || [];
+      var imageWeight = 0;
+
+      imageMatches.forEach(function (match) {
+        var widthMatch = match.match(/\|w=(\d+)/);
+        var width = widthMatch ? Number(widthMatch[1]) || 220 : 220;
+        imageWeight += Math.max(2, Math.ceil(width / 120));
+      });
+
+      return Math.max(2, textWeight + imageWeight);
     }
     if (row.kind === "blockHeading") {
       return 2;
@@ -1748,7 +1812,6 @@
     }
     return 1;
   }
-
   function buildPrintRowsForStudent(exam, studentId) {
     var rows = [];
     var childrenMap = getChildrenMap(exam.structure);
@@ -1765,6 +1828,31 @@
         if (index === endIndex) {
           rows[index].frameEnd = true;
         }
+      }
+    }
+
+    function foldInlineBlockRows(startIndex, endIndex, blockTitle) {
+      var firstRow = null;
+      var index;
+      if (endIndex < startIndex) {
+        return;
+      }
+
+      for (index = startIndex; index <= endIndex; index += 1) {
+        rows[index].depth = Math.max(0, Number(rows[index].depth || 0) - 1);
+        if (!firstRow && rows[index].kind !== "spacer") {
+          firstRow = rows[index];
+        }
+      }
+
+      if (!firstRow || !blockTitle) {
+        return;
+      }
+
+      if (firstRow.marker) {
+        firstRow.marker = blockTitle + " " + firstRow.marker;
+      } else {
+        firstRow.marker = blockTitle;
       }
     }
 
@@ -1797,10 +1885,11 @@
 
       var startIndex = rows.length;
       var blockTitle = String(node.title || "").trim();
-      if (blockTitle) {
+      if (blockTitle && getNodeIsHeading(node)) {
         rows.push({
-          kind: getNodeIsHeading(node) ? "blockHeading" : "blockInline",
-          depth: depth,
+          kind: "blockHeading",
+          depth: 0,
+          marker: "",
           titleText: blockTitle,
           frameStyle: "none",
           frameStart: false,
@@ -1813,11 +1902,16 @@
         addNodeRows(child, depth + 1);
       });
 
+      if (blockTitle && !getNodeIsHeading(node)) {
+        foldInlineBlockRows(startIndex, rows.length - 1, blockTitle);
+      }
+
       if (getNodeShowSum(node) && getDescendantCriterionIds(exam.structure, node.id).length) {
         var totals = getNodeTotalsForStudent(exam, node.id, studentId);
         rows.push({
           kind: "sum",
-          depth: depth,
+          depth: getNodeIsHeading(node) ? 0 : Math.max(0, depth - 1),
+          marker: "",
           label: getNodeIsHeading(node) && blockTitle ? "Summe " + blockTitle : "Summe",
           achieved: totals.achieved,
           max: totals.max,
@@ -1843,14 +1937,19 @@
     var currentWeight = 0;
     var maxWeight = 24;
 
-    rows.forEach(function (row) {
+    rows.forEach(function (row, index) {
       var weight = getPrintRowWeight(row);
-      var reserveHeading = row.kind === "blockHeading" && currentWeight > 20;
-      if (current.length && (currentWeight + weight > maxWeight || reserveHeading)) {
+      var nextRow = rows[index + 1] || null;
+      var reserveFollower = isPrintHeadingRow(row) && nextRow ? Math.min(getPrintRowWeight(nextRow), 8) : 0;
+      var wouldOverflow = current.length && (currentWeight + weight + reserveFollower > maxWeight);
+      var currentHasOnlyHeading = current.length === 1 && isPrintHeadingRow(current[0]);
+
+      if (wouldOverflow && !currentHasOnlyHeading) {
         pages.push(current);
         current = [];
         currentWeight = 0;
       }
+
       current.push(row);
       currentWeight += weight;
     });
@@ -1869,7 +1968,6 @@
 
     return pages;
   }
-
   function getPrintHeaderTitle(exam) {
     var metadata = exam.metadata || {};
     var parts = [];
@@ -1977,15 +2075,15 @@
     }
 
     if (row.kind === "blockHeading") {
-      return `<div class="${rowClass.join(" ")}"><div class="print-marker-cell"></div><div class="print-content-cell print-content-span" style="${indentStyle}"><div class="print-heading-block">${escapeHtml(row.titleText || "")}</div></div></div>`;
+      return `<div class="${rowClass.join(" ")}"><div class="print-content-cell print-content-full" style="${indentStyle}"><div class="print-heading-block">${escapeHtml(row.titleText || "")}</div></div></div>`;
     }
 
     if (row.kind === "blockInline") {
-      return `<div class="${rowClass.join(" ")}"><div class="print-marker-cell"></div><div class="print-content-cell print-content-span" style="${indentStyle}"><div class="print-heading-inline">${escapeHtml(row.titleText || "")}</div></div></div>`;
+      return `<div class="${rowClass.join(" ")}"><div class="print-marker-cell">${escapeHtml(row.marker || "")}</div><div class="print-content-cell print-content-span" style="${indentStyle}"><div class="print-heading-inline">${escapeHtml(row.titleText || "")}</div></div></div>`;
     }
 
     if (row.kind === "sum") {
-      return `<div class="${rowClass.join(" ")}"><div class="print-marker-cell"></div><div class="print-content-cell" style="${indentStyle}"><strong>${escapeHtml(row.label || "Summe")}</strong></div><div class="print-score-cell">${renderPrintScore(row.achieved, row.max)}</div></div>`;
+      return `<div class="${rowClass.join(" ")}"><div class="print-content-cell print-sum-content" style="${indentStyle}"><strong>${escapeHtml(row.label || "Summe")}</strong></div><div class="print-score-cell">${renderPrintScore(row.achieved, row.max)}</div></div>`;
     }
 
     return `<div class="${rowClass.join(" ")}"><div class="print-marker-cell">${escapeHtml(row.marker || "")}</div><div class="print-content-cell" style="${indentStyle}">${renderPrintCriterionContent(row)}</div><div class="print-score-cell">${renderPrintScore(row.achieved, row.max)}${row.isBonus ? '<div class="print-bonus-note">Bonus</div>' : ""}</div></div>`;
@@ -2004,7 +2102,7 @@
           <div class="print-summary-label">In Prozent</div>
           <div class="print-summary-value">${formatPercentValue(totals.percent)}</div>
           <div class="print-summary-label">${escapeHtml(resultLabel)}</div>
-          <div class="print-summary-value print-summary-note-line"><span class="print-summary-note">${escapeHtml(totals.gradeLabel)}</span><span class="print-summary-teacher">${escapeHtml(exam.metadata.lehrkraftKuerzel || "")}</span></div>
+          <div class="print-summary-value print-summary-note-line"><span class="print-summary-note">${escapeHtml(totals.gradeLabel)}</span><span class="print-summary-teacher" aria-hidden="true"></span></div>
         </div>
         <table class="print-grade-horizontal">
           <thead>
@@ -2109,6 +2207,7 @@
 
   function render() {
     var exam = getCurrentExam();
+    captureMatrixScrollState();
     appRoot.innerHTML = `
       <main class="app-shell">
         ${renderTopBar(exam)}
@@ -2118,7 +2217,21 @@
       </main>
       ${renderModal()}
     `;
+    setupMatrixBottomScrollbar();
     restoreMatrixFocus();
+    restoreMatrixScrollState();
+  }
+
+  function captureMatrixScrollState() {
+    var main = appRoot ? appRoot.querySelector('[data-role="matrix-scroll-main"]') : null;
+    if (!main) {
+      ui.matrixScroll = null;
+      return;
+    }
+    ui.matrixScroll = {
+      left: main.scrollLeft,
+      top: main.scrollTop
+    };
   }
 
   function showNotice(message) {
@@ -2155,6 +2268,10 @@
   }
 
   function restoreMatrixFocus() {
+    if (ui.suppressMatrixFocusRestore) {
+      ui.suppressMatrixFocusRestore = false;
+      return;
+    }
     if (!ui.matrixFocus) {
       return;
     }
@@ -2164,6 +2281,74 @@
       input.focus();
       input.select();
     }
+  }
+
+  function restoreMatrixScrollState() {
+    if (!ui.matrixScroll) {
+      return;
+    }
+    var main = appRoot.querySelector('[data-role="matrix-scroll-main"]');
+    var bar = appRoot.querySelector('[data-role="matrix-scroll-bar"]');
+    if (!main) {
+      return;
+    }
+    main.scrollLeft = ui.matrixScroll.left || 0;
+    main.scrollTop = ui.matrixScroll.top || 0;
+    if (bar) {
+      bar.scrollLeft = ui.matrixScroll.left || 0;
+    }
+  }
+
+  function setupMatrixBottomScrollbar() {
+    var shell = appRoot.querySelector('[data-role="matrix-scroll-shell"]');
+    if (!shell) {
+      return;
+    }
+
+    var main = shell.querySelector('[data-role="matrix-scroll-main"]');
+    var bar = shell.querySelector('[data-role="matrix-scroll-bar"]');
+    var inner = shell.querySelector('[data-role="matrix-scroll-inner"]');
+    var table = shell.querySelector('[data-role="matrix-scroll-table"]');
+    var syncingMain = false;
+    var syncingBar = false;
+
+    if (!main || !bar || !inner || !table) {
+      return;
+    }
+
+    function syncWidths() {
+      var tableWidth = Math.max(table.scrollWidth, table.offsetWidth, main.scrollWidth);
+      var needsScroll = tableWidth > main.clientWidth + 1;
+      inner.style.width = tableWidth + 'px';
+      bar.style.display = needsScroll ? 'block' : 'none';
+      if (needsScroll) {
+        bar.scrollLeft = main.scrollLeft;
+      } else {
+        main.scrollLeft = 0;
+        bar.scrollLeft = 0;
+      }
+    }
+
+    main.addEventListener('scroll', function () {
+      if (syncingMain) {
+        syncingMain = false;
+        return;
+      }
+      syncingBar = true;
+      bar.scrollLeft = main.scrollLeft;
+    });
+
+    bar.addEventListener('scroll', function () {
+      if (syncingBar) {
+        syncingBar = false;
+        return;
+      }
+      syncingMain = true;
+      main.scrollLeft = bar.scrollLeft;
+    });
+
+    syncWidths();
+    window.setTimeout(syncWidths, 0);
   }
 
   function getValue(id) {
@@ -2653,6 +2838,30 @@
     });
   }
 
+  function batchSetNodeStudentPercent(nodeId, studentId, percent) {
+    mutateCurrentExam(function (exam) {
+      var node = exam.structure.find(function (entry) {
+        return entry.id === nodeId;
+      });
+      var criterionIds = [];
+
+      if (!node) {
+        return exam;
+      }
+
+      if (isCriterionNode(node)) {
+        criterionIds = [node.id];
+      } else {
+        criterionIds = getDescendantCriterionIds(exam.structure, node.id);
+      }
+
+      criterionIds.forEach(function (criterionId) {
+        setEvaluationValue(exam, studentId, criterionId, String(percent), "percent");
+      });
+      return exam;
+    });
+  }
+
   function updateMatrixValue(studentId, criterionId, rawValue) {
     ui.matrixFocus = { studentId: studentId, criterionId: criterionId };
     mutateCurrentExam(function (exam) {
@@ -2800,6 +3009,10 @@
       case "move-node":
         moveNode(target.dataset.nodeId, Number(target.dataset.direction));
         break;
+      case "toggle-node-collapse":
+        ui.collapsedNodeIds[target.dataset.nodeId] = !ui.collapsedNodeIds[target.dataset.nodeId];
+        render();
+        break;
       case "save-task-block":
         saveTaskBlock();
         break;
@@ -2814,10 +3027,16 @@
         render();
         break;
       case "set-criterion-percent":
+        ui.suppressMatrixFocusRestore = true;
         batchSetCriterionPercent(target.dataset.criterionId, Number(target.dataset.percent));
         break;
       case "set-student-percent":
+        ui.suppressMatrixFocusRestore = true;
         batchSetStudentPercent(target.dataset.studentId, Number(target.dataset.percent));
+        break;
+      case "set-node-student-percent":
+        ui.suppressMatrixFocusRestore = true;
+        batchSetNodeStudentPercent(target.dataset.nodeId, target.dataset.studentId, Number(target.dataset.percent));
         break;
       case "print":
         (function () {
@@ -3005,11 +3224,16 @@
   });
 
   appRoot.addEventListener("dragstart", function (event) {
-    var row = event.target.closest("[data-node-id]");
-    if (!row) {
+    var handle = event.target.closest('[data-role="drag-handle"]');
+    if (!handle) {
+      event.preventDefault();
       return;
     }
-    ui.draggedNodeId = row.dataset.nodeId;
+    ui.draggedNodeId = handle.dataset.nodeId;
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", ui.draggedNodeId || "");
+    }
   });
 
   appRoot.addEventListener("dragover", function (event) {
@@ -3033,8 +3257,32 @@
     ui.draggedNodeId = null;
   });
 
+  window.addEventListener("resize", function () {
+    setupMatrixBottomScrollbar();
+  });
+
   render();
 })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -308,6 +308,11 @@ strong {
   vertical-align: top;
 }
 
+.matrix-table th,
+.matrix-table td {
+  padding: 0.35rem 0.4rem;
+}
+
 .simple-table th,
 .matrix-table th,
 .print-table th,
@@ -316,19 +321,57 @@ strong {
   text-align: left;
 }
 
+.matrix-view {
+  min-height: 0;
+  gap: 0.5rem;
+  padding: 0.7rem 0.8rem;
+}
+
+.matrix-scroll-shell {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 0;
+}
+
 .matrix-wrapper {
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: auto;
+  height: clamp(26rem, calc(100vh - 11.5rem), 56rem);
   border: 1px solid var(--border);
   border-radius: 16px;
+  background: #fff;
+  scrollbar-gutter: stable both-edges;
+  overscroll-behavior: contain;
+}
+
+.matrix-bottom-scroll {
+  display: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  position: sticky;
+  bottom: 0.35rem;
+  z-index: 7;
+  min-height: 18px;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+  scrollbar-gutter: stable;
+}
+
+.matrix-bottom-scroll-inner {
+  height: 1px;
 }
 
 .matrix-table {
-  min-width: 980px;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .matrix-label-col {
-  min-width: 320px;
-  width: 320px;
+  min-width: 250px;
+  width: 250px;
 }
 
 .matrix-meta-col {
@@ -337,11 +380,64 @@ strong {
 }
 
 .matrix-student-head {
-  min-width: 220px;
+  min-width: 140px;
+  width: 140px;
 }
 
 .matrix-input-cell input {
-  min-width: 88px;
+  min-width: 0;
+  width: 3.9rem;
+  padding: 0.28rem 0.35rem;
+}
+
+.matrix-cell-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.18rem;
+  margin: 0;
+}
+
+.matrix-cell-summary {
+  font-weight: 600;
+}
+
+.matrix-summary-stack {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.matrix-summary-cell .matrix-cell-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+
+.matrix-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.matrix-input-unit {
+  font-size: 0.76rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.matrix-cell-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.28rem;
+  margin-top: 0.22rem;
+}
+
+.matrix-secondary-value {
+  color: var(--text-soft);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .matrix-label-cell,
@@ -349,7 +445,7 @@ strong {
 .student-summary,
 .print-header-meta {
   display: grid;
-  gap: 0.25rem;
+  gap: 0.18rem;
 }
 
 .sticky-col {
@@ -366,7 +462,15 @@ strong {
 }
 
 .matrix-table .sticky-col.sticky-head {
-  z-index: 4;
+  z-index: 8;
+}
+
+.matrix-table th.sticky-head {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  background: #fff;
+  box-shadow: inset 0 -1px 0 var(--border);
 }
 
 .matrix-missing {
@@ -408,6 +512,17 @@ strong {
 
 .structure-row {
   gap: 0.85rem;
+}
+
+.structure-row-collapsed {
+  gap: 0.4rem;
+}
+
+.collapse-toggle {
+  min-width: 1.8rem;
+  padding: 0.12rem 0.35rem;
+  font-size: 0.95rem;
+  line-height: 1;
 }
 
 .markdown-preview {
@@ -559,7 +674,11 @@ strong {
 }
 
 .print-live-preview .print-title-main {
-  text-align: center;
+  flex: 1 1 auto;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
 }
 .grade-table {
   width: auto;
@@ -567,8 +686,9 @@ strong {
 }
 
 .tiny-button {
-  padding: 0.25rem 0.55rem;
-  font-size: 0.82rem;
+  padding: 0.12rem 0.34rem;
+  font-size: 0.72rem;
+  line-height: 1.1;
 }
 
 .segmented-control {
@@ -692,6 +812,7 @@ strong {
   font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.2;
+  text-align: left;
 }
 
 .print-title-date {
@@ -748,8 +869,8 @@ strong {
 
 .print-work-row {
   display: grid;
-  grid-template-columns: 1.1rem minmax(0, 1fr) 8.6rem;
-  column-gap: 0.3rem;
+  grid-template-columns: 1.8rem minmax(0, 1fr) 8.8rem;
+  column-gap: 0.2rem;
   align-items: start;
   padding: 0.01rem 0;
   line-height: 1.25;
@@ -761,6 +882,15 @@ strong {
   grid-column: 2 / 4;
 }
 
+.print-content-full {
+  grid-column: 1 / 4;
+}
+
+.print-sum-content {
+  grid-column: 1 / 3;
+  min-width: 0;
+}
+
 .print-spacer-cell {
   grid-column: 1 / 4;
   min-height: 0.2rem;
@@ -768,6 +898,8 @@ strong {
 
 .print-marker-cell {
   white-space: nowrap;
+  text-align: left;
+  padding-right: 0.1rem;
 }
 
 .print-content-cell {
@@ -775,9 +907,13 @@ strong {
 }
 
 .print-score-cell {
-  padding-left: 0.6rem;
-  text-align: right;
+  padding-left: 0.4rem;
   white-space: nowrap;
+  display: grid;
+  justify-items: end;
+  align-content: center;
+  align-self: stretch;
+  row-gap: 0.08rem;
 }
 
 .print-row-blockHeading .print-content-cell {
@@ -815,15 +951,22 @@ strong {
 
 .print-score-bracket {
   display: inline-grid;
-  grid-template-columns: auto minmax(1.9rem, auto) auto minmax(1.9rem, auto) auto;
-  gap: 0.28rem;
+  grid-template-columns: 0.9rem 2.25rem 0.9rem 2.25rem 0.9rem;
+  gap: 0;
   justify-content: end;
   align-items: baseline;
+  justify-items: center;
   font-weight: 500;
 }
 
+.print-score-bracket span {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
 .print-score-value {
-  text-align: right;
+  text-align: center;
 }
 
 .print-bonus-note {
@@ -904,9 +1047,11 @@ strong {
 }
 
 .print-summary-teacher {
-  border-left: 1px solid var(--border-strong);
-  padding-left: 0.7rem;
-  font-size: 0.95rem;
+  display: inline-block;
+  min-width: 2.8rem;
+  height: 1.1rem;
+  margin-left: 0.2rem;
+  border-bottom: 1px solid var(--border-strong);
 }
 
 .print-grade-horizontal {
@@ -944,9 +1089,12 @@ strong {
   }
 
   .print-title-main {
-    padding-right: 7rem;
-    text-align: left;
-  }
+  flex: 1 1 auto;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+}
 
   .print-score-cell {
     width: 7.6rem;
@@ -1000,3 +1148,47 @@ strong {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+.overview-distribution-table {
+  width: auto;
+  min-width: 18rem;
+  max-width: 100%;
+}
+
+.overview-distribution-table th,
+.overview-distribution-table td {
+  padding: 0.28rem 0.45rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.55rem;
+  min-width: 1.55rem;
+  height: 1.55rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-muted);
+  color: var(--text-soft);
+  cursor: grab;
+  user-select: none;
+  line-height: 1;
+  font-size: 0.9rem;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
