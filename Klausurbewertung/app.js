@@ -161,7 +161,8 @@
       paddingTop: 0,
       paddingBottom: 0,
       breakAfter: false,
-      avoidBreakBefore: false
+      avoidBreakBefore: false,
+      suppressAutoBreakAfter: false
     };
   }
 
@@ -193,7 +194,8 @@
       paddingTop: normalizePrintMetric(override.paddingTop, 0, 16),
       paddingBottom: normalizePrintMetric(override.paddingBottom, 0, 16),
       breakAfter: !!override.breakAfter,
-      avoidBreakBefore: !!override.avoidBreakBefore
+      avoidBreakBefore: !!override.avoidBreakBefore,
+      suppressAutoBreakAfter: !!override.suppressAutoBreakAfter
     };
   }
 
@@ -205,7 +207,8 @@
       && normalized.paddingTop === 0
       && normalized.paddingBottom === 0
       && !normalized.breakAfter
-      && !normalized.avoidBreakBefore;
+      && !normalized.avoidBreakBefore
+      && !normalized.suppressAutoBreakAfter;
   }
 
   function normalizePrintLayout(candidate) {
@@ -2075,6 +2078,35 @@
     return option ? option.label : "Automatisch";
   }
 
+  function setPrintLayoutRowOverride(layout, rowKey, override) {
+    var nextLayout = normalizePrintLayout(layout);
+    if (!rowKey) {
+      return nextLayout;
+    }
+    if (isDefaultPrintRowOverride(override)) {
+      delete nextLayout.rowOverrides[rowKey];
+    } else {
+      nextLayout.rowOverrides[rowKey] = normalizePrintRowOverride(override);
+    }
+    return nextLayout;
+  }
+
+  function getPrintPaginationPreviewData(exam) {
+    var previewStudentId = getPrintPreviewStudentId(exam);
+    var rows = previewStudentId ? buildPrintRowsForStudent(exam, previewStudentId) : [];
+    return chunkRowsForPrint(rows, 5, exam);
+  }
+
+  function wouldAutoBreakAfterRow(exam, rowKey, override) {
+    if (!exam || !rowKey) {
+      return false;
+    }
+    var layout = setPrintLayoutRowOverride(getPrintLayout(exam), rowKey, override);
+    var examCopy = Object.assign({}, exam, { printLayout: layout });
+    var pagination = getPrintPaginationPreviewData(examCopy);
+    return !!(pagination.breakMap[rowKey] && pagination.breakMap[rowKey].kind === "auto");
+  }
+
   function formatPrintMetricInput(value) {
     var numeric = Number(value) || 0;
     return Number.isInteger(numeric) ? String(numeric) : String(numeric);
@@ -2305,6 +2337,7 @@
     var current = [];
     var currentWeight = 0;
     var maxWeight = 28;
+    var breakMap = {};
 
     rows.forEach(function (row, index) {
       var weight = getPrintRowWeight(row, exam);
@@ -2315,18 +2348,30 @@
       var currentHasOnlyHeading = current.length === 1 && isPrintHeadingRow(current[0]);
 
       if (wouldOverflow && !currentHasOnlyHeading) {
-        pages.push(current);
-        current = [];
-        currentWeight = 0;
+        var previousRow = current[current.length - 1];
+        var previousOverride = exam && previousRow ? getPrintRowOverride(exam, previousRow) : createDefaultPrintRowOverride();
+
+        if (!previousOverride.suppressAutoBreakAfter) {
+          breakMap[previousRow.rowKey] = { kind: "auto" };
+          pages.push(current);
+          current = [];
+          currentWeight = 0;
+        }
       }
 
       current.push(row);
       currentWeight += weight;
 
-      if (rowOverride.breakAfter && index < rows.length - 1) {
+      var hasFollowerAfterRow = index < rows.length - 1 || !!summaryWeight;
+      if (rowOverride.breakAfter && hasFollowerAfterRow) {
+        breakMap[row.rowKey] = { kind: "manual" };
         pages.push(current);
         current = [];
         currentWeight = 0;
+
+        if (index === rows.length - 1 && summaryWeight) {
+          pages.push([]);
+        }
       }
     });
 
@@ -2339,19 +2384,37 @@
     }
 
     if (summaryWeight && currentWeight + summaryWeight > maxWeight) {
-      pages.push([]);
+      var lastPage = pages[pages.length - 1] || [];
+      var lastRow = lastPage[lastPage.length - 1] || null;
+      var lastOverride = exam && lastRow ? getPrintRowOverride(exam, lastRow) : createDefaultPrintRowOverride();
+
+      if (!lastOverride.suppressAutoBreakAfter) {
+        if (lastRow) {
+          breakMap[lastRow.rowKey] = { kind: "auto" };
+        }
+        pages.push([]);
+      }
     }
 
-    return pages;
+    return {
+      pages: pages,
+      breakMap: breakMap
+    };
   }
 
   function buildPrintDocumentForStudent(exam, student) {
     var rows = buildPrintRowsForStudent(exam, student.id);
+    var pagination = chunkRowsForPrint(rows, 5, exam);
     return {
       rows: rows,
-      pages: chunkRowsForPrint(rows, 5, exam),
+      pages: pagination.pages,
+      breakMap: pagination.breakMap,
       totals: getStudentTotals(exam, student.id)
     };
+  }
+
+  function getPrintRowBreakInfo(documentData, rowKey) {
+    return documentData && documentData.breakMap && rowKey ? documentData.breakMap[rowKey] || null : null;
   }
 
   function getPrintHeaderTitle(exam) {
@@ -2483,8 +2546,16 @@
     var rowStyleAttr = rowStyle ? ` style="${rowStyle}"` : "";
     var indentStyle = `padding-left:${row.depth * 12}px`;
     var rowActionAttr = "";
-    var breakFlag = renderOptions.showBreakMarkers && override.breakAfter
-      ? '<div class="print-break-flag">Seitenumbruch nach diesem Element</div>'
+    var breakInfo = getPrintRowBreakInfo(renderOptions.documentData, row.rowKey);
+    var hasBreakAfter = !!breakInfo;
+    var breakLabel = breakInfo && breakInfo.kind === "auto"
+      ? "Automatischer Seitenumbruch-Vorschlag"
+      : "Seitenumbruch nach diesem Element";
+    var breakFlagClass = breakInfo && breakInfo.kind === "auto"
+      ? "print-break-flag print-break-flag-auto"
+      : "print-break-flag print-break-flag-manual";
+    var breakFlag = renderOptions.showBreakMarkers && hasBreakAfter
+      ? `<div class="${breakFlagClass}">${breakLabel}</div>`
       : "";
 
     if (frameClasses) {
@@ -2497,8 +2568,9 @@
     if (renderOptions.selectedRowKey && renderOptions.selectedRowKey === row.rowKey) {
       rowClass.push("print-row-selected");
     }
-    if (renderOptions.showBreakMarkers && override.breakAfter) {
+    if (renderOptions.showBreakMarkers && hasBreakAfter) {
       rowClass.push("print-row-has-break");
+      rowClass.push(breakInfo.kind === "auto" ? "print-row-has-auto-break" : "print-row-has-manual-break");
     }
 
     if (row.kind === "spacer") {
@@ -2556,7 +2628,7 @@
   }
 
   function renderPrintPagesMarkup(exam, student, documentData, scheme, options) {
-    var renderOptions = Object.assign({ exam: exam }, options || {});
+    var renderOptions = Object.assign({ exam: exam, documentData: documentData }, options || {});
     return documentData.pages.map(function (pageRows, pageIndex) {
       return `<section class="print-sheet-page">
         ${renderPrintHeader(exam, student, pageIndex, documentData.pages.length)}
@@ -2601,6 +2673,16 @@
     }) || documentData.rows[0];
     var override = getPrintRowOverride(exam, selectedRow);
     var pageIndex = Math.max(0, getPrintRowPageIndex(documentData.pages, selectedRow.rowKey));
+    var breakInfo = getPrintRowBreakInfo(documentData, selectedRow.rowKey);
+    var hasBreakAfter = !!breakInfo;
+    var breakStatusLabel = override.suppressAutoBreakAfter
+      ? "Automatischen Vorschlag entfernt"
+      : (breakInfo ? (breakInfo.kind === "auto" ? "Automatischer Vorschlag" : "Manuell gesetzt") : "Kein Umbruch");
+    var breakHelpText = override.suppressAutoBreakAfter
+      ? "Der automatische Seitenumbruch ist f\u00fcr dieses Element unterdr\u00fcckt. Die Seite darf hier \u00fcberlaufen."
+      : (breakInfo && breakInfo.kind === "auto"
+        ? "Automatische Umbr\u00fcche sind nur Vorschl\u00e4ge. Wenn du das H\u00e4kchen entfernst, darf die Seite an dieser Stelle \u00fcber den Rand hinauslaufen."
+        : "Manuelle Umbr\u00fcche und automatische Vorschl\u00e4ge lassen sich hier direkt ein- und ausschalten.");
 
     return `
       <aside class="subpanel print-layout-sidebar">
@@ -2613,6 +2695,7 @@
             <div><dt>Typ</dt><dd>${escapeHtml(getPrintRowTypeLabel(selectedRow))}</dd></div>
             <div><dt>Element</dt><dd>${escapeHtml(getPrintRowLabel(selectedRow))}</dd></div>
             <div><dt>Vorschauseite</dt><dd>${pageIndex + 1} / ${documentData.pages.length}</dd></div>
+            <div><dt>Umbruch</dt><dd>${escapeHtml(breakStatusLabel)}</dd></div>
             <div><dt>Geerbter Rahmen</dt><dd>${escapeHtml(getPrintBorderLabel(selectedRow.frameStyle || "none"))}</dd></div>
           </dl>
         </div>
@@ -2635,8 +2718,9 @@
 
         <label class="inline-checkbox print-layout-break-toggle">
           <span>Seitenumbruch nach diesem Element</span>
-          <input type="checkbox" data-print-layout-field="breakAfter" data-row-key="${escapeHtml(selectedRow.rowKey)}"${attrChecked(override.breakAfter)} />
+          <input type="checkbox" data-print-layout-field="breakAfter" data-row-key="${escapeHtml(selectedRow.rowKey)}"${attrChecked(hasBreakAfter)} />
         </label>
+        <p class="small-help print-break-help">${escapeHtml(breakHelpText)}</p>
 
         <div class="inline-actions wrap-actions">
           <button type="button" class="secondary-button" data-action="reset-print-row-layout" data-row-key="${escapeHtml(selectedRow.rowKey)}">Element zur\u00fccksetzen</button>
@@ -2681,7 +2765,7 @@
         <div class="panel-header print-layout-header">
           <div>
             <h2>Druckvorschau</h2>
-            <p class="muted-text">Interaktiver Layouter f\u00fcr den ersten Beispielbogen. Hier setzt du manuelle Umbr\u00fcche und Feinabst\u00e4nde.</p>
+            <p class="muted-text">Interaktiver Layouter f\u00fcr den ersten Beispielbogen. Hier setzt du manuelle Umbr\u00fcche, \u00fcbersteuerst automatische Vorschl\u00e4ge und justierst Abst\u00e4nde.</p>
             <p class="small-help">Die Einstellungen gelten global f\u00fcr alle Sch\u00fcler. Die eigentliche Sammelausgabe bleibt im Tab "Druck".</p>
           </div>
           <div class="inline-actions wrap-actions">
@@ -2999,11 +3083,24 @@
 
   function updatePrintRowLayout(rowKey, field, value, checked) {
     mutateCurrentExam(function (exam) {
+      if (!rowKey) {
+        return exam;
+      }
+
       var layout = getPrintLayout(exam);
       var override = normalizePrintRowOverride(layout.rowOverrides[rowKey]);
 
       if (field === "breakAfter") {
-        override.breakAfter = !!checked;
+        override.breakAfter = false;
+        override.suppressAutoBreakAfter = false;
+
+        if (checked) {
+          if (!wouldAutoBreakAfterRow(exam, rowKey, override)) {
+            override.breakAfter = true;
+          }
+        } else if (wouldAutoBreakAfterRow(exam, rowKey, override)) {
+          override.suppressAutoBreakAfter = true;
+        }
       } else if (field === "borderStyle") {
         override.borderStyle = value || "default";
       } else if (field === "marginTop" || field === "marginBottom") {
@@ -3012,13 +3109,7 @@
         override[field] = normalizePrintMetric(value, 0, 16);
       }
 
-      if (isDefaultPrintRowOverride(override)) {
-        delete layout.rowOverrides[rowKey];
-      } else {
-        layout.rowOverrides[rowKey] = override;
-      }
-
-      exam.printLayout = layout;
+      exam.printLayout = setPrintLayoutRowOverride(layout, rowKey, override);
       exam.metadata.updatedAt = nowIso();
       return exam;
     });

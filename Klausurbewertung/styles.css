@@ -898,13 +898,32 @@ strong {
   box-shadow: inset 0 -2px 0 rgba(31, 94, 140, 0.18);
 }
 
+.print-row-has-manual-break {
+  box-shadow: inset 0 -2px 0 rgba(31, 94, 140, 0.24);
+}
+
+.print-row-has-auto-break {
+  box-shadow: inset 0 -2px 0 rgba(145, 97, 26, 0.24);
+}
+
 .print-break-flag {
   grid-column: 1 / 4;
   justify-self: end;
   margin-top: 0.14rem;
   font-size: 0.72rem;
-  color: var(--primary);
   font-weight: 700;
+}
+
+.print-break-flag-manual {
+  color: var(--primary);
+}
+
+.print-break-flag-auto {
+  color: #91611a;
+}
+
+.print-break-help {
+  margin: -0.35rem 0 0;
 }
 .grade-table {
   width: auto;
