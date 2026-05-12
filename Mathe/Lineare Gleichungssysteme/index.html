@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lineare Gleichungssysteme verstehen</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Module">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">LGS</span>
+        <div>
+          <strong>Lineare Gleichungssysteme</strong>
+          <span>2 Variablen, 2 Gleichungen</span>
+        </div>
+      </div>
+
+      <nav class="module-nav">
+        <a class="module-link active" href="#generator" aria-current="page">
+          <span aria-hidden="true">+</span>
+          Gleichungssysteme erzeugen
+        </a>
+        <span class="module-link disabled">
+          <span aria-hidden="true">=</span>
+          Loesungswege
+        </span>
+        <a class="module-link" href="#exercise">
+          <span aria-hidden="true">?</span>
+          Ueben und pruefen
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-area">
+      <section class="workspace" id="generator">
+        <header class="workspace-header">
+          <div>
+            <p class="eyebrow">Modul 1</p>
+            <h1>Gleichungssysteme erzeugen</h1>
+            <p>Waehle aus, welche Art von linearem Gleichungssystem entstehen soll. Bei einer eindeutigen Loesung sind x und y immer ganze Zahlen; im Format y = mx + b sind auch m und b ganzzahlig.</p>
+          </div>
+          <button class="primary-action" id="generateButton" type="button">Neu erzeugen</button>
+        </header>
+
+        <section class="control-band" aria-label="Einstellungen">
+          <fieldset>
+            <legend>Loesungsfall</legend>
+            <label class="choice">
+              <input type="radio" name="solutionType" value="unique" checked>
+              <span>Eine Loesung</span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="solutionType" value="equivalent">
+              <span>Aequivalente Gleichungen</span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="solutionType" value="none">
+              <span>Keine Loesung</span>
+            </label>
+          </fieldset>
+
+          <label class="range-control">
+            <span>Koeffizienten bis</span>
+            <input id="coefficientLimit" type="range" min="3" max="12" value="8">
+            <output id="coefficientLimitValue">8</output>
+          </label>
+
+          <label class="range-control">
+            <span>Loesungswerte bis</span>
+            <input id="solutionLimit" type="range" min="2" max="10" value="6">
+            <output id="solutionLimitValue">6</output>
+          </label>
+
+          <label class="range-control format-control">
+            <span>Ausgabeformat</span>
+            <input id="outputFormat" type="range" min="0" max="2" step="1" value="1">
+            <output id="outputFormatValue">ax + by = c</output>
+          </label>
+        </section>
+
+        <section class="result-layout">
+          <article class="equation-panel">
+            <div class="panel-heading">
+              <h2>Erzeugtes LGS</h2>
+              <span class="case-badge" id="caseBadge">Eine Loesung</span>
+            </div>
+
+            <div class="equation-system" aria-live="polite">
+              <div class="system-lines" aria-label="Lineares Gleichungssystem">
+                <span class="equation" id="equationOne"></span>
+                <span class="equation" id="equationTwo"></span>
+              </div>
+            </div>
+
+            <dl class="facts">
+              <div>
+                <dt>Lösungsmenge</dt>
+                <dd class="solution-set" id="solutionSetText"></dd>
+              </div>
+              <div>
+                <dt>Warum?</dt>
+                <dd id="reasonText"></dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="visual-panel">
+            <div class="panel-heading">
+              <h2>Graphische Sicht</h2>
+              <span class="axis-note">x-y-Ebene</span>
+            </div>
+            <svg id="graph" class="graph" viewBox="0 0 520 520" role="img" aria-label="Graphische Darstellung des Gleichungssystems"></svg>
+            <div class="legend">
+              <span><i class="line-one"></i> Gleichung I</span>
+              <span><i class="line-two"></i> Gleichung II</span>
+            </div>
+          </article>
+        </section>
+
+        <section class="exercise-workspace" id="exercise">
+          <header class="section-header">
+            <div>
+              <p class="eyebrow">Übungsmodus</p>
+              <h2>LGS Schritt fuer Schritt loesen</h2>
+              <p>Waehle zuerst eine Gleichung, dann eine Umformung und trage danach die Koeffizienten der neuen Gleichung ein.</p>
+            </div>
+            <button class="secondary-action" id="newExerciseButton" type="button">Neue Uebung</button>
+          </header>
+
+          <div class="exercise-layout">
+            <article class="equation-panel">
+              <div class="panel-heading">
+                <h2>Aktueller Stand</h2>
+                <span class="case-badge unique">Uebung</span>
+              </div>
+
+              <div class="equation-system">
+                <div class="system-lines selectable-system" aria-label="Aktuelles Gleichungssystem">
+                  <button class="exercise-equation" id="selectExerciseEquationOne" type="button" data-equation-index="0"></button>
+                  <button class="exercise-equation" id="selectExerciseEquationTwo" type="button" data-equation-index="1"></button>
+                </div>
+              </div>
+
+              <div class="exercise-controls">
+                <label class="form-control">
+                  <span>Umformung</span>
+                  <select id="exerciseOperation">
+                    <option value="add">Addieren</option>
+                    <option value="subtract">Subtrahieren</option>
+                    <option value="multiply">Multiplizieren</option>
+                    <option value="divide">Dividieren</option>
+                    <option value="substitute">Einsetzen</option>
+                  </select>
+                </label>
+
+                <label class="form-control">
+                  <span>Zahl</span>
+                  <input id="exerciseNumber" type="number" step="1" value="1">
+                </label>
+
+                <label class="form-control">
+                  <span>Ausdruck</span>
+                  <select id="exerciseOperand">
+                    <option value="number">nur Zahl</option>
+                    <option value="x">Vielfaches von x</option>
+                    <option value="y">Vielfaches von y</option>
+                    <option value="equation">andere Gleichung</option>
+                  </select>
+                </label>
+
+                <label class="form-control substitute-control">
+                  <span>Variable</span>
+                  <select id="exerciseVariable">
+                    <option value="x">x einsetzen</option>
+                    <option value="y">y einsetzen</option>
+                  </select>
+                </label>
+
+                <button class="primary-action" id="prepareStepButton" type="button">Schritt vorbereiten</button>
+              </div>
+            </article>
+
+            <article class="equation-panel">
+              <div class="panel-heading">
+                <h2>Neue Koeffizienten eintragen</h2>
+                <span class="axis-note" id="exerciseStepLabel">Noch kein Schritt</span>
+              </div>
+
+              <div class="coefficient-entry" id="coefficientEntry">
+                <p>Bereite zuerst einen Umformungsschritt vor.</p>
+              </div>
+
+              <div class="exercise-actions">
+                <button class="primary-action" id="checkStepButton" type="button" disabled>Pruefen</button>
+                <p class="exercise-feedback" id="exerciseFeedback" aria-live="polite"></p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="lgs-generator.js?v=7"></script>
+  <script src="app.js?v=7"></script>
+</body>
+</html>
