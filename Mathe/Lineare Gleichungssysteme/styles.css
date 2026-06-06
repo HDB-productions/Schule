@@ -31,6 +31,10 @@ select {
   font: inherit;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .app-shell {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
@@ -83,11 +87,17 @@ select {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
   min-height: 44px;
   padding: 10px 12px;
+  border: 0;
   border-radius: 8px;
+  background: transparent;
   color: #dbe5ef;
+  font: inherit;
   text-decoration: none;
+  text-align: left;
+  cursor: pointer;
 }
 
 .module-link span:first-child {
@@ -428,13 +438,35 @@ legend {
   background: var(--orange);
 }
 
-.exercise-workspace {
-  margin-top: 28px;
-  padding-top: 26px;
-  border-top: 1px solid var(--line);
+.exercise-window {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 18px;
 }
 
-.section-header {
+.exercise-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(24, 32, 42, 0.58);
+}
+
+.exercise-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, 100%);
+  max-height: calc(100vh - 36px);
+  overflow: auto;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  box-shadow: 0 28px 70px rgba(12, 18, 28, 0.35);
+}
+
+.exercise-window-header {
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -442,11 +474,50 @@ legend {
   margin-bottom: 18px;
 }
 
-.section-header p:last-child {
+.exercise-window-header p:last-child {
   max-width: 740px;
   margin-bottom: 0;
   color: var(--muted);
   line-height: 1.55;
+}
+
+.exercise-window-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.icon-action {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.icon-action:hover,
+.icon-action:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.exercise-settings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
 }
 
 .exercise-layout {
@@ -598,7 +669,7 @@ legend {
     flex-direction: column;
   }
 
-  .section-header {
+  .exercise-window-header {
     flex-direction: column;
   }
 }
@@ -614,8 +685,22 @@ legend {
 
   .control-band,
   .equation-panel,
-  .visual-panel {
+  .visual-panel,
+  .exercise-dialog {
     padding: 14px;
+  }
+
+  .exercise-window {
+    padding: 10px;
+  }
+
+  .exercise-window-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .exercise-settings {
+    grid-template-columns: 1fr;
   }
 
   fieldset {

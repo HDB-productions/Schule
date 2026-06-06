@@ -26,7 +26,7 @@
           <span aria-hidden="true">=</span>
           Loesungswege
         </span>
-        <a class="module-link" href="#exercise">
+        <a class="module-link" id="openExerciseLink" href="#exercise">
           <span aria-hidden="true">?</span>
           Ueben und pruefen
         </a>
@@ -119,17 +119,41 @@
           </article>
         </section>
 
-        <section class="exercise-workspace" id="exercise">
-          <header class="section-header">
+        <section class="exercise-window" id="exerciseWindow" role="dialog" aria-modal="true" aria-labelledby="exerciseTitle" hidden>
+          <div class="exercise-backdrop" data-close-exercise></div>
+          <div class="exercise-dialog" id="exercise" tabindex="-1">
+            <header class="exercise-window-header">
             <div>
-              <p class="eyebrow">Übungsmodus</p>
-              <h2>LGS Schritt fuer Schritt loesen</h2>
+              <p class="eyebrow">Uebungsmodus</p>
+              <h2 id="exerciseTitle">LGS Schritt fuer Schritt loesen</h2>
               <p>Waehle zuerst eine Gleichung, dann eine Umformung und trage danach die Koeffizienten der neuen Gleichung ein.</p>
             </div>
-            <button class="secondary-action" id="newExerciseButton" type="button">Neue Uebung</button>
-          </header>
+            <div class="exercise-window-actions">
+              <button class="icon-action" id="toggleExerciseSettingsButton" type="button" aria-expanded="false" aria-controls="exerciseSettings" aria-label="Einstellungen" title="Einstellungen">
+                <span aria-hidden="true">&#9881;</span>
+              </button>
+              <button class="secondary-action" id="newExerciseButton" type="button">Neue Uebung</button>
+              <button class="icon-action" id="closeExerciseButton" type="button" aria-label="Uebungsfenster schliessen" title="Schliessen">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            </header>
 
-          <div class="exercise-layout">
+            <section class="exercise-settings" id="exerciseSettings" aria-label="Einstellungen fuer neue Uebungen" hidden>
+            <label class="range-control">
+              <span>Koeffizienten bis</span>
+              <input id="exerciseCoefficientLimit" type="range" min="3" max="12" value="8">
+              <output id="exerciseCoefficientLimitValue">8</output>
+            </label>
+
+            <label class="range-control">
+              <span>Loesungswerte bis</span>
+              <input id="exerciseSolutionLimit" type="range" min="2" max="10" value="6">
+              <output id="exerciseSolutionLimitValue">6</output>
+            </label>
+            </section>
+
+            <div class="exercise-layout">
             <article class="equation-panel">
               <div class="panel-heading">
                 <h2>Aktueller Stand</h2>
@@ -197,13 +221,14 @@
                 <p class="exercise-feedback" id="exerciseFeedback" aria-live="polite"></p>
               </div>
             </article>
+            </div>
           </div>
         </section>
       </section>
     </main>
   </div>
 
-  <script src="lgs-generator.js?v=7"></script>
-  <script src="app.js?v=7"></script>
+  <script src="lgs-generator.js?v=8"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

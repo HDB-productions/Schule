@@ -6,6 +6,8 @@
   const axisLimit = 10;
 
   const controls = {
+    generatorLink: document.querySelector(".module-link[href='#generator']"),
+    openExerciseLink: document.getElementById("openExerciseLink"),
     generateButton: document.getElementById("generateButton"),
     coefficientLimit: document.getElementById("coefficientLimit"),
     coefficientLimitValue: document.getElementById("coefficientLimitValue"),
@@ -13,6 +15,12 @@
     solutionLimitValue: document.getElementById("solutionLimitValue"),
     outputFormat: document.getElementById("outputFormat"),
     outputFormatValue: document.getElementById("outputFormatValue"),
+    closeExerciseButton: document.getElementById("closeExerciseButton"),
+    toggleExerciseSettingsButton: document.getElementById("toggleExerciseSettingsButton"),
+    exerciseCoefficientLimit: document.getElementById("exerciseCoefficientLimit"),
+    exerciseCoefficientLimitValue: document.getElementById("exerciseCoefficientLimitValue"),
+    exerciseSolutionLimit: document.getElementById("exerciseSolutionLimit"),
+    exerciseSolutionLimitValue: document.getElementById("exerciseSolutionLimitValue"),
     newExerciseButton: document.getElementById("newExerciseButton"),
     exerciseOperation: document.getElementById("exerciseOperation"),
     exerciseNumber: document.getElementById("exerciseNumber"),
@@ -29,6 +37,9 @@
     solutionSetText: document.getElementById("solutionSetText"),
     reasonText: document.getElementById("reasonText"),
     graph: document.getElementById("graph"),
+    exerciseWindow: document.getElementById("exerciseWindow"),
+    exerciseDialog: document.getElementById("exercise"),
+    exerciseSettings: document.getElementById("exerciseSettings"),
     exerciseEquations: [
       document.getElementById("selectExerciseEquationOne"),
       document.getElementById("selectExerciseEquationTwo")
@@ -65,6 +76,11 @@
     controls.coefficientLimitValue.textContent = controls.coefficientLimit.value;
     controls.solutionLimitValue.textContent = controls.solutionLimit.value;
     controls.outputFormatValue.textContent = currentOutputFormat().label;
+  }
+
+  function updateExerciseSettingsLabels() {
+    controls.exerciseCoefficientLimitValue.textContent = controls.exerciseCoefficientLimit.value;
+    controls.exerciseSolutionLimitValue.textContent = controls.exerciseSolutionLimit.value;
   }
 
   function currentOutputFormat() {
@@ -247,8 +263,8 @@
   function startNewExercise() {
     const exerciseSystem = LgsGenerator.generateSystem({
       type: "unique",
-      coefficientLimit: Number(controls.coefficientLimit.value),
-      solutionLimit: Number(controls.solutionLimit.value),
+      coefficientLimit: Number(controls.exerciseCoefficientLimit.value),
+      solutionLimit: Number(controls.exerciseSolutionLimit.value),
       outputFormat: "standard"
     });
 
@@ -262,6 +278,30 @@
     renderExerciseSystem();
     clearPreparedStep("Bereite zuerst einen Umformungsschritt vor.");
     setExerciseFeedback("");
+  }
+
+  function openExerciseWindow() {
+    output.exerciseWindow.hidden = false;
+    controls.generatorLink.classList.remove("active");
+    controls.generatorLink.removeAttribute("aria-current");
+    controls.openExerciseLink.classList.add("active");
+    controls.openExerciseLink.setAttribute("aria-current", "page");
+    output.exerciseDialog.focus();
+  }
+
+  function closeExerciseWindow() {
+    output.exerciseWindow.hidden = true;
+    controls.openExerciseLink.classList.remove("active");
+    controls.openExerciseLink.removeAttribute("aria-current");
+    controls.generatorLink.classList.add("active");
+    controls.generatorLink.setAttribute("aria-current", "page");
+    controls.openExerciseLink.focus();
+  }
+
+  function toggleExerciseSettings() {
+    const shouldOpen = output.exerciseSettings.hidden;
+    output.exerciseSettings.hidden = !shouldOpen;
+    controls.toggleExerciseSettingsButton.setAttribute("aria-expanded", String(shouldOpen));
   }
 
   function cloneSystem(equations) {
@@ -642,6 +682,24 @@
     updateRangeLabels();
     generateAndRender();
   });
+  controls.exerciseCoefficientLimit.addEventListener("input", updateExerciseSettingsLabels);
+  controls.exerciseSolutionLimit.addEventListener("input", updateExerciseSettingsLabels);
+  controls.openExerciseLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    openExerciseWindow();
+  });
+  controls.closeExerciseButton.addEventListener("click", closeExerciseWindow);
+  controls.toggleExerciseSettingsButton.addEventListener("click", toggleExerciseSettings);
+  output.exerciseWindow.addEventListener("click", (event) => {
+    if (event.target.hasAttribute("data-close-exercise")) {
+      closeExerciseWindow();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !output.exerciseWindow.hidden) {
+      closeExerciseWindow();
+    }
+  });
 
   document.querySelectorAll("input[name='solutionType']").forEach((input) => {
     input.addEventListener("change", generateAndRender);
@@ -656,6 +714,7 @@
   controls.checkStepButton.addEventListener("click", checkExerciseStep);
 
   updateRangeLabels();
+  updateExerciseSettingsLabels();
   generateAndRender();
   startNewExercise();
 })();
