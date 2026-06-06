@@ -97,6 +97,11 @@ const createDemoStructure = (): StructureNode[] => {
   ];
 };
 
+const sanitizeExamRecord = (exam: ExamRecord): ExamRecord => ({
+  ...exam,
+  evaluations: exam.evaluations && typeof exam.evaluations === "object" ? exam.evaluations : {}
+});
+
 export const createDemoExam = (): ExamRecord => {
   const createdAt = now();
   return {
@@ -144,7 +149,7 @@ export const createDemoExam = (): ExamRecord => {
 };
 
 const sanitizeStore = (store: AppStore): AppStore => {
-  const exams = Array.isArray(store.exams) ? store.exams : [];
+  const exams = Array.isArray(store.exams) ? store.exams.map(sanitizeExamRecord) : [];
   const currentExamId = exams.some((exam) => exam.metadata.id === store.currentExamId)
     ? store.currentExamId
     : exams[0]?.metadata.id ?? null;
@@ -198,7 +203,7 @@ export const importExamPayload = (raw: string): ExamRecord => {
   if (!parsed?.metadata?.id || !Array.isArray(parsed.students) || !Array.isArray(parsed.structure)) {
     throw new Error("Die JSON-Datei ist kein gültiger Klausurexport.");
   }
-  return parsed;
+  return sanitizeExamRecord(parsed);
 };
 
 export const createTaskBlockTemplate = (name: string, nodes: StructureNode[]): TaskBlockTemplate => ({

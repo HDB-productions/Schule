@@ -3,6 +3,7 @@ import {
   getGradeFromPercent,
   getStudentTotals,
   percentToPoints,
+  resetAllEvaluations,
   rescaleCriterionAfterMaxPointsChange,
   roundDownToHalf
 } from "../domain/logic";
@@ -124,5 +125,16 @@ describe("fachlogik", () => {
     const exam = createExam();
     const absolute = rescaleCriterionAfterMaxPointsChange(exam, "criterion_1", 4, "absolute");
     expect(absolute.evaluations["student_1::criterion_1"].achievedPoints).toBe(2);
+  });
+
+  it("setzt alle Punkte zurück, ohne Stammdaten und Struktur zu entfernen", () => {
+    const exam = createExam();
+    const reset = resetAllEvaluations(exam);
+
+    expect(reset.evaluations).toEqual({});
+    expect(reset.metadata.id).toBe(exam.metadata.id);
+    expect(reset.students).toEqual(exam.students);
+    expect(reset.structure).toEqual(exam.structure);
+    expect(reset.metadata.updatedAt).not.toBe(exam.metadata.updatedAt);
   });
 });

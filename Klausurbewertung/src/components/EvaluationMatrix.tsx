@@ -13,6 +13,7 @@ interface EvaluationMatrixProps {
   scoreMode: ScoreMode;
   onScoreModeChange: (mode: ScoreMode) => void;
   onSetEvaluation: (studentId: string, criterionId: string, rawValue: string, mode: ScoreMode) => void;
+  onResetEvaluations: () => void;
   onBatchSetCriterionPercent: (criterionId: string, percent: number) => void;
   onBatchSetStudentPercent: (studentId: string, percent: number) => void;
 }
@@ -41,6 +42,7 @@ export const EvaluationMatrix = ({
   scoreMode,
   onScoreModeChange,
   onSetEvaluation,
+  onResetEvaluations,
   onBatchSetCriterionPercent,
   onBatchSetStudentPercent
 }: EvaluationMatrixProps) => {
@@ -104,9 +106,14 @@ export const EvaluationMatrix = ({
           <h2>Bewertungsmatrix</h2>
           <p className="muted-text">Sticky-Raster mit Tastaturnavigation, Blockaktionen und Live-Summen.</p>
         </div>
-        <div className="segmented-control">
-          <button type="button" className={scoreMode === "points" ? "segmented-active" : ""} onClick={() => onScoreModeChange("points")}>Punktmodus</button>
-          <button type="button" className={scoreMode === "percent" ? "segmented-active" : ""} onClick={() => onScoreModeChange("percent")}>Prozentmodus</button>
+        <div className="inline-actions wrap-actions">
+          <button type="button" className="danger-button" onClick={onResetEvaluations}>
+            Alle Punkte zurücksetzen
+          </button>
+          <div className="segmented-control">
+            <button type="button" className={scoreMode === "points" ? "segmented-active" : ""} onClick={() => onScoreModeChange("points")}>Punktmodus</button>
+            <button type="button" className={scoreMode === "percent" ? "segmented-active" : ""} onClick={() => onScoreModeChange("percent")}>Prozentmodus</button>
+          </div>
         </div>
       </div>
 

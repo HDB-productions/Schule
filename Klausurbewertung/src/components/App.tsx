@@ -7,6 +7,7 @@ import {
   getCriterionNodes,
   normalizeBoundaries,
   renumberSortIndices,
+  resetAllEvaluations,
   rescaleCriterionAfterMaxPointsChange,
   setEvaluationValue
 } from "../domain/logic";
@@ -411,6 +412,17 @@ export const App = () => {
     mutateCurrentExam((exam) => setEvaluationValue(exam, studentId, criterionId, rawValue, mode));
   };
 
+  const resetEvaluations = () => {
+    if (!currentExam || !Object.keys(currentExam.evaluations).length) {
+      return;
+    }
+    if (!window.confirm("Alle eingetragenen Punkte dieser Klausur wirklich zurücksetzen?")) {
+      return;
+    }
+    mutateCurrentExam(resetAllEvaluations);
+    setNotice("Alle Punkte wurden zurückgesetzt.");
+  };
+
   const batchSetCriterionPercent = (criterionId: string, percent: number) => {
     if (!currentExam) {
       return;
@@ -554,6 +566,7 @@ export const App = () => {
               scoreMode={scoreMode}
               onScoreModeChange={setScoreMode}
               onSetEvaluation={setEvaluation}
+              onResetEvaluations={resetEvaluations}
               onBatchSetCriterionPercent={batchSetCriterionPercent}
               onBatchSetStudentPercent={batchSetStudentPercent}
             />

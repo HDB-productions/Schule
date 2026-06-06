@@ -146,6 +146,15 @@ export const setEvaluationValue = (
   };
 };
 
+export const resetAllEvaluations = (exam: ExamRecord): ExamRecord => ({
+  ...exam,
+  metadata: {
+    ...exam.metadata,
+    updatedAt: new Date().toISOString()
+  },
+  evaluations: {}
+});
+
 const getDescendantCriterionIds = (nodes: StructureNode[], parentId: string): string[] => {
   const childrenMap = getChildrenMap(nodes);
   const result: string[] = [];

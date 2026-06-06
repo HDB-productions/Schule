@@ -230,6 +230,7 @@
     if (!exam || typeof exam !== "object") {
       return exam;
     }
+    exam.evaluations = exam.evaluations && typeof exam.evaluations === "object" ? exam.evaluations : {};
     exam.printLayout = normalizePrintLayout(exam.printLayout);
     return exam;
   }
@@ -858,6 +859,12 @@
       isUnset: String(rawValue).trim() === "",
       updatedAt: nowIso()
     };
+    exam.metadata.updatedAt = nowIso();
+    return exam;
+  }
+
+  function resetAllEvaluations(exam) {
+    exam.evaluations = {};
     exam.metadata.updatedAt = nowIso();
     return exam;
   }
@@ -1939,9 +1946,12 @@
             <h2>Bewertungsmatrix</h2>
             <p class="muted-text">Sticky-Raster mit Tastaturnavigation und Blockaktionen.</p>
           </div>
-          <div class="segmented-control">
-            <button type="button" class="${ui.scoreMode === "points" ? "segmented-active" : ""}" data-action="set-score-mode" data-mode="points">Punktmodus</button>
-            <button type="button" class="${ui.scoreMode === "percent" ? "segmented-active" : ""}" data-action="set-score-mode" data-mode="percent">Prozentmodus</button>
+          <div class="inline-actions wrap-actions">
+            <button type="button" class="danger-button" data-action="reset-evaluations">Alle Punkte zurücksetzen</button>
+            <div class="segmented-control">
+              <button type="button" class="${ui.scoreMode === "points" ? "segmented-active" : ""}" data-action="set-score-mode" data-mode="points">Punktmodus</button>
+              <button type="button" class="${ui.scoreMode === "percent" ? "segmented-active" : ""}" data-action="set-score-mode" data-mode="percent">Prozentmodus</button>
+            </div>
           </div>
         </div>
         <div class="matrix-scroll-shell" data-role="matrix-scroll-shell">
@@ -3676,6 +3686,20 @@
     });
   }
 
+  function resetCurrentExamEvaluations() {
+    var exam = getCurrentExam();
+    if (!exam || !Object.keys(exam.evaluations || {}).length) {
+      return;
+    }
+    if (!window.confirm("Alle eingetragenen Punkte dieser Klausur wirklich zurücksetzen?")) {
+      return;
+    }
+    ui.matrixFocus = null;
+    ui.suppressMatrixFocusRestore = true;
+    mutateCurrentExam(resetAllEvaluations);
+    showNotice("Alle Punkte wurden zurückgesetzt.");
+  }
+
   function applyPendingMaxChange(mode) {
     if (!ui.pendingMaxChange) {
       return;
@@ -3847,6 +3871,9 @@
       case "set-score-mode":
         ui.scoreMode = target.dataset.mode;
         render();
+        break;
+      case "reset-evaluations":
+        resetCurrentExamEvaluations();
         break;
       case "set-criterion-percent":
         ui.suppressMatrixFocusRestore = true;
