@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Anmeldehilfe</title>
+  <style>
+    :root { --bg:#f3f5f7; --card:#fff; --text:#1b1f23; --muted:#667085; --border:#d8dee6; --accent:#0f6cbd; --success:#107c10; --danger:#a4262c; --field:#f8fafc; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#111418; --card:#1b1f24; --text:#f4f6f8; --muted:#aab4c0; --border:#37404a; --accent:#4aa3df; --success:#54b054; --danger:#ef8b8f; --field:#15191e; } }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; min-height:100dvh; display:flex; justify-content:center; align-items:center; padding:22px; padding-top:max(22px,env(safe-area-inset-top)); padding-bottom:max(22px,env(safe-area-inset-bottom)); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); }
+    main { width:min(100%,560px); background:var(--card); border:1px solid var(--border); border-radius:22px; padding:26px; box-shadow:0 12px 32px rgba(0,0,0,.08); }
+    h1 { margin:0 0 8px; font-size:clamp(28px,7vw,38px); line-height:1.05; letter-spacing:-.03em; }
+    .intro { margin:0 0 24px; color:var(--muted); font-size:16px; line-height:1.45; }
+    .field { margin:18px 0; }
+    .label { display:block; margin-bottom:7px; font-weight:700; font-size:15px; }
+    .value { width:100%; padding:15px 16px; border:1px solid var(--border); border-radius:14px; background:var(--field); color:var(--text); font:600 17px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; overflow-wrap:anywhere; user-select:all; -webkit-user-select:all; }
+    button,a.button { appearance:none; -webkit-appearance:none; display:flex; width:100%; min-height:54px; align-items:center; justify-content:center; margin-top:10px; padding:13px 16px; border:0; border-radius:14px; font:700 17px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; text-decoration:none; cursor:pointer; touch-action:manipulation; }
+    .copy { background:var(--accent); color:#fff; }
+    .login { margin-top:24px!important; background:transparent; color:var(--accent); border:2px solid var(--accent)!important; }
+    .status { min-height:22px; margin-top:8px; color:var(--success); font-weight:700; text-align:center; }
+    .hint { margin:22px 0 0; padding-top:18px; border-top:1px solid var(--border); color:var(--muted); font-size:14px; line-height:1.45; }
+    .error { padding:16px; border:1px solid var(--danger); border-radius:14px; color:var(--danger); font-weight:700; line-height:1.4; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Microsoft 365</h1>
+    <p class="intro">Kopiere Benutzername und temporäres Passwort. Öffne danach die Microsoft-Anmeldung.</p>
+    <div id="error" class="error hidden">In diesem QR-Code fehlen Zugangsdaten.</div>
+    <section id="content">
+      <div class="field"><span class="label">Benutzername</span><div id="username" class="value"></div><button class="copy" type="button" data-copy="username">Benutzername kopieren</button></div>
+      <div class="field"><span class="label">Temporäres Passwort</span><div id="password" class="value"></div><button class="copy" type="button" data-copy="password">Passwort kopieren</button></div>
+      <div id="status" class="status" aria-live="polite"></div>
+      <a class="button login" href="https://login.microsoftonline.com/" target="_blank" rel="noopener noreferrer">Microsoft-Anmeldung öffnen</a>
+      <p class="hint">Die Zugangsdaten werden nur aus dem QR-Code auf diesem Gerät ausgelesen. Sie sind nicht in dieser Webseite gespeichert.</p>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const raw = location.hash.startsWith('#') ? location.hash.slice(1) : '';
+      const params = new URLSearchParams(raw);
+      const username = params.get('u') || '';
+      const password = params.get('p') || '';
+      const content = document.getElementById('content');
+      const error = document.getElementById('error');
+      if (!username || !password) { content.classList.add('hidden'); error.classList.remove('hidden'); return; }
+      document.getElementById('username').textContent = username;
+      document.getElementById('password').textContent = password;
+      history.replaceState(null,'',location.pathname + location.search);
+      document.querySelectorAll('[data-copy]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const id = button.getAttribute('data-copy');
+          const text = document.getElementById(id).textContent;
+          const status = document.getElementById('status');
+          const original = button.textContent;
+          try { await navigator.clipboard.writeText(text); }
+          catch (_) {
+            const area = document.createElement('textarea'); area.value = text; area.setAttribute('readonly',''); area.style.position='fixed'; area.style.opacity='0'; document.body.appendChild(area); area.select(); area.setSelectionRange(0,area.value.length); document.execCommand('copy'); area.remove();
+          }
+          button.textContent = '✓ Kopiert'; status.textContent = id === 'username' ? 'Benutzername kopiert.' : 'Passwort kopiert.';
+          setTimeout(() => { button.textContent = original; status.textContent = ''; }, 1800);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
