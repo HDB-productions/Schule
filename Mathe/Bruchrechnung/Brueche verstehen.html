@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brüche verstehen</title>
+<style>
+#fractionWidget{font-family:system-ui,sans-serif;color:#183b42;background:#eff6f4;font-size:17px;--accent:#087f72;--line:#ccded9}
+#fractionWidget, #fractionWidget *{box-sizing:border-box}
+#fractionWidget{margin:0}
+#fractionWidget{max-width:900px;margin:auto;padding:24px 18px 40px}
+#fractionWidget h1{font-size:clamp(1.8rem,5vw,2.5rem);margin:4px 0 8px}
+#fractionWidget h2{font-size:1.15rem;margin:0 0 18px}
+#fractionWidget p{line-height:1.5}
+#fractionWidget .eyebrow{color:var(--accent);font-weight:750;letter-spacing:.12em;font-size:.72rem;text-transform:uppercase}
+#fractionWidget .muted,#fractionWidget small{color:#516a70}
+#fractionWidget .toolbar,#fractionWidget .stats,#fractionWidget .actions,#fractionWidget .fraction-entry,#fractionWidget .range-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#fractionWidget .toolbar{justify-content:space-between;margin:20px 0}
+#fractionWidget .stats{gap:8px}
+#fractionWidget .stat{background:white;border:1px solid var(--line);border-radius:14px;padding:12px 16px;flex:1;min-width:125px}
+#fractionWidget .stat b{font-size:1.5rem;display:block}
+#fractionWidget .stat span{font-size:.8rem}
+#fractionWidget .card{background:white;border:1px solid var(--line);border-radius:20px;padding:24px;margin-top:18px;box-shadow:0 6px 22px #123e3910}
+#fractionWidget .word{font-size:clamp(1.6rem,5vw,2.2rem);font-weight:750;margin:12px 0 24px}
+#fractionWidget .step{font-size:.78rem;color:var(--accent);font-weight:bold;letter-spacing:.05em}
+#fractionWidget .fraction-entry{margin-bottom:20px;gap:22px}
+#fractionWidget .fraction{display:inline-grid;gap:8px}
+#fractionWidget .fraction input{width:90px;text-align:center}
+#fractionWidget .fraction .bar{border-top:3px solid #183b42}
+#fractionWidget .whole input{width:90px;text-align:center}
+#fractionWidget .whole label{display:block;font-size:.75rem;margin-top:8px}
+#fractionWidget input[type=number]{font:inherit;font-size:1.45rem;border:2px solid #9cbab3;border-radius:10px;padding:10px;max-width:100%}
+#fractionWidget input[type=range]{width:min(340px,65vw);accent-color:var(--accent);height:36px}
+#fractionWidget button,#fractionWidget select{font:inherit;border:1px solid var(--line);border-radius:10px;padding:11px 16px;background:white;color:inherit;cursor:pointer;min-height:44px}
+#fractionWidget button.primary{background:var(--accent);color:white;border-color:var(--accent);font-weight:650}
+#fractionWidget button:disabled{opacity:.5;cursor:default}
+#fractionWidget button:hover:not(:disabled){filter:brightness(.94)}
+#fractionWidget :focus-visible{outline:3px solid #c47917;outline-offset:3px}
+#fractionWidget [hidden]{display:none!important}
+#fractionWidget .squares{display:flex;gap:18px;flex-wrap:wrap;margin:22px 0}
+#fractionWidget .square{width:min(264px,100%);aspect-ratio:1;display:grid;border:2px solid #183b42;background:#f7faf9;gap:0}
+#fractionWidget .piece{border:1px solid #557e75;border-radius:0;min-height:0;padding:0;background:#f7faf9}
+#fractionWidget .piece[aria-pressed=true]{background:#19a491;box-shadow:inset 0 0 0 2px #ffffff45}
+#fractionWidget .piece[aria-pressed=true]::after{content:'✓';color:#063f36;font-weight:bold;font-size:clamp(.7rem,2vw,1.1rem)}
+#fractionWidget .piece:disabled{opacity:1}
+#fractionWidget .notice{border-radius:10px;background:#e9f6f1;padding:12px 16px;line-height:1.5}
+#fractionWidget .notice.bad{background:#fff0df;color:#784204}
+#fractionWidget .storage{font-size:.8rem;margin-top:20px;overflow-wrap:anywhere}
+#fractionWidget .storage.bad{color:#934400}
+#fractionWidget .milestones{display:flex;gap:5px;margin:12px 0}
+#fractionWidget .dot{height:9px;flex:1;background:#d9e6e2;border-radius:8px}
+#fractionWidget .dot.on{background:var(--accent)}
+#fractionWidget details{margin-top:18px}
+#fractionWidget summary{cursor:pointer;font-weight:650;padding:10px 0}
+#fractionWidget .history-item{padding:12px 0;border-bottom:1px solid var(--line)}
+#fractionWidget .history-item p{margin:6px 0}
+#fractionWidget .history-item summary{font-size:.95rem}
+#fractionWidget .tag{font-size:.8rem;font-weight:650}
+#fractionWidget .history-list{padding:0;list-style:none}
+#fractionWidget dialog{border:1px solid var(--line);border-radius:20px;max-width:560px;padding:26px;color:inherit}
+#fractionWidget dialog::backdrop{background:#122f3870}
+#fractionWidget progress{width:100%;accent-color:var(--accent);height:10px}
+@media(max-width:480px){#fractionWidget{padding:16px 12px}
+#fractionWidget .card{padding:18px}
+#fractionWidget .stat{min-width:43%;padding:10px}
+#fractionWidget .square{width:min(264px,100%)}
+#fractionWidget .toolbar{align-items:flex-start}
+}
+#fractionWidget .task-heading{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:12px 0 24px}
+#fractionWidget .task-heading .word{margin:0}
+#fractionWidget .confirmed-answer{display:flex;align-items:center;gap:12px;font-size:1.7rem;font-weight:700;color:var(--accent)}
+#fractionWidget .confirmed-fraction{display:grid;text-align:center;line-height:1.15;min-width:1.4em}
+#fractionWidget .confirmed-fraction span{padding:3px 6px}
+#fractionWidget .confirmed-fraction span+span{border-top:2px solid currentColor}
+
+</style>
+</head>
+<body>
+<main id="fractionWidget" data-edulo-widget-key="BRUECHE_VERSTEHEN">
+  <header><span class="eyebrow">Schritt für Schritt</span><h1>Brüche verstehen</h1><p class="muted">Lies den Bruch. Schreibe ihn auf. Mach ihn sichtbar.</p></header>
+  <div class="toolbar"><label>Schwierigkeitsstufe <select id="mode"><option value="1">1 · Teile eines Ganzen</option><option value="2">2 · Auch mehrere Ganze</option></select></label><button id="help">So funktioniert’s</button></div>
+  <p id="modeNotice" class="notice" role="status" hidden></p>
+  <section class="card" id="exercise" aria-label="Aktuelle Aufgabe" hidden>
+    <div class="step" id="stepLabel"></div><div class="task-heading"><div class="word" id="word"></div><div id="confirmedAnswer" class="confirmed-answer" role="img" hidden><span aria-hidden="true">=</span><span id="confirmedWhole" aria-hidden="true" hidden></span><span class="confirmed-fraction" aria-hidden="true"><span id="confirmedNumerator"></span><span id="confirmedDenominator"></span></span></div></div>
+    <section id="numberStep"><h2>Schreibe den Bruch mit Zahlen.</h2><div class="fraction-entry"><div class="whole" id="wholeWrap" hidden><input id="whole" type="number" min="0" max="100" step="1" inputmode="numeric" aria-label="Ganze Zahl, darf leer bleiben"><label for="whole">Ganze (freiwillig)</label></div><div class="fraction"><input id="numerator" type="number" min="0" max="1000" step="1" inputmode="numeric" aria-label="Zähler"><span class="bar"></span><input id="denominator" type="number" min="1" max="100" step="1" inputmode="numeric" aria-label="Nenner"></div></div><button class="primary" id="checkNumber">✓ Prüfen</button></section>
+    <section id="partitionStep" hidden><h2>In wie viele gleich große Teile wird ein Ganzes geteilt?</h2></section>
+    <section id="markStep" hidden><h2>Tippe die Teile an, die zum Bruch gehören.</h2><p class="muted">Noch einmal tippen hebt die Markierung auf.</p><p id="markedLabel" aria-live="polite"></p></section>
+    <div id="squares" class="squares" hidden></div>
+    <div id="partitionControls" hidden><output id="partsLabel" for="parts">1 Teil</output><div class="range-row"><input id="parts" type="range" min="1" max="24" value="1" aria-label="Anzahl der Teile"></div><button class="primary" id="checkParts">✓ Unterteilung prüfen</button></div>
+    <button class="primary" id="checkMarks" hidden>✓ Markierung prüfen</button>
+    <p id="feedback" class="notice" aria-live="polite" hidden></p>
+    <div class="actions"><button class="primary" id="next" hidden>Nächste Aufgabe →</button></div>
+  </section>
+  <p id="empty" class="notice" hidden></p>
+  <details class="card" id="historyPanel"><summary>Historie</summary>
+  <details id="history"><summary>Meine bisherigen Aufgaben</summary><p class="muted">„Auf Anhieb richtig“ heißt: Alle drei Schritte stimmen beim ersten Prüfen. Verbesserungen bleiben im Verlauf sichtbar.</p><ol class="history-list" id="historyList"></ol></details>
+  <section class="card" aria-labelledby="statsTitle1"><h2 id="statsTitle1">Teile eines Ganzen</h2><div class="stats"><div class="stat"><b id="total">0</b><span>Aufgaben erledigt</span></div><div class="stat"><b id="correct">0</b><span>Auf Anhieb richtig</span></div><div class="stat"><b id="wrong">0</b><span>Mit Fehlern bearbeitet</span></div><div class="stat"><b id="rate">–</b><span>Trefferquote</span></div></div></section>
+  <section class="card" aria-labelledby="statsTitle2"><h2 id="statsTitle2">Unechte Brüche</h2><div class="stats"><div class="stat"><b id="total2">0</b><span>Aufgaben erledigt</span></div><div class="stat"><b id="correct2">0</b><span>Auf Anhieb richtig</span></div><div class="stat"><b id="wrong2">0</b><span>Mit Fehlern bearbeitet</span></div><div class="stat"><b id="rate2">–</b><span>Trefferquote</span></div></div></section>
+  <section class="card" aria-labelledby="statsTitle3"><h2 id="statsTitle3">Gemischte Zahlen</h2><div class="stats"><div class="stat"><b id="total3">0</b><span>Aufgaben erledigt</span></div><div class="stat"><b id="correct3">0</b><span>Auf Anhieb richtig</span></div><div class="stat"><b id="wrong3">0</b><span>Mit Fehlern bearbeitet</span></div><div class="stat"><b id="rate3">–</b><span>Trefferquote</span></div></div></section>
+  </details>
+  <div class="card"><b id="points">0 von 10 Punkten</b><div class="milestones" id="milestones" aria-hidden="true"></div><small id="nextPoint"></small><ul id="pointRequirements" hidden></ul><small id="pointHint" hidden>Die fehlenden Aufgaben je Sorte zählen gleichzeitig zur Gesamtzahl.</small></div>
+  <p id="storage" class="storage" role="status">Speicher wird verbunden …</p><button id="retry" hidden>Verbindung erneut prüfen</button>
+<dialog id="intro"><h2 id="introTitle"></h2><div id="introText"></div><button class="primary" id="introDone">Verstanden – weiter</button></dialog>
+</main>
+<script>
+(() => {
+'use strict';
+// EDULO_WIDGET_KEY:BRUECHE_VERSTEHEN
+// Eine Datei pro Widget; keine externen Bibliotheken nötig.
+// Konfiguration per URL: ?edulo=1&STATE_ID=e1_input&SCORE_PREFIX=e2_cloze_text_input_
+const widgetRoot = document.getElementById('fractionWidget');
+const $ = id => widgetRoot.querySelector('#'+CSS.escape(id));
+const STORAGE_KEY = 'bruchrechnung-brueche-verstehen-v1';
+const THRESHOLDS = Array.from({length:10}, (_, i) => (i+1)*(i+4));
+const query = new URLSearchParams(location.search);
+let state, hostField = null, scoreFields = [], ready = false, pendingMode = null, isEdulo = window.parent !== window || query.get('edulo') === '1' || query.has('data');
+const config = {stateId:query.get('STATE_ID') || '', scorePrefix:query.get('SCORE_PREFIX') || 'e2_cloze_text_input_', showFields:query.get('SHOW_FIELDS') === '1'};
+let editorPreview=false;
+const hiddenHostElements=new Map();
+const fresh = () => ({version:1, widget:'brueche-verstehen', mode:1, introduced2:false, points:0, history:[], active:null});
+const numbers = ['null','ein','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf','dreizehn','vierzehn','fünfzehn','sechzehn','siebzehn','achtzehn','neunzehn','zwanzig'];
+const denominators = {2:'Halb',3:'Drittel',4:'Viertel',5:'Fünftel',6:'Sechstel',7:'Siebtel',8:'Achtel',9:'Neuntel',10:'Zehntel',11:'Elftel',12:'Zwölftel'};
+function numberWord(n) { if(n<=20)return numbers[n]; const tens={20:'zwanzig',30:'dreißig',40:'vierzig',50:'fünfzig',60:'sechzig',70:'siebzig',80:'achtzig',90:'neunzig'}; return n%10 ? numbers[n%10]+'und'+tens[n-n%10] : tens[n]; }
+function fractionWord(n,d) { return numberWord(n)+' '+(d===2 ? (n===1?'Halb':'Halbe') : denominators[d] || numberWord(d)+'stel'); }
+function taskWord(t) { if(t.form==='mixed') { const w=Math.floor(t.n/t.d), r=t.n%t.d; if(r)return numberWord(w)+' '+fractionWord(r,t.d);return numberWord(w)+(w===1?' Ganzes':' Ganze')+(r?' und '+fractionWord(r,t.d):''); } return fractionWord(t.n,t.d); }
+function category(t) { return t.form==='mixed'?'mixed':t.n>=t.d?'improper':'proper'; }
+function stats(kind=null) { const history=kind===null?state.history:state.history.filter(h=>category(h.task)===kind);const total=history.length, correct=history.filter(h=>h.correct).length; return {total,correct,wrong:total-correct}; }
+function pointProgress() { return stats().correct; }
+function pointRequirements(index){
+  const threshold=THRESHOLDS[index],minimum=index<3?0:Math.ceil(threshold/5);
+  const missing={};for(const kind of ['proper','improper','mixed'])missing[kind]=Math.max(0,minimum-stats(kind).correct);
+  const totalMissing=Math.max(0,threshold-pointProgress());
+  return {threshold,minimum,missing,totalMissing,eligible:totalMissing===0&&Object.values(missing).every(n=>n===0)};
+}
+function taskKey(t) { return t.n+'/'+t.d+':'+t.form; }
+function validTask(t) { return t && [1,2].includes(t.mode) && Number.isInteger(t.d) && t.d>=2 && t.d<=24 && Number.isInteger(t.n) && t.n>0 && t.n<=4*t.d && (t.mode===2 || t.n<t.d) && ['fraction','mixed'].includes(t.form) && (t.form!=='mixed'||t.mode===2); }
+function validActive(a) { return a && validTask(a.task) && ['number','partition','mark','done'].includes(a.step) && Array.isArray(a.attempts) && a.attempts.every(v=>v && ['number','partition','mark'].includes(v.step) && typeof v.correct==='boolean') && typeof a.hadError==='boolean' && Number.isInteger(a.parts) && a.parts>=1 && a.parts<=24 && Array.isArray(a.selected) && a.selected.every(v=>Number.isInteger(v)&&v>=0&&v<192) && new Set(a.selected).size===a.selected.length && a.answer && ['whole','n','d'].every(k=>typeof a.answer[k]==='string'&&a.answer[k].length<30); }
+function parseState(raw) {
+  let s;
+  try {
+    const text=String(raw).trim();
+    if(text.startsWith('BRUCH1:')) {
+      const bytes=Uint8Array.from(atob(text.slice(7)),c=>c.charCodeAt(0));
+      s=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+    }else{
+      try{s=JSON.parse(text);}catch(_){s=JSON.parse(text.replace(/[„“”]/g,'"'));}
+    }
+  }catch(_){throw new Error('Der gespeicherte Lernstand konnte nicht gelesen werden. Der Inhalt von E1 bzw. dem Browserspeicher bleibt unverändert.');}
+  if(!s || s.version!==1 || s.widget!=='brueche-verstehen' || ![1,2].includes(s.mode) || typeof s.introduced2!=='boolean' || !Number.isInteger(s.points) || s.points<0 || s.points>10 || !Array.isArray(s.history) || s.history.some(h=>!h || !validTask(h.task) || typeof h.correct!=='boolean' || !Array.isArray(h.attempts)) || (s.active&&!validActive(s.active))) throw new Error('Der gespeicherte Lernstand hat ein unbekanntes Format. Er wurde nicht überschrieben.');
+  return s;
+}
+function encodeState(s) {
+  const bytes=new TextEncoder().encode(JSON.stringify(s));let binary='';
+  for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));
+  return 'BRUCH1:'+btoa(binary);
+}
+function docs() {const result=[document]; for(const win of [window.parent,window.top])try{if(win.document&&!result.includes(win.document))result.push(win.document);}catch(_){} return result;}
+function isEditorView(){return docs().some(doc=>{try{return doc.defaultView.widget?.isEditor===true||doc.body?.classList.contains('editor')||new URLSearchParams(doc.defaultView.location.search).get('editor')==='1';}catch(_){return false;}});}
+function restoreHostElements(){for(const [el,original] of hiddenHostElements){el.hidden=original.hidden;if(original.display)el.style.setProperty('display',original.display,original.priority);else el.style.removeProperty('display');}hiddenHostElements.clear();}
+function findField(id) {for(const doc of docs()){const el=doc.getElementById(id);if(el&&('value' in el))return el;}return null;}
+function findStateField() {
+  if(config.stateId)return findField(config.stateId);
+  for(const id of ['e1_input','e1_text_input','e1_cloze_text_input_1','e1']){const el=findField(id);if(el)return el;}
+  for(const doc of docs()){const fields=doc.querySelectorAll('#e1 textarea, #e1 input:not([type=button]):not([type=hidden]), textarea[id^="e1_"], input[id^="e1_"]:not([type=button]):not([type=hidden])');if(fields.length===1)return fields[0];}return null;
+}
+function writeField(el,value) {if(String(el.value)===value)return; const proto=Object.getPrototypeOf(el), setter=Object.getOwnPropertyDescriptor(proto,'value')?.set; if(setter)setter.call(el,value);else el.value=value; const EventClass=el.ownerDocument.defaultView.Event;el.dispatchEvent(new EventClass('input',{bubbles:true}));el.dispatchEvent(new EventClass('change',{bubbles:true}));}
+function hideField(el,moduleId) {if(config.showFields||editorPreview||isEditorView())return;const module=el.ownerDocument.getElementById(moduleId); const target=module&&module.contains(el)&&!module.querySelector('iframe, #fractionWidget')&&module!==el.ownerDocument.body ? module : el.closest('.inputcontainer')||el;if(!hiddenHostElements.has(target))hiddenHostElements.set(target,{hidden:target.hidden,display:target.style.getPropertyValue('display'),priority:target.style.getPropertyPriority('display')});target.hidden=true;target.style.setProperty('display','none','important');}
+function storageMessage(text,bad=false){$('storage').textContent=text;$('storage').classList.toggle('bad',bad);$('retry').hidden=!bad;}
+function save() {
+  if(!ready||!widgetRoot.isConnected)return;
+  if(editorPreview||isEditorView()){editorPreview=true;restoreHostElements();storageMessage('Editor-Vorschau: Änderungen werden nicht in EduLudoo gespeichert.');renderStats();return;}
+  const earned=THRESHOLDS.filter((_,index)=>pointRequirements(index).eligible).length;state.points=Math.max(state.points,earned);
+  try {
+    if(isEdulo){
+      if(!hostField?.isConnected)throw new Error('Die Verbindung zum EduLudoo-Textfeld fehlt. Der aktuelle Stand ist noch geöffnet.');
+      const encoded=encodeState(state);writeField(hostField,encoded);
+      if(hostField.value!==encoded)throw new Error('EduLudoo hat den Speichertext verändert. Bitte den Inhalt von E1 zur Prüfung erhalten.');
+      hideField(hostField,'e1');
+      scoreFields=Array.from({length:10},(_,i)=>findField(config.scorePrefix+(i+1)));
+      scoreFields.forEach((field,i)=>{if(field){writeField(field,i<state.points?'1':'0');hideField(field,'e2');}});
+      storageMessage(scoreFields.every(Boolean)?'Lernstand an EduLudoo übergeben.': 'Lernstand an EduLudoo übergeben; einige der zehn Punktefelder fehlen.',!scoreFields.every(Boolean));
+    }else{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));storageMessage('Lernstand in diesem Browser gespeichert.');}
+  }catch(err){storageMessage('Speichern fehlgeschlagen: '+err.message,true);}
+  renderStats();
+}
+async function connect() {
+  $('retry').hidden=true;
+  if(ready){save();return;}
+  try {
+    if(isEditorView()){
+      editorPreview=true;state=fresh();ready=true;newTask();return;
+    }
+    if(isEdulo){
+      for(let i=0;i<25;i++){hostField=findStateField();if(hostField)break;await new Promise(r=>setTimeout(r,200));}
+      if(!hostField)throw new Error('Das EduLudoo-Textfeld E1 ist nicht erreichbar. Bitte Einbettung und Feldzuordnung prüfen. Es wird kein lokaler Lernstand geladen.');
+      state=String(hostField.value).trim()?parseState(hostField.value):fresh();
+      scoreFields=Array.from({length:10},(_,i)=>findField(config.scorePrefix+(i+1)));
+    }else{const raw=localStorage.getItem(STORAGE_KEY);state=raw?parseState(raw):fresh();}
+    ready=true;if(!state.active)newTask();else render();save();
+  }catch(err){storageMessage(err.message,true);}
+}
+function chooseTask() {
+  const history=state.history;
+  const mastered=new Set(history.filter(h=>h.correct).map(h=>taskKey(h.task)));
+  const pool=[];
+  for(let d=2;d<=24;d++)for(let n=1;n<(state.mode===1?d:4*d);n++)for(const form of (state.mode===2&&n>d&&n%d!==0?['fraction','mixed']:['fraction'])){const t={mode:state.mode,n,d,form};if(!mastered.has(taskKey(t)))pool.push(t);}
+  if(!pool.length)return null;
+  const recent=new Set(history.slice(-3).map(h=>taskKey(h.task)));
+  const available=pool.filter(t=>!recent.has(taskKey(t)));
+  const source=available.length?available:pool;
+  // Kategorien zuerst gewichten, damit der größere Pool unechter Brüche nicht automatisch dominiert.
+  const kinds=[...new Set(source.map(category))];
+  const weights=kinds.map(kind=>{const s=stats(kind), mastery=s.total?s.correct*s.correct/s.total:0;return 1/Math.sqrt(1+mastery);});
+  let draw=Math.random()*weights.reduce((a,b)=>a+b,0), chosen=kinds[kinds.length-1];
+  for(let i=0;i<kinds.length;i++){draw-=weights[i];if(draw<=0){chosen=kinds[i];break;}}
+  const categoryPool=source.filter(t=>category(t)===chosen), s=stats(chosen);
+  const band=s.total<5?3:s.total<12?5:s.total<25?8:s.total<45?12:24;
+  const rate=s.total?s.correct/s.total:0;
+  const ceiling=Math.random()<rate?band:Math.max(3,Math.floor(band*.65));
+  let candidates=categoryPool.filter(t=>t.d<=ceiling && (state.mode===1||s.total>=5||t.n<=2*t.d));
+  if(!candidates.length){const easiest=Math.min(...categoryPool.map(t=>t.d));candidates=categoryPool.filter(t=>t.d===easiest);}
+  const failed=new Set(history.filter(h=>!h.correct).map(h=>taskKey(h.task)));
+  const retries=candidates.filter(t=>failed.has(taskKey(t)));
+  if(retries.length&&Math.random()<.3)candidates=retries;
+  const task=candidates[Math.floor(Math.random()*candidates.length)];
+  if(task.form==='mixed')task.wording='short';
+  return task;
+}
+function newTask() {const task=chooseTask();state.active=task?{task,step:'number',answer:{whole:'',n:'',d:''},parts:1,selected:[],attempts:[],hadError:false,started:new Date().toISOString()}:null; render();save();}
+function feedback(text,bad=false){$('feedback').hidden=false;$('feedback').textContent=text;$('feedback').classList.toggle('bad',bad);}
+function record(step,input,correct){state.active.attempts.push({step,input,correct,at:new Date().toISOString()});if(!correct)state.active.hadError=true;}
+function readAnswer(){return {whole:$('whole').value,n:$('numerator').value,d:$('denominator').value};}
+function checkNumber(){const a=state.active;if(!ready||a?.step!=='number')return;a.answer=readAnswer();const {whole,n,d}=a.answer,w=whole===''?0:Number(whole),nn=Number(n),dd=Number(d);const ok=n!==''&&d!==''&&Number.isSafeInteger(w)&&w>=0&&Number.isSafeInteger(nn)&&nn>=0&&Number.isSafeInteger(dd)&&dd===a.task.d&&w*dd+nn===a.task.n;record('number',{...a.answer},ok);if(ok){a.step='partition';render();feedback('Richtig! Jetzt teile ein Ganzes in gleich große Teile.');}else feedback('Noch nicht ganz. Prüfe Zähler und Nenner. Behalte die im Wort genannte Unterteilung bei.',true);save();}
+function checkParts(){const a=state.active;if(!ready||a?.step!=='partition')return;const ok=a.parts===a.task.d;record('partition',{parts:a.parts},ok);if(ok){a.step='mark';render();feedback('Die Unterteilung stimmt. Markiere jetzt den passenden Anteil.');}else feedback('Die Anzahl der Teile stimmt noch nicht. Schau auf den Nenner.',true);save();}
+function checkMarks(){const a=state.active;if(!ready||a?.step!=='mark')return;const ok=a.selected.length===a.task.n;record('mark',{parts:a.parts,selected:[...a.selected]},ok);if(ok){a.step='done';state.history.push({task:{...a.task},answer:{...a.answer},parts:a.parts,selected:[...a.selected],attempts:JSON.parse(JSON.stringify(a.attempts)),correct:!a.hadError,started:a.started,finished:new Date().toISOString()});render();feedback(a.hadError?'Geschafft! Deine Verbesserungen sind im Verlauf gespeichert.':'Alles auf Anhieb richtig – gut gemacht!');}else feedback('Die markierte Menge passt noch nicht. Du kannst Teile an- und wieder abwählen.',true);save();}
+function renderStats(){
+  for(const [kind,suffix] of [['proper',''],['improper','2'],['mixed','3']]){const s=stats(kind);$('total'+suffix).textContent=s.total;$('correct'+suffix).textContent=s.correct;$('wrong'+suffix).textContent=s.wrong;$('rate'+suffix).textContent=s.total?Math.round(100*s.correct/s.total)+' %':'–';}
+  $('points').textContent=state.points+' von 10 Punkten';
+  $('milestones').replaceChildren(...THRESHOLDS.map((_,i)=>{const dot=document.createElement('span');dot.className='dot'+(i<state.points?' on':'');return dot;}));
+  $('pointRequirements').replaceChildren();$('pointRequirements').hidden=true;$('pointHint').hidden=true;$('modeNotice').hidden=true;
+  if(state.points===10){$('nextPoint').textContent='Alle zehn Punkte erreicht. Du kannst weiterüben!';return;}
+  const next=pointRequirements(state.points);
+  $('nextPoint').textContent=next.totalMissing?'Für Punkt '+(state.points+1)+' fehlen insgesamt noch '+next.totalMissing+' auf Anhieb richtige Aufgaben.':'Die Gesamtzahl für Punkt '+(state.points+1)+' ist erreicht. Es fehlen noch Aufgaben in der Verteilung:';
+  if(next.minimum){
+    $('pointRequirements').hidden=false;$('pointHint').hidden=false;
+    for(const [kind,label] of [['proper','Teile eines Ganzen'],['improper','Unechte Brüche'],['mixed','Gemischte Zahlen']]){
+      const li=document.createElement('li'),remaining=next.missing[kind];
+      li.textContent=label+': '+(remaining?'noch '+remaining+' auf Anhieb richtig':'Mindestanzahl erreicht')+' (mindestens '+next.minimum+' insgesamt).';$('pointRequirements').append(li);
+    }
+    if(state.mode===1&&(next.missing.improper||next.missing.mixed)){
+      $('modeNotice').hidden=false;$('modeNotice').textContent='Für den nächsten Punkt fehlen auch unechte Brüche oder gemischte Zahlen. Diese übst du in Stufe 2: „Auch mehrere Ganze“. Deine bisherigen und weiteren richtigen Aufgaben bleiben erhalten und zählen mit.';
+    }
+  }
+}
+function renderConfirmedAnswer(){const a=state.active;$('confirmedAnswer').hidden=!a||a.step==='number';if(!a||a.step==='number')return;const whole=a.answer.whole;$('confirmedWhole').hidden=whole==='';$('confirmedWhole').textContent=whole;$('confirmedNumerator').textContent=a.answer.n;$('confirmedDenominator').textContent=a.answer.d;$('confirmedAnswer').setAttribute('aria-label','Bestätigte Eingabe: '+(whole!==''?whole+' Ganze und ':'')+a.answer.n+' durch '+a.answer.d);}
+function renderSquares(){renderConfirmedAnswer();const a=state.active, container=$('squares');$('partitionControls').hidden=!a||a.step!=='partition';container.replaceChildren();if(!a||a.step==='number')return;const d=a.parts;let columns=Math.floor(Math.sqrt(d));while(d%columns!==0)columns--;const rows=d/columns;const selected=new Set(a.selected);let count=a.selected.length?Math.floor(Math.max(...a.selected)/d)+1:1;const lastFull=Array.from({length:d},(_,i)=>(count-1)*d+i).every(i=>selected.has(i));if(a.task.mode===2&&lastFull&&count<8)count++;
+  for(let whole=0;whole<count;whole++){const square=document.createElement('div');square.className='square';square.setAttribute('role','group');square.setAttribute('aria-label','Ganzes '+(whole+1));square.style.gridTemplateColumns='repeat('+columns+',1fr)';square.style.gridTemplateRows='repeat('+rows+',1fr)';for(let part=0;part<d;part++){const index=whole*d+part,btn=document.createElement('button');btn.className='piece';btn.type='button';btn.setAttribute('aria-label','Ganzes '+(whole+1)+', Teil '+(part+1));btn.setAttribute('aria-pressed',String(selected.has(index)));btn.disabled=a.step!=='mark';btn.addEventListener('click',()=>{if(a.selected.includes(index))a.selected=a.selected.filter(i=>i!==index);else a.selected.push(index);renderSquares();const same=container.querySelectorAll('.piece')[index];same?.focus({preventScroll:true});save();});square.append(btn);}container.append(square);}
+  $('markedLabel').textContent=a.selected.length+' Teile markiert';
+}
+function renderHistory(){const list=$('historyList');list.replaceChildren();if(!state.history.length){const p=document.createElement('p');p.textContent='Hier erscheinen deine abgeschlossenen Aufgaben.';list.append(p);return;}state.history.forEach((h,i)=>{const li=document.createElement('li');li.className='history-item';const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent=(i+1)+'. '+taskWord(h.task)+' · '+(h.correct?'✓ Auf Anhieb richtig':'↻ Mit Fehlern, danach verbessert');details.append(summary);for(const attempt of h.attempts){const p=document.createElement('p'),v=attempt.input||{};let text='';if(attempt.step==='number')text='Zahlenbruch: '+(v.whole?v.whole+' ':'')+v.n+'/'+v.d;else if(attempt.step==='partition')text='Unterteilung: '+v.parts+' Teile';else text='Markierung: '+(v.selected?.length||0)+' Teile (je Ganzes '+v.parts+')';p.textContent=text+' – '+(attempt.correct?'richtig':'noch nicht richtig');details.append(p);}li.append(details);list.append(li);});}
+function render(){if(!state)return;$('mode').value=String(state.mode);$('feedback').hidden=true;renderStats();renderHistory();const a=state.active;$('exercise').hidden=!a;$('empty').hidden=!!a;if(!a){$('empty').textContent='Du hast alle Aufgaben dieser Stufe auf Anhieb gelöst. In Stufe zwei warten weitere Aufgaben.';return;}$('word').textContent=taskWord(a.task);$('stepLabel').textContent='AUFGABE '+(state.history.length+(a.step==='done'?0:1))+' · '+({number:'1 / 3 · AUFSCHREIBEN',partition:'2 / 3 · UNTERTEILEN',mark:'3 / 3 · MARKIEREN',done:'ABGESCHLOSSEN'}[a.step]);$('wholeWrap').hidden=a.task.mode===1;$('whole').value=a.answer.whole;$('numerator').value=a.answer.n;$('denominator').value=a.answer.d;$('parts').value=a.parts;$('partsLabel').textContent=a.parts+(a.parts===1?' Teil':' Teile');$('numberStep').hidden=a.step!=='number';$('partitionStep').hidden=a.step!=='partition';$('markStep').hidden=a.step!=='mark';$('squares').hidden=a.step==='number';$('checkMarks').hidden=a.step!=='mark';$('next').hidden=a.step!=='done';$('mode').disabled=a.step!=='done'&&a.attempts.length>0;renderSquares();if(a.step==='done')feedback(a.hadError?'Geschafft! Deine Verbesserungen sind im Verlauf gespeichert.':'Alles auf Anhieb richtig – gut gemacht!');}
+function showIntro(mode){pendingMode=mode;$('introTitle').textContent=mode===2?'Mehr als ein Ganzes':'So funktioniert’s';$('introText').replaceChildren();const paragraphs=mode===2?['Fünf Viertel sind ein Ganzes und noch ein Viertel. Du kannst 5 über den Bruchstrich und 4 darunter schreiben – oder 1 vor den Bruch und 1 über 4.','Das Feld für die ganze Zahl bleibt in dieser Stufe immer sichtbar. Du darfst es leer lassen.','Ist ein Quadrat voll markiert, erscheint ein weiteres leeres Quadrat mit derselben Unterteilung. Markiere dort weiter, wenn du es brauchst.']:['Schreibe zuerst den Wortbruch mit Zähler und Nenner auf. Stelle danach mit dem Regler die Anzahl gleich großer Teile ein. Anschließend tippst du die passenden Teile an.','Prüfe jeden Schritt mit dem Häkchen. Nur wenn alle Schritte beim ersten Prüfen stimmen, zählt die Aufgabe als auf Anhieb richtig. Du darfst Fehler verbessern.'];for(const text of paragraphs){const p=document.createElement('p');p.textContent=text;$('introText').append(p);}$('intro').showModal();}
+$('checkNumber').addEventListener('click',checkNumber);$('checkParts').addEventListener('click',checkParts);$('checkMarks').addEventListener('click',checkMarks);$('next').addEventListener('click',()=>{if(ready&&state.active?.step==='done')newTask();});
+for(const id of ['whole','numerator','denominator'])$(id).addEventListener('input',()=>{if(ready&&state.active?.step==='number'){state.active.answer=readAnswer();save();}});
+$('parts').addEventListener('input',()=>{if(ready&&state.active?.step==='partition'){state.active.parts=Number($('parts').value);$('partsLabel').textContent=state.active.parts+' Teile';renderSquares();save();}});
+$('mode').addEventListener('change',()=>{if(!ready)return;const mode=Number($('mode').value);if(mode===2&&!state.introduced2){$('mode').value=String(state.mode);showIntro(2);}else{state.mode=mode;newTask();}});
+$('help').addEventListener('click',()=>{if(ready)showIntro(state.mode);});$('introDone').addEventListener('click',()=>{if(pendingMode===2&&!state.introduced2){state.introduced2=true;state.mode=2;newTask();}$('intro').close();pendingMode=null;save();});$('retry').addEventListener('click',()=>{if(ready&&isEdulo)hostField=findStateField();connect();});const onPageHide=()=>{save();restoreHostElements();};
+window.addEventListener('pagehide',onPageHide);
+const removalObserver=new MutationObserver(()=>{if(!widgetRoot.isConnected){ready=false;restoreHostElements();window.removeEventListener('pagehide',onPageHide);removalObserver.disconnect();}});
+removalObserver.observe(document.documentElement,{childList:true,subtree:true});
+connect();
+})();
+</script>
+</body>
+</html>

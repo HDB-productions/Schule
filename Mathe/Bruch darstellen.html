@@ -1,49 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-  <title>Brüche als Kreise</title>
-  <script src="Bruchrechnung Tools.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brüche als Kreise und Quadrate</title>
+  <script src="Bruchrechnung Tools.js" defer></script>
 </head>
 <body>
-  <div>
-    <canvas id="fraction"></canvas>
+  <div style="overflow-x: auto;">
+    <canvas id="fraction" aria-label="Grafische Darstellung des Bruchs"></canvas>
   </div>
   <div>
-    Zähler: <input type="number" id="numeratorInput" value="2"> <br/>
-    Nenner: <input type="number" id="denominatorInput" value="4"><br />
-    Zoom: <input type="number" id="zoomInput" value="100"><br />
-    Zeichenmethode: <select id="drawMethod">
+    <label for="numeratorInput">Zähler:</label> <input type="number" id="numeratorInput" value="2" step="1" required><br>
+    <label for="denominatorInput">Nenner:</label> <input type="number" id="denominatorInput" value="4" step="1" required><br>
+    <label for="zoomInput">Größe (Pixel):</label> <input type="number" id="zoomInput" value="100" min="30" max="1000" required><br>
+    <label for="drawMethod">Zeichenmethode:</label>
+    <select id="drawMethod">
       <option value="Kreis">Kreis</option>
       <option value="Quadrat">Quadrat</option>
-  </select><br />  
-Zerlegung: <input type="number" id="zerlegungInput1"><input type="number" id="zerlegungInput2"><br />
-Farbe: <select id="color">
-  <option value="red">Rot</option>
-  <option value="green">Grün</option>
-  <option value="blue">Blau</option>
-  <option value="yellow">Gelb</option>
-  </select>
-    
-  <button onclick="drawFraction(
-    parseInt(document.getElementById('numeratorInput').value),
-    parseInt(document.getElementById('denominatorInput').value),
-    'fraction',
-    parseInt(document.getElementById('zoomInput').value)
-    ,drawMethod.value
-    ,[zerlegungInput1.value,zerlegungInput2.value],
-    color.value
-  )">Zeichnen</button>  
-  <!--Button der den Inhalt des Canvas in die Zwischenablage speichert -->
-  <button onclick="downloadCanvasAsImage('fraction', 'fraction.png')">Bild herunterladen</button>
-
+    </select><br>
+    Zerlegung (nur Quadrat, leer = automatisch):
+    <label for="zerlegungInput1">Spalten:</label> <input type="number" id="zerlegungInput1" min="1" step="1">
+    <label for="zerlegungInput2">Zeilen:</label> <input type="number" id="zerlegungInput2" min="1" step="1"><br>
+    <label for="color">Farbe:</label>
+    <select id="color">
+      <option value="red">Rot</option>
+      <option value="green">Grün</option>
+      <option value="blue">Blau</option>
+      <option value="yellow">Gelb</option>
+    </select>
+    <button type="button" id="drawButton">Zeichnen</button>
+    <button type="button" id="downloadButton" disabled>Bild herunterladen</button>
   </div>
-  <br />
-  <span class="res"></span><br /><br />
-  
-  <input type="button" name="ggt" value="ggT berechnen" onclick="calcGGT(parseInt(document.getElementById('numeratorInput').value), parseInt(document.getElementById('denominatorInput').value));" />
-  <input type="button" name="kgv" value="kgV berechnen" onclick="calcKGV(parseInt(document.getElementById('numeratorInput').value), parseInt(document.getElementById('denominatorInput').value));" />
-
+  <p id="error" role="alert" style="color: #b00020;"></p>
+  <p class="res" aria-live="polite"></p>
+  <button type="button" id="ggtButton">ggT berechnen</button>
+  <button type="button" id="kgvButton">kgV berechnen</button>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const element = id => document.getElementById(id);
+      const zahl = id => element(id).valueAsNumber;
+      const ausfuehren = aktion => {
+        element('error').textContent = '';
+        document.querySelector('.res').textContent = '';
+        try {
+          aktion();
+        } catch (fehler) {
+          element('error').textContent = fehler.message;
+        }
+      };
+      const zeichnen = () => {
+        element('downloadButton').disabled = true;
+        const canvas = element('fraction');
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        const zerlegung = ['zerlegungInput1', 'zerlegungInput2'].map(id => element(id).value);
+        drawFraction(zahl('numeratorInput'), zahl('denominatorInput'), 'fraction',
+          zahl('zoomInput'), element('drawMethod').value,
+          zerlegung.every(wert => wert === '') ? null : zerlegung, element('color').value);
+        element('downloadButton').disabled = false;
+      };
+      element('drawButton').addEventListener('click', () => ausfuehren(zeichnen));
+      element('downloadButton').addEventListener('click', () => ausfuehren(() => downloadCanvasAsImage('fraction', 'fraction.png')));
+      element('ggtButton').addEventListener('click', () => ausfuehren(() => calcGGT(zahl('numeratorInput'), zahl('denominatorInput'))));
+      element('kgvButton').addEventListener('click', () => ausfuehren(() => calcKGV(zahl('numeratorInput'), zahl('denominatorInput'))));
+      ausfuehren(zeichnen);
+    });
+  </script>
 </body>
 </html>

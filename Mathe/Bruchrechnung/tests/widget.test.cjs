@@ -1,0 +1,178 @@
+// Browser-Integrationstest: node tests/widget.test.cjs
+// PLAYWRIGHT_MODULE kann auf eine lokale Playwright-Installation zeigen.
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const http = require('node:http');
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const rawHtml = fs.readFileSync(path.join(__dirname, '..', 'Brueche verstehen.html'), 'utf8');
+const hooks = "Object.defineProperty(window,'state',{configurable:true,get:()=>state,set:v=>state=v});Object.defineProperty(window,'ready',{configurable:true,get:()=>ready,set:v=>ready=v});Object.assign(window,{fresh,render,save,checkMarks,taskKey,chooseTask,category,stats,pointProgress,pointRequirements,renderStats,parseState,encodeState});";
+const html = rawHtml.replace('connect();\n})();',hooks+'\nconnect();\n})();');
+const key = 'bruchrechnung-brueche-verstehen-v1';
+const fresh = () => ({ version: 1, widget: 'brueche-verstehen', mode: 1, introduced2: false, points: 0, history: [], active: null });
+const active = (n, d, mode = 1, form = 'fraction') => ({ task: { n, d, mode, form }, step: 'number', answer: { whole: '', n: '', d: '' }, parts: 1, selected: [], attempts: [], hadError: false, started: new Date().toISOString() });
+let hostInitial = '';
+const host = `<div id="e1"><textarea id="e1_text_input"></textarea></div><div id="e2">${Array.from({ length: 10 }, (_, i) => `<input id="e2_cloze_text_input_${i + 1}">`).join('')}</div><script>window.changes=0;document.addEventListener('change',()=>window.changes++);document.getElementById('e1_text_input').addEventListener('input',event=>{let opening=true;event.target.value=event.target.value.replace(/"/g,()=>{const quote=opening?'„':'“';opening=!opening;return quote;});});</script><iframe src="/widget?edulo=1" style="width:100%;height:900px"></iframe>`;
+const decodeHost = text => JSON.parse(text.startsWith('BRUCH1:') ? Buffer.from(text.slice(7), 'base64').toString('utf8') : text);
+const server = http.createServer((req, res) => { res.setHeader('Content-Type', 'text/html; charset=utf-8'); res.end(req.url.startsWith('/host') ? host.replace('<script>',req.url.startsWith('/host-editor')?'<script>window.widget={isEditor:true};':'<script>').replace('</textarea>', hostInitial.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</textarea>') : req.url.startsWith('/missing') ? '<iframe src="/widget?edulo=1"></iframe>' : html); });
+let browser;
+(async () => {
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  browser = await chromium.launch({ headless: true, channel: process.env.BROWSER_CHANNEL || 'msedge' });
+  const page = await browser.newPage({ viewport: { width: 1000, height: 1000 } });
+  const errors = []; page.on('pageerror', err => errors.push(err.message));
+  await page.goto(base);
+  async function seed(s) { await page.evaluate(({ key, s }) => { ready=false; localStorage.setItem(key, JSON.stringify(s)); }, { key, s }); await page.reload(); await page.locator('#exercise').waitFor({ state: 'visible' }); }
+  async function saved() { return page.evaluate(key => JSON.parse(localStorage.getItem(key)), key); }
+  async function solve(target = page, mixed = false) {
+    const task = await target.evaluate(() => state.active.task);
+    if (mixed) await target.locator('#whole').fill(String(Math.floor(task.n / task.d)));
+    await target.locator('#numerator').fill(String(mixed ? task.n % task.d : task.n));
+    await target.locator('#denominator').fill(String(task.d));
+    await target.locator('#checkNumber').click();
+    await target.locator('#parts').fill(String(task.d));
+    await target.locator('#checkParts').click();
+    for (let i = 0; i < task.n; i++) await target.locator('.piece').nth(i).click();
+    await target.locator('#checkMarks').click();
+  }
+  await seed({ ...fresh(), active: active(2, 3) });
+  await page.locator('#numerator').fill('2');
+  await page.reload(); assert.equal(await page.locator('#numerator').inputValue(), '2');
+  await solve(); assert.equal((await saved()).history[0].correct, true);
+  await page.evaluate(() => checkMarks()); assert.equal((await saved()).history.length, 1, 'Repeated check must not score twice');
+  await page.reload(); assert.equal(await page.locator('#total').textContent(), '1');
+  const previous = await page.evaluate(() => taskKey(state.active.task));
+  await page.locator('#next').click(); assert.notEqual(await page.evaluate(() => taskKey(state.active.task)), previous);
+  await seed({ ...fresh(), active: active(1, 2) });
+  await page.locator('#numerator').fill('9'); await page.locator('#denominator').fill('2'); await page.locator('#checkNumber').click();
+  await solve(); assert.equal((await saved()).history[0].correct, false); assert.equal((await saved()).history[0].attempts.length, 4);
+  const retryAllowed = await page.evaluate(() => { const tasks = []; for(let i=0;i<400;i++)tasks.push(taskKey(chooseTask())); return tasks.includes('1/2:fraction'); });
+  // Die zuletzt bearbeitete Aufgabe bleibt zunächst ausgenommen; sie kommt erst mit Abstand wieder.
+  assert.equal(retryAllowed, false);
+  await seed({ ...fresh(), mode: 2, introduced2: true, active: active(5, 4, 2) });
+  assert.equal(await page.locator('#wholeWrap').isVisible(), true);
+  await page.locator('#numerator').fill('5'); await page.locator('#denominator').fill('4'); await page.locator('#checkNumber').click();
+  await page.locator('#parts').fill('4'); await page.locator('#checkParts').click();
+  for(let i=0;i<4;i++)await page.locator('.piece').nth(i).click();
+  assert.equal(await page.locator('.square').count(), 2);
+  await page.locator('.piece').nth(4).click(); await page.reload(); assert.equal(await page.locator('[aria-pressed=true]').count(), 5);
+  await page.locator('.piece').nth(0).click(); assert.equal(await page.locator('.square').count(), 2, 'Do not drop selected pieces in later squares');
+  await page.locator('.piece').nth(0).click(); await page.locator('#checkMarks').click(); assert.equal((await saved()).history[0].correct, true);
+  await seed({ ...fresh(), mode: 2, introduced2: true, active: active(13, 4, 2, 'mixed') });
+  await solve(page, true); assert.equal((await saved()).history[0].answer.whole, '3');
+  await seed({ ...fresh(), mode: 2, introduced2: true, active: active(4, 4, 2) });
+  await solve(); assert.equal(await page.locator('.square').count(), 2, 'Empty optional square also appears for whole answers');
+  await seed({ ...fresh(), active: active(1, 2) });
+  await page.locator('#mode').selectOption('2'); assert.equal(await page.locator('#intro').isVisible(), true);
+  await page.locator('#introDone').click(); assert.equal((await saved()).introduced2, true); assert.equal(await page.locator('#wholeWrap').isVisible(), true);
+  await page.goto(base + '/host'); const frame = page.frameLocator('iframe'); await frame.locator('#exercise').waitFor({ state: 'visible' });
+  assert.equal(await page.locator('#e1').isVisible(), false); assert.equal(await page.locator('#e2').isVisible(), false);
+  assert.equal(decodeHost(await page.locator('#e1_text_input').inputValue()).history.length, 0, 'Host must not import local progress');
+  const inner = page.frames().find(f => f.url().includes('/widget'));
+  for(let i=0;i<10;i++) { await solve(inner); if(i!==9)await frame.locator('#next').click(); if(i===3)assert.equal(await page.locator('#e2_cloze_text_input_1').inputValue(), '1'); }
+  assert.equal(await page.locator('#e2_cloze_text_input_2').inputValue(), '1'); assert.equal(await page.locator('#e2_cloze_text_input_3').inputValue(), '0');
+  assert.ok(await page.evaluate(() => window.changes > 0));
+  const hostSaved = await page.locator('#e1_text_input').inputValue();
+  await inner.evaluate(() => location.reload()); await frame.locator('#exercise').waitFor({ state: 'visible' });
+  assert.equal(decodeHost(await page.locator('#e1_text_input').inputValue()).history.length, 10);
+  assert.equal(new Set(decodeHost(hostSaved).history.map(h => `${h.task.n}/${h.task.d}:${h.task.form}`)).size, 10);
+  assert.ok(hostSaved.startsWith('BRUCH1:')); assert.ok(!hostSaved.includes('"'), 'Host serialization must not contain quotes');
+  let opening=true;
+  hostInitial=JSON.stringify(decodeHost(hostSaved)).replace(/"/g,()=>{const q=opening?'„':'“';opening=!opening;return q;});
+  await page.goto(base+'/host'); await page.frameLocator('iframe').locator('#exercise').waitFor({state:'visible'});
+  assert.equal(decodeHost(await page.locator('#e1_text_input').inputValue()).history.length,10,'Recover existing German-quote JSON without losing history');
+  assert.ok((await page.locator('#e1_text_input').inputValue()).startsWith('BRUCH1:'));
+  hostInitial='unlesbarer Altbestand';
+  await page.goto(base+'/host'); await page.frameLocator('iframe').locator('#retry').waitFor({state:'visible'});
+  assert.equal(await page.locator('#e1_text_input').inputValue(),hostInitial,'Do not overwrite genuinely invalid host data');
+  hostInitial='';
+  hostInitial='Editorinhalt bleibt unverändert';
+  await page.goto(base+'/host-editor');
+  const editorFrame=page.frames().find(f=>f.url().includes('/widget'));
+  await editorFrame.locator('#exercise').waitFor({state:'visible'});
+  await solve(editorFrame);
+  assert.equal(await page.locator('#e1_text_input').inputValue(),hostInitial);
+  assert.equal(await page.locator('#e1').isVisible(),true);assert.equal(await page.locator('#e2').isVisible(),true);
+  assert.equal(await page.evaluate(()=>window.changes),0,'Editor preview must not dispatch host change events');
+  await editorFrame.evaluate(()=>location.reload());await page.frameLocator('iframe').locator('#exercise').waitFor({state:'visible'});
+  assert.equal(await page.evaluate(()=>window.changes),0);assert.equal(await page.locator('#e2').isVisible(),true);
+  assert.match(await page.frameLocator('iframe').locator('#storage').textContent(),/Editor-Vorschau/);
+  hostInitial='';
+  await page.goto(base + '/missing'); await page.frameLocator('iframe').locator('#retry').waitFor({state:'visible'});
+  assert.match(await page.frameLocator('iframe').locator('#storage').textContent(), /nicht erreichbar/);
+  await page.goto(base); await page.evaluate(key => { ready=false; localStorage.setItem(key, '{broken'); }, key); await page.reload();
+  assert.equal(await page.locator('#exercise').isVisible(), false); assert.equal(await page.evaluate(key => localStorage.getItem(key), key), '{broken');
+  await seed({...fresh(), active:active(1,2)});
+  const categoryChecks=await page.evaluate(()=>{
+    const record=(n,d,form,correct,mode=2)=>({task:{n,d,form,mode},correct,attempts:[]});
+    state.history=[record(1,2,'fraction',true,1),record(2,3,'fraction',false),record(5,4,'fraction',true),record(7,4,'mixed',false)];
+    renderStats();
+    const result={proper:stats('proper'),improper:stats('improper'),mixed:stats('mixed')};
+    state.history=Array.from({length:40},()=>record(1,2,'fraction',true,1));state.points=0;save();
+    result.cap=state.points;result.progress=pointProgress();result.notice=!document.getElementById('modeNotice').hidden;
+    for(let i=0;i<10;i++)state.history.push(record(5,4,i%2?'mixed':'fraction',true));save();result.stillThird=state.points;result.missingFourth=pointRequirements(3).missing;state.history.push(record(5,4,'fraction',true),record(5,4,'mixed',true));save();result.fourth=state.points;
+    state.history=Array.from({length:18},()=>record(5,4,'fraction',true));state.history.push(record(1,2,'fraction',true,1));result.noEasyAfterAdvanced=pointProgress();
+    const unicode={...fresh(),note:'Grüße 🧮 „Zitat“'};
+    result.unicode=JSON.stringify(parseState(encodeState(unicode)))===JSON.stringify(unicode);
+    state.mode=2;state.history=Array.from({length:60},()=>record(5,4,'fraction',true));
+    let seed=17;const random=Math.random;Math.random=()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296);
+    const counts={proper:0,improper:0,mixed:0};try{for(let i=0;i<400;i++)counts[category(chooseTask())]++;}finally{Math.random=random;}
+    result.weights=counts;
+    state.history=[record(1,2,'fraction',true,1)];result.crossModeRepeat=false;for(let i=0;i<100;i++){if(taskKey(chooseTask())==='1/2:fraction')result.crossModeRepeat=true;}
+    return result;
+  });
+  assert.deepEqual(categoryChecks.proper,{total:2,correct:1,wrong:1});assert.deepEqual(categoryChecks.improper,{total:1,correct:1,wrong:0});assert.deepEqual(categoryChecks.mixed,{total:1,correct:0,wrong:1});
+  assert.equal(categoryChecks.cap,3);assert.equal(categoryChecks.progress,40);assert.equal(categoryChecks.notice,true);assert.equal(categoryChecks.fourth,4);assert.equal(categoryChecks.noEasyAfterAdvanced,19);assert.equal(categoryChecks.unicode,true);
+  assert.ok(categoryChecks.weights.mixed>categoryChecks.weights.improper*2 && categoryChecks.weights.proper>categoryChecks.weights.improper*2,'Weak and unpracticed categories must occur more often');
+  assert.equal(categoryChecks.crossModeRepeat,false);
+  assert.equal(categoryChecks.stillThird,3);assert.deepEqual(categoryChecks.missingFourth,{proper:0,improper:1,mixed:1});
+  const quotaChecks=await page.evaluate(()=>{
+    const make=(kind,i)=>({task:{n:kind==='proper'?1:5,d:4,form:kind==='mixed'?'mixed':'fraction',mode:kind==='proper'?1:2},correct:true,attempts:[],i});
+    const distribution=(p,u,m)=>[...Array.from({length:p},(_,i)=>make('proper',i)),...Array.from({length:u},(_,i)=>make('improper',i)),...Array.from({length:m},(_,i)=>make('mixed',i))];
+    state.history=distribution(16,6,6);state.points=0;save();const result={fourth:state.points};
+    state.history.reverse();state.points=0;save();result.reversed=state.points;
+    state.history=distribution(27,5,8);state.points=0;save();result.blocked=state.points;result.before=pointRequirements(3);
+    state.history.push(make('improper',99));save();result.oneAdded=state.points;result.next=pointRequirements(4);
+    result.text=document.getElementById('pointRequirements').textContent;
+    state.history.push(make('improper',100));save();result.secondAdded=state.points;
+    state.history.push(make('improper',101));save();result.thirdAdded=state.points;
+    result.minima=Array.from({length:10},(_,i)=>pointRequirements(i).minimum);
+    state.history=distribution(78,26,26);state.points=0;save();result.allPoints=state.points;
+    state.history=distribution(1,0,0);state.points=4;save();result.preserved=state.points;
+    return result;
+  });
+  assert.equal(quotaChecks.fourth,4);assert.equal(quotaChecks.reversed,4,'Task order must not affect points');
+  assert.equal(quotaChecks.blocked,3);assert.equal(quotaChecks.before.totalMissing,0);assert.equal(quotaChecks.before.missing.improper,1);
+  assert.equal(quotaChecks.oneAdded,4);assert.equal(quotaChecks.next.missing.improper,2);assert.match(quotaChecks.text,/Unechte Brüche: noch 2/);
+  assert.equal(quotaChecks.secondAdded,4);assert.equal(quotaChecks.thirdAdded,5);
+  assert.deepEqual(quotaChecks.minima,[0,0,0,6,8,11,14,18,22,26]);assert.equal(quotaChecks.allPoints,10);assert.equal(quotaChecks.preserved,4);
+  await seed({ ...fresh(), mode: 2, introduced2: true, active: active(5, 4, 2) });
+  await page.locator('#numerator').fill('5'); await page.locator('#denominator').fill('4'); await page.locator('#checkNumber').click();await page.locator('#parts').fill('4');await page.locator('#checkParts').click();for(let i=0;i<5;i++)await page.locator('.piece').nth(i).click();
+  if(process.env.SCREENSHOT_DIR){ fs.mkdirSync(process.env.SCREENSHOT_DIR,{recursive:true}); await page.screenshot({path:path.join(process.env.SCREENSHOT_DIR,'bruch-widget-desktop.png'),fullPage:true}); }
+  await page.setViewportSize({width:390,height:844}); assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'No horizontal overflow on mobile');
+  assert.equal(await page.locator('#historyPanel').getAttribute('open'),null);
+  assert.equal(await page.locator('#statsTitle1').isVisible(),false);assert.equal(await page.locator('#points').isVisible(),true);
+  await page.locator('#historyPanel > summary').click();assert.equal(await page.locator('#statsTitle3').isVisible(),true);
+  await page.locator('#history > summary').click();assert.equal(await page.locator('#historyList').isVisible(),true);
+  await page.locator('#historyPanel > summary').click();assert.equal(await page.locator('#historyList').isVisible(),false);assert.equal(await page.locator('#nextPoint').isVisible(),true);
+  if(process.env.SCREENSHOT_DIR)await page.screenshot({path:path.join(process.env.SCREENSHOT_DIR,'bruch-widget-mobile.png'),fullPage:true});
+  const inlinePage=await browser.newPage();inlinePage.on('pageerror',err=>errors.push(err.message));
+  await inlinePage.setContent('<style>.card{background:rgb(123,45,67)}button{border-radius:0}</style><button id="editOther">Anderes Element bearbeiten</button><div class="card" id="editorPanel" style="display:none">Bearbeitungsfenster</div><div id="mount"></div>');
+  const jquery=fs.readFileSync(path.resolve(__dirname,'../../../Chemie/Edulo Laborführerschen/Widget_224324_Luft_und_Gas_Regulieren.wdgt/libs/jquery-2.1.1.min.js'),'utf8');
+  await inlinePage.addScriptTag({content:jquery});
+  await inlinePage.addScriptTag({content:"window.widget={isEditor:true};window.editorClicks=0;document.getElementById('editOther').addEventListener('click',function(){window.editorClicks++;$('#editorPanel').show();});"});
+  for(let i=0;i<3;i++){
+    await inlinePage.evaluate(markup=>window.jQuery('#mount').empty().append(markup),rawHtml);
+    await inlinePage.locator('#exercise').waitFor({state:'visible'});
+    await inlinePage.locator('#editOther').click();
+    assert.equal(await inlinePage.locator('#editorPanel').isVisible(),true);
+    assert.equal(await inlinePage.evaluate(()=>window.editorClicks),i+1);
+    assert.equal(await inlinePage.evaluate(()=>$===window.jQuery),true,'Widget must not shadow host jQuery');
+    assert.equal(await inlinePage.locator('#editorPanel').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(123, 45, 67)','Widget styles must not change host cards');
+    await inlinePage.evaluate(()=>window.jQuery('#editorPanel').hide());
+  }
+  await inlinePage.close();
+  assert.deepEqual(errors, []);
+  console.log('OK: browser flow, first-attempt scoring, retries, mixed numbers, additional squares, reload, no duplicates, host priority, milestones, hidden fields, missing host, corrupted storage, mobile layout.');
+})().catch(err => { console.error(err); process.exitCode = 1; }).finally(async () => { if(browser)await browser.close();server.close(); });
