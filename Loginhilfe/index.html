@@ -13,6 +13,9 @@
     * { box-sizing:border-box; }
     body { margin:0; min-height:100vh; min-height:100dvh; display:flex; justify-content:center; align-items:center; padding:22px; padding-top:max(22px,env(safe-area-inset-top)); padding-bottom:max(22px,env(safe-area-inset-bottom)); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); }
     main { width:min(100%,560px); background:var(--card); border:1px solid var(--border); border-radius:22px; padding:26px; box-shadow:0 12px 32px rgba(0,0,0,.08); }
+    .home-banner { display:flex; min-height:48px; align-items:center; justify-content:center; margin-top:24px; padding:10px 16px; border:1px solid var(--border); border-radius:14px; background:var(--field); color:var(--accent); font-size:22px; font-weight:800; text-decoration:none; touch-action:manipulation; }
+    .home-banner:hover { border-color:var(--accent); }
+    .home-banner:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
     h1 { margin:0 0 8px; font-size:clamp(28px,7vw,38px); line-height:1.05; letter-spacing:-.03em; }
     .intro { margin:0 0 24px; color:var(--muted); font-size:16px; line-height:1.45; }
     .field { margin:18px 0; }
@@ -39,6 +42,7 @@
       <a class="button login" href="https://login.microsoftonline.com/" target="_blank" rel="noopener noreferrer">Microsoft-Anmeldung öffnen</a>
       <p class="hint">Die Zugangsdaten werden nur aus dem QR-Code auf diesem Gerät ausgelesen. Sie sind nicht in dieser Webseite gespeichert.</p>
     </section>
+    <a class="home-banner" href="../index.html" aria-label="HDB – zur Startseite">HDB</a>
   </main>
   <script>
     (() => {
