@@ -1,408 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inhaltsverzeichnis</title>
     <style>
-      /***********************************************************************
-     * Grundlayout
-     ***********************************************************************/
+      :root { color-scheme: dark; --ink:#eef3ff; --muted:#9facc4; --line:#ffffff15; }
+      * { box-sizing:border-box; }
+      html { min-height:100%; background:#080d19; }
+      body { margin:0 auto; padding:88px 48px 32px; max-width:1280px; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; background:transparent; position:relative; }
+      body::before { content:""; position:fixed; inset:0; z-index:-2; pointer-events:none; background:radial-gradient(ellipse at 85% 4%,#23468140,transparent 43%),radial-gradient(ellipse at 8% 62%,#29235220,transparent 50%),radial-gradient(circle at 18% 20%,#a9b8d980 0 1px,transparent 1.5px),radial-gradient(circle at 73% 37%,#a9b8d94d 0 1px,transparent 1.5px); background-size:auto,auto,193px 211px,271px 307px; }
+      body::after { content:""; position:absolute; right:35px; top:50px; width:285px; height:285px; border:1px solid #83aaf322; border-radius:50%; box-shadow:0 0 0 36px #83aaf308,0 0 0 37px #83aaf310,0 0 0 74px #83aaf306; z-index:-1; pointer-events:none; transform:rotate(-28deg) scaleY(.55); }
+      h1 { font-size:clamp(32px,4.1vw,54px); font-weight:650; line-height:1.15; letter-spacing:-.045em; max-width:750px; margin:0 0 24px; }
+      h1::before { content:""; display:block; width:42px; height:4px; background:#94baff; border-radius:10px; margin-bottom:28px; box-shadow:0 0 22px #76a7ff80; }
+      body > section { max-width:720px; margin:0 0 54px; color:var(--muted); font-size:16px; line-height:1.8; }
+      p { margin:0 0 8px; }
+      .category { margin:0 0 34px; }
+      .category > h2 { font-size:13px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:18px; margin:0 0 20px; }
+      .category > h2::after { content:""; height:1px; background:var(--line); flex:1; }
+      .button-container { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+      .button { text-decoration:none; color:var(--ink); position:relative; transition:background .2s,border-color .2s,transform .2s; }
+      #faecher .button { min-height:174px; border:1px solid color-mix(in srgb,var(--accent) 25%,transparent); border-radius:20px; padding:104px 24px 24px; font-size:23px; font-weight:600; letter-spacing:-.025em; background:radial-gradient(ellipse at 95% 0%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 70%),#101827; overflow:hidden; }
+      #faecher .button::before { content:""; position:absolute; top:26px; left:25px; width:33px; height:33px; border:1.5px solid var(--accent); border-radius:10px; box-shadow:0 0 24px color-mix(in srgb,var(--accent) 13%,transparent); }
+      #faecher .button::after { content:"+"; position:absolute; right:24px; bottom:25px; color:var(--accent); font-size:23px; font-weight:300; }
+      #faecher .button.active::after { content:"−"; }
+      #faecher .button:hover,#faecher .button.active { background:radial-gradient(ellipse at 95% 0%,color-mix(in srgb,var(--accent) 23%,transparent),transparent 90%),#131e30; border-color:var(--accent); transform:translateY(-3px); }
+      .mathe-button,#mathe-links { --accent:#ffb06e; }
+      .physik-button,#physik-links { --accent:#70b4ff; }
+      .chemie-button,#chemie-links { --accent:#f48fc4; }
+      .bio-button,#bio-links { --accent:#7cdda6; }
+      #faecher .physik-button::before { border-radius:50%; transform:rotate(-35deg) scaleY(.5); box-shadow:0 0 0 7px #70b4ff12,0 0 0 8px #70b4ff30; }
+      #faecher .chemie-button::before { border-radius:50% 50% 8px 8px; width:25px; transform:rotate(30deg); }
+      #faecher .bio-button::before { border-radius:24px 0 24px 0; transform:rotate(-15deg); }
+      .link-list { display:none; }
+      .link-list.show { display:block; margin-top:20px; padding:26px; background:#101827; border:1px solid var(--line); border-top:2px solid var(--accent); border-radius:16px; }
+      .link-list h2 { font-size:22px; margin:0 0 20px; color:var(--accent); }
+      .link-list ul { list-style:none; margin:0; padding:0; }
+      .link-list > ul { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 22px; }
+      .link-list li { padding:13px 14px; line-height:1.6; background:#ffffff03; border-bottom:1px solid var(--line); border-radius:6px; color:#bfcae0; overflow-wrap:anywhere; }
+      .link-list a { color:#dce6f8; text-decoration:none; text-underline-offset:4px; }
+      .link-list a:hover { color:var(--accent); text-decoration:underline; }
+      details { grid-column:1/-1; border:1px solid var(--line); border-radius:10px; padding:0 16px; }
+      summary { cursor:pointer; padding:16px 0; color:var(--accent); font-weight:600; }
+      details[open] { padding-bottom:12px; }
+      #tools { margin-top:38px; }
+      #tools .button-container { gap:10px; }
+      .tool-button { min-height:74px; display:flex; align-items:center; padding:18px 36px 18px 18px; border:1px solid var(--line); border-radius:12px; background:#111a29; font-size:14px; line-height:1.45; }
+      .tool-button::after { content:"↗"; position:absolute; right:15px; color:#788ba9; }
+      .tool-button:hover { background:#1a2840; border-color:#7894c1; transform:translateY(-2px); }
+      .footer-category { margin:38px 0 0; border-top:1px solid var(--line); padding-top:22px; }
+      .footer-category > h2 { display:block; text-transform:none; letter-spacing:0; font-weight:400; font-size:14px; margin:0; }
+      .footer-category a { color:#a8b8d2; text-decoration:none; }
+      .footer-category a::after { content:" ↗"; margin-left:8px; }
+      .footer-category a:hover { color:white; }
+      a:focus-visible,summary:focus-visible { outline:2px solid #d7e6ff; outline-offset:5px; }
+      @media(min-width:1000px) { #tools .button-container { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+      @media(max-width:760px) { body { padding:44px 24px 26px; } .button-container { grid-template-columns:repeat(2,minmax(0,1fr)); } body > section { margin-bottom:34px; } .link-list > ul { grid-template-columns:1fr; } body::after { right:20px; width:170px; height:170px; } }
+      @media(max-width:420px) { body { padding:32px 18px 24px; } #faecher .button { min-height:148px; padding:87px 18px 20px; font-size:21px; } #faecher .button::before { left:20px; top:23px; } #faecher .button::after { right:18px; bottom:19px; } .button-container { gap:10px; } .link-list.show { padding:18px 12px; } .tool-button { padding-left:13px; font-size:13px; } }
+      @media(prefers-reduced-motion:reduce) { * { transition:none!important; } }
 
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(0deg, #2190d5, #cfeafb);
-        color: #333;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 20px;
-      }
+      /* Centered introduction and luminous, touch-independent wordmark. */
+      h1 { max-width:none; text-align:center; margin:0 auto 25px; font-size:clamp(35px,4.3vw,60px); font-weight:650; line-height:1.2; letter-spacing:-.045em; }
+      h1::before { margin:0 auto 30px; width:64px; height:3px; background:linear-gradient(90deg,#78b5ff,#c5a4ff); box-shadow:0 0 24px #8bafff80; }
+      body > section { max-width:820px; text-align:center; margin:0 auto 58px; }
+      .hdb-wordmark { position:relative; display:inline-block; font-weight:800; letter-spacing:-.06em; color:#c1deff; background:linear-gradient(115deg,#eff8ff 8%,#88c7ff 42%,#c6a5ff 78%,#eef5ff); background-clip:text; -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 17px #7aaaff45); }
+      .hdb-wordmark::after { content:""; position:absolute; left:4%; right:0; height:2px; bottom:0; border-radius:100%; background:linear-gradient(90deg,transparent,#89c9ff,#c4a3ff,transparent); box-shadow:0 0 15px #98baff70; }
+      body::after { top:28px; right:calc(50% - 190px); width:380px; height:270px; opacity:.65; transform:rotate(-18deg) scaleY(.55); }
+      #faecher .button:active { transform:scale(.98); }
+      .tool-button:active { background:#213450; transform:scale(.98); }
+      @media(hover:none) { #faecher .button:hover { transform:none; } #faecher .button.active { border-color:var(--accent); background:radial-gradient(ellipse at 95% 0%,color-mix(in srgb,var(--accent) 23%,transparent),transparent 90%),#131e30; } .tool-button:hover { transform:none; } }
+      @media(max-width:760px) { h1 { max-width:600px; } body > section { margin-bottom:38px; } body::after { width:260px; height:220px; right:calc(50% - 130px); top:34px; } }
+      @media(prefers-reduced-motion:reduce) { #faecher .button,.tool-button { transform:none!important; } }
 
-      h1 {
-        color: #333;
-        margin-bottom: 10px;
-      }
+      .hdb-wordmark { background-image:linear-gradient(110deg,transparent 40%,#ffffff 49%,#ffffff 51%,transparent 60%),linear-gradient(115deg,#a2f5ff 5%,#72b9ff 42%,#b49aff 80%,#e4d8ff); background-size:250% 100%,100% 100%; background-position:150% 0,0 0; background-repeat:no-repeat; animation:hdb-reflection 8s ease-in-out infinite; }
+      @keyframes hdb-reflection { 0%,65% { background-position:150% 0,0 0; } 88%,100% { background-position:-150% 0,0 0; } }
+      @media(prefers-reduced-motion:reduce) { .hdb-wordmark { animation:none; background-image:linear-gradient(115deg,#a2f5ff 5%,#72b9ff 42%,#b49aff 80%,#e4d8ff); background-size:100% 100%; background-position:0 0; } }
 
-      section {
-        margin: 20px 0;
-        padding: 20px;
-        width: calc(100% - 40px);
-        box-sizing: border-box;
-        max-width: 900px;
-      }
+      /* Channel closing card: the entire surface is one link. */
+      .footer-category { padding-top:28px; margin-top:38px; }
+      .footer-category > h2 { margin:0; }
+      .footer-category a { display:flex; align-items:center; gap:20px; position:relative; min-height:104px; padding:24px 30px; border:1px solid #ff777738; border-radius:18px; background:radial-gradient(ellipse at 0% 50%,#eb46551a,transparent 65%),#111827; color:#f4eef3; font-size:19px; font-weight:600; letter-spacing:-.015em; transition:background .2s,border-color .2s,box-shadow .2s; }
+      .footer-category a::before { content:""; display:block; flex:0 0 54px; height:40px; border-radius:12px; background:#f05b67; box-shadow:0 0 28px #f05b6725; }
+      .footer-category a .channel-play { position:absolute; left:52px; top:50%; transform:translateY(-50%); width:0; height:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-left:12px solid #fff; pointer-events:none; }
+      .footer-category a::after { content:"↗"; display:grid; place-items:center; flex:0 0 36px; height:36px; margin-left:auto; border:1px solid #ffffff1a; border-radius:50%; font-size:21px; color:#eaaab0; }
+      .footer-category a:hover { color:#fff; border-color:#ff8a94; background:radial-gradient(ellipse at 0% 50%,#eb46552a,transparent 70%),#172033; box-shadow:0 0 28px #ef52650a; }
+      .footer-category a:focus-visible { outline:3px solid #ffc2c8; outline-offset:5px; }
+      .footer-category a:active { background:#34202e; border-color:#ffc2c8; }
+      @media(max-width:420px) { .footer-category a { min-height:94px; padding:22px 18px; gap:15px; font-size:17px; } .footer-category a::before { flex-basis:46px; height:36px; border-radius:10px; } .footer-category a .channel-play { left:36px; border-top-width:7px; border-bottom-width:7px; border-left-width:11px; } .footer-category a::after { flex-basis:30px; height:30px; font-size:18px; } }
 
-      .category {
-        margin: 20px 20px;
-        padding: 20px;
-        border: 2px solid #ccc;
-        border-radius: 10px;
-        background-color: #ffffff;
-        width: calc(100% - 40px);
-        box-sizing: border-box;
-        max-width: 1000px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-        transition: background 0.7s ease;
-      }
-
-      .category h2 {
-        margin-bottom: 20px;
-        margin-left: 20px;
-      }
-
-      .button-container {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      /***********************************************************************
-     * Keyframes: Hover/Active-Animation
-     * 
-     * Hier deine gewünschte Variante mit 0%->50%->100%, 
-     * und Y-Position fix auf 50%.
-     ***********************************************************************/
-      @keyframes glowing {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      /*
-       2) Basis-Stile für ALLE Buttons.
-       Wichtig: z-index, overflow: visible, 
-       damit der Rand-Glow nicht abgeschnitten wird.
-    */
-      .button {
-        position: relative;
-        padding: 15px 5px;
-        margin: 5px;
-        font-size: 16px;
-        text-decoration: none;
-        border-radius: 10px;
-        color: #fff;
-        cursor: pointer;
-        border: none;
-        flex: 1 1 200px;
-        max-width: 200px;
-
-        z-index: 1; /* Der Button selbst ist über dem Rand-Glow */
-        overflow: visible; /* Verhindert abgeschnittene Filter-Effekte */
-      }
-
-      /* 
-       3) Gemeinsamer "glühender Rand" mit ::before,
-          standardmäßig unsichtbar (opacity: 0).
-    */
-      .button::before {
-        content: "";
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        width: calc(100% + 4px);
-        height: calc(100% + 4px);
-        border-radius: 10px;
-
-        /* Platzhalter-Fallback, wird pro Fach überschrieben */
-        background: linear-gradient(45deg, #000000, #ffffff);
-        background-size: 200%;
-        background-repeat: no-repeat;
-
-        filter: blur(5px);
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-        z-index: -1;
-
-        /* Rand pulsiert (invisibel), bis .button:active => opacity: 1 */
-        animation: glowing 3s linear infinite;
-      }
-
-      /*
-       4) :active => glühender Rand einblenden,
-          Button-Hintergrund wird einfarbig (also KEIN Hover-Verlauf mehr).
-    */
-      .button:active {
-        /* Button selbst einfarbig. 
-         Wir überschreiben ggf. den Hover-Farbverlauf. */
-        animation: none;
-      }
-      .button:active::before {
-        /* Rand sichtbar machen */
-        opacity: 1;
-      }
-
-      /* 
-       5) Hover => animierter Verlauf auf dem Button selbst.
-    */
-
-      /* ========================= Mathe (Orange-Rot) ========================= */
-      .mathe-button {
-        /* Grundfarbe (Normalzustand) */
-        background: #ff8c00;
-      }
-      .mathe-button:hover {
-        background: linear-gradient(
-          45deg,
-          #ff8c00,
-          #ff7300,
-          #fffb00,
-          #ff7300,
-          #ff8c00
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-        animation: glowing 3s linear infinite;
-      }
-      .mathe-button::before {
-        background: linear-gradient(
-          45deg,
-          #ff8c00,
-          #ff7300,
-          #fffb00,
-          #ff7300,
-          #ff8c00
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-      }
-
-      /* ========================= Physik (Blautöne) ========================= */
-      .physik-button {
-        background: #00008b;
-      }
-      .physik-button:hover {
-        background: linear-gradient(
-          45deg,
-          #000033,
-          #00008b,
-          #0000cd,
-          #1e90ff,
-          #0000cd
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-        animation: glowing 3s linear infinite;
-      }
-      .physik-button::before {
-        background: linear-gradient(
-          45deg,
-          #000033,
-          #00008b,
-          #0000cd,
-          #1e90ff,
-          #0000cd
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-      }
-
-      /* ========================= Chemie (Pink-Lila) ========================= */
-      .chemie-button {
-        background: #ff1493;
-      }
-      .chemie-button:hover {
-        background: linear-gradient(
-          45deg,
-          #ff1493,
-          #ff00ff,
-          #cc00cc,
-          #9933ff,
-          #ff1493
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-        animation: glowing 3s linear infinite;
-      }
-      .chemie-button::before {
-        background: linear-gradient(
-          45deg,
-          #ff1493,
-          #ff00ff,
-          #cc00cc,
-          #9933ff,
-          #ff1493
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-      }
-
-      /* ========================= Bio (Grün) ========================= */
-      .bio-button {
-        background: #228b22;
-      }
-      .bio-button:hover {
-        background: linear-gradient(
-          45deg,
-          #00ff00,
-          #00aa00,
-          #00ff44,
-          #00aa00,
-          #00ff00
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-        animation: glowing 3s linear infinite;
-      }
-      .bio-button::before {
-        background: linear-gradient(
-          45deg,
-          #00ff00,
-          #00aa00,
-          #00ff44,
-          #00aa00,
-          #00ff00
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-      }
-
-      /* ========================= Tools (Hellblau) ========================= */
-      .tool-button {
-        background: #00bfff;
-      }
-      .tool-button:hover {
-        background: linear-gradient(
-          45deg,
-          #add8e6,
-          #87cefa,
-          #b0e0e6,
-          #87cefa,
-          #add8e6
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-        animation: glowing 3s linear infinite;
-      }
-      .tool-button::before {
-        background: linear-gradient(
-          45deg,
-          #add8e6,
-          #87cefa,
-          #b0e0e6,
-          #87cefa,
-          #add8e6
-        );
-        background-size: 200%;
-        background-repeat: no-repeat;
-      }
-
-      /***********************************************************************
-     * LINKLIST-ANIMATION
-    ***********************************************************************/
-      .link-list {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s ease, opacity 0.5s ease;
-        opacity: 0;
-        margin-top: 0;
-        text-align: left;
-        padding: 0 40px;
-      }
-      .link-list.show {
-        opacity: 1;
-        max-height: 900px;
-      }
-
-      .link-list ul {
-        list-style-type: disc;
-      }
-
-      .link-list details {
-        margin-top: 10px;
-      }
-
-      /***********************************************************************
-     * Fusszeile, Youtube-Bereich
-    ***********************************************************************/
-      .footer-category {
-        text-align: center;
-      }
-      .footer-category a {
-        text-decoration: none;
-        color: #2196f3;
-        font-weight: bold;
-      }
+      .footer-category a::before { display:none; }
+      .channel-avatar { width:80px; height:80px; flex:0 0 80px; border-radius:18px; border:1px solid #a4d9e64d; object-fit:contain; box-shadow:0 0 24px #77b8d518; }
+      .channel-label { display:flex; flex-direction:column; gap:8px; }
+      .youtube-brand { display:flex; align-items:center; gap:8px; color:#ced6e5; font-size:13px; font-weight:600; letter-spacing:.015em; }
+      .youtube-mark { display:inline-block; position:relative; width:25px; height:18px; border-radius:5px; background:#f05b67; }
+      .youtube-mark::after { content:""; position:absolute; left:10px; top:5px; border-top:4px solid transparent; border-bottom:4px solid transparent; border-left:6px solid white; }
+      @media(max-width:420px) { .channel-avatar { width:64px; height:64px; flex-basis:64px; border-radius:14px; } .channel-label { gap:6px; } }
     </style>
 
     <script>
-      /* Hintergründe, wenn eine Kategorie aktiv ist*/
-      const gradientMap = {
-        "mathe-button":
-          "linear-gradient(to bottom, #ffe0c2, #fff4e6 40%, #fff)",
-        "physik-button":
-          "linear-gradient(to bottom, #cce5f4, #eef6fb 40%, #fff)",
-        "chemie-button":
-          "linear-gradient(to bottom, #ffd1e9, #ffe9f4 40%, #fff)",
-        "bio-button": "linear-gradient(to bottom, #d5ffd1, #ebffe6 40%, #fff)",
-      };
-
       function toggleLinks(buttonId, listId) {
-        const clickedButton = document.getElementById(buttonId);
-        const newList = document.getElementById(listId);
-        const container = document.getElementById("faecher");
-
-        // Finde den aktuell offenen Bereich (falls einer offen ist)
-        const currentlyOpen = document.querySelector(".link-list.show");
-
-        // Falls kein Bereich offen ist oder der gleiche erneut gewählt wird,
-        // einfach toggeln
-        if (!currentlyOpen || currentlyOpen === newList) {
-          newList.classList.toggle("show");
-          clickedButton.classList.toggle("active");
-
-          // Wenn jetzt geöffnet => setze container-background
-          if (newList.classList.contains("show")) {
-            container.style.background = gradientMap[buttonId] || "#fff";
-          } else {
-            container.style.background = "#fff";
-          }
-          return;
-        }
-
-        // Wenn ein anderer Bereich bereits offen ist,
-        // erst diesen schließen (transitionend abwarten)
-        currentlyOpen.classList.remove("show");
-        const openButton = document.querySelector(".button.active");
-        if (openButton && openButton !== clickedButton) {
-          openButton.classList.remove("active");
-        }
-
-        // Nach dem Schließen des alten Bereichs öffnen wir den neuen
-        const transitionHandler = function (e) {
-          if (e.target === currentlyOpen && e.propertyName === "max-height") {
-            currentlyOpen.removeEventListener(
-              "transitionend",
-              transitionHandler
-            );
-
-            newList.classList.add("show");
-            clickedButton.classList.add("active");
-            container.style.background = gradientMap[buttonId] || "#fff";
-          }
-        };
-        currentlyOpen.addEventListener("transitionend", transitionHandler, {
-          once: true,
+        const shouldOpen = !document.getElementById(listId).classList.contains('show');
+        document.querySelectorAll('#faecher .button').forEach(button => {
+          const active = shouldOpen && button.id === buttonId;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-expanded', String(active));
+        });
+        document.querySelectorAll('.link-list').forEach(list => {
+          list.classList.toggle('show', shouldOpen && list.id === listId);
         });
       }
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('#faecher .button').forEach(button => {
+          button.setAttribute('role', 'button');
+          button.setAttribute('aria-expanded', 'false');
+          button.setAttribute('aria-controls', button.id.replace('-button', '-links'));
+          button.addEventListener('keydown', event => {
+            if (event.key === ' ') { event.preventDefault(); button.click(); }
+          });
+        });
+      });
     </script>
   </head>
   <body>
-    <h1>Willkommen auf HDB's Seite</h1>
+    <h1>Willkommen auf <span class="hdb-wordmark">HDB</span>'s Seite</h1>
     <section>
       <p>
-        Hier findest du Links der von mir im Unterricht genutzten (zum Teil
-        selbst erstellten) Materialien nach Fächern sortiert.
-      </p>
-      <p>
-        Sollte Interesse bestehen, kann ich die Link-Sammlung bei Zeiten
-        erweitern.
+        Hier findest du meine Unterrichtsmaterialien, nach Fächern sortiert.
       </p>
     </section>
 
@@ -493,13 +216,7 @@
                   >Buch(GGB): Bruchrechnung Wolfgang Wengler</a
                 >
               </li>
-              <li>
-                <a
-                  href="https://www.alice.edu.tum.de/bruchrechnen.html#"
-                  target="_blank"
-                  >Buch: Bruchrechnung TU-München</a
-                >
-              </li>
+              
               <li>
                 <a href="https://www.geogebra.org/m/wpd732cy" target="_blank"
                   >Gemischte Zahl in unechten Bruch umwandeln</a
@@ -579,11 +296,6 @@
       <div id="physik-links" class="link-list">
         <h2>Physik</h2>
         <ul>
-          <li>
-            <a href="Physik/Taschenrechner.html" target="_blank"
-              >Basis HTML-Taschenrechner</a
-            >
-          </li>
           <li>
             <a
               href="https://phet.colorado.edu/sims/html/circuit-construction-kit-ac-virtual-lab/latest/circuit-construction-kit-ac-virtual-lab_de.html"
@@ -795,7 +507,7 @@
     <div class="category footer-category">
       <h2>
         <a href="https://www.youtube.com/@HDB-AES" target="_blank"
-          >Youtube Kanal</a
+          ><img class="channel-avatar" src="assets/hdb-youtube-avatar.jpg" alt="Profilbild von HDB@AES" width="80" height="80"><span class="channel-label"><span class="youtube-brand"><span class="youtube-mark" aria-hidden="true"></span>YouTube</span><span>Youtube Kanal</span></span></a
         >
       </h2>
     </div>
