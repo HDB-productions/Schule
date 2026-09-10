@@ -1,5 +1,7 @@
 # Bruchrechnung: Brüche verstehen
 
+Das zweite Widget ist **[Anteile berechnen](Anteile%20berechnen.html)**. Es hat eine eigene [Anleitung für Lernwege und die 20-Punkte-Einbindung](Anteile%20berechnen.md). Die folgende Anleitung betrifft das erste Widget.
+
 `Brueche verstehen.html` ist das erste eigenständige Widget. Die Datei enthält Oberfläche, Gestaltung und JavaScript und benötigt keine weiteren Dateien oder Internetbibliotheken. Der Ordner `tests` gehört nur zur Entwicklungsprüfung und wird nicht hochgeladen.
 
 ## In EduLudoo erproben

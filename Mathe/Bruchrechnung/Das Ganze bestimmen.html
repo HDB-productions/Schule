@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="de">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Das Ganze bestimmen</title>
+<style>
+/* Alle Regeln gelten nur innerhalb dieser App, auch bei direkter EduLudoo-Einbettung. */
+#wholeWidget{--ink:#193c43;--green:#087e70;--line:#d3e3de;--soft:#eff7f3;box-sizing:border-box;font:17px/1.5 system-ui,sans-serif;color:var(--ink);background:#f2f7f4;max-width:980px;margin:auto;padding:26px 20px 40px;border-radius:18px}
+#wholeWidget *{box-sizing:border-box}
+#wholeWidget [hidden]{display:none!important}
+#wholeWidget h1{font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.15;margin:6px 0 10px;letter-spacing:-.04em}
+#wholeWidget h2{font-size:1.12rem;line-height:1.45;margin:0 0 12px}
+#wholeWidget p{margin:10px 0}
+#wholeWidget .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--green)}
+#wholeWidget .sub,#wholeWidget small{color:#526c70}
+#wholeWidget .toolbar{display:flex;gap:12px;justify-content:space-between;align-items:end;flex-wrap:wrap;margin:22px 0}
+#wholeWidget .toolbar label{display:grid;gap:4px;font-size:.82rem;font-weight:650}
+#wholeWidget button,#wholeWidget select,#wholeWidget input{font:inherit;color:inherit}
+#wholeWidget button,#wholeWidget select{border:1px solid var(--line);border-radius:12px;background:white;padding:10px 15px;min-height:46px;cursor:pointer;max-width:100%}
+#wholeWidget button.primary{background:var(--green);border-color:var(--green);color:white;font-weight:650}
+#wholeWidget button:disabled,#wholeWidget select:disabled{opacity:.55;cursor:default}
+#wholeWidget button:hover:not(:disabled){filter:brightness(.95)}
+#wholeWidget :focus-visible{outline:3px solid #c47d12;outline-offset:3px}
+#wholeWidget .card{background:white;border:1px solid var(--line);padding:24px;border-radius:22px;margin-top:18px;box-shadow:0 7px 22px #19483c09}
+#wholeWidget .question{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 8px;font-size:clamp(1.6rem,4vw,2.05rem);font-weight:740;line-height:1.25}
+#wholeWidget .frac{display:inline-grid;text-align:center;line-height:1.15;vertical-align:middle;min-width:1.2em}
+#wholeWidget .frac span{padding:2px 5px}
+#wholeWidget .frac span+span{border-top:2px solid currentColor}
+#wholeWidget .scene-name{font-size:.76rem;letter-spacing:.07em;text-transform:uppercase;font-weight:750;color:var(--green)}
+#wholeWidget .stepbar{display:flex;gap:6px;margin:20px 0 16px}
+#wholeWidget .stepdot{height:5px;border-radius:8px;flex:1;background:#e0ebe7}
+#wholeWidget .stepdot.active{background:#119987}
+#wholeWidget .flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:18px 0;font-size:.78rem;text-align:center}
+#wholeWidget .flow-node{background:#f0f7f3;padding:7px 10px;border-radius:9px}
+#wholeWidget .flow-arrow{color:#087e70;display:grid;font-weight:700;line-height:1.2}
+#wholeWidget .scene-board{background:linear-gradient(135deg,#f8f6ed,#edf7f4);border:1px solid #e1e8df;border-radius:18px;overflow:hidden;margin:16px 0}
+#wholeWidget .objects{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:4px;padding:10px}
+#wholeWidget .objects.single{grid-template-columns:minmax(0,1fr);max-width:640px;margin:auto}
+#wholeWidget .object{margin:0;min-width:0;display:grid;justify-items:center}
+#wholeWidget .object svg{display:block;width:100%;max-height:315px;overflow:visible;touch-action:manipulation}
+#wholeWidget .object figcaption{font-size:.78rem;padding-bottom:10px;color:#4b676c}
+#wholeWidget .visual-caption{background:#ffffffb0;border-top:1px solid #dbe6dd;padding:10px 16px;font-size:.84rem;line-height:1.5}
+#wholeWidget .visual-part{cursor:pointer;transition:opacity .15s}
+#wholeWidget .visual-part:hover{opacity:.78}
+#wholeWidget .visual-part:focus{outline:none;filter:drop-shadow(0 0 3px #d08600)}
+#wholeWidget .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0 4px}
+#wholeWidget .range-controls{display:grid;justify-items:start;gap:8px;margin:14px 0}
+#wholeWidget input[type=range]{width:min(100%,380px);min-height:38px;accent-color:var(--green)}
+#wholeWidget .range-controls input[type=range]{width:min(70vw,380px)}
+#wholeWidget input[type=text]{width:145px;max-width:100%;font-size:1.5rem;font-weight:650;border:2px solid #8ab4a9;border-radius:11px;padding:10px}
+#wholeWidget .answer-label{font-size:.84rem;display:block;margin-bottom:6px}
+#wholeWidget .unit{font-size:1.2rem;font-weight:650}
+#wholeWidget .route-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+#wholeWidget .route-options button{text-align:left;padding:18px;background:#f2f8f5;border-color:#bcd9cf}
+#wholeWidget .route-options strong{display:block;margin-bottom:6px}
+#wholeWidget .route-options small{font-size:.84rem;font-weight:400}
+#wholeWidget .notice{border-radius:12px;background:#e9f6f0;padding:12px 15px;font-size:.92rem}
+#wholeWidget .notice.bad{background:#fff1dd;color:#754812}
+#wholeWidget .work{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:8px}
+#wholeWidget .work li{padding:10px 14px;border-left:3px solid #26a389;background:#f0f8f4;border-radius:0 10px 10px 0;font-weight:650}
+#wholeWidget .work{margin:0 0 22px}
+#wholeWidget .work .completed-question{font-weight:600;font-size:.9rem}
+#wholeWidget .work .completed-answer{display:block;margin-top:5px;color:#086c60}
+#wholeWidget .copy-targets{width:100%;min-width:0;grid-column:1/-1;padding:8px}
+#wholeWidget .main-target-scroll{width:100%;overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:8px}
+#wholeWidget .main-target-picture{display:block;justify-items:start;width:100%;margin:0}
+#wholeWidget .main-target-picture svg{max-height:none;justify-self:start;margin:0}
+#wholeWidget .copy-source{max-width:400px;width:100%;margin:auto}
+#wholeWidget .copy-direction{font-weight:700;text-align:center}
+#wholeWidget .copy-key{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+#wholeWidget .copy-key span{border-bottom:5px solid;padding:3px 6px;font-size:12px;background:white;border-radius:4px}
+#wholeWidget .copy-help{font-size:13px;text-align:center}
+#wholeWidget .target-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px}
+#wholeWidget .target-object{border:1px solid #d3e3de;border-radius:12px;background:#ffffff80;padding:6px}
+#wholeWidget .target-object figcaption{font-weight:650;font-size:14px;text-align:center}
+#wholeWidget .schema-parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(46px,1fr));gap:4px;width:100%}
+#wholeWidget .schema-part{min-width:0;min-height:48px;border:1px solid #668d81;border-radius:5px;padding:6px 2px;text-align:center;font-size:12px;display:grid;place-content:center;line-height:1.25}
+#wholeWidget .schema-label{text-align:center;font-size:13px;margin:5px 0 12px}
+#wholeWidget .picture-work{grid-column:1/-1;width:100%;max-width:440px;margin:0 auto;padding:4px 8px;display:grid;gap:8px}
+#wholeWidget .picture-work svg{display:block;width:100%;height:auto}
+#wholeWidget .picture-work p{margin:0;padding:10px 12px;border-radius:10px;background:#ffffffce;font-weight:650}
+#wholeWidget .picture-work small{display:block;font-weight:400;margin-bottom:4px}
+#wholeWidget #showTip{margin-top:12px;font-size:.85rem}
+#wholeWidget #stepTip{background:#fff6e6;border-left:3px solid #d2a041}
+#wholeWidget .task-command{font-size:1rem;font-weight:550;flex-basis:100%;margin-bottom:1px}
+#wholeWidget .next-row{margin-top:16px}
+#wholeWidget details{margin-top:14px}
+#wholeWidget summary{cursor:pointer;font-weight:650;padding:8px 0}
+#wholeWidget .history-list{list-style:none;padding:0}
+#wholeWidget .history-list>li{border-bottom:1px solid var(--line);padding:8px 0}
+#wholeWidget .history-list p{font-size:.86rem;overflow-wrap:anywhere}
+#wholeWidget .statistics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+#wholeWidget .stat-card{padding:16px;background:#f3f8f5;border-radius:14px}
+#wholeWidget .stat-card h2{font-size:.96rem}
+#wholeWidget .stat-row{display:flex;justify-content:space-between;gap:10px;font-size:.84rem;padding:4px 0}
+#wholeWidget .milestones{display:flex;gap:4px;margin:12px 0;flex-wrap:wrap}
+#wholeWidget .milestones span{display:grid;place-items:center;min-width:28px;min-height:30px;flex:1;border-radius:7px;background:#e8f1ec;font-size:.75rem;color:#536f66}
+#wholeWidget .milestones span.earned{background:#087e70;color:white;font-weight:700}
+#wholeWidget .stat-card h3{margin:0;font-size:1rem}
+#wholeWidget #requirements{padding-left:20px;font-size:.9rem}
+#wholeWidget #storage{font-size:.76rem;margin-top:20px;overflow-wrap:anywhere;color:#597176}
+#wholeWidget #storage.bad{color:#9c5214}
+#wholeWidget dialog{max-width:min(620px,95vw);border:1px solid var(--line);border-radius:20px;padding:26px;color:var(--ink);font:inherit}
+#wholeWidget dialog::backdrop{background:#183d4260}
+#wholeWidget .bubble{animation:whole-bubble 3s ease-in-out infinite alternate}
+@keyframes whole-bubble{from{transform:translateY(1px)}to{transform:translateY(-9px)}}
+@media(prefers-reduced-motion:reduce){#wholeWidget .bubble{animation:none}#wholeWidget *{transition:none!important}}
+@media(max-width:520px){#wholeWidget{padding:18px 12px}#wholeWidget .card{padding:18px}#wholeWidget .route-options,#wholeWidget .statistics{grid-template-columns:1fr}#wholeWidget .objects:not(.single){grid-template-columns:repeat(2,minmax(0,1fr))}#wholeWidget .toolbar{align-items:start}#wholeWidget .object figcaption{font-size:.7rem}#wholeWidget .question{gap:9px}}
+@media(max-width:520px){#wholeWidget .flow{display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;gap:4px;font-size:.7rem}#wholeWidget .flow-node{padding:6px 4px;overflow-wrap:anywhere;hyphens:auto}#wholeWidget .milestones{display:grid;grid-template-columns:repeat(10,minmax(0,1fr))}#wholeWidget .milestones span{min-width:0}}
+</style></head>
+<body><main id="wholeWidget" data-edulo-widget-key="DAS_GANZE_BESTIMMEN">
+<header><span class="eyebrow">Mathe im Alltag</span><h1>Das Ganze bestimmen</h1><p class="sub">Mengen sehen. Teile verstehen. Deinen Rechenweg finden.</p></header>
+<div class="toolbar"><label for="mode">Dein Rechenweg<select id="mode"><option value="divide">1 · Zuerst teilen</option><option value="multiply">2 · Zuerst vervielfachen</option><option value="choice">3 · Selbst entscheiden</option></select></label><button id="help" type="button">So funktioniert’s</button></div>
+<section class="card" id="exercise" hidden>
+<div id="sceneName" class="scene-name"></div><p id="story" class="sub"></p><div class="question" id="question"></div>
+<div class="stepbar" id="stepbar" aria-hidden="true"></div><ol id="work" class="work" aria-label="Deine erledigten Schritte"></ol><h2 id="stepTitle"></h2><p id="stepHint" class="sub"></p>
+<div id="routeControls" class="route-options" hidden><button type="button" data-route="divide"><strong>Zuerst einen Teil berechnen</strong></button><button type="button" data-route="multiply"><strong>Zuerst vervielfachen</strong></button></div>
+<div id="rangeControls" class="range-controls" hidden><output for="range" id="rangeLabel"></output><input id="range" type="range" min="1" max="12" value="1" aria-label="Anzahl einstellen"><button class="primary" id="checkRange" type="button">✓ Prüfen</button></div>
+<div id="markControls" hidden><p id="marked" aria-live="polite"></p><button class="primary" id="checkMark" type="button">✓ Markierung prüfen</button></div>
+<form id="answerForm" hidden><label for="answer" id="answerLabel" class="answer-label">Dein Ergebnis</label><div class="controls"><input id="answer" type="text" inputmode="decimal" autocomplete="off" maxlength="24" aria-describedby="answerHelp"><span id="answerUnit" class="unit"></span><button class="primary" type="submit">✓ Ergebnis prüfen</button></div><small id="answerHelp">Trage das ausgerechnete Ergebnis als Zahl ein, zum Beispiel 60 oder 1,5. Keine Rechnung und kein Bruch.</small></form>
+<button id="showTip" type="button" hidden>Tipp zu diesem Schritt</button><p id="stepTip" class="notice" role="status" hidden></p><p id="feedback" class="notice" role="status" hidden></p>
+<div class="next-row"><button class="primary" id="next" type="button" hidden>Neue Aufgabe →</button></div>
+<div class="scene-board"><div id="objects" class="objects single"></div><div id="visualCaption" class="visual-caption" aria-live="polite"></div><div id="flow" class="flow" aria-label="Vollständiger Rechenweg" hidden></div></div>
+</section><p id="empty" class="notice" hidden></p>
+<details class="card" id="historyPanel"><summary>Historie</summary><details><summary>Meine bisherigen Aufgaben</summary><p class="sub">Auf Anhieb richtig: Alle geprüften Schritte stimmen beim ersten Versuch. Verbesserungen bleiben sichtbar.</p><ol id="historyList" class="history-list"></ol></details><div id="statistics" class="statistics"></div></details>
+<section class="card" aria-label="Deine Punkte"><b id="points">0 von 20 Punkten</b><div id="milestones" class="milestones" aria-hidden="true"></div><small id="nextPoint"></small><ul id="requirements" hidden></ul><small id="pointHint" hidden>Die Aufgaben je Rechenweg zählen gleichzeitig zur Gesamtzahl. Alle bisherigen richtigen Lösungen zählen mit.</small></section>
+<p id="storage" role="status">Speicher wird verbunden …</p><button id="retry" type="button" hidden>Verbindung erneut prüfen</button>
+<dialog id="intro"><h2>Zwei Wege zum Ganzen</h2><p>Drei Viertel entsprechen 90 g. Wie viel ist das Ganze?</p><p>Zuerst teilen: 90 g ÷ 3 = 30 g für ein Viertel. Dann 30 g × 4 = 120 g für das Ganze.</p><p>Zuerst vervielfachen: 90 g × 4 = 360 g. Das sind drei Ganze. Dann 360 g ÷ 3 = 120 g für ein Ganzes.</p><p>In den geführten Wegen stellst du die Mengen und Teile selbst ein. Bei „Selbst entscheiden“ wählst du einen Weg und berechnest beide Ergebnisse. Tipps gibt es auf Wunsch oder nach einem Fehler.</p><button class="primary" type="button" id="closeIntro">Verstanden</button></dialog>
+</main><script>
+(() => {
+'use strict';
+// EDULO_WIDGET_KEY:DAS_GANZE_BESTIMMEN
+const widgetRoot=document.getElementById('wholeWidget');
+const $=id=>widgetRoot.querySelector('#'+CSS.escape(id));
+const STORAGE_KEY='bruchrechnung-das-ganze-bestimmen-v1';
+const THRESHOLDS=Array.from({length:20},(_,i)=>(i+1)*(i+4));
+const ROUTES={divide:'Zuerst teilen',multiply:'Zuerst vervielfachen'};
+const query=new URLSearchParams(location.search);
+let state,hostField=null,scoreFields=[],ready=false,editorPreview=false;
+const isEdulo=window.parent!==window||query.get('edulo')==='1'||query.has('data')||!!window.widget;
+const config={stateId:query.get('STATE_ID')||'',scorePrefix:query.get('SCORE_PREFIX')||'e2_cloze_text_input_',showFields:query.get('SHOW_FIELDS')==='1'};
+const hiddenHostElements=new Map();
+const fresh=()=>({version:1,widget:'das-ganze-bestimmen',mode:'divide',points:0,history:[],active:null});
+const SCENES=[
+ {id:'cola',kind:'beaker',title:'Cola im Messbecher',noun:'Cola',unit:'ml',amounts:[120,180,240,300,360,450,600,750,900],color:'#78472f',light:'#be9160',bubbles:true,story:'Im Messbecher ist Cola für eine Getränkemischung. Bestimme die gesuchte Menge.'},
+ {id:'orange',kind:'beaker',title:'Orangensaft zum Frühstück',noun:'Orangensaft',unit:'ml',amounts:[100,150,200,250,300,400,500,600,750],color:'#ed9b20',light:'#ffd26d',story:'Ein Teil des Orangensafts wird in ein Glas gegossen. Wie viel ist das?'},
+ {id:'water',kind:'beaker',title:'Wasser für die Pflanzen',noun:'Wasser',unit:'l',amounts:[2,3,4,5,6,8,9,10,12],color:'#439ebe',light:'#a6e5ec',story:'Aus dem Messbecher wird ein Teil des Wassers zum Gießen genommen.'},
+ {id:'milk',kind:'beaker',title:'Milch für Pfannkuchen',noun:'Milch',unit:'ml',amounts:[120,180,200,240,300,360,400,500,600],color:'#d4d3c4',light:'#fffbed',story:'Für einen Teig brauchst du einen Teil der abgemessenen Milch.'},
+ {id:'lemon',kind:'beaker',title:'Zitronenlimonade',noun:'Limonade',unit:'ml',amounts:[120,180,240,300,360,480,600,720],color:'#b0c64c',light:'#e7ed98',bubbles:true,story:'Von der Limonade wird die gesuchte Menge ausgeschenkt.'},
+ {id:'syringe',kind:'syringe',title:'Wasser für ein Experiment',noun:'Wasser',unit:'ml',amounts:[3,4,5,6,8,9,10,12,15,18,20],color:'#35a6bc',light:'#a7e7ed',story:'Eine Messspritze ohne Nadel enthält Wasser. Wie viel wird für das Experiment herausgedrückt?'},
+ {id:'chocolate',kind:'chocolate',title:'Eine Tafel Schokolade',noun:'Schokolade',unit:'g',amounts:[60,80,100,120,160,180,200,240],denominators:[2,3,4,6,8,12],color:'#63362c',light:'#a56c50',story:'Die Tafel hat 24 gleich schwere Stückchen. Ein Teil davon wird zum Backen gebraucht.'},
+ {id:'white-chocolate',kind:'chocolate',title:'Weiße Schokolade',noun:'weiße Schokolade',unit:'g',amounts:[60,80,100,120,160,180,200,240],denominators:[2,3,4,6,8,12],color:'#cfb67c',light:'#f7e6b6',story:'Von der Tafel mit 24 gleich schweren Stückchen wird ein Teil geschmolzen.'},
+ {id:'butter',kind:'block',title:'Butter für den Kuchenteig',noun:'Butter',unit:'g',amounts:[100,120,150,180,200,240,250,300,400,500],color:'#e7bc48',light:'#ffe499',story:'Ein gleichmäßig geformtes Stück Butter wird in gleich schwere Portionen geteilt.'},
+ {id:'clay',kind:'block',title:'Ton in der Werkstatt',noun:'Ton',unit:'g',amounts:[120,180,240,300,360,400,480,600,750],color:'#b97b62',light:'#e5bca0',story:'Aus einem gleichmäßigen Tonblock wird ein Teil für eine kleine Figur genommen.'},
+ {id:'flour',kind:'powder',title:'Mehl aus der Vorratsdose',noun:'Mehl',unit:'g',amounts:[100,150,200,300,400,500,600,750,900,1000],color:'#d8c9a4',light:'#fbf0d7',story:'Die geradwandige Dose ist gleichmäßig mit Mehl gefüllt. Gesucht ist ein Anteil der Masse.'},
+ {id:'rice',kind:'powder',title:'Reis für das Mittagessen',noun:'Reis',unit:'kg',amounts:[2,3,4,5,6,8,9,10,12],color:'#d0bd84',light:'#f6e7b5',story:'Von einem gleichmäßig gefüllten Reisbehälter wird ein Teil abgewogen.'},
+ {id:'ruler',kind:'strip',title:'Messen am Lineal',noun:'Strecke',unit:'cm',amounts:[6,8,9,10,12,15,16,18,20,24,30],color:'#e3b245',light:'#f7dfa1',story:'Die farbige Strecke beginnt bei null. Bestimme die Länge des gesuchten Anteils.'},
+ {id:'tape',kind:'strip',title:'Ein Maßband auf der Baustelle',noun:'Strecke',unit:'m',amounts:[6,8,9,10,12,15,18,20,21,24,30,36],color:'#d4ad2f',light:'#f6e693',story:'Ein Teil der abgemessenen Strecke wird für einen Zaun gebraucht.'},
+ {id:'ribbon',kind:'strip',title:'Geschenkband abschneiden',noun:'Geschenkband',unit:'cm',amounts:[20,24,30,36,40,48,60,72,80,90,100,120],color:'#b76a8f',light:'#ecc3d7',story:'Von diesem Band soll ein Stück für ein Geschenk abgeschnitten werden.'},
+ {id:'rope',kind:'strip',title:'Seil fürs Zelt',noun:'Seil',unit:'m',amounts:[6,8,9,10,12,15,18,20,24,30,36],color:'#b58b51',light:'#e5cda7',story:'Für eine Abspannung wird ein Anteil des Seils benötigt.'},
+ {id:'minutes',kind:'clock',title:'Zeit zum Lesen',noun:'Lesezeit',unit:'min',amounts:[6,8,10,12,15,18,20,24,30,36,40,45,48,60],dial:60,color:'#598aaa',light:'#bbd8e8',story:'Der farbige Bogen zeigt die gesamte Lesezeit. Wie lang ist der gesuchte Anteil?'},
+ {id:'seconds',kind:'clock',title:'Zeit für eine Laufübung',noun:'Trainingszeit',unit:'s',amounts:[6,8,10,12,15,18,20,24,30,36,40,45,48,60],dial:60,color:'#bb795a',light:'#edc8ad',story:'Die Stoppuhr zeigt eine Zeitspanne. Bestimme den Anteil für einen Abschnitt der Übung.'},
+ {id:'hours',kind:'clock',title:'Zeit für ein Projekt',noun:'Arbeitszeit',unit:'h',amounts:[2,3,4,5,6,8,9,10,12],dial:12,color:'#8873af',light:'#d6cbed',story:'Der farbige Bogen steht für die gesamte Arbeitszeit, nicht für eine Uhrzeit.'},
+ {id:'eggs',kind:'eggs',title:'Eier für die Backgruppe',noun:'Eier',unit:'Eier',amounts:[6,12,18,24],denominators:[2,3,4,6],discrete:true,color:'#b78a56',light:'#f2dfb9',story:'Ein Teil der Eier aus gleich großen Packungen wird zum Backen gebraucht. Es werden nur ganze Eier genommen.'}
+];
+const sceneOf=t=>SCENES.find(s=>s.id===t.scene);
+function partName(d){return {2:'Hälften',3:'Drittel',4:'Viertel',5:'Fünftel',6:'Sechstel',7:'Siebtel',8:'Achtel',9:'Neuntel',10:'Zehntel',11:'Elftel',12:'Zwölftel'}[d];}
+function fractionWords(t){
+ const words=['','ein','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf'];
+ return t.n===1&&t.d===2?'die Hälfte':words[t.n]+' '+partName(t.d);
+}
+function storyForTask(t){
+ const s=sceneOf(t),amount=fmt(given(t))+' '+s.unit,part=fractionWords(t);
+ const actions={cola:'Cola für eine Getränkemischung',orange:'Orangensaft zum Frühstück',water:'Wasser zum Gießen',milk:'Milch für Pfannkuchen',lemon:'Limonade für ein Fest',syringe:'Wasser für ein Experiment',chocolate:'Schokolade zum Backen','white-chocolate':'weiße Schokolade zum Schmelzen',butter:'Butter für den Kuchenteig',clay:'Ton für eine Figur',flour:'Mehl für ein Brot',rice:'Reis für das Mittagessen',ruler:'eine abgemessene Strecke',tape:'eine Strecke für einen Zaun',ribbon:'Geschenkband für ein Paket',rope:'Seil für eine Abspannung',minutes:'Lesezeit',seconds:'Zeit für eine Laufübung',hours:'Arbeitszeit für ein Projekt',eggs:'Eier zum Backen'};
+ return `Du verwendest ${amount} – ${actions[s.id]}. Diese Menge entspricht ${part} der gesamten Menge.`+(s.kind==='chocolate'?' Die ganze Tafel besteht aus 24 gleich schweren Stückchen.':'');
+}
+
+const fmt=n=>Number(n.toFixed(6)).toLocaleString('de-DE',{maximumFractionDigits:6});
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const frac=(n,d)=>'<span class="frac" aria-label="'+n+' durch '+d+'"><span>'+n+'</span><span>'+d+'</span></span>';
+function gcd(a,b){while(b){const r=a%b;a=b;b=r;}return a;}
+function rational(n,d=1){const g=gcd(Math.abs(n),d);return {n:n/g,d:d/g};}
+function rationalText(r){return r.d===1?fmt(r.n):r.d===2?fmt(r.n/2):r.n+'/'+r.d;}
+function readNumber(text){
+ const normalize=part=>{const token=part.trim();return /^[1-9]\d{0,2}(?:\.\d{3})+(?:,\d{1,6})?$/.test(token)?token.replace(/\./g,'').replace(',','.'):token.replace(/,/g,'.');};
+ const raw=normalize(String(text));if(!/^\d+(?:\.\d{1,6})?$/.test(raw))return null;
+ const [whole,dec='']=raw.split('.'),numerator=Number(whole+dec);if(!Number.isSafeInteger(numerator)||numerator>1e12)return null;
+ return rational(numerator,10**dec.length);
+}
+const given=t=>t.whole*t.n/t.d;
+function expected(a){const t=a.task;return a.stage==='unit'?rational(t.whole,t.d):a.stage==='product'?rational(t.whole*t.n):rational(t.whole);}
+function category(record){return record.route;}
+function stats(route=null){const h=state.history.filter(v=>!route||v.route===route);return {total:h.length,correct:h.filter(v=>v.correct).length,wrong:h.filter(v=>!v.correct).length};}
+function pointRequirements(index){const threshold=THRESHOLDS[index],minimum=index<2?0:Math.ceil(threshold/5),missing={};for(const route of ['divide','multiply'])missing[route]=Math.max(0,minimum-stats(route).correct);const totalMissing=Math.max(0,threshold-stats().correct);return {threshold,minimum,missing,totalMissing,eligible:totalMissing===0&&Object.values(missing).every(v=>v===0)};}
+function validTask(t){const s=t&&sceneOf(t);return !!s&&s.amounts.includes(t.whole)&&Number.isInteger(t.n)&&Number.isInteger(t.d)&&t.n>=2&&t.n<t.d&&t.d>=2&&t.d<=12&&(!s.denominators||s.denominators.includes(t.d))&&Number.isInteger(t.whole/t.d*2)&&Number.isInteger(t.whole*t.n/t.d*2)&&(!s.discrete||Number.isInteger(t.whole/t.d));}
+const STAGES=['route','divideParts','unit','mark','result','copies','product','multiplyParts','done'];
+function validActive(a){return !!a&&validTask(a.task)&&['divide','multiply','choice'].includes(a.mode)&&[null,'divide','multiply'].includes(a.route)&&STAGES.includes(a.stage)&&Number.isInteger(a.parts)&&a.parts>=1&&a.parts<=12&&Number.isInteger(a.copies)&&a.copies>=1&&a.copies<=12&&Array.isArray(a.selected)&&a.selected.every(v=>Number.isInteger(v)&&v>=0&&v<a.task.d)&&new Set(a.selected).size===a.selected.length&&typeof a.input==='string'&&a.input.length<=24&&Array.isArray(a.attempts)&&a.attempts.every(v=>v&&STAGES.includes(v.stage)&&typeof v.correct==='boolean')&&typeof a.hadError==='boolean'&&Array.isArray(a.work)&&a.work.every(v=>typeof v==='string');}
+function parseState(raw){let s;try{const text=String(raw).trim();if(text.startsWith('GANZES1:'))s=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(text.slice(8)),c=>c.charCodeAt(0))));else s=JSON.parse(text);}catch(_){throw new Error('Der gespeicherte Lernstand ist nicht lesbar. Er wurde nicht überschrieben.');}if(!s||s.version!==1||s.widget!=='das-ganze-bestimmen'||!['divide','multiply','choice'].includes(s.mode)||!Number.isInteger(s.points)||s.points<0||s.points>20||!Array.isArray(s.history)||s.history.some(h=>!h||!validTask(h.task)||!['divide','multiply'].includes(h.route)||typeof h.correct!=='boolean'||!Array.isArray(h.attempts)||!Array.isArray(h.work))||(s.active&&!validActive(s.active)))throw new Error('Dieser Speichertext gehört nicht zu „Das Ganze bestimmen“ oder hat ein unbekanntes Format. Er bleibt unverändert.');return upgradeFlow(s);}
+function upgradeFlow(s){
+ const a=s.active;if(a&&a.stage!=='done'&&((a.mode==='divide'&&!(a.flowVersion>=2))||(a.mode==='multiply'&&!(a.flowVersion>=3)))){
+  const previous=structuredClone(a);Object.assign(a,{flowVersion:3,previousFlow:previous,stage:'divideParts',parts:1,selected:[],input:'',attempts:[],work:[],hints:[]});
+ }
+ return s;
+}
+function encodeState(s){const bytes=new TextEncoder().encode(JSON.stringify(s));let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return 'GANZES1:'+btoa(binary);}
+function taskKey(t){return t.scene+':'+t.whole+':'+t.n+'/'+t.d;}
+function partitionOptions(t){const all=Array.from({length:12},(_,i)=>i+1),s=sceneOf(t);return state?.active?.stage==='divideParts'?(s.kind==='chocolate'?all.filter(n=>24%n===0):s.discrete?all.filter(n=>t.whole%n===0):all):all;}
+
+const POOL=[];
+for(const scene of SCENES)for(const whole of scene.amounts)for(const d of scene.denominators||[2,3,4,5,6,7,8,9,10,12])for(let n=2;n<d;n++){const t={scene:scene.id,whole,n,d};if(validTask(t))POOL.push(t);}
+function chooseTask(){
+ const mastered=new Set(state.history.filter(h=>h.correct).map(h=>taskKey(h.task))),recent=state.history.slice(-3),lastScene=recent.at(-1)?.task.scene,lastKind=lastScene&&sceneOf({scene:lastScene}).kind;
+ const count=state.history.length,recentResults=state.history.slice(-12),accuracy=recentResults.length?recentResults.filter(h=>h.correct).length/recentResults.length:0,ceiling=count<6||accuracy<.5?4:count<18||accuracy<.7?6:count<40||accuracy<.85?8:12;
+ let pool=POOL.filter(t=>!mastered.has(taskKey(t))&&(state.mode==='multiply'||Number.isInteger(t.whole/t.d*(sceneOf(t).discrete?1:2))));if(!pool.length)return null;
+ const easy=pool.filter(t=>t.d<=ceiling&&t.n<=5);if(easy.length)pool=easy;
+ if(state.mode==='multiply'&&count>=3&&Math.random()<.4){const useful=pool.filter(t=>!Number.isInteger(t.whole/t.d*2)&&t.n>1);if(useful.length)pool=useful;}
+ else if(count<6){const simple=pool.filter(t=>Number.isInteger(t.whole/t.d*2));if(simple.length)pool=simple;}
+ const recentKeys=new Set(recent.map(h=>taskKey(h.task)));const different=pool.filter(t=>sceneOf(t).kind!==lastKind&&!recentKeys.has(taskKey(t)));if(different.length)pool=different;
+ const scenes=[...new Set(pool.map(t=>t.scene))],scene=scenes[Math.floor(Math.random()*scenes.length)];pool=pool.filter(t=>t.scene===scene);
+ return {...pool[Math.floor(Math.random()*pool.length)]};
+}
+function newTask(){const task=chooseTask();state.active=task?{flowVersion:3,task,mode:state.mode,route:state.mode==='choice'?null:state.mode,stage:state.mode==='choice'?'route':'divideParts',parts:1,copies:1,selected:[],input:'',attempts:[],hadError:false,work:[],started:new Date().toISOString()}:null;render();save();}
+// Die Maße der gefüllten Flächen beziehen sich immer auf die Ausgangsmenge.
+function drawing(t,parts,selected,interactive,index,unknownWhole=false){
+ // Explicit SVG end tags keep the host's legacy HTML prefilter from rewriting script templates.
+ const s=sceneOf(t),green='#087e70',pale='#65c7a8';
+ const text=(x,y,label,size=12,anchor='middle')=>`<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="system-ui,sans-serif" font-size="${size}" fill="#24464b">${esc(label)}</text>`;
+ const group=(i,body)=>`<g data-region="${i}" ${interactive?`class="visual-part" data-part="${i}" role="button" tabindex="0" aria-label="Teil ${i+1} von ${parts}" aria-pressed="${selected.includes(i)}"`:''}>${body}</g>`;
+ const fill=i=>selected.includes(i)?green:unknownWhole?'#f4f8f5':s.color;
+ let body='',decor='';
+ if(s.kind==='beaker'||s.kind==='powder'){
+  const x=105,w=140,top=69,h=135,bottom=204;
+  body+=`<ellipse cx="177" cy="216" rx="92" ry="9" fill="#193c4310"></ellipse>`;
+  if(s.kind==='beaker')body+='<path d="M247 65 H266 Q292 65 290 107 Q289 144 247 147" fill="none" stroke="#839da2" stroke-width="9"></path><path d="M107 36 H225 L252 25 L245 56 V207 Q175 220 105 207 V36" fill="#ffffff70" stroke="#668c94" stroke-width="3"></path>';
+  else body+='<rect x="98" y="40" width="154" height="172" rx="13" fill="#ffffff80" stroke="#82999a" stroke-width="3"></rect><rect x="97" y="30" width="156" height="22" rx="7" fill="#acbab5"></rect><path d="M110 39H237" stroke="white" stroke-width="3"></path>';
+  for(let i=0;i<parts;i++){const y=bottom-(i+1)*h/parts;body+=group(i,`<rect x="${x}" y="${y}" width="${w}" height="${h/parts}" fill="${fill(i)}" fill-opacity=".79" stroke="#fff" stroke-width="${parts>1?1.8:0}"></rect>`);}
+  if(s.bubbles)for(let i=0;i<16;i++)decor+=`<circle class="bubble" cx="${118+(i*37)%113}" cy="${85+(i*29)%108}" r="${2+i%3}" fill="#fff" opacity=".38" style="animation-delay:${i*.21}s"></circle>`;
+  if(s.kind==='powder')for(let i=0;i<75;i++)decor+=`<ellipse cx="${112+(i*31)%128}" cy="${75+(i*37)%123}" rx="${s.id==='rice'?2.6:1}" ry="1" fill="#fff" opacity=".45" transform="rotate(${i*19} ${112+(i*31)%128} ${75+(i*37)%123})"></ellipse>`;
+  decor+='<path d="M114 53V196" stroke="white" opacity=".35" stroke-width="5"></path>';
+  for(const ratio of [0,.5,1]){const y=bottom-h*ratio;decor+=`<path d="M246 ${y}h13" stroke="#52767e"></path>`+text(269,y+4,fmt(t.whole*ratio),12,'start');}
+  decor+=text(285,46,s.unit,12)+text(175,240,s.noun,13);
+ }else if(s.kind==='syringe'){
+  body='<ellipse cx="175" cy="204" rx="139" ry="9" fill="#193c4310"></ellipse><path d="M38 107V170M38 139H81" stroke="#839ca6" stroke-width="10"></path><rect x="81" y="92" width="225" height="94" rx="8" fill="#ffffffa0" stroke="#6b8f9a" stroke-width="3"></rect><path d="M309 122h19v30h-19M81 79v119" fill="#aecdd1" stroke="#6b8f9a" stroke-width="5"></path>';
+  for(let i=0;i<parts;i++)body+=group(i,`<rect x="${112+i*185/parts}" y="103" width="${185/parts}" height="70" fill="${fill(i)}" fill-opacity=".72" stroke="white" stroke-width="${parts>1?2:0}"></rect>`);
+  decor='<rect x="100" y="100" width="12" height="76" rx="2" fill="#42626c"></rect>';
+  for(let i=0;i<=10;i++)decor+=`<path d="M${112+i*18.5} 103v${i%5?10:19}" stroke="#42626c"></path>`;
+  decor+=text(112,88,'0')+text(297,88,fmt(t.whole)+' ml')+text(186,233,'Messspritze · ohne Nadel',13);
+ }else if(s.kind==='chocolate'){
+  body='<rect x="31" y="53" width="302" height="150" rx="13" fill="#193c4316"></rect><rect x="25" y="46" width="302" height="150" rx="12" fill="'+s.color+'"></rect>';
+  const portion=k=>{const row=Math.floor(k/6),col=k%6;return parts===1?0:parts===2?Math.floor(row/2):parts===3?Math.floor(col/2):parts===4?row:parts===6?col:parts===8?row*2+Math.floor(col/3):parts===12?row*3+Math.floor(col/2):Math.floor(k*parts/24);};
+  for(let part=0;part<parts;part++){let tiles='';for(let k=0;k<24;k++)if(portion(k)===part){const x=32+(k%6)*48,y=53+Math.floor(k/6)*34;tiles+=`<rect x="${x-2}" y="${y-2}" width="48" height="34" fill="transparent"></rect><rect x="${x}" y="${y}" data-chocolate-piece="${k}" width="43" height="29" rx="4" fill="${fill(part)}" stroke="${selected.includes(part)?pale:s.light}" stroke-width="2"></rect><path d="M${x+4} ${y+24}v-19h35" fill="none" stroke="${selected.includes(part)?pale:s.light}" stroke-width="3" opacity=".85"></path><path d="M${x+8} ${y+12}h25" stroke="#fff" opacity=".15"></path>`;if(parts>1){let lines='';if(k%6===0||portion(k-1)!==part)lines+=`M${x-2} ${y-2}v34`;if(k%6===5||portion(k+1)!==part)lines+=`M${x+46} ${y-2}v34`;if(k<6||portion(k-6)!==part)lines+=`M${x-2} ${y-2}h48`;if(k>=18||portion(k+6)!==part)lines+=`M${x-2} ${y+32}h48`;decor+=`<path d="${lines}" fill="none" stroke="#fff6d9" stroke-width="2"></path>`;}}body+=group(part,tiles);}
+  decor+=text(180,224,fmt(t.whole)+' g · 24 gleich schwere Stückchen',13);
+ }else if(s.kind==='block'){
+  body=`<ellipse cx="179" cy="206" rx="137" ry="9" fill="#193c4310"></ellipse><path d="M36 94L73 65H320L284 94Z" fill="${s.light}"></path><path d="M284 94L320 65V165L284 194Z" fill="${s.color}"></path>`;
+  for(let i=0;i<parts;i++)body+=group(i,`<rect x="${36+i*248/parts}" y="94" width="${248/parts}" height="100" fill="${fill(i)}" stroke="${parts>1?'#fff':s.color}" stroke-width="2"></rect><path d="M${36+i*248/parts} 94l37-29" stroke="#fff" stroke-width="${parts>1?2:0}"></path>`);
+  decor=text(161,147,s.noun,19)+text(180,234,fmt(t.whole)+' '+s.unit,14);
+ }else if(s.kind==='strip'){
+  if(s.id==='tape'){
+   body='<g data-fence="true" pointer-events="none"><rect x="25" y="47" width="300" height="12" rx="2" fill="#8c5637"></rect><rect x="25" y="78" width="300" height="12" rx="2" fill="#8c5637"></rect>';
+   for(let i=0;i<11;i++){const x=39+i*25;body+=`<path d="M${x} 126V34L${x+9} 23L${x+18} 34V126Z" fill="${i%2?'#ca9563':'#dbab75'}" stroke="#75482d" stroke-width="1.5"></path><path d="M${x+3} 37V119M${x+13} 44V72" stroke="#f7d6a1" stroke-width="1.5" opacity=".8"></path><path d="M${x+15} 36V119" stroke="#ae7447" stroke-width="1"></path><circle cx="${x+9}" cy="53" r="1.8" fill="#715347"></circle><circle cx="${x+9}" cy="84" r="1.8" fill="#715347"></circle>`;}
+   for(const x of [23,313])body+=`<path d="M${x} 132V24L${x+7} 15L${x+14} 24V132Z" fill="#ad7447" stroke="#75482d" stroke-width="2"></path><path d="M${x+3} 29V121" stroke="#e6b67f" stroke-width="2"></path>`;
+   body+='</g>';
+  }
+  if(s.id==='ribbon')body=`<path d="M22 89l-14-10v69l14-10M322 89l24-10-8 35 8 34-24-10" fill="${s.color}"></path>`;
+  body+=`<rect x="25" y="90" width="300" height="${s.id==='rope'?50:70}" rx="${s.id==='rope'?22:3}" fill="${s.light}" stroke="${s.color}" stroke-width="2"></rect>`;
+  for(let i=0;i<parts;i++)body+=group(i,`<rect x="${25+i*300/parts}" y="90" width="${300/parts}" height="${s.id==='rope'?50:70}" fill="${fill(i)}" fill-opacity=".72" stroke="white" stroke-width="${parts>1?2:0}"></rect>`);
+  if(s.id==='rope')for(let i=0;i<25;i++)decor+=`<path d="M${27+i*12} 97l14 18-14 18" stroke="#fff" opacity=".35" stroke-width="3" fill="none"></path>`;
+  else for(let i=0;i<=30;i++)decor+=`<path d="M${25+i*10} 90v${i%5?8:17}" stroke="#5b5140" opacity=".8"></path>`;
+  decor+=`<path d="M25 185H325m-293-5-7 5 7 5m286-10 7 5-7 5" fill="none" stroke="#42676c" stroke-width="2"></path>`+text(25,213,'0')+text(325,213,fmt(t.whole)+' '+s.unit)+text(175,240,s.noun,13);
+ }else if(s.kind==='clock'){
+  const cx=180,cy=124,r=85,angle=t.whole/s.dial*360;
+  const point=deg=>[cx+r*Math.sin(deg*Math.PI/180),cy-r*Math.cos(deg*Math.PI/180)];
+  const wedge=(start,end)=>{if(end-start>=359.99)return `<circle cx="${cx}" cy="${cy}" r="${r}"></circle>`;const a=point(start),b=point(end);return `<path d="M${cx} ${cy}L${a}A${r} ${r} 0 ${end-start>180?1:0} 1 ${b}Z"></path>`;};
+  body='<circle cx="182" cy="129" r="102" fill="#193c4310"></circle><circle cx="180" cy="124" r="98" fill="#fff" stroke="#577a81" stroke-width="6"></circle>';
+  if(s.id==='seconds')body+='<rect x="168" y="9" width="24" height="13" rx="4" fill="#577a81"></rect>';
+  for(let i=0;i<parts;i++)body+=group(i,`<g fill="${fill(i)}" fill-opacity=".7" stroke="#fff" stroke-width="2">${wedge(i*angle/parts,(i+1)*angle/parts)}</g>`);
+  for(let i=0;i<60;i++){const a=i*6*Math.PI/180,outer=95,inner=i%5?91:87;decor+=`<path d="M${cx+inner*Math.sin(a)} ${cy-inner*Math.cos(a)}L${cx+outer*Math.sin(a)} ${cy-outer*Math.cos(a)}" stroke="#577a81" stroke-width="${i%5?1:2}"></path>`;}
+  const hand=point(angle);decor+=`<path d="M180 124L${hand}" stroke="#294c57" stroke-width="3"></path><circle cx="180" cy="124" r="5" fill="#294c57"></circle>`;
+  decor+=text(180,56,'0',11)+text(250,128,s.dial/4,11)+text(180,199,s.dial/2,11)+text(111,128,s.dial*3/4,11)+text(180,245,fmt(t.whole)+' '+s.unit+' Zeitspanne',14);
+ }else if(s.kind==='eggs'){
+  const rows=Math.ceil(t.whole/6),height=rows*43;
+  body=`<rect x="32" y="${113-height/2}" width="294" height="${height+14}" rx="16" fill="#b1b3a1" stroke="#889280" stroke-width="3"></rect>`;
+  for(let part=0;part<parts;part++){let eggs='';for(let k=0;k<t.whole;k++)if(Math.floor(k*parts/t.whole)===part){const x=58+(k%6)*48,y=137-height/2+Math.floor(k/6)*43;eggs+=`<rect x="${x-24}" y="${y-22}" width="48" height="43" fill="transparent"></rect><ellipse cx="${x}" cy="${y+2}" rx="19" ry="20" fill="#8d9480"></ellipse><path d="M${x} ${y-19}C${x+13} ${y-19} ${x+20} ${y+17} ${x} ${y+17}C${x-20} ${y+17} ${x-13} ${y-19} ${x} ${y-19}" fill="${selected.includes(part)?green:s.light}" stroke="${selected.includes(part)?pale:s.color}" stroke-width="2"></path><ellipse cx="${x-5}" cy="${y-7}" rx="3" ry="6" fill="#ffffff50"></ellipse>`;}body+=group(part,eggs);}
+  if(parts>1)for(let k=0;k<t.whole;k++){const part=Math.floor(k*parts/t.whole),x=34+(k%6)*48,y=115-height/2+Math.floor(k/6)*43,of=j=>Math.floor(j*parts/t.whole);let lines='';if(k%6===0||of(k-1)!==part)lines+=`M${x} ${y}v43`;if(k%6===5||k===t.whole-1||of(k+1)!==part)lines+=`M${x+48} ${y}v43`;if(k<6||of(k-6)!==part)lines+=`M${x} ${y}h48`;if(k+6>=t.whole||of(k+6)!==part)lines+=`M${x} ${y+43}h48`;decor+=`<path d="${lines}" fill="none" stroke="#fffbed" stroke-width="2"></path>`;}
+  decor+=text(180,240,t.whole+' Eier',14);
+ }
+ return `<svg viewBox="0 0 360 260" role="${interactive?'group':'img'}" aria-label="${esc(s.title+', '+fmt(t.whole)+' '+s.unit+', '+parts+' Teile, '+selected.length+' markiert')}"><title>${esc(s.title)}</title>${body}<g pointer-events="none" aria-hidden="true">${decor}</g></svg>`;
+}
+function labelKnownParts(t,clockWhole=t.whole){
+ const s=sceneOf(t),value=fmt(t.whole/t.d),unit=s.unit,ns='http://www.w3.org/2000/svg';
+ const make=(tag,attrs,text)=>{const el=document.createElementNS(ns,tag);for(const [key,val] of Object.entries(attrs))el.setAttribute(key,String(val));if(text!==undefined)el.textContent=text;return el;};
+ const regions=Array.from($('objects').querySelectorAll('.object svg [data-region]'));
+ const clockSides={left:[],right:[]};
+ if(s.kind==='clock')regions.forEach((region,i)=>{const angle=(i+.5)*clockWhole/s.dial*2*Math.PI/t.d;clockSides[Math.sin(angle)>=0?'right':'left'].push({region,angle});});
+ regions.forEach((region,i)=>{
+  const box=region.getBBox();let x=box.x+box.width/2,y=box.y+box.height/2,font=Math.min(14,Math.max(8,(box.width-6)/Math.max(value.length,unit.length)*1.5)),width=Math.min(box.width-2,Math.max(value.length,unit.length)*font*.65+10),height=font*2.3;
+  const label=make('g',{'data-part-amount':i,'pointer-events':'none','aria-label':value+' '+unit});
+  if(s.kind==='clock'){
+   const side=Object.entries(clockSides).find(([,items])=>items.some(item=>item.region===region)),items=side[1],index=items.findIndex(item=>item.region===region),angle=items[index].angle;
+   font=12;width=Math.max(value.length,unit.length)*8+12;height=32;
+   if(clockWhole/s.dial*360/t.d>=45){x=180+55*Math.sin(angle);y=124-55*Math.cos(angle);}
+   else{x=side[0]==='right'?326:34;y=items.length===1?124:30+index*185/(items.length-1);width=Math.min(60,width);label.append(make('path',{d:'M'+(180+57*Math.sin(angle))+' '+(124-57*Math.cos(angle))+' L'+(side[0]==='right'?294:66)+' '+y,fill:'none',stroke:'#355e62','stroke-width':1}));}
+  }else if(box.height<height+4){font=Math.max(8,Math.min(13,box.height-5,(box.width-10)/((value+' '+unit).length*.65)));width=Math.min(box.width-2,(value+' '+unit).length*font*.65+8);height=font+5;}
+  label.append(make('rect',{x:x-width/2,y:y-height/2,width,height,rx:4,fill:'#ffffff',opacity:.93,stroke:'#aacac1','stroke-width':.6,'pointer-events':'all'}));
+  const attrs={x,'text-anchor':'middle','font-family':'system-ui,sans-serif','font-size':font,'font-weight':650,fill:'#164b43'};
+  if(height<font*2)label.append(make('text',{...attrs,y:y+font*.35},value+' '+unit));
+  else{label.append(make('text',{...attrs,y:y-1},value));label.append(make('text',{...attrs,y:y+font},unit));}
+  region.append(label);
+ });
+}
+function svgElement(tag,attrs,text){const el=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attrs))el.setAttribute(key,String(value));if(text!==undefined)el.textContent=text;return el;}
+function prepareWholeDrawing(svg,t,parts,selected,done){
+ const s=sceneOf(t),make=svgElement;
+ svg.setAttribute('data-whole-picture','');svg.setAttribute('aria-label',s.title+' – das Ganze '+(done?fmt(t.whole)+' '+s.unit:'gesucht')+', '+selected.length+' von '+parts+' Teilen markiert');
+ // Remove every scale amount and decorative particle that would fill an unknown region.
+ const decor=svg.querySelector('g[aria-hidden="true"]');
+ decor.querySelectorAll('text').forEach(el=>el.remove());
+ if(s.kind==='strip')decor.querySelectorAll('path').forEach(el=>{if((el.getAttribute('d')||'').startsWith('M25 185'))el.remove();});
+ if(['beaker','powder'].includes(s.kind))decor.querySelectorAll('circle,ellipse').forEach(el=>el.remove());
+ if(s.kind==='clock'){
+  [['0',180,56],['¼',250,128],['½',180,199],['¾',111,128]].forEach(([label,x,y])=>decor.append(make('text',{x,y,'text-anchor':'middle','font-size':11,fill:'#24464b'},label)));
+ }
+ decor.append(make('text',{x:180,y:245,'text-anchor':'middle','font-family':'system-ui,sans-serif','font-size':14,fill:'#24464b'},s.kind==='clock'?'Schema der gesamten Zeitspanne':s.noun));
+ const regions=[...svg.querySelectorAll('[data-region]')];
+ regions.forEach((region,i)=>{
+  const known=selected.includes(i);region.setAttribute('data-known',String(known));
+  if(s.kind==='eggs'&&!known)region.querySelectorAll('path,ellipse').forEach(el=>el.setAttribute('visibility','hidden'));
+  if(s.kind==='chocolate'&&!known){region.querySelectorAll('[data-chocolate-piece]').forEach(el=>{el.setAttribute('fill','#e6ece7');el.setAttribute('stroke','#b3c2b8');});region.querySelectorAll('path').forEach(el=>el.setAttribute('opacity','0'));}
+ });
+}
+function measureSpan(parent,intervals,label,color,attributes={}){
+ const group=svgElement('g',{'pointer-events':'none',...attributes});
+ intervals.forEach(([left,right],i)=>{
+  group.append(svgElement('path',{d:`M${left} 185H${right} M${left+5} 181L${left} 185L${left+5} 189 M${right-5} 181L${right} 185L${right-5} 189`,fill:'none',stroke:color,'stroke-width':2}));
+  if(i)group.append(svgElement('path',{d:`M${intervals[i-1][1]} 185H${left}`,fill:'none',stroke:color,'stroke-width':1.5,'stroke-dasharray':'3 4'}));
+ });
+ const x=(intervals[0][0]+intervals.at(-1)[1])/2;
+ group.append(svgElement('text',{x,y:210,'text-anchor':'middle','font-size':17,'font-family':'system-ui,sans-serif','font-weight':750,fill:'#193c43'},label));parent.append(group);
+}
+function selectedRuns(selected){const runs=[];for(const i of [...selected].sort((a,b)=>a-b)){if(runs.length&&runs.at(-1)[1]===i)runs.at(-1)[1]=i+1;else runs.push([i,i+1]);}return runs;}
+function pieceWords(t){const kind=sceneOf(t).kind;return ['beaker','powder','syringe'].includes(kind)?['Portion','Portionen']:kind==='eggs'?['Gruppe','Gruppen']:kind==='clock'?['Abschnitt','Abschnitte']:['Stück','Stücke'];}
+function renderDividePicture(){
+ const a=state.active,t=a.task,s=sceneOf(t),done=a.stage==='done',unitKnown=a.route==='divide'&&a.work.length>0;
+ const parts=['divideParts','route'].includes(a.stage)?a.parts:t.d,interactive=a.stage==='mark';
+ const confirmed=['unit','copies','product','result','done'].includes(a.stage),selected=['divideParts','route'].includes(a.stage)?[]:a.mode==='choice'?Array.from({length:t.n},(_,i)=>i):a.selected;
+ // The clock is a fraction diagram of the whole time span; its size never gives away the duration.
+ const shapeTask=s.kind==='clock'?{...t,whole:s.dial}:t;
+ $('objects').classList.add('single');
+ $('objects').innerHTML=`<figure class="object">${drawing(shapeTask,parts,selected,interactive,0,true)}</figure>`;
+ const svg=$('objects').querySelector('.object svg'),ns='http://www.w3.org/2000/svg';
+ const make=(tag,attrs,text)=>{const el=document.createElementNS(ns,tag);for(const [key,value] of Object.entries(attrs))el.setAttribute(key,String(value));if(text!==undefined)el.textContent=text;return el;};
+ prepareWholeDrawing(svg,t,parts,selected,done);
+ // The shared amount label points to every selected region, never to an individual part alone.
+ if(confirmed&&s.kind==='strip'){
+  const runs=selectedRuns(selected);measureSpan(svg,runs.map(([a,b])=>[25+a*300/parts,25+b*300/parts]),(runs.length>1?'zusammen ':'')+fmt(given(t))+' '+s.unit,'#087e70',{'data-known-total':''});
+ }else if(confirmed){
+  const group=make('g',{'data-known-total':'','pointer-events':'none'});
+  if(['beaker','powder'].includes(s.kind)){
+   selected.forEach(i=>{const y=204-(i+.5)*135/parts;group.append(make('path',{d:`M105 ${y} H88`,fill:'none',stroke:'#087e70','stroke-width':2}));});
+   const ys=selected.map(i=>204-(i+.5)*135/parts);group.append(make('path',{d:`M88 ${Math.min(...ys)} V${Math.max(...ys)}`,fill:'none',stroke:'#087e70','stroke-width':3}));
+   group.append(make('rect',{x:0,y:108,width:81,height:51,rx:8,fill:'#087e70'}));
+   group.append(make('text',{x:40,y:126,'text-anchor':'middle','font-size':10,fill:'white'},'zusammen'));
+   group.append(make('text',{x:40,y:148,'text-anchor':'middle','font-size':16,'font-weight':750,fill:'white'},fmt(given(t))+' '+s.unit));
+  }else{
+   group.append(make('rect',{x:75,y:266,width:210,height:45,rx:8,fill:'#087e70'}));
+   group.append(make('text',{x:180,y:284,'text-anchor':'middle','font-size':11,fill:'white'},'Markierte Teile zusammen'));
+   group.append(make('text',{x:180,y:304,'text-anchor':'middle','font-size':18,'font-weight':750,fill:'white'},fmt(given(t))+' '+s.unit));
+  }
+  svg.append(group);
+ }
+ // Fixed canvas from the first step onward; no separate completion schema is added.
+ svg.setAttribute('viewBox','0 0 360 345');svg.style.maxHeight='430px';
+ if(unitKnown)labelKnownParts(t,s.kind==='clock'?s.dial:t.whole);
+ if(done)svg.append(make('text',{x:180,y:337,'text-anchor':'middle','font-size':18,'font-weight':750,fill:'#165e51','data-whole-total':''},'Das Ganze: '+fmt(t.whole)+' '+s.unit));
+ const annotation=document.createElement('div');annotation.id='pictureWork';annotation.className='picture-work';annotation.hidden=!a.work.length;
+ annotation.innerHTML=a.work.map((line,i)=>`<p data-equation="${i}"><small>${i===0?(a.route==='multiply'?t.n+' Ganze':'Ein Bruchteil'):'Das Ganze'}</small>${esc(line)}</p>`).join('');$('objects').prepend(annotation);
+ $('visualCaption').textContent=a.stage==='divideParts'?`Das Bild zeigt das unbekannte Ganze. In ${parts} ${parts===1?'Teil':'gleich große Teile'} eingeteilt.`:a.stage==='mark'?`${selected.length} von ${t.d} Teilen markiert. Wähle den bekannten Anteil im Bild.`:done?`Das Ganze umfasst ${fmt(t.whole)} ${s.unit}. Die markierten Teile entsprechen zusammen ${fmt(given(t))} ${s.unit}.`:`Die markierten Teile entsprechen zusammen ${fmt(given(t))} ${s.unit}. Die hellen Teile ergänzen sie zum Ganzen.`;
+}
+function wholeWords(t){
+ const kind=sceneOf(t).kind;
+ return {strip:['Strecke','Strecken','diese','dieses markierte Stück','füllen'],beaker:['Gefäß','Gefäße','diese','diese markierte Menge','füllen'],powder:['Behälter','Behälter','diese','diese markierte Menge','füllen'],syringe:['Messspritze','Messspritzen','diese','diese markierte Menge','füllen'],chocolate:['Tafel','Tafeln','diese','dieses markierte Stück','füllen'],block:['Block','Blöcke','diese','dieses markierte Stück','zusammensetzen'],eggs:['Packung','Packungen','diese','diese markierte Eiergruppe','füllen'],clock:['Zeitspanne','Zeitspannen','diese','diesen markierten Zeitabschnitt','abdecken']}[kind];
+}
+function numberWord(n){return ['null','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf'][n]||String(n);}
+function renderPicture(){
+ renderDividePicture();
+ const a=state.active,t=a.task,s=sceneOf(t);
+ if(a.route!=='multiply'||!['copies','product','result','done'].includes(a.stage))return;
+ const copies=a.stage==='copies'?a.copies:t.d,filled=Math.min(copies*t.n,t.n*t.d),done=a.stage==='done',words=wholeWords(t),pieces=pieceWords(t);
+ const colors=['#70bca6','#e1b65f','#7ca9d6','#c59dcf','#e59980','#96ba66','#79c6cf','#dca2b6','#b8ad76','#9fafd6','#cfb38a','#91bd9e'];
+ // Replace the starting image in place with one shared drawing of all whole targets.
+ $('objects').querySelector('.object').remove();$('objects').classList.remove('single');
+ const board=document.createElement('section');board.id='copyTargets';board.className='copy-targets';board.setAttribute('aria-label','Gemeinsames Hauptbild der ganzen Ziele');
+ board.innerHTML=`<div class="copy-key">${Array.from({length:Math.min(copies,t.d)},(_,i)=>`<span style="border-color:${colors[i]}">${pieces[0]} ${i+1}${s.kind==='strip'?'':' · '+fmt(given(t))+' '+esc(s.unit)}</span>`).join('')}</div><div class="main-target-scroll" tabindex="0" role="region" aria-label="Alle ganzen Ziele nebeneinander; bei Bedarf seitlich scrollen"><figure class="object main-target-picture"></figure></div>`;
+ $('objects').append(board);
+ const width=t.n*360+(t.n-1)*10,main=svgElement('svg',{viewBox:`0 0 ${width} 290`,role:'img','aria-label':`${t.n} ganze ${words[1]} mit ${copies} gleich großen ${pieces[1]}`,'data-main-target-picture':''});
+ main.style.width='100%';main.style.minWidth=t.n*270+'px';main.style.maxHeight='none';board.querySelector('figure').append(main);
+ for(let j=0;j<t.n;j++){
+  const selected=Array.from({length:t.d},(_,i)=>i).filter(i=>j*t.d+i<filled),shape=s.kind==='clock'?{...t,whole:s.dial}:t;
+  const holder=document.createElement('div');holder.innerHTML=drawing(shape,t.d,selected,false,j,true);const svg=holder.firstElementChild;
+  svg.setAttribute('x',j*370);svg.setAttribute('y',0);svg.setAttribute('width',360);svg.setAttribute('height',260);svg.style.width='360px';svg.style.height='260px';svg.dataset.targetWhole=j;main.append(svg);
+  prepareWholeDrawing(svg,t,t.d,selected,done);
+  svg.setAttribute('aria-label',words[0]+' '+(j+1)+': '+selected.length+' von '+t.d+' Teilen gefüllt'+(done?', '+fmt(t.whole)+' '+s.unit:''));
+  svg.querySelectorAll('[data-region]').forEach((region,i)=>{
+   const position=j*t.d+i,copy=position<filled?Math.floor(position/t.n)+1:0;region.dataset.copyIndex=copy;region.dataset.targetPart=position;
+   if(copy){region.querySelectorAll('[fill="#087e70"]').forEach(el=>el.setAttribute('fill',colors[copy-1]));region.append(svgElement('title',{},pieces[0]+' '+copy));}
+  });
+  main.append(svgElement('text',{x:j*370+180,y:279,'text-anchor':'middle','font-family':'system-ui,sans-serif','font-size':16,'font-weight':650,fill:'#193c43',...(done?{'data-target-amount':''}:{})},words[0]+' '+(j+1)+(done?': '+fmt(t.whole)+' '+s.unit:' · Ganzes: ?')));
+ }
+ if(s.kind==='strip')for(let k=0;k<Math.min(copies,t.d);k++){
+  const first=k*t.n,last=(k+1)*t.n,intervals=[];
+  for(let j=0;j<t.n;j++){const lo=Math.max(first,j*t.d),hi=Math.min(last,(j+1)*t.d);if(lo<hi)intervals.push([j*370+25+(lo-j*t.d)*300/t.d,j*370+25+(hi-j*t.d)*300/t.d]);}
+  measureSpan(main,intervals,fmt(given(t))+' '+s.unit,colors[k],{'data-piece-measure':k+1});
+ }
+ const status=document.createElement('p');status.id='copyStatus';status.className='notice';status.setAttribute('aria-live','polite');
+ status.textContent=copies>t.d?`${copies-t.d} ${copies-t.d===1?pieces[0]+' passt':pieces[1]+' passen'} nicht mehr hinein.`:copies===t.d?'Alle Ziele sind genau gefüllt.':'Noch nicht alle Ziele sind gefüllt.';board.append(status);
+ $('visualCaption').textContent=done?`${t.n} ganze ${words[1]} umfassen zusammen ${fmt(t.whole*t.n)} ${s.unit}. Ein Ganzes umfasst ${fmt(t.whole)} ${s.unit}.`:`Jedes gleichfarbige ${pieces[0]==='Stück'?'Stück':pieces[0]==='Abschnitt'?'Zeitstück':'Teilstück'} entspricht ${fmt(given(t))} ${s.unit}. Es darf im nächsten Ganzen weitergehen.`;
+}
+
+function steps(a){return a.mode==='choice'?['route',a.route==='multiply'?'product':'unit','result']:a.route==='divide'?['divideParts','mark','unit','result']:['divideParts','mark','copies','product','result'];}
+function quantityQuestion(a,stage){
+ const t=a.task,s=sceneOf(t),names={g:'Gramm',kg:'Kilogramm',ml:'Milliliter',l:'Liter',cm:'Zentimeter',m:'Meter',min:'Minuten',s:'Sekunden',h:'Stunden',Eier:'Eier'},name=names[s.unit],words=wholeWords(t),many=numberWord(t.n)+' ganzen '+words[1];
+ if(stage==='unit')return `Wie viele ${name} entsprechen einem ${partName(t.d).replace('Hälften','Halben')}?`;
+ if(a.route==='multiply'){
+  if(s.kind==='strip')return stage==='product'?`Wie lang sind die ${many} zusammen?`:'Wie lang ist eine ganze Strecke?';
+  if(s.kind==='clock')return stage==='product'?`Wie lange dauern die ${many} zusammen?`:'Wie lange dauert eine ganze Zeitspanne?';
+  if(s.unit==='g'||s.unit==='kg')return stage==='product'?`Wie viele ${name} wiegen die ${many} zusammen?`:`Wie viele ${name} wiegt ein Ganzes?`;
+  if(s.kind==='eggs')return stage==='product'?`Wie viele Eier enthalten die ${many} zusammen?`:'Wie viele Eier enthält eine ganze Packung?';
+  return stage==='product'?`Wie viele ${name} fassen die ${many} zusammen?`:`Wie viele ${name} fasst ${s.kind==='syringe'?'eine ganze Messspritze':'ein ganzes '+words[0]}?`;
+ }
+ return s.kind==='beaker'?`Wie viele ${name} fasst das ganze Gefäß?`:`Wie viele ${name} umfasst das Ganze?`;
+}
+
+function stepTitleFor(a,stage){const t=a.task;if(['unit','product','result'].includes(stage))return quantityQuestion(a,stage);return {route:'Welchen Weg möchtest du rechnen?',divideParts:`Teile das Ganze in ${partName(t.d)}.`,mark:`Markiere ${fractionWords(t)}.`,copies:`Wie oft brauchst du ${wholeWords(t)[3]}, um ${numberWord(t.n)} ganze ${wholeWords(t)[1]} zu ${wholeWords(t)[4]}?`,multiplyParts:`Die vervielfachte Menge entspricht ${t.n} Ganzen. In wie viele gleich große Portionen teilst du sie?`,done:'Geschafft! Du hast das Ganze bestimmt.'}[stage];}
+
+function tipFor(a){const t=a.task,s=sceneOf(t);return {divideParts:`Der Nenner ist ${t.d}. Teile das Ganze in ${t.d} gleich große Teile.`,copies:`Der Nenner ist ${t.d}. Stelle ${t.d} gleich große ${pieceWords(t)[1]} ein. Zusammen enthalten sie ${t.n} Ganze.`,mark:`Der Zähler ist ${t.n}. Markiere ${t.n} von ${t.d} gleich großen Teilen.`,multiplyParts:`Die Gesamtmenge entspricht ${t.n} Ganzen. Teile sie in ${t.n} gleich große Portionen.`,unit:`Für einen Bruchteil rechnest du ${fmt(given(t))} ${s.unit} ÷ ${t.n}.`,product:`Rechne ${fmt(given(t))} ${s.unit} × ${t.d}.`,result:a.route==='divide'?`Ein Bruchteil enthält ${fmt(t.whole/t.d)} ${s.unit}. Rechne diese Menge mal ${t.d}.`:`Die vervielfachte Menge beträgt ${fmt(t.whole*t.n)} ${s.unit}. Teile sie durch ${t.n}.`}[a.stage]||'';}
+
+function renderCompleted(a){
+ const path=steps(a),pos=a.stage==='done'?path.length:path.indexOf(a.stage),t=a.task,s=sceneOf(t);
+ $('work').innerHTML=path.slice(0,pos).map((stage,i)=>{
+  const attempt=a.attempts.filter(v=>v.stage===stage&&v.correct).at(-1);let answer='';
+  if(stage==='route')answer=ROUTES[a.route];
+  else if(stage==='copies')answer=`${t.d} ${pieceWords(t)[1]} füllen ${t.n} ganze ${wholeWords(t)[1]}`;
+  else if(['divideParts','multiplyParts'].includes(stage))answer=`${stage==='divideParts'?t.d:t.n} gleich große ${stage==='divideParts'?'Teile':'Portionen'}`;
+  else if(stage==='mark')answer=`${t.n} von ${t.d} Bruchteilen markiert · zusammen ${fmt(given(t))} ${s.unit}`;
+  else{const entered=attempt&&readNumber(attempt.input),value=entered||expected({...a,stage});answer='Deine Antwort: '+rationalText(value)+' '+s.unit;}
+  return `<li data-completed-stage="${stage}"><div class="completed-question">Schritt ${i+1} · ${esc(stepTitleFor(a,stage))}</div><span class="completed-answer">✓ ${esc(answer)}</span></li>`;
+ }).join('');$('work').hidden=pos<=0;
+}
+function message(text,bad=false){$('feedback').hidden=!text;$('feedback').textContent=text;$('feedback').classList.toggle('bad',bad);}
+function render(){
+ const a=state.active;$('exercise').hidden=!a;$('empty').hidden=!!a;$('empty').textContent='Du hast alle verfügbaren Aufgaben dieses Rechenwegs auf Anhieb richtig gelöst. Wähle einen anderen Rechenweg.';
+ $('mode').value=state.mode;$('mode').disabled=!!a&&a.stage!=='done'&&a.attempts.length>0;renderStats();if(!a)return;
+ const t=a.task,s=sceneOf(t),path=steps(a),pos=a.stage==='done'?path.length:path.indexOf(a.stage);
+ $('sceneName').textContent=s.title;$('question').innerHTML='<span class="task-command">Bestimme das Ganze.</span>'+frac(t.n,t.d)+`<span>≙ ${fmt(given(t))} ${s.unit}</span>`;$('story').textContent=storyForTask(t);
+ $('stepbar').innerHTML=path.map((step,i)=>`<span class="stepdot ${i<=pos?'active':''}"></span>`).join('');
+ const hints={route:'Beide Wege führen zum selben Ergebnis. Wähle den Weg, der dir hier leichter erscheint.',divideParts:'Stelle die Unterteilung mit dem Regler ein. Die Teile sollen gleich groß sein.',unit:'Gesucht ist die Menge des hervorgehobenen Teils.',mark:'Tippe die Teile im Bild an. Erneutes Antippen wählt sie wieder ab.',copies:'Stelle die Anzahl mit dem Regler ein.',product:'Gesucht ist die Menge aller dargestellten Ausgangsmengen zusammen.',multiplyParts:'Die Unterteilung im Bild ändert sich mit dem Regler.',result:'Gesucht ist die Menge aller grünen Teile zusammen.',done:a.hadError?'Du hast deine Fehler verbessert. Im Verlauf kannst du deine Versuche nachlesen.':'Alle Schritte waren auf Anhieb richtig. Diese Aufgabe zählt für deine Punkte.'};
+ $('stepTitle').textContent=(a.stage==='done'?'':`Schritt ${pos+1} → `)+stepTitleFor(a,a.stage);$('stepHint').textContent=a.stage==='done'?hints.done:a.stage==='mark'?'Tippe die Bruchteile im Bild an.':a.stage==='route'?hints.route:'';
+ const tipVisible=(Array.isArray(a.hints)&&a.hints.includes(a.stage))||a.attempts.some(v=>v.stage===a.stage&&!v.correct);$('showTip').hidden=['route','done'].includes(a.stage)||tipVisible;$('stepTip').hidden=!tipVisible;$('stepTip').textContent=tipVisible?tipFor(a):'';
+ $('routeControls').hidden=a.stage!=='route';$('rangeControls').hidden=!['divideParts','copies','multiplyParts'].includes(a.stage);$('markControls').hidden=a.stage!=='mark';$('answerForm').hidden=!['unit','product','result'].includes(a.stage);$('next').hidden=a.stage!=='done';
+ const isCopies=a.stage==='copies',value=isCopies?a.copies:a.parts;$('range').max=isCopies?12:partitionOptions(t).length;$('range').value=isCopies?value:partitionOptions(t).indexOf(value)+1;$('range').setAttribute('aria-label',isCopies?'Anzahl der gleichen Anteile':'Anzahl gleich großer Teile');$('range').setAttribute('aria-valuetext',isCopies?value+' '+pieceWords(t)[1]:value+' gleich große Teile');$('rangeLabel').textContent=isCopies?`${value} ${pieceWords(t)[value===1?0:1]}`:`${value} ${value===1?'Teil':'gleich große Teile'}`;
+ $('checkRange').textContent=isCopies?'✓ Anzahl prüfen':'✓ Unterteilung prüfen';$('marked').textContent=`${a.selected.length} ${a.selected.length===1?'Teil':'Teile'} markiert`;
+ $('answer').value=a.input;$('answerUnit').textContent=s.unit;$('answerLabel').textContent='Dein Ergebnis';
+ $('flow').hidden=a.stage!=='done';$('flow').innerHTML=a.stage==='done'?`<span class="flow-node">${fmt(given(t))} ${s.unit}</span><span class="flow-arrow">${a.route==='divide'?'÷ '+t.n:'× '+t.d}<span aria-hidden="true">⟶</span></span><span class="flow-node">${a.route==='divide'?'Ein Teil':'Vervielfachte Menge'}</span><span class="flow-arrow">${a.route==='divide'?'× '+t.d:'÷ '+t.n}<span aria-hidden="true">⟶</span></span><span class="flow-node">Gesuchtes Ganzes</span>`:'';
+ renderCompleted(a);renderPicture();
+}
+function renderStats(){
+ if(!state)return;
+ const overall=stats();$('statistics').innerHTML=[['Alle Aufgaben',overall],...Object.entries(ROUTES).map(([r,label])=>[label,stats(r)])].map(([label,v])=>`<section class="stat-card"><h3>${label}</h3><p><b>${v.correct}</b> auf Anhieb richtig / ${v.total} erledigt</p><small>${v.wrong} mit Fehlern bearbeitet · Trefferquote ${v.total?Math.round(v.correct/v.total*100)+' %':'–'}</small></section>`).join('');
+ $('historyList').innerHTML=state.history.length?state.history.map((h,i)=>`<li><details><summary>${i+1}. ${esc(sceneOf(h.task).title)} · ${h.task.n}/${h.task.d} entsprechen ${fmt(given(h.task))} ${sceneOf(h.task).unit} · ${h.correct?'✓ Auf Anhieb richtig':'↻ Mit Fehlern'}</summary><p>${ROUTES[h.route]}</p>${h.work.map(w=>`<p>${esc(w)}</p>`).join('')}<ol>${h.attempts.map(v=>`<li>${esc(attemptLabel(v.stage))}: ${esc(typeof v.input==='object'?JSON.stringify(v.input):v.input)} ${v.correct?'✓':'→ noch nicht richtig'}</li>`).join('')}</ol></details></li>`).join(''):'<li>Noch keine Aufgabe abgeschlossen.</li>';
+ $('points').textContent=`${state.points} von 20 Punkten`;$('milestones').innerHTML=THRESHOLDS.map((t,i)=>`<span class="${i<state.points?'earned':''}" title="Punkt ${i+1}: ${t} richtige Aufgaben">${i+1}</span>`).join('');
+ if(state.points>=20){$('nextPoint').textContent='Alle 20 Punkte erreicht! Du kannst weiterüben.';$('requirements').hidden=true;$('pointHint').hidden=true;return;}
+ const req=pointRequirements(state.points);$('nextPoint').textContent=`Bis Punkt ${state.points+1}: noch ${req.totalMissing} auf Anhieb richtige Aufgaben insgesamt (Ziel: ${req.threshold}).`;
+ $('requirements').hidden=!req.minimum;$('pointHint').hidden=!req.minimum;
+ $('requirements').innerHTML=Object.entries(ROUTES).map(([route,label])=>`<li>${req.missing[route]?'Noch '+req.missing[route]:'✓ Erfüllt'} · ${label}: mindestens ${req.minimum} auf Anhieb richtig</li>`).join('');
+}
+function attemptLabel(stage){return {divideParts:'Unterteilung',unit:'Einzelteil berechnen',mark:'Markierte Teile (Nummern ab 1)',copies:'Anzahl der Ausgangsmengen',product:'Vervielfachte Menge',multiplyParts:'Unterteilung der Gesamtmenge',result:'Ganzes bestimmen'}[stage]||stage;}
+function record(input,correct){const a=state.active;a.attempts.push({stage:a.stage,input,correct,time:new Date().toISOString()});if(!correct)a.hadError=true;}
+function finish(){const a=state.active;if(a.stage==='done')return;state.history.push({task:{...a.task},mode:a.mode,route:a.route,correct:!a.hadError,attempts:structuredClone(a.attempts),hints:Array.isArray(a.hints)?[...a.hints]:[],work:[...a.work],previousFlow:a.previousFlow||null,started:a.started,finished:new Date().toISOString()});a.stage='done';a.input='';}
+function checkRange(){const a=state.active;if(!a||!['divideParts','copies','multiplyParts'].includes(a.stage))return;const copies=a.stage==='copies',value=copies?a.copies:a.parts,target=copies||a.stage==='divideParts'?a.task.d:a.task.n,ok=value===target;record(value,ok);if(ok){a.stage=copies?'product':a.stage==='divideParts'?'mark':'result';a.input='';message(a.stage==='mark'?'Die Unterteilung stimmt. Markiere jetzt den bekannten Anteil.':'Die Darstellung stimmt. Jetzt kannst du rechnen.');}else message(tipFor(a),true);render();save();}
+function togglePart(i){const a=state.active;if(!a||a.stage!=='mark'||i<0||i>=a.task.d)return;const pos=a.selected.indexOf(i);if(pos<0)a.selected.push(i);else a.selected.splice(pos,1);render();save();const target=$('objects').querySelector(`[data-part="${i}"]`);target?.focus({preventScroll:true});}
+function checkMark(){const a=state.active;if(!a||a.stage!=='mark')return;const ok=a.selected.length===a.task.n;record(a.selected.map(v=>v+1),ok);if(ok){a.stage=a.route==='multiply'?'copies':'unit';message(a.route==='multiply'?'Die markierten Teile stimmen. Fülle jetzt die ganzen Ziele mit gleichen Anteilen.':'Die markierten Teile stimmen. Berechne jetzt die Menge eines Bruchteils.');}else message(tipFor(a),true);render();save();}
+function submitAnswer(){
+ const a=state.active;if(!a||!['unit','product','result'].includes(a.stage))return;const value=readNumber(a.input),want=expected(a);if(!value){record(a.input,false);message('Trage das ausgerechnete Ergebnis als Zahl ein. Rechnungen und Brüche sind hier nicht erlaubt.',true);render();save();return;}
+ const ok=value.n*want.d===want.n*value.d;record(a.input,ok);const t=a.task,s=sceneOf(t),unit=s.unit;
+ if(!ok){message('Das Ergebnis stimmt noch nicht. Der Tipp hilft dir bei diesem Schritt.',true);render();save();return;}
+ const operation=a.stage==='unit'?`${fmt(given(t))} ${unit} ÷ ${t.n}`:a.stage==='product'?`${fmt(given(t))} ${unit} × ${t.d}`:a.route==='divide'?`${rationalText(rational(t.whole,t.d))} ${unit} × ${t.d}`:`${fmt(t.whole*t.n)} ${unit} ÷ ${t.n}`;
+ a.work.push(`${operation} = ${rationalText(want)} ${unit}`);
+ if(a.stage==='result')finish();else if(a.mode==='choice'){a.stage='result';a.parts=t.d;a.selected=Array.from({length:t.n},(_,i)=>i);}else a.stage='result';a.input='';message(a.stage==='done'?'Richtig – der vollständige Rechenweg bleibt hier stehen.':'Richtig! Weiter zum nächsten Schritt.');render();save();
+}
+function docs() {const result=[document]; for(const win of [window.parent,window.top])try{if(win.document&&!result.includes(win.document))result.push(win.document);}catch(_){} return result;}
+function isEditorView(){return docs().some(doc=>{try{return doc.defaultView.widget?.isEditor===true||doc.body?.classList.contains('editor')||new URLSearchParams(doc.defaultView.location.search).get('editor')==='1';}catch(_){return false;}});}
+function restoreHostElements(){for(const [el,original] of hiddenHostElements){el.hidden=original.hidden;if(original.display)el.style.setProperty('display',original.display,original.priority);else el.style.removeProperty('display');}hiddenHostElements.clear();}
+function findField(id) {for(const doc of docs()){const el=doc.getElementById(id);if(el&&('value' in el))return el;}return null;}
+function findStateField() {
+  if(config.stateId)return findField(config.stateId);
+  for(const id of ['e1_input','e1_text_input','e1_cloze_text_input_1','e1']){const el=findField(id);if(el)return el;}
+  for(const doc of docs()){const fields=doc.querySelectorAll('#e1 textarea, #e1 input:not([type=button]):not([type=hidden]), textarea[id^="e1_"], input[id^="e1_"]:not([type=button]):not([type=hidden])');if(fields.length===1)return fields[0];}return null;
+}
+function writeField(el,value) {if(String(el.value)===value)return; const proto=Object.getPrototypeOf(el), setter=Object.getOwnPropertyDescriptor(proto,'value')?.set; if(setter)setter.call(el,value);else el.value=value; const EventClass=el.ownerDocument.defaultView.Event;el.dispatchEvent(new EventClass('input',{bubbles:true}));el.dispatchEvent(new EventClass('change',{bubbles:true}));}
+function hideField(el,moduleId) {if(config.showFields||editorPreview||isEditorView())return;const module=el.ownerDocument.getElementById(moduleId); const target=module&&module.contains(el)&&!module.querySelector('iframe, #fractionWidget, #wholeWidget')&&module!==el.ownerDocument.body ? module : el.closest('.inputcontainer')||el;if(!hiddenHostElements.has(target))hiddenHostElements.set(target,{hidden:target.hidden,display:target.style.getPropertyValue('display'),priority:target.style.getPropertyPriority('display')});target.hidden=true;target.style.setProperty('display','none','important');}
+function storageMessage(text,bad=false){$('storage').textContent=text;$('storage').classList.toggle('bad',bad);$('retry').hidden=!bad;}
+function save() {
+  if(!ready||!widgetRoot.isConnected)return;
+  if(editorPreview||isEditorView()){editorPreview=true;restoreHostElements();storageMessage('Editor-Vorschau: Änderungen werden nicht in EduLudoo gespeichert.');renderStats();return;}
+  const earned=THRESHOLDS.filter((_,index)=>pointRequirements(index).eligible).length;state.points=Math.max(state.points,earned);
+  try {
+    if(isEdulo){
+      if(!hostField?.isConnected)throw new Error('Die Verbindung zum EduLudoo-Textfeld fehlt. Der aktuelle Stand ist noch geöffnet.');
+      const encoded=encodeState(state);writeField(hostField,encoded);
+      if(hostField.value!==encoded)throw new Error('EduLudoo hat den Speichertext verändert. Bitte den Inhalt von E1 zur Prüfung erhalten.');
+      hideField(hostField,'e1');
+      scoreFields=Array.from({length:20},(_,i)=>findField(config.scorePrefix+(i+1)));
+      scoreFields.forEach((field,i)=>{if(field){writeField(field,i<state.points?'1':'0');hideField(field,'e2');}});
+      storageMessage(scoreFields.every(Boolean)?'Lernstand an EduLudoo übergeben.': 'Lernstand an EduLudoo übergeben; einige der zwanzig Punktefelder fehlen.',!scoreFields.every(Boolean));
+    }else{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));storageMessage('Lernstand in diesem Browser gespeichert.');}
+  }catch(err){storageMessage('Speichern fehlgeschlagen: '+err.message,true);}
+  renderStats();
+}
+async function connect() {
+  $('retry').hidden=true;
+  if(ready){save();return;}
+  try {
+    if(isEditorView()){
+      editorPreview=true;state=fresh();ready=true;newTask();return;
+    }
+    if(isEdulo){
+      for(let i=0;i<25;i++){hostField=findStateField();if(hostField)break;await new Promise(r=>setTimeout(r,200));}
+      if(!hostField)throw new Error('Das EduLudoo-Textfeld E1 ist nicht erreichbar. Bitte Einbettung und Feldzuordnung prüfen. Es wird kein lokaler Lernstand geladen.');
+      state=String(hostField.value).trim()?parseState(hostField.value):fresh();
+      scoreFields=Array.from({length:20},(_,i)=>findField(config.scorePrefix+(i+1)));
+    }else{const raw=localStorage.getItem(STORAGE_KEY);state=raw?parseState(raw):fresh();}
+    ready=true;if(!state.active||state.active.task.n===1||(state.active.stage!=='done'&&state.active.mode!=='multiply'&&!Number.isInteger(state.active.task.whole/state.active.task.d*2)))newTask();else render();save();
+  }catch(err){storageMessage(err.message,true);}
+}
+
+$('range').addEventListener('input',()=>{if(!ready||!state.active)return;const a=state.active;if(a.stage==='copies')a.copies=Number($('range').value);else a.parts=partitionOptions(a.task)[Number($('range').value)-1];message('');render();save();});
+$('checkRange').addEventListener('click',checkRange);
+$('checkMark').addEventListener('click',checkMark);
+$('objects').addEventListener('click',event=>{const part=event.target.closest('[data-part]');if(part)togglePart(Number(part.dataset.part));});
+$('objects').addEventListener('keydown',event=>{const part=event.target.closest('[data-part]');if(part&&['Enter',' '].includes(event.key)){event.preventDefault();togglePart(Number(part.dataset.part));}});
+$('answer').addEventListener('input',()=>{if(!ready||!state.active)return;state.active.input=$('answer').value;save();});
+$('answerForm').addEventListener('submit',event=>{event.preventDefault();submitAnswer();});
+$('showTip').addEventListener('click',()=>{const a=state.active;if(!a||['route','done'].includes(a.stage))return;if(!Array.isArray(a.hints))a.hints=[];if(!a.hints.includes(a.stage))a.hints.push(a.stage);render();save();});
+$('routeControls').addEventListener('click',event=>{const button=event.target.closest('[data-route]');if(!button||!state.active||state.active.stage!=='route')return;const a=state.active;a.route=button.dataset.route;a.stage=a.route==='divide'?'unit':'product';a.parts=a.task.d;a.copies=a.task.d;a.selected=Array.from({length:a.task.n},(_,i)=>i);render();save();});
+$('mode').addEventListener('change',()=>{if(!ready||$('mode').disabled)return;state.mode=$('mode').value;message('');newTask();});
+$('next').addEventListener('click',()=>{if(state.active?.stage!=='done')return;message('');newTask();$('stepTitle').scrollIntoView({block:'nearest',behavior:'smooth'});});
+$('retry').addEventListener('click',connect);
+$('help').addEventListener('click',()=>$('intro').showModal());$('closeIntro').addEventListener('click',()=>$('intro').close());
+function onPageHide(){save();restoreHostElements();}
+window.addEventListener('pagehide',onPageHide);
+const removalObserver=new MutationObserver(()=>{if(!widgetRoot.isConnected){ready=false;restoreHostElements();window.removeEventListener('pagehide',onPageHide);removalObserver.disconnect();}});
+removalObserver.observe(document.documentElement,{childList:true,subtree:true});
+connect();
+})();
+</script></body></html>
