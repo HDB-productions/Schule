@@ -16,7 +16,19 @@ Beispiel: drei Viertel von 1 l → ml auswählen → 1000 eingeben → 1000 : 4 
 
 Jeder Zähler ist mindestens zwei. Der Anteil ist in der Ausgangseinheit nicht ganzzahlig; nach Umrechnung sind beide Zwischenwerte und das Endergebnis ganzzahlig. Jede Auswahlliste enthält genau eine kleinere Einheit derselben Größenart. Andere Antworten sind die Ausgangseinheit, eine größere Einheit oder eine andere Größenart; etwa bei Stunden: h, m, min, g. Weitere ebenfalls richtige kleinere Einheiten werden nicht gleichzeitig angeboten.
 
-Die adaptive Auswahl berücksichtigt jüngste Trefferquote, bisherige Übung und Darstellungswechsel. Auf Anhieb gelöste Aufgaben werden nicht erneut angeboten; Aufgaben mit Fehlern können später wiederkehren.
+## Zahlenrunden und begrenzte Fehlerwiederholung
+
+Eine Zahlengruppe ist die **umgerechnete Ausgangsmenge plus der vorgegebene Zähler und Nenner**. Beispielsweise gehören drei Viertel von 1000 ml und drei Viertel von 1000 g zur selben Gruppe. Gleichwertige, aber anders geschriebene Brüche bleiben eigene Zahlenaufgaben, da sie andere Rechenschritte verlangen. Die vorgeschaltete Umrechnung ist Teil der Motivvariante: Liter → Milliliter und Kilogramm → Gramm dürfen keine zusätzliche Ziehung derselben Zahlenaufgabe innerhalb einer Runde auslösen. Die feste Situation legt die Ausgangseinheit und den Umrechnungsfaktor eindeutig fest.
+
+In jeder Zahlenrunde wird jede noch verfügbare Zahlengruppe genau einmal gezogen, jeweils mit einer zufällig gewählten unbenutzten Situation. Schwierigkeit beeinflusst ausschließlich die Reihenfolge. Auch schwierigere Nenner werden innerhalb derselben Runde vollständig abgearbeitet, bevor eine neue Runde beginnt.
+
+Bereits das Ziehen reserviert die Motiv-Zahlen-Kombination dauerhaft. Moduswechsel vor der ersten Antwort verbraucht deshalb ebenfalls die angezeigte Variante. Neuladen stellt die bestehende Aufgabe wieder her. Eine nicht abgeschlossene, durch Moduswechsel verlassene Aufgabe erzeugt keine Fehlerwiederholung.
+
+Nach vollständiger Zahlenrunde wird jede darin mit Fehlern abgeschlossene Aufgabe genau einmal mit **demselben Motiv und derselben Umrechnung** wiederholt. Fehler in dieser Wiederholung erzeugen keine weitere Wiederholung. Auch die Ziehung einer Wiederholung wird reserviert und entfernt sie aus der Warteschlange. Anschließend beginnt die nächste Runde mit verbleibenden unbenutzten Kombinationen; ausgeschöpfte Zahlengruppen entfallen. Nach der letzten Variantenrunde und ihren Fehlerwiederholungen endet die Auswahl vollständig, unabhängig vom Punktestand.
+
+Der Lernstand speichert Runde, Phase (`numbers`, `retry`, `done`), verbrauchte Kombinationen, in der Runde gezogene Zahlengruppen, alle Reservierungen samt Abschlussstatus sowie eine begrenzte Warteschlange. Historieneinträge nennen zusätzlich Runde, Reservierung und Wiederholungsstatus.
+
+**Alte Lernstände:** Bisherige Historie und Punkte bleiben erhalten. Alle bekannten Kombinationen werden als benutzt und ihre Zahlengruppen für die Übergangsrunde als gezogen übernommen. Genau einmal vorkommende fehlerhafte Abschlüsse erhalten eine Wiederholung. Bei bereits mehrfach bearbeiteten Kombinationen wird vorsichtig keine neue Wiederholung erzeugt, weil ein früherer Wiederholungsstatus nicht rekonstruierbar ist. Eine offene aktuelle Aufgabe erhält eine Reservierung und wird weitergeführt; eine etwaige ältere Warteschlangenposition derselben Kombination entfällt.
 
 ## Speicherung und Punkte
 
@@ -31,3 +43,5 @@ Im Editor werden Hostfelder nicht verändert. Fremde oder defekte Speichertexte 
 ## Prüfung
 
 Eigener Test: `tests/anteile-einheiten.test.cjs`; ausführen mit Node und verfügbarer Playwright-Installation (`PLAYWRIGHT_MODULE`), Browser Microsoft Edge. Geprüft werden alle vier Wegvarianten, falsche Einheit, falsche und unzulässige Umrechnung, Wiederherstellung nach jedem Schritt, Erstversuch-Wertung, alle 20 Punkteschwellen, alle 17 Zeichnungen bei 1000/390/320 Pixeln, Hostfelder und Base64-Transport, Schutz fremder Daten, Browserfallback sowie wiederholte Einbettung mit der echten lokalen jQuery-Version 2.1.1. SVG-Tags in JavaScript-Strings besitzen explizite Endtags.
+
+Der Auswahltest durchläuft zusätzlich den gesamten echten Variantenpool, prüft vollständige Zahlenrunden ohne Zahlenduplikate, dauerhaft eindeutige Kombinationen, exakt eine motivgleiche Fehlerwiederholung trotz erneuter Fehler, Reservierungen bei Moduswechsel/Neuladen, Migration alter Historie und das endgültige Ende.

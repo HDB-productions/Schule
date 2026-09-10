@@ -193,7 +193,7 @@ function pointRequirements(index){const threshold=THRESHOLDS[index],minimum=inde
 function validTask(t){const s=t&&sceneOf(t);return !!s&&s.amounts.includes(t.whole)&&Number.isInteger(t.n)&&Number.isInteger(t.d)&&t.n>=2&&t.n<t.d&&t.d>=2&&t.d<=12&&(!s.denominators||s.denominators.includes(t.d))&&Number.isInteger(t.whole/t.d*2)&&Number.isInteger(t.whole*t.n/t.d*2)&&(!s.discrete||Number.isInteger(t.whole/t.d));}
 const STAGES=['route','divideParts','unit','mark','result','copies','product','multiplyParts','done'];
 function validActive(a){return !!a&&validTask(a.task)&&['divide','multiply','choice'].includes(a.mode)&&[null,'divide','multiply'].includes(a.route)&&STAGES.includes(a.stage)&&Number.isInteger(a.parts)&&a.parts>=1&&a.parts<=12&&Number.isInteger(a.copies)&&a.copies>=1&&a.copies<=12&&Array.isArray(a.selected)&&a.selected.every(v=>Number.isInteger(v)&&v>=0&&v<a.task.d)&&new Set(a.selected).size===a.selected.length&&typeof a.input==='string'&&a.input.length<=24&&Array.isArray(a.attempts)&&a.attempts.every(v=>v&&STAGES.includes(v.stage)&&typeof v.correct==='boolean')&&typeof a.hadError==='boolean'&&Array.isArray(a.work)&&a.work.every(v=>typeof v==='string');}
-function parseState(raw){let s;try{const text=String(raw).trim();if(text.startsWith('GANZES1:'))s=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(text.slice(8)),c=>c.charCodeAt(0))));else s=JSON.parse(text);}catch(_){throw new Error('Der gespeicherte Lernstand ist nicht lesbar. Er wurde nicht überschrieben.');}if(!s||s.version!==1||s.widget!=='das-ganze-bestimmen'||!['divide','multiply','choice'].includes(s.mode)||!Number.isInteger(s.points)||s.points<0||s.points>20||!Array.isArray(s.history)||s.history.some(h=>!h||!validTask(h.task)||!['divide','multiply'].includes(h.route)||typeof h.correct!=='boolean'||!Array.isArray(h.attempts)||!Array.isArray(h.work))||(s.active&&!validActive(s.active)))throw new Error('Dieser Speichertext gehört nicht zu „Das Ganze bestimmen“ oder hat ein unbekanntes Format. Er bleibt unverändert.');return upgradeFlow(s);}
+function parseState(raw){let s;try{const text=String(raw).trim();if(text.startsWith('GANZES1:'))s=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(text.slice(8)),c=>c.charCodeAt(0))));else s=JSON.parse(text);}catch(_){throw new Error('Der gespeicherte Lernstand ist nicht lesbar. Er wurde nicht überschrieben.');}if(!s||s.version!==1||s.widget!=='das-ganze-bestimmen'||!['divide','multiply','choice'].includes(s.mode)||!Number.isInteger(s.points)||s.points<0||s.points>20||!Array.isArray(s.history)||s.history.some(h=>!h||!validTask(h.task)||!['divide','multiply'].includes(h.route)||typeof h.correct!=='boolean'||!Array.isArray(h.attempts)||!Array.isArray(h.work))||(s.active&&!validActive(s.active)))throw new Error('Dieser Speichertext gehört nicht zu „Das Ganze bestimmen“ oder hat ein unbekanntes Format. Er bleibt unverändert.');if(!validSelection(s.selection,s.history.length))throw new Error('Die gespeicherte Aufgabenauswahl ist beschädigt. Sie bleibt unverändert.');return upgradeFlow(s);}
 function upgradeFlow(s){
  const a=s.active;if(a&&a.stage!=='done'&&((a.mode==='divide'&&!(a.flowVersion>=2))||(a.mode==='multiply'&&!(a.flowVersion>=3)))){
   const previous=structuredClone(a);Object.assign(a,{flowVersion:3,previousFlow:previous,stage:'divideParts',parts:1,selected:[],input:'',attempts:[],work:[],hints:[]});
@@ -206,18 +206,53 @@ function partitionOptions(t){const all=Array.from({length:12},(_,i)=>i+1),s=scen
 
 const POOL=[];
 for(const scene of SCENES)for(const whole of scene.amounts)for(const d of scene.denominators||[2,3,4,5,6,7,8,9,10,12])for(let n=2;n<d;n++){const t={scene:scene.id,whole,n,d};if(validTask(t))POOL.push(t);}
-function chooseTask(){
- const mastered=new Set(state.history.filter(h=>h.correct).map(h=>taskKey(h.task))),recent=state.history.slice(-3),lastScene=recent.at(-1)?.task.scene,lastKind=lastScene&&sceneOf({scene:lastScene}).kind;
- const count=state.history.length,recentResults=state.history.slice(-12),accuracy=recentResults.length?recentResults.filter(h=>h.correct).length/recentResults.length:0,ceiling=count<6||accuracy<.5?4:count<18||accuracy<.7?6:count<40||accuracy<.85?8:12;
- let pool=POOL.filter(t=>!mastered.has(taskKey(t))&&(state.mode==='multiply'||Number.isInteger(t.whole/t.d*(sceneOf(t).discrete?1:2))));if(!pool.length)return null;
- const easy=pool.filter(t=>t.d<=ceiling&&t.n<=5);if(easy.length)pool=easy;
- if(state.mode==='multiply'&&count>=3&&Math.random()<.4){const useful=pool.filter(t=>!Number.isInteger(t.whole/t.d*2)&&t.n>1);if(useful.length)pool=useful;}
- else if(count<6){const simple=pool.filter(t=>Number.isInteger(t.whole/t.d*2));if(simple.length)pool=simple;}
- const recentKeys=new Set(recent.map(h=>taskKey(h.task)));const different=pool.filter(t=>sceneOf(t).kind!==lastKind&&!recentKeys.has(taskKey(t)));if(different.length)pool=different;
- const scenes=[...new Set(pool.map(t=>t.scene))],scene=scenes[Math.floor(Math.random()*scenes.length)];pool=pool.filter(t=>t.scene===scene);
- return {...pool[Math.floor(Math.random()*pool.length)]};
+// Each number problem is drawn once per round, independently of the illustration.
+function numberTaskKey(t){return t.whole+':'+t.n+'/'+t.d;}
+function selectionEligible(t){return state.mode==='multiply'||Number.isInteger(t.whole/t.d*(sceneOf(t).discrete?1:2));}
+function validSelection(l,historyLength){return l==null||!!l&&l.version===1&&Number.isInteger(l.round)&&l.round>=1&&['new','review','complete'].includes(l.phase)&&['used','seen'].every(k=>Array.isArray(l[k])&&l[k].every(v=>typeof v==='string')&&new Set(l[k]).size===l[k].length)&&Array.isArray(l.retry)&&l.retry.every(t=>validTask(t))&&Number.isInteger(l.historyCursor)&&l.historyCursor>=0&&l.historyCursor<=historyLength;}
+function ensureSelection(){
+ if(!state.selection){
+  const available=new Map(POOL.map(t=>[taskKey(t),t])),latest=new Map();
+  for(const h of state.history)if(available.has(taskKey(h.task)))latest.set(taskKey(h.task),h);
+  state.selection={version:1,round:1,phase:'new',used:[...latest.keys()],seen:[...new Set([...latest.values()].map(h=>numberTaskKey(h.task)))],retry:[...latest.values()].filter(h=>!h.correct).map(h=>({...h.task})),historyCursor:state.history.length,pending:null};
+  const a=state.active;if(a&&a.stage!=='done'&&available.has(taskKey(a.task))){
+   if(!state.selection.used.includes(taskKey(a.task)))state.selection.used.push(taskKey(a.task));
+   if(!state.selection.seen.includes(numberTaskKey(a.task)))state.selection.seen.push(numberTaskKey(a.task));
+   a.draw={round:1,kind:'new',key:taskKey(a.task)};
+  }
+ }
+ const l=state.selection;
+ for(const h of state.history.slice(l.historyCursor)){
+  if(h.draw?.kind==='new'&&h.draw.round===l.round&&!h.correct&&!l.retry.some(t=>taskKey(t)===taskKey(h.task)))l.retry.push({...h.task});
+ }
+ l.historyCursor=state.history.length;return l;
 }
-function newTask(){const task=chooseTask();state.active=task?{flowVersion:3,task,mode:state.mode,route:state.mode==='choice'?null:state.mode,stage:state.mode==='choice'?'route':'divideParts',parts:1,copies:1,selected:[],input:'',attempts:[],hadError:false,work:[],started:new Date().toISOString()}:null;render();save();}
+function chooseTask(){
+ const l=ensureSelection();l.reason='';l.pending=null;
+ // At most one review-to-new transition is needed for a call; the loop also handles exhaustion.
+ while(true){
+  const used=new Set(l.used),seen=new Set(l.seen),unused=POOL.filter(t=>!used.has(taskKey(t))),unseen=unused.filter(t=>!seen.has(numberTaskKey(t)));
+  if(l.phase==='new'&&!unseen.length)l.phase='review';
+  if(l.phase==='review'){
+   if(l.retry.length){
+    const eligible=l.retry.map((t,i)=>({t,i})).filter(v=>selectionEligible(v.t));
+    if(!eligible.length){l.reason='mode';return null;}
+    const picked=eligible[Math.floor(Math.random()*eligible.length)];l.retry.splice(picked.i,1);
+    l.pending={round:l.round,kind:'retry',key:taskKey(picked.t)};return {...picked.t};
+   }
+   if(!unused.length){l.phase='complete';l.reason='complete';return null;}
+   l.round++;l.phase='new';l.seen=[];continue;
+  }
+  if(l.phase==='complete'){l.reason='complete';return null;}
+  let pool=unseen.filter(selectionEligible);if(!pool.length){l.reason='mode';return null;}
+  const recent=state.history.slice(-12),accuracy=recent.length?recent.filter(h=>h.correct).length/recent.length:0,count=state.history.length,ceiling=count<6||accuracy<.5?4:count<18||accuracy<.7?6:count<40||accuracy<.85?8:12;
+  const easy=pool.filter(t=>t.d<=ceiling&&t.n<=5);if(easy.length)pool=easy;
+  const keys=[...new Set(pool.map(numberTaskKey))],key=keys[Math.floor(Math.random()*keys.length)];pool=pool.filter(t=>numberTaskKey(t)===key);
+  const previous=state.active?.task||state.history.at(-1)?.task,lastKind=previous&&sceneOf(previous)?.kind,different=pool.filter(t=>sceneOf(t).kind!==lastKind);if(different.length)pool=different;
+  const task=pool[Math.floor(Math.random()*pool.length)];l.used.push(taskKey(task));l.seen.push(key);l.pending={round:l.round,kind:'new',key:taskKey(task)};return {...task};
+ }
+}
+function newTask(){const task=chooseTask();state.active=task?{flowVersion:3,task,draw:{...state.selection.pending},mode:state.mode,route:state.mode==='choice'?null:state.mode,stage:state.mode==='choice'?'route':'divideParts',parts:1,copies:1,selected:[],input:'',attempts:[],hadError:false,work:[],started:new Date().toISOString()}:null;render();save();}
 // Die Maße der gefüllten Flächen beziehen sich immer auf die Ausgangsmenge.
 function drawing(t,parts,selected,interactive,index,unknownWhole=false){
  // Explicit SVG end tags keep the host's legacy HTML prefilter from rewriting script templates.
@@ -446,7 +481,7 @@ function renderCompleted(a){
 }
 function message(text,bad=false){$('feedback').hidden=!text;$('feedback').textContent=text;$('feedback').classList.toggle('bad',bad);}
 function render(){
- const a=state.active;$('exercise').hidden=!a;$('empty').hidden=!!a;$('empty').textContent='Du hast alle verfügbaren Aufgaben dieses Rechenwegs auf Anhieb richtig gelöst. Wähle einen anderen Rechenweg.';
+ const a=state.active;$('exercise').hidden=!a;$('empty').hidden=!!a;$('empty').textContent=state.selection?.reason==='mode'?'Die übrigen Aufgaben dieser Runde brauchen den Weg „Zuerst vervielfachen“. Wähle diesen Weg, um die Runde fortzusetzen.':'Alle Aufgabenvarianten und die einmaligen Fehlerwiederholungen sind bearbeitet.';
  $('mode').value=state.mode;$('mode').disabled=!!a&&a.stage!=='done'&&a.attempts.length>0;renderStats();if(!a)return;
  const t=a.task,s=sceneOf(t),path=steps(a),pos=a.stage==='done'?path.length:path.indexOf(a.stage);
  $('sceneName').textContent=s.title;$('question').innerHTML='<span class="task-command">Bestimme das Ganze.</span>'+frac(t.n,t.d)+`<span>≙ ${fmt(given(t))} ${s.unit}</span>`;$('story').textContent=storyForTask(t);
@@ -473,7 +508,7 @@ function renderStats(){
 }
 function attemptLabel(stage){return {divideParts:'Unterteilung',unit:'Einzelteil berechnen',mark:'Markierte Teile (Nummern ab 1)',copies:'Anzahl der Ausgangsmengen',product:'Vervielfachte Menge',multiplyParts:'Unterteilung der Gesamtmenge',result:'Ganzes bestimmen'}[stage]||stage;}
 function record(input,correct){const a=state.active;a.attempts.push({stage:a.stage,input,correct,time:new Date().toISOString()});if(!correct)a.hadError=true;}
-function finish(){const a=state.active;if(a.stage==='done')return;state.history.push({task:{...a.task},mode:a.mode,route:a.route,correct:!a.hadError,attempts:structuredClone(a.attempts),hints:Array.isArray(a.hints)?[...a.hints]:[],work:[...a.work],previousFlow:a.previousFlow||null,started:a.started,finished:new Date().toISOString()});a.stage='done';a.input='';}
+function finish(){const a=state.active;if(a.stage==='done')return;state.history.push({task:{...a.task},draw:a.draw?{...a.draw}:null,mode:a.mode,route:a.route,correct:!a.hadError,attempts:structuredClone(a.attempts),hints:Array.isArray(a.hints)?[...a.hints]:[],work:[...a.work],previousFlow:a.previousFlow||null,started:a.started,finished:new Date().toISOString()});a.stage='done';a.input='';}
 function checkRange(){const a=state.active;if(!a||!['divideParts','copies','multiplyParts'].includes(a.stage))return;const copies=a.stage==='copies',value=copies?a.copies:a.parts,target=copies||a.stage==='divideParts'?a.task.d:a.task.n,ok=value===target;record(value,ok);if(ok){a.stage=copies?'product':a.stage==='divideParts'?'mark':'result';a.input='';message(a.stage==='mark'?'Die Unterteilung stimmt. Markiere jetzt den bekannten Anteil.':'Die Darstellung stimmt. Jetzt kannst du rechnen.');}else message(tipFor(a),true);render();save();}
 function togglePart(i){const a=state.active;if(!a||a.stage!=='mark'||i<0||i>=a.task.d)return;const pos=a.selected.indexOf(i);if(pos<0)a.selected.push(i);else a.selected.splice(pos,1);render();save();const target=$('objects').querySelector(`[data-part="${i}"]`);target?.focus({preventScroll:true});}
 function checkMark(){const a=state.active;if(!a||a.stage!=='mark')return;const ok=a.selected.length===a.task.n;record(a.selected.map(v=>v+1),ok);if(ok){a.stage=a.route==='multiply'?'copies':'unit';message(a.route==='multiply'?'Die markierten Teile stimmen. Fülle jetzt die ganzen Ziele mit gleichen Anteilen.':'Die markierten Teile stimmen. Berechne jetzt die Menge eines Bruchteils.');}else message(tipFor(a),true);render();save();}
@@ -498,6 +533,7 @@ function writeField(el,value) {if(String(el.value)===value)return; const proto=O
 function hideField(el,moduleId) {if(config.showFields||editorPreview||isEditorView())return;const module=el.ownerDocument.getElementById(moduleId); const target=module&&module.contains(el)&&!module.querySelector('iframe, #fractionWidget, #wholeWidget')&&module!==el.ownerDocument.body ? module : el.closest('.inputcontainer')||el;if(!hiddenHostElements.has(target))hiddenHostElements.set(target,{hidden:target.hidden,display:target.style.getPropertyValue('display'),priority:target.style.getPropertyPriority('display')});target.hidden=true;target.style.setProperty('display','none','important');}
 function storageMessage(text,bad=false){$('storage').textContent=text;$('storage').classList.toggle('bad',bad);$('retry').hidden=!bad;}
 function save() {
+ if(state)ensureSelection();
   if(!ready||!widgetRoot.isConnected)return;
   if(editorPreview||isEditorView()){editorPreview=true;restoreHostElements();storageMessage('Editor-Vorschau: Änderungen werden nicht in EduLudoo gespeichert.');renderStats();return;}
   const earned=THRESHOLDS.filter((_,index)=>pointRequirements(index).eligible).length;state.points=Math.max(state.points,earned);

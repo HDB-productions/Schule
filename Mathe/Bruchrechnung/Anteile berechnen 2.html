@@ -217,24 +217,58 @@ function pointRequirements(index){const threshold=THRESHOLDS[index],minimum=inde
 function validTask(t){const s=t&&sceneOf(t);return !!s&&s.amounts.includes(t.whole)&&Number.isInteger(t.n)&&Number.isInteger(t.d)&&t.n>=2&&t.n<t.d&&t.d>=2&&t.d<=12&&(!s.denominators||s.denominators.includes(t.d))&&Number.isInteger(t.whole/t.d)&&!Number.isInteger(sourceAmount(t)*t.n/t.d)&&(!s.discrete||Number.isInteger(t.whole/t.d));}
 const STAGES=['selectUnit','convert','route','divideParts','unit','mark','result','copies','product','multiplyParts','done'];
 function validActive(a){return !!a&&validTask(a.task)&&['divide','multiply','choice'].includes(a.mode)&&[null,'divide','multiply'].includes(a.route)&&STAGES.includes(a.stage)&&Number.isInteger(a.parts)&&a.parts>=1&&a.parts<=12&&Number.isInteger(a.copies)&&a.copies>=1&&a.copies<=12&&Array.isArray(a.selected)&&a.selected.every(v=>Number.isInteger(v)&&v>=0&&v<a.task.d)&&new Set(a.selected).size===a.selected.length&&typeof a.input==='string'&&a.input.length<=24&&Array.isArray(a.attempts)&&a.attempts.every(v=>v&&STAGES.includes(v.stage)&&typeof v.correct==='boolean')&&typeof a.hadError==='boolean'&&Array.isArray(a.work)&&a.work.every(v=>typeof v==='string');}
-function parseState(raw){let s;try{const text=String(raw).trim();if(text.startsWith('EINHEIT:'))s=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(text.slice(8)),c=>c.charCodeAt(0))));else s=JSON.parse(text);}catch(_){throw new Error('Der gespeicherte Lernstand ist nicht lesbar. Er wurde nicht überschrieben.');}if(!s||s.version!==1||s.widget!=='anteile-einheiten'||!['divide','multiply','choice'].includes(s.mode)||!Number.isInteger(s.points)||s.points<0||s.points>20||!Array.isArray(s.history)||s.history.some(h=>!h||!validTask(h.task)||!['divide','multiply'].includes(h.route)||typeof h.correct!=='boolean'||!Array.isArray(h.attempts)||!Array.isArray(h.work))||(s.active&&!validActive(s.active)))throw new Error('Dieser Speichertext gehört nicht zu „Anteile berechnen 2 – Einheiten umrechnen“ oder hat ein unbekanntes Format. Er bleibt unverändert.');return s;}
+function parseState(raw){let s;try{const text=String(raw).trim();if(text.startsWith('EINHEIT:'))s=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(text.slice(8)),c=>c.charCodeAt(0))));else s=JSON.parse(text);}catch(_){throw new Error('Der gespeicherte Lernstand ist nicht lesbar. Er wurde nicht überschrieben.');}if(!s||s.version!==1||s.widget!=='anteile-einheiten'||!['divide','multiply','choice'].includes(s.mode)||!Number.isInteger(s.points)||s.points<0||s.points>20||!Array.isArray(s.history)||s.history.some(h=>!h||!validTask(h.task)||!['divide','multiply'].includes(h.route)||typeof h.correct!=='boolean'||!Array.isArray(h.attempts)||!Array.isArray(h.work))||(s.active&&!validActive(s.active)))throw new Error('Dieser Speichertext gehört nicht zu „Anteile berechnen 2 – Einheiten umrechnen“ oder hat ein unbekanntes Format. Er bleibt unverändert.');if(s.selection)validateSelection(s.selection);return s;}
 function encodeState(s){const bytes=new TextEncoder().encode(JSON.stringify(s));let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return 'EINHEIT:'+btoa(binary);}
 function taskKey(t){return t.scene+':'+t.whole+':'+t.n+'/'+t.d;}
 function partitionOptions(t){const s=sceneOf(t);return s.kind==='chocolate'?[1,2,3,4,6,8,12]:s.discrete?Array.from({length:12},(_,i)=>i+1).filter(n=>t.whole%n===0):Array.from({length:12},(_,i)=>i+1);}
 const POOL=[];
 for(const scene of SCENES)for(const whole of scene.amounts)for(const d of scene.denominators||[2,3,4,5,6,7,8,9,10,12])for(let n=2;n<d;n++){const t={scene:scene.id,whole,n,d};if(validTask(t))POOL.push(t);}
-function chooseTask(){
- const mastered=new Set(state.history.filter(h=>h.correct).map(h=>taskKey(h.task))),recent=state.history.slice(-3),lastScene=recent.at(-1)?.task.scene,lastKind=lastScene&&sceneOf({scene:lastScene}).kind;
- const count=state.history.length,recentResults=state.history.slice(-12),accuracy=recentResults.length?recentResults.filter(h=>h.correct).length/recentResults.length:0,ceiling=count<6||accuracy<.5?4:count<18||accuracy<.7?6:count<40||accuracy<.85?8:12;
- let pool=POOL.filter(t=>!mastered.has(taskKey(t))&&(state.mode==='multiply'||Number.isInteger(t.whole/t.d*(sceneOf(t).discrete?1:2))));if(!pool.length)return null;
- const easy=pool.filter(t=>t.d<=ceiling&&t.n<=5);if(easy.length)pool=easy;
- if(state.mode==='multiply'&&count>=3&&Math.random()<.4){const useful=pool.filter(t=>!Number.isInteger(t.whole/t.d*2)&&t.n>1);if(useful.length)pool=useful;}
- else if(count<6){const simple=pool.filter(t=>Number.isInteger(t.whole/t.d*2));if(simple.length)pool=simple;}
- const recentKeys=new Set(recent.map(h=>taskKey(h.task)));const different=pool.filter(t=>sceneOf(t).kind!==lastKind&&!recentKeys.has(taskKey(t)));if(different.length)pool=different;
- const scenes=[...new Set(pool.map(t=>t.scene))],scene=scenes[Math.floor(Math.random()*scenes.length)];pool=pool.filter(t=>t.scene===scene);
- return {...pool[Math.floor(Math.random()*pool.length)]};
+// Numbers define the round; unit conversions are variants, never extra groups.
+function numberKey(t){return t.whole+':'+t.n+'/'+t.d;}
+const TASKS=new Map(POOL.map(t=>[taskKey(t),t]));
+const NUMBER_KEYS=new Set(POOL.map(numberKey));
+function validateSelection(q){
+ if(!q||q.version!==1||!Number.isInteger(q.round)||q.round<1||!['numbers','retry','done'].includes(q.phase)||!Array.isArray(q.used)||new Set(q.used).size!==q.used.length||q.used.some(k=>!TASKS.has(k))||!Array.isArray(q.seen)||new Set(q.seen).size!==q.seen.length||q.seen.some(k=>!NUMBER_KEYS.has(k))||!Array.isArray(q.reservations)||q.reservations.some((r,i)=>!r||r.id!==i+1||!TASKS.has(r.key)||!['normal','retry'].includes(r.kind)||!Number.isInteger(r.round)||r.round<1||r.round>q.round||typeof r.completed!=='boolean')||!Array.isArray(q.queue)||new Set(q.queue).size!==q.queue.length||q.queue.some(id=>!Number.isInteger(id)||!q.reservations[id-1]||q.reservations[id-1].kind!=='normal'||!q.reservations[id-1].completed))throw new Error('Die gespeicherte Aufgabenauswahl ist beschädigt. Sie bleibt unverändert.');
 }
-function newTask(){const task=chooseTask();state.active=task?{task,mode:state.mode,route:state.mode==='choice'?null:state.mode,stage:'selectUnit',unitChoice:'',parts:1,copies:1,selected:[],input:'',attempts:[],hadError:false,work:[],started:new Date().toISOString()}:null;render();save();}
+function ensureSelection(){
+ if(state.selection)return state.selection;
+ const q=state.selection={version:1,round:1,phase:'numbers',used:[],seen:[],reservations:[],queue:[]};
+ const counts=new Map();for(const h of state.history)counts.set(taskKey(h.task),(counts.get(taskKey(h.task))||0)+1);
+ const reserve=(t,completed)=>{const key=taskKey(t),group=numberKey(t);if(!q.used.includes(key))q.used.push(key);if(!q.seen.includes(group))q.seen.push(group);const r={id:q.reservations.length+1,key,round:1,kind:'normal',completed};q.reservations.push(r);return r;};
+ for(const h of state.history){const key=taskKey(h.task);if(q.used.includes(key))continue;const r=reserve(h.task,true);if(!h.correct&&counts.get(key)===1)q.queue.push(r.id);}
+ const a=state.active;if(a){if(a.stage==='done'){a.selectionId=q.reservations.find(r=>r.key===taskKey(a.task))?.id;}else{a.selectionId=reserve(a.task,false).id;q.queue=q.queue.filter(id=>q.reservations[id-1].key!==taskKey(a.task));}}
+ return q;
+}
+function chooseTask(){
+ const q=ensureSelection();
+ for(;;){
+  if(q.phase==='done')return null;
+  if(q.phase==='retry'){
+   if(q.queue.length){const original=q.reservations[q.queue.shift()-1];const r={id:q.reservations.length+1,key:original.key,round:q.round,kind:'retry',completed:false};q.reservations.push(r);return {...TASKS.get(r.key)};}
+   q.round++;q.seen=[];q.phase='numbers';
+  }
+  const used=new Set(q.used),seen=new Set(q.seen),available=POOL.filter(t=>!used.has(taskKey(t))&&!seen.has(numberKey(t)));
+  if(!available.length){
+   if(q.queue.length){q.phase='retry';continue;}
+   if(POOL.some(t=>!used.has(taskKey(t)))){q.round++;q.seen=[];continue;}
+   q.phase='done';return null;
+  }
+  const groups=[...new Set(available.map(numberKey))];
+  const recent=state.history.slice(-12),accuracy=recent.length?recent.filter(h=>h.correct).length/recent.length:0;
+  const ceiling=state.history.length<6||accuracy<.5?4:accuracy<.7?6:accuracy<.85?8:12;
+  // Difficulty changes order only. Every unseen number group remains eligible.
+  const easier=groups.filter(k=>available.find(t=>numberKey(t)===k).d<=ceiling);
+  const order=easier.length?easier:groups,group=order[Math.floor(Math.random()*order.length)];
+  const variants=available.filter(t=>numberKey(t)===group),task=variants[Math.floor(Math.random()*variants.length)];
+  const key=taskKey(task);q.used.push(key);q.seen.push(group);q.reservations.push({id:q.reservations.length+1,key,round:q.round,kind:'normal',completed:false});return {...task};
+ }
+}
+function completeSelection(a){
+ const q=ensureSelection(),r=q.reservations[(a.selectionId||0)-1];
+ if(!r||r.completed)return;
+ r.completed=true;if(a.hadError&&r.kind==='normal')q.queue.push(r.id);
+}
+function newTask(){const task=chooseTask();state.active=task?{task,selectionId:state.selection.reservations.length,mode:state.mode,route:state.mode==='choice'?null:state.mode,stage:'selectUnit',unitChoice:'',parts:1,copies:1,selected:[],input:'',attempts:[],hadError:false,work:[],started:new Date().toISOString()}:null;render();save();}
 // Die Maße der gefüllten Flächen beziehen sich immer auf die Ausgangsmenge.
 function drawing(t,parts,selected,interactive,index){
  // Explicit SVG end tags keep the host's legacy HTML prefilter from rewriting script templates.
@@ -377,7 +411,7 @@ function renderCompleted(a){
 }
 function message(text,bad=false){$('feedback').hidden=!text;$('feedback').textContent=text;$('feedback').classList.toggle('bad',bad);}
 function render(){
- const a=state.active;$('exercise').hidden=!a;$('empty').hidden=!!a;$('empty').textContent='Du hast alle verfügbaren Aufgaben dieses Rechenwegs auf Anhieb richtig gelöst. Wähle einen anderen Rechenweg.';
+ const a=state.active;$('exercise').hidden=!a;$('empty').hidden=!!a;$('empty').textContent='Alle Zahlenrunden und die vorgesehenen Fehlerwiederholungen sind abgeschlossen. Du hast alle verfügbaren Aufgabenvarianten bearbeitet.';
  $('mode').value=state.mode;$('mode').disabled=!!a&&a.stage!=='done'&&a.attempts.length>0;renderStats();if(!a)return;
  const t=a.task,s=sceneOf(t),path=steps(a),pos=a.stage==='done'?path.length:path.indexOf(a.stage);
  $('sceneName').textContent=s.title;$('question').innerHTML='<span class="task-command">Berechne:</span>'+frac(t.n,t.d)+`<span>von ${fmt(sourceAmount(t))} ${s.conversion.from}</span>`;$('story').textContent=storyForTask(t);
@@ -405,7 +439,7 @@ function renderStats(){
 }
 function attemptLabel(stage){return {selectUnit:'Kleinere Einheit',convert:'Ausgangsmenge umrechnen',divideParts:'Unterteilung',unit:'Einzelteil berechnen',mark:'Markierte Teile (Nummern ab 1)',copies:'Anzahl der Ausgangsmengen',product:'Vervielfachte Menge',multiplyParts:'Unterteilung der Gesamtmenge',result:'Anteil berechnen'}[stage]||stage;}
 function record(input,correct){const a=state.active;a.attempts.push({stage:a.stage,input,correct,time:new Date().toISOString()});if(!correct)a.hadError=true;}
-function finish(){const a=state.active;if(a.stage==='done')return;state.history.push({task:{...a.task},mode:a.mode,route:a.route,correct:!a.hadError,attempts:structuredClone(a.attempts),hints:Array.isArray(a.hints)?[...a.hints]:[],work:[conversionText(a.task),...a.work],started:a.started,finished:new Date().toISOString()});a.stage='done';a.input='';}
+function finish(){const a=state.active;if(a.stage==='done')return;completeSelection(a);state.history.push({task:{...a.task},selectionId:a.selectionId,round:state.selection.round,repetition:state.selection.reservations[(a.selectionId||0)-1]?.kind==='retry',mode:a.mode,route:a.route,correct:!a.hadError,attempts:structuredClone(a.attempts),hints:Array.isArray(a.hints)?[...a.hints]:[],work:[conversionText(a.task),...a.work],started:a.started,finished:new Date().toISOString()});a.stage='done';a.input='';}
 function checkRange(){const a=state.active;if(!a||!['divideParts','copies','multiplyParts'].includes(a.stage))return;const copies=a.stage==='copies',value=copies?a.copies:a.parts,target=copies?a.task.n:a.task.d,ok=value===target;record(value,ok);if(ok){a.stage=copies?'product':a.stage==='divideParts'?'unit':'result';a.input='';message('Die Darstellung stimmt. Jetzt kannst du rechnen.');}else message(copies?`Der Zähler ist ${target}. Du brauchst ${target} gleich große Ausgangsmengen.`:`Der Nenner ist ${target}. Teile in ${target} gleich große Teile.`,true);render();save();}
 function togglePart(i){const a=state.active;if(!a||a.stage!=='mark'||i<0||i>=a.task.d)return;const pos=a.selected.indexOf(i);if(pos<0)a.selected.push(i);else a.selected.splice(pos,1);render();save();const target=$('objects').querySelector(`[data-part="${i}"]`);target?.focus({preventScroll:true});}
 function checkMark(){const a=state.active;if(!a||a.stage!=='mark')return;const ok=a.selected.length===a.task.n;record(a.selected.map(v=>v+1),ok);if(ok){a.stage='result';message('Die markierten Teile stimmen. Berechne jetzt ihre Menge.');}else message(`Der Zähler ist ${a.task.n}. Markiere genau ${a.task.n} der gleich großen Teile.`,true);render();save();}
@@ -460,7 +494,7 @@ async function connect() {
       state=String(hostField.value).trim()?parseState(hostField.value):fresh();
       scoreFields=Array.from({length:20},(_,i)=>findField(config.scorePrefix+(i+1)));
     }else{const raw=localStorage.getItem(STORAGE_KEY);state=raw?parseState(raw):fresh();}
-    ready=true;if(!state.active||state.active.task.n===1||(state.active.stage!=='done'&&state.active.mode!=='multiply'&&!Number.isInteger(state.active.task.whole/state.active.task.d*2)))newTask();else render();save();
+    ensureSelection();ready=true;if(!state.active||state.active.task.n===1||(state.active.stage!=='done'&&state.active.mode!=='multiply'&&!Number.isInteger(state.active.task.whole/state.active.task.d*2)))newTask();else render();save();
   }catch(err){storageMessage(err.message,true);}
 }
 

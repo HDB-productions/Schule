@@ -45,7 +45,15 @@ Die Hilfeseite erklärt bei Bedarf beide Wege. Eingaben müssen ausgerechnete Za
 
 Der Aufgabenpool enthält ausschließlich Brüche mit einem Zähler ab 2, damit beide Rechenschritte benötigt werden. Beim Öffnen wird eine bisher gespeicherte aktuelle Aufgabe mit Zähler 1 durch eine passende neue Aufgabe ersetzt; frühere Ergebnisse und Punkte bleiben erhalten. Endergebnisse sind ganze Zahlen oder halbe Einheiten. Im geführten Teilen und bei freier Auswahl gilt dies auch für den Zwischenwert. Beim Vervielfachen kommen gezielt auch ungekürzte Brüche vor, bei denen dieser Weg bequemere Zwischenwerte liefert. Schwierigkeit richtet sich nach Übungsumfang und jüngster Trefferquote. Wo möglich, wechselt auch die Darstellungsart zwischen Aufgaben.
 
-Auf Anhieb richtig gelöste Aufgaben werden aus der Auswahl genommen. Aufgaben mit Fehlern dürfen später wiederkommen, möglichst nicht unmittelbar. Die Identität einer Aufgabe umfasst Situation, Ausgangsmenge und vorgegebenen Bruch.
+Die Auswahl läuft in Runden über **Zahlenaufgaben**, unabhängig von Motiv und Einheit. Die Zahlenidentität besteht aus Ausgangsmenge sowie dem vorgegebenen Zähler und Nenner. In „Das Ganze bestimmen“ ist damit auch die bekannte Teilmenge eindeutig festgelegt. Jede Zahlengruppe wird in einer Runde genau einmal mit einer zufällig passenden, bislang unbenutzten Situation gezogen. Bereits das Ziehen reserviert Zahlenaufgabe und konkrete Variante dauerhaft, auch ohne Antwort und bei Moduswechsel oder Neuladen.
+
+Erst nach der vollständigen Zahlenrunde folgen alle darin mit Fehlern abgeschlossenen Aufgaben genau einmal im selben Motiv. Diese Wiederholungsrunde erzeugt auch bei erneuten Fehlern keine weitere Warteschlange. Danach beginnt die nächste Zahlenrunde mit bislang unbenutzten Situationen. Gruppen ohne weitere Varianten fallen heraus. Nach dem vollständigen Variantenpool und seiner letzten Fehlerwiederholung ist die Auswahl beendet.
+
+Schwierigkeit und Darstellungswechsel beeinflussen nur die Reihenfolge innerhalb der noch nicht gezogenen Aufgaben; sie erlauben keine vorzeitigen Zahlenwiederholungen. In „Anteile berechnen“ können am Ende einer Runde Aufgaben verbleiben, die wegen ihres Zwischenwerts ausschließlich für „Zuerst vervielfachen“ vorgesehen sind. Dann fordert die App zum passenden Moduswechsel auf, statt eine neue Runde zu beginnen. „Das Ganze bestimmen“ besitzt einen für beide Wege geeigneten gemeinsamen Pool.
+
+Runde, Phase, reservierte Kombinationen, gezogene Zahlengruppen und die endliche Fehlerwarteschlange werden mit dem Lernstand gespeichert. Vorhandene Historien werden übernommen: bereits bearbeitete Kombinationen gelten als benutzt, ihre Zahlengruppen als gezogen; pro Kombination wird höchstens der letzte noch fehlerhafte Abschluss einmal vorgemerkt. Die bestehende Aufgabe und erreichte Punkte bleiben erhalten. Alte, nicht gespeicherte Ziehungen lassen sich rückwirkend nicht rekonstruieren.
+
+`tests/selection.test.cjs` durchläuft beide vollständigen Pools, prüft Zahlen- und Motivduplikate, Rundenwechsel, falsche Wiederholungen ohne Endlosschleife, endgültige Erschöpfung, Reservierung und Wiederherstellung. Aktuell: „Das Ganze bestimmen“ 981 Zahlengruppen / 4.187 Varianten; „Anteile berechnen“ 1.156 Zahlengruppen / 4.963 Varianten.
 
 ## Verlauf und 20 Punkte
 
