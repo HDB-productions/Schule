@@ -1,0 +1,39 @@
+/* Diagram-only overrides. Load after dynamot-lern-ui.css. */
+#energyLab .de-palette{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:6px 0}
+#energyLab .de-category{min-width:0;padding:4px;border:1px solid #d4dfd8;border-radius:7px;background:#fff}
+#energyLab .de-category h4{font-size:12px;line-height:1.2;margin:0 0 4px;min-height:29px;color:#214f71}
+#energyLab .de-category>div{display:grid;gap:4px}
+#energyLab .de-palette button{padding:0;width:100%;min-height:44px;touch-action:none;user-select:none;cursor:grab}
+#energyLab .de-palette .de-token{width:100%;font-size:12px}
+@media(max-width:700px){#energyLab .de-palette{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#energyLab .de-editor{--de-height:66px;--de-blue:#d8eaf8;--de-ink:#214f71}
+#energyLab .de-help{font-size:13px;line-height:1.4;margin:8px 0}
+#energyLab .de-token{box-sizing:border-box;min-height:44px;padding:7px 10px;line-height:1.18;font-size:13px;overflow-wrap:normal;hyphens:none}
+#energyLab .de-arrow{clip-path:polygon(0 0,calc(100% - 13px) 0,100% 50%,calc(100% - 13px) 100%,0 100%);padding:7px 18px 7px 7px;background:var(--de-blue);color:var(--de-ink)}
+#energyLab .de-box{border:2px solid #b48e39;border-radius:0;background:#fff0ca;color:#5e4710;padding:7px 5px}
+#energyLab .de-selection{font-size:12px;min-height:18px;margin:6px 0;color:#416b5b}
+#energyLab .de-chain{display:flex;gap:0;align-items:flex-start;overflow-x:auto;overflow-y:hidden;padding:24px 1px 8px;min-height:158px;isolation:isolate}
+#energyLab .de-cell{position:relative;flex:1 0 0;min-width:82px;margin:0;padding:0}
+#energyLab .de-socket{box-sizing:border-box;height:var(--de-height);min-height:var(--de-height);width:100%;padding:0;margin:0;display:flex;align-items:stretch;justify-content:stretch;background:transparent;border:0;border-radius:0;touch-action:none;user-select:none;box-shadow:none;cursor:grab}
+#energyLab .de-socket .de-token{width:100%;height:var(--de-height);min-height:var(--de-height);font-size:clamp(11px,1.2vw,14px);display:flex;align-items:center;justify-content:center}
+#energyLab .de-socket.de-vacant{background:linear-gradient(90deg,transparent 6%,#e8eeea 6%,#e8eeea 94%,transparent 94%);background-size:100% 2px;background-repeat:no-repeat;background-position:center;cursor:copy}
+#energyLab .de-empty{padding:8px 0;width:100%;color:#7d9185;align-self:center;font-size:13px}
+#energyLab .de-empty small{font-size:10px;margin-top:3px;background:#f4f8f4;display:inline-block;padding:0 4px;margin-left:4px}
+#energyLab .de-clear,#energyLab .de-branch-clear{position:absolute;right:0;top:-25px;width:30px;height:25px;min-height:25px;padding:0;border:0;border-radius:5px;background:transparent;color:#6e8075;font-size:20px;z-index:2;line-height:1}
+#energyLab .de-clear:hover,#energyLab .de-branch-clear:hover{background:#f3dfd7;color:#8c3928}
+#energyLab .de-branch{position:relative;display:flex;flex-direction:column;align-items:center;width:100%;margin:0;padding:0}
+#energyLab .de-connector{display:block;width:2px;height:14px;background:#6c91a9;flex:none}
+#energyLab .de-branch-socket{box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-direction:column;width:100%;height:55px;min-height:44px;border:0;padding:0;margin:0;background:transparent;border-radius:0;touch-action:none;user-select:none;cursor:copy;color:#70897b}
+#energyLab .de-branch-empty .de-connector{height:10px;background:#c7d6cc}
+#energyLab .de-branch-empty .de-branch-socket{height:44px;opacity:.65}
+#energyLab .de-dock-dot{font-size:17px;line-height:18px}
+#energyLab .de-dock-label{font-size:10px}
+#energyLab .de-branch-socket .de-arrow{width:100%;height:55px;min-height:55px;font-size:11px;clip-path:polygon(0 0,100% 0,100% calc(100% - 11px),50% 100%,0 calc(100% - 11px));padding:5px 3px 14px;cursor:grab}
+#energyLab .de-branch-clear{top:9px;right:-3px;width:23px;min-height:23px;height:23px;background:#ffffffd9;font-size:18px}
+#energyLab .de-drag-hover,#energyLab .de-chosen,#energyLab .de-socket:focus-visible,#energyLab .de-branch-socket:focus-visible{outline:3px solid #cb9b2c;outline-offset:-3px;background:#fff5cc}
+#energyLab .de-dragging .de-branch-empty .de-branch-socket,#energyLab .de-has-selection .de-branch-empty .de-branch-socket{opacity:1;background:#e4efe6}
+#energyLab .de-drag-ghost{position:fixed;z-index:10000;pointer-events:none;width:130px;opacity:.92;transform:translate(-50%,-115%);filter:drop-shadow(0 3px 4px #183e3b44)}
+#energyLab .de-drag-ghost .de-token{width:100%;min-height:55px}
+#energyLab .de-readonly .de-chain{padding-top:6px;min-height:140px}
+#energyLab .de-readonly .de-socket{cursor:default}
+@media(prefers-reduced-motion:reduce){#energyLab .de-editor *{scroll-behavior:auto}}

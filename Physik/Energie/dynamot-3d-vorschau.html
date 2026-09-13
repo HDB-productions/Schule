@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DynaMot in 3D</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e9eff3;color:#223746;font:16px system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;gap:16px;align-items:center}h1{margin:0;font-size:28px}p{line-height:1.5;color:#526673}#viewport{height:clamp(330px,62vh,680px);border-radius:18px;overflow:hidden;background:#f0f4f6}nav{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 20px}button{font:inherit;min-height:44px;padding:8px 14px;border:1px solid #afbdc8;border-radius:8px;background:#fff;color:#223746;cursor:pointer}button[aria-pressed=true]{background:#254a61;color:#fff}label{display:flex;align-items:center;gap:12px;flex-wrap:wrap}input{width:min(240px,50vw);min-height:44px}output{font-variant-numeric:tabular-nums}.note{font-size:14px}a{color:#265e82}#error{color:#92312a}@media(max-width:540px){main{padding:14px}h1{font-size:24px}header{display:block}#viewport{height:420px;max-height:60vh}}
+</style></head><body><main><header><h1>DynaMot in 3D</h1><span>Kurbel · Gehäuse · Antrieb</span></header><p>Im Bild ziehen: Ansicht drehen. Mausrad oder zwei Finger: zoomen.</p>
+<div id="viewport"></div><p id="error" role="alert" hidden></p>
+<nav aria-label="Ansicht"><button id="reset">Ansicht zurücksetzen</button><button id="closer" aria-label="Vergrößern">＋ Zoom</button><button id="farther" aria-label="Verkleinern">− Zoom</button></nav>
+<nav aria-label="Kurbelanimation"><button id="play" aria-pressed="false">Drehung abspielen</button><button id="reverse">Drehrichtung wechseln</button></nav>
+<nav aria-label="Zubehör"><button id="bare">Ohne Zubehör</button><button id="crank">Kurbel</button><button id="pulley">Schnurrolle und Gewicht</button></nav>
+<p class="note">Die Ansicht lässt sich unabhängig von der Kurbel bewegen. Gehäuse und Stativstab bleiben beim Kurbeln fest. Die inneren Antriebsscheiben sind schematisch, mit einer Drehzahlübersetzung von 30:1. Zahngeometrie, interne Drehrichtung und Maße sind nicht technisch rekonstruiert.</p>
+<p class="note">Referenzen: <a href="IMG_2154.jpeg">Eigenes Seitenfoto</a> · <a href="IMG_2157.jpeg">Aufbau mit Tischklemmen</a> · <a href="https://en.cornelsen-experimenta.de/media/do/renderImage/57176/D/57176?no_sess=true">Hersteller-Kurbelseite</a>. Cornelsen DynaMot 54850. Die Tischklemme ist vereinfacht nachgebildet. Die Fotos zeigen keine Schnurrolle und kein Gewicht.</p>
+<script type="module">
+import {createDynamotView} from './dynamot-3d.js';
+let running=false,angle=0,direction=1,last=null;
+const play=document.getElementById('play');
+function stop(){running=false;play.textContent='Drehung abspielen';play.setAttribute('aria-pressed','false');}
+try {
+ const view=createDynamotView(document.getElementById('viewport'),{onCrankChange:a=>{stop();angle=a;view.setWeightHeight(-2.45+angle*.12);}});
+ document.getElementById('bare').addEventListener('click',()=>{stop();view.setAccessory('none');});
+ document.getElementById('crank').addEventListener('click',()=>view.setAccessory('crank'));
+ document.getElementById('pulley').addEventListener('click',()=>{stop();view.setAccessory('pulley');});
+ play.addEventListener('click',()=>{running=!running;play.textContent=running?'Drehung pausieren':'Drehung abspielen';play.setAttribute('aria-pressed',String(running));last=null;});
+ document.getElementById('reverse').addEventListener('click',()=>{direction*=-1;});
+ document.getElementById('reset').addEventListener('click',view.resetView);
+ document.getElementById('closer').addEventListener('click',()=>view.zoom(.8));
+ document.getElementById('farther').addEventListener('click',()=>view.zoom(1.25));
+ function tick(time){if(running&&last!==null){angle+=direction*Math.min(time-last,80)*.00035;if(view.model.getAccessory()==='pulley'&&(angle>15||angle< -8)){stop();}view.setCrankAngle(angle);view.setWeightHeight(-2.45+angle*.12);}last=time;requestAnimationFrame(tick);}requestAnimationFrame(tick);
+ document.addEventListener('visibilitychange',()=>{last=null;});
+}catch(error){const message=document.getElementById('error');message.hidden=false;message.textContent='Die 3D-Ansicht konnte nicht geladen werden. Bitte einen Browser mit WebGL 2 verwenden. '+error.message;document.querySelectorAll('button').forEach(b=>b.disabled=true);}
+</script></main></body></html>

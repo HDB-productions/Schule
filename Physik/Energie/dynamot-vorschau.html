@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DynaMot – Kurbelvorschau</title>
+<style>body{margin:0;background:#edf2f5;color:#243441;font:16px system-ui,sans-serif}main{max-width:960px;margin:auto;padding:24px}h1{font-size:24px;margin:0}p{line-height:1.5;color:#536573}svg{display:block;width:100%;height:auto;max-height:65vh}section{background:white;border-radius:18px;padding:16px}nav{display:flex;align-items:center;gap:14px;flex-wrap:wrap}button{font:inherit;border:1px solid #a9bac6;background:#fff;border-radius:8px;padding:10px 16px;cursor:pointer}button[aria-pressed=true]{background:#243f52;color:white}label{display:flex;gap:10px;align-items:center;flex-wrap:wrap}input{width:180px}small{display:block;margin-top:18px;line-height:1.5}a{color:#245d83}output{min-width:45px;font-variant-numeric:tabular-nums}</style>
+<main><h1>DynaMot · Kurbelvorschau</h1><p>Kurbelseite mit transparentem Gehäuse</p><section>
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="620" viewBox="0 0 860 620" role="img" aria-labelledby="dm-title dm-desc">
+  <title id="dm-title">DynaMot – Ansicht von der Kurbelseite</title>
+  <desc id="dm-desc">Stilisierte Zeichnung des Cornelsen DynaMot 54850 nach offiziellen Fotos. Transparenter Zylinder, Motor, feste Stirnplatten und Stativstab. Kurbel, Griff und schematische Getriebeteile sind getrennte Gruppen. Keine maßgetreue technische Rekonstruktion.</desc>
+  <metadata>
+    Referenzen: https://en.cornelsen-experimenta.de/media/do/renderImage/57176/D/57176?no_sess=true und https://en.cornelsen-experimenta.de/media/do/renderImage/57173/D/57173?no_sess=true
+    Animation: dm-crank rotate(a); dm-grip-counter rotate(-a); dm-drive rotate(a); dm-rotor rotate(30*a). Rotationszentren jeweils 0,0 im lokalen Koordinatensystem. Griff-Gegendrehung erhält seine projizierte Achsrichtung. Getriebe schematisch, 30:1 laut Hersteller; interne Drehrichtung nicht fotografisch verifiziert. Inline-SVG verwenden; IDs bei mehrfacher Einbindung präfixieren.
+  </metadata>
+  <defs>
+    <linearGradient id="dm-metal" x1="0" y1="0" x2="0.8" y2="1"><stop stop-color="#e9edf1"/><stop offset=".35" stop-color="#b4bec9"/><stop offset=".55" stop-color="#f4f6f8"/><stop offset="1" stop-color="#8996a5"/></linearGradient>
+    <linearGradient id="dm-motor" x2="0" y2="1"><stop stop-color="#71808e"/><stop offset=".3" stop-color="#e0e5e9"/><stop offset=".55" stop-color="#b0bbc5"/><stop offset="1" stop-color="#687683"/></linearGradient>
+    <linearGradient id="dm-black" x2="0" y2="1"><stop stop-color="#46505a"/><stop offset=".4" stop-color="#222a32"/><stop offset="1" stop-color="#080e14"/></linearGradient>
+    <g id="dm-screw"><circle r="6" fill="#dce2e7" stroke="#65717d" stroke-width="1.5"/><path d="M-3 0H3M0-3V3" stroke="#4e5965" stroke-width="1.5"/></g>
+  </defs>
+  <!-- Rear plate and fixed electrical terminals. Cylinder axis projects up/right. -->
+  <g id="dm-frame" stroke-linejoin="round">
+    <ellipse cx="585" cy="190" rx="91" ry="142" fill="url(#dm-metal)" stroke="#6d7986" stroke-width="3"/>
+    <ellipse cx="594" cy="188" rx="88" ry="140" fill="#d8e0e7" stroke="#8b97a3" stroke-width="2"/>
+    <path d="M615 99l25-7M649 235l24-7" stroke="#7d8792" stroke-width="12"/>
+    <ellipse cx="642" cy="91" rx="9" ry="13" fill="#d13936" stroke="#8c2526" stroke-width="3"/>
+    <ellipse cx="675" cy="228" rx="9" ry="13" fill="#242a32" stroke="#111820" stroke-width="3"/>
+    <path d="M547 167C590 151 589 107 622 102" fill="none" stroke="#c73737" stroke-width="5"/>
+    <path d="M548 231C587 267 615 256 654 237" fill="none" stroke="#29343e" stroke-width="5"/>
+    <path d="M294 152L585 81M295 365L590 293" stroke="#727e89" stroke-width="11"/>
+    <path d="M294 150L585 79M295 363L590 291" stroke="#d4dce2" stroke-width="3"/>
+  </g>
+  <!-- Motor housing stays fixed. Visible gearbox is intentionally schematic. -->
+  <g id="dm-motor-housing">
+    <path d="M399 175L525 144Q569 165 557 240L428 273Z" fill="url(#dm-motor)" stroke="#74818d" stroke-width="2"/>
+    <ellipse cx="420" cy="224" rx="35" ry="59" fill="#a5b0bb" stroke="#63717f" stroke-width="3"/>
+    <path d="M455 166L507 153L520 234L468 247Z" fill="#273442" stroke="#ac353b" stroke-width="3"/>
+    <text x="476" y="205" fill="#fff" font-family="Arial,sans-serif" font-size="14" transform="rotate(-14 476 205)">MOTOR</text>
+    <path d="M526 158l13-3M531 167l12-3" stroke="#485662" stroke-width="5"/>
+    <g transform="translate(405 226) matrix(.60 -.15 0 1 0 0)">
+      <g id="dm-rotor" data-ratio="30" data-schematic="true"><circle r="34" fill="#485661" stroke="#23323f" stroke-width="4"/><path d="M-29 0H29M0-29V29M-20-20L20 20M-20 20L20-20" stroke="#b8c2ca" stroke-width="5"/><circle r="10" fill="#cfdae2"/></g>
+    </g>
+    <g transform="translate(349 239) matrix(.60 -.15 0 1 0 0)">
+      <g id="dm-drive" data-ratio="1" data-schematic="true"><circle r="42" fill="#53616c" stroke="#293742" stroke-width="5" stroke-dasharray="4 3"/><path d="M-32 0H32M0-32V32" stroke="#a7b3bd" stroke-width="8"/><circle r="12" fill="#d9e0e5"/></g>
+    </g>
+    <path d="M316 197L397 177M316 282L410 258" stroke="#aa975b" stroke-width="7"/>
+  </g>
+  <g id="dm-transparent-shell">
+    <path d="M289 123L587 48C705 68 707 302 588 332L290 407C403 375 400 143 289 123Z" fill="#d7edf7" fill-opacity=".18" stroke="#9cbbc9" stroke-opacity=".7" stroke-width="2"/>
+    <path d="M344 139L610 75M372 162L633 96" stroke="#fff" stroke-opacity=".65" stroke-width="5"/>
+    <path d="M363 374L638 303" stroke="#f4fcff" stroke-opacity=".8" stroke-width="3"/>
+  </g>
+  <g id="dm-front-plate">
+    <ellipse cx="289" cy="266" rx="89" ry="144" fill="#39434e"/>
+    <ellipse cx="282" cy="267" rx="87" ry="142" fill="url(#dm-metal)" stroke="#75828f" stroke-width="2"/>
+    <path d="M240 166L468 544L482 536L254 158Z" fill="url(#dm-metal)" stroke="#8795a2" stroke-width="2"/>
+    <use href="#dm-screw" x="254" y="184"/><use href="#dm-screw" x="337" y="322"/>
+    <use href="#dm-screw" x="231" y="223"/><use href="#dm-screw" x="331" y="259"/>
+    <text x="304" y="220" font-family="Arial,sans-serif" font-size="15" fill="#34424e" transform="rotate(-14 304 220)">DynaMot</text>
+    <ellipse cx="278" cy="269" rx="20" ry="29" fill="#67737f" stroke="#43515d" stroke-width="2"/>
+  </g>
+  <!-- Only the inner group rotates; the projection and fixed plate remain still. -->
+  <g transform="translate(267 273) matrix(.60 -.15 0 1 0 0)">
+    <g id="dm-crank" data-ratio="1">
+      <path d="M-5-14L-133-14Q-149-14-149 0Q-149 14-133 14H-5Z" fill="url(#dm-metal)" stroke="#6e7d89" stroke-width="2"/>
+      <g transform="translate(-135 0)"><g id="dm-grip-counter">
+        <path d="M0-9L-31-15L-34 9L0 9Z" fill="url(#dm-metal)" stroke="#6d7a86" stroke-width="2"/>
+        <path d="M-27-18L-143-23Q-161-22-164-6Q-166 11-147 15L-31 18Q-18 0-27-18Z" fill="url(#dm-black)" stroke="#17222c" stroke-width="2"/>
+        <path d="M-42-11L-138-14" stroke="#7b8994" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>
+      </g></g>
+      <circle r="20" fill="#f5f3ea" stroke="#bac0bf" stroke-width="3" stroke-dasharray="2 1"/>
+      <circle r="7" fill="#a9b1b8" stroke="#66737e" stroke-width="2"/><path d="M-4 0H4" stroke="#44505a" stroke-width="2"/>
+    </g>
+  </g>
+</svg>
+
+<nav aria-label="Animation"><button id="play" aria-pressed="false">Abspielen</button><button id="reverse">Richtung wechseln</button><label>Kurbelwinkel <input id="angle" type="range" min="0" max="360" step="1" value="0"><output id="degrees">0°</output></label></nav></section>
+<small>Stilisierte Ansicht nach den <a href="https://en.cornelsen-experimenta.de/media/do/renderImage/57176/D/57176?no_sess=true">offiziellen Fotos der Kurbelseite</a> und des <a href="https://en.cornelsen-experimenta.de/media/do/renderImage/57173/D/57173?no_sess=true">Gesamtaufbaus</a>. Stirnplatten, Stativstab und Motorgehäuse bleiben fest. Getrieberäder sind schematisch; die Ausgangsbewegung folgt dem angegebenen Verhältnis 30:1. Zahnform und interne Drehrichtung sind keine technische Rekonstruktion.</small>
+<script>
+'use strict';
+const ids=['dm-crank','dm-grip-counter','dm-drive','dm-rotor'];
+const parts=ids.map(id=>document.getElementById(id));
+const slider=document.getElementById('angle'), degrees=document.getElementById('degrees'), play=document.getElementById('play');
+let angle=0,running=false,direction=1,last=null;
+function render(){[angle,-angle,angle,angle*30].forEach((value,i)=>parts[i].setAttribute('transform',`rotate(${value%360})`));slider.value=String(Math.round(angle)%360);degrees.value=`${Math.round(angle)%360}°`;}
+function setRunning(value){running=value;play.textContent=running?'Pause':'Abspielen';play.setAttribute('aria-pressed',String(running));last=null;}
+play.addEventListener('click',()=>setRunning(!running));
+document.getElementById('reverse').addEventListener('click',()=>{direction*=-1;});
+slider.addEventListener('input',()=>{setRunning(false);angle=Number(slider.value);render();});
+function tick(time){if(running&&last!==null){angle=(angle+direction*Math.min(time-last,80)*.018+360)%360;render();}last=time;requestAnimationFrame(tick);}
+document.addEventListener('visibilitychange',()=>{last=null;});
+render();requestAnimationFrame(tick);
+</script></main></html>
