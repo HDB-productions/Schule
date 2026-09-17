@@ -19,3 +19,12 @@ Die Historie bleibt vollständig in E1 enthalten. Nur die Bildschirm-Liste wird 
 `tests/performance-touch.test.cjs` prüft alle vier Apps mit je tausend Aufgaben in einem bisherigen Speicherformat, offenen Eingaben und erhaltenem Verlauf. Vierzig unmittelbar aufeinanderfolgende Eingabeereignisse verursachen eine statt vierzig Übergaben an das nachgebildete EduLudoo-Feld. Zusätzlich geprüft: sofortiges Leeren des Speicherpuffers beim Seitenverlassen, zunächst nicht aufgebaute Historie, Wiederverwendung der geöffneten Liste, Touch-Wischen über mehrere Teile, Zurückwischen sowie unveränderte Maus- und Tastaturbedienung.
 
 Die vorhandenen Bedienungs-, Punkte-, Runden-, Speicher- und Einbettungstests bleiben Teil der Prüfung. Die Touch-Tests verwenden Browser-Touch-Ereignisse über Chromium; die tatsächliche Serververarbeitung der Schulinstanz und die verschiedenen Geräte der Kinder werden damit nicht nachgebildet.
+
+
+## Nachprüfung: Tippen in den drei SVG-Apps
+
+Nach Rückmeldung aus dem eingebetteten EduLO-Browser auf einem iPad wurden „Anteile berechnen“, „Das Ganze bestimmen“ und „Anteile berechnen 2“ zusätzlich korrigiert. Die dort funktionierende Touch-Bedienung von „Brüche verstehen“ bleibt unverändert.
+
+Das Startfeld einer Wischgeste wird unmittelbar aus dem berührten Element bestimmt. Es wird nicht noch einmal durch eine möglicherweise abweichende Koordinatenabfrage gesucht. Beim Loslassen wird auch die letzte Fingerposition berücksichtigt. Nach einer behandelten Touch-Geste darf ein zusätzlich ausgelöstes Klickereignis die Auswahl nicht wieder rückgängig machen – auch dann nicht, wenn die Einbettung es als Mausklick kennzeichnet oder ohne Klickzähler auslöst. Ein echter neuer Mausdruck oder eine Tastaturaktion bleibt sofort verwendbar.
+
+`tests/svg-touch.test.cjs` reproduziert die frühere Aufhebung einer Touch-Auswahl durch ein zusätzliches Klickereignis. Er prüft kurze Berührungen, erneutes Antippen zum Entfernen, Start- und Endfeld beim Wischen, abweichende Koordinatentreffer beim Start, verschiedene Klickkennzeichnungen sowie Maus und Tastatur nach Einbettung mit der echten lokalen jQuery-Version. Alle verfügbaren Motive der drei Apps sind einbezogen. Die echte iPad-App lässt sich in der lokalen Chromium-Testumgebung nicht ersetzen; die abschließende Geräteprüfung erfolgt nach Übernahme der korrigierten HTML-Inhalte in EduLO.

@@ -555,22 +555,34 @@ widgetRoot.addEventListener('focusout',flushPendingSave);
 // Keep pointer capture on the stable container while its children are redrawn.
 function installTouchPainting(container,selector,readIndex,paint,isMarking){
  let gesture=null,suppressUntil=0;
- const visit=(x,y)=>{const el=document.elementFromPoint(x,y)?.closest(selector);if(!el||!container.contains(el))return;const i=readIndex(el);if(gesture.seen.has(i))return;gesture.seen.add(i);paint(i,gesture.select);};
+ const apply=el=>{if(!gesture||!el||!container.contains(el))return;const i=readIndex(el);if(gesture.seen.has(i))return;gesture.seen.add(i);paint(i,gesture.select);};
+ const visit=(x,y)=>apply(container.ownerDocument.elementFromPoint(x,y)?.closest(selector));
  container.addEventListener('pointerdown',e=>{
+  // A genuine mouse press starts a new action; its click must remain usable.
+  if(e.pointerType==='mouse'){suppressUntil=0;return;}
   if(e.pointerType!=='touch'||!e.isPrimary||!isMarking()||gesture)return;
-  const el=e.target.closest(selector);if(!el)return;
-  e.preventDefault();gesture={id:e.pointerId,select:!state.active.selected.includes(readIndex(el)),seen:new Set(),x:e.clientX,y:e.clientY};
-  container.setPointerCapture(e.pointerId);visit(e.clientX,e.clientY);
+  const el=e.target.closest(selector);if(!el||!container.contains(el))return;
+  e.preventDefault();suppressUntil=Date.now()+800;
+  gesture={id:e.pointerId,select:!state.active.selected.includes(readIndex(el)),seen:new Set(),x:e.clientX,y:e.clientY};
+  container.setPointerCapture(e.pointerId);
+  // The event target already identifies the start field, including SVG children.
+  apply(el);
  });
- container.addEventListener('pointermove',e=>{
+ const move=e=>{
   if(!gesture||e.pointerId!==gesture.id)return;e.preventDefault();
   const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y,steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/6)),x=gesture.x,y=gesture.y;
   for(let i=1;i<=steps;i++)visit(x+dx*i/steps,y+dy*i/steps);
   gesture.x=e.clientX;gesture.y=e.clientY;
- });
- const end=e=>{if(!gesture||e.pointerId!==gesture.id)return;gesture=null;suppressUntil=Date.now()+600;flushPendingSave();};
- for(const type of ['pointerup','pointercancel','lostpointercapture'])container.addEventListener(type,end);
- container.addEventListener('click',e=>{if(Date.now()<suppressUntil&&e.detail!==0&&e.pointerType!=='mouse'){e.preventDefault();e.stopImmediatePropagation();}},true);
+ };
+ container.addEventListener('pointermove',move);
+ const end=e=>{if(!gesture||e.pointerId!==gesture.id)return;gesture=null;suppressUntil=Date.now()+800;flushPendingSave();};
+ container.addEventListener('pointerup',e=>{move(e);end(e);});
+ for(const type of ['pointercancel','lostpointercapture'])container.addEventListener(type,end);
+ container.addEventListener('keydown',e=>{if(['Enter',' '].includes(e.key))suppressUntil=0;},true);
+ // Embedded browsers may label a touch's compatibility click as a mouse click
+ // or omit detail/pointerType. Only a fresh physical mouse press or keyboard
+ // action above re-enables clicks immediately; the touch was already handled.
+ container.addEventListener('click',e=>{if(gesture||Date.now()<suppressUntil){e.preventDefault();e.stopImmediatePropagation();}},true);
 }
 
 function save(force=false) {
