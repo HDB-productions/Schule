@@ -71,3 +71,10 @@ Für Punkt `p` werden insgesamt `p × (p + 3)` auf Anhieb richtige Aufgaben ben�
 Ausführung: `PLAYWRIGHT_MODULE` auf eine lokale Playwright-Installation setzen und `node tests/ganze.test.cjs` aus diesem Ordner aufrufen. Optional erzeugt `SCREENSHOT_DIR` Bildschirmaufnahmen. Standardbrowser ist Microsoft Edge; `BROWSER_CHANNEL` kann ihn ändern. Tests werden nicht in EduLudoo hochgeladen.
 
 Alle SVG-Elemente in JavaScript-Strings haben explizite Endtags. Selbstschließende SVG-Tags dürfen hier nicht eingeführt werden: Der ältere jQuery-HTML-Prefilter kann sonst Zeichnungen innerhalb von Schleifen beschädigen.
+
+
+## Kompaktes Layout (17. September 2026)
+
+Aufgabe, Visualisierung und Eingabefelder stehen in einer gemeinsamen Fläche. Regler und Prüfen sind direkt darunter angeordnet; abgeschlossene Schritte werden nicht zusätzlich als lange Liste angezeigt. Historie und Punkte bleiben erhalten. Der Titel wird in der Edulo-Einbettung ausgeblendet. Im Modus „Selbst entscheiden“ folgt nach der Wegwahl derselbe vollständige Ablauf wie bei direkter Wahl.
+
+Die bisherige Widgetkennung, das Speicherpräfix, E1/E2 und der lokale Speicherschlüssel bleiben erhalten. `tests/compact-layout.test.cjs` prüft gespeicherte Altstände mit 100 Ergebnissen und acht Punkten, beide Wege einschließlich freier Wahl, Wiederherstellung nach jedem Schritt und alle Motive in zwei Breiten. Die Altstände in `tests/fixtures` wurden mit der vorherigen App-Fassung erzeugt; es sind synthetische Testdaten. Die Vergleichsdatei „Anteile berechnen - Layout 2.html“ bleibt separat und verwendet weiterhin ihren eigenen Testspeicher.

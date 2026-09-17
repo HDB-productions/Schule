@@ -22,7 +22,7 @@ let browser;
  await page.goto(base);await page.locator('#exercise').waitFor();
  async function seed(s){await page.evaluate(({s,storageKey})=>{ready=false;localStorage.setItem(storageKey,JSON.stringify(s));},{s,storageKey});await page.reload();await page.locator('#exercise').waitFor();}
  const saved=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('bruchrechnung-anteile-berechnen-v1')));
- async function answer(target=page){const value=await target.evaluate(()=>rationalText(expected(state.active)));await target.locator('#answer').fill(value);await target.locator('#answerForm button').click();}
+ async function answer(target=page){const value=await target.evaluate(()=>rationalText(expected(state.active)));await target.locator('#answer').fill(value);await target.locator('#checkAnswer').click();}
  async function solve(target=page,choice='divide'){
   for(let k=0;k<7;k++){
    const a=await target.evaluate(()=>state.active);if(a.stage==='done')return;
@@ -39,26 +39,26 @@ let browser;
  // Four guided stages, persistent partial input/marking, first-attempt record.
  await seed({...fresh(),active:active('divide',routeTask)});
  assert.equal(await page.locator('#historyPanel').getAttribute('open'),null);
- let layout=await page.evaluate(()=>({picture:document.querySelector('#objects').getBoundingClientRect().top,slider:document.querySelector('#checkRange').getBoundingClientRect().bottom,context:document.querySelector('#story').getBoundingClientRect().bottom,question:document.querySelector('#question').getBoundingClientRect().top}));assert.ok(layout.slider<layout.picture);assert.ok(layout.context<=layout.question);
- await page.locator('#range').fill('7');await page.locator('#checkRange').click();await page.locator('#answer').fill('3');await page.reload();assert.equal(await page.locator('#answer').inputValue(),'3');await page.locator('#answerForm button').click();
+ let layout=await page.evaluate(()=>({picture:document.querySelector('#objects').getBoundingClientRect().top,slider:document.querySelector('#checkRange').getBoundingClientRect().bottom,context:document.querySelector('#story').getBoundingClientRect().bottom,question:document.querySelector('#question').getBoundingClientRect().top}));assert.ok(layout.slider>layout.picture);assert.ok(layout.context<=layout.question);
+ await page.locator('#range').fill('7');await page.locator('#checkRange').click();await page.locator('#answer').fill('3');await page.reload();assert.equal(await page.locator('#answer').inputValue(),'3');await page.locator('#checkAnswer').click();
  await page.locator('[data-part="0"]').click();await page.reload();assert.equal(await page.locator('[aria-pressed=true]').count(),1);await solve();
  assert.equal((await saved()).history[0].correct,true);assert.equal((await saved()).history[0].attempts.length,4);assert.deepEqual((await saved()).history[0].work,['21 m ÷ 7 = 3 m','3 m × 5 = 15 m']);
  await page.evaluate(()=>submitAnswer());assert.equal((await saved()).history.length,1);
- assert.equal(await page.locator('[data-completed-stage]').count(),4);assert.equal(await page.locator('#flow').isVisible(),true);assert.equal(await page.locator('#pictureWork [data-equation]').count(),2);
+ assert.equal(await page.locator('#work').isVisible(),false);assert.equal(await page.locator('#flow').isVisible(),false);assert.equal(await page.locator('#pictureWork [data-equation]').count(),2);
  const prior=await page.evaluate(()=>taskKey(state.active.task));await page.locator('#next').click();assert.notEqual(await page.evaluate(()=>taskKey(state.active.task)),prior);
  // Wrong attempts stay visible and don't count toward rewards.
  await seed({...fresh(),active:active('divide',routeTask)});await page.locator('#checkRange').click();await solve();assert.equal((await saved()).history[0].correct,false);assert.equal((await saved()).history[0].attempts.length,5);
  // Multiplication before division, deliberately useful unreduced fraction.
  const useful={scene:'tape',whole:10,n:3,d:6};
  await seed({...fresh(),mode:'multiply',active:active('multiply',useful)});await solve();assert.deepEqual((await saved()).history[0].work,['10 m × 3 = 30 m','30 m ÷ 6 = 5 m']);assert.equal(await page.locator('#objects .object > svg').count(),3);
- for(const route of ['divide','multiply']){await seed({...fresh(),mode:'choice',active:active('choice',{scene:'tape',whole:12,n:3,d:6})});await solve(page,route);const h=(await saved()).history[0];assert.equal(h.route,route);assert.equal(h.attempts.length,2);assert.equal(h.correct,true);if(route==='divide')assert.equal(h.work[0],'12 m ÷ 6 = 2 m');}
+ for(const route of ['divide','multiply']){await seed({...fresh(),mode:'choice',active:active('choice',{scene:'tape',whole:12,n:3,d:6})});await solve(page,route);const h=(await saved()).history[0];assert.equal(h.route,route);assert.equal(h.attempts.length,4);assert.equal(h.correct,true);if(route==='divide')assert.equal(h.work[0],'12 m ÷ 6 = 2 m');}
  const numbers=await page.evaluate(()=>['1,5','1.5','5/3','10 / 6','0','1/0','abc','999999999999999999999999'].map(readNumber));assert.deepEqual(numbers.slice(0,5),[{n:3,d:2},{n:3,d:2},null,null,{n:0,d:1}]);assert.deepEqual(numbers.slice(5),[null,null,null]);
  const groupedNumbers=await page.evaluate(()=>['1.600','1.600,5','1.600 / 5','0.125','1.234.567','1.6.00'].map(readNumber));assert.deepEqual(groupedNumbers,[{n:1600,d:1},{n:3201,d:2},null,{n:1,d:8},{n:1234567,d:1},null]);
  // Numeric answers cannot bypass calculation with a division expression.
  await seed({...fresh(),mode:'multiply',active:{...active('multiply',{scene:'chocolate',whole:120,n:2,d:4}),stage:'result',parts:4,work:['120 g × 2 = 240 g']}});
- assert.match(await page.locator('#stepTitle').textContent(),/Wie viele Gramm/);assert.equal(await page.locator('#answerLabel').textContent(),'Dein Ergebnis');
- await page.locator('#answer').fill('240/4');await page.locator('#answerForm button').click();assert.equal((await saved()).active.stage,'result');assert.match(await page.locator('#feedback').textContent(),/Rechnungen und Brüche/);
- await page.locator('#answer').fill('60');await page.locator('#answerForm button').click();assert.equal((await saved()).active.stage,'done');
+ assert.match(await page.locator('#stepTitle').textContent(),/Wie viele Gramm/);assert.equal(await page.locator('#answerLabel').textContent(),'Berechne den gesuchten Anteil.');
+ await page.locator('#answer').fill('240/4');await page.locator('#checkAnswer').click();assert.equal((await saved()).active.stage,'result');assert.match(await page.locator('#feedback').textContent(),/Rechnungen und Brüche/);
+ await page.locator('#answer').fill('60');await page.locator('#checkAnswer').click();assert.equal((await saved()).active.stage,'done');
  for(const mode of ['choice','divide']){await seed({...fresh(),mode,active:active(mode,useful)});assert.equal(await page.evaluate(()=>Number.isInteger(state.active.task.whole/state.active.task.d*2)),true);}
  // All 20 thresholds, route quotas from third point, order independent.
  await seed({...fresh(),active:active('divide',routeTask)});
@@ -92,14 +92,14 @@ let browser;
  }
  await page.setViewportSize({width:1000,height:1100});
  // Empty checked answers also count as a logged failed attempt.
- await seed({...fresh(),active:{...active('divide',routeTask),stage:'unit',parts:7}});await page.locator('#answerForm button').click();assert.equal((await saved()).active.hadError,true);assert.equal((await saved()).active.attempts[0].input,'');
+ await seed({...fresh(),active:{...active('divide',routeTask),stage:'unit',parts:7}});await page.locator('#checkAnswer').click();assert.equal((await saved()).active.hadError,true);assert.equal((await saved()).active.attempts[0].input,'');
  // Each available slider step groups chocolate and eggs into equal whole pieces.
  const grouping=await page.evaluate(()=>SCENES.filter(s=>s.kind==='chocolate'||s.discrete).every(s=>POOL.filter(t=>t.scene===s.id).every(t=>partitionOptions(t).every(p=>(s.kind==='chocolate'?24:t.whole)%p===0))));assert.equal(grouping,true);
  for(const task of [{scene:'chocolate',whole:120,n:5,d:6},{scene:'white-chocolate',whole:120,n:7,d:8},{scene:'eggs',whole:24,n:5,d:6}]){await seed({...fresh(),active:active('divide',task)});await solve();assert.equal((await saved()).history[0].correct,true);}
  // Each region gets its known unit amount only after the learner calculates it.
  await seed({...fresh(),active:{...active('divide',{scene:'chocolate',whole:120,n:2,d:4}),stage:'unit',parts:4}});
- assert.equal(await page.locator('[data-part-amount]').count(),0);await page.locator('#answer').fill('20');await page.locator('#answerForm button').click();assert.equal(await page.locator('[data-part-amount]').count(),0);
- await page.locator('#answer').fill('30');await page.locator('#answerForm button').click();assert.equal(await page.locator('[data-part-amount]').count(),4);assert.deepEqual(await page.locator('[data-part-amount]').evaluateAll(els=>els.map(el=>el.getAttribute('aria-label'))),Array(4).fill('30 g'));
+ assert.equal(await page.locator('[data-part-amount]').count(),0);await page.locator('#answer').fill('20');await page.locator('#checkAnswer').click();assert.equal(await page.locator('[data-part-amount]').count(),0);
+ await page.locator('#answer').fill('30');await page.locator('#checkAnswer').click();assert.equal(await page.locator('[data-part-amount]').count(),4);assert.deepEqual(await page.locator('[data-part-amount]').evaluateAll(els=>els.map(el=>el.getAttribute('aria-label'))),Array(4).fill('30 g'));
  await page.locator('[data-part="0"]').click();await page.locator('[data-part="1"]').click();await page.reload();assert.equal(await page.locator('[data-part-amount]').count(),4);assert.equal(await page.locator('[aria-pressed=true]').count(),2);
  if(screenshotDir)await page.locator('.scene-board').screenshot({path:path.join(screenshotDir,'chocolate-known-parts.png')});await page.locator('#checkMark').click();assert.equal(await page.locator('[data-part-amount]').count(),4);await answer();
  for(const scene of await page.evaluate(()=>SCENES.map(s=>s.id))){
@@ -112,20 +112,20 @@ let browser;
  assert.match(await page.locator('#story').textContent(),/400 g.*vier Fünftel/);assert.equal(await page.locator('#objects figcaption').count(),0);
  assert.doesNotMatch(await page.locator('#exercise').innerText(),/[×÷]/);assert.equal(await page.locator('#pictureWork').isVisible(),false);
  await page.locator('#range').fill('4');await page.locator('#checkRange').click();
- assert.match(await page.locator('[data-completed-stage=copies]').textContent(),/Stelle 4.*4 gleich große Ausgangsmengen/);
- assert.doesNotMatch(await page.locator('#exercise').innerText(),/[×÷]/);
+ assert.equal(await page.locator('#work').isVisible(),false);
+ assert.match(await page.locator('#answerExpression').textContent(),/×/);
  await page.locator('#showTip').click();assert.match(await page.locator('#stepTip').textContent(),/4 × 400 g/);assert.doesNotMatch(await page.locator('#stepTip').textContent(),/1[.]?600|÷/);
- await page.reload();assert.equal(await page.locator('#stepTip').isVisible(),true);await page.locator('#answer').fill('1600');await page.locator('#answerForm button').click();
- assert.match(await page.locator('[data-completed-stage=product]').textContent(),/Wie viele Gramm wiegen alle Ausgangsmengen zusammen.*1\.600 g/);assert.match(await page.locator('#pictureWork').textContent(),/4 × 400 g = 1\.600 g/);assert.equal(await page.locator('#stepTip').isVisible(),false);assert.doesNotMatch(await page.locator('#exercise').innerText(),/÷/);
+ await page.reload();assert.equal(await page.locator('#stepTip').isVisible(),true);await page.locator('#answer').fill('1600');await page.locator('#checkAnswer').click();
+ assert.equal(await page.locator('#work').isVisible(),false);assert.match(await page.locator('#pictureWork').textContent(),/4 × 400 g = 1\.600 g/);assert.equal(await page.locator('#stepTip').isVisible(),false);assert.doesNotMatch(await page.locator('#exercise').innerText(),/÷/);
  if(screenshotDir){await page.screenshot({path:path.join(screenshotDir,'clay-confirmed-wide.png'),fullPage:true});await page.setViewportSize({width:390,height:1100});await page.screenshot({path:path.join(screenshotDir,'clay-confirmed-mobile.png'),fullPage:true});await page.setViewportSize({width:1000,height:1100});}
- await page.locator('#range').fill('5');await page.locator('#checkRange').click();await page.locator('#answer').fill('80');await page.locator('#answerForm button').click();
- assert.match(await page.locator('#stepTip').textContent(),/1\.600 g ÷ 5/);assert.doesNotMatch(await page.locator('#pictureWork').textContent(),/320/);await page.locator('#answer').fill('320');await page.locator('#answerForm button').click();
- assert.equal(await page.locator('[data-completed-stage]').count(),4);assert.match(await page.locator('#pictureWork').textContent(),/320 g/);assert.equal((await saved()).history[0].correct,false);
+ await page.locator('#range').fill('5');await page.locator('#checkRange').click();await page.locator('#answer').fill('80');await page.locator('#checkAnswer').click();
+ assert.match(await page.locator('#stepTip').textContent(),/1\.600 g ÷ 5/);assert.doesNotMatch(await page.locator('#pictureWork').textContent(),/320/);await page.locator('#answer').fill('320');await page.locator('#checkAnswer').click();
+ assert.equal(await page.locator('#work').isVisible(),false);assert.match(await page.locator('#pictureWork').textContent(),/320 g/);assert.equal((await saved()).history[0].correct,false);
  // Free selection follows the same layout and does not expose the second operation early.
  for(const route of ['divide','multiply']){
   await seed({...fresh(),mode:'choice',active:active('choice',clay)});assert.doesNotMatch(await page.locator('#exercise').innerText(),/[×÷]/);await page.locator(`[data-route=${route}]`).click();assert.doesNotMatch(await page.locator('#exercise').innerText(),/[×÷]/);
-  const order=await page.evaluate(()=>({input:document.querySelector('#answerForm').getBoundingClientRect().bottom,picture:document.querySelector('.scene-board').getBoundingClientRect().top,past:document.querySelector('#work').getBoundingClientRect().bottom,current:document.querySelector('#stepTitle').getBoundingClientRect().top}));assert.ok(order.input<order.picture);assert.ok(order.past<=order.current);
-  await answer();assert.equal(await page.locator('[data-completed-stage]').count(),2,JSON.stringify(await page.evaluate(()=>state.active)));assert.equal(await page.locator('#pictureWork [data-equation]').count(),1);assert.equal(await page.locator('#flow').isVisible(),false);await solve(page,route);assert.equal(await page.locator('#flow').isVisible(),true);
+  assert.equal(await page.evaluate(()=>state.active.stage),route==='divide'?'divideParts':'copies');await solve(page,route);assert.equal((await saved()).history[0].attempts.length,4);
+
  }
  // Host transport tolerates EduLudoo's smart quote replacement and writes 20 gaps.
  initial='';await page.goto(base+'/host');const frame=page.frames().find(f=>f.url().includes('/app'));await frame.locator('#exercise').waitFor();await solve(frame);

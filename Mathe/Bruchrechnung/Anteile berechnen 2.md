@@ -45,3 +45,10 @@ Im Editor werden Hostfelder nicht verändert. Fremde oder defekte Speichertexte 
 Eigener Test: `tests/anteile-einheiten.test.cjs`; ausführen mit Node und verfügbarer Playwright-Installation (`PLAYWRIGHT_MODULE`), Browser Microsoft Edge. Geprüft werden alle vier Wegvarianten, falsche Einheit, falsche und unzulässige Umrechnung, Wiederherstellung nach jedem Schritt, Erstversuch-Wertung, alle 20 Punkteschwellen, alle 17 Zeichnungen bei 1000/390/320 Pixeln, Hostfelder und Base64-Transport, Schutz fremder Daten, Browserfallback sowie wiederholte Einbettung mit der echten lokalen jQuery-Version 2.1.1. SVG-Tags in JavaScript-Strings besitzen explizite Endtags.
 
 Der Auswahltest durchläuft zusätzlich den gesamten echten Variantenpool, prüft vollständige Zahlenrunden ohne Zahlenduplikate, dauerhaft eindeutige Kombinationen, exakt eine motivgleiche Fehlerwiederholung trotz erneuter Fehler, Reservierungen bei Moduswechsel/Neuladen, Migration alter Historie und das endgültige Ende.
+
+
+## Kompaktes Layout (17. September 2026)
+
+Aufgabe, Visualisierung und Eingabefelder stehen in einer gemeinsamen Fläche. Regler und Prüfen sind direkt darunter angeordnet; abgeschlossene Schritte werden nicht zusätzlich als lange Liste angezeigt. Historie und Punkte bleiben erhalten. Der Titel wird in der Edulo-Einbettung ausgeblendet. Im Modus „Selbst entscheiden“ folgt nach der Wegwahl derselbe vollständige Ablauf wie bei direkter Wahl.
+
+Die bisherige Widgetkennung, das Speicherpräfix, E1/E2 und der lokale Speicherschlüssel bleiben erhalten. `tests/compact-layout.test.cjs` prüft gespeicherte Altstände mit 100 Ergebnissen und acht Punkten, beide Wege einschließlich freier Wahl, Wiederherstellung nach jedem Schritt und alle Motive in zwei Breiten. Die Altstände in `tests/fixtures` wurden mit der vorherigen App-Fassung erzeugt; es sind synthetische Testdaten. Die Vergleichsdatei „Anteile berechnen - Layout 2.html“ bleibt separat und verwendet weiterhin ihren eigenen Testspeicher.

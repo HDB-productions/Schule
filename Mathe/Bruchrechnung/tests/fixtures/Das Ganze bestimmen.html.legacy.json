@@ -1,0 +1,1455 @@
+{
+  "encoded": "GANZES1:eyJ2ZXJzaW9uIjoxLCJ3aWRnZXQiOiJkYXMtZ2FuemUtYmVzdGltbWVuIiwibW9kZSI6ImRpdmlkZSIsInBvaW50cyI6OCwiaGlzdG9yeSI6W3sidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjoyLCJkIjozfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjoyLCJkIjo0fSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjEyMCwibiI6MywiZCI6NH0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjEyMCwibiI6MiwiZCI6NX0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjMsImQiOjV9LCJyb3V0ZSI6Im11bHRpcGx5IiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjQsImQiOjV9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjoyLCJkIjo2fSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjozLCJkIjo2fSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjEyMCwibiI6NCwiZCI6Nn0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjEyMCwibiI6NSwiZCI6Nn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjIsImQiOjh9LCJyb3V0ZSI6Im11bHRpcGx5IiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjMsImQiOjh9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjo0LCJkIjo4fSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjo1LCJkIjo4fSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjEyMCwibiI6NiwiZCI6OH0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjEyMCwibiI6NywiZCI6OH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjIsImQiOjEwfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjozLCJkIjoxMH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjQsImQiOjEwfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjo1LCJkIjoxMH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjYsImQiOjEwfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjo3LCJkIjoxMH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjgsImQiOjEwfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjo5LCJkIjoxMH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjIsImQiOjEyfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjozLCJkIjoxMn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjQsImQiOjEyfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjo1LCJkIjoxMn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjYsImQiOjEyfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjo3LCJkIjoxMn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjgsImQiOjEyfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTIwLCJuIjo5LCJkIjoxMn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxMjAsIm4iOjEwLCJkIjoxMn0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjEyMCwibiI6MTEsImQiOjEyfSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjE4MCwibiI6MiwiZCI6M30sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjE4MCwibiI6MiwiZCI6NH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjMsImQiOjR9LCJyb3V0ZSI6Im11bHRpcGx5IiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjIsImQiOjV9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjozLCJkIjo1fSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjo0LCJkIjo1fSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjE4MCwibiI6MiwiZCI6Nn0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjE4MCwibiI6MywiZCI6Nn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjQsImQiOjZ9LCJyb3V0ZSI6Im11bHRpcGx5IiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjUsImQiOjZ9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjoyLCJkIjo4fSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjozLCJkIjo4fSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjE4MCwibiI6NCwiZCI6OH0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjE4MCwibiI6NSwiZCI6OH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjYsImQiOjh9LCJyb3V0ZSI6Im11bHRpcGx5IiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjcsImQiOjh9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjoyLCJkIjo5fSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjozLCJkIjo5fSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjE4MCwibiI6NCwiZCI6OX0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjE4MCwibiI6NSwiZCI6OX0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjYsImQiOjl9LCJyb3V0ZSI6Im11bHRpcGx5IiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjcsImQiOjl9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjo4LCJkIjo5fSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjoyLCJkIjoxMH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjMsImQiOjEwfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjo0LCJkIjoxMH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjUsImQiOjEwfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjo2LCJkIjoxMH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjcsImQiOjEwfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjo4LCJkIjoxMH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjksImQiOjEwfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjoyLCJkIjoxMn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjMsImQiOjEyfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjo0LCJkIjoxMn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjUsImQiOjEyfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjo2LCJkIjoxMn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjcsImQiOjEyfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjo4LCJkIjoxMn0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoxODAsIm4iOjksImQiOjEyfSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjoxMCwiZCI6MTJ9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MTgwLCJuIjoxMSwiZCI6MTJ9LCJyb3V0ZSI6Im11bHRpcGx5IiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoyNDAsIm4iOjIsImQiOjN9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjoyLCJkIjo0fSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjozLCJkIjo0fSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6MiwiZCI6NX0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6MywiZCI6NX0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoyNDAsIm4iOjQsImQiOjV9LCJyb3V0ZSI6Im11bHRpcGx5IiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoyNDAsIm4iOjIsImQiOjZ9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjozLCJkIjo2fSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjo0LCJkIjo2fSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6NSwiZCI6Nn0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6MiwiZCI6OH0sInJvdXRlIjoiZGl2aWRlIiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoyNDAsIm4iOjMsImQiOjh9LCJyb3V0ZSI6Im11bHRpcGx5IiwiY29ycmVjdCI6dHJ1ZSwiYXR0ZW1wdHMiOltdLCJ3b3JrIjpbXX0seyJ0YXNrIjp7InNjZW5lIjoiY29sYSIsIndob2xlIjoyNDAsIm4iOjQsImQiOjh9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjo1LCJkIjo4fSwicm91dGUiOiJtdWx0aXBseSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjo2LCJkIjo4fSwicm91dGUiOiJkaXZpZGUiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6NywiZCI6OH0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6MiwiZCI6MTB9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjozLCJkIjoxMH0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6NCwiZCI6MTB9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjo1LCJkIjoxMH0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6NiwiZCI6MTB9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjo3LCJkIjoxMH0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6OCwiZCI6MTB9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119LHsidGFzayI6eyJzY2VuZSI6ImNvbGEiLCJ3aG9sZSI6MjQwLCJuIjo5LCJkIjoxMH0sInJvdXRlIjoibXVsdGlwbHkiLCJjb3JyZWN0Ijp0cnVlLCJhdHRlbXB0cyI6W10sIndvcmsiOltdfSx7InRhc2siOnsic2NlbmUiOiJjb2xhIiwid2hvbGUiOjI0MCwibiI6MiwiZCI6MTJ9LCJyb3V0ZSI6ImRpdmlkZSIsImNvcnJlY3QiOnRydWUsImF0dGVtcHRzIjpbXSwid29yayI6W119XSwiYWN0aXZlIjp7ImZsb3dWZXJzaW9uIjozLCJ0YXNrIjp7InNjZW5lIjoicmliYm9uIiwid2hvbGUiOjkwLCJuIjo1LCJkIjoxMH0sImRyYXciOnsicm91bmQiOjEsImtpbmQiOiJuZXciLCJrZXkiOiJyaWJib246OTA6NS8xMCJ9LCJtb2RlIjoiZGl2aWRlIiwicm91dGUiOiJkaXZpZGUiLCJzdGFnZSI6ImRpdmlkZVBhcnRzIiwicGFydHMiOjEsImNvcGllcyI6MSwic2VsZWN0ZWQiOltdLCJpbnB1dCI6IiIsImF0dGVtcHRzIjpbXSwiaGFkRXJyb3IiOmZhbHNlLCJ3b3JrIjpbXSwic3RhcnRlZCI6IjIwMjYtMDktMTdUMTg6MTk6NDkuNzY1WiJ9LCJzZWxlY3Rpb24iOnsidmVyc2lvbiI6MSwicm91bmQiOjEsInBoYXNlIjoibmV3IiwidXNlZCI6WyJjb2xhOjEyMDoyLzMiLCJjb2xhOjEyMDoyLzQiLCJjb2xhOjEyMDozLzQiLCJjb2xhOjEyMDoyLzUiLCJjb2xhOjEyMDozLzUiLCJjb2xhOjEyMDo0LzUiLCJjb2xhOjEyMDoyLzYiLCJjb2xhOjEyMDozLzYiLCJjb2xhOjEyMDo0LzYiLCJjb2xhOjEyMDo1LzYiLCJjb2xhOjEyMDoyLzgiLCJjb2xhOjEyMDozLzgiLCJjb2xhOjEyMDo0LzgiLCJjb2xhOjEyMDo1LzgiLCJjb2xhOjEyMDo2LzgiLCJjb2xhOjEyMDo3LzgiLCJjb2xhOjEyMDoyLzEwIiwiY29sYToxMjA6My8xMCIsImNvbGE6MTIwOjQvMTAiLCJjb2xhOjEyMDo1LzEwIiwiY29sYToxMjA6Ni8xMCIsImNvbGE6MTIwOjcvMTAiLCJjb2xhOjEyMDo4LzEwIiwiY29sYToxMjA6OS8xMCIsImNvbGE6MTIwOjIvMTIiLCJjb2xhOjEyMDozLzEyIiwiY29sYToxMjA6NC8xMiIsImNvbGE6MTIwOjUvMTIiLCJjb2xhOjEyMDo2LzEyIiwiY29sYToxMjA6Ny8xMiIsImNvbGE6MTIwOjgvMTIiLCJjb2xhOjEyMDo5LzEyIiwiY29sYToxMjA6MTAvMTIiLCJjb2xhOjEyMDoxMS8xMiIsImNvbGE6MTgwOjIvMyIsImNvbGE6MTgwOjIvNCIsImNvbGE6MTgwOjMvNCIsImNvbGE6MTgwOjIvNSIsImNvbGE6MTgwOjMvNSIsImNvbGE6MTgwOjQvNSIsImNvbGE6MTgwOjIvNiIsImNvbGE6MTgwOjMvNiIsImNvbGE6MTgwOjQvNiIsImNvbGE6MTgwOjUvNiIsImNvbGE6MTgwOjIvOCIsImNvbGE6MTgwOjMvOCIsImNvbGE6MTgwOjQvOCIsImNvbGE6MTgwOjUvOCIsImNvbGE6MTgwOjYvOCIsImNvbGE6MTgwOjcvOCIsImNvbGE6MTgwOjIvOSIsImNvbGE6MTgwOjMvOSIsImNvbGE6MTgwOjQvOSIsImNvbGE6MTgwOjUvOSIsImNvbGE6MTgwOjYvOSIsImNvbGE6MTgwOjcvOSIsImNvbGE6MTgwOjgvOSIsImNvbGE6MTgwOjIvMTAiLCJjb2xhOjE4MDozLzEwIiwiY29sYToxODA6NC8xMCIsImNvbGE6MTgwOjUvMTAiLCJjb2xhOjE4MDo2LzEwIiwiY29sYToxODA6Ny8xMCIsImNvbGE6MTgwOjgvMTAiLCJjb2xhOjE4MDo5LzEwIiwiY29sYToxODA6Mi8xMiIsImNvbGE6MTgwOjMvMTIiLCJjb2xhOjE4MDo0LzEyIiwiY29sYToxODA6NS8xMiIsImNvbGE6MTgwOjYvMTIiLCJjb2xhOjE4MDo3LzEyIiwiY29sYToxODA6OC8xMiIsImNvbGE6MTgwOjkvMTIiLCJjb2xhOjE4MDoxMC8xMiIsImNvbGE6MTgwOjExLzEyIiwiY29sYToyNDA6Mi8zIiwiY29sYToyNDA6Mi80IiwiY29sYToyNDA6My80IiwiY29sYToyNDA6Mi81IiwiY29sYToyNDA6My81IiwiY29sYToyNDA6NC81IiwiY29sYToyNDA6Mi82IiwiY29sYToyNDA6My82IiwiY29sYToyNDA6NC82IiwiY29sYToyNDA6NS82IiwiY29sYToyNDA6Mi84IiwiY29sYToyNDA6My84IiwiY29sYToyNDA6NC84IiwiY29sYToyNDA6NS84IiwiY29sYToyNDA6Ni84IiwiY29sYToyNDA6Ny84IiwiY29sYToyNDA6Mi8xMCIsImNvbGE6MjQwOjMvMTAiLCJjb2xhOjI0MDo0LzEwIiwiY29sYToyNDA6NS8xMCIsImNvbGE6MjQwOjYvMTAiLCJjb2xhOjI0MDo3LzEwIiwiY29sYToyNDA6OC8xMCIsImNvbGE6MjQwOjkvMTAiLCJjb2xhOjI0MDoyLzEyIiwicmliYm9uOjkwOjUvMTAiXSwic2VlbiI6WyIxMjA6Mi8zIiwiMTIwOjIvNCIsIjEyMDozLzQiLCIxMjA6Mi81IiwiMTIwOjMvNSIsIjEyMDo0LzUiLCIxMjA6Mi82IiwiMTIwOjMvNiIsIjEyMDo0LzYiLCIxMjA6NS82IiwiMTIwOjIvOCIsIjEyMDozLzgiLCIxMjA6NC84IiwiMTIwOjUvOCIsIjEyMDo2LzgiLCIxMjA6Ny84IiwiMTIwOjIvMTAiLCIxMjA6My8xMCIsIjEyMDo0LzEwIiwiMTIwOjUvMTAiLCIxMjA6Ni8xMCIsIjEyMDo3LzEwIiwiMTIwOjgvMTAiLCIxMjA6OS8xMCIsIjEyMDoyLzEyIiwiMTIwOjMvMTIiLCIxMjA6NC8xMiIsIjEyMDo1LzEyIiwiMTIwOjYvMTIiLCIxMjA6Ny8xMiIsIjEyMDo4LzEyIiwiMTIwOjkvMTIiLCIxMjA6MTAvMTIiLCIxMjA6MTEvMTIiLCIxODA6Mi8zIiwiMTgwOjIvNCIsIjE4MDozLzQiLCIxODA6Mi81IiwiMTgwOjMvNSIsIjE4MDo0LzUiLCIxODA6Mi82IiwiMTgwOjMvNiIsIjE4MDo0LzYiLCIxODA6NS82IiwiMTgwOjIvOCIsIjE4MDozLzgiLCIxODA6NC84IiwiMTgwOjUvOCIsIjE4MDo2LzgiLCIxODA6Ny84IiwiMTgwOjIvOSIsIjE4MDozLzkiLCIxODA6NC85IiwiMTgwOjUvOSIsIjE4MDo2LzkiLCIxODA6Ny85IiwiMTgwOjgvOSIsIjE4MDoyLzEwIiwiMTgwOjMvMTAiLCIxODA6NC8xMCIsIjE4MDo1LzEwIiwiMTgwOjYvMTAiLCIxODA6Ny8xMCIsIjE4MDo4LzEwIiwiMTgwOjkvMTAiLCIxODA6Mi8xMiIsIjE4MDozLzEyIiwiMTgwOjQvMTIiLCIxODA6NS8xMiIsIjE4MDo2LzEyIiwiMTgwOjcvMTIiLCIxODA6OC8xMiIsIjE4MDo5LzEyIiwiMTgwOjEwLzEyIiwiMTgwOjExLzEyIiwiMjQwOjIvMyIsIjI0MDoyLzQiLCIyNDA6My80IiwiMjQwOjIvNSIsIjI0MDozLzUiLCIyNDA6NC81IiwiMjQwOjIvNiIsIjI0MDozLzYiLCIyNDA6NC82IiwiMjQwOjUvNiIsIjI0MDoyLzgiLCIyNDA6My84IiwiMjQwOjQvOCIsIjI0MDo1LzgiLCIyNDA6Ni84IiwiMjQwOjcvOCIsIjI0MDoyLzEwIiwiMjQwOjMvMTAiLCIyNDA6NC8xMCIsIjI0MDo1LzEwIiwiMjQwOjYvMTAiLCIyNDA6Ny8xMCIsIjI0MDo4LzEwIiwiMjQwOjkvMTAiLCIyNDA6Mi8xMiIsIjkwOjUvMTAiXSwicmV0cnkiOltdLCJoaXN0b3J5Q3Vyc29yIjoxMDAsInBlbmRpbmciOnsicm91bmQiOjEsImtpbmQiOiJuZXciLCJrZXkiOiJyaWJib246OTA6NS8xMCJ9LCJyZWFzb24iOiIifX0=",
+  "state": {
+    "version": 1,
+    "widget": "das-ganze-bestimmen",
+    "mode": "divide",
+    "points": 8,
+    "history": [
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 2,
+          "d": 3
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 2,
+          "d": 4
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 3,
+          "d": 4
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 2,
+          "d": 5
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 3,
+          "d": 5
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 4,
+          "d": 5
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 2,
+          "d": 6
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 3,
+          "d": 6
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 4,
+          "d": 6
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 5,
+          "d": 6
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 2,
+          "d": 8
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 3,
+          "d": 8
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 4,
+          "d": 8
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 5,
+          "d": 8
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 6,
+          "d": 8
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 7,
+          "d": 8
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 2,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 3,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 4,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 5,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 6,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 7,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 8,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 9,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 2,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 3,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 4,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 5,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 6,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 7,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 8,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 9,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 10,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 120,
+          "n": 11,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 2,
+          "d": 3
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 2,
+          "d": 4
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 3,
+          "d": 4
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 2,
+          "d": 5
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 3,
+          "d": 5
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 4,
+          "d": 5
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 2,
+          "d": 6
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 3,
+          "d": 6
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 4,
+          "d": 6
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 5,
+          "d": 6
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 2,
+          "d": 8
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 3,
+          "d": 8
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 4,
+          "d": 8
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 5,
+          "d": 8
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 6,
+          "d": 8
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 7,
+          "d": 8
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 2,
+          "d": 9
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 3,
+          "d": 9
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 4,
+          "d": 9
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 5,
+          "d": 9
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 6,
+          "d": 9
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 7,
+          "d": 9
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 8,
+          "d": 9
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 2,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 3,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 4,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 5,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 6,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 7,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 8,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 9,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 2,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 3,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 4,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 5,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 6,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 7,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 8,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 9,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 10,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 180,
+          "n": 11,
+          "d": 12
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 2,
+          "d": 3
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 2,
+          "d": 4
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 3,
+          "d": 4
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 2,
+          "d": 5
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 3,
+          "d": 5
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 4,
+          "d": 5
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 2,
+          "d": 6
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 3,
+          "d": 6
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 4,
+          "d": 6
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 5,
+          "d": 6
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 2,
+          "d": 8
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 3,
+          "d": 8
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 4,
+          "d": 8
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 5,
+          "d": 8
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 6,
+          "d": 8
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 7,
+          "d": 8
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 2,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 3,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 4,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 5,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 6,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 7,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 8,
+          "d": 10
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 9,
+          "d": 10
+        },
+        "route": "multiply",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      },
+      {
+        "task": {
+          "scene": "cola",
+          "whole": 240,
+          "n": 2,
+          "d": 12
+        },
+        "route": "divide",
+        "correct": true,
+        "attempts": [],
+        "work": []
+      }
+    ],
+    "active": {
+      "flowVersion": 3,
+      "task": {
+        "scene": "ribbon",
+        "whole": 90,
+        "n": 5,
+        "d": 10
+      },
+      "draw": {
+        "round": 1,
+        "kind": "new",
+        "key": "ribbon:90:5/10"
+      },
+      "mode": "divide",
+      "route": "divide",
+      "stage": "divideParts",
+      "parts": 1,
+      "copies": 1,
+      "selected": [],
+      "input": "",
+      "attempts": [],
+      "hadError": false,
+      "work": [],
+      "started": "2026-09-17T18:19:49.765Z"
+    },
+    "selection": {
+      "version": 1,
+      "round": 1,
+      "phase": "new",
+      "used": [
+        "cola:120:2/3",
+        "cola:120:2/4",
+        "cola:120:3/4",
+        "cola:120:2/5",
+        "cola:120:3/5",
+        "cola:120:4/5",
+        "cola:120:2/6",
+        "cola:120:3/6",
+        "cola:120:4/6",
+        "cola:120:5/6",
+        "cola:120:2/8",
+        "cola:120:3/8",
+        "cola:120:4/8",
+        "cola:120:5/8",
+        "cola:120:6/8",
+        "cola:120:7/8",
+        "cola:120:2/10",
+        "cola:120:3/10",
+        "cola:120:4/10",
+        "cola:120:5/10",
+        "cola:120:6/10",
+        "cola:120:7/10",
+        "cola:120:8/10",
+        "cola:120:9/10",
+        "cola:120:2/12",
+        "cola:120:3/12",
+        "cola:120:4/12",
+        "cola:120:5/12",
+        "cola:120:6/12",
+        "cola:120:7/12",
+        "cola:120:8/12",
+        "cola:120:9/12",
+        "cola:120:10/12",
+        "cola:120:11/12",
+        "cola:180:2/3",
+        "cola:180:2/4",
+        "cola:180:3/4",
+        "cola:180:2/5",
+        "cola:180:3/5",
+        "cola:180:4/5",
+        "cola:180:2/6",
+        "cola:180:3/6",
+        "cola:180:4/6",
+        "cola:180:5/6",
+        "cola:180:2/8",
+        "cola:180:3/8",
+        "cola:180:4/8",
+        "cola:180:5/8",
+        "cola:180:6/8",
+        "cola:180:7/8",
+        "cola:180:2/9",
+        "cola:180:3/9",
+        "cola:180:4/9",
+        "cola:180:5/9",
+        "cola:180:6/9",
+        "cola:180:7/9",
+        "cola:180:8/9",
+        "cola:180:2/10",
+        "cola:180:3/10",
+        "cola:180:4/10",
+        "cola:180:5/10",
+        "cola:180:6/10",
+        "cola:180:7/10",
+        "cola:180:8/10",
+        "cola:180:9/10",
+        "cola:180:2/12",
+        "cola:180:3/12",
+        "cola:180:4/12",
+        "cola:180:5/12",
+        "cola:180:6/12",
+        "cola:180:7/12",
+        "cola:180:8/12",
+        "cola:180:9/12",
+        "cola:180:10/12",
+        "cola:180:11/12",
+        "cola:240:2/3",
+        "cola:240:2/4",
+        "cola:240:3/4",
+        "cola:240:2/5",
+        "cola:240:3/5",
+        "cola:240:4/5",
+        "cola:240:2/6",
+        "cola:240:3/6",
+        "cola:240:4/6",
+        "cola:240:5/6",
+        "cola:240:2/8",
+        "cola:240:3/8",
+        "cola:240:4/8",
+        "cola:240:5/8",
+        "cola:240:6/8",
+        "cola:240:7/8",
+        "cola:240:2/10",
+        "cola:240:3/10",
+        "cola:240:4/10",
+        "cola:240:5/10",
+        "cola:240:6/10",
+        "cola:240:7/10",
+        "cola:240:8/10",
+        "cola:240:9/10",
+        "cola:240:2/12",
+        "ribbon:90:5/10"
+      ],
+      "seen": [
+        "120:2/3",
+        "120:2/4",
+        "120:3/4",
+        "120:2/5",
+        "120:3/5",
+        "120:4/5",
+        "120:2/6",
+        "120:3/6",
+        "120:4/6",
+        "120:5/6",
+        "120:2/8",
+        "120:3/8",
+        "120:4/8",
+        "120:5/8",
+        "120:6/8",
+        "120:7/8",
+        "120:2/10",
+        "120:3/10",
+        "120:4/10",
+        "120:5/10",
+        "120:6/10",
+        "120:7/10",
+        "120:8/10",
+        "120:9/10",
+        "120:2/12",
+        "120:3/12",
+        "120:4/12",
+        "120:5/12",
+        "120:6/12",
+        "120:7/12",
+        "120:8/12",
+        "120:9/12",
+        "120:10/12",
+        "120:11/12",
+        "180:2/3",
+        "180:2/4",
+        "180:3/4",
+        "180:2/5",
+        "180:3/5",
+        "180:4/5",
+        "180:2/6",
+        "180:3/6",
+        "180:4/6",
+        "180:5/6",
+        "180:2/8",
+        "180:3/8",
+        "180:4/8",
+        "180:5/8",
+        "180:6/8",
+        "180:7/8",
+        "180:2/9",
+        "180:3/9",
+        "180:4/9",
+        "180:5/9",
+        "180:6/9",
+        "180:7/9",
+        "180:8/9",
+        "180:2/10",
+        "180:3/10",
+        "180:4/10",
+        "180:5/10",
+        "180:6/10",
+        "180:7/10",
+        "180:8/10",
+        "180:9/10",
+        "180:2/12",
+        "180:3/12",
+        "180:4/12",
+        "180:5/12",
+        "180:6/12",
+        "180:7/12",
+        "180:8/12",
+        "180:9/12",
+        "180:10/12",
+        "180:11/12",
+        "240:2/3",
+        "240:2/4",
+        "240:3/4",
+        "240:2/5",
+        "240:3/5",
+        "240:4/5",
+        "240:2/6",
+        "240:3/6",
+        "240:4/6",
+        "240:5/6",
+        "240:2/8",
+        "240:3/8",
+        "240:4/8",
+        "240:5/8",
+        "240:6/8",
+        "240:7/8",
+        "240:2/10",
+        "240:3/10",
+        "240:4/10",
+        "240:5/10",
+        "240:6/10",
+        "240:7/10",
+        "240:8/10",
+        "240:9/10",
+        "240:2/12",
+        "90:5/10"
+      ],
+      "retry": [],
+      "historyCursor": 100,
+      "pending": {
+        "round": 1,
+        "kind": "new",
+        "key": "ribbon:90:5/10"
+      },
+      "reason": ""
+    }
+  }
+}

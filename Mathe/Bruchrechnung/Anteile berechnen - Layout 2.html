@@ -3,143 +3,143 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Anteile berechnen</title>
 <style>
 /* Alle Regeln gelten nur innerhalb dieser App, auch bei direkter EduLudoo-Einbettung. */
-#portionWidget{--ink:#193c43;--green:#087e70;--line:#d3e3de;--soft:#eff7f3;box-sizing:border-box;font:17px/1.5 system-ui,sans-serif;color:var(--ink);background:#f2f7f4;max-width:980px;margin:auto;padding:26px 20px 40px;border-radius:18px}
-#portionWidget *{box-sizing:border-box}
-#portionWidget [hidden]{display:none!important}
-#portionWidget h1{font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.15;margin:6px 0 10px;letter-spacing:-.04em}
-#portionWidget h2{font-size:1.12rem;line-height:1.45;margin:0 0 12px}
-#portionWidget #stepTitle{font-size:clamp(1.35rem,2.8vw,1.65rem);font-weight:800;line-height:1.35;color:#124f49;background:#e4f3ed;border-left:5px solid #078878;border-radius:0 12px 12px 0;padding:14px 16px;margin:16px 0 10px;overflow-wrap:break-word}
-#portionWidget #stepHint{font-size:.94rem;line-height:1.55;margin:0 0 16px;color:#526e73}
-#portionWidget p{margin:10px 0}
-#portionWidget .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--green)}
-#portionWidget .sub,#portionWidget small{color:#526c70}
-#portionWidget .toolbar{display:flex;gap:12px;justify-content:space-between;align-items:end;flex-wrap:wrap;margin:22px 0}
-#portionWidget .toolbar label{display:grid;gap:4px;font-size:.82rem;font-weight:650}
-#portionWidget button,#portionWidget select,#portionWidget input{font:inherit;color:inherit}
-#portionWidget button,#portionWidget select{border:1px solid var(--line);border-radius:12px;background:white;padding:10px 15px;min-height:46px;cursor:pointer;max-width:100%}
-#portionWidget button.primary{background:var(--green);border-color:var(--green);color:white;font-weight:650}
-#portionWidget button:disabled,#portionWidget select:disabled{opacity:.55;cursor:default}
-#portionWidget button:hover:not(:disabled){filter:brightness(.95)}
-#portionWidget :focus-visible{outline:3px solid #c47d12;outline-offset:3px}
-#portionWidget .card{background:white;border:1px solid var(--line);padding:24px;border-radius:22px;margin-top:18px;box-shadow:0 7px 22px #19483c09}
-#portionWidget .question{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 8px;font-size:clamp(1.6rem,4vw,2.05rem);font-weight:740;line-height:1.25}
-#portionWidget .frac{display:inline-grid;text-align:center;line-height:1.15;vertical-align:middle;min-width:1.2em}
-#portionWidget .frac span{padding:2px 5px}
-#portionWidget .frac span+span{border-top:2px solid currentColor}
-#portionWidget .scene-name{font-size:.76rem;letter-spacing:.07em;text-transform:uppercase;font-weight:750;color:var(--green)}
-#portionWidget .stepbar{display:flex;gap:6px;margin:20px 0 16px}
-#portionWidget .stepdot{height:5px;border-radius:8px;flex:1;background:#e0ebe7}
-#portionWidget .stepdot.active{background:#119987}
-#portionWidget .flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:18px 0;font-size:.78rem;text-align:center}
-#portionWidget .flow-node{background:#f0f7f3;padding:7px 10px;border-radius:9px}
-#portionWidget .flow-arrow{color:#087e70;display:grid;font-weight:700;line-height:1.2}
-#portionWidget .scene-board{background:linear-gradient(135deg,#f8f6ed,#edf7f4);border:1px solid #e1e8df;border-radius:18px;overflow:hidden;margin:16px 0}
-#portionWidget .objects{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:4px;padding:10px}
-#portionWidget .objects.single{grid-template-columns:minmax(0,1fr);max-width:640px;margin:auto}
-#portionWidget .object{margin:0;min-width:0;display:grid;justify-items:center}
-#portionWidget .object svg{display:block;width:100%;max-height:315px;overflow:visible;touch-action:manipulation}
-#portionWidget .object figcaption{font-size:.78rem;padding-bottom:10px;color:#4b676c}
-#portionWidget .visual-caption{background:#ffffffb0;border-top:1px solid #dbe6dd;padding:10px 16px;font-size:.84rem;line-height:1.5}
-#portionWidget .visual-part{cursor:pointer;transition:opacity .15s}
-#portionWidget .visual-part:hover{opacity:.78}
-#portionWidget .visual-part:focus{outline:none;filter:drop-shadow(0 0 3px #d08600)}
-#portionWidget .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0 4px}
-#portionWidget .range-controls{display:grid;justify-items:start;gap:8px;margin:14px 0}
-#portionWidget input[type=range]{width:min(100%,380px);min-height:38px;accent-color:var(--green)}
-#portionWidget .range-controls input[type=range]{width:min(70vw,380px)}
-#portionWidget input[type=text]{width:145px;max-width:100%;font-size:1.5rem;font-weight:650;border:2px solid #8ab4a9;border-radius:11px;padding:10px}
-#portionWidget .answer-label{font-size:.84rem;display:block;margin-bottom:6px}
-#portionWidget .unit{font-size:1.2rem;font-weight:650}
-#portionWidget .route-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
-#portionWidget .route-options button{text-align:left;padding:18px;background:#f2f8f5;border-color:#bcd9cf}
-#portionWidget .route-options strong{display:block;margin-bottom:6px}
-#portionWidget .route-options small{font-size:.84rem;font-weight:400}
-#portionWidget .notice{border-radius:12px;background:#e9f6f0;padding:12px 15px;font-size:.92rem}
-#portionWidget .notice.bad{background:#fff1dd;color:#754812}
-#portionWidget .work{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:8px}
-#portionWidget .work li{padding:10px 14px;border-left:3px solid #26a389;background:#f0f8f4;border-radius:0 10px 10px 0;font-weight:650}
-#portionWidget .work{margin:0 0 22px}
-#portionWidget .work .completed-question{font-weight:600;font-size:.9rem}
-#portionWidget .work .completed-answer{display:block;margin-top:5px;color:#086c60}
-#portionWidget .picture-work{grid-column:1/-1;width:100%;max-width:440px;margin:0 auto;padding:4px 8px;display:grid;gap:8px}
-#portionWidget .picture-work svg{display:block;width:100%;height:auto}
-#portionWidget .picture-work p{margin:0;padding:10px 12px;border-radius:10px;background:#ffffffce;font-weight:650}
-#portionWidget .picture-work small{display:block;font-weight:400;margin-bottom:4px}
-#portionWidget #showTip{margin-top:12px;font-size:.85rem}
-#portionWidget #stepTip{background:#fff6e6;border-left:3px solid #d2a041}
-#portionWidget .task-command{font-size:1rem;font-weight:550;flex-basis:100%;margin-bottom:1px}
-#portionWidget .next-row{margin-top:16px}
-#portionWidget details{margin-top:14px}
-#portionWidget summary{cursor:pointer;font-weight:650;padding:8px 0}
-#portionWidget .history-list{list-style:none;padding:0}
-#portionWidget .history-list>li{border-bottom:1px solid var(--line);padding:8px 0}
-#portionWidget .history-list p{font-size:.86rem;overflow-wrap:anywhere}
-#portionWidget .statistics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
-#portionWidget .stat-card{padding:16px;background:#f3f8f5;border-radius:14px}
-#portionWidget .stat-card h2{font-size:.96rem}
-#portionWidget .stat-row{display:flex;justify-content:space-between;gap:10px;font-size:.84rem;padding:4px 0}
-#portionWidget .milestones{display:flex;gap:4px;margin:12px 0;flex-wrap:wrap}
-#portionWidget .milestones span{display:grid;place-items:center;min-width:28px;min-height:30px;flex:1;border-radius:7px;background:#e8f1ec;font-size:.75rem;color:#536f66}
-#portionWidget .milestones span.earned{background:#087e70;color:white;font-weight:700}
-#portionWidget .stat-card h3{margin:0;font-size:1rem}
-#portionWidget #requirements{padding-left:20px;font-size:.9rem}
-#portionWidget #storage{font-size:.76rem;margin-top:20px;overflow-wrap:anywhere;color:#597176}
-#portionWidget #storage.bad{color:#9c5214}
-#portionWidget dialog{max-width:min(620px,95vw);border:1px solid var(--line);border-radius:20px;padding:26px;color:var(--ink);font:inherit}
-#portionWidget dialog::backdrop{background:#183d4260}
-#portionWidget .bubble{animation:portion-bubble 3s ease-in-out infinite alternate}
+#portionLayoutWidget{--ink:#193c43;--green:#087e70;--line:#d3e3de;--soft:#eff7f3;box-sizing:border-box;font:17px/1.5 system-ui,sans-serif;color:var(--ink);background:#f2f7f4;max-width:980px;margin:auto;padding:26px 20px 40px;border-radius:18px}
+#portionLayoutWidget *{box-sizing:border-box}
+#portionLayoutWidget [hidden]{display:none!important}
+#portionLayoutWidget h1{font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.15;margin:6px 0 10px;letter-spacing:-.04em}
+#portionLayoutWidget h2{font-size:1.12rem;line-height:1.45;margin:0 0 12px}
+#portionLayoutWidget #stepTitle{font-size:clamp(1.35rem,2.8vw,1.65rem);font-weight:800;line-height:1.35;color:#124f49;background:#e4f3ed;border-left:5px solid #078878;border-radius:0 12px 12px 0;padding:14px 16px;margin:16px 0 10px;overflow-wrap:break-word}
+#portionLayoutWidget #stepHint{font-size:.94rem;line-height:1.55;margin:0 0 16px;color:#526e73}
+#portionLayoutWidget p{margin:10px 0}
+#portionLayoutWidget .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:750;color:var(--green)}
+#portionLayoutWidget .sub,#portionLayoutWidget small{color:#526c70}
+#portionLayoutWidget .toolbar{display:flex;gap:12px;justify-content:space-between;align-items:end;flex-wrap:wrap;margin:22px 0}
+#portionLayoutWidget .toolbar label{display:grid;gap:4px;font-size:.82rem;font-weight:650}
+#portionLayoutWidget button,#portionLayoutWidget select,#portionLayoutWidget input{font:inherit;color:inherit}
+#portionLayoutWidget button,#portionLayoutWidget select{border:1px solid var(--line);border-radius:12px;background:white;padding:10px 15px;min-height:46px;cursor:pointer;max-width:100%}
+#portionLayoutWidget button.primary{background:var(--green);border-color:var(--green);color:white;font-weight:650}
+#portionLayoutWidget button:disabled,#portionLayoutWidget select:disabled{opacity:.55;cursor:default}
+#portionLayoutWidget button:hover:not(:disabled){filter:brightness(.95)}
+#portionLayoutWidget :focus-visible{outline:3px solid #c47d12;outline-offset:3px}
+#portionLayoutWidget .card{background:white;border:1px solid var(--line);padding:24px;border-radius:22px;margin-top:18px;box-shadow:0 7px 22px #19483c09}
+#portionLayoutWidget .question{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 8px;font-size:clamp(1.6rem,4vw,2.05rem);font-weight:740;line-height:1.25}
+#portionLayoutWidget .frac{display:inline-grid;text-align:center;line-height:1.15;vertical-align:middle;min-width:1.2em}
+#portionLayoutWidget .frac span{padding:2px 5px}
+#portionLayoutWidget .frac span+span{border-top:2px solid currentColor}
+#portionLayoutWidget .scene-name{font-size:.76rem;letter-spacing:.07em;text-transform:uppercase;font-weight:750;color:var(--green)}
+#portionLayoutWidget .stepbar{display:flex;gap:6px;margin:20px 0 16px}
+#portionLayoutWidget .stepdot{height:5px;border-radius:8px;flex:1;background:#e0ebe7}
+#portionLayoutWidget .stepdot.active{background:#119987}
+#portionLayoutWidget .flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:18px 0;font-size:.78rem;text-align:center}
+#portionLayoutWidget .flow-node{background:#f0f7f3;padding:7px 10px;border-radius:9px}
+#portionLayoutWidget .flow-arrow{color:#087e70;display:grid;font-weight:700;line-height:1.2}
+#portionLayoutWidget .scene-board{background:linear-gradient(135deg,#f8f6ed,#edf7f4);border:1px solid #e1e8df;border-radius:18px;overflow:hidden;margin:16px 0}
+#portionLayoutWidget .objects{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:4px;padding:10px}
+#portionLayoutWidget .objects.single{grid-template-columns:minmax(0,1fr);max-width:640px;margin:auto}
+#portionLayoutWidget .object{margin:0;min-width:0;display:grid;justify-items:center}
+#portionLayoutWidget .object svg{display:block;width:100%;max-height:315px;overflow:visible;touch-action:manipulation}
+#portionLayoutWidget .object figcaption{font-size:.78rem;padding-bottom:10px;color:#4b676c}
+#portionLayoutWidget .visual-caption{background:#ffffffb0;border-top:1px solid #dbe6dd;padding:10px 16px;font-size:.84rem;line-height:1.5}
+#portionLayoutWidget .visual-part{cursor:pointer;transition:opacity .15s}
+#portionLayoutWidget .visual-part:hover{opacity:.78}
+#portionLayoutWidget .visual-part:focus{outline:none;filter:drop-shadow(0 0 3px #d08600)}
+#portionLayoutWidget .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0 4px}
+#portionLayoutWidget .range-controls{display:grid;justify-items:start;gap:8px;margin:14px 0}
+#portionLayoutWidget input[type=range]{width:min(100%,380px);min-height:38px;accent-color:var(--green)}
+#portionLayoutWidget .range-controls input[type=range]{width:min(70vw,380px)}
+#portionLayoutWidget input[type=text]{width:145px;max-width:100%;font-size:1.5rem;font-weight:650;border:2px solid #8ab4a9;border-radius:11px;padding:10px}
+#portionLayoutWidget .answer-label{font-size:.84rem;display:block;margin-bottom:6px}
+#portionLayoutWidget .unit{font-size:1.2rem;font-weight:650}
+#portionLayoutWidget .route-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+#portionLayoutWidget .route-options button{text-align:left;padding:18px;background:#f2f8f5;border-color:#bcd9cf}
+#portionLayoutWidget .route-options strong{display:block;margin-bottom:6px}
+#portionLayoutWidget .route-options small{font-size:.84rem;font-weight:400}
+#portionLayoutWidget .notice{border-radius:12px;background:#e9f6f0;padding:12px 15px;font-size:.92rem}
+#portionLayoutWidget .notice.bad{background:#fff1dd;color:#754812}
+#portionLayoutWidget .work{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:8px}
+#portionLayoutWidget .work li{padding:10px 14px;border-left:3px solid #26a389;background:#f0f8f4;border-radius:0 10px 10px 0;font-weight:650}
+#portionLayoutWidget .work{margin:0 0 22px}
+#portionLayoutWidget .work .completed-question{font-weight:600;font-size:.9rem}
+#portionLayoutWidget .work .completed-answer{display:block;margin-top:5px;color:#086c60}
+#portionLayoutWidget .picture-work{grid-column:1/-1;width:100%;max-width:440px;margin:0 auto;padding:4px 8px;display:grid;gap:8px}
+#portionLayoutWidget .picture-work svg{display:block;width:100%;height:auto}
+#portionLayoutWidget .picture-work p{margin:0;padding:10px 12px;border-radius:10px;background:#ffffffce;font-weight:650}
+#portionLayoutWidget .picture-work small{display:block;font-weight:400;margin-bottom:4px}
+#portionLayoutWidget #showTip{margin-top:12px;font-size:.85rem}
+#portionLayoutWidget #stepTip{background:#fff6e6;border-left:3px solid #d2a041}
+#portionLayoutWidget .task-command{font-size:1rem;font-weight:550;flex-basis:100%;margin-bottom:1px}
+#portionLayoutWidget .next-row{margin-top:16px}
+#portionLayoutWidget details{margin-top:14px}
+#portionLayoutWidget summary{cursor:pointer;font-weight:650;padding:8px 0}
+#portionLayoutWidget .history-list{list-style:none;padding:0}
+#portionLayoutWidget .history-list>li{border-bottom:1px solid var(--line);padding:8px 0}
+#portionLayoutWidget .history-list p{font-size:.86rem;overflow-wrap:anywhere}
+#portionLayoutWidget .statistics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+#portionLayoutWidget .stat-card{padding:16px;background:#f3f8f5;border-radius:14px}
+#portionLayoutWidget .stat-card h2{font-size:.96rem}
+#portionLayoutWidget .stat-row{display:flex;justify-content:space-between;gap:10px;font-size:.84rem;padding:4px 0}
+#portionLayoutWidget .milestones{display:flex;gap:4px;margin:12px 0;flex-wrap:wrap}
+#portionLayoutWidget .milestones span{display:grid;place-items:center;min-width:28px;min-height:30px;flex:1;border-radius:7px;background:#e8f1ec;font-size:.75rem;color:#536f66}
+#portionLayoutWidget .milestones span.earned{background:#087e70;color:white;font-weight:700}
+#portionLayoutWidget .stat-card h3{margin:0;font-size:1rem}
+#portionLayoutWidget #requirements{padding-left:20px;font-size:.9rem}
+#portionLayoutWidget #storage{font-size:.76rem;margin-top:20px;overflow-wrap:anywhere;color:#597176}
+#portionLayoutWidget #storage.bad{color:#9c5214}
+#portionLayoutWidget dialog{max-width:min(620px,95vw);border:1px solid var(--line);border-radius:20px;padding:26px;color:var(--ink);font:inherit}
+#portionLayoutWidget dialog::backdrop{background:#183d4260}
+#portionLayoutWidget .bubble{animation:portion-bubble 3s ease-in-out infinite alternate}
 @keyframes portion-bubble{from{transform:translateY(1px)}to{transform:translateY(-9px)}}
-@media(prefers-reduced-motion:reduce){#portionWidget .bubble{animation:none}#portionWidget *{transition:none!important}}
-@media(max-width:520px){#portionWidget{padding:18px 12px}#portionWidget .card{padding:18px}#portionWidget .route-options,#portionWidget .statistics{grid-template-columns:1fr}#portionWidget .objects:not(.single){grid-template-columns:repeat(2,minmax(0,1fr))}#portionWidget .toolbar{align-items:start}#portionWidget .object figcaption{font-size:.7rem}#portionWidget .question{gap:9px}}
-@media(max-width:520px){#portionWidget .flow{display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;gap:4px;font-size:.7rem}#portionWidget .flow-node{padding:6px 4px;overflow-wrap:anywhere;hyphens:auto}#portionWidget .milestones{display:grid;grid-template-columns:repeat(10,minmax(0,1fr))}#portionWidget .milestones span{min-width:0}}
-#portionWidget .touch-marking{touch-action:none}
+@media(prefers-reduced-motion:reduce){#portionLayoutWidget .bubble{animation:none}#portionLayoutWidget *{transition:none!important}}
+@media(max-width:520px){#portionLayoutWidget{padding:18px 12px}#portionLayoutWidget .card{padding:18px}#portionLayoutWidget .route-options,#portionLayoutWidget .statistics{grid-template-columns:1fr}#portionLayoutWidget .objects:not(.single){grid-template-columns:repeat(2,minmax(0,1fr))}#portionLayoutWidget .toolbar{align-items:start}#portionLayoutWidget .object figcaption{font-size:.7rem}#portionLayoutWidget .question{gap:9px}}
+@media(max-width:520px){#portionLayoutWidget .flow{display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;gap:4px;font-size:.7rem}#portionLayoutWidget .flow-node{padding:6px 4px;overflow-wrap:anywhere;hyphens:auto}#portionLayoutWidget .milestones{display:grid;grid-template-columns:repeat(10,minmax(0,1fr))}#portionLayoutWidget .milestones span{min-width:0}}
+#portionLayoutWidget .touch-marking{touch-action:none}
 
 /* Layoutvergleich: eine gemeinsame Bild- und Arbeitsfläche. */
-#portionWidget{max-width:980px;padding:10px 12px 24px;font-size:16px;background:#f5f8f6;border-radius:12px}
-#portionWidget h1{font-size:1.8rem;margin:0 0 10px}
-#portionWidget .toolbar{margin:0 0 10px;align-items:center;gap:10px}
-#portionWidget .toolbar label{display:flex;align-items:center;gap:10px}
-#portionWidget button,#portionWidget select{padding:8px 12px;min-height:44px;font-size:.9rem}
-#portionWidget #exercise{padding:0;margin:0;border:0;background:transparent;box-shadow:none}
-#portionWidget .scene-board{margin:0;border-radius:16px;background:linear-gradient(135deg,#fbfaf4,#edf7f2);overflow:hidden}
-#portionWidget .board-heading{padding:14px 18px 0}
-#portionWidget .scene-name{font-size:.68rem}
-#portionWidget #story{font-size:.94rem;line-height:1.4;margin:5px 0 9px;color:#35555a}
-#portionWidget .question{font-size:1.3rem;gap:9px;margin:0;line-height:1.2}
-#portionWidget .task-command{flex-basis:auto;font-size:.9rem;margin:0;font-weight:500}
-#portionWidget #stepTitle{font-size:1.05rem;line-height:1.35;padding:9px 18px;margin:10px 0 0;border:0;border-top:1px solid #d6e5dc;border-radius:0;background:#ffffff80;color:#234d47}
-#portionWidget #stepHint,#portionWidget #stepbar,#portionWidget #work,#portionWidget #flow,#portionWidget #visualCaption{display:none!important}
-#portionWidget .workspace{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:center;padding:4px 16px 8px;min-height:190px}
-#portionWidget .workspace.has-math{grid-template-columns:minmax(0,1.4fr) minmax(245px,1fr)}
-#portionWidget .objects,#portionWidget .objects.single{padding:0;gap:4px;max-width:none;width:100%;margin:0;grid-template-columns:repeat(var(--columns,1),minmax(0,1fr))}
-#portionWidget .object > svg{width:100%;max-height:220px}
-#portionWidget .objects:not(.single) .object > svg{max-height:130px}
-#portionWidget .calculation-area{display:grid;gap:10px;min-width:0}
-#portionWidget #equations{display:grid;gap:10px}
-#portionWidget .math-card{border:1px solid #afd4c4;background:#e1f3ea;border-radius:13px;padding:13px 14px;color:#165e51;margin:0;min-width:0}
-#portionWidget .math-card .confirmed-equation{font-size:.85rem;color:#43625b;margin:8px 0 0}
-#portionWidget .math-result,#portionWidget .equation-entry{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-weight:700;font-size:1.04rem;line-height:1.3}
-#portionWidget #answerExpression{display:inline-flex;align-items:center;gap:7px}
-#portionWidget .answer-label{font-size:.82rem;font-weight:550;margin:0 0 9px}
-#portionWidget #answer{width:90px;padding:7px 8px;font-size:1.25rem;background:white;min-height:44px;border-radius:8px}
-#portionWidget .unit{font-size:1rem}
-#portionWidget .board-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid #d6e5dc;background:#ffffff8f}
-#portionWidget #showTip{margin:0;background:transparent;font-size:.86rem}
-#portionWidget .range-controls{display:flex;align-items:center;flex:1;gap:10px;margin:0;min-width:0}
-#portionWidget #rangeLabel{font-size:.85rem;min-width:48px;width:21ch;flex:none;white-space:nowrap}
-#portionWidget .range-controls input[type=range]{width:auto;min-width:80px;flex:1;margin:0}
-#portionWidget #markControls,#portionWidget #checkAnswer,#portionWidget #next{margin-left:auto}
-#portionWidget #stepTip,#portionWidget #feedback{margin:8px 16px 12px;padding:9px 12px;font-size:.88rem}
-#portionWidget #feedback:not(.bad){display:none}
-#portionWidget .route-options{margin:8px 16px;gap:8px}
-#portionWidget .route-options button{padding:12px}
-#portionWidget .card:not(#exercise){padding:16px 20px;margin-top:12px;border-radius:16px}
-#portionWidget #historyPanel{padding:8px 20px}
-#portionWidget .visually-hidden{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-@media(max-height:640px) and (min-width:650px){#portionWidget .workspace{min-height:160px}#portionWidget .object > svg{max-height:160px}#portionWidget .objects:not(.single) .object > svg{max-height:95px}#portionWidget .board-heading{padding-top:9px}}
-@media(max-width:649px){#portionWidget{padding:8px}#portionWidget .toolbar label{display:grid;gap:3px}#portionWidget .workspace.has-math{grid-template-columns:minmax(0,1fr)}#portionWidget .workspace{min-height:0;padding:4px 10px 10px;gap:6px}#portionWidget .object > svg{max-height:210px}#portionWidget .calculation-area{width:100%;max-width:440px;justify-self:center}#portionWidget .board-heading{padding:12px 12px 0}#portionWidget .board-controls{padding:8px;gap:5px}#portionWidget #checkRange{font-size:.78rem;padding:8px}#portionWidget .range-controls{gap:5px}#portionWidget .range-controls{flex-wrap:wrap}#portionWidget #rangeLabel{min-width:0;width:100%}#portionWidget .math-card{padding:10px 12px}}
+#portionLayoutWidget{max-width:980px;padding:10px 12px 24px;font-size:16px;background:#f5f8f6;border-radius:12px}
+#portionLayoutWidget h1{font-size:1.8rem;margin:0 0 10px}
+#portionLayoutWidget .toolbar{margin:0 0 10px;align-items:center;gap:10px}
+#portionLayoutWidget .toolbar label{display:flex;align-items:center;gap:10px}
+#portionLayoutWidget button,#portionLayoutWidget select{padding:8px 12px;min-height:44px;font-size:.9rem}
+#portionLayoutWidget #exercise{padding:0;margin:0;border:0;background:transparent;box-shadow:none}
+#portionLayoutWidget .scene-board{margin:0;border-radius:16px;background:linear-gradient(135deg,#fbfaf4,#edf7f2);overflow:hidden}
+#portionLayoutWidget .board-heading{padding:14px 18px 0}
+#portionLayoutWidget .scene-name{font-size:.68rem}
+#portionLayoutWidget #story{font-size:.94rem;line-height:1.4;margin:5px 0 9px;color:#35555a}
+#portionLayoutWidget .question{font-size:1.3rem;gap:9px;margin:0;line-height:1.2}
+#portionLayoutWidget .task-command{flex-basis:auto;font-size:.9rem;margin:0;font-weight:500}
+#portionLayoutWidget #stepTitle{font-size:1.05rem;line-height:1.35;padding:9px 18px;margin:10px 0 0;border:0;border-top:1px solid #d6e5dc;border-radius:0;background:#ffffff80;color:#234d47}
+#portionLayoutWidget #stepHint,#portionLayoutWidget #stepbar,#portionLayoutWidget #work,#portionLayoutWidget #flow,#portionLayoutWidget #visualCaption{display:none!important}
+#portionLayoutWidget .workspace{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:center;padding:4px 16px 8px;min-height:190px}
+#portionLayoutWidget .workspace.has-math{grid-template-columns:minmax(0,1.4fr) minmax(245px,1fr)}
+#portionLayoutWidget .objects,#portionLayoutWidget .objects.single{padding:0;gap:4px;max-width:none;width:100%;margin:0;grid-template-columns:repeat(var(--columns,1),minmax(0,1fr))}
+#portionLayoutWidget .object > svg{width:100%;max-height:220px}
+#portionLayoutWidget .objects:not(.single) .object > svg{max-height:130px}
+#portionLayoutWidget .calculation-area{display:grid;gap:10px;min-width:0}
+#portionLayoutWidget #equations{display:grid;gap:10px}
+#portionLayoutWidget .math-card{border:1px solid #afd4c4;background:#e1f3ea;border-radius:13px;padding:13px 14px;color:#165e51;margin:0;min-width:0}
+#portionLayoutWidget .math-card .confirmed-equation{font-size:.85rem;color:#43625b;margin:8px 0 0}
+#portionLayoutWidget .math-result,#portionLayoutWidget .equation-entry{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-weight:700;font-size:1.04rem;line-height:1.3}
+#portionLayoutWidget #answerExpression{display:inline-flex;align-items:center;gap:7px}
+#portionLayoutWidget .answer-label{font-size:.82rem;font-weight:550;margin:0 0 9px}
+#portionLayoutWidget #answer{width:90px;padding:7px 8px;font-size:1.25rem;background:white;min-height:44px;border-radius:8px}
+#portionLayoutWidget .unit{font-size:1rem}
+#portionLayoutWidget .board-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid #d6e5dc;background:#ffffff8f}
+#portionLayoutWidget #showTip{margin:0;background:transparent;font-size:.86rem}
+#portionLayoutWidget .range-controls{display:flex;align-items:center;flex:1;gap:10px;margin:0;min-width:0}
+#portionLayoutWidget #rangeLabel{font-size:.85rem;min-width:48px;width:21ch;flex:none;white-space:nowrap}
+#portionLayoutWidget .range-controls input[type=range]{width:auto;min-width:80px;flex:1;margin:0}
+#portionLayoutWidget #markControls,#portionLayoutWidget #checkAnswer,#portionLayoutWidget #next{margin-left:auto}
+#portionLayoutWidget #stepTip,#portionLayoutWidget #feedback{margin:8px 16px 12px;padding:9px 12px;font-size:.88rem}
+#portionLayoutWidget #feedback:not(.bad){display:none}
+#portionLayoutWidget .route-options{margin:8px 16px;gap:8px}
+#portionLayoutWidget .route-options button{padding:12px}
+#portionLayoutWidget .card:not(#exercise){padding:16px 20px;margin-top:12px;border-radius:16px}
+#portionLayoutWidget #historyPanel{padding:8px 20px}
+#portionLayoutWidget .visually-hidden{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-height:640px) and (min-width:650px){#portionLayoutWidget .workspace{min-height:160px}#portionLayoutWidget .object > svg{max-height:160px}#portionLayoutWidget .objects:not(.single) .object > svg{max-height:95px}#portionLayoutWidget .board-heading{padding-top:9px}}
+@media(max-width:649px){#portionLayoutWidget{padding:8px}#portionLayoutWidget .toolbar label{display:grid;gap:3px}#portionLayoutWidget .workspace.has-math{grid-template-columns:minmax(0,1fr)}#portionLayoutWidget .workspace{min-height:0;padding:4px 10px 10px;gap:6px}#portionLayoutWidget .object > svg{max-height:210px}#portionLayoutWidget .calculation-area{width:100%;max-width:440px;justify-self:center}#portionLayoutWidget .board-heading{padding:12px 12px 0}#portionLayoutWidget .board-controls{padding:8px;gap:5px}#portionLayoutWidget #checkRange{font-size:.78rem;padding:8px}#portionLayoutWidget .range-controls{gap:5px}#portionLayoutWidget .range-controls{flex-wrap:wrap}#portionLayoutWidget #rangeLabel{min-width:0;width:100%}#portionLayoutWidget .math-card{padding:10px 12px}}
 </style></head>
-<body><main id="portionWidget" data-edulo-widget-key="ANTEILE_BERECHNEN">
+<body><main id="portionLayoutWidget" data-edulo-widget-key="ANTEILE_LAYOUT2">
 <header id="standaloneHeading"><h1>Anteile berechnen</h1></header>
 <div class="toolbar"><label for="mode">Dein Rechenweg<select id="mode"><option value="divide">1 · Zuerst teilen</option><option value="multiply">2 · Zuerst vervielfachen</option><option value="choice">3 · Selbst entscheiden</option></select></label><button id="help" type="button">So funktioniert’s</button></div>
 <section class="card" id="exercise" hidden>
@@ -176,10 +176,10 @@
 </main><script>
 (() => {
 'use strict';
-// EDULO_WIDGET_KEY:ANTEILE_BERECHNEN
-const widgetRoot=document.getElementById('portionWidget');
+// EDULO_WIDGET_KEY:ANTEILE_LAYOUT2
+const widgetRoot=document.getElementById('portionLayoutWidget');
 const $=id=>widgetRoot.querySelector('#'+CSS.escape(id));
-const STORAGE_KEY='bruchrechnung-anteile-berechnen-v1';
+const STORAGE_KEY='bruchrechnung-anteile-layout2-v1';
 const THRESHOLDS=Array.from({length:20},(_,i)=>(i+1)*(i+4));
 const ROUTES={divide:'Zuerst teilen',multiply:'Zuerst vervielfachen'};
 const query=new URLSearchParams(location.search);
@@ -188,7 +188,7 @@ const isEdulo=window.parent!==window||query.get('edulo')==='1'||query.has('data'
 $('standaloneHeading').hidden=isEdulo;
 const config={stateId:query.get('STATE_ID')||'',scorePrefix:query.get('SCORE_PREFIX')||'e2_cloze_text_input_',showFields:query.get('SHOW_FIELDS')==='1'};
 const hiddenHostElements=new Map();
-const fresh=()=>({version:1,widget:'anteile-berechnen',mode:'divide',points:0,history:[],active:null});
+const fresh=()=>({version:1,widget:'anteile-layout2',mode:'divide',points:0,history:[],active:null});
 const SCENES=[
  {id:'cola',kind:'beaker',title:'Cola im Messbecher',noun:'Cola',unit:'ml',amounts:[120,180,240,300,360,450,600,750,900],color:'#78472f',light:'#be9160',bubbles:true,story:'Im Messbecher ist Cola für eine Getränkemischung. Bestimme die gesuchte Menge.'},
  {id:'orange',kind:'beaker',title:'Orangensaft zum Frühstück',noun:'Orangensaft',unit:'ml',amounts:[100,150,200,250,300,400,500,600,750],color:'#ed9b20',light:'#ffd26d',story:'Ein Teil des Orangensafts wird in ein Glas gegossen. Wie viel ist das?'},
@@ -261,8 +261,8 @@ function pointRequirements(index){const threshold=THRESHOLDS[index],minimum=inde
 function validTask(t){const s=t&&sceneOf(t);return !!s&&s.amounts.includes(t.whole)&&Number.isInteger(t.n)&&Number.isInteger(t.d)&&t.n>=1&&t.n<t.d&&t.d>=2&&t.d<=12&&(!s.denominators||s.denominators.includes(t.d))&&Number.isInteger(t.whole*t.n/t.d*2)&&(!s.discrete||Number.isInteger(t.whole/t.d));}
 const STAGES=['route','divideParts','unit','mark','result','copies','product','multiplyParts','done'];
 function validActive(a){return !!a&&validTask(a.task)&&['divide','multiply','choice'].includes(a.mode)&&[null,'divide','multiply'].includes(a.route)&&STAGES.includes(a.stage)&&Number.isInteger(a.parts)&&a.parts>=1&&a.parts<=12&&Number.isInteger(a.copies)&&a.copies>=1&&a.copies<=12&&Array.isArray(a.selected)&&a.selected.every(v=>Number.isInteger(v)&&v>=0&&v<a.task.d)&&new Set(a.selected).size===a.selected.length&&typeof a.input==='string'&&a.input.length<=24&&Array.isArray(a.attempts)&&a.attempts.every(v=>v&&STAGES.includes(v.stage)&&typeof v.correct==='boolean')&&typeof a.hadError==='boolean'&&Array.isArray(a.work)&&a.work.every(v=>typeof v==='string');}
-function parseState(raw){let s;try{const text=String(raw).trim();if(text.startsWith('ANTEIL1:'))s=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(text.slice(8)),c=>c.charCodeAt(0))));else s=JSON.parse(text);}catch(_){throw new Error('Der gespeicherte Lernstand ist nicht lesbar. Er wurde nicht überschrieben.');}if(!s||s.version!==1||s.widget!=='anteile-berechnen'||!['divide','multiply','choice'].includes(s.mode)||!Number.isInteger(s.points)||s.points<0||s.points>20||!Array.isArray(s.history)||s.history.some(h=>!h||!validTask(h.task)||!['divide','multiply'].includes(h.route)||typeof h.correct!=='boolean'||!Array.isArray(h.attempts)||!Array.isArray(h.work))||(s.active&&!validActive(s.active)))throw new Error('Dieser Speichertext gehört nicht zu „Anteile berechnen“ oder hat ein unbekanntes Format. Er bleibt unverändert.');if(!validSelection(s.selection,s.history.length))throw new Error('Die gespeicherte Aufgabenauswahl ist beschädigt. Sie bleibt unverändert.');return s;}
-function encodeState(s){const bytes=new TextEncoder().encode(JSON.stringify(s));let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return 'ANTEIL1:'+btoa(binary);}
+function parseState(raw){let s;try{const text=String(raw).trim();if(text.startsWith('ANTEIL2:'))s=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(text.slice(8)),c=>c.charCodeAt(0))));else s=JSON.parse(text);}catch(_){throw new Error('Der gespeicherte Lernstand ist nicht lesbar. Er wurde nicht überschrieben.');}if(!s||s.version!==1||s.widget!=='anteile-layout2'||!['divide','multiply','choice'].includes(s.mode)||!Number.isInteger(s.points)||s.points<0||s.points>20||!Array.isArray(s.history)||s.history.some(h=>!h||!validTask(h.task)||!['divide','multiply'].includes(h.route)||typeof h.correct!=='boolean'||!Array.isArray(h.attempts)||!Array.isArray(h.work))||(s.active&&!validActive(s.active)))throw new Error('Dieser Speichertext gehört nicht zu „Anteile berechnen“ oder hat ein unbekanntes Format. Er bleibt unverändert.');if(!validSelection(s.selection,s.history.length))throw new Error('Die gespeicherte Aufgabenauswahl ist beschädigt. Sie bleibt unverändert.');return s;}
+function encodeState(s){const bytes=new TextEncoder().encode(JSON.stringify(s));let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return 'ANTEIL2:'+btoa(binary);}
 function taskKey(t){return t.scene+':'+t.whole+':'+t.n+'/'+t.d;}
 function partitionOptions(t){const s=sceneOf(t);return s.kind==='chocolate'?[1,2,3,4,6,8,12]:s.discrete?Array.from({length:12},(_,i)=>i+1).filter(n=>t.whole%n===0):Array.from({length:12},(_,i)=>i+1);}
 const POOL=[];
@@ -506,7 +506,7 @@ function findStateField() {
   for(const doc of docs()){const fields=doc.querySelectorAll('#e1 textarea, #e1 input:not([type=button]):not([type=hidden]), textarea[id^="e1_"], input[id^="e1_"]:not([type=button]):not([type=hidden])');if(fields.length===1)return fields[0];}return null;
 }
 function writeField(el,value) {if(String(el.value)===value)return; const proto=Object.getPrototypeOf(el), setter=Object.getOwnPropertyDescriptor(proto,'value')?.set; if(setter)setter.call(el,value);else el.value=value; const EventClass=el.ownerDocument.defaultView.Event;el.dispatchEvent(new EventClass('input',{bubbles:true}));el.dispatchEvent(new EventClass('change',{bubbles:true}));}
-function hideField(el,moduleId) {if(config.showFields||editorPreview||isEditorView())return;const module=el.ownerDocument.getElementById(moduleId); const target=module&&module.contains(el)&&!module.querySelector('iframe, #fractionWidget, #portionWidget')&&module!==el.ownerDocument.body ? module : el.closest('.inputcontainer')||el;if(!hiddenHostElements.has(target))hiddenHostElements.set(target,{hidden:target.hidden,display:target.style.getPropertyValue('display'),priority:target.style.getPropertyPriority('display')});target.hidden=true;target.style.setProperty('display','none','important');}
+function hideField(el,moduleId) {if(config.showFields||editorPreview||isEditorView())return;const module=el.ownerDocument.getElementById(moduleId); const target=module&&module.contains(el)&&!module.querySelector('iframe, #fractionWidget, #portionLayoutWidget')&&module!==el.ownerDocument.body ? module : el.closest('.inputcontainer')||el;if(!hiddenHostElements.has(target))hiddenHostElements.set(target,{hidden:target.hidden,display:target.style.getPropertyValue('display'),priority:target.style.getPropertyPriority('display')});target.hidden=true;target.style.setProperty('display','none','important');}
 function storageMessage(text,bad=false){$('storage').textContent=text;$('storage').classList.toggle('bad',bad);$('retry').hidden=!bad;}
 // Coalesce transient input; explicit checks and navigation still save immediately.
 let pendingSave=null;

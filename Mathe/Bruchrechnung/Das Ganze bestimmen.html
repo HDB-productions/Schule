@@ -106,25 +106,85 @@
 @media(max-width:520px){#wholeWidget{padding:18px 12px}#wholeWidget .card{padding:18px}#wholeWidget .route-options,#wholeWidget .statistics{grid-template-columns:1fr}#wholeWidget .objects:not(.single){grid-template-columns:repeat(2,minmax(0,1fr))}#wholeWidget .toolbar{align-items:start}#wholeWidget .object figcaption{font-size:.7rem}#wholeWidget .question{gap:9px}}
 @media(max-width:520px){#wholeWidget .flow{display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;gap:4px;font-size:.7rem}#wholeWidget .flow-node{padding:6px 4px;overflow-wrap:anywhere;hyphens:auto}#wholeWidget .milestones{display:grid;grid-template-columns:repeat(10,minmax(0,1fr))}#wholeWidget .milestones span{min-width:0}}
 #wholeWidget .touch-marking{touch-action:none}
+/* Layoutvergleich: eine gemeinsame Bild- und Arbeitsfläche. */
+#wholeWidget{max-width:980px;padding:10px 12px 24px;font-size:16px;background:#f5f8f6;border-radius:12px}
+#wholeWidget h1{font-size:1.8rem;margin:0 0 10px}
+#wholeWidget .toolbar{margin:0 0 10px;align-items:center;gap:10px}
+#wholeWidget .toolbar label{display:flex;align-items:center;gap:10px}
+#wholeWidget button,#wholeWidget select{padding:8px 12px;min-height:44px;font-size:.9rem}
+#wholeWidget #exercise{padding:0;margin:0;border:0;background:transparent;box-shadow:none}
+#wholeWidget .scene-board{margin:0;border-radius:16px;background:linear-gradient(135deg,#fbfaf4,#edf7f2);overflow:hidden}
+#wholeWidget .board-heading{padding:14px 18px 0}
+#wholeWidget .scene-name{font-size:.68rem}
+#wholeWidget #story{font-size:.94rem;line-height:1.4;margin:5px 0 9px;color:#35555a}
+#wholeWidget .question{font-size:1.3rem;gap:9px;margin:0;line-height:1.2}
+#wholeWidget .task-command{flex-basis:auto;font-size:.9rem;margin:0;font-weight:500}
+#wholeWidget #stepTitle{font-size:1.05rem;line-height:1.35;padding:9px 18px;margin:10px 0 0;border:0;border-top:1px solid #d6e5dc;border-radius:0;background:#ffffff80;color:#234d47}
+#wholeWidget #stepHint,#wholeWidget #stepbar,#wholeWidget #work,#wholeWidget #flow,#wholeWidget #visualCaption{display:none!important}
+#wholeWidget .workspace{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:center;padding:4px 16px 8px;min-height:190px}
+#wholeWidget .workspace.has-math{grid-template-columns:minmax(0,1.4fr) minmax(245px,1fr)}
+#wholeWidget .objects,#wholeWidget .objects.single{padding:0;gap:4px;max-width:none;width:100%;margin:0;grid-template-columns:repeat(var(--columns,1),minmax(0,1fr))}
+#wholeWidget .object > svg{width:100%;max-height:220px}
+#wholeWidget .objects:not(.single) .object > svg{max-height:130px}
+#wholeWidget .calculation-area{display:grid;gap:10px;min-width:0}
+#wholeWidget #equations{display:grid;gap:10px}
+#wholeWidget .math-card{border:1px solid #afd4c4;background:#e1f3ea;border-radius:13px;padding:13px 14px;color:#165e51;margin:0;min-width:0}
+#wholeWidget .math-card .confirmed-equation{font-size:.85rem;color:#43625b;margin:8px 0 0}
+#wholeWidget .math-result,#wholeWidget .equation-entry{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-weight:700;font-size:1.04rem;line-height:1.3}
+#wholeWidget #answerExpression{display:inline-flex;align-items:center;gap:7px}
+#wholeWidget .answer-label{font-size:.82rem;font-weight:550;margin:0 0 9px}
+#wholeWidget #answer{width:90px;padding:7px 8px;font-size:1.25rem;background:white;min-height:44px;border-radius:8px}
+#wholeWidget .unit{font-size:1rem}
+#wholeWidget .board-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid #d6e5dc;background:#ffffff8f}
+#wholeWidget #showTip{margin:0;background:transparent;font-size:.86rem}
+#wholeWidget .range-controls{display:flex;align-items:center;flex:1;gap:10px;margin:0;min-width:0}
+#wholeWidget #rangeLabel{font-size:.85rem;min-width:48px;width:21ch;flex:none;white-space:nowrap}
+#wholeWidget .range-controls input[type=range]{width:auto;min-width:80px;flex:1;margin:0}
+#wholeWidget #markControls,#wholeWidget #checkAnswer,#wholeWidget #next{margin-left:auto}
+#wholeWidget #stepTip,#wholeWidget #feedback{margin:8px 16px 12px;padding:9px 12px;font-size:.88rem}
+#wholeWidget #feedback:not(.bad){display:none}
+#wholeWidget .route-options{margin:8px 16px;gap:8px}
+#wholeWidget .route-options button{padding:12px}
+#wholeWidget .card:not(#exercise){padding:16px 20px;margin-top:12px;border-radius:16px}
+#wholeWidget #historyPanel{padding:8px 20px}
+#wholeWidget .visually-hidden{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-height:640px) and (min-width:650px){#wholeWidget .workspace{min-height:160px}#wholeWidget .object > svg{max-height:160px}#wholeWidget .objects:not(.single) .object > svg{max-height:95px}#wholeWidget .board-heading{padding-top:9px}}
+@media(max-width:649px){#wholeWidget{padding:8px}#wholeWidget .toolbar label{display:grid;gap:3px}#wholeWidget .workspace.has-math{grid-template-columns:minmax(0,1fr)}#wholeWidget .workspace{min-height:0;padding:4px 10px 10px;gap:6px}#wholeWidget .object > svg{max-height:210px}#wholeWidget .calculation-area{width:100%;max-width:440px;justify-self:center}#wholeWidget .board-heading{padding:12px 12px 0}#wholeWidget .board-controls{padding:8px;gap:5px}#wholeWidget #checkRange{font-size:.78rem;padding:8px}#wholeWidget .range-controls{gap:5px}#wholeWidget .range-controls{flex-wrap:wrap}#wholeWidget #rangeLabel{min-width:0;width:100%}#wholeWidget .math-card{padding:10px 12px}}
 </style></head>
 <body><main id="wholeWidget" data-edulo-widget-key="DAS_GANZE_BESTIMMEN">
-<header><span class="eyebrow">Mathe im Alltag</span><h1>Das Ganze bestimmen</h1><p class="sub">Mengen sehen. Teile verstehen. Deinen Rechenweg finden.</p></header>
+<header id="standaloneHeading"><h1>Das Ganze bestimmen</h1></header>
 <div class="toolbar"><label for="mode">Dein Rechenweg<select id="mode"><option value="divide">1 · Zuerst teilen</option><option value="multiply">2 · Zuerst vervielfachen</option><option value="choice">3 · Selbst entscheiden</option></select></label><button id="help" type="button">So funktioniert’s</button></div>
 <section class="card" id="exercise" hidden>
-<div id="sceneName" class="scene-name"></div><p id="story" class="sub"></p><div class="question" id="question"></div>
-<div class="stepbar" id="stepbar" aria-hidden="true"></div><ol id="work" class="work" aria-label="Deine erledigten Schritte"></ol><h2 id="stepTitle"></h2><p id="stepHint" class="sub"></p>
+<div class="scene-board">
+<div class="board-heading"><div id="sceneName" class="scene-name"></div><p id="story" class="sub"></p><div class="question" id="question"></div></div>
+<h2 id="stepTitle"></h2><p id="stepHint" hidden></p><div id="stepbar" hidden></div><ol id="work" hidden></ol>
 <div id="routeControls" class="route-options" hidden><button type="button" data-route="divide"><strong>Zuerst einen Teil berechnen</strong></button><button type="button" data-route="multiply"><strong>Zuerst vervielfachen</strong></button></div>
-<div id="rangeControls" class="range-controls" hidden><output for="range" id="rangeLabel"></output><input id="range" type="range" min="1" max="12" value="1" aria-label="Anzahl einstellen"><button class="primary" id="checkRange" type="button">✓ Prüfen</button></div>
-<div id="markControls" hidden><p id="marked" aria-live="polite"></p><button class="primary" id="checkMark" type="button">✓ Markierung prüfen</button></div>
-<form id="answerForm" hidden><label for="answer" id="answerLabel" class="answer-label">Dein Ergebnis</label><div class="controls"><input id="answer" type="text" inputmode="decimal" autocomplete="off" maxlength="24" aria-describedby="answerHelp"><span id="answerUnit" class="unit"></span><button class="primary" type="submit">✓ Ergebnis prüfen</button></div><small id="answerHelp">Trage das ausgerechnete Ergebnis als Zahl ein, zum Beispiel 60 oder 1,5. Keine Rechnung und kein Bruch.</small></form>
-<button id="showTip" type="button" hidden>Tipp zu diesem Schritt</button><p id="stepTip" class="notice" role="status" hidden></p><p id="feedback" class="notice" role="status" hidden></p>
-<div class="next-row"><button class="primary" id="next" type="button" hidden>Neue Aufgabe →</button></div>
-<div class="scene-board"><div id="objects" class="objects single"></div><div id="visualCaption" class="visual-caption" aria-live="polite"></div><div id="flow" class="flow" aria-label="Vollständiger Rechenweg" hidden></div></div>
+<div class="workspace" id="workspace">
+<div id="objects" class="objects single"></div>
+<div id="pictureWork" class="calculation-area" aria-label="Rechnungen zum Bild">
+<div id="equations"></div>
+<form id="answerForm" class="math-card" hidden>
+<label for="answer" id="answerLabel" class="answer-label">Dein Ergebnis</label>
+<div class="equation-entry"><span id="answerExpression"></span><input id="answer" type="text" inputmode="decimal" autocomplete="off" maxlength="24" aria-describedby="answerHelp"><span id="answerUnit" class="unit"></span></div>
+<small id="answerHelp" class="visually-hidden">Trage das ausgerechnete Ergebnis als Zahl ein. Keine Rechnung und kein Bruch.</small>
+</form>
+</div>
+</div>
+<div class="board-controls">
+<button id="showTip" type="button" hidden>Tipp</button>
+<div id="rangeControls" class="range-controls" hidden><label for="range" id="rangeLabel"></label><input id="range" type="range" min="1" max="12" value="1" aria-label="Anzahl einstellen"><button class="primary" id="checkRange" type="button">✓ Prüfen</button></div>
+<div id="markControls" hidden><span id="marked" class="visually-hidden" aria-live="polite"></span><button class="primary" id="checkMark" type="button">✓ Markierung prüfen</button></div>
+<button class="primary" id="checkAnswer" type="submit" form="answerForm" hidden>✓ Ergebnis prüfen</button>
+<button class="primary" id="next" type="button" hidden>Neue Aufgabe →</button>
+</div>
+<p id="stepTip" class="notice" role="status" hidden></p><p id="feedback" class="notice" role="status" hidden></p>
+<div id="visualCaption" hidden></div><div id="flow" hidden></div>
+</div>
 </section><p id="empty" class="notice" hidden></p>
 <details class="card" id="historyPanel"><summary>Historie</summary><details><summary>Meine bisherigen Aufgaben</summary><p class="sub">Auf Anhieb richtig: Alle geprüften Schritte stimmen beim ersten Versuch. Verbesserungen bleiben sichtbar.</p><ol id="historyList" class="history-list"></ol></details><div id="statistics" class="statistics"></div></details>
 <section class="card" aria-label="Deine Punkte"><b id="points">0 von 20 Punkten</b><div id="milestones" class="milestones" aria-hidden="true"></div><small id="nextPoint"></small><ul id="requirements" hidden></ul><small id="pointHint" hidden>Die Aufgaben je Rechenweg zählen gleichzeitig zur Gesamtzahl. Alle bisherigen richtigen Lösungen zählen mit.</small></section>
 <p id="storage" role="status">Speicher wird verbunden …</p><button id="retry" type="button" hidden>Verbindung erneut prüfen</button>
-<dialog id="intro"><h2>Zwei Wege zum Ganzen</h2><p>Drei Viertel entsprechen 90 g. Wie viel ist das Ganze?</p><p>Zuerst teilen: 90 g ÷ 3 = 30 g für ein Viertel. Dann 30 g × 4 = 120 g für das Ganze.</p><p>Zuerst vervielfachen: 90 g × 4 = 360 g. Das sind drei Ganze. Dann 360 g ÷ 3 = 120 g für ein Ganzes.</p><p>In den geführten Wegen stellst du die Mengen und Teile selbst ein. Bei „Selbst entscheiden“ wählst du einen Weg und berechnest beide Ergebnisse. Tipps gibt es auf Wunsch oder nach einem Fehler.</p><button class="primary" type="button" id="closeIntro">Verstanden</button></dialog>
+<dialog id="intro"><h2>Zwei Wege zum Ganzen</h2><p>Drei Viertel entsprechen 90 g. Wie viel ist das Ganze?</p><p>Zuerst teilen: 90 g ÷ 3 = 30 g für ein Viertel. Dann 30 g × 4 = 120 g für das Ganze.</p><p>Zuerst vervielfachen: 90 g × 4 = 360 g. Das sind drei Ganze. Dann 360 g ÷ 3 = 120 g für ein Ganzes.</p><p>In allen Modi stellst du die Mengen und Teile selbst ein. Bei „Selbst entscheiden“ wählst du zuerst den Weg und bearbeitest danach dieselben Schritte. Tipps gibt es auf Wunsch oder nach einem Fehler.</p><button class="primary" type="button" id="closeIntro">Verstanden</button></dialog>
 </main><script>
 (() => {
 'use strict';
@@ -137,6 +197,7 @@ const ROUTES={divide:'Zuerst teilen',multiply:'Zuerst vervielfachen'};
 const query=new URLSearchParams(location.search);
 let state,hostField=null,scoreFields=[],ready=false,editorPreview=false;
 const isEdulo=window.parent!==window||query.get('edulo')==='1'||query.has('data')||!!window.widget;
+$('standaloneHeading').hidden=isEdulo;
 const config={stateId:query.get('STATE_ID')||'',scorePrefix:query.get('SCORE_PREFIX')||'e2_cloze_text_input_',showFields:query.get('SHOW_FIELDS')==='1'};
 const hiddenHostElements=new Map();
 const fresh=()=>({version:1,widget:'das-ganze-bestimmen',mode:'divide',points:0,history:[],active:null});
@@ -285,9 +346,9 @@ function drawing(t,parts,selected,interactive,index,unknownWhole=false){
   for(let part=0;part<parts;part++){let tiles='';for(let k=0;k<24;k++)if(portion(k)===part){const x=32+(k%6)*48,y=53+Math.floor(k/6)*34;tiles+=`<rect x="${x-2}" y="${y-2}" width="48" height="34" fill="transparent"></rect><rect x="${x}" y="${y}" data-chocolate-piece="${k}" width="43" height="29" rx="4" fill="${fill(part)}" stroke="${selected.includes(part)?pale:s.light}" stroke-width="2"></rect><path d="M${x+4} ${y+24}v-19h35" fill="none" stroke="${selected.includes(part)?pale:s.light}" stroke-width="3" opacity=".85"></path><path d="M${x+8} ${y+12}h25" stroke="#fff" opacity=".15"></path>`;if(parts>1){let lines='';if(k%6===0||portion(k-1)!==part)lines+=`M${x-2} ${y-2}v34`;if(k%6===5||portion(k+1)!==part)lines+=`M${x+46} ${y-2}v34`;if(k<6||portion(k-6)!==part)lines+=`M${x-2} ${y-2}h48`;if(k>=18||portion(k+6)!==part)lines+=`M${x-2} ${y+32}h48`;decor+=`<path d="${lines}" fill="none" stroke="#fff6d9" stroke-width="2"></path>`;}}body+=group(part,tiles);}
   decor+=text(180,224,fmt(t.whole)+' g · 24 gleich schwere Stückchen',13);
  }else if(s.kind==='block'){
-  body=`<ellipse cx="179" cy="206" rx="137" ry="9" fill="#193c4310"></ellipse><path d="M36 94L73 65H320L284 94Z" fill="${s.light}"></path><path d="M284 94L320 65V165L284 194Z" fill="${s.color}"></path>`;
-  for(let i=0;i<parts;i++)body+=group(i,`<rect x="${36+i*248/parts}" y="94" width="${248/parts}" height="100" fill="${fill(i)}" stroke="${parts>1?'#fff':s.color}" stroke-width="2"></rect><path d="M${36+i*248/parts} 94l37-29" stroke="#fff" stroke-width="${parts>1?2:0}"></path>`);
-  decor=text(161,147,s.noun,19)+text(180,234,fmt(t.whole)+' '+s.unit,14);
+  body=`<ellipse cx="179" cy="206" rx="137" ry="9" fill="#193c4310"></ellipse>`;
+  for(let i=0;i<parts;i++){const x=36+i*248/parts,end=36+(i+1)*248/parts;body+=group(i,`<path data-block-top="true" d="M${x} 94L${x+37} 65H${end+37}L${end} 94Z" fill="${selected.includes(i)?pale:s.light}" stroke="${parts>1?'#fff':s.color}" stroke-width="1"></path>${i===parts-1?`<path data-block-side="true" d="M284 94L321 65V165L284 194Z" fill="${fill(i)}"></path>`:''}<rect data-block-front="true" x="${x}" y="94" width="${248/parts}" height="100" fill="${fill(i)}" stroke="${parts>1?'#fff':s.color}" stroke-width="2"></rect>`);}
+  decor=text(180,234,fmt(t.whole)+' '+s.unit+' '+s.noun,14);
  }else if(s.kind==='strip'){
   if(s.id==='tape'){
    body='<g data-fence="true" pointer-events="none"><rect x="25" y="47" width="300" height="12" rx="2" fill="#8c5637"></rect><rect x="25" y="78" width="300" height="12" rx="2" fill="#8c5637"></rect>';
@@ -324,21 +385,24 @@ function labelKnownParts(t,clockWhole=t.whole){
  const s=sceneOf(t),value=fmt(t.whole/t.d),unit=s.unit,ns='http://www.w3.org/2000/svg';
  const make=(tag,attrs,text)=>{const el=document.createElementNS(ns,tag);for(const [key,val] of Object.entries(attrs))el.setAttribute(key,String(val));if(text!==undefined)el.textContent=text;return el;};
  const regions=Array.from($('objects').querySelectorAll('.object svg [data-region]'));
- const clockSides={left:[],right:[]};
- if(s.kind==='clock')regions.forEach((region,i)=>{const angle=(i+.5)*clockWhole/s.dial*2*Math.PI/t.d;clockSides[Math.sin(angle)>=0?'right':'left'].push({region,angle});});
+ const amount=value+' '+unit,sector=clockWhole/s.dial*2*Math.PI/t.d;
+ const outerClock=s.kind==='clock'&&sector<Math.PI/4;
+ if(outerClock){const svg=regions[0]?.ownerSVGElement;if(svg){svg.setAttribute('viewBox','0 -42 360 365');const texts=svg.querySelectorAll('g[aria-hidden="true"] > text');texts[texts.length-1]?.setAttribute('y','307');}}
  regions.forEach((region,i)=>{
-  const box=region.getBBox();let x=box.x+box.width/2,y=box.y+box.height/2,font=Math.min(14,Math.max(8,(box.width-6)/Math.max(value.length,unit.length)*1.5)),width=Math.min(box.width-2,Math.max(value.length,unit.length)*font*.65+10),height=font*2.3;
-  const label=make('g',{'data-part-amount':i,'pointer-events':'none','aria-label':value+' '+unit});
+  const box=(region.querySelector('[data-block-front]')||region).getBBox();
+  let x=box.x+box.width/2,y=box.y+box.height/2,font=Math.min(14,Math.max(6,(box.width-8)/(amount.length*.65)),box.height-5),width=Math.min(box.width-2,amount.length*font*.65+8),height=font+6;
+  const label=make('g',{'data-part-amount':i,'pointer-events':'none','aria-label':amount});
   if(s.kind==='clock'){
-   const side=Object.entries(clockSides).find(([,items])=>items.some(item=>item.region===region)),items=side[1],index=items.findIndex(item=>item.region===region),angle=items[index].angle;
-   font=12;width=Math.max(value.length,unit.length)*8+12;height=32;
-   if(clockWhole/s.dial*360/t.d>=45){x=180+55*Math.sin(angle);y=124-55*Math.cos(angle);}
-   else{x=side[0]==='right'?326:34;y=items.length===1?124:30+index*185/(items.length-1);width=Math.min(60,width);label.append(make('path',{d:'M'+(180+57*Math.sin(angle))+' '+(124-57*Math.cos(angle))+' L'+(side[0]==='right'?294:66)+' '+y,fill:'none',stroke:'#355e62','stroke-width':1}));}
-  }else if(box.height<height+4){font=Math.max(8,Math.min(13,box.height-5,(box.width-10)/((value+' '+unit).length*.65)));width=Math.min(box.width-2,(value+' '+unit).length*font*.65+8);height=font+5;}
+   const angle=(i+.5)*sector; font=12;width=amount.length*font*.65+10;height=20;
+   if(!outerClock){x=180+55*Math.sin(angle);y=124-55*Math.cos(angle);}
+   else{
+    const gap=Math.max(sector,Math.min(2*Math.PI/t.d,.42)),fan=clockWhole/s.dial*Math.PI+(i-(t.d-1)/2)*gap;
+    x=180+140*Math.sin(fan);y=124-140*Math.cos(fan);
+    label.append(make('path',{d:'M'+(180+60*Math.sin(angle))+' '+(124-60*Math.cos(angle))+' Q'+(180+110*Math.sin((angle+fan)/2))+' '+(124-110*Math.cos((angle+fan)/2))+' '+x+' '+y,fill:'none',stroke:'#355e62','stroke-width':1}));
+   }
+  }
   label.append(make('rect',{x:x-width/2,y:y-height/2,width,height,rx:4,fill:'#ffffff',opacity:.93,stroke:'#aacac1','stroke-width':.6,'pointer-events':'all'}));
-  const attrs={x,'text-anchor':'middle','font-family':'system-ui,sans-serif','font-size':font,'font-weight':650,fill:'#164b43'};
-  if(height<font*2)label.append(make('text',{...attrs,y:y+font*.35},value+' '+unit));
-  else{label.append(make('text',{...attrs,y:y-1},value));label.append(make('text',{...attrs,y:y+font},unit));}
+  label.append(make('text',{x,y:y+font*.35,'text-anchor':'middle','font-family':'system-ui,sans-serif','font-size':font,'font-weight':650,fill:'#164b43'},amount));
   region.append(label);
  });
 }
@@ -376,7 +440,7 @@ function pieceWords(t){const kind=sceneOf(t).kind;return ['beaker','powder','syr
 function renderDividePicture(){
  const a=state.active,t=a.task,s=sceneOf(t),done=a.stage==='done',unitKnown=a.route==='divide'&&a.work.length>0;
  const parts=['divideParts','route'].includes(a.stage)?a.parts:t.d,interactive=a.stage==='mark';
- const confirmed=['unit','copies','product','result','done'].includes(a.stage),selected=['divideParts','route'].includes(a.stage)?[]:a.mode==='choice'?Array.from({length:t.n},(_,i)=>i):a.selected;
+ const confirmed=['unit','copies','product','result','done'].includes(a.stage),selected=['divideParts','route'].includes(a.stage)?[]:a.selected;
  // The clock is a fraction diagram of the whole time span; its size never gives away the duration.
  const shapeTask=s.kind==='clock'?{...t,whole:s.dial}:t;
  $('objects').classList.add('single');
@@ -403,11 +467,9 @@ function renderDividePicture(){
   svg.append(group);
  }
  // Fixed canvas from the first step onward; no separate completion schema is added.
- svg.setAttribute('viewBox','0 0 360 345');svg.style.maxHeight='430px';
+ svg.setAttribute('viewBox','0 0 360 345');svg.style.maxHeight='220px';
  if(unitKnown)labelKnownParts(t,s.kind==='clock'?s.dial:t.whole);
  if(done)svg.append(make('text',{x:180,y:337,'text-anchor':'middle','font-size':18,'font-weight':750,fill:'#165e51','data-whole-total':''},'Das Ganze: '+fmt(t.whole)+' '+s.unit));
- const annotation=document.createElement('div');annotation.id='pictureWork';annotation.className='picture-work';annotation.hidden=!a.work.length;
- annotation.innerHTML=a.work.map((line,i)=>`<p data-equation="${i}"><small>${i===0?(a.route==='multiply'?t.n+' Ganze':'Ein Bruchteil'):'Das Ganze'}</small>${esc(line)}</p>`).join('');$('objects').prepend(annotation);
  $('visualCaption').textContent=a.stage==='divideParts'?`Das Bild zeigt das unbekannte Ganze. In ${parts} ${parts===1?'Teil':'gleich große Teile'} eingeteilt.`:a.stage==='mark'?`${selected.length} von ${t.d} Teilen markiert. Wähle den bekannten Anteil im Bild.`:done?`Das Ganze umfasst ${fmt(t.whole)} ${s.unit}. Die markierten Teile entsprechen zusammen ${fmt(given(t))} ${s.unit}.`:`Die markierten Teile entsprechen zusammen ${fmt(given(t))} ${s.unit}. Die hellen Teile ergänzen sie zum Ganzen.`;
 }
 function wholeWords(t){
@@ -428,7 +490,7 @@ function renderPicture(){
  board.innerHTML=`<div class="copy-key">${Array.from({length:Math.min(copies,t.d)},(_,i)=>`<span style="border-color:${colors[i]}">${pieces[0]} ${i+1}${s.kind==='strip'?'':' · '+fmt(given(t))+' '+esc(s.unit)}</span>`).join('')}</div><div class="main-target-scroll" tabindex="0" role="region" aria-label="Alle ganzen Ziele nebeneinander; bei Bedarf seitlich scrollen"><figure class="object main-target-picture"></figure></div>`;
  $('objects').append(board);
  const width=t.n*360+(t.n-1)*10,main=svgElement('svg',{viewBox:`0 0 ${width} 290`,role:'img','aria-label':`${t.n} ganze ${words[1]} mit ${copies} gleich großen ${pieces[1]}`,'data-main-target-picture':''});
- main.style.width='100%';main.style.minWidth=t.n*270+'px';main.style.maxHeight='none';board.querySelector('figure').append(main);
+ main.style.width='100%';main.style.minWidth='0';main.style.maxHeight='none';board.querySelector('figure').append(main);
  for(let j=0;j<t.n;j++){
   const selected=Array.from({length:t.d},(_,i)=>i).filter(i=>j*t.d+i<filled),shape=s.kind==='clock'?{...t,whole:s.dial}:t;
   const holder=document.createElement('div');holder.innerHTML=drawing(shape,t.d,selected,false,j,true);const svg=holder.firstElementChild;
@@ -451,7 +513,14 @@ function renderPicture(){
  $('visualCaption').textContent=done?`${t.n} ganze ${words[1]} umfassen zusammen ${fmt(t.whole*t.n)} ${s.unit}. Ein Ganzes umfasst ${fmt(t.whole)} ${s.unit}.`:`Jedes gleichfarbige ${pieces[0]==='Stück'?'Stück':pieces[0]==='Abschnitt'?'Zeitstück':'Teilstück'} entspricht ${fmt(given(t))} ${s.unit}. Es darf im nächsten Ganzen weitergehen.`;
 }
 
-function steps(a){return a.mode==='choice'?['route',a.route==='multiply'?'product':'unit','result']:a.route==='divide'?['divideParts','mark','unit','result']:['divideParts','mark','copies','product','result'];}
+function renderMathCards(){
+ const a=state.active,t=a.task,s=sceneOf(t),answering=!$('answerForm').hidden;
+ $('equations').innerHTML=a.work.map((line,i)=>`<div class="math-card" data-equation="${i}"><div class="math-result">${esc(line)}</div></div>`).join('');
+ $('pictureWork').hidden=!a.work.length&&!answering;$('workspace').classList.toggle('has-math',!!a.work.length||answering);
+ $('checkAnswer').hidden=!answering;$('answerLabel').textContent=stepTitleFor(a,a.stage);
+ $('answerExpression').innerHTML=a.stage==='unit'?frac(1,t.d)+' ≙':a.stage==='product'?`${t.d} × ${fmt(given(t))} ${s.unit} =`:'Das Ganze ≙';
+}
+function steps(a){const path=a.route==='divide'?['divideParts','mark','unit','result']:['divideParts','mark','copies','product','result'];return a.mode==='choice'?['route',...path]:path;}
 function quantityQuestion(a,stage){
  const t=a.task,s=sceneOf(t),names={g:'Gramm',kg:'Kilogramm',ml:'Milliliter',l:'Liter',cm:'Zentimeter',m:'Meter',min:'Minuten',s:'Sekunden',h:'Stunden',Eier:'Eier'},name=names[s.unit],words=wholeWords(t),many=numberWord(t.n)+' ganzen '+words[1];
  if(stage==='unit')return `Wie viele ${name} entsprechen einem ${partName(t.d).replace('Hälften','Halben')}?`;
@@ -489,14 +558,14 @@ function render(){
  $('sceneName').textContent=s.title;$('question').innerHTML='<span class="task-command">Bestimme das Ganze.</span>'+frac(t.n,t.d)+`<span>≙ ${fmt(given(t))} ${s.unit}</span>`;$('story').textContent=storyForTask(t);
  $('stepbar').innerHTML=path.map((step,i)=>`<span class="stepdot ${i<=pos?'active':''}"></span>`).join('');
  const hints={route:'Beide Wege führen zum selben Ergebnis. Wähle den Weg, der dir hier leichter erscheint.',divideParts:'Stelle die Unterteilung mit dem Regler ein. Die Teile sollen gleich groß sein.',unit:'Gesucht ist die Menge des hervorgehobenen Teils.',mark:'Tippe die Teile im Bild an oder streiche mit dem Finger über mehrere Teile. Beginne auf einem markierten Teil, um Markierungen zu entfernen.',copies:'Stelle die Anzahl mit dem Regler ein.',product:'Gesucht ist die Menge aller dargestellten Ausgangsmengen zusammen.',multiplyParts:'Die Unterteilung im Bild ändert sich mit dem Regler.',result:'Gesucht ist die Menge aller grünen Teile zusammen.',done:a.hadError?'Du hast deine Fehler verbessert. Im Verlauf kannst du deine Versuche nachlesen.':'Alle Schritte waren auf Anhieb richtig. Diese Aufgabe zählt für deine Punkte.'};
- $('stepTitle').textContent=(a.stage==='done'?'':`Schritt ${pos+1} → `)+stepTitleFor(a,a.stage);$('stepHint').textContent=a.stage==='done'?hints.done:a.stage==='mark'?'Tippe die Bruchteile an oder streiche mit dem Finger darüber. Beginne auf einem markierten Teil, um Markierungen zu entfernen.':a.stage==='route'?hints.route:'';
- const tipVisible=(Array.isArray(a.hints)&&a.hints.includes(a.stage))||a.attempts.some(v=>v.stage===a.stage&&!v.correct);$('showTip').hidden=['route','done'].includes(a.stage)||tipVisible;$('stepTip').hidden=!tipVisible;$('stepTip').textContent=tipVisible?tipFor(a):'';
+ $('stepTitle').textContent=stepTitleFor(a,a.stage);$('stepTitle').hidden=['convert','unit','product','result'].includes(a.stage);$('stepHint').textContent=a.stage==='done'?hints.done:a.stage==='mark'?'Tippe die Bruchteile an oder streiche mit dem Finger darüber. Beginne auf einem markierten Teil, um Markierungen zu entfernen.':a.stage==='route'?hints.route:'';
+ const tipVisible=(Array.isArray(a.hints)&&a.hints.includes(a.stage))||a.attempts.some(v=>v.stage===a.stage&&!v.correct);$('showTip').hidden=['route','done'].includes(a.stage);$('showTip').disabled=tipVisible;$('stepTip').hidden=!tipVisible;$('stepTip').textContent=tipVisible?tipFor(a):'';
  $('routeControls').hidden=a.stage!=='route';$('rangeControls').hidden=!['divideParts','copies','multiplyParts'].includes(a.stage);$('markControls').hidden=a.stage!=='mark';$('answerForm').hidden=!['unit','product','result'].includes(a.stage);$('next').hidden=a.stage!=='done';
  const isCopies=a.stage==='copies',value=isCopies?a.copies:a.parts;$('range').max=isCopies?12:partitionOptions(t).length;$('range').value=isCopies?value:partitionOptions(t).indexOf(value)+1;$('range').setAttribute('aria-label',isCopies?'Anzahl der gleichen Anteile':'Anzahl gleich großer Teile');$('range').setAttribute('aria-valuetext',isCopies?value+' '+pieceWords(t)[1]:value+' gleich große Teile');$('rangeLabel').textContent=isCopies?`${value} ${pieceWords(t)[value===1?0:1]}`:`${value} ${value===1?'Teil':'gleich große Teile'}`;
  $('checkRange').textContent=isCopies?'✓ Anzahl prüfen':'✓ Unterteilung prüfen';$('marked').textContent=`${a.selected.length} ${a.selected.length===1?'Teil':'Teile'} markiert`;
  $('answer').value=a.input;$('answerUnit').textContent=s.unit;$('answerLabel').textContent='Dein Ergebnis';
  $('flow').hidden=a.stage!=='done';$('flow').innerHTML=a.stage==='done'?`<span class="flow-node">${fmt(given(t))} ${s.unit}</span><span class="flow-arrow">${a.route==='divide'?'÷ '+t.n:'× '+t.d}<span aria-hidden="true">⟶</span></span><span class="flow-node">${a.route==='divide'?'Ein Teil':'Vervielfachte Menge'}</span><span class="flow-arrow">${a.route==='divide'?'× '+t.d:'÷ '+t.n}<span aria-hidden="true">⟶</span></span><span class="flow-node">Gesuchtes Ganzes</span>`:'';
- renderCompleted(a);renderPicture();
+ renderPicture();renderMathCards();
 }
 let renderedHistory=null,renderedHistoryLength=-1;
 function renderHistory(){if(!$('historyPanel').open)return;
@@ -630,7 +699,7 @@ $('objects').addEventListener('keydown',event=>{const part=event.target.closest(
 $('answer').addEventListener('input',()=>{if(!ready||!state.active)return;state.active.input=$('answer').value;scheduleSave();});
 $('answerForm').addEventListener('submit',event=>{event.preventDefault();submitAnswer();});
 $('showTip').addEventListener('click',()=>{const a=state.active;if(!a||['route','done'].includes(a.stage))return;if(!Array.isArray(a.hints))a.hints=[];if(!a.hints.includes(a.stage))a.hints.push(a.stage);render();save();});
-$('routeControls').addEventListener('click',event=>{const button=event.target.closest('[data-route]');if(!button||!state.active||state.active.stage!=='route')return;const a=state.active;a.route=button.dataset.route;a.stage=a.route==='divide'?'unit':'product';a.parts=a.task.d;a.copies=a.task.d;a.selected=Array.from({length:a.task.n},(_,i)=>i);render();save();});
+$('routeControls').addEventListener('click',event=>{const button=event.target.closest('[data-route]');if(!button||!state.active||state.active.stage!=='route')return;const a=state.active;a.route=button.dataset.route;a.stage='divideParts';a.parts=1;a.copies=1;a.selected=[];render();save();});
 $('mode').addEventListener('change',()=>{if(!ready||$('mode').disabled)return;state.mode=$('mode').value;message('');newTask();});
 $('next').addEventListener('click',()=>{if(state.active?.stage!=='done')return;message('');newTask();$('stepTitle').scrollIntoView({block:'nearest',behavior:'smooth'});});
 $('retry').addEventListener('click',connect);

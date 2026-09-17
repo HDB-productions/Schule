@@ -98,3 +98,10 @@ Ab Punkt 3 muss also jeweils mindestens ein aufgerundetes Fünftel der Schwelle 
 ### Kompatibilität der Zeichnungen
 
 SVG-Elemente im eingebetteten Skript besitzen ausdrücklich schließende Tags. Die ältere jQuery-Vorverarbeitung im EduLudoo-HTML-Modul verändert sonst selbstschließende SVG-Tags innerhalb von JavaScript-Schleifen und verschachtelt die Zeichnung falsch. Das führte zu verschwundenen Eiern, fehlenden Uhrzahlen und nur einem sichtbaren Schokoladenstück je Gruppe. Der Integrationstest prüft unveränderten Skripttext nach dieser Vorverarbeitung und die anschließend sichtbaren Formen und auswählbaren Gruppen. Fehlende Punktefelder blockieren die Übung nicht; eine Warnung zeigt die unvollständige Verbindung an.
+
+
+## Kompaktes Layout (17. September 2026)
+
+Aufgabe, Visualisierung und Eingabefelder stehen in einer gemeinsamen Fläche. Regler und Prüfen sind direkt darunter angeordnet; abgeschlossene Schritte werden nicht zusätzlich als lange Liste angezeigt. Historie und Punkte bleiben erhalten. Der Titel wird in der Edulo-Einbettung ausgeblendet. Im Modus „Selbst entscheiden“ folgt nach der Wegwahl derselbe vollständige Ablauf wie bei direkter Wahl.
+
+Die bisherige Widgetkennung, das Speicherpräfix, E1/E2 und der lokale Speicherschlüssel bleiben erhalten. `tests/compact-layout.test.cjs` prüft gespeicherte Altstände mit 100 Ergebnissen und acht Punkten, beide Wege einschließlich freier Wahl, Wiederherstellung nach jedem Schritt und alle Motive in zwei Breiten. Die Altstände in `tests/fixtures` wurden mit der vorherigen App-Fassung erzeugt; es sind synthetische Testdaten. Die Vergleichsdatei „Anteile berechnen - Layout 2.html“ bleibt separat und verwendet weiterhin ihren eigenen Testspeicher.
