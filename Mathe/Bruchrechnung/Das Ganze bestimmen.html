@@ -105,6 +105,7 @@
 @media(prefers-reduced-motion:reduce){#wholeWidget .bubble{animation:none}#wholeWidget *{transition:none!important}}
 @media(max-width:520px){#wholeWidget{padding:18px 12px}#wholeWidget .card{padding:18px}#wholeWidget .route-options,#wholeWidget .statistics{grid-template-columns:1fr}#wholeWidget .objects:not(.single){grid-template-columns:repeat(2,minmax(0,1fr))}#wholeWidget .toolbar{align-items:start}#wholeWidget .object figcaption{font-size:.7rem}#wholeWidget .question{gap:9px}}
 @media(max-width:520px){#wholeWidget .flow{display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;gap:4px;font-size:.7rem}#wholeWidget .flow-node{padding:6px 4px;overflow-wrap:anywhere;hyphens:auto}#wholeWidget .milestones{display:grid;grid-template-columns:repeat(10,minmax(0,1fr))}#wholeWidget .milestones span{min-width:0}}
+#wholeWidget .touch-marking{touch-action:none}
 </style></head>
 <body><main id="wholeWidget" data-edulo-widget-key="DAS_GANZE_BESTIMMEN">
 <header><span class="eyebrow">Mathe im Alltag</span><h1>Das Ganze bestimmen</h1><p class="sub">Mengen sehen. Teile verstehen. Deinen Rechenweg finden.</p></header>
@@ -415,6 +416,7 @@ function wholeWords(t){
 }
 function numberWord(n){return ['null','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf'][n]||String(n);}
 function renderPicture(){
+ $('objects').classList.toggle('touch-marking',state.active?.stage==='mark');
  renderDividePicture();
  const a=state.active,t=a.task,s=sceneOf(t);
  if(a.route!=='multiply'||!['copies','product','result','done'].includes(a.stage))return;
@@ -486,8 +488,8 @@ function render(){
  const t=a.task,s=sceneOf(t),path=steps(a),pos=a.stage==='done'?path.length:path.indexOf(a.stage);
  $('sceneName').textContent=s.title;$('question').innerHTML='<span class="task-command">Bestimme das Ganze.</span>'+frac(t.n,t.d)+`<span>≙ ${fmt(given(t))} ${s.unit}</span>`;$('story').textContent=storyForTask(t);
  $('stepbar').innerHTML=path.map((step,i)=>`<span class="stepdot ${i<=pos?'active':''}"></span>`).join('');
- const hints={route:'Beide Wege führen zum selben Ergebnis. Wähle den Weg, der dir hier leichter erscheint.',divideParts:'Stelle die Unterteilung mit dem Regler ein. Die Teile sollen gleich groß sein.',unit:'Gesucht ist die Menge des hervorgehobenen Teils.',mark:'Tippe die Teile im Bild an. Erneutes Antippen wählt sie wieder ab.',copies:'Stelle die Anzahl mit dem Regler ein.',product:'Gesucht ist die Menge aller dargestellten Ausgangsmengen zusammen.',multiplyParts:'Die Unterteilung im Bild ändert sich mit dem Regler.',result:'Gesucht ist die Menge aller grünen Teile zusammen.',done:a.hadError?'Du hast deine Fehler verbessert. Im Verlauf kannst du deine Versuche nachlesen.':'Alle Schritte waren auf Anhieb richtig. Diese Aufgabe zählt für deine Punkte.'};
- $('stepTitle').textContent=(a.stage==='done'?'':`Schritt ${pos+1} → `)+stepTitleFor(a,a.stage);$('stepHint').textContent=a.stage==='done'?hints.done:a.stage==='mark'?'Tippe die Bruchteile im Bild an.':a.stage==='route'?hints.route:'';
+ const hints={route:'Beide Wege führen zum selben Ergebnis. Wähle den Weg, der dir hier leichter erscheint.',divideParts:'Stelle die Unterteilung mit dem Regler ein. Die Teile sollen gleich groß sein.',unit:'Gesucht ist die Menge des hervorgehobenen Teils.',mark:'Tippe die Teile im Bild an oder streiche mit dem Finger über mehrere Teile. Beginne auf einem markierten Teil, um Markierungen zu entfernen.',copies:'Stelle die Anzahl mit dem Regler ein.',product:'Gesucht ist die Menge aller dargestellten Ausgangsmengen zusammen.',multiplyParts:'Die Unterteilung im Bild ändert sich mit dem Regler.',result:'Gesucht ist die Menge aller grünen Teile zusammen.',done:a.hadError?'Du hast deine Fehler verbessert. Im Verlauf kannst du deine Versuche nachlesen.':'Alle Schritte waren auf Anhieb richtig. Diese Aufgabe zählt für deine Punkte.'};
+ $('stepTitle').textContent=(a.stage==='done'?'':`Schritt ${pos+1} → `)+stepTitleFor(a,a.stage);$('stepHint').textContent=a.stage==='done'?hints.done:a.stage==='mark'?'Tippe die Bruchteile an oder streiche mit dem Finger darüber. Beginne auf einem markierten Teil, um Markierungen zu entfernen.':a.stage==='route'?hints.route:'';
  const tipVisible=(Array.isArray(a.hints)&&a.hints.includes(a.stage))||a.attempts.some(v=>v.stage===a.stage&&!v.correct);$('showTip').hidden=['route','done'].includes(a.stage)||tipVisible;$('stepTip').hidden=!tipVisible;$('stepTip').textContent=tipVisible?tipFor(a):'';
  $('routeControls').hidden=a.stage!=='route';$('rangeControls').hidden=!['divideParts','copies','multiplyParts'].includes(a.stage);$('markControls').hidden=a.stage!=='mark';$('answerForm').hidden=!['unit','product','result'].includes(a.stage);$('next').hidden=a.stage!=='done';
  const isCopies=a.stage==='copies',value=isCopies?a.copies:a.parts;$('range').max=isCopies?12:partitionOptions(t).length;$('range').value=isCopies?value:partitionOptions(t).indexOf(value)+1;$('range').setAttribute('aria-label',isCopies?'Anzahl der gleichen Anteile':'Anzahl gleich großer Teile');$('range').setAttribute('aria-valuetext',isCopies?value+' '+pieceWords(t)[1]:value+' gleich große Teile');$('rangeLabel').textContent=isCopies?`${value} ${pieceWords(t)[value===1?0:1]}`:`${value} ${value===1?'Teil':'gleich große Teile'}`;
@@ -496,10 +498,20 @@ function render(){
  $('flow').hidden=a.stage!=='done';$('flow').innerHTML=a.stage==='done'?`<span class="flow-node">${fmt(given(t))} ${s.unit}</span><span class="flow-arrow">${a.route==='divide'?'÷ '+t.n:'× '+t.d}<span aria-hidden="true">⟶</span></span><span class="flow-node">${a.route==='divide'?'Ein Teil':'Vervielfachte Menge'}</span><span class="flow-arrow">${a.route==='divide'?'× '+t.d:'÷ '+t.n}<span aria-hidden="true">⟶</span></span><span class="flow-node">Gesuchtes Ganzes</span>`:'';
  renderCompleted(a);renderPicture();
 }
+let renderedHistory=null,renderedHistoryLength=-1;
+function renderHistory(){if(!$('historyPanel').open)return;
+ if(renderedHistory!==state.history||renderedHistoryLength!==state.history.length){renderedHistory=state.history;renderedHistoryLength=state.history.length;
+ $('historyList').innerHTML=state.history.length?state.history.map((h,i)=>`<li><details><summary>${i+1}. ${esc(sceneOf(h.task).title)} · ${h.task.n}/${h.task.d} entsprechen ${fmt(given(h.task))} ${sceneOf(h.task).unit} · ${h.correct?'✓ Auf Anhieb richtig':'↻ Mit Fehlern'}</summary><p>${ROUTES[h.route]}</p>${h.work.map(w=>`<p>${esc(w)}</p>`).join('')}<ol>${h.attempts.map(v=>`<li>${esc(attemptLabel(v.stage))}: ${esc(typeof v.input==='object'?JSON.stringify(v.input):v.input)} ${v.correct?'✓':'→ noch nicht richtig'}</li>`).join('')}</ol></details></li>`).join(''):'<li>Noch keine Aufgabe abgeschlossen.</li>';
+ }
+}
+let statsView=null;
 function renderStats(){
  if(!state)return;
+ if(statsView&&statsView.history===state.history&&statsView.length===state.history.length&&statsView.points===state.points&&statsView.mode===state.mode)return;
+ statsView={history:state.history,length:state.history.length,points:state.points,mode:state.mode};
+ if(!state)return;
  const overall=stats();$('statistics').innerHTML=[['Alle Aufgaben',overall],...Object.entries(ROUTES).map(([r,label])=>[label,stats(r)])].map(([label,v])=>`<section class="stat-card"><h3>${label}</h3><p><b>${v.correct}</b> auf Anhieb richtig / ${v.total} erledigt</p><small>${v.wrong} mit Fehlern bearbeitet · Trefferquote ${v.total?Math.round(v.correct/v.total*100)+' %':'–'}</small></section>`).join('');
- $('historyList').innerHTML=state.history.length?state.history.map((h,i)=>`<li><details><summary>${i+1}. ${esc(sceneOf(h.task).title)} · ${h.task.n}/${h.task.d} entsprechen ${fmt(given(h.task))} ${sceneOf(h.task).unit} · ${h.correct?'✓ Auf Anhieb richtig':'↻ Mit Fehlern'}</summary><p>${ROUTES[h.route]}</p>${h.work.map(w=>`<p>${esc(w)}</p>`).join('')}<ol>${h.attempts.map(v=>`<li>${esc(attemptLabel(v.stage))}: ${esc(typeof v.input==='object'?JSON.stringify(v.input):v.input)} ${v.correct?'✓':'→ noch nicht richtig'}</li>`).join('')}</ol></details></li>`).join(''):'<li>Noch keine Aufgabe abgeschlossen.</li>';
+ renderHistory();
  $('points').textContent=`${state.points} von 20 Punkten`;$('milestones').innerHTML=THRESHOLDS.map((t,i)=>`<span class="${i<state.points?'earned':''}" title="Punkt ${i+1}: ${t} richtige Aufgaben">${i+1}</span>`).join('');
  if(state.points>=20){$('nextPoint').textContent='Alle 20 Punkte erreicht! Du kannst weiterüben.';$('requirements').hidden=true;$('pointHint').hidden=true;return;}
  const req=pointRequirements(state.points);$('nextPoint').textContent=`Bis Punkt ${state.points+1}: noch ${req.totalMissing} auf Anhieb richtige Aufgaben insgesamt (Ziel: ${req.threshold}).`;
@@ -532,9 +544,39 @@ function findStateField() {
 function writeField(el,value) {if(String(el.value)===value)return; const proto=Object.getPrototypeOf(el), setter=Object.getOwnPropertyDescriptor(proto,'value')?.set; if(setter)setter.call(el,value);else el.value=value; const EventClass=el.ownerDocument.defaultView.Event;el.dispatchEvent(new EventClass('input',{bubbles:true}));el.dispatchEvent(new EventClass('change',{bubbles:true}));}
 function hideField(el,moduleId) {if(config.showFields||editorPreview||isEditorView())return;const module=el.ownerDocument.getElementById(moduleId); const target=module&&module.contains(el)&&!module.querySelector('iframe, #fractionWidget, #wholeWidget')&&module!==el.ownerDocument.body ? module : el.closest('.inputcontainer')||el;if(!hiddenHostElements.has(target))hiddenHostElements.set(target,{hidden:target.hidden,display:target.style.getPropertyValue('display'),priority:target.style.getPropertyPriority('display')});target.hidden=true;target.style.setProperty('display','none','important');}
 function storageMessage(text,bad=false){$('storage').textContent=text;$('storage').classList.toggle('bad',bad);$('retry').hidden=!bad;}
-function save() {
+// Coalesce transient input; explicit checks and navigation still save immediately.
+let pendingSave=null;
+$('historyPanel').addEventListener('toggle',()=>{if($('historyPanel').open)renderHistory();});
+function scheduleSave(){if(pendingSave!==null)clearTimeout(pendingSave);pendingSave=setTimeout(()=>{pendingSave=null;save();},200);}
+function flushPendingSave(){if(pendingSave!==null)save();}
+function onVisibilityChange(){if(document.visibilityState==='hidden')flushPendingSave();}
+document.addEventListener('visibilitychange',onVisibilityChange);
+widgetRoot.addEventListener('focusout',flushPendingSave);
+// Keep pointer capture on the stable container while its children are redrawn.
+function installTouchPainting(container,selector,readIndex,paint,isMarking){
+ let gesture=null,suppressUntil=0;
+ const visit=(x,y)=>{const el=document.elementFromPoint(x,y)?.closest(selector);if(!el||!container.contains(el))return;const i=readIndex(el);if(gesture.seen.has(i))return;gesture.seen.add(i);paint(i,gesture.select);};
+ container.addEventListener('pointerdown',e=>{
+  if(e.pointerType!=='touch'||!e.isPrimary||!isMarking()||gesture)return;
+  const el=e.target.closest(selector);if(!el)return;
+  e.preventDefault();gesture={id:e.pointerId,select:!state.active.selected.includes(readIndex(el)),seen:new Set(),x:e.clientX,y:e.clientY};
+  container.setPointerCapture(e.pointerId);visit(e.clientX,e.clientY);
+ });
+ container.addEventListener('pointermove',e=>{
+  if(!gesture||e.pointerId!==gesture.id)return;e.preventDefault();
+  const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y,steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/6)),x=gesture.x,y=gesture.y;
+  for(let i=1;i<=steps;i++)visit(x+dx*i/steps,y+dy*i/steps);
+  gesture.x=e.clientX;gesture.y=e.clientY;
+ });
+ const end=e=>{if(!gesture||e.pointerId!==gesture.id)return;gesture=null;suppressUntil=Date.now()+600;flushPendingSave();};
+ for(const type of ['pointerup','pointercancel','lostpointercapture'])container.addEventListener(type,end);
+ container.addEventListener('click',e=>{if(Date.now()<suppressUntil&&e.detail!==0&&e.pointerType!=='mouse'){e.preventDefault();e.stopImmediatePropagation();}},true);
+}
+
+function save(force=false) {
+  if(pendingSave!==null){clearTimeout(pendingSave);pendingSave=null;}
  if(state)ensureSelection();
-  if(!ready||!widgetRoot.isConnected)return;
+  if(!ready||(!widgetRoot.isConnected&&!force))return;
   if(editorPreview||isEditorView()){editorPreview=true;restoreHostElements();storageMessage('Editor-Vorschau: Änderungen werden nicht in EduLudoo gespeichert.');renderStats();return;}
   const earned=THRESHOLDS.filter((_,index)=>pointRequirements(index).eligible).length;state.points=Math.max(state.points,earned);
   try {
@@ -567,12 +609,13 @@ async function connect() {
   }catch(err){storageMessage(err.message,true);}
 }
 
-$('range').addEventListener('input',()=>{if(!ready||!state.active)return;const a=state.active;if(a.stage==='copies')a.copies=Number($('range').value);else a.parts=partitionOptions(a.task)[Number($('range').value)-1];message('');render();save();});
+$('range').addEventListener('input',()=>{if(!ready||!state.active)return;const a=state.active;if(a.stage==='copies')a.copies=Number($('range').value);else a.parts=partitionOptions(a.task)[Number($('range').value)-1];message('');render();scheduleSave();});
 $('checkRange').addEventListener('click',checkRange);
 $('checkMark').addEventListener('click',checkMark);
+installTouchPainting($('objects'),'[data-part]',el=>Number(el.dataset.part),(i,selected)=>{const a=state.active;if(a.selected.includes(i)===selected)return;if(selected)a.selected.push(i);else a.selected=a.selected.filter(v=>v!==i);$('marked').textContent=a.selected.length+' Teile markiert';renderPicture();scheduleSave();},()=>ready&&state.active?.stage==='mark');
 $('objects').addEventListener('click',event=>{const part=event.target.closest('[data-part]');if(part)togglePart(Number(part.dataset.part));});
 $('objects').addEventListener('keydown',event=>{const part=event.target.closest('[data-part]');if(part&&['Enter',' '].includes(event.key)){event.preventDefault();togglePart(Number(part.dataset.part));}});
-$('answer').addEventListener('input',()=>{if(!ready||!state.active)return;state.active.input=$('answer').value;save();});
+$('answer').addEventListener('input',()=>{if(!ready||!state.active)return;state.active.input=$('answer').value;scheduleSave();});
 $('answerForm').addEventListener('submit',event=>{event.preventDefault();submitAnswer();});
 $('showTip').addEventListener('click',()=>{const a=state.active;if(!a||['route','done'].includes(a.stage))return;if(!Array.isArray(a.hints))a.hints=[];if(!a.hints.includes(a.stage))a.hints.push(a.stage);render();save();});
 $('routeControls').addEventListener('click',event=>{const button=event.target.closest('[data-route]');if(!button||!state.active||state.active.stage!=='route')return;const a=state.active;a.route=button.dataset.route;a.stage=a.route==='divide'?'unit':'product';a.parts=a.task.d;a.copies=a.task.d;a.selected=Array.from({length:a.task.n},(_,i)=>i);render();save();});
@@ -582,7 +625,7 @@ $('retry').addEventListener('click',connect);
 $('help').addEventListener('click',()=>$('intro').showModal());$('closeIntro').addEventListener('click',()=>$('intro').close());
 function onPageHide(){save();restoreHostElements();}
 window.addEventListener('pagehide',onPageHide);
-const removalObserver=new MutationObserver(()=>{if(!widgetRoot.isConnected){ready=false;restoreHostElements();window.removeEventListener('pagehide',onPageHide);removalObserver.disconnect();}});
+const removalObserver=new MutationObserver(()=>{if(!widgetRoot.isConnected){if(pendingSave!==null)save(true);document.removeEventListener('visibilitychange',onVisibilityChange);ready=false;restoreHostElements();window.removeEventListener('pagehide',onPageHide);removalObserver.disconnect();}});
 removalObserver.observe(document.documentElement,{childList:true,subtree:true});
 connect();
 })();
