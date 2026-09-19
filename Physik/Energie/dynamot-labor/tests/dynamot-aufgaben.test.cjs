@@ -12,7 +12,7 @@ for(const v of ['v1','v2','v3','v4']){
 }
 assert(!api.checkDiagram('v1',{nodes:[{id:'x',label:'DynaMot'},{id:'x',label:'Lampe'}],edges:[]}));
 const raw=fs.readFileSync(require('node:path').join(__dirname,'../dynamot-labor.html'),'utf8');const model=raw.slice(raw.indexOf('/* MODEL_START */'),raw.indexOf('/* MODEL_END */'));const box={};vm.runInNewContext(model+';this.step=step;',box);
-function run(e,s,seconds=2){let completed=false;for(let i=0;i<seconds/.005;i++){box.step(s.devices,s.wires,.005);s.time+=.005;if(i%20===0)completed=e.observe(s)||completed;}return completed;}
+function run(e,s,seconds=2,experiment){let completed=false;for(let i=0;i<seconds/.005;i++){box.step(s.devices,s.wires,.005);s.time+=.005;if(i%20===0)completed=e.observe(s,experiment)||completed;}return completed;}
 for(const v of ['v1','v2','v3','v4']){
  const e=api.create({definitions:api.definitions.filter(d=>d.experiment===v)}),s=fixture(v),before=JSON.stringify(s);assert(e.observe(s));assert.equal(JSON.stringify(s),before);assert.equal(e.current().kind,'observe');
  if(v==='v1'){run(e,s);s.devices[0].rate=12;assert(run(e,s));}
@@ -59,3 +59,39 @@ function oldState(ids){const state={version:2,signature:JSON.stringify(oldDefs),
  const altered=oldState(['v1']);const signature=JSON.parse(altered.signature);signature[0].text+=' modified';altered.signature=JSON.stringify(signature);assert.throws(()=>api.create({state:altered}),'changed definitions are not an order migration');
 }
 console.log('Stable-ID order migration: half/full/unfinished old states, hole-preserving restore, skip completed later experiment, reject changed definitions passed.');
+
+// The selected experiment owns its next step; the global first-open step is only a legacy default.
+{
+ let free=api.create(),v4=fixture('v4'),v2=fixture('v2');
+ assert.equal(free.current('v4').id,'v4.build');
+ assert(free.observe(v4,'v4'));assert.equal(free.current('v4').id,'v4.observe');
+ assert(free.observe(v2,'v2'));assert.equal(free.current('v2').id,'v2.observe');
+ assert.equal(free.current('v1').id,'v1.build');
+ free=api.create({state:JSON.parse(JSON.stringify(free.serialize()))});
+ assert.equal(free.current('v4').id,'v4.observe');assert.equal(free.current('v2').id,'v2.observe');
+ assert.equal(free.progress().points,2);
+ v4.devices[0].omega=0;run(free,v4,6,'v4');
+ v4.devices[0].mass=1;v4.devices[0].height=1.2;v4.devices[0].omega=0;
+ assert(run(free,v4,6,'v4'));
+ assert.equal(free.current('v4').kind,'choice');
+ assert.equal(free.current('v2').kind,'observe','another experiment remains at its own step');
+ const questions=free.current('v4').questions;
+ assert(free.answer(Object.fromEntries(questions.map(q=>[q.id,q.answer])),'v4').correct);
+ assert(free.submitDiagram(graph('v4'),'v4').correct);
+ assert.equal(free.current('v4'),null);
+ assert.equal(free.current().id,'v1.build');
+ assert.equal(free.progress().points,6);
+ assert.equal(free.observe(v4,'v4'),false,'finished experiment cannot gain points');
+ const saved=free.serialize(),again=api.create({state:JSON.parse(JSON.stringify(saved))});
+ assert.deepEqual(again.serialize(),saved);
+ assert.equal(again.current('v2').id,'v2.observe');
+ assert.equal(again.current('v4'),null);
+}
+{
+ const free=api.create(),s=fixture('v1');assert(free.observe(s,'v1'));
+ run(free,s,.5,'v1');assert.equal(free.current('v1').kind,'observe');
+ free.current('v2');s.devices[0].rate=12;
+ assert.equal(run(free,s,.5,'v1'),false,'measurement samples from before a visit elsewhere cannot finish a comparison');
+ assert.equal(free.current('v1').kind,'observe');
+}
+console.log('Free experiment selection, independent step order, nonprefix completion, points and reload passed.');

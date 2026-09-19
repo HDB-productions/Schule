@@ -72,12 +72,12 @@ root.addEventListener('dynamot:state', event => {
 Die Integration speichert `engine.serialize()` über `setTaskState(namespace,json)`, außerhalb eines rekursiven Save/Event-Zyklus und zusätzlich nach Antwort-/Diagrammänderungen. Achtung: Teilfortschritt von Beobachtungen (`activity()`) kann sich ändern, obwohl `observe()` false zurückgibt; auch diesen Stand gelegentlich bzw. beim Verlassen speichern. Der Motor selbst schreibt nichts. E1 enthält weiter den vollständigen Laborzustand mit getrenntem `tasks`-Namensraum; Aufgaben-JSON darf E1 niemals ersetzen. Edulo-E2-Ausgabe der 20 erreichten Punkte übernimmt die Integration. Fremden oder beschädigten Zustand bei Ladefehler nicht still überschreiben.
 
 - `create({state?, definitions?})`: neuer oder wiederhergestellter Motor. Definitionen sind austauschbare JSON-Daten. Eine reine Umordnung des exakt gleichen Definitionssets wird verlustfrei übernommen. Inhaltlich geänderte Definitionen werden weiter durch die Signaturprüfung abgewiesen. Neue physikalische Versuchsarten brauchen zusätzliche Prüflogik.
-- `current()`: aktueller Schritt oder null. Felder `id`, `experiment`, `kind`, `points`, `text`; bei Aufbau `image`, `hints`, `reference`; bei Auswahl `questions:[{id,text,options,answer}]`; bei Diagramm `chain`, `note`.
-- `observe(snapshot)`: true genau dann, wenn Aufbau/Handlung abgeschlossen wurde. Snapshot wird nicht verändert.
-- `answer({questionId:optionText,...})`: alle Lücken des aktuellen Auswahlschritts; Ergebnis `{accepted,correct,feedback:{questionId:boolean}}`. Unvollständige/fremde Auswahl bleibt unbewertet; falsche gültige Auswahl wird als Versuch gespeichert.
-- `submitDiagram(graph)`: `{accepted,correct}`; bei Erfolg nächsten Schritt freischalten. UI verwaltet den noch unvollständigen Diagrammentwurf selbst, bei Bedarf in eigenem Namespace.
+- `current(experimentId?)`: nächster Schritt im gewählten Versuch oder null, falls dieser abgeschlossen ist. Ohne ID bleibt der erste offene Schritt in Anzeigereihenfolge als Kompatibilitätsstandard erhalten. Felder `id`, `experiment`, `kind`, `points`, `text`; bei Aufbau `image`, `hints`, `reference`; bei Auswahl `questions:[{id,text,options,answer}]`; bei Diagramm `chain`, `note`.
+- `observe(snapshot, experimentId?)`: true genau dann, wenn Aufbau/Handlung des gewählten Versuchs abgeschlossen wurde. Snapshot wird nicht verändert. Beim Wechsel werden nur flüchtige Messproben verworfen; bereits gespeicherte Teilhandlungen bleiben erhalten.
+- `answer({questionId:optionText,...}, experimentId?)`: alle Lücken des aktuellen Auswahlschritts im gewählten Versuch; Ergebnis `{accepted,correct,feedback:{questionId:boolean}}`. Unvollständige/fremde Auswahl bleibt unbewertet; falsche gültige Auswahl wird als Versuch gespeichert.
+- `submitDiagram(graph, experimentId?)`: `{accepted,correct}`; bei Erfolg nächsten Schritt im gewählten Versuch freischalten. UI verwaltet den noch unvollständigen Diagrammentwurf selbst, bei Bedarf in eigenem Namespace.
 - `progress()`: `{completed,total,done,points,maxPoints}`.
-- `activity()`: bereits erfüllte Teilhandlungen des aktuellen Beobachtungsschritts.
+- `activity(experimentId?)`: bereits erfüllte Teilhandlungen des gewählten Beobachtungsschritts.
 - `results()`: vollständige Daten für die abschließende Nachschlageübersicht: Fortschritt und Experimente mit Texten, Lösungen, Erklärungen, Diagrammketten sowie `steps` mit `completed` und gegebenen Antworten/Diagrammen.
 - `serialize()`: eigenes JSON, `version:2`, Definitionssignatur, Abschlüsse, Antworten, Diagramme und Handlungsevidenz. Nach Wiederherstellung sind neue Messpunkte nötig; abgeschlossene Teilhandlungen bleiben erhalten. Version 1 des frühen Entwurfs wird bewusst nicht automatisch als fertiger neuer Versuch ausgelegt.
 
@@ -98,7 +98,7 @@ Schwellen sind didaktische Toleranzen für das vorhandene illustrative Modell, k
 
 ## Tests
 
-`node Physik/Energie/tests/dynamot-aufgaben.test.cjs`
+`node Physik/Energie/dynamot-labor/tests/dynamot-aufgaben.test.cjs`
 
 Die Tests verwenden das tatsächliche aktuelle Simulationsmodell zwischen `MODEL_START` und `MODEL_END` aus der Laborquelle. Geprüft werden alle vier Versuche mit realen Modellschritten, Slots/Polung/offener Kreis/Kurzschluss, Diagrammstruktur und optionale thermische Zweige, falsche und korrigierte Antworten, Punkte ohne Wiederholungsgewinn sowie serialisierter Fortschritt. UI-/Touch-/Edulo-Tests und Gesamtdarstellung führt die Integrationsaufgabe aus.
 
@@ -109,6 +109,10 @@ Die verbindliche Anzeigereihenfolge lautet jetzt **Licht (v1), fallendes Gewicht
 Version-2-Lernstände mit der vorherigen Reihenfolge werden akzeptiert, wenn ihre Signatur genau dieselben Aufgabendefinitionen in anderer Reihenfolge enthält. Abschlüsse bleiben als eindeutige stabile IDs erhalten und dürfen nun zwischen Versuchen Lücken haben. Innerhalb eines Versuchs bleiben die Voraussetzungen strikt: Aufbau vor Beobachtung vor Antworten vor Diagramm. `current()` liefert den ersten noch offenen Schritt der neuen Reihenfolge. Bereits abgeschlossene spätere Versuche werden übersprungen. Auch falsche Teilantworten/Evidenz eines nun späteren Versuchs bleiben gespeichert. Neue Serialisierung und erneutes Laden erhalten dieses Verhalten. Inhaltlich veränderte Definitionen oder kaputte Antworten/Diagramme/Evidenz werden weiterhin abgelehnt.
 
 Tests decken alte vollständige und halb bearbeitete Stände ab, insbesondere bereits fertiges v2 vor dem nun früheren v4, laufende Teilantworten sowie erneutes Laden eines migrierten Stands.
+
+## Freie Versuchsauswahl
+
+Alle vier Versuche sind jederzeit wählbar. Innerhalb eines Versuchs gilt weiter Aufbau → Durchführung → Antworten → Diagramm. Die UI speichert die gewählte Versuchs-ID unter `chosen` im bisherigen Aufgaben-Namensraum; der Aufgabenmotor führt Abschlüsse, Antworten und Beobachtungsevidenz weiter unter stabilen Schritt-IDs. Ein Wechsel verwirft daher weder Fortschritt noch Entwürfe, Notizen oder geprüfte Aufbauten. Das Nachschlagewerk und vollständig bearbeitete Versuche prüfen keine weiteren Simulationszustände. Die Punktzahl ist die Summe tatsächlich abgeschlossener Schritte, unabhängig von der Bearbeitungsreihenfolge. Das Speicherformat bleibt Version 2; alte Präfixstände und bereits migrierte Stände laden ohne Umwertung.
 
 ## Aktualisierung: Diagrammeditor
 

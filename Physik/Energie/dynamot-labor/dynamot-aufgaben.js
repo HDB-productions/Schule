@@ -46,7 +46,7 @@ function checkDiagram(experiment,graph){
 function create(options={}){
  const defs=copy(options.definitions||definitions),signature=JSON.stringify(defs);
  if(!defs.length||new Set(defs.map(d=>d.id)).size!==defs.length||defs.some(d=>!['build','observe','choice','diagram'].includes(d.kind)||!experiments.some(e=>e.id===d.experiment)))throw Error('Invalid task definitions');
- let completed=[],answers={},diagrams={},evidence={},samples=[],lastTime=null;
+ let completed=[],answers={},diagrams={},evidence={},samples=[],lastTime=null,observedStep=null,activeExperiment=null;
  if(options.state){
   const s=options.state,record=x=>x!==null&&typeof x==='object'&&!Array.isArray(x),fail=()=>{throw Error('Incompatible task state');};
   if(!record(s)||s.version!==2||!Array.isArray(s.completed)||s.completed.length>defs.length||new Set(s.completed).size!==s.completed.length||s.completed.some(id=>!defs.some(d=>d.id===id))||!record(s.answers)||!record(s.diagrams)||!record(s.evidence))fail();
@@ -82,11 +82,16 @@ function create(options={}){
   }
   completed=copy(s.completed);answers=copy(s.answers);diagrams=copy(s.diagrams);evidence=copy(s.evidence);
  }
- const current=()=>defs.find(d=>!completed.includes(d.id))||null;
- function finish(){completed.push(current().id);samples=[];lastTime=null;}
- function observe(s){
-  const d=current();if(!d||!['build','observe'].includes(d.kind))return false;const p=checkBuild(s,d.experiment);
-  if(d.kind==='build'){if(p){finish();return true;}return false;}
+ const current=experiment=>{
+  if(experiment&&activeExperiment!==experiment){samples=[];lastTime=null;observedStep=null;activeExperiment=experiment;}
+  return defs.find(d=>(!experiment||d.experiment===experiment)&&!completed.includes(d.id))||null;
+ };
+ function finish(d){completed.push(d.id);samples=[];lastTime=null;observedStep=null;}
+ function observe(s,experiment){
+  const d=current(experiment);if(!d||!['build','observe'].includes(d.kind))return false;
+  if(observedStep!==d.id){samples=[];lastTime=null;observedStep=d.id;}
+  const p=checkBuild(s,d.experiment);
+  if(d.kind==='build'){if(p){finish(d);return true;}return false;}
   if(!Number.isFinite(s?.time)||s.running!==true||!p)return false;
   if(lastTime!==null&&s.time<=lastTime)return false;lastTime=s.time;
   const g=s.devices.find(x=>x.id===p.generator),l=s.devices.find(x=>x.id===p.receiver);
@@ -123,15 +128,15 @@ function create(options={}){
    }
   }
   const needed={v1:['comparison'],v2:['normal','swapped','reverse','speed'],v3:['lift'],v4:['fall','comparison']}[d.experiment];
-  if(needed.every(k=>ev[k])){finish();return true;}return false;
+  if(needed.every(k=>ev[k])){finish(d);return true;}return false;
  }
- function answer(value){const d=current();if(d?.kind!=='choice'||!value||typeof value!=='object')return {accepted:false,correct:false};const feedback={};let accepted=true;for(const q of d.questions){feedback[q.id]=value[q.id]===q.answer;if(!q.options.includes(value[q.id]))accepted=false;}if(!accepted)return {accepted:false,correct:false,feedback};answers[d.id]=copy(value);const correct=Object.values(feedback).every(Boolean);if(correct)finish();return {accepted:true,correct,feedback};}
- function submitDiagram(graph){const d=current();if(d?.kind!=='diagram')return {accepted:false,correct:false};const correct=checkDiagram(d.experiment,graph);if(correct){diagrams[d.id]=copy(graph);finish();}return {accepted:true,correct};}
+ function answer(value,experiment){const d=current(experiment);if(d?.kind!=='choice'||!value||typeof value!=='object')return {accepted:false,correct:false};const feedback={};let accepted=true;for(const q of d.questions){feedback[q.id]=value[q.id]===q.answer;if(!q.options.includes(value[q.id]))accepted=false;}if(!accepted)return {accepted:false,correct:false,feedback};answers[d.id]=copy(value);const correct=Object.values(feedback).every(Boolean);if(correct)finish(d);return {accepted:true,correct,feedback};}
+ function submitDiagram(graph,experiment){const d=current(experiment);if(d?.kind!=='diagram')return {accepted:false,correct:false};const correct=checkDiagram(d.experiment,graph);if(correct){diagrams[d.id]=copy(graph);finish(d);}return {accepted:true,correct};}
  function progress(){return {completed:completed.length,total:defs.length,done:completed.length===defs.length,points:defs.filter(d=>completed.includes(d.id)).reduce((n,d)=>n+d.points,0),maxPoints:defs.reduce((n,d)=>n+d.points,0)};}
- return {current:()=>copy(current()),observe,answer,submitDiagram,progress,
+ return {current:experiment=>copy(current(experiment)),observe,answer,submitDiagram,progress,
   results:()=>copy({progress:progress(),experiments:experiments.map(e=>({...e,steps:defs.filter(d=>d.experiment===e.id).map(d=>({...d,completed:completed.includes(d.id),response:answers[d.id]||diagrams[d.id]||null}))}))}),
   serialize:()=>copy({version:2,signature,completed,answers,diagrams,evidence}),
-  activity:()=>copy(evidence[current()?.id]||{})
+  activity:experiment=>copy(evidence[current(experiment)?.id]||{})
  };
 }
 return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};

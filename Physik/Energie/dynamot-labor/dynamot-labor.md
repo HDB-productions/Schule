@@ -2,9 +2,13 @@
 
 Öffnen: **dynamot-labor.html**. Die Datei enthält Oberfläche, 3D-Modell, lokale Three.js-Bibliothek und Simulation vollständig. Sie benötigt kein Netzwerk und lässt sich direkt im Browser öffnen. Keine Veröffentlichung vorgenommen.
 
-Die eigenständige Lernseite enthält den Experimentiertisch und vier aufeinanderfolgende Versuche: **1 Kurbel–Lampe, 2 fallendes Gewicht–Lampe, 3 zwei DynaMots, 4 Gewichtheben**. Aufbau und Durchführung werden anhand der laufenden Simulation geprüft. Danach folgen korrigierbare Auswahlantworten und jeweils ein Energieflussdiagramm. Jeder Versuch gibt fünf Punkte (1 Aufbau, 1 Durchführung, 1 Antworten, 2 Diagramm), insgesamt 20. Eine Endübersicht erhält die geprüften Aufbauten, Antworten und Diagramme als Nachschlagewerk. Die internen IDs bleiben v1/v4/v2/v3; alte Ergebnisse werden nach IDs übernommen, nicht nach alter Position umgedeutet.
+Die eigenständige Lernseite enthält den Experimentiertisch und vier frei auswählbare Versuche: **1 Kurbel–Lampe, 2 fallendes Gewicht–Lampe, 3 zwei DynaMots, 4 Gewichtheben**. Aufbau und Durchführung werden anhand der laufenden Simulation geprüft. Danach folgen korrigierbare Auswahlantworten und jeweils ein Energieflussdiagramm. Jeder Versuch gibt fünf Punkte (1 Aufbau, 1 Durchführung, 1 Antworten, 2 Diagramm), insgesamt 20. Eine Endübersicht erhält die geprüften Aufbauten, Antworten und Diagramme als Nachschlagewerk. Die internen IDs bleiben v1/v4/v2/v3; alte Ergebnisse werden nach IDs übernommen, nicht nach alter Position umgedeutet.
 
 Der Diagrammeditor bietet alle neun vorgegebenen Energieformen in drei Gruppen und die passenden Gerätekästen. Begriffe lassen sich per Ziehen oder per Auswahl und Antippen anordnen. Die Prüfung verwendet einen gerichteten Graphen, keine Pixelpositionen. Licht als Lampenausgang genügt; zusätzliche thermische Energie von Lampe oder DynaMot ist ebenfalls korrekt. Das Gewicht ist in den vereinfachten Diagrammen eine eigene Speicherstation.
+
+## Dateien und Erzeugung
+
+Alle zugehörigen Quellen, Fotos, Bibliotheken und Tests liegen in `Physik/Energie/dynamot-labor/`. Änderungen an der Seite erfolgen in `dynamot-labor.quelle.html`; anschließend aus dem Repository-Hauptordner mit `node Physik/Energie/dynamot-labor/build-dynamot-labor.cjs` die fertige HTML-Datei erzeugen. Die eigenständigen 2D- und 3D-Vorschauen bleiben als Referenz erhalten.
 
 ## Bedienung
 
@@ -114,3 +118,31 @@ E1 und localStorage verwenden exakt denselben serialisierten Zustand. In Edulo w
 ## Zweifinger-Kamerabedienung
 
 Ein Finger dreht den Tisch. Zwei Finger verschieben die Ansicht über die Bewegung ihres Mittelpunkts und zoomen gleichzeitig über ihren Abstand (OrbitControls DOLLY_PAN, bildschirmbezogenes Pan). Nach Mehrfinger-Gesten und Abbruch werden keine Anschluss-Klicks ausgelöst; ein neuer Tap funktioniert normal. Kameraposition und Ziel werden über den bestehenden Speicherweg in localStorage bzw. E1 erhalten. Keine zusätzliche Begrenzung der Verschiebung; die vorhandenen Zoom- und Winkelgrenzen bleiben bestehen. `tests/dynamot-touch-pan.test.cjs` prüft echte Chromium-Multi-Touch-Ereignisse bei 1024×668 und 1180×720: Pan in beiden Achsen, kombiniertes Pinch/Pan, Übergang zu Einfinger-Orbit ohne Sprung, Abbruch, Seitenscroll, Tap und Kamera-Restore über beide Speicherwege. Eine Prüfung auf physischer Tablet-Hardware steht aus.
+
+## Getrennte Versuche, Aufbauhilfe und Energieanzeige (September 2026)
+
+- Die vier geführten Versuche und das Freie Labor speichern jeweils einen eigenen Aufbau. Neue geführte Versuche starten leer. M1/L1 werden für Kurbel–Lampe und Gewicht–Lampe gezeigt, M1/M2 für die beiden Versuche mit zwei DynaMots. Andere Plätze sind dort unsichtbar.
+- Text und Pfeil führen ausgehend vom tatsächlichen Aufbau zu Gerät, Zubehör und Anschlussbuchsen. Die zweite 3D-Szene rechts ist eine dreh- und zoombare Vorlage. Sie verwendet dieselben Modelle und Kabelwege, verändert aber weder den eigenen Tisch noch dessen Kamera oder Speicherung. Sie hat keine laufende Simulation; gezeichnet wird bei Aufbau, Kamerabewegung und Größenänderung.
+- Ein korrekt geprüfter Aufbau bleibt gesperrt. Start/Pause, Antreiben, Drehzahl, Masse, Gewicht hochsetzen und Lampeneigenschaften bleiben bedienbar. Im Versuch mit zwei Kurbeln erlaubt „Polung umkehren“ den erforderlichen kontrollierten Buchsentausch. Das Freie Labor bleibt uneingeschränkt.
+- Elektronen laufen bei aktiviertem Schalter auch durch die schematischen Anschlussleitungen und die echte, gerenderte Glühwendel der Lampe. Das Glas und der Glanz werden für diese Durchsicht abgeschwächt. Die Markierungen folgen der Elektronenrichtung, sind aber keine Simulation einzelner realer Elektronen.
+- Energiepakete sind separat einschaltbar: blau elektrisch, rot thermisch, gelb Licht, violett Lageenergie, grün kinetisch. Rechteckflächen stehen für Energieanteile. Für die Glühlampe ist eine ausdrücklich illustrative Aufteilung von 10 % Licht und 90 % Wärme gewählt. Die Pakete sind keine Elektronen; die Kabelwege dienen zur schematischen Darstellung des Energietransports. Der Lageenergie-Vorrat wird aus Masse, Schwerebeschleunigung und Höhe berechnet. Beim Pausieren bleiben die Animationen stehen.
+
+### Bestehende Lernstände
+
+E1/E2, die Kennung DYNAMOT1, Widget-Version 2, Aufgaben-Namespace, stabile Versuchs-IDs und Aufgaben-Signaturen bleiben erhalten. Die neuen optionalen Modusdaten ergänzen den bisherigen Zustand; fehlende Energieanzeige bedeutet ausgeschaltet. Der bisherige einzelne Tisch bleibt im Freien Labor erhalten. Passende früher gespeicherte, geprüfte Aufbauprotokolle können für einen geführten Versuch rekonstruiert werden und sind als solche gekennzeichnet. Fehlende historische Aufbauten werden nicht erfunden; Aufgabenfortschritt, Antworten, Entwürfe und Notizen bleiben erhalten. Neu gespeicherte, getrennte Modi werden beim Laden ebenfalls validiert.
+
+Die dauerhaften Test-Fixtures in tests/fixtures/dynamot-altstand-v2.json wurden mit dem bisherigen HTML-Bundle erzeugt. Sie enthalten leere, teilweise und vollständig bearbeitete Aufgaben, falsche Antworten/Entwürfe, Beobachtungsdaten und die frühere Versuchsreihenfolge. Zusätzlich wird Labor-Version 1 geprüft. Die Browserprüfungen nutzen eine lokale E1/E2-Hostnachbildung. Ein echter Edulo-Server-Roundtrip und ein physisches Tablet sind gesondert zu prüfen.
+
+Neue Bausteine: dynamot-energie.js (schematische Energiebilanz), dynamot-energie-ansicht.js (3D-Pakete), dynamot-aufbau-hilfe.js (zustandsabhängige Hinweise), dynamot-energie.css (ergänzendes Layout). Alle werden vom bestehenden Generator in die einzelne Labor-HTML eingebettet.
+
+### Nachbesserungen an Aufbau und Flussdarstellung
+
+In den beiden Lampenvorlagen verbindet DynaMot-Pin 0 die Lampenbuchse 1 und DynaMot-Pin 1 die Lampenbuchse 0. Diese Paare liegen im tatsächlichen 3D-Modell jeweils auf derselben X-Seite; die Farbreihenfolge der beiden Geräte ist gespiegelt. Aufbauhinweise folgen dieser Zuordnung. Alte gleichfarbig verkabelte Aufbauten und ihre Bestätigungen bleiben gültig und werden beim Laden nicht umverdrahtet.
+
+Nach bestätigtem Aufbau wird das vollständige Vorlagenfeld samt Renderer entfernt. Die Anleitung erhält den freien Platz. Unbestätigte Versuche zeigen die Vorlage weiterhin; die Entscheidung folgt auch nach Wiederherstellung dem gespeicherten Aufbauzustand.
+
+Ladungssymbole haben auf Kabeln und Lampenleitungen denselben schematischen Abstand von 0,7 Szeneneinheiten entlang der Bogenlänge. Ihre Anzahl wächst mit der Weglänge. Die Geschwindigkeit ist proportional zum berechneten Zweigstrom, die Richtung der technischen Stromrichtung entgegengesetzt. An unverzweigten Lampenanschlüssen wird das Abstandsbild durchgehend fortgesetzt. An Verzweigungen werden keine individuellen Elektronen verfolgt; die Symbolflussraten folgen den bilanzierten Strömen. Material- oder Querschnittsunterschiede realer Leiter werden damit nicht quantitativ abgebildet.
+
+Mehrere violette Pakete um das Gewicht stellen dessen endlichen Lageenergievorrat dar. Beim Fallen wird abgegebene Energie am Gewicht grün und läuft im Seil zum DynaMot; beim Heben läuft sie grün zum Gewicht und ergänzt dort den violetten Vorrat. Pakete werden aus der tatsächlichen Änderung der Lageenergie abgeleitet, nicht endlos zeitgesteuert erzeugt. Pause, Bewegungsende und manuelles Hochsetzen sind gesondert berücksichtigt.
+
+Die Lampenspannung und der Strom werden aus dem vollständigen Widerstandsnetz berechnet. Die Lampenleistung ist U mal I; die Darstellung leitet daraus eine monotone, bei hohen Leistungen begrenzte Helligkeit ab. Reihen-, Parallel-, gemischte, offene und überbrückte Schaltungen sind durch Regressionen geprüft. Eine abweichende Helligkeit allein ist kein Fehler: Im Serienzweig parallel zu einer Einzellampe leuchtet die Einzellampe heller.
