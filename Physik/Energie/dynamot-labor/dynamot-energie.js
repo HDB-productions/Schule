@@ -205,8 +205,31 @@
       const valid = a !== undefined && b !== undefined && a !== b && weight > EPS;
       const flow = valid ? weight * (potential[a] - potential[b]) : 0;
       const power = Math.abs(flow) > EPS ? Math.abs(flow) : 0;
+      // The signed endpoint powers entering this resistive cable are
+      // F + H/2 and -F + H/2. Their sum is its measured I²R loss H.
+      // If both ends supply the loss (opposed, equally strong generators),
+      // the net device-to-device transfer F is zero but energy still reaches
+      // and heats the cable. A single directed `power` cannot show that.
+      const flows = [];
+      if (a !== undefined && b !== undefined && weight > EPS) {
+        const left = flow + heat / 2, right = -flow + heat / 2;
+        const add = (from, to, amount, kind) => {
+          if (amount > EPS) flows.push({ from: devices[from].id, to: to === null ? null : devices[to].id,
+            power: amount, kind });
+        };
+        if (left > EPS && right < -EPS) {
+          add(a, b, -right, 'transfer');
+          add(a, null, heat, 'heat');
+        } else if (right > EPS && left < -EPS) {
+          add(b, a, -left, 'transfer');
+          add(b, null, heat, 'heat');
+        } else {
+          add(a, null, Math.max(0, left), 'heat');
+          add(b, null, Math.max(0, right), 'heat');
+        }
+      }
       return {
-        index, power, heat, currentA: weight,
+        index, power, heat, currentA: weight, flows,
         from: power ? devices[flow > 0 ? a : b].id : null,
         to: power ? devices[flow > 0 ? b : a].id : null,
         direction: power ? (flow > 0 ? 1 : -1) : 0
