@@ -11,7 +11,7 @@ const lab=moduleCode('dynamot-labor-szene.js','LabScene',{'./dynamot-3d-vendor/t
 const license=fs.readFileSync(path.join(dir,'dynamot-3d-vendor/LICENSE'),'utf8');
 const bundle=('/* Three.js license\n'+license+'\n*/\n'+[core,three,orbit,view,energyView,lab].join('\n')).replace(/<\/script/gi,'<\\/script');
 const source=fs.readFileSync(path.join(dir,'dynamot-labor.quelle.html'),'utf8');
-const learning=['dynamot-aufgaben.js','dynamot-diagramm.js','dynamot-lern-ui.js','dynamot-aufbau-hilfe.js'].map(f=>fs.readFileSync(path.join(dir,f),'utf8')).join('\n').replace(/<\/script/gi,'<\\/script');
+const learning=['dynamot-aufgaben.js','dynamot-diagramm-stufen.js','dynamot-diagramm.js','dynamot-lern-ui.js','dynamot-aufbau-hilfe.js'].map(f=>fs.readFileSync(path.join(dir,f),'utf8')).join('\n').replace(/<\/script/gi,'<\\/script');
 const styles=['dynamot-lern-ui.css','dynamot-diagramm.css','dynamot-energie.css'].map(f=>fs.readFileSync(path.join(dir,f),'utf8')).join('\n');
 const network=fs.readFileSync(path.join(dir,'dynamot-stromnetz.js'),'utf8');
 fs.writeFileSync(path.join(dir,'dynamot-labor.html'),source.replace('/* DYNAMOT_ENERGY_MODEL */',()=>fs.readFileSync(path.join(dir,'dynamot-energie.js'),'utf8')).replace('/* DYNAMOT_3D_BUNDLE */',()=>bundle).replace('/* DYNAMOT_LEARNING_CSS */',()=>styles).replace('/* DYNAMOT_NETWORK_MODEL */',()=>network).replace('/* DYNAMOT_LEARNING_BUNDLE */',()=>learning));

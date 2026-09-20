@@ -1,6 +1,11 @@
 <!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DynaMot · Experimentiertisch</title><style>
 #energyLab{font:16px system-ui,sans-serif;color:#193c43;background:#f2f6f2;padding:16px;border-radius:18px;max-width:1400px;margin:auto}#energyLab *{box-sizing:border-box}#energyLab button,#energyLab input{font:inherit}#energyLab button{min-height:44px;padding:8px 12px;background:white;border:1px solid #afc6b9;border-radius:9px;color:inherit;cursor:pointer}#energyLab button:hover{background:#e0efe5}#energyLab button:focus-visible,#energyLab input:focus-visible{outline:3px solid #cf8b11}#energyLab .primary{background:#087e70;color:white}#energyLab .active{box-shadow:0 0 0 3px #e4ad45}#energyLab header,#energyLab .tools,#energyLab .views,#energyLab .slots{display:flex;gap:8px;align-items:center;flex-wrap:wrap}#energyLab header{justify-content:space-between;flex-wrap:nowrap}#energyLab header>div{min-width:0}#energyLab .home-logo{display:inline-flex;flex:0 0 52px;margin-left:auto;border-radius:12px}#energyLab .home-logo img{display:block;width:52px;height:52px;object-fit:cover;border-radius:12px}#energyLab .home-logo:focus-visible{outline:3px solid #cf8b11;outline-offset:3px}#energyLab h1{font-size:25px;margin:0}#energyLab p{margin:8px 0}#energyLab .sub{font-size:14px;color:#506b60}#energyLab .tools{margin:12px 0}#energyLab [data-tool]{touch-action:none}#energyLab .notice{min-height:30px;padding:5px 0}#energyLab .layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:12px}#energyLab .stage{height:620px;border:1px solid #bdcfc3;border-radius:14px;overflow:hidden;background:#eaf1ed}#energyLab .stage canvas{outline-offset:-4px}#energyLab aside{background:white;border:1px solid #c3d4c9;border-radius:14px;padding:14px}#energyLab aside h2{font-size:20px;margin:0 0 10px}#energyLab aside button{margin:5px 0}#energyLab label{display:block;margin:10px 0 3px}#energyLab input[type=range]{width:100%;min-height:35px}#energyLab .views{margin:8px 0}#energyLab .slots{margin:10px 0}#energyLab .slots button{font-size:14px}#energyLab .connections button{display:block;width:100%;font-size:14px;text-align:left}#energyLab .storage{font-size:13px;color:#506b60}#energyLab details{margin-top:12px}#energyLab summary{min-height:42px;padding:9px 0;cursor:pointer}#energyLab .remove{color:#9a322a}#energyLab [hidden]{display:none!important}@media(max-width:850px){#energyLab .layout{grid-template-columns:1fr}#energyLab .stage{height:480px}#energyLab{padding:10px}}@media(max-width:450px){#energyLab .stage{height:400px}#energyLab h1{font-size:22px}}
 #energyLab .learn{margin-top:24px;padding:22px;background:#fff;border:1px solid #b9cdc2;border-radius:16px;scroll-margin-top:12px}
+#energyLab .learn.learn-expanded{position:fixed;inset:12px;z-index:100;width:auto;height:auto;max-height:calc(100dvh - 24px);margin:0;overflow:auto;box-shadow:0 0 0 30px #193c4366,0 8px 35px #193c4355}
+#energyLab [data-diagram-expand]{margin:4px 0 10px;min-height:44px}
+#energyLab .learn-current .de-losses>.de-help{display:none}
+#energyLab .de-loss-palette-panel{margin:8px 0}
+#energyLab .de-loss-palette-panel>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:650}
 #energyLab .learn h2{font-size:24px;margin:0 0 8px}#energyLab .learn h3{font-size:19px;margin:14px 0 8px}
 #energyLab .learn-top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
 #energyLab .learn-score{font-weight:750;background:#e1f2e7;padding:9px 14px;border-radius:24px}
@@ -145,6 +150,40 @@
 #energyLab .de-readonly .de-chain{padding-top:6px;min-height:140px}
 #energyLab .de-readonly .de-socket{cursor:default}
 @media(prefers-reduced-motion:reduce){#energyLab .de-editor *{scroll-behavior:auto}}
+
+/* Second diagram step: the output bands split after a converter. */
+#energyLab .de-losses{min-width:0}
+#energyLab .de-loss-palette{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px;margin:8px 0}
+#energyLab .de-loss-category{min-width:0;padding:7px;border:1px solid #cbded1;border-radius:9px;background:#fff}
+#energyLab .de-loss-category h4{font-size:12px;line-height:1.25;min-height:28px;margin:0 0 5px;color:#214f71}
+#energyLab .de-loss-category>div{display:grid;gap:5px}
+#energyLab .de-loss-palette button{width:100%;min-height:44px;padding:7px 9px;text-align:left;font-size:13px;line-height:1.2;touch-action:none;user-select:none;cursor:grab;background:#edf5f5}
+#energyLab .de-loss-palette button[aria-pressed=true]{outline:3px solid #d99c30;background:#fff1ce}
+#energyLab .de-loss-feedback{min-height:28px;margin:7px 0;color:#245846;font-size:13px;line-height:1.35}
+#energyLab .de-loss-feedback.de-loss-error{color:#9a322a;font-weight:650}
+#energyLab .de-losses-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;border:1px solid #c6d9d0;border-radius:12px;background:#f9fcfa;touch-action:pan-x pan-y}
+#energyLab .de-sankey-wrap{position:relative;min-width:max-content}
+#energyLab .de-sankey-svg{display:block;max-width:none}
+#energyLab .de-flow-background{fill:#f9fcfa}
+#energyLab .de-flow-main{fill:#d8eaf8;stroke:none}
+#energyLab .de-flow-heat{fill:#e6a36a;stroke:#ad6b3e;stroke-width:1}
+#energyLab .de-flow-device rect{fill:#fff0ca;stroke:#b48e39;stroke-width:2}
+#energyLab .de-flow-device-label{font:700 12px system-ui,sans-serif;fill:#5e4710}
+#energyLab .de-flow-energy-label{font:700 10.5px system-ui,sans-serif;fill:#214f71}
+#energyLab .de-flow-energy-label.de-flow-narrow{paint-order:stroke fill;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+#energyLab .de-flow-heat-label{font:700 10.5px system-ui,sans-serif;fill:#8a4b2b}
+#energyLab .de-loss-dock,#energyLab .de-loss-grip{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);box-sizing:border-box;width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;font-size:0;line-height:1;touch-action:none;user-select:none;background:transparent}
+#energyLab .de-loss-dock::before,#energyLab .de-loss-grip::before{position:absolute;inset:6px;display:flex;align-items:center;justify-content:center;border-radius:50%;font:750 18px/1 system-ui,sans-serif;pointer-events:none}
+#energyLab .de-loss-dock{cursor:copy}
+#energyLab .de-loss-dock::before{content:'＋';background:#fef9ed;border:2px dashed #b88124;color:#805713}
+#energyLab .de-loss-dock.de-loss-hover::before,#energyLab .de-loss-dock:focus-visible::before{background:#fff0bd}
+#energyLab .de-loss-dock:focus-visible{outline:3px solid #cb9623;outline-offset:2px}
+#energyLab .de-loss-grip{cursor:ns-resize}
+#energyLab .de-loss-grip::before{content:'↕';background:#fff3d5;border:2px solid #a86d22;color:#754918;box-shadow:0 2px 6px #5c4b2455}
+#energyLab .de-loss-grip:focus-visible{outline:3px solid #224f78;outline-offset:3px}
+#energyLab .de-loss-note{font-size:12px;line-height:1.35;color:#526c61;margin:7px 0}
+#energyLab .de-loss-ghost{position:fixed;z-index:10000;pointer-events:none;transform:translate(-50%,-125%);padding:8px 12px;background:#fff1ce;border:2px solid #bd8629;border-radius:8px;color:#513b10;font-size:14px;box-shadow:0 3px 9px #314a3e55;white-space:nowrap}
+@media(max-width:450px){#energyLab .de-loss-palette{grid-template-columns:repeat(2,minmax(0,1fr))}#energyLab .de-loss-category h4{font-size:11px}#energyLab .de-loss-palette button{font-size:12px}}
 
 #energyLab .flow-toggles{display:flex;flex-direction:column;gap:4px}
 #energyLab .flow-toggles .electron-toggle{display:flex;min-height:44px;margin:0;max-width:180px;font-size:12px}
@@ -80259,6 +80298,68 @@ function create(options={}){
 return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
 });
 
+/* Optional diagram extension; independent of the 20-point task engine. */
+(function(root,factory){
+ if(typeof module==='object'&&module.exports)module.exports=factory(require('./dynamot-aufgaben.js'));
+ else root.DynamotDiagramStages=factory(root.DynamotTasks);
+})(globalThis,function(Tasks){
+ 'use strict';
+ if(!Tasks||!Array.isArray(Tasks.experiments))throw Error('DynaMot tasks must load before diagram stages');
+
+ const experiment=id=>Tasks.experiments.find(e=>e.id===id)||null;
+ const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
+ const heatSources=ex=>ex.chain.flatMap((label,index)=>index%2&&label!=='Gewicht'?[index]:[]);
+ const fraction=value=>typeof value==='number'&&Number.isFinite(value)&&value>=.05&&value<=.95;
+
+ function mainCorrect(ex,value){
+  return !!ex&&object(value)&&Array.isArray(value.main)&&value.main.length===ex.chain.length&&
+   value.main.every((token,index)=>object(token)&&token.kind===(index%2?'device':'energy')&&token.label===ex.chain[index]);
+ }
+ function legalBranches(ex,branches,requireFraction){
+  if(!Array.isArray(branches))return false;
+  const allowed=new Set(heatSources(ex)),seen=new Set();
+  for(const branch of branches){
+   if(!object(branch)||!Number.isInteger(branch.from)||!allowed.has(branch.from)||seen.has(branch.from)||branch.energy!=='thermische Energie')return false;
+   if(requireFraction&& !fraction(branch.fraction))return false;
+   if(!requireFraction&&branch.fraction!==undefined&&!fraction(branch.fraction))return false;
+   seen.add(branch.from);
+  }
+  return true;
+ }
+ function basicCorrect(id,value){
+  const ex=experiment(id);
+  return mainCorrect(ex,value)&&Array.isArray(value.branches)&&value.branches.length===0;
+ }
+ function lossesCorrect(id,value){
+  const ex=experiment(id);
+  return mainCorrect(ex,value)&&legalBranches(ex,value.branches,true)&&value.branches.length===heatSources(ex).length;
+ }
+ function seed(id,legacyValue){
+  const ex=experiment(id);
+  if(!ex)throw Error('Unknown DynaMot experiment');
+  const main=ex.chain.map((label,index)=>({kind:index%2?'device':'energy',label}));
+  const branches=[],allowed=new Set(heatSources(ex)),seen=new Set();
+  for(const branch of Array.isArray(legacyValue?.branches)?legacyValue.branches:[]){
+   if(!object(branch)||!Number.isInteger(branch.from)||!allowed.has(branch.from)||seen.has(branch.from)||branch.energy!=='thermische Energie')continue;
+   const share=branch.fraction===undefined?.25:branch.fraction;
+   if(!fraction(share))continue;
+   branches.push({from:branch.from,energy:'thermische Energie',fraction:share});
+   seen.add(branch.from);
+  }
+  return {main,branches};
+ }
+ function validateExtensions(record,engineState){
+  if(record===undefined)return true;
+  if(!object(record)||!object(engineState)||!Array.isArray(engineState.completed))throw Error('Invalid diagram extension state');
+  for(const [id,entry]of Object.entries(record)){
+   const ex=experiment(id);
+   if(!ex||!engineState.completed.includes(id+'.diagram')||!object(entry)||typeof entry.completed!=='boolean'||!mainCorrect(ex,entry.value)||!legalBranches(ex,entry.value.branches,true)||entry.completed&&!lossesCorrect(ex.id,entry.value))throw Error('Invalid diagram extension: '+id);
+  }
+  return true;
+ }
+ return {basicCorrect,lossesCorrect,seed,validateExtensions};
+});
+
 /* Connected energy-flow editor with pointer dragging and equivalent tap/keyboard moves. */
 (function(root){
  'use strict';
@@ -80269,15 +80370,19 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
  };
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const clone=s=>JSON.parse(JSON.stringify(s));
- function mount(host,{length=5,devices=['DynaMot','Lampe'],value,onChange=()=>{},readonly=false}={}){
+ function mount(host,{stage='basic',length=5,devices=['DynaMot','Lampe'],value,onChange=()=>{},readonly=false}={}){
+  if(stage==='losses')return mountLosses(host,{length,value,onChange,readonly});
+  if(!['basic','legacy'].includes(stage))throw Error('Unbekannter Diagrammschritt');
+  const legacy=stage==='legacy';
   let data={main:Array(length).fill(null),branches:[]},selected=null,pointer=null,suppressClick=false,ghost=null,hover=null,timer=null;
   if(value&&Array.isArray(value.main)&&value.main.length===length){data=clone(value);data.branches=Array.isArray(data.branches)?data.branches:[];}
   function token(t,extra=''){return `<span class="de-token ${t.kind==='energy'?'de-arrow':'de-box'}" ${extra}>${esc(t.label)}</span>`;}
   function cleanBranches(){data.branches=data.branches.filter((b,i,all)=>data.main[b.from]?.kind==='device'&&all.findIndex(x=>x.from===b.from)===i);}
-  function change(){cleanBranches();selected=null;render();onChange(clone(data));}
+  function change(){if(legacy)cleanBranches();selected=null;render();onChange(clone(data));}
   function put(target,item=selected){
    if(!item)return false;
    if(target.kind==='branch'){
+    if(!legacy)return false;
     if(item.token.kind!=='energy'||item.token.label!=='thermische Energie'||data.main[target.index]?.kind!=='device')return false;
     if(item.source==='main')data.main[item.index]=null;
     if(item.source==='branch')data.branches=data.branches.filter(b=>b.from!==item.index);
@@ -80287,22 +80392,22 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
     if(item.source==='main'){
      if(item.index===target.index){selected=null;render();return false;}
      const displaced=data.main[target.index];data.main[target.index]=clone(item.token);data.main[item.index]=displaced;
-     data.branches=data.branches.map(b=>({...b,from:b.from===item.index?target.index:b.from===target.index?item.index:b.from}));
+     if(legacy)data.branches=data.branches.map(b=>({...b,from:b.from===item.index?target.index:b.from===target.index?item.index:b.from}));
     }else{
-     if(item.source==='branch')data.branches=data.branches.filter(b=>b.from!==item.index);
-     data.main[target.index]=clone(item.token);data.branches=data.branches.filter(b=>b.from!==target.index);
+     if(legacy&&item.source==='branch')data.branches=data.branches.filter(b=>b.from!==item.index);
+     data.main[target.index]=clone(item.token);if(legacy)data.branches=data.branches.filter(b=>b.from!==target.index);
     }
    }
    change();return true;
   }
   function render(){
    const scroll=host.querySelector('.de-chain')?.scrollLeft||0;
-   host.classList.add('de-editor');host.classList.toggle('de-readonly',readonly);host.classList.toggle('de-has-selection',!!selected);
-   host.innerHTML=`${readonly?'':`<p class="de-help">Ziehe Pfeile und Energiewandler in die Kette. Wärme: einen thermischen Pfeil an den Ausgang eines Kastens ziehen.</p><div class="de-palette">${[...Object.entries(groups),['Energiewandler',devices]].map(([title,labels])=>`<section class="de-category"><h4>${title}</h4><div>${labels.map(label=>{const kind=title==='Energiewandler'?'device':'energy';return `<button type="button" data-kind="${kind}" data-label="${esc(label)}" aria-pressed="${selected?.source==='palette'&&selected?.token.label===label}">${token({kind,label})}</button>`;}).join('')}</div></section>`).join('')}</div><p class="de-selection" role="status" aria-live="polite">${selected?'Gewählt: '+esc(selected.token.label)+' · Ziel antippen oder mit Escape abbrechen.':'Pfeile zeigen den Energiefluss von links nach rechts.'}</p>`}
+   host.classList.add('de-editor');host.dataset.diagramStage=stage;host.classList.toggle('de-readonly',readonly);host.classList.toggle('de-has-selection',!!selected);
+   host.innerHTML=`${readonly?'':`<p class="de-help">${legacy?'Ziehe Pfeile und Energiewandler in die Kette. Wärme: einen thermischen Pfeil an den Ausgang eines Kastens ziehen.':'Ordne die Energiepfeile und Wandler von links nach rechts. Wärmeverluste kommen erst im nächsten Schritt.'}</p><div class="de-palette">${[...Object.entries(groups),['Energiewandler',devices]].map(([title,labels])=>`<section class="de-category"><h4>${title}</h4><div>${labels.map(label=>{const kind=title==='Energiewandler'?'device':'energy';return `<button type="button" data-kind="${kind}" data-label="${esc(label)}" aria-pressed="${selected?.source==='palette'&&selected?.token.label===label}">${token({kind,label})}</button>`;}).join('')}</div></section>`).join('')}</div><p class="de-selection" role="status" aria-live="polite">${selected?'Gewählt: '+esc(selected.token.label)+' · Ziel antippen oder mit Escape abbrechen.':'Pfeile zeigen den Energiefluss von links nach rechts.'}</p>`}
     <div class="de-chain" style="--de-count:${length}" aria-label="Energiefluss von links nach rechts">${data.main.map((t,i)=>{
      const branch=data.branches.find(b=>b.from===i),device=t?.kind==='device',chosen=selected?.source==='main'&&selected.index===i;
      return `<div class="de-cell ${device?'de-device-cell':''}"><${readonly?'div':'button type="button"'} class="de-socket ${t?'de-filled':'de-vacant'} ${chosen?'de-chosen':''}" data-socket="${i}" ${t?`data-source-main="${i}"`:''} aria-label="Platz ${i+1}${t?': '+esc(t.label)+'. Zum Verschieben wählen.':': leer'}" ${readonly?'':`aria-pressed="${chosen}"`}>${t?token(t):`<span class="de-empty">${i+1}<small>Ablegen</small></span>`}</${readonly?'div':'button'}>${!readonly&&t?`<button type="button" class="de-clear" data-clear="${i}" aria-label="${esc(t.label)} an Platz ${i+1} entfernen">×</button>`:''}
-      ${device&&(branch||!readonly)?`<div class="de-branch ${branch?'de-branch-filled':'de-branch-empty'}"><span class="de-connector" aria-hidden="true"></span><${readonly?'div':'button type="button"'} class="de-branch-socket ${selected?.source==='branch'&&selected.index===i?'de-chosen':''}" data-branch-socket="${i}" ${branch?`data-source-branch="${i}"`:''} aria-label="${branch?'Thermische Energie von '+esc(t.label)+'. Zum Verschieben wählen.':'Nebenast am Ausgang von '+esc(t.label)+': thermischen Pfeil hier andocken'}">${branch?token({kind:'energy',label:branch.energy}):'<span class="de-dock-dot" aria-hidden="true">＋</span><span class="de-dock-label">Ausgang</span>'}</${readonly?'div':'button'}>${branch&&!readonly?`<button type="button" class="de-branch-clear" data-branch-remove="${i}" aria-label="Thermischen Nebenast von ${esc(t.label)} entfernen">×</button>`:''}</div>`:''}</div>`;
+      ${legacy&&device&&(branch||!readonly)?`<div class="de-branch ${branch?'de-branch-filled':'de-branch-empty'}"><span class="de-connector" aria-hidden="true"></span><${readonly?'div':'button type="button"'} class="de-branch-socket ${selected?.source==='branch'&&selected.index===i?'de-chosen':''}" data-branch-socket="${i}" ${branch?`data-source-branch="${i}"`:''} aria-label="${branch?'Thermische Energie von '+esc(t.label)+'. Zum Verschieben wählen.':'Nebenast am Ausgang von '+esc(t.label)+': thermischen Pfeil hier andocken'}">${branch?token({kind:'energy',label:branch.energy}):'<span class="de-dock-dot" aria-hidden="true">＋</span><span class="de-dock-label">Ausgang</span>'}</${readonly?'div':'button'}>${branch&&!readonly?`<button type="button" class="de-branch-clear" data-branch-remove="${i}" aria-label="Thermischen Nebenast von ${esc(t.label)} entfernen">×</button>`:''}</div>`:''}</div>`;
     }).join('')}</div>`;
    host.querySelector('.de-chain').scrollLeft=scroll;
   }
@@ -80310,12 +80415,12 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
    const b=el?.closest('[data-label],[data-source-main],[data-source-branch]');if(!b||!host.contains(b))return null;
    if(b.dataset.label)return {source:'palette',token:{kind:b.dataset.kind,label:b.dataset.label}};
    if(b.dataset.sourceMain!==undefined){const index=+b.dataset.sourceMain;return {source:'main',index,token:clone(data.main[index])};}
-   const index=+b.dataset.sourceBranch;return {source:'branch',index,token:{kind:'energy',label:data.branches.find(v=>v.from===index).energy}};
+   if(!legacy)return null;const index=+b.dataset.sourceBranch;return {source:'branch',index,token:{kind:'energy',label:data.branches.find(v=>v.from===index).energy}};
   }
-  function destination(el){const b=el?.closest('[data-branch-socket],[data-socket]');if(!b||!host.contains(b))return null;return {element:b,kind:b.dataset.branchSocket!==undefined?'branch':'main',index:+(b.dataset.branchSocket??b.dataset.socket)};}
+  function destination(el){const b=el?.closest('[data-branch-socket],[data-socket]');if(!b||!host.contains(b)||!legacy&&b.dataset.branchSocket!==undefined)return null;return {element:b,kind:b.dataset.branchSocket!==undefined?'branch':'main',index:+(b.dataset.branchSocket??b.dataset.socket)};}
   function click(e){
    if(readonly||suppressClick)return;const b=e.target.closest('button');if(!b||!host.contains(b))return;
-   if(b.dataset.clear!==undefined){data.main[+b.dataset.clear]=null;data.branches=data.branches.filter(v=>v.from!==+b.dataset.clear);change();return;}
+   if(b.dataset.clear!==undefined){data.main[+b.dataset.clear]=null;if(legacy)data.branches=data.branches.filter(v=>v.from!==+b.dataset.clear);change();return;}
    if(b.dataset.branchRemove!==undefined){data.branches=data.branches.filter(v=>v.from!==+b.dataset.branchRemove);change();return;}
    const dest=destination(b),item=origin(b);
    if(selected&&dest){put(dest);return;}
@@ -80332,7 +80437,7 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
    pointer.moved=true;e.preventDefault();
    if(!ghost){ghost=document.createElement('div');ghost.className='de-drag-ghost';ghost.setAttribute('aria-hidden','true');ghost.innerHTML=token(pointer.item.token);host.append(ghost);host.classList.add('de-dragging');}
    ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';
-   const d=destination(document.elementFromPoint(e.clientX,e.clientY));const valid=d&&(d.kind==='main'||pointer.item.token.label==='thermische Energie');
+   const d=destination(document.elementFromPoint(e.clientX,e.clientY));const valid=d&&(d.kind==='main'||legacy&&pointer.item.token.label==='thermische Energie');
    if(hover&&(!valid||hover!==d?.element))hover.classList.remove('de-drag-hover');hover=valid?d.element:null;hover?.classList.add('de-drag-hover');
    // Keep all seven parts reachable on narrow phones without changing the tablet layout.
    const chain=host.querySelector('.de-chain'),r=chain.getBoundingClientRect();if(e.clientY>=r.top&&e.clientY<=r.bottom){if(e.clientX>r.right-30)chain.scrollLeft+=12;else if(e.clientX<r.left+30)chain.scrollLeft-=12;}
@@ -80348,7 +80453,60 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
   host.addEventListener('click',click);host.addEventListener('pointerdown',down);host.addEventListener('pointermove',move);host.addEventListener('pointerup',up);host.addEventListener('pointercancel',cancel);host.addEventListener('keydown',key);host.addEventListener('dragstart',nativeDrag);render();
   return {getValue:()=>clone(data),destroy(){cancel();clearTimeout(timer);host.removeEventListener('click',click);host.removeEventListener('pointerdown',down);host.removeEventListener('pointermove',move);host.removeEventListener('pointerup',up);host.removeEventListener('pointercancel',cancel);host.removeEventListener('keydown',key);host.removeEventListener('dragstart',nativeDrag);}};
  }
- root.DynamotDiagram={mount,groups};
+ const isConverter=t=>t?.kind==='device'&&/DynaMot|Lampe/i.test(t.label)&&!/Gewicht/i.test(t.label);
+ const lossFraction=b=>Number.isFinite(b?.fraction)?Math.max(.05,Math.min(.95,b.fraction)):.25;
+  function flowLayout(main,branches=[]){
+   const cell=82,top=75,base=66,height=266,width=main.length*cell;
+   const byFrom=new Map(branches.filter(b=>b&&Number.isInteger(b.from)&&b.energy==='thermische Energie').map(b=>[b.from,b]));
+   const gaps=[],splits=[],energyCells=[{index:0,x:0,thickness:base}];let remaining=1;
+   for(let i=0;i<main.length-1;i++){
+    const incoming=base*remaining;
+    if(i%2&&isConverter(main[i])){
+     const branch=byFrom.get(i),fraction=branch?lossFraction(branch):0,heat=incoming*fraction,outgoing=incoming-heat,x0=(i+1)*cell,radius=Math.min(70,Math.max(52,heat+4));
+     gaps.push({fromIndex:i,from:x0,to:x0+cell,incoming,outgoing,heat,branch:!!branch,last:i===main.length-2});
+     splits.push({from:i,label:main[i].label,x0,cx:x0+12,radius,innerRadius:radius-heat,top,incoming,outgoing,heat,fraction,branch:!!branch});
+     remaining*=1-fraction;
+    }else gaps.push({fromIndex:i,from:i*cell,to:(i+1)*cell,incoming,outgoing:incoming,heat:0,last:i===main.length-2});
+    if(i%2)energyCells.push({index:i+1,x:(i+1)*cell,thickness:base*remaining});
+   }
+   return {width,height,cell,top,base,gaps,splits,energyCells,remaining,nodes:main.map((token,i)=>({index:i,x:i*cell,token}))};
+  }
+  function arrowPath(x,top,height,cell){return `M ${x} ${top} L ${x+cell-13} ${top} L ${x+cell} ${top+height/2} L ${x+cell-13} ${top+height} L ${x} ${top+height} Z`;}
+  function heatPath(s){const y=s.top+s.outgoing,R=s.radius,r=s.innerRadius,cx=s.cx,turn=y+R,base=207,tip=226;return `M ${s.x0} ${y} L ${cx} ${y} A ${R} ${R} 0 0 1 ${cx+R} ${turn} L ${cx+R} ${base} L ${cx+(R+r)/2} ${tip} L ${cx+r} ${base} L ${cx+r} ${turn} A ${r} ${r} 0 0 0 ${cx} ${y+s.heat} L ${s.x0} ${y+s.heat} Z`;}
+ function svgLabel(label,x,y,klass,centered=false){const words=String(label||'').split(' '),mid=words.length>2?Math.ceil(words.length/2):1,lines=words.length===1?[label]:[words.slice(0,mid).join(' '),words.slice(mid).join(' ')].filter(Boolean);return `<text class="${klass}" x="${x}" y="${centered?y-(lines.length-1)*7.5:y}" ${centered?'dominant-baseline="central"':''} text-anchor="middle">${lines.map((line,i)=>`<tspan x="${x}" dy="${i?15:0}">${esc(line)}</tspan>`).join('')}</text>`;}
+ function mountLosses(host,{length=5,value,onChange=()=>{},readonly=false}={}){
+  const data=value&&Array.isArray(value.main)?clone(value):{main:Array(length).fill(null),branches:[]};data.branches=Array.isArray(data.branches)?data.branches:[];
+  let selected=null,feedback='',bad=false,drag=null,grip=null,ghost=null,hover=null,suppressClick=false,suppressTimer=null;
+  const energyGroups=Object.entries(groups);
+  const snapshot=()=>clone(data);
+  function setFeedback(text,isBad=false){feedback=text;bad=isBad;const el=host.querySelector('.de-loss-feedback');if(el){el.textContent=text;el.classList.toggle('de-loss-error',isBad);}}
+  function commit(){onChange(snapshot());}
+  function render(){
+   const scroll=host.querySelector('.de-losses-scroll')?.scrollLeft||0,layout=flowLayout(data.main,data.branches);
+   host.classList.add('de-editor','de-losses');host.dataset.diagramStage='losses';host.classList.toggle('de-readonly',readonly);
+   const mainPaths=layout.energyCells.map(c=>`<path class="de-flow-main" data-flow-after="${c.index-1}" d="${arrowPath(c.x,layout.top,c.thickness,layout.cell)}"/>`).join('');
+   const heatPaths=layout.splits.filter(s=>s.branch).map(s=>`<path class="de-flow-heat" data-heat-after="${s.from}" d="${heatPath(s)}"/>`).join('');
+   const labels=layout.nodes.map(n=>n.index%2?`<g class="de-flow-device"><rect x="${n.x}" y="${layout.top}" width="${layout.cell}" height="${layout.base}" rx="0"/>${svgLabel(n.token?.label||'Wandler',n.x+layout.cell/2,layout.top+27,'de-flow-device-label')}</g>`:svgLabel(n.token?.label||'Energieform',n.x+layout.cell/2,layout.top+layout.energyCells.find(c=>c.index===n.index).thickness/2,`de-flow-energy-label${layout.energyCells.find(c=>c.index===n.index)?.thickness<34?' de-flow-narrow':''}`,true)).join('');
+   const heatLabels=layout.splits.filter(s=>s.branch).map(s=>svgLabel('thermische Energie',s.x0+layout.cell/2,layout.height-29,'de-flow-heat-label')).join('');
+   const targets=readonly?'':layout.splits.map(s=>s.branch?`<div class="de-loss-grip" data-loss-grip="${s.from}" role="slider" tabindex="0" aria-label="Wärmeanteil nach ${esc(s.label)}" aria-orientation="vertical" aria-valuemin="5" aria-valuemax="95" aria-valuenow="${Math.round(s.fraction*100)}" aria-valuetext="${Math.round(s.fraction*100)} Prozent Wärme" style="left:${s.x0+3}px;top:${layout.top+s.outgoing}px" title="Grenze nach oben oder unten ziehen · Pfeiltasten">↕</div>`:`<button type="button" class="de-loss-dock" data-loss-dock="${s.from}" aria-label="Energieform am Ausgang von ${esc(s.label)} zuordnen" style="left:${s.x0+3}px;top:${layout.top+s.incoming/2}px">＋</button>`).join('');
+   host.innerHTML=`${readonly?'':`<p class="de-help">Welche Energieform verlässt die Wandler zusätzlich? Wähle eine Energieform und lege sie auf den Ausgangspfeil. Ziehe dann die Grenze zwischen den Bändern senkrecht; es gibt keinen vorgegebenen Wirkungsgrad.</p><details class="de-loss-palette-panel" ${layout.splits.every(s=>s.branch)?'':'open'}><summary>Energieform auswählen</summary><div class="de-loss-palette">${energyGroups.map(([title,forms])=>`<section class="de-loss-category"><h4>${title}</h4><div>${forms.map(form=>`<button type="button" data-loss-energy="${esc(form)}" aria-pressed="${selected===form}">${esc(form)}</button>`).join('')}</div></section>`).join('')}</div></details>`}<p class="de-loss-feedback ${bad?'de-loss-error':''}" role="status" aria-live="polite">${esc(feedback||(!readonly&&selected?'Gewählt: '+selected+' · Ausgangspfeil antippen oder dorthin ziehen.':''))}</p><div class="de-losses-scroll" aria-label="Energiefluss mit Anteilen; horizontal verschiebbar"><div class="de-sankey-wrap" style="width:${layout.width}px;height:${layout.height}px"><svg class="de-sankey-svg" width="${layout.width}" height="${layout.height}" viewBox="0 0 ${layout.width} ${layout.height}" role="img" aria-label="Energiefluss: Die Bandbreite zeigt den verbleibenden Anteil von links nach rechts"><rect class="de-flow-background" width="${layout.width}" height="${layout.height}" rx="12"/>${mainPaths}${heatPaths}${labels}${heatLabels}</svg>${targets}</div></div><p class="de-loss-note">Die Breiten zeigen gewählte Anteile im Modell, keine gemessenen Wirkungsgrade. Am Gewicht wird Lageenergie gespeichert; dort zweigt keine Wärme ab.</p>`;
+   host.querySelector('.de-losses-scroll').scrollLeft=scroll;
+  }
+  function place(from,form=selected){const target=flowLayout(data.main,data.branches).splits.find(s=>s.from===from);if(!target)return false;if(form!=='thermische Energie'){selected=null;render();setFeedback('An diesem Ausgang wird thermische Energie als zusätzlicher Anteil gesucht. Wähle die passende Energieform.',true);return false;}if(!data.branches.some(b=>b.from===from)){data.branches.push({from,energy:'thermische Energie',fraction:.25});selected=null;feedback='✓ Thermische Energie am Ausgang ergänzt. Ziehe die Grenze, um die Anteile zu verändern.';bad=false;render();commit();}else{selected=null;render();setFeedback('Dieser Ausgang hat bereits einen thermischen Anteil. Ziehe seine Grenze, um den Anteil zu ändern.');}return true;}
+  function changeFraction(from,value,notify=false){const b=data.branches.find(b=>b.from===from);if(!b)return;const fraction=Math.round(Math.max(.05,Math.min(.95,value))*100)/100;if(b.fraction===fraction)return;b.fraction=fraction;render();if(notify)commit();}
+  function fractionAt(from,clientY){const s=flowLayout(data.main,data.branches).splits.find(s=>s.from===from),r=host.querySelector('.de-sankey-svg').getBoundingClientRect();return 1-(clientY-r.top-s.top)/s.incoming;}
+  function clearGhost(){ghost?.remove();ghost=null;hover?.classList.remove('de-loss-hover');hover=null;}
+  function click(e){if(readonly||suppressClick)return;const button=e.target.closest('button');if(!button||!host.contains(button))return;if(button.dataset.lossEnergy){selected=button.dataset.lossEnergy;feedback='';bad=false;render();return;}if(button.dataset.lossDock!==undefined){if(!selected){setFeedback('Wähle zuerst eine Energieform aus der Palette.');return;}place(+button.dataset.lossDock);}}
+  function down(e){if(readonly||e.button>0)return;const handle=e.target.closest('[data-loss-grip]');if(handle&&host.contains(handle)){e.preventDefault();grip={id:e.pointerId,from:+handle.dataset.lossGrip,changed:false};host.setPointerCapture?.(e.pointerId);return;}const token=e.target.closest('[data-loss-energy]');if(token&&host.contains(token)){drag={id:e.pointerId,x:e.clientX,y:e.clientY,form:token.dataset.lossEnergy,moved:false,capture:token};token.setPointerCapture?.(e.pointerId);}}
+  function move(e){if(grip&&e.pointerId===grip.id){e.preventDefault();const old=data.branches.find(b=>b.from===grip.from)?.fraction;changeFraction(grip.from,fractionAt(grip.from,e.clientY));if(data.branches.find(b=>b.from===grip.from)?.fraction!==old)grip.changed=true;return;}if(!drag||e.pointerId!==drag.id)return;if(!drag.moved&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<7)return;drag.moved=true;e.preventDefault();if(!ghost){ghost=document.createElement('div');ghost.className='de-loss-ghost';ghost.textContent=drag.form;host.append(ghost);}ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-loss-dock]');if(hover&&hover!==target)hover.classList.remove('de-loss-hover');hover=target&&host.contains(target)?target:null;hover?.classList.add('de-loss-hover');const scroll=host.querySelector('.de-losses-scroll'),r=scroll.getBoundingClientRect();if(e.clientY>=r.top&&e.clientY<=r.bottom){if(e.clientX>r.right-30)scroll.scrollLeft+=12;else if(e.clientX<r.left+30)scroll.scrollLeft-=12;}}
+  function up(e){if(grip&&e.pointerId===grip.id){const changed=grip.changed;grip=null;host.releasePointerCapture?.(e.pointerId);if(changed)commit();return;}if(!drag||e.pointerId!==drag.id)return;const d=drag;drag=null;clearGhost();d.capture?.releasePointerCapture?.(e.pointerId);if(!d.moved)return;suppressClick=true;clearTimeout(suppressTimer);suppressTimer=setTimeout(()=>suppressClick=false,240);const dock=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-loss-dock]');if(dock&&host.contains(dock))place(+dock.dataset.lossDock,d.form);else setFeedback('Lege die Energieform auf einen Ausgangspfeil nach einem Wandler.');}
+  function cancel(){const changed=grip?.changed;grip=null;drag=null;clearGhost();if(changed)commit();}
+  function key(e){if(e.key==='Escape'){selected=null;feedback='';bad=false;render();return;}const handle=e.target.closest('[data-loss-grip]');if(!handle||readonly)return;const from=+handle.dataset.lossGrip,branch=data.branches.find(b=>b.from===from);if(!branch)return;let f=lossFraction(branch);if(e.key==='ArrowUp')f+=.025;else if(e.key==='ArrowDown')f-=.025;else if(e.key==='Home')f=.05;else if(e.key==='End')f=.95;else return;e.preventDefault();changeFraction(from,f,true);host.querySelector(`[data-loss-grip="${from}"]`)?.focus({preventScroll:true});}
+  function nativeDrag(e){e.preventDefault();}
+  host.addEventListener('click',click);host.addEventListener('pointerdown',down);host.addEventListener('pointermove',move);host.addEventListener('pointerup',up);host.addEventListener('pointercancel',cancel);host.addEventListener('keydown',key);host.addEventListener('dragstart',nativeDrag);render();
+  return {getValue:snapshot,destroy(){cancel();clearTimeout(suppressTimer);host.removeEventListener('click',click);host.removeEventListener('pointerdown',down);host.removeEventListener('pointermove',move);host.removeEventListener('pointerup',up);host.removeEventListener('pointercancel',cancel);host.removeEventListener('keydown',key);host.removeEventListener('dragstart',nativeDrag);}};
+ }
+ root.DynamotDiagram={mount,groups,flowLayout};
 })(typeof globalThis==='object'?globalThis:this);
 
 (function(global){
@@ -80362,9 +80520,9 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
   value.branches.forEach(b=>edges.push({from:'station'+b.from,to:null,energy:b.energy}));return {nodes,edges};
  }
  function mount(root){
-  const lab=root.energyLab,Tasks=global.DynamotTasks,Diagram=global.DynamotDiagram;if(!lab||!Tasks||!Diagram)return;
+  const lab=root.energyLab,Tasks=global.DynamotTasks,Diagram=global.DynamotDiagram,Stages=global.DynamotDiagramStages;if(!lab||!Tasks||!Diagram||!Stages)return;
   const host=document.createElement('section');host.className='learn';host.setAttribute('aria-label','Vier Versuche zur Energie');root.querySelector('.storage').before(host);
-  let engine=null,store={version:2,drafts:{},builds:{},notes:{}},chosen=null,busy=false,blocked=false,diagram=null,referenceView=null,feedback='',feedbackBad=false,lastEvidenceSave=0;
+  let engine=null,store={version:2,drafts:{},builds:{},notes:{}},chosen=null,busy=false,blocked=false,diagram=null,referenceView=null,feedback='',feedbackBad=false,lastEvidenceSave=0,expanded=false;
   const numberOf=id=>Tasks.experiments.findIndex(e=>e.id===id)+1;
   function status(){return lab.getPersistenceStatus?.()||{ready:true,blocked:false,editor:false,edulo:parent!==window};}
   function score(){
@@ -80382,39 +80540,67 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
   host.addEventListener('toggle',()=>{capturePage();save();},true);
   function save(){if(busy||blocked||!engine||status().blocked)return;busy=true;try{store.engine=engine.serialize();store.chosen=chosen;if(lab.setTaskState(NS,store)===true)score();}catch(e){host.querySelector('.learn-storage').textContent='Aufgabenstand nicht gespeichert: '+e.message;}finally{busy=false;}}
   function savedChoice(){return store.chosen==='summary'||store.chosen==='free'||Tasks.experiments.some(e=>e.id===store.chosen)?store.chosen:engine.current()?.experiment||'free';}
-  function boot(){if(engine||!status().ready)return;try{const saved=lab.getTaskState(NS);if(saved!==null){if(saved.version!==2||!saved.engine||![saved.drafts,saved.builds,saved.notes].every(v=>v&&typeof v==='object'&&!Array.isArray(v))||Object.values(saved.notes).some(v=>typeof v!=='string'||v.length>3000))throw Error('Unbekanntes Aufgabenformat');for(const [id,v]of Object.entries(saved.drafts)){const d=Tasks.definitions.find(d=>d.id===id);if(!d||!v||typeof v!=='object')throw Error('Beschädigter Entwurf');if(d.kind==='diagram'&&(!Array.isArray(v.main)||v.main.length!==d.chain.length||v.main.some(t=>t&&(!['energy','device'].includes(t.kind)||typeof t.label!=='string'))||!Array.isArray(v.branches)||v.branches.some(b=>!Number.isInteger(b.from)||b.from<0||b.from>=v.main.length||b.energy!=='thermische Energie')))throw Error('Beschädigtes Diagramm');}for(const v of Object.values(saved.builds))if(!v||!Array.isArray(v.devices)||!Array.isArray(v.wires))throw Error('Beschädigter Aufbau');store=saved;}engine=Tasks.create({state:store.engine});}catch(e){blocked=true;lab.blockPersistence?.('Der gespeicherte Aufgabenstand ist nicht lesbar');store={version:2,drafts:{},builds:{},notes:{}};engine=Tasks.create();feedback='Der gespeicherte Aufgabenstand ist nicht lesbar. Er bleibt unverändert. Die Aufgaben können hier ohne Speicherung ausprobiert werden.';}chosen=savedChoice();if(chosen!=='summary')lab.setMode(chosen);render();queueMicrotask(save);}
+  function currentStep(id=chosen){
+   const next=engine.current(id);if(next)return next;
+   const ex=Tasks.experiments.find(e=>e.id===id);
+   return ex&&!store.diagramExtensions?.[id]?.completed?{id:id+'.losses',experiment:id,kind:'losses',chain:ex.chain}:null;
+  }
+  function extension(id){
+   store.diagramExtensions??={};
+   return store.diagramExtensions[id]??=( {value:Stages.seed(id,store.drafts[id+'.diagram']),completed:false} );
+  }
+  function allDone(){return engine.progress().done&&Tasks.experiments.every(e=>store.diagramExtensions?.[e.id]?.completed);}
+  function diagramInstruction(kind){return kind==='losses'
+   ?'Beobachte die Energieanzeige im Versuch. Nicht die gesamte zugeführte Energie wird zum nächsten Schritt weitergegeben. Welche zusätzliche Energieform wird abgegeben? Ergänze sie im Diagramm auf den Ausgangspfeilen.'
+   :'Erstelle das Energieflussdiagramm. Ignoriere dabei zunächst die thermische Energie. Zeichne nur die Hauptkette ohne Aufteilungen und Wirkungsgrade.';}
+  function boot(){if(engine||!status().ready)return;try{const saved=lab.getTaskState(NS);if(saved!==null){if(saved.version!==2||!saved.engine||![saved.drafts,saved.builds,saved.notes].every(v=>v&&typeof v==='object'&&!Array.isArray(v))||Object.values(saved.notes).some(v=>typeof v!=='string'||v.length>3000))throw Error('Unbekanntes Aufgabenformat');for(const [id,v]of Object.entries(saved.drafts)){const d=Tasks.definitions.find(d=>d.id===id);if(!d||!v||typeof v!=='object')throw Error('Beschädigter Entwurf');if(d.kind==='diagram'&&(!Array.isArray(v.main)||v.main.length!==d.chain.length||v.main.some(t=>t&&(!['energy','device'].includes(t.kind)||typeof t.label!=='string'))||!Array.isArray(v.branches)||v.branches.some(b=>!Number.isInteger(b.from)||b.from<0||b.from>=v.main.length||b.energy!=='thermische Energie')))throw Error('Beschädigtes Diagramm');}for(const v of Object.values(saved.builds))if(!v||!Array.isArray(v.devices)||!Array.isArray(v.wires))throw Error('Beschädigter Aufbau');store=saved;}engine=Tasks.create({state:store.engine});Stages.validateExtensions(store.diagramExtensions,engine.serialize());}catch(e){blocked=true;lab.blockPersistence?.('Der gespeicherte Aufgabenstand ist nicht lesbar');store={version:2,drafts:{},builds:{},notes:{}};engine=Tasks.create();feedback='Der gespeicherte Aufgabenstand ist nicht lesbar. Er bleibt unverändert. Die Aufgaben können hier ohne Speicherung ausprobiert werden.';}chosen=savedChoice();if(chosen!=='summary')lab.setMode(chosen);render();queueMicrotask(save);}
   function activity(){const a=engine.activity(chosen),current=engine.current(chosen);if(current?.kind!=='observe')return '';const labels={comparison:'Langsam/schnell verglichen',normal:'Normale Polung beobachtet',swapped:'Vertauschte Polung beobachtet',reverse:'Drehrichtung umgekehrt',speed:'Langsam/schnell verglichen',lift:'Gewicht angehoben',fall:'Fall beobachtet'};if(current.experiment==='v4')labels.comparison='Leichteres/schwereres Gewicht verglichen';const keys={v1:['comparison'],v2:['normal','reverse','swapped','speed'],v3:['lift'],v4:['fall','comparison']}[current.experiment];return '<ul class="learn-checklist">'+keys.map(k=>`<li class="${a[k]?'learn-done':''}">${a[k]?'✓':'○'} ${labels[k]}</li>`).join('')+'</ul>';}
   function reference(){return '<section class="learn-reference"><h3>Vorlage · so soll dein Aufbau aussehen</h3><div class="learn-reference-stage" aria-label="Drehbare 3D-Vorlage des Aufbaus"></div></section>';}
-  function displayText(step){if(step.kind==='build')return {v1:'Baue einen DynaMot mit Kurbel, eine Lampe und zwei Kabel wie in der 3D-Vorlage auf. Verbinde auf derselben Tischseite DynaMot rot mit Lampe schwarz und DynaMot schwarz mit Lampe rot.',v4:'Baue einen DynaMot mit Seilrolle und Gewicht, eine Lampe und zwei Kabel wie in der 3D-Vorlage auf. Verbinde auf derselben Tischseite DynaMot rot mit Lampe schwarz und DynaMot schwarz mit Lampe rot.',v2:'Baue zwei DynaMots mit je einer Kurbel und zwei Kabel wie in der 3D-Vorlage auf.',v3:'Baue zwei DynaMots mit Kurbel sowie Seilrolle und Gewicht wie in der 3D-Vorlage auf.'}[step.experiment];if(step.kind==='observe'&&step.experiment==='v2')return step.text.replace('Vertausche danach am zweiten DynaMot die beiden Kabel','Nutze danach „Polung umkehren“');return step.text;}
+  function displayText(step){if(['diagram','losses'].includes(step.kind))return diagramInstruction(step.kind);if(step.kind==='build')return {v1:'Baue einen DynaMot mit Kurbel, eine Lampe und zwei Kabel wie in der 3D-Vorlage auf. Verbinde auf derselben Tischseite DynaMot rot mit Lampe schwarz und DynaMot schwarz mit Lampe rot.',v4:'Baue einen DynaMot mit Seilrolle und Gewicht, eine Lampe und zwei Kabel wie in der 3D-Vorlage auf. Verbinde auf derselben Tischseite DynaMot rot mit Lampe schwarz und DynaMot schwarz mit Lampe rot.',v2:'Baue zwei DynaMots mit je einer Kurbel und zwei Kabel wie in der 3D-Vorlage auf.',v3:'Baue zwei DynaMots mit Kurbel sowie Seilrolle und Gewicht wie in der 3D-Vorlage auf.'}[step.experiment];if(step.kind==='observe'&&step.experiment==='v2')return step.text.replace('Vertausche danach am zweiten DynaMot die beiden Kabel','Nutze danach „Polung umkehren“');return step.text;}
   function displayHints(step){return step.hints?.map(h=>{if(['v1','v4'].includes(step.experiment)&&h.startsWith('Verbinde beide DynaMot-Buchsen'))return 'Verbinde auf derselben Tischseite DynaMot rot mit Lampe schwarz und DynaMot schwarz mit Lampe rot.';return h.replace('Nimm am zweiten DynaMot die Kurbel ab und bringe die Seilrolle an.','Bringe am zweiten DynaMot die Seilrolle mit Gewicht an.').replace('Ersetze die Kurbel durch die Seilrolle.','Bringe am DynaMot die Seilrolle mit Gewicht an.').replace('„Kurbeln“','„Antreiben“');})||[];}
   function records(ex){const record=store.builds[ex.id];return record?`<div class="learn-build-record">${record.devices.map(d=>`<span>${d.type==='lamp'?'Lampe':'DynaMot'} ${d.id} · ${esc(d.slot)}${d.crank?' · Kurbel':d.weight?' · Gewicht':''}</span>`).join('')}</div><p class="sub">${record.wires.map(w=>`Kabel: ${w.a}/${w.ap===0?'rot':'schwarz'} ↔ ${w.b}/${w.bp===0?'rot':'schwarz'}`).join(' · ')}</p>`:'<p class="sub">Noch kein geprüfter Aufbau gespeichert.</p>';}
-  function review(ex){return `<details class="learn-summary" ${chosen===ex.id?'open':''}><summary>Versuch ${numberOf(ex.id)} · ${esc(ex.title)}</summary>${records(ex)}<p>${esc(ex.summary)}</p><ul class="learn-checklist">${ex.steps.map(s=>`<li class="${s.completed?'learn-done':''}">${s.completed?'✓':'○'} ${esc(s.text)}${s.kind==='choice'&&s.response?'<ul>'+s.questions.map(q=>`<li>${esc(q.text)} <strong>${esc(s.response[q.id])}</strong></li>`).join('')+'</ul>':''}</li>`).join('')}</ul>${ex.steps.find(s=>s.kind==='diagram'&&s.completed)?`<div data-review-diagram="${ex.id}"></div>`:''}${store.notes[ex.id]?`<p><strong>Eigene Notizen:</strong> ${esc(store.notes[ex.id])}</p>`:''}</details>`;}
+  function review(ex){return `<details class="learn-summary" ${chosen===ex.id?'open':''}><summary>Versuch ${numberOf(ex.id)} · ${esc(ex.title)}</summary>${records(ex)}<p>${esc(ex.summary)}</p><ul class="learn-checklist">${ex.steps.map(s=>`<li class="${s.completed?'learn-done':''}">${s.completed?'✓':'○'} ${esc(displayText(s))}${s.kind==='choice'&&s.response?'<ul>'+s.questions.map(q=>`<li>${esc(q.text)} <strong>${esc(s.response[q.id])}</strong></li>`).join('')+'</ul>':''}</li>`).join('')}</ul>${ex.steps.find(s=>s.kind==='diagram'&&s.completed)?`<p class="sub">${store.diagramExtensions?.[ex.id]?.completed?'✓ Zusätzliche Energieabgaben ergänzt.':'Die Vertiefung zu den Energieabgaben ist noch offen.'}</p><div data-review-diagram="${ex.id}"></div>${store.diagramExtensions?.[ex.id]?.completed?`<button type="button" data-edit-losses="${ex.id}">Aufteilung weiter untersuchen</button>`:''}`:''}${store.notes[ex.id]?`<p><strong>Eigene Notizen:</strong> ${esc(store.notes[ex.id])}</p>`:''}</details>`;}
   function render(){
-   diagram?.destroy();diagram=null;referenceView?.dispose();referenceView=null;const p=engine.progress(),cur=engine.current(chosen),result=engine.results();
-    host.innerHTML=`<div class="learn-top"><div><h2>Dein Auftrag</h2><p class="sub">Aufbauen → beobachten → ergänzen → Energiefluss zeigen</p></div><span class="learn-score">${p.points} von 20 Punkten</span></div><progress value="${p.points}" max="20" aria-label="Lernfortschritt"></progress><nav class="learn-nav" aria-label="Versuche">${result.experiments.map(e=>`<button type="button" data-learn-nav="${e.id}" aria-current="${chosen===e.id}">${e.steps.every(s=>s.completed)?'✓ ':''}${numberOf(e.id)} · ${esc(e.title)}</button>`).join('')}<button type="button" data-learn-nav="free" aria-current="${chosen==='free'}">Freies Labor</button><button type="button" data-learn-nav="summary" aria-current="${chosen==='summary'}">Nachschlagewerk</button></nav><div class="learn-body"></div><p class="learn-feedback ${feedbackBad?'bad':''}" role="status">${esc(feedback)}</p><p class="learn-storage sub"></p><details><summary>So sammelst du Punkte</summary><p>Jeder Versuch gibt 5 Punkte: Aufbau 1, Durchführung 1, richtige Beobachtungen 1 und Energieflussdiagramm 2. Du darfst Antworten und Diagramme verbessern. Hilfe kostet keine Punkte.</p><p>Die Simulation prüft deinen virtuellen Aufbau und seine Bewegung. Beim echten Experiment könnt ihr zu zweit, zu dritt oder zu viert arbeiten und eure Beobachtungen zusätzlich notieren.</p></details>`;
+   diagram?.destroy();diagram=null;referenceView?.dispose();referenceView=null;const p=engine.progress(),cur=currentStep(),result=engine.results();host.classList.toggle('learn-expanded',expanded);
+    host.innerHTML=`<div class="learn-top"><div><h2>Dein Auftrag</h2><p class="sub">Aufbauen → beobachten → ergänzen → Energiefluss zeigen</p></div><span class="learn-score">${p.points} von 20 Punkten</span></div><progress value="${p.points}" max="20" aria-label="Lernfortschritt"></progress><nav class="learn-nav" aria-label="Versuche">${result.experiments.map(e=>`<button type="button" data-learn-nav="${e.id}" aria-current="${chosen===e.id}">${e.steps.every(s=>s.completed)&&store.diagramExtensions?.[e.id]?.completed?'✓ ':''}${numberOf(e.id)} · ${esc(e.title)}</button>`).join('')}<button type="button" data-learn-nav="free" aria-current="${chosen==='free'}">Freies Labor</button><button type="button" data-learn-nav="summary" aria-current="${chosen==='summary'}">Nachschlagewerk</button></nav><div class="learn-body"></div><p class="learn-feedback ${feedbackBad?'bad':''}" role="status">${esc(feedback)}</p><p class="learn-storage sub"></p><details><summary>So sammelst du Punkte</summary><p>Jeder Versuch gibt 5 Punkte: Aufbau 1, Durchführung 1, richtige Beobachtungen 1 und Energieflussdiagramm 2. Du darfst Antworten und Diagramme verbessern. Hilfe kostet keine Punkte. Danach folgt die Vertiefung zu den Energieabgaben ohne zusätzliche Punkte.</p><p>Die Simulation prüft deinen virtuellen Aufbau und seine Bewegung. Beim echten Experiment könnt ihr zu zweit, zu dritt oder zu viert arbeiten und eure Beobachtungen zusätzlich notieren.</p></details>`;
    root.dataset.learningStep=chosen==='summary'?'summary':cur?.kind||'review';
    const picker=document.createElement('select');picker.className='learn-picker';picker.setAttribute('aria-label','Versuch oder Nachschlagewerk wählen');
     picker.innerHTML=result.experiments.map((e,i)=>`<option value="${e.id}" ${chosen===e.id?'selected':''}>${i+1} · ${esc(e.title)}</option>`).join('')+`<option value="free" ${chosen==='free'?'selected':''}>Freies Labor</option><option value="summary" ${chosen==='summary'?'selected':''}>Nachschlagewerk</option>`;
    host.querySelector('.learn-nav').after(picker);
    const body=host.querySelector('.learn-body');
-   if(chosen==='free'){body.innerHTML='<h3>Freies Labor</h3><p>Hier kannst du Geräte, Zubehör und Kabel frei ausprobieren. Die vier geführten Versuche behalten jeweils ihren eigenen Aufbau.</p>';}else if(chosen==='summary'){body.innerHTML=`<h3>${p.done?'Alle vier Versuche geschafft!':'Dein Nachschlagewerk'}</h3><p>Hier bleiben geprüfte Aufbauten, Beobachtungen und Diagramme erhalten.</p>${result.experiments.map(review).join('')}`;}
+   if(chosen==='free'){body.innerHTML='<h3>Freies Labor</h3><p>Hier kannst du Geräte, Zubehör und Kabel frei ausprobieren. Die vier geführten Versuche behalten jeweils ihren eigenen Aufbau.</p>';}else if(chosen==='summary'){body.innerHTML=`<h3>${allDone()?'Alle vier Versuche geschafft!':'Dein Nachschlagewerk'}</h3><p>Hier bleiben geprüfte Aufbauten, Beobachtungen und Diagramme erhalten.</p>${result.experiments.map(review).join('')}`;}
    else if(!cur){const ex=result.experiments.find(e=>e.id===chosen);body.innerHTML=review(ex);}
    else{
     const ex=result.experiments.find(e=>e.id===chosen);const draft=store.drafts[cur.id]||{};
-    body.innerHTML=`<h3>Versuch ${numberOf(chosen)} · ${esc(ex.title)}</h3><ul class="learn-checklist learn-stepstrip">${ex.steps.filter(s=>s.completed).map(s=>`<li class="learn-done">✓ ${esc({build:'Aufbau stimmt',observe:'Versuch durchgeführt',choice:'Beobachtungen ergänzt',diagram:'Diagramm stimmt'}[s.kind])}</li>`).join('')}</ul><div class="learn-current">${cur.kind==='diagram'?'':`<p><strong>${esc(displayText(cur))}</strong></p>`}${cur.kind==='build'?`<p class="sub">Der richtige Aufbau wird automatisch erkannt.</p><details><summary>Hilfe zum Aufbau</summary><ol>${displayHints(cur).map(h=>'<li>'+esc(h)+'</li>').join('')}</ol></details>`:cur.kind==='observe'?`<p class="sub">${cur.experiment==='v4'?'Wähle den DynaMot, setze das Gewicht hoch und starte die Simulation. Zum Wechseln der Masse pausieren, Masse ändern und erneut hochsetzen.':'Wähle den antreibenden DynaMot, schalte „Antreiben“ ein und starte die Simulation. Tempo und Drehrichtung kannst du nach dem Pausieren ändern. Bei Versuch 3 kehrst du die Polung mit der Taste um.'}</p><div class="learn-activity">${activity()}</div>`:cur.kind==='choice'?`<form class="learn-answer">${cur.questions.map(q=>`<label>${esc(q.text)} <select name="${esc(q.id)}" required aria-label="${esc(q.text)}"><option value="">Bitte wählen …</option>${q.options.map(o=>`<option ${draft[q.id]===o?'selected':''}>${esc(o)}</option>`).join('')}</select><span data-answer-feedback="${q.id}"></span></label>`).join('')}<button type="submit" class="primary">Antworten prüfen</button></form>`:`<div class="learn-diagram"></div><button type="button" class="primary" data-check-diagram>Diagramm prüfen</button><details><summary>Hinweis zur Energie</summary><p class="sub">${esc(cur.note)}</p></details>`}</div><details><summary>Eigene Beobachtungen / echtes Experiment</summary><label>Notizen zu Versuch ${numberOf(chosen)}<textarea class="learn-notes" rows="3" maxlength="3000" style="width:100%;font:inherit">${esc(store.notes[chosen]||'')}</textarea></label></details>`;
-    if(cur.kind==='diagram')diagram=Diagram.mount(body.querySelector('.learn-diagram'),{length:cur.chain.length,devices:[...new Set(cur.chain.filter((_,i)=>i%2))],value:store.drafts[cur.id],onChange(v){store.drafts[cur.id]=v;save();}});
+    body.innerHTML=`<h3>Versuch ${numberOf(chosen)} · ${esc(ex.title)}</h3><ul class="learn-checklist learn-stepstrip">${ex.steps.filter(s=>s.completed).map(s=>`<li class="learn-done">✓ ${esc({build:'Aufbau stimmt',observe:'Versuch durchgeführt',choice:'Beobachtungen ergänzt',diagram:'Diagramm stimmt'}[s.kind])}</li>`).join('')}</ul>${['diagram','losses'].includes(cur.kind)?`<button type="button" data-diagram-expand aria-expanded="${expanded}">${expanded?'Zurück zur Tischansicht':'Diagramm groß anzeigen'}</button>`:''}<div class="learn-current"><p><strong>${esc(displayText(cur))}</strong></p>${cur.kind==='build'?`<p class="sub">Der richtige Aufbau wird automatisch erkannt.</p><details><summary>Hilfe zum Aufbau</summary><ol>${displayHints(cur).map(h=>'<li>'+esc(h)+'</li>').join('')}</ol></details>`:cur.kind==='observe'?`<p class="sub">${cur.experiment==='v4'?'Wähle den DynaMot, setze das Gewicht hoch und starte die Simulation. Zum Wechseln der Masse pausieren, Masse ändern und erneut hochsetzen.':'Wähle den antreibenden DynaMot, schalte „Antreiben“ ein und starte die Simulation. Tempo und Drehrichtung kannst du nach dem Pausieren ändern. Bei Versuch 3 kehrst du die Polung mit der Taste um.'}</p><div class="learn-activity">${activity()}</div>`:cur.kind==='choice'?`<form class="learn-answer">${cur.questions.map(q=>`<label>${esc(q.text)} <select name="${esc(q.id)}" required aria-label="${esc(q.text)}"><option value="">Bitte wählen …</option>${q.options.map(o=>`<option ${draft[q.id]===o?'selected':''}>${esc(o)}</option>`).join('')}</select><span data-answer-feedback="${q.id}"></span></label>`).join('')}<button type="submit" class="primary">Antworten prüfen</button></form>`:`<p class="sub">${cur.kind==='losses'?'Verschiebe die Grenze zwischen den beiden Pfeilen nach oben oder unten. Beobachte, wie sich die folgenden Pfeile verändern. Die Anteile darfst du frei untersuchen.':'Thermische Energie gehört erst in den nächsten Schritt.'}</p><div class="learn-diagram"></div><button type="button" class="primary" data-check-diagram>${cur.kind==='losses'?'Ergänzungen prüfen':'Hauptkette prüfen'}</button>${cur.kind==='losses'?'<details><summary>Hinweis zur Energie</summary><p class="sub">Energie wird nicht vernichtet. Die Dicke beider Ausgangspfeile zusammen entspricht der Dicke des Eingangs. Das Gewicht betrachten wir als Speicher ohne zusätzliche Energieabgabe.</p></details>':''}`}</div><details><summary>Eigene Beobachtungen / echtes Experiment</summary><label>Notizen zu Versuch ${numberOf(chosen)}<textarea class="learn-notes" rows="3" maxlength="3000" style="width:100%;font:inherit">${esc(store.notes[chosen]||'')}</textarea></label></details>`;
+    if(['diagram','losses'].includes(cur.kind)){
+     const loss=cur.kind==='losses',stored=loss?extension(chosen).value:store.drafts[cur.id];
+     const value=loss?stored:stored?{...copy(stored),branches:[]}:undefined;
+     diagram=Diagram.mount(body.querySelector('.learn-diagram'),{stage:loss?'losses':'basic',length:cur.chain.length,devices:[...new Set(cur.chain.filter((_,i)=>i%2))],value,onChange(v){
+      if(loss){extension(cur.experiment).value=v;extension(cur.experiment).completed=false;}
+      else{if(store.drafts[cur.id]?.branches?.length){store.diagramLegacyDrafts??={};store.diagramLegacyDrafts[cur.id]??=copy(store.drafts[cur.id]);}store.drafts[cur.id]=v;}save();
+     }});
+    }
    }
     if(chosen!=='free'&&chosen!=='summary'){const snapshot=lab.getSnapshot();if(!snapshot.buildLocked){body.insertAdjacentHTML('afterbegin',reference());referenceView=lab.mountReference?.(body.querySelector('.learn-reference-stage'),chosen)||null;}if(snapshot.modeSource==='reconstructed')body.insertAdjacentHTML('afterbegin','<p class="sub">Aus dem früher geprüften Aufbau wiederhergestellt.</p>');}
-    const pageState=store.pages?.[chosen];if(pageState){for(const d of host.querySelectorAll('details'))d.open=pageState.open?.includes(d.querySelector('summary')?.textContent)||false;host.scrollTop=Number.isFinite(pageState.scroll)?pageState.scroll:0;}
-   host.querySelectorAll('[data-review-diagram]').forEach(el=>{const ex=result.experiments.find(e=>e.id===el.dataset.reviewDiagram);Diagram.mount(el,{length:ex.chain.length,value:store.drafts[ex.id+'.diagram'],readonly:true});});
+    const pageState=store.pages?.[chosen];if(pageState){for(const d of host.querySelectorAll('details')){if(d.matches('.de-loss-palette-panel'))continue;d.open=d.matches('.learn-summary')&&chosen!=='summary'?true:pageState.open?.includes(d.querySelector('summary')?.textContent)||false;}host.scrollTop=Number.isFinite(pageState.scroll)?pageState.scroll:0;}
+   host.querySelectorAll('[data-review-diagram]').forEach(el=>{const ex=result.experiments.find(e=>e.id===el.dataset.reviewDiagram);const saved=store.diagramExtensions?.[ex.id]?.value||Stages.seed(ex.id,store.drafts[ex.id+'.diagram']);Diagram.mount(el,{stage:saved.branches.length?'losses':'basic',length:ex.chain.length,value:saved,readonly:true});});
    if(blocked)host.querySelector('.learn-storage').textContent='Speicherschutz aktiv: Bestehender Aufgabenstand bleibt erhalten.';
   }
-  function completed(){feedback=engine.progress().done?'✓ Alle vier Versuche abgeschlossen. Dein Nachschlagewerk ist fertig.':engine.current(chosen)?'✓ Richtig – der nächste Schritt in diesem Versuch ist bereit.':'✓ Versuch abgeschlossen. Du kannst einen anderen Versuch wählen.';feedbackBad=false;render();save();}
+  function completed(){feedback=allDone()?'✓ Alle vier Versuche abgeschlossen. Dein Nachschlagewerk ist fertig.':currentStep()?'✓ Richtig – der nächste Schritt in diesem Versuch ist bereit.':'✓ Versuch abgeschlossen. Du kannst einen anderen Versuch wählen.';feedbackBad=false;render();save();}
   function event(e){if(busy)return;boot();if(!engine||chosen==='summary'||chosen==='free')return;const snapshot=e.detail?.snapshot||lab.getSnapshot();if(snapshot.activeMode!==chosen)return;const before=engine.current(chosen);if(!snapshot.buildLocked&&before?.kind!=='build'&&lab.lockBuild(chosen))render();if(!before||!['build','observe'].includes(before.kind))return;const changed=engine.observe(Tasks.fromLab(snapshot),chosen);if(changed){if(before.kind==='build'){store.builds[before.experiment]=copy({devices:snapshot.devices,wires:snapshot.wires});lab.lockBuild(before.experiment);}completed();}else{const el=host.querySelector('.learn-activity');if(el)el.innerHTML=activity();if(before.kind==='observe'&&performance.now()-lastEvidenceSave>1500){lastEvidenceSave=performance.now();save();}}}
-   host.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!engine)return;if(b.dataset.learnNav){capturePage();chosen=b.dataset.learnNav;if(chosen!=='summary')lab.setMode(chosen);feedback='';render();save();}else if(b.hasAttribute('data-check-diagram')){const response=engine.submitDiagram(graph(diagram.getValue()),chosen);if(response.correct)completed();else{feedback='Das passt noch nicht. Prüfe die Reihenfolge: Energiepfeil → Gerätekasten → Energiepfeil. Beginne bei der zugeführten Energie und ende beim Ergebnis.';feedbackBad=true;const f=host.querySelector('.learn-feedback');f.textContent=feedback;f.classList.add('bad');save();}}});
+   host.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!engine)return;if(b.hasAttribute('data-diagram-expand')){expanded=!expanded;render();return;}if(b.dataset.learnNav){expanded=false;capturePage();chosen=b.dataset.learnNav;if(chosen!=='summary')lab.setMode(chosen);feedback='';render();save();}else if(b.dataset.editLosses){chosen=b.dataset.editLosses;lab.setMode(chosen);extension(chosen).completed=false;feedback='';render();save();}
+   else if(b.hasAttribute('data-check-diagram')){
+    const value=diagram.getValue(),loss=currentStep()?.kind==='losses';
+    const correct=loss?Stages.lossesCorrect(chosen,value):Stages.basicCorrect(chosen,value);
+    if(correct){if(loss){expanded=false;extension(chosen).value=value;extension(chosen).completed=true;}else{const response=engine.submitDiagram(graph(value),chosen);if(!response.correct)return;}capturePage();store.pages[chosen].scroll=0;completed();}
+    else{feedback=loss?'Prüfe, welche zusätzliche Energieform die Wandler abgeben. Ergänze sie bei jedem Wandler; das Gewicht bleibt hier ein Speicher. Die eingestellten Anteile werden nicht als Zahlenlösung bewertet.':value.main.some(t=>t?.label==='thermische Energie')||value.branches.length?'In dieser ersten Stufe sollst du die thermische Energie noch ignorieren. Prüfe nur die Hauptkette.':'Das passt noch nicht. Prüfe die Reihenfolge: Energiepfeil → Gerätekasten → Energiepfeil. Beginne bei der zugeführten Energie und ende beim Ergebnis.';feedbackBad=true;const f=host.querySelector('.learn-feedback');f.textContent=feedback;f.classList.add('bad');save();}
+   }
+  });
   host.addEventListener('submit',e=>{if(!e.target.matches('.learn-answer'))return;e.preventDefault();const values=Object.fromEntries(new FormData(e.target));const id=engine.current(chosen).id;store.drafts[id]=values;const result=engine.answer(values,chosen);if(result.correct)completed();else{for(const [k,ok]of Object.entries(result.feedback||{})){const el=host.querySelector(`[data-answer-feedback="${k}"]`);el.textContent=ok?' ✓':' · Bitte noch einmal überlegen.';}feedback='Noch nicht alles richtig. Du kannst deine Auswahl ändern.';host.querySelector('.learn-feedback').textContent=feedback;save();}});
-   host.addEventListener('change',e=>{if(e.target.matches('.learn-picker')){capturePage();chosen=e.target.value;if(chosen!=='summary')lab.setMode(chosen);feedback='';render();save();return;}if(e.target.closest('.learn-answer')){store.drafts[engine.current(chosen).id]=Object.fromEntries(new FormData(e.target.closest('form')));save();}});
+   host.addEventListener('change',e=>{if(e.target.matches('.learn-picker')){expanded=false;capturePage();chosen=e.target.value;if(chosen!=='summary')lab.setMode(chosen);feedback='';render();save();return;}if(e.target.closest('.learn-answer')){store.drafts[engine.current(chosen).id]=Object.fromEntries(new FormData(e.target.closest('form')));save();}});
   host.addEventListener('input',e=>{if(e.target.matches('.learn-notes')){store.notes[chosen]=e.target.value;save();}});
+  host.addEventListener('keydown',e=>{if(e.key==='Escape'&&expanded){expanded=false;render();host.querySelector('[data-diagram-expand]')?.focus();}});
   root.addEventListener('dynamot:state',event);const timer=setInterval(()=>{if(!root.isConnected){clearInterval(timer);return;}boot();if(engine)clearInterval(timer);},200);
   boot();
  }

@@ -37,3 +37,37 @@
 #energyLab .de-readonly .de-chain{padding-top:6px;min-height:140px}
 #energyLab .de-readonly .de-socket{cursor:default}
 @media(prefers-reduced-motion:reduce){#energyLab .de-editor *{scroll-behavior:auto}}
+
+/* Second diagram step: the output bands split after a converter. */
+#energyLab .de-losses{min-width:0}
+#energyLab .de-loss-palette{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px;margin:8px 0}
+#energyLab .de-loss-category{min-width:0;padding:7px;border:1px solid #cbded1;border-radius:9px;background:#fff}
+#energyLab .de-loss-category h4{font-size:12px;line-height:1.25;min-height:28px;margin:0 0 5px;color:#214f71}
+#energyLab .de-loss-category>div{display:grid;gap:5px}
+#energyLab .de-loss-palette button{width:100%;min-height:44px;padding:7px 9px;text-align:left;font-size:13px;line-height:1.2;touch-action:none;user-select:none;cursor:grab;background:#edf5f5}
+#energyLab .de-loss-palette button[aria-pressed=true]{outline:3px solid #d99c30;background:#fff1ce}
+#energyLab .de-loss-feedback{min-height:28px;margin:7px 0;color:#245846;font-size:13px;line-height:1.35}
+#energyLab .de-loss-feedback.de-loss-error{color:#9a322a;font-weight:650}
+#energyLab .de-losses-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;border:1px solid #c6d9d0;border-radius:12px;background:#f9fcfa;touch-action:pan-x pan-y}
+#energyLab .de-sankey-wrap{position:relative;min-width:max-content}
+#energyLab .de-sankey-svg{display:block;max-width:none}
+#energyLab .de-flow-background{fill:#f9fcfa}
+#energyLab .de-flow-main{fill:#d8eaf8;stroke:none}
+#energyLab .de-flow-heat{fill:#e6a36a;stroke:#ad6b3e;stroke-width:1}
+#energyLab .de-flow-device rect{fill:#fff0ca;stroke:#b48e39;stroke-width:2}
+#energyLab .de-flow-device-label{font:700 12px system-ui,sans-serif;fill:#5e4710}
+#energyLab .de-flow-energy-label{font:700 10.5px system-ui,sans-serif;fill:#214f71}
+#energyLab .de-flow-energy-label.de-flow-narrow{paint-order:stroke fill;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+#energyLab .de-flow-heat-label{font:700 10.5px system-ui,sans-serif;fill:#8a4b2b}
+#energyLab .de-loss-dock,#energyLab .de-loss-grip{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);box-sizing:border-box;width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;font-size:0;line-height:1;touch-action:none;user-select:none;background:transparent}
+#energyLab .de-loss-dock::before,#energyLab .de-loss-grip::before{position:absolute;inset:6px;display:flex;align-items:center;justify-content:center;border-radius:50%;font:750 18px/1 system-ui,sans-serif;pointer-events:none}
+#energyLab .de-loss-dock{cursor:copy}
+#energyLab .de-loss-dock::before{content:'＋';background:#fef9ed;border:2px dashed #b88124;color:#805713}
+#energyLab .de-loss-dock.de-loss-hover::before,#energyLab .de-loss-dock:focus-visible::before{background:#fff0bd}
+#energyLab .de-loss-dock:focus-visible{outline:3px solid #cb9623;outline-offset:2px}
+#energyLab .de-loss-grip{cursor:ns-resize}
+#energyLab .de-loss-grip::before{content:'↕';background:#fff3d5;border:2px solid #a86d22;color:#754918;box-shadow:0 2px 6px #5c4b2455}
+#energyLab .de-loss-grip:focus-visible{outline:3px solid #224f78;outline-offset:3px}
+#energyLab .de-loss-note{font-size:12px;line-height:1.35;color:#526c61;margin:7px 0}
+#energyLab .de-loss-ghost{position:fixed;z-index:10000;pointer-events:none;transform:translate(-50%,-125%);padding:8px 12px;background:#fff1ce;border:2px solid #bd8629;border-radius:8px;color:#513b10;font-size:14px;box-shadow:0 3px 9px #314a3e55;white-space:nowrap}
+@media(max-width:450px){#energyLab .de-loss-palette{grid-template-columns:repeat(2,minmax(0,1fr))}#energyLab .de-loss-category h4{font-size:11px}#energyLab .de-loss-palette button{font-size:12px}}

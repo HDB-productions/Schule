@@ -1,4 +1,9 @@
 #energyLab .learn{margin-top:24px;padding:22px;background:#fff;border:1px solid #b9cdc2;border-radius:16px;scroll-margin-top:12px}
+#energyLab .learn.learn-expanded{position:fixed;inset:12px;z-index:100;width:auto;height:auto;max-height:calc(100dvh - 24px);margin:0;overflow:auto;box-shadow:0 0 0 30px #193c4366,0 8px 35px #193c4355}
+#energyLab [data-diagram-expand]{margin:4px 0 10px;min-height:44px}
+#energyLab .learn-current .de-losses>.de-help{display:none}
+#energyLab .de-loss-palette-panel{margin:8px 0}
+#energyLab .de-loss-palette-panel>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:650}
 #energyLab .learn h2{font-size:24px;margin:0 0 8px}#energyLab .learn h3{font-size:19px;margin:14px 0 8px}
 #energyLab .learn-top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
 #energyLab .learn-score{font-weight:750;background:#e1f2e7;padding:9px 14px;border-radius:24px}

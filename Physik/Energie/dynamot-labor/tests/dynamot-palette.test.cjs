@@ -10,7 +10,7 @@ const server=http.createServer((req,res)=>{res.setHeader('Content-Type','text/ht
   await page.evaluate(ex=>{
    window.paletteTest?.destroy();const root=document.querySelector('#energyLab');root.dataset.learningStep='diagram';
    const learn=root.querySelector('.learn');learn.innerHTML='<select class="learn-picker" aria-label="Versuch"><option>'+ex.title+'</option></select><div class="learn-body"><div class="learn-current"><div class="learn-diagram"></div><button data-check-diagram>Diagramm prüfen</button></div></div>';
-   window.paletteTest=DynamotDiagram.mount(learn.querySelector('.learn-diagram'),{length:ex.chain.length,devices:[...new Set(ex.chain.filter((_,i)=>i%2))]});learn.scrollTop=0;
+   window.paletteTest=DynamotDiagram.mount(learn.querySelector('.learn-diagram'),{stage:'legacy',length:ex.chain.length,devices:[...new Set(ex.chain.filter((_,i)=>i%2))]});learn.scrollTop=0;
   },ex);
   async function drag(label,target){const a=await page.locator('[data-label="'+label+'"]').boundingBox(),b=await page.locator(target).boundingBox();assert(a&&b);const x=a.x+a.width/2,y=a.y+a.height/2,tx=b.x+b.width/2,ty=b.y+b.height/2;await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y,id:0}]});for(let n=1;n<=8;n++)await touch.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+(tx-x)*n/8,y:y+(ty-y)*n/8,id:0}]});await touch.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
   for(const [i,label] of ex.chain.entries())await drag(label,'[data-socket="'+i+'"]');await drag('thermische Energie','[data-branch-socket="1"]');
