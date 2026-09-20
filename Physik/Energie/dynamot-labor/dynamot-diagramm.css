@@ -6,7 +6,7 @@
 #energyLab .de-palette button{padding:0;width:100%;min-height:44px;touch-action:none;user-select:none;cursor:grab}
 #energyLab .de-palette .de-token{width:100%;font-size:12px}
 @media(max-width:700px){#energyLab .de-palette{grid-template-columns:repeat(2,minmax(0,1fr))}}
-#energyLab .de-editor{--de-height:66px;--de-blue:#d8eaf8;--de-ink:#214f71}
+#energyLab .de-editor{--de-height:66px;--de-min-cell:82px;--de-blue:#d8eaf8;--de-ink:#214f71}
 #energyLab .de-help{font-size:13px;line-height:1.4;margin:8px 0}
 #energyLab .de-token{box-sizing:border-box;min-height:44px;padding:7px 10px;line-height:1.18;font-size:13px;overflow-wrap:normal;hyphens:none}
 #energyLab .de-arrow{clip-path:polygon(0 0,calc(100% - 13px) 0,100% 50%,calc(100% - 13px) 100%,0 100%);padding:7px 18px 7px 7px;background:var(--de-blue);color:var(--de-ink)}
@@ -48,15 +48,15 @@
 #energyLab .de-loss-palette button[aria-pressed=true]{outline:3px solid #d99c30;background:#fff1ce}
 #energyLab .de-loss-feedback{min-height:28px;margin:7px 0;color:#245846;font-size:13px;line-height:1.35}
 #energyLab .de-loss-feedback.de-loss-error{color:#9a322a;font-weight:650}
-#energyLab .de-losses-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;border:1px solid #c6d9d0;border-radius:12px;background:#f9fcfa;touch-action:pan-x pan-y}
+#energyLab .de-losses-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;border:0;padding:0 1px;border-radius:0;background:transparent;touch-action:pan-x pan-y}
 #energyLab .de-sankey-wrap{position:relative;min-width:max-content}
 #energyLab .de-sankey-svg{display:block;max-width:none}
-#energyLab .de-flow-background{fill:#f9fcfa}
+#energyLab .de-flow-background{fill:transparent}
 #energyLab .de-flow-main{fill:#d8eaf8;stroke:none}
 #energyLab .de-flow-heat{fill:#e6a36a;stroke:#ad6b3e;stroke-width:1}
 #energyLab .de-flow-device rect{fill:#fff0ca;stroke:#b48e39;stroke-width:2}
-#energyLab .de-flow-device-label{font:700 12px system-ui,sans-serif;fill:#5e4710}
-#energyLab .de-flow-energy-label{font:700 10.5px system-ui,sans-serif;fill:#214f71}
+#energyLab .de-flow-device-label{font:700 clamp(11px,1.2vw,14px) system-ui,sans-serif;fill:#5e4710}
+#energyLab .de-flow-energy-label{font:700 clamp(11px,1.2vw,14px) system-ui,sans-serif;fill:#214f71}
 #energyLab .de-flow-energy-label.de-flow-narrow{paint-order:stroke fill;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
 #energyLab .de-flow-heat-label{font:700 10.5px system-ui,sans-serif;fill:#8a4b2b}
 #energyLab .de-loss-dock,#energyLab .de-loss-grip{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);box-sizing:border-box;width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;font-size:0;line-height:1;touch-action:none;user-select:none;background:transparent}

@@ -75,13 +75,13 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
    rects:[...document.querySelectorAll('.de-flow-device rect')].map(r=>[+r.getAttribute('x'),+r.getAttribute('width')]),
    labels:[...document.querySelectorAll('.de-flow-energy-label')].map(t=>+t.getAttribute('x'))
   }));
-  assert.equal(geometry.width,574,'the complete seven-part flow takes only seven compact cells');
-  assert.deepEqual(geometry.rects,[[82,82],[246,82],[410,82]],'the converter boxes keep the first step cell positions');
-  assert.deepEqual(geometry.labels,[41,205,369,533],'energy captions sit inside their original arrow cells');
+  const cell=geometry.width/7;assert(geometry.width>=574,'diagram fills available width with equal cells');
+  assert.deepEqual(geometry.rects,[[cell,cell],[3*cell,cell],[5*cell,cell]],'the converter boxes keep the first step cell positions');
+  assert.deepEqual(geometry.labels,[.5*cell,2.5*cell,4.5*cell,6.5*cell],'energy captions sit inside their original arrow cells');
   for(const [i,heat] of geometry.heat.entries()){
    assert.match(heat,/A [\d.]+ [\d.]+ 0 0 1 [\d.]+ [\d.]+ L [\d.]+ 207 L [\d.]+ 226 L [\d.]+ 207/,'heat rounds through a quarter-circle into a downward arrow tip');
    assert.match(heat,/A [\d.]+ [\d.]+ 0 0 0 [\d.]+ [\d.]+ L [\d.]+ [\d.]+ Z$/,'inner heat contour rounds back at constant thickness');
-   assert(geometry.blue[i+2].startsWith(`M ${i===0?328:492} 75 L `),'main arrows start at the same converter outlet as heat');
+   assert(geometry.blue[i+2].startsWith(`M ${(i===0?4:6)*cell} 24 L `),'main arrows start at the same converter outlet as heat');
   }
   if(process.env.DYNAMOT_QA_IMAGE)await page.screenshot({path:process.env.DYNAMOT_QA_IMAGE+'-920.png',fullPage:true});
   await page.setViewportSize({width:390,height:700});

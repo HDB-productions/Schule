@@ -76,7 +76,7 @@
  #energyLab>.learn .learn-feedback{font-size:13px;margin:5px 0;min-height:0}#energyLab>.learn .learn-storage{font-size:12px}
  #energyLab>details{grid-area:info;margin:0;font-size:13px}#energyLab>details summary{min-height:30px;padding:4px 0}
  #energyLab>.storage{grid-area:storage;margin:0;font-size:12px}
- #energyLab[data-learning-step=diagram]{grid-template-columns:minmax(300px,.7fr) minmax(0,1.3fr)}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]){grid-template-columns:minmax(300px,.7fr) minmax(0,1.3fr)}
  #energyLab[data-learning-step=summary]>.layout{display:none}#energyLab[data-learning-step=summary]>.learn{grid-column:1/-1}
 }
 @media(max-width:450px){#energyLab .build-reset button{font-size:10px;padding:4px}#energyLab .build-reset{right:7px}#energyLab .stage-run{left:12px;transform:none;min-width:85px}}
@@ -93,20 +93,21 @@
 #energyLab .device-panel details{margin-top:4px}
 #energyLab .device-panel summary{min-height:36px;padding:7px 0;font-size:13px}
 @media(min-width:900px){
- #energyLab[data-learning-step=diagram] .learn-body>h3,#energyLab[data-learning-step=diagram] .learn-stepstrip{display:none}
- #energyLab[data-learning-step=diagram] .learn-current{padding:6px}
- #energyLab[data-learning-step=diagram] .learn-current .de-help{font-size:13px;line-height:1.3;margin:3px 0}
- #energyLab[data-learning-step=diagram] .de-selection{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);margin:0;min-height:0}
- #energyLab[data-learning-step=diagram] .de-palette details{padding:0 6px}
- #energyLab[data-learning-step=diagram] .de-palette summary{padding:4px 0;min-height:44px}
- #energyLab[data-learning-step=diagram] .de-editor{--de-height:56px}
- #energyLab[data-learning-step=diagram] .de-cell{min-width:0}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .learn-body>h3,#energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .learn-stepstrip{display:none}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .learn-current{padding:6px}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .learn-current .de-help{font-size:13px;line-height:1.3;margin:3px 0}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .de-selection{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);margin:0;min-height:0}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .de-palette details{padding:0 6px}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .de-palette summary{padding:4px 0;min-height:44px}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .de-editor{--de-height:56px}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .de-cell{min-width:0}
+ #energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .de-editor{--de-min-cell:0px}
 }
 @media(max-width:450px){#energyLab .device-panel{top:60px;max-height:calc(100% - 130px)}#energyLab .stage .views button{font-size:12px;min-height:44px;padding:5px 7px}}
 @media(max-width:600px){#energyLab .learn{padding:13px}#energyLab .de-palette{grid-template-columns:1fr}#energyLab .learn-reference{float:none;display:block;margin:8px 0}#energyLab .learn-current{padding:12px}#energyLab .learn h2{font-size:21px}}
 
 
-@media(min-width:900px){#energyLab[data-learning-step=diagram] .learn-top{display:none}#energyLab[data-learning-step=diagram] .learn-picker{margin:4px 0}#energyLab[data-learning-step=diagram] .de-chain{min-height:153px;padding-bottom:3px}}
+@media(min-width:900px){#energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .learn-top{display:none}#energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .learn-picker{margin:4px 0}#energyLab:is([data-learning-step=diagram],[data-learning-step=losses]) .de-chain{min-height:153px;padding-bottom:3px}}
 
 
 #energyLab .stage .slot-target:hover{background:transparent;outline:none}#energyLab .stage .slot-target:focus-visible{background:transparent;outline:2px solid #087e70}
@@ -119,7 +120,7 @@
 #energyLab .de-palette button{padding:0;width:100%;min-height:44px;touch-action:none;user-select:none;cursor:grab}
 #energyLab .de-palette .de-token{width:100%;font-size:12px}
 @media(max-width:700px){#energyLab .de-palette{grid-template-columns:repeat(2,minmax(0,1fr))}}
-#energyLab .de-editor{--de-height:66px;--de-blue:#d8eaf8;--de-ink:#214f71}
+#energyLab .de-editor{--de-height:66px;--de-min-cell:82px;--de-blue:#d8eaf8;--de-ink:#214f71}
 #energyLab .de-help{font-size:13px;line-height:1.4;margin:8px 0}
 #energyLab .de-token{box-sizing:border-box;min-height:44px;padding:7px 10px;line-height:1.18;font-size:13px;overflow-wrap:normal;hyphens:none}
 #energyLab .de-arrow{clip-path:polygon(0 0,calc(100% - 13px) 0,100% 50%,calc(100% - 13px) 100%,0 100%);padding:7px 18px 7px 7px;background:var(--de-blue);color:var(--de-ink)}
@@ -161,15 +162,15 @@
 #energyLab .de-loss-palette button[aria-pressed=true]{outline:3px solid #d99c30;background:#fff1ce}
 #energyLab .de-loss-feedback{min-height:28px;margin:7px 0;color:#245846;font-size:13px;line-height:1.35}
 #energyLab .de-loss-feedback.de-loss-error{color:#9a322a;font-weight:650}
-#energyLab .de-losses-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;border:1px solid #c6d9d0;border-radius:12px;background:#f9fcfa;touch-action:pan-x pan-y}
+#energyLab .de-losses-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;border:0;padding:0 1px;border-radius:0;background:transparent;touch-action:pan-x pan-y}
 #energyLab .de-sankey-wrap{position:relative;min-width:max-content}
 #energyLab .de-sankey-svg{display:block;max-width:none}
-#energyLab .de-flow-background{fill:#f9fcfa}
+#energyLab .de-flow-background{fill:transparent}
 #energyLab .de-flow-main{fill:#d8eaf8;stroke:none}
 #energyLab .de-flow-heat{fill:#e6a36a;stroke:#ad6b3e;stroke-width:1}
 #energyLab .de-flow-device rect{fill:#fff0ca;stroke:#b48e39;stroke-width:2}
-#energyLab .de-flow-device-label{font:700 12px system-ui,sans-serif;fill:#5e4710}
-#energyLab .de-flow-energy-label{font:700 10.5px system-ui,sans-serif;fill:#214f71}
+#energyLab .de-flow-device-label{font:700 clamp(11px,1.2vw,14px) system-ui,sans-serif;fill:#5e4710}
+#energyLab .de-flow-energy-label{font:700 clamp(11px,1.2vw,14px) system-ui,sans-serif;fill:#214f71}
 #energyLab .de-flow-energy-label.de-flow-narrow{paint-order:stroke fill;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
 #energyLab .de-flow-heat-label{font:700 10.5px system-ui,sans-serif;fill:#8a4b2b}
 #energyLab .de-loss-dock,#energyLab .de-loss-grip{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);box-sizing:border-box;width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;font-size:0;line-height:1;touch-action:none;user-select:none;background:transparent}
@@ -80139,6 +80140,7 @@ function notice(t){q('.notice').textContent=t;}
 function docs(){const out=[document];for(const win of [parent,top])try{if(!out.includes(win.document))out.push(win.document);}catch{}return out;}
 function isEditor(){return query.get('editor')==='1'||docs().some(d=>{try{return d.body?.classList.contains('editor')||d.defaultView.widget?.isEditor===true||new URLSearchParams(d.defaultView.location.search).get('editor')==='1';}catch{return false;}});}
 const edulo=parent!==window||query.get('edulo')==='1'||query.has('data')||!!window.widget;
+q('.home-logo').hidden=edulo;
 function getHost(){for(const d of docs())for(const id of [query.get('STATE_ID'),'e1_text_input','e1_input']){const el=id&&d.getElementById(id);if(el&&'value'in el)return el;}return null;}
 function encode(s){return 'DYNAMOT1:'+btoa(Array.from(new TextEncoder().encode(JSON.stringify(s)),b=>String.fromCharCode(b)).join(''));}
 function parse(raw){if(!raw.startsWith('DYNAMOT1:'))throw Error('Fremder Lernstand');const s=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(raw.slice(9)),c=>c.charCodeAt(0))));if(s.widget!=='dynamot-lab'||![1,2].includes(s.version)||!Number.isInteger(s.next)||s.next<1||!Array.isArray(s.devices)||!Array.isArray(s.wires)||s.wires.length>100)throw Error('Unbekannter Lernstand');const ids=new Set(),occupied=new Set();for(const d of s.devices){if(!['motor','lamp'].includes(d.type)||!Number.isInteger(d.id)||ids.has(d.id)||d.id>=s.next||!['omega','angle','mass','height','rate'].every(k=>Number.isFinite(d[k]))||d.crank&&d.weight||d.mass<.05||d.mass>2||d.height<0||d.height>1.5||Math.abs(d.rate)>30||Math.abs(d.omega)>200||!['crank','weight','hand'].every(k=>typeof d[k]==='boolean'))throw Error('Beschädigtes Gerät');if(d.lampR!==undefined&&![4,8,24].includes(d.lampR))throw Error('Unbekannte Modelllampe');if(s.version===1){const slot=slots.find(v=>v.type===d.type&&!occupied.has(v.id));if(!slot)throw Error('Alter Aufbau hat mehr Geräte als Tischplätze. Originalstand bleibt erhalten.');d.slot=slot.id;delete d.x;delete d.y;}const slot=slots.find(v=>v.id===d.slot);if(!slot||slot.type!==d.type||occupied.has(d.slot))throw Error('Ungültiger oder doppelt belegter Platz');occupied.add(d.slot);ids.add(d.id);}for(const w of s.wires)if(!ids.has(w.a)||!ids.has(w.b)||![0,1].includes(w.ap)||![0,1].includes(w.bp))throw Error('Beschädigtes Kabel');for(const w of s.wires)if(w.routeLane!==undefined&&(!Number.isInteger(w.routeLane)||w.routeLane<0||w.routeLane>399))throw Error('Beschädigte Kabelroute');if(s.electronFlow!==undefined&&typeof s.electronFlow!=='boolean')throw Error('Beschädigte Flusseinstellung');s.electronFlow=s.electronFlow===true;if(s.energyPackets!==undefined&&typeof s.energyPackets!=='boolean')throw Error('Beschädigte Energieanzeige');s.energyPackets=s.energyPackets===true;s.version=2;s.simulationTime=Number.isFinite(s.simulationTime)&&s.simulationTime>=0?s.simulationTime:0;if(s.camera&&(![s.camera.position,s.camera.target].every(a=>Array.isArray(a)&&a.length===3&&a.every(n=>Number.isFinite(n)&&Math.abs(n)<100))))throw Error('Beschädigte Kameraansicht');if(s.ui&&(!Object.prototype.hasOwnProperty.call(s.ui,'selected')||typeof s.ui!=='object'))throw Error('Beschädigte Bedienansicht');if(s.undoBuild){const u=s.undoBuild;if(!Array.isArray(u.devices)||!Array.isArray(u.wires))throw Error('Beschädigter Rückgängig-Aufbau');parse(encode({...s,devices:u.devices,wires:u.wires,undoBuild:null}));}if(s.tasks===undefined)s.tasks={};else if(!s.tasks||typeof s.tasks!=='object'||Array.isArray(s.tasks))throw Error('Beschädigter Aufgabenbereich');return s;}
@@ -80487,14 +80489,14 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
  }
  const isConverter=t=>t?.kind==='device'&&/DynaMot|Lampe/i.test(t.label)&&!/Gewicht/i.test(t.label);
  const lossFraction=b=>Number.isFinite(b?.fraction)?Math.max(.05,Math.min(.95,b.fraction)):.25;
-  function flowLayout(main,branches=[]){
-   const cell=82,top=75,base=66,height=266,width=main.length*cell;
+  function flowLayout(main,branches=[],options={}){
+   const cell=options.cell||82,top=options.top??75,base=options.base||66,height=266,width=main.length*cell;
    const byFrom=new Map(branches.filter(b=>b&&Number.isInteger(b.from)&&b.energy==='thermische Energie').map(b=>[b.from,b]));
    const gaps=[],splits=[],energyCells=[{index:0,x:0,thickness:base}];let remaining=1;
    for(let i=0;i<main.length-1;i++){
     const incoming=base*remaining;
     if(i%2&&isConverter(main[i])){
-     const branch=byFrom.get(i),fraction=branch?lossFraction(branch):0,heat=incoming*fraction,outgoing=incoming-heat,x0=(i+1)*cell,radius=Math.min(70,Math.max(52,heat+4));
+     const branch=byFrom.get(i),fraction=branch?lossFraction(branch):0,heat=incoming*fraction,outgoing=incoming-heat,x0=(i+1)*cell,radius=Math.max(heat+2,Math.min(cell-14,Math.max(52,heat+4)));
      gaps.push({fromIndex:i,from:x0,to:x0+cell,incoming,outgoing,heat,branch:!!branch,last:i===main.length-2});
      splits.push({from:i,label:main[i].label,x0,cx:x0+12,radius,innerRadius:radius-heat,top,incoming,outgoing,heat,fraction,branch:!!branch});
      remaining*=1-fraction;
@@ -80513,12 +80515,14 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
   const snapshot=()=>clone(data);
   function setFeedback(text,isBad=false){feedback=text;bad=isBad;const el=host.querySelector('.de-loss-feedback');if(el){el.textContent=text;el.classList.toggle('de-loss-error',isBad);}}
   function commit(){onChange(snapshot());}
+  function measuredLayout(){const css=getComputedStyle(host),minimum=parseFloat(css.getPropertyValue('--de-min-cell'))||0;return flowLayout(data.main,data.branches,{top:24,cell:Math.max(minimum,(host.clientWidth-2)/data.main.length),base:parseFloat(css.getPropertyValue('--de-height'))||66});}
   function render(){
-   const scroll=host.querySelector('.de-losses-scroll')?.scrollLeft||0,layout=flowLayout(data.main,data.branches);
+   host.classList.add('de-editor','de-losses');
+   const scroll=host.querySelector('.de-losses-scroll')?.scrollLeft||0,layout=measuredLayout();
    host.classList.add('de-editor','de-losses');host.dataset.diagramStage='losses';host.classList.toggle('de-readonly',readonly);
    const mainPaths=layout.energyCells.map(c=>`<path class="de-flow-main" data-flow-after="${c.index-1}" d="${arrowPath(c.x,layout.top,c.thickness,layout.cell)}"/>`).join('');
    const heatPaths=layout.splits.filter(s=>s.branch).map(s=>`<path class="de-flow-heat" data-heat-after="${s.from}" d="${heatPath(s)}"/>`).join('');
-   const labels=layout.nodes.map(n=>n.index%2?`<g class="de-flow-device"><rect x="${n.x}" y="${layout.top}" width="${layout.cell}" height="${layout.base}" rx="0"/>${svgLabel(n.token?.label||'Wandler',n.x+layout.cell/2,layout.top+27,'de-flow-device-label')}</g>`:svgLabel(n.token?.label||'Energieform',n.x+layout.cell/2,layout.top+layout.energyCells.find(c=>c.index===n.index).thickness/2,`de-flow-energy-label${layout.energyCells.find(c=>c.index===n.index)?.thickness<34?' de-flow-narrow':''}`,true)).join('');
+   const labels=layout.nodes.map(n=>n.index%2?`<g class="de-flow-device"><rect x="${n.x}" y="${layout.top}" width="${layout.cell}" height="${layout.base}" rx="0"/>${svgLabel(n.token?.label||'Wandler',n.x+layout.cell/2,layout.top+layout.base/2,'de-flow-device-label',true)}</g>`:svgLabel(n.token?.label||'Energieform',n.x+layout.cell/2,layout.top+layout.energyCells.find(c=>c.index===n.index).thickness/2,`de-flow-energy-label${layout.energyCells.find(c=>c.index===n.index)?.thickness<34?' de-flow-narrow':''}`,true)).join('');
    const heatLabels=layout.splits.filter(s=>s.branch).map(s=>svgLabel('thermische Energie',s.x0+layout.cell/2,layout.height-29,'de-flow-heat-label')).join('');
    const targets=readonly?'':layout.splits.map(s=>s.branch?`<div class="de-loss-grip" data-loss-grip="${s.from}" role="slider" tabindex="0" aria-label="Wärmeanteil nach ${esc(s.label)}" aria-orientation="vertical" aria-valuemin="5" aria-valuemax="95" aria-valuenow="${Math.round(s.fraction*100)}" aria-valuetext="${Math.round(s.fraction*100)} Prozent Wärme" style="left:${s.x0+3}px;top:${layout.top+s.outgoing}px" title="Grenze nach oben oder unten ziehen · Pfeiltasten">↕</div>`:`<button type="button" class="de-loss-dock" data-loss-dock="${s.from}" aria-label="Energieform am Ausgang von ${esc(s.label)} zuordnen" style="left:${s.x0+3}px;top:${layout.top+s.incoming/2}px">＋</button>`).join('');
    host.innerHTML=`${readonly?'':`<p class="de-help">Welche Energieform verlässt die Wandler zusätzlich? Wähle eine Energieform und lege sie auf den Ausgangspfeil. Ziehe dann die Grenze zwischen den Bändern senkrecht; es gibt keinen vorgegebenen Wirkungsgrad.</p><details class="de-loss-palette-panel" ${layout.splits.every(s=>s.branch)?'':'open'}><summary>Energieform auswählen</summary><div class="de-loss-palette">${energyGroups.map(([title,forms])=>`<section class="de-loss-category"><h4>${title}</h4><div>${forms.map(form=>`<button type="button" data-loss-energy="${esc(form)}" aria-pressed="${selected===form}">${esc(form)}</button>`).join('')}</div></section>`).join('')}</div></details>`}<p class="de-loss-feedback ${bad?'de-loss-error':''}" role="status" aria-live="polite">${esc(feedback||(!readonly&&selected?'Gewählt: '+selected+' · Ausgangspfeil antippen oder dorthin ziehen.':''))}</p><div class="de-losses-scroll" aria-label="Energiefluss mit Anteilen; horizontal verschiebbar"><div class="de-sankey-wrap" style="width:${layout.width}px;height:${layout.height}px"><svg class="de-sankey-svg" width="${layout.width}" height="${layout.height}" viewBox="0 0 ${layout.width} ${layout.height}" role="img" aria-label="Energiefluss: Die Bandbreite zeigt den verbleibenden Anteil von links nach rechts"><rect class="de-flow-background" width="${layout.width}" height="${layout.height}" rx="12"/>${mainPaths}${heatPaths}${labels}${heatLabels}</svg>${targets}</div></div><p class="de-loss-note">Die Breiten zeigen gewählte Anteile im Modell, keine gemessenen Wirkungsgrade. Am Gewicht wird Lageenergie gespeichert; dort zweigt keine Wärme ab.</p>`;
@@ -80526,7 +80530,7 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
   }
   function place(from,form=selected){const target=flowLayout(data.main,data.branches).splits.find(s=>s.from===from);if(!target)return false;if(form!=='thermische Energie'){selected=null;render();setFeedback('An diesem Ausgang wird thermische Energie als zusätzlicher Anteil gesucht. Wähle die passende Energieform.',true);return false;}if(!data.branches.some(b=>b.from===from)){data.branches.push({from,energy:'thermische Energie',fraction:.25});selected=null;feedback='✓ Thermische Energie am Ausgang ergänzt. Ziehe die Grenze, um die Anteile zu verändern.';bad=false;render();commit();}else{selected=null;render();setFeedback('Dieser Ausgang hat bereits einen thermischen Anteil. Ziehe seine Grenze, um den Anteil zu ändern.');}return true;}
   function changeFraction(from,value,notify=false){const b=data.branches.find(b=>b.from===from);if(!b)return;const fraction=Math.round(Math.max(.05,Math.min(.95,value))*100)/100;if(b.fraction===fraction)return;b.fraction=fraction;render();if(notify)commit();}
-  function fractionAt(from,clientY){const s=flowLayout(data.main,data.branches).splits.find(s=>s.from===from),r=host.querySelector('.de-sankey-svg').getBoundingClientRect();return 1-(clientY-r.top-s.top)/s.incoming;}
+  function fractionAt(from,clientY){const s=measuredLayout().splits.find(s=>s.from===from),r=host.querySelector('.de-sankey-svg').getBoundingClientRect();return 1-(clientY-r.top-s.top)/s.incoming;}
   function clearGhost(){ghost?.remove();ghost=null;hover?.classList.remove('de-loss-hover');hover=null;}
   function click(e){if(readonly||suppressClick)return;const button=e.target.closest('button');if(!button||!host.contains(button))return;if(button.dataset.lossEnergy){selected=button.dataset.lossEnergy;feedback='';bad=false;render();return;}if(button.dataset.lossDock!==undefined){if(!selected){setFeedback('Wähle zuerst eine Energieform aus der Palette.');return;}place(+button.dataset.lossDock);}}
   function down(e){if(readonly||e.button>0)return;const handle=e.target.closest('[data-loss-grip]');if(handle&&host.contains(handle)){e.preventDefault();grip={id:e.pointerId,from:+handle.dataset.lossGrip,changed:false};host.setPointerCapture?.(e.pointerId);return;}const token=e.target.closest('[data-loss-energy]');if(token&&host.contains(token)){drag={id:e.pointerId,x:e.clientX,y:e.clientY,form:token.dataset.lossEnergy,moved:false,capture:token};token.setPointerCapture?.(e.pointerId);}}
@@ -80536,7 +80540,8 @@ return {palette,experiments,definitions,fromLab,checkBuild,checkDiagram,create};
   function key(e){if(e.key==='Escape'){selected=null;feedback='';bad=false;render();return;}const handle=e.target.closest('[data-loss-grip]');if(!handle||readonly)return;const from=+handle.dataset.lossGrip,branch=data.branches.find(b=>b.from===from);if(!branch)return;let f=lossFraction(branch);if(e.key==='ArrowUp')f+=.025;else if(e.key==='ArrowDown')f-=.025;else if(e.key==='Home')f=.05;else if(e.key==='End')f=.95;else return;e.preventDefault();changeFraction(from,f,true);host.querySelector(`[data-loss-grip="${from}"]`)?.focus({preventScroll:true});}
   function nativeDrag(e){e.preventDefault();}
   host.addEventListener('click',click);host.addEventListener('pointerdown',down);host.addEventListener('pointermove',move);host.addEventListener('pointerup',up);host.addEventListener('pointercancel',cancel);host.addEventListener('keydown',key);host.addEventListener('dragstart',nativeDrag);render();
-  return {getValue:snapshot,destroy(){cancel();clearTimeout(suppressTimer);host.removeEventListener('click',click);host.removeEventListener('pointerdown',down);host.removeEventListener('pointermove',move);host.removeEventListener('pointerup',up);host.removeEventListener('pointercancel',cancel);host.removeEventListener('keydown',key);host.removeEventListener('dragstart',nativeDrag);}};
+  let lastWidth=host.clientWidth;const resize=new ResizeObserver(()=>{if(host.clientWidth!==lastWidth){lastWidth=host.clientWidth;render();}});resize.observe(host);
+  return {getValue:snapshot,destroy(){resize.disconnect();cancel();clearTimeout(suppressTimer);host.removeEventListener('click',click);host.removeEventListener('pointerdown',down);host.removeEventListener('pointermove',move);host.removeEventListener('pointerup',up);host.removeEventListener('pointercancel',cancel);host.removeEventListener('keydown',key);host.removeEventListener('dragstart',nativeDrag);}};
  }
  root.DynamotDiagram={mount,groups,flowLayout};
 })(typeof globalThis==='object'?globalThis:this);
