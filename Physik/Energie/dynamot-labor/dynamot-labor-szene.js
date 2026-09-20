@@ -10,7 +10,7 @@ export const LAB_SLOTS=[
 
 // A second static scene shares the exact device/cable renderer, but has no pupil
 // model, animation loop or storage bridge. Only its camera is interactive.
-export function createLabReference(container,experiment){
+export function referenceBuild(experiment){
  const motor=(id,slot)=>({id,type:'motor',slot,omega:0,angle:0,crank:false,weight:false,hand:false,rate:15,mass:.5,height:1.2});
  const a=motor(1,'M1'),b=motor(2,['v1','v4'].includes(experiment)?'L1':'M2');
  if(!['v1','v4','v2','v3'].includes(experiment))throw Error('Unbekannte Versuchsvorlage');
@@ -19,6 +19,10 @@ export function createLabReference(container,experiment){
  // Motor pin 0 is at local +X, but lamp pin 0 is at local -X.
  // Connect matching physical sides, not matching colors, for the lamp examples.
  const state={devices:[a,b],wires:[0,1].map(pin=>({a:1,ap:pin,b:2,bp:b.type==='lamp'?1-pin:pin})),simulationTime:0,allowedSlots:['M1',b.slot],buildLocked:true};
+ return state;
+}
+export function createLabReference(container,experiment){
+ const state=referenceBuild(experiment),b=state.devices[1];
  const stage=document.createElement('div');stage.className='reference-canvas';container.append(stage);
  const view=createLabScene(stage),lamps=b.type==='lamp';
  view.rebuild(state);

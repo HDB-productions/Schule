@@ -133,7 +133,15 @@ function create(options={}){
  function answer(value,experiment){const d=current(experiment);if(d?.kind!=='choice'||!value||typeof value!=='object')return {accepted:false,correct:false};const feedback={};let accepted=true;for(const q of d.questions){feedback[q.id]=value[q.id]===q.answer;if(!q.options.includes(value[q.id]))accepted=false;}if(!accepted)return {accepted:false,correct:false,feedback};answers[d.id]=copy(value);const correct=Object.values(feedback).every(Boolean);if(correct)finish(d);return {accepted:true,correct,feedback};}
  function submitDiagram(graph,experiment){const d=current(experiment);if(d?.kind!=='diagram')return {accepted:false,correct:false};const correct=checkDiagram(d.experiment,graph);if(correct){diagrams[d.id]=copy(graph);finish(d);}return {accepted:true,correct};}
  function progress(){return {completed:completed.length,total:defs.length,done:completed.length===defs.length,points:defs.filter(d=>completed.includes(d.id)).reduce((n,d)=>n+d.points,0),maxPoints:defs.reduce((n,d)=>n+d.points,0)};}
- return {current:experiment=>copy(current(experiment)),observe,answer,submitDiagram,progress,
+ function resetExperiment(id){
+  const own=new Set(defs.filter(d=>d.experiment===id).map(d=>d.id));
+  if(!own.size)throw RangeError('Unknown DynaMot experiment');
+  completed=completed.filter(step=>!own.has(step));
+  for(const records of [answers,diagrams,evidence])for(const step of own)delete records[step];
+  if(activeExperiment===id){samples=[];lastTime=null;observedStep=null;activeExperiment=null;}
+  return progress();
+ }
+ return {current:experiment=>copy(current(experiment)),observe,answer,submitDiagram,progress,resetExperiment,
   results:()=>copy({progress:progress(),experiments:experiments.map(e=>({...e,steps:defs.filter(d=>d.experiment===e.id).map(d=>({...d,completed:completed.includes(d.id),response:answers[d.id]||diagrams[d.id]||null}))}))}),
   serialize:()=>copy({version:2,signature,completed,answers,diagrams,evidence}),
   activity:experiment=>copy(evidence[current(experiment)?.id]||{})
