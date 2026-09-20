@@ -1,5 +1,6 @@
 <!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DynaMot · Experimentiertisch</title><style>
 #energyLab{font:16px system-ui,sans-serif;color:#193c43;background:#f2f6f2;padding:16px;border-radius:18px;max-width:1400px;margin:auto}#energyLab *{box-sizing:border-box}#energyLab button,#energyLab input{font:inherit}#energyLab button{min-height:44px;padding:8px 12px;background:white;border:1px solid #afc6b9;border-radius:9px;color:inherit;cursor:pointer}#energyLab button:hover{background:#e0efe5}#energyLab button:focus-visible,#energyLab input:focus-visible{outline:3px solid #cf8b11}#energyLab .primary{background:#087e70;color:white}#energyLab .active{box-shadow:0 0 0 3px #e4ad45}#energyLab header,#energyLab .tools,#energyLab .views,#energyLab .slots{display:flex;gap:8px;align-items:center;flex-wrap:wrap}#energyLab header{justify-content:space-between;flex-wrap:nowrap}#energyLab header>div{min-width:0}#energyLab .home-logo{display:inline-flex;flex:0 0 52px;margin-left:auto;border-radius:12px}#energyLab .home-logo img{display:block;width:52px;height:52px;object-fit:cover;border-radius:12px}#energyLab .home-logo:focus-visible{outline:3px solid #cf8b11;outline-offset:3px}#energyLab h1{font-size:25px;margin:0}#energyLab p{margin:8px 0}#energyLab .sub{font-size:14px;color:#506b60}#energyLab .tools{margin:12px 0}#energyLab [data-tool]{touch-action:none}#energyLab .notice{min-height:30px;padding:5px 0}#energyLab .layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:12px}#energyLab .stage{height:620px;border:1px solid #bdcfc3;border-radius:14px;overflow:hidden;background:#eaf1ed}#energyLab .stage canvas{outline-offset:-4px}#energyLab aside{background:white;border:1px solid #c3d4c9;border-radius:14px;padding:14px}#energyLab aside h2{font-size:20px;margin:0 0 10px}#energyLab aside button{margin:5px 0}#energyLab label{display:block;margin:10px 0 3px}#energyLab input[type=range]{width:100%;min-height:35px}#energyLab .views{margin:8px 0}#energyLab .slots{margin:10px 0}#energyLab .slots button{font-size:14px}#energyLab .connections button{display:block;width:100%;font-size:14px;text-align:left}#energyLab .storage{font-size:13px;color:#506b60}#energyLab details{margin-top:12px}#energyLab summary{min-height:42px;padding:9px 0;cursor:pointer}#energyLab .remove{color:#9a322a}#energyLab [hidden]{display:none!important}@media(max-width:850px){#energyLab .layout{grid-template-columns:1fr}#energyLab .stage{height:480px}#energyLab{padding:10px}}@media(max-width:450px){#energyLab .stage{height:400px}#energyLab h1{font-size:22px}}
+#energyLab .weight-height-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}#energyLab .weight-height-actions button{padding:6px 3px;font-size:12px;line-height:1.2;overflow-wrap:anywhere}
 #energyLab .learn{margin-top:24px;padding:22px;background:#fff;border:1px solid #b9cdc2;border-radius:16px;scroll-margin-top:12px}
 #energyLab .learn.learn-expanded{position:fixed;inset:12px;z-index:100;width:auto;height:auto;max-height:calc(100dvh - 24px);margin:0;overflow:auto;box-shadow:0 0 0 30px #193c4366,0 8px 35px #193c4355}
 #energyLab [data-diagram-expand]{margin:4px 0 10px;min-height:44px}
@@ -211,8 +212,8 @@
 @media(max-width:450px){#energyLab .energy-legend:not([hidden])~.stage{height:440px}#energyLab .flow-toggles .electron-toggle{font-size:11px}#energyLab .stage-toolbar{grid-template-columns:minmax(0,1.3fr) auto minmax(0,1fr)}}
 
 </style></head><body><main id="energyLab" data-edulo-widget-key="DYNAMOT_LAB"><header><div><h1>DynaMot · Experimentiertisch</h1><p class="sub">Freien Platz antippen · Gerät hinzufügen · Buchsen verbinden</p></div><a class="home-logo" href="../../../index.html" aria-label="Zur Schul-Startseite" title="Zur Schul-Startseite"><img src="../../../assets/hdb-youtube-avatar.jpg" alt="HDB" width="52" height="52"></a></header>
-<p class="notice" role="status" aria-live="polite">Tippe einen freien Platz an, um ein Gerät hinzuzufügen.</p><div class="layout"><section><div class="energy-legend" hidden aria-label="Legende Energiepakete"><div class="energy-key"><span><b class="electric">E</b> Elektrische Energie</span><span><b class="heat">E</b> Thermische Energie</span><span><b class="light">E</b> Lichtenergie</span><span><b class="potential">E</b> Lageenergie</span><span><b class="kinetic">E</b> Kinetische Energie</span></div><p>E-Pakete zeigen den Energietransport. Größere Fläche = größerer Anteil. Am Gewicht zeigt das violette E den Lageenergie-Vorrat.</p><small>Schematisch: keine Elektronen. Glühlampe: viel Wärme, wenig Licht; keine gemessenen Wirkungsgrade.</small></div><div class="stage"><div class="views"><span class="sub">Tisch drehen: ziehen</span><button data-view="front">Vorne</button><button data-view="back">Buchsen von hinten</button><button data-view="default">Übersicht</button><button data-action="zoom-in" aria-label="Vergrößern">＋</button><button data-action="zoom-out" aria-label="Verkleinern">−</button></div><div class="device-panel" hidden><button data-action="close-device" class="device-close" aria-label="Geräteeinstellungen schließen">×</button><div class="inspector"></div></div><div class="stage-toolbar"><div class="flow-toggles"><label class="electron-toggle"><input type="checkbox" data-electron-flow> Elektronenfluss anzeigen</label><label class="electron-toggle"><input type="checkbox" data-energy-packets> Energiepakete anzeigen</label></div><button class="primary stage-run" data-action="run">▶ Start</button><button data-action="invert-polarity" hidden>Polung umkehren</button><div class="build-reset"><button data-action="reset-build">Aufbau zurücksetzen</button><button data-action="undo-build" hidden>Rückgängig</button></div></div><div class="wire-selection" hidden role="group" aria-label="Ausgewähltes Kabel"><span class="wire-selection-label"></span><button data-action="remove-wire" class="remove">Dieses Kabel entfernen</button><button data-action="cancel-wire">Abwählen</button></div></div></section></div>
-<details><summary>Bedienung und Modell</summary><p>Es gibt drei DynaMot-Plätze an der Tischkante und vier Lampenplätze auf dem Tisch. Einen freien markierten Platz antippen und im kleinen Fenster das passende Gerät hinzufügen. Ein Gerät auswählen, „Umsetzen“ wählen und den neuen Platz antippen.</p><p>Zum Verbinden die sichtbaren Buchsen direkt an den Geräten antippen: erst die eine, dann die andere. Die Ansicht „Buchsen von hinten“ und die Zoom-Tasten helfen. Die Buchsen lassen sich mehrfach verbinden. Kabel entfernen: ein Kabel im Bild antippen, dann „Dieses Kabel entfernen“ wählen. Eine begonnene Verbindung lässt sich mit „Begonnenes Kabel abbrechen“, Escape oder erneutem Antippen derselben Buchse abbrechen.</p><p>Einen DynaMot antippen und im kleinen Fenster Kurbel oder Seilrolle anbringen. Beide ersetzen einander. Der Umbau hält die Welle an. Beim Kurbeln hält eine ideale Hand die gewählte Drehzahl; eine größere Last verlangt mehr Handmoment. Ohne Kurbeln bestimmt die Last die Bewegung. Mehr Lampen wirken je nach Schaltung und Antrieb unterschiedlich.</p><p>Modellwerte, keine Messwerte des realen DynaMot: Gegen-EMK, Strom, Reibung, Trägheit und Gewichtskraft bestimmen die Bewegung. Kleine Kabelwiderstände von 0,05 Ω, konstante Gerätewiderstände, keine Überlastschäden. „Gewicht hochsetzen“ führt von Hand Lageenergie zu. Beim Wiederöffnen ist das Labor pausiert. Die vier Lernversuche prüfen Aufbau und Durchführung. Im Tablet-Querformat stehen Tisch und aktueller Auftrag nebeneinander.</p><p>„Elektronenfluss anzeigen“ blendet blaue Ladungsmarkierungen ein. Sie laufen entgegen der technischen Stromrichtung durch die Kabel, die Lampenanschlüsse und die Glühwendel. Ohne Strom bewegen sich keine Ladungsmarkierungen. Die sichtbaren Leitungen im Lampensockel sind eine schematische Durchsicht. Die Bewegung ist veranschaulicht; Elektronen werden nicht zu Licht. Der sichtbare Lampenglanz ist für den Unterricht verstärkt und folgt der berechneten Leistung.</p><p>„Energiepakete anzeigen“ ist unabhängig vom Elektronenfluss. Blaue E-Pakete zeigen Energie vom Generator zum Verbraucher entlang beider Kabel. An der Glühwendel teilt sich die Energie in Licht und Wärme. Die Flächen zeigen Anteile: Für diese Veranschaulichung sind 10 % Licht und 90 % Wärme gewählt; das sind keine Messwerte. Auch der DynaMot gibt Wärme ab. Beim Sinken nimmt der violette Lageenergie-Vorrat ab, beim Heben nimmt er zu. Die Bewegung und Größen sind schematisch; elektrische Energie wird über das elektromagnetische Feld übertragen. Die Pakete sind keine materiellen Teilchen und keine Elektronen.</p><p>„Aufbau zurücksetzen“ leert nur Geräte und Kabel. Aufgaben, Punkte und Ergebnisse bleiben erhalten; die letzte Rücksetzung lässt sich unmittelbar rückgängig machen.</p></details><p class="storage" role="status"></p><button data-action="retry" hidden>Speichern erneut verbinden</button>
+<p class="notice" role="status" aria-live="polite">Tippe einen freien Platz an, um ein Gerät hinzuzufügen.</p><div class="layout"><section><div class="energy-legend" hidden aria-label="Legende Energiepakete"><div class="energy-key"><span><b class="electric">E</b> Elektrische Energie</span><span><b class="heat">E</b> Thermische Energie</span><span><b class="light">E</b> Lichtenergie</span><span><b class="potential">E</b> Lageenergie</span><span><b class="kinetic">E</b> Kinetische Energie</span></div><p>E-Pakete zeigen den Energietransport schematisch. Ihre Symbole wachsen und schrumpfen mit dem dargestellten Energieanteil. Am Gewicht zeigt das violette E den Lageenergie-Vorrat: Beim Heben wird es größer, beim Sinken kleiner.</p><small>Schematisch: keine Elektronen. Glühlampe: viel Wärme, wenig Licht; keine gemessenen Wirkungsgrade.</small></div><div class="stage"><div class="views"><span class="sub">Tisch drehen: ziehen</span><button data-view="front">Vorne</button><button data-view="back">Buchsen von hinten</button><button data-view="default">Übersicht</button><button data-action="zoom-in" aria-label="Vergrößern">＋</button><button data-action="zoom-out" aria-label="Verkleinern">−</button></div><div class="device-panel" hidden><button data-action="close-device" class="device-close" aria-label="Geräteeinstellungen schließen">×</button><div class="inspector"></div></div><div class="stage-toolbar"><div class="flow-toggles"><label class="electron-toggle"><input type="checkbox" data-electron-flow> Elektronenfluss anzeigen</label><label class="electron-toggle"><input type="checkbox" data-energy-packets> Energiepakete anzeigen</label></div><button class="primary stage-run" data-action="run">▶ Start</button><button data-action="invert-polarity" hidden>Polung umkehren</button><div class="build-reset"><button data-action="reset-build">Aufbau zurücksetzen</button><button data-action="undo-build" hidden>Rückgängig</button></div></div><div class="wire-selection" hidden role="group" aria-label="Ausgewähltes Kabel"><span class="wire-selection-label"></span><button data-action="remove-wire" class="remove">Dieses Kabel entfernen</button><button data-action="cancel-wire">Abwählen</button></div></div></section></div>
+<details><summary>Bedienung und Modell</summary><p>Es gibt drei DynaMot-Plätze an der Tischkante und vier Lampenplätze auf dem Tisch. Einen freien markierten Platz antippen und im kleinen Fenster das passende Gerät hinzufügen. Ein Gerät auswählen, „Umsetzen“ wählen und den neuen Platz antippen.</p><p>Zum Verbinden die sichtbaren Buchsen direkt an den Geräten antippen: erst die eine, dann die andere. Die Ansicht „Buchsen von hinten“ und die Zoom-Tasten helfen. Die Buchsen lassen sich mehrfach verbinden. Kabel entfernen: ein Kabel im Bild antippen, dann „Dieses Kabel entfernen“ wählen. Eine begonnene Verbindung lässt sich mit „Begonnenes Kabel abbrechen“, Escape oder erneutem Antippen derselben Buchse abbrechen.</p><p>Einen DynaMot antippen und im kleinen Fenster Kurbel oder Seilrolle anbringen. Beide ersetzen einander. Der Umbau hält die Welle an. Beim Kurbeln hält eine ideale Hand die gewählte Drehzahl; eine größere Last verlangt mehr Handmoment. Ohne Kurbeln bestimmt die Last die Bewegung. Mehr Lampen wirken je nach Schaltung und Antrieb unterschiedlich.</p><p>Modellwerte, keine Messwerte des realen DynaMot: Gegen-EMK, Strom, Reibung, Trägheit und Gewichtskraft bestimmen die Bewegung. Kleine Kabelwiderstände von 0,05 Ω, konstante Gerätewiderstände, keine Überlastschäden. „Gewicht hochsetzen“ führt von Hand Lageenergie zu. „Gewicht heruntersetzen“ nimmt von Hand Lageenergie weg und hält die Welle an; danach kann das Gewicht erneut gehoben werden. Beim Wiederöffnen ist das Labor pausiert. Die vier Lernversuche prüfen Aufbau und Durchführung. Im Tablet-Querformat stehen Tisch und aktueller Auftrag nebeneinander.</p><p>„Elektronenfluss anzeigen“ blendet blaue Ladungsmarkierungen ein. Sie laufen entgegen der technischen Stromrichtung durch die Kabel, die Lampenanschlüsse und die Glühwendel. Ohne Strom bewegen sich keine Ladungsmarkierungen. Die sichtbaren Leitungen im Lampensockel sind eine schematische Durchsicht. Die Bewegung ist veranschaulicht; Elektronen werden nicht zu Licht. Der sichtbare Lampenglanz ist für den Unterricht verstärkt und folgt der berechneten Leistung.</p><p>„Energiepakete anzeigen“ ist unabhängig vom Elektronenfluss. Blaue E-Pakete zeigen Energie vom Generator zum Verbraucher entlang beider Kabel. An der Glühwendel teilt sich die Energie in Licht und Wärme. Die Flächen zeigen Anteile: Für diese Veranschaulichung sind 10 % Licht und 90 % Wärme gewählt; das sind keine Messwerte. Auch der DynaMot gibt Wärme ab. Beim Sinken nimmt der violette Lageenergie-Vorrat ab, beim Heben nimmt er zu. Die Bewegung und die wachsenden oder schrumpfenden E-Symbole sind schematisch; elektrische Energie wird über das elektromagnetische Feld übertragen. Die Pakete sind keine materiellen Teilchen und keine Elektronen.</p><p>„Aufbau zurücksetzen“ leert nur Geräte und Kabel. Aufgaben, Punkte und Ergebnisse bleiben erhalten; die letzte Rücksetzung lässt sich unmittelbar rückgängig machen.</p></details><p class="storage" role="status"></p><button data-action="retry" hidden>Speichern erneut verbinden</button>
 <script>(()=>{'use strict';const root=document.currentScript?.closest('#energyLab')||[...document.querySelectorAll('#energyLab')].reverse().find(el=>!el.dataset.labInitialized);if(!root)return;root.dataset.labInitialized='1';const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
 /**
  * Pure, schematic energy-flow plan for the DynaMot laboratory.
@@ -434,6 +435,284 @@
   const API = Object.freeze({ plan, weightStockPackets, createWeightPacketTracker, WEIGHT_STOCK_SLICES, WEIGHT_TRAVEL_SECONDS, COLORS, LIGHT_FRACTION, MODEL });
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   if (root) root.DynamotEnergy = API;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+/** Schematic, finite-Joule packet pipeline. No DOM, Three.js or physics mutation. */
+(function (root) {
+  'use strict';
+  const INTERVAL = 1.2, TRAVEL = 1.2, SOURCE_INTERVAL = INTERVAL, STEP = 0.05, EPS = 1e-8;
+  const finite = x => Number.isFinite(x) ? x : 0;
+  const positive = x => Math.max(0, finite(x));
+  const motor = id => 'motor:' + id, weight = id => 'weight:' + id, rotor = id => 'rotor:' + id;
+  const stationId = station => Number(station.slice(station.indexOf(':') + 1));
+
+  function create() {
+    let lastTime = null, previous = null, topology = null, serial = 0;
+    let initialJ = 0, injectedJ = 0, deliveredJ = 0;
+    const stocks = new Map(), pending = new Map(), liftCredits = new Map(), kineticCredits = new Map(), reservedLift = new Map(), queues = new Map(), travels = [], batches = [];
+    const id = () => ++serial;
+    const stockKey = (kind, device) => kind + ':' + device;
+    const stockOf = (kind, device) => positive(stocks.get(stockKey(kind, device))?.joules);
+    const setStock = (kind, device, value) => {
+      const item = stocks.get(stockKey(kind, device));
+      if (item) item.joules = positive(value);
+    };
+    const topologyOf = (plan, state) => JSON.stringify([
+      (plan?.devices || []).map(d => [d.id, d.type]),
+      (state?.wires || []).map(w => [w.a, w.ap, w.b, w.bp])
+    ]);
+    const recipeOf = (plan, state) => ({
+      devices: (plan?.devices || []).map(d => ({ ...d, weight: state.devices?.find(raw => raw.id === d.id)?.weight === true,
+        crank: state.devices?.find(raw => raw.id === d.id)?.crank === true })),
+      wires: (plan?.wires || []).map(w => ({ ...w }))
+    });
+    function reset() {
+      lastTime = null; previous = null; topology = null; serial = 0;
+      initialJ = injectedJ = deliveredJ = 0;
+      stocks.clear(); pending.clear(); liftCredits.clear(); kineticCredits.clear(); reservedLift.clear(); queues.clear(); travels.length = 0; batches.length = 0;
+    }
+    function initialize(plan, state, time) {
+      reset(); lastTime = time; topology = topologyOf(plan, state); previous = recipeOf(plan, state);
+      for (const d of plan.devices || []) {
+        if (d.type !== 'motor') continue;
+        const raw = state.devices?.find(x => x.id === d.id);
+        if (raw?.weight) stocks.set(stockKey('potential-stock', d.id), { device: d.id, kind: 'potential-stock', joules: positive(d.potentialJ), mass: positive(raw.mass) });
+        stocks.set(stockKey('kinetic-stock', d.id), { device: d.id, kind: 'kinetic-stock', joules: positive(d.kineticJ), mass: positive(raw?.mass) });
+      }
+      initialJ = [...stocks.values()].reduce((sum, s) => sum + s.joules, 0);
+    }
+    function travel(kind, form, joules, from, to, device, recipe, extra = {}) {
+      if (!(joules > EPS)) return;
+      travels.push({ id: id(), kind, form, device, from, to, station: to, wire: extra.wire,
+        stage: 'travel', progress: 0, joules, outputIndex: extra.outputIndex, recipe });
+    }
+    function source(kind, device, joules, recipe) {
+      if (!(joules > EPS)) return 0;
+      if (kind === 'hand') {
+        travel('mechanical-in', 'kinetic', joules, 'hand:' + device, motor(device), device, recipe);
+        return joules;
+      } else if (kind === 'fall') {
+        const amount = Math.min(joules, stockOf('potential-stock', device));
+        if (!(amount > EPS)) return 0;
+        setStock('potential-stock', device, stockOf('potential-stock', device) - amount);
+        enqueueBatch(weight(device), [{ id: id(), kind: 'potential', form: 'potential', device, joules: amount, recipe }]);
+        return amount;
+      } else if (kind === 'rotor') {
+        const amount = Math.min(joules, stockOf('kinetic-stock', device));
+        if (!(amount > EPS)) return 0;
+        setStock('kinetic-stock', device, stockOf('kinetic-stock', device) - amount);
+        travel('kinetic', 'kinetic', amount, rotor(device), motor(device), device, recipe);
+        return amount;
+      }
+      return 0;
+    }
+    function pendingSource(kind, device, amount, dt, recipe, stop) {
+      const key = kind + ':' + device;
+      let p = pending.get(key);
+      if (!p) { p = { kind, device, joules: 0, age: 0, recipe }; pending.set(key, p); }
+      if (p.joules <= EPS && amount > EPS) p.recipe = recipe;
+      p.joules += positive(amount);
+      if (amount > EPS || p.joules > EPS) p.age += dt;
+      if (p.joules > EPS && (p.age >= SOURCE_INTERVAL - EPS || stop)) {
+        const emitted = source(kind, device, p.joules, p.recipe);
+        p.joules = Math.max(0, p.joules - emitted);
+        p.age = p.joules > EPS ? SOURCE_INTERVAL : 0;
+      }
+    }
+    function outputsFor(station, input) {
+      const recipe = input.recipe || { devices: [], wires: [] }, device = stationId(station);
+      if (station.startsWith('weight:')) {
+        if (input.kind === 'potential') return [{ kind: 'fall', form: 'kinetic', to: motor(device), weight: 1 }];
+        if (input.kind === 'lift') return [{ kind: 'potential', form: 'potential', to: weight(device), store: 'potential-stock', weight: 1 }];
+      }
+      if (station.startsWith('lamp:')) {
+        const d = recipe.devices.find(x => x.id === device), light = positive(d?.light), heat = positive(d?.heat);
+        return [{ kind: 'light', form: 'light', to: 'environment:' + device, weight: light },
+          { kind: 'heat', form: 'thermal', to: 'environment:' + device, weight: heat }];
+      }
+      if (!station.startsWith('motor:')) return [{ kind: 'heat', form: 'thermal', to: 'environment:' + device, weight: 1 }];
+      const d = recipe.devices.find(x => x.id === device);
+      if (!d) return [{ kind: 'heat', form: 'thermal', to: 'environment:' + device, weight: 1 }];
+      const out = [], wires = recipe.wires.filter(w => w.from === device && w.power > EPS);
+      const wireSum = wires.reduce((sum, w) => sum + w.power, 0);
+      for (const w of wires) {
+        const receiver = recipe.devices.find(x => x.id === w.to);
+        if (!receiver) continue;
+        out.push({ kind: 'electrical', form: 'electrical', to: receiver.type + ':' + receiver.id,
+          wire: w.index, weight: positive(d.electricalOut) * w.power / wireSum });
+      }
+      out.push({ kind: 'heat', form: 'thermal', to: 'environment:' + device, weight: positive(d.heat) });
+      if (d.weight && d.mechanicalOut > EPS) out.push({ kind: 'lift', form: 'kinetic', to: weight(device), weight: d.mechanicalOut });
+      else if (d.crank && d.mechanicalOut > EPS) out.push({ kind: 'mechanical-out', form: 'kinetic', to: 'hand:' + device, weight: d.mechanicalOut });
+      if (d.kineticPower > EPS) out.push({ kind: 'kinetic', form: 'kinetic', to: rotor(device), store: 'kinetic-stock', weight: d.kineticPower });
+      return out;
+    }
+    function enqueueBatch(station, inputs) {
+      if (batches.some(b => b.station === station)) {
+        const waiting = queues.get(station) || [];
+        waiting.push(...inputs); queues.set(station, waiting);
+      } else makeBatch(station, inputs);
+    }
+    function makeBatch(station, inputs) {
+      if (!inputs.length) return;
+      const output = [];
+      for (const input of inputs) {
+        let choices = outputsFor(station, input).filter(x => x.weight > EPS);
+        if (!choices.length) choices = [{ kind: 'heat', form: 'thermal', to: 'environment:' + stationId(station), weight: 1 }];
+        const total = choices.reduce((sum, x) => sum + x.weight, 0);
+        let excessStoreJ = 0;
+        for (const choice of choices) {
+          let amount = input.joules * choice.weight / total;
+          if (choice.kind === 'lift') {
+            const target = stationId(choice.to), mass = positive(stocks.get(stockKey('potential-stock', target))?.mass);
+            const capacity = mass * 9.81 * 1.5;
+            const room = Math.max(0, capacity - stockOf('potential-stock', target) - positive(reservedLift.get(target)));
+            const credit = positive(liftCredits.get(target));
+            const allowed = Math.min(amount, room, credit);
+            excessStoreJ += amount - allowed; amount = allowed;
+            liftCredits.set(target, Math.max(0, credit - allowed));
+            reservedLift.set(target, positive(reservedLift.get(target)) + amount);
+          } else if (choice.store === 'kinetic-stock') {
+            const device = stationId(station), credit = positive(kineticCredits.get(device));
+            const allowed = Math.min(amount, credit);
+            excessStoreJ += amount - allowed; amount = allowed;
+            kineticCredits.set(device, Math.max(0, credit - allowed));
+          }
+          if (amount > EPS) output.push({ ...choice, joules: amount, recipe: input.recipe, input: input.id });
+        }
+        if (excessStoreJ > EPS) {
+          const alternatives = choices.filter(x => x.kind !== 'lift' && !x.store && x.weight > EPS);
+          const alternativesTotal = alternatives.reduce((sum, x) => sum + x.weight, 0);
+          if (alternativesTotal > EPS) for (const choice of alternatives) {
+            const existing = output.find(o => o.input === input.id && o.kind === choice.kind && o.to === choice.to && o.wire === choice.wire);
+            if (existing) existing.joules += excessStoreJ * choice.weight / alternativesTotal;
+            else output.push({ ...choice, joules: excessStoreJ * choice.weight / alternativesTotal, recipe: input.recipe, input: input.id });
+          } else {
+            // A physically impossible isolated recipe remains visible until credit arrives.
+            const waiting = queues.get(station) || [];
+            waiting.push({ ...input, id: id(), joules: excessStoreJ }); queues.set(station, waiting);
+            input.joules -= excessStoreJ;
+          }
+        }
+      }
+      batches.push({ id: id(), station, inputs, output, progress: 0 });
+    }
+    function advance(dt, recipe, actual) {
+      const complete = [];
+      for (const b of batches) {
+        const old = b.progress; b.progress = Math.min(1, old + dt / INTERVAL);
+        const fraction = b.progress - old;
+        for (const o of b.output) if (o.store) {
+          const device = stationId(o.to), wanted = o.joules * fraction;
+          const limit = o.store === 'potential-stock' ?
+            positive(stocks.get(stockKey('potential-stock', device))?.mass) * 9.81 * 1.5 : Infinity;
+          const added = Math.min(wanted, Math.max(0, limit - stockOf(o.store, device)));
+          setStock(o.store, device, stockOf(o.store, device) + added);
+          if (o.store === 'potential-stock') reservedLift.set(device, Math.max(0, positive(reservedLift.get(device)) - wanted));
+          // Capacity was reserved at motor conversion; only a topology/reset can
+          // invalidate that reservation, and those clear the whole pipeline.
+          if (o.store === 'potential-stock' && wanted - added > 1e-6) throw new RangeError('Weight packet reservation exceeded capacity');
+          o.appliedJ = positive(o.appliedJ) + added;
+        }
+        if (b.progress >= 1 - EPS) complete.push(b);
+      }
+      for (const b of complete) {
+        batches.splice(batches.indexOf(b), 1);
+        b.output.forEach((o, outputIndex) => {
+          if (o.store) return;
+          travel(o.kind, o.form, o.joules, b.station, o.to, stationId(b.station), o.recipe,
+            { wire: o.wire, outputIndex });
+        });
+        const waiting = queues.get(b.station);
+        if (waiting?.length) { queues.delete(b.station); makeBatch(b.station, waiting); }
+      }
+      const arrivals = new Map();
+      for (const p of [...travels]) {
+        p.progress = Math.min(1, p.progress + dt / TRAVEL);
+        if (p.progress < 1 - EPS) continue;
+        travels.splice(travels.indexOf(p), 1);
+        if (p.to.startsWith('environment:') || p.to.startsWith('hand:')) { deliveredJ += p.joules; continue; }
+        const list = arrivals.get(p.to) || [];
+        list.push({ id: p.id, kind: p.kind, form: p.form, device: stationId(p.to), joules: p.joules, recipe: p.recipe });
+        arrivals.set(p.to, list);
+      }
+      for (const [station, inputs] of arrivals) enqueueBatch(station, inputs);
+    }
+    function snapshot() {
+      const packets = travels.map(p => ({ id: p.id, kind: p.kind, form: p.form, device: p.device,
+        from: p.from, to: p.to, wire: p.wire, station: p.station, stage: 'travel',
+        progress: p.progress, joules: p.joules, outputIndex: p.outputIndex }));
+      for (const b of batches) {
+        b.inputs.forEach(p => packets.push({ id: p.id, kind: p.kind, form: p.form, device: p.device,
+          station: b.station, stage: 'input', progress: b.progress, joules: p.joules * (1 - b.progress) }));
+        b.output.forEach((o, outputIndex) => packets.push({ id: b.id + ':' + outputIndex, kind: o.kind,
+          form: o.form, device: stationId(b.station), from: b.station, to: o.to, wire: o.wire,
+          station: b.station, stage: 'output', progress: b.progress,
+          joules: o.store ? positive(o.appliedJ) : o.joules * b.progress,
+          outputIndex, store: !!o.store }));
+      }
+      for (const [station, waiting] of queues) for (const p of waiting) packets.push({
+        id: p.id, kind: p.kind, form: p.form, device: p.device,
+        station, stage: 'input', waiting: true, progress: 0, joules: p.joules
+      });
+      const visibleStocks = [...stocks.values()].map(s => ({ ...s }));
+      const storedJ = visibleStocks.reduce((sum, s) => sum + s.joules, 0);
+      const pendingJ = [...pending.values()].filter(p => p.kind === 'hand').reduce((sum, p) => sum + p.joules, 0) +
+        [...queues.values()].flat().reduce((sum, p) => sum + p.joules, 0);
+      const activeJ = travels.reduce((sum, p) => sum + p.joules, 0) + batches.reduce((sum, b) =>
+        sum + b.inputs.reduce((n, p) => n + p.joules * (1 - b.progress), 0) +
+        b.output.reduce((n, o) => n + (o.store ? 0 : o.joules * b.progress), 0), 0);
+      const ledger = { initialJ, injectedJ, storedJ, pendingJ, activeJ, deliveredJ,
+        balanceJ: initialJ + injectedJ - storedJ - pendingJ - activeJ - deliveredJ };
+      return { packets, stocks: visibleStocks, ledger };
+    }
+    function update(plan, state) {
+      const time = positive(state?.simulationTime);
+      if (!plan || !state || !Array.isArray(plan.devices) || !Array.isArray(state.devices)) return snapshot();
+      const current = recipeOf(plan, state), fingerprint = topologyOf(plan, state);
+      if (lastTime === null || time < lastTime - EPS || topology !== fingerprint) {
+        initialize(plan, state, time); return snapshot();
+      }
+      const dt = time - lastTime;
+      if (dt <= EPS) {
+        // A manual raise/reposition occurs without simulation time advancing.
+        if (current.devices.some(d => {
+          const old = previous.devices.find(p => p.id === d.id);
+          return old && (Math.abs(d.potentialJ - old.potentialJ) > EPS || Math.abs(d.kineticJ - old.kineticJ) > EPS);
+        })) { initialize(plan, state, time); }
+        return snapshot();
+      }
+      const steps = Math.ceil(dt / STEP), step = dt / steps;
+      for (let i = 1; i <= steps; i++) {
+        const a = (i - 1) / steps, b = i / steps;
+        for (const d of current.devices) {
+          if (d.type !== 'motor') continue;
+          const old = previous.devices.find(p => p.id === d.id) || d;
+          const handA = positive(old.handPower + (d.handPower - old.handPower) * a);
+          const handB = positive(old.handPower + (d.handPower - old.handPower) * b);
+          const handJ = (handA + handB) * step / 2;
+          injectedJ += handJ;
+          const fallJ = Math.max(0, (old.potentialJ - d.potentialJ) / steps);
+          const liftJ = Math.max(0, (d.potentialJ - old.potentialJ) / steps);
+          const rotorJ = Math.max(0, (old.kineticJ - d.kineticJ) / steps);
+          const kineticGainJ = Math.max(0, (d.kineticJ - old.kineticJ) / steps);
+          if (d.weight && liftJ > EPS) liftCredits.set(d.id, positive(liftCredits.get(d.id)) + liftJ);
+          if (kineticGainJ > EPS) kineticCredits.set(d.id, positive(kineticCredits.get(d.id)) + kineticGainJ);
+          pendingSource('hand', d.id, handJ, step, current, i === steps && d.handPower <= EPS);
+          if (d.weight) pendingSource('fall', d.id, fallJ, step, current, i === steps && d.gravityPower <= EPS);
+          pendingSource('rotor', d.id, rotorJ, step, current, i === steps && d.kineticPower >= -EPS);
+        }
+        advance(step, current, current);
+      }
+      lastTime = time; previous = current;
+      return snapshot();
+    }
+    return Object.freeze({ update, reset });
+  }
+
+  const API = Object.freeze({ create, INTERVAL, TRAVEL, SOURCE_INTERVAL });
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+  if (root) root.DynamotEnergyBuffers = API;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 
 /* Three.js license
@@ -79706,103 +79985,85 @@ exports.createDynamotView=createDynamotView;return exports;})();
 const EnergyView=(()=>{const exports={};
 const THREE=threeModule;
 
-// Energy symbols are a separate, deliberately schematic overlay, not charge carriers.
-function createEnergyView(group,{models,wireCurves,worldPort}){
- const arrivals=new Map(),sprites=new Map(),materials=new Map(),weightTracker=globalThis.DynamotEnergy.createWeightPacketTracker();let lastPlan=null,lastTime=null,clock=0;
- const V=(x,y,z)=>new THREE.Vector3(x,y,z),positive=x=>Math.max(0,Number.isFinite(x)?x:0);
+// This overlay slows down transfers without changing the simulation or its scores.
+function createEnergyView(group,{models,wireCurves}){
+ const buffers=globalThis.DynamotEnergyBuffers.create(),sprites=new Map(),materials=new Map();
+ let lastPlan=null,lastTime=null,lastShape=null,lastHeights=null;
+ const V=(x,y,z)=>new THREE.Vector3(x,y,z),colors={electrical:'#65b9ff',thermal:'#f27770',light:'#ffe45d',potential:'#bc97eb',kinetic:'#6cd1a0'};
+ const areaPerJoule=.05;
  function material(color){
   if(materials.has(color))return materials.get(color);
-  const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d');
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=128;const ctx=canvas.getContext('2d');
   ctx.fillStyle=color;ctx.fillRect(7,7,114,114);ctx.strokeStyle='#163442';ctx.lineWidth=8;ctx.strokeRect(7,7,114,114);
   ctx.fillStyle='#102f3a';ctx.font='bold 88px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('E',64,68);
-  const map=new THREE.CanvasTexture(c);map.colorSpace=THREE.SRGBColorSpace;
+  const map=new THREE.CanvasTexture(canvas);map.colorSpace=THREE.SRGBColorSpace;
   const m=new THREE.SpriteMaterial({map,depthTest:false,depthWrite:false,toneMapped:false});materials.set(color,m);return m;
  }
- function point(model,p){return model.group.localToWorld(p.clone());}
- function packet(key,p,color,area,meta){
-  if(!(area>0))return;
-  let s=sprites.get(key);if(!s){s=new THREE.Sprite(material(color));s.renderOrder=20;group.add(s);sprites.set(key,s);}
-  s.material=material(color);s.position.copy(p);s.scale.setScalar(Math.sqrt(area));s.visible=true;s.userData={...meta,area};
+ function draw(key,position,form,joules,meta){
+  if(!(joules>1e-7)||!position)return;
+  let sprite=sprites.get(key);if(!sprite){sprite=new THREE.Sprite(material(colors[form]));sprite.renderOrder=20;group.add(sprite);sprites.set(key,sprite);}
+  const area=areaPerJoule*joules;sprite.material=material(colors[form]);sprite.position.copy(position);sprite.scale.setScalar(Math.sqrt(area));sprite.visible=true;sprite.userData={...meta,form,joules,area};
  }
- const line=(a,b)=>new THREE.LineCurve3(a,b);
- const joined=(...curves)=>{const p=new THREE.CurvePath();for(const c of curves)p.add(c);return p;};
- function stream(key,curve,power,color,meta,offset=0,count=1){
-  if(!(power>.0001)||!curve)return;
-  // All streams emit the same number per visual interval. Square area, not side
-  // length, represents their share. One common scale keeps splits additive.
-  const area=.34*power/(lastPlan.visualScale||1);
-  for(let i=0;i<count;i++){
-   const t=((clock/3+offset+i/count)%1+1)%1;
-   packet(key+':'+i,curve.getPointAt(t),color,area,{...meta,t,power});
+ const point=(model,p)=>model.group.localToWorld(p.clone());
+ function anchor(device,station,side,form){
+  const m=models.get(device);if(!m)return null;
+  let p;
+  if(station?.startsWith('weight:'))p=m.parts.weightRig.children[1].getWorldPosition(new THREE.Vector3());
+  else if(station?.startsWith('rotor:'))p=point(m,V(0,.35,1.5));
+  else p=point(m,m.bulb?V(0,1.08,0):V(0,.45,0));
+  if(side==='input')return p.add(V(-.45,.12,form==='kinetic'?.3:form==='electrical'?-.2:0));
+  const offset={thermal:V(.45,.75,0),light:V(-.1,.75,-.45),electrical:V(.45,.05,-.2),kinetic:V(.1,.05,.55),potential:V(.3,.2,0)};
+  return p.add(offset[form]||V(0,0,0));
+ }
+ function transport(packet,state){
+  const t=Math.max(0,Math.min(1,packet.progress||0)),id=packet.device;
+  if(packet.kind==='electrical'){
+   const raw=state.wires[packet.wire],curve=wireCurves.get(raw);if(!raw||!curve)return null;
+   const from=Number(String(packet.from).split(':').at(-1)),to=Number(String(packet.to).split(':').at(-1));
+   const forward=from===raw.a,start=anchor(from,packet.from,'output','electrical'),end=anchor(to,packet.to,'input','electrical');if(!start||!end)return null;
+   const a=curve.getPointAt(forward?0:1),b=curve.getPointAt(forward?1:0);
+   if(t<.15)return start.lerp(a,t/.15);if(t>.85)return b.clone().lerp(end,(t-.85)/.15);
+   return curve.getPointAt(forward?(t-.15)/.7:1-(t-.15)/.7);
   }
+  const m=models.get(id);if(!m)return null;
+  if(packet.kind==='mechanical-in')return m.parts.grip.getWorldPosition(new THREE.Vector3()).lerp(anchor(id,'motor:'+id,'input','kinetic'),t);
+  if(packet.kind==='fall'||packet.kind==='lift'){
+   const fall=packet.kind==='fall',start=anchor(id,fall?'weight:'+id:'motor:'+id,'output','kinetic'),end=anchor(id,fall?'motor:'+id:'weight:'+id,'input','kinetic'),pulley=point(m,V(-.4,0,1.85));
+   const path=new THREE.CurvePath();path.add(new THREE.LineCurve3(start,pulley));path.add(new THREE.LineCurve3(pulley,end));return path.getPointAt(t);
+  }
+  if(packet.kind==='kinetic')return anchor(id,'rotor:'+id,'output','kinetic').lerp(anchor(id,'motor:'+id,'input','kinetic'),t);
+  const start=anchor(id,packet.station||'motor:'+id,'output',packet.form);
+  const end=packet.kind==='mechanical-out'?m.parts.grip.getWorldPosition(new THREE.Vector3()).add(V(-.4,.65,.3)):start.clone().add(packet.form==='thermal'?V(1.1,1.6,.2):V(-1.2,1.5,-.4));
+  return start.lerp(end,t);
  }
+ function reset(){for(const s of sprites.values())group.remove(s);sprites.clear();buffers.reset();lastPlan=null;lastTime=null;lastShape=null;lastHeights=null;}
  function update(state){
-  const time=state.simulationTime||0;if(lastTime!==null)clock+=Math.max(0,time-lastTime);lastTime=time;
+  const time=state.simulationTime||0,shape=JSON.stringify([state.activeMode,state.devices.map(d=>[d.id,d.type,d.slot,d.crank,d.weight,d.mass]),state.wires.map(w=>[w.a,w.ap,w.b,w.bp])]),heights=JSON.stringify(state.devices.map(d=>d.height));
+  if(lastShape!==null&&(shape!==lastShape||time<lastTime||time===lastTime&&heights!==lastHeights))reset();
+  lastShape=shape;lastTime=time;lastHeights=heights;
+  lastPlan=globalThis.DynamotEnergy.plan(state);const frame=buffers.update(lastPlan,state);lastPlan.bufferLedger=frame.ledger;
   group.visible=state.energyPackets===true;for(const s of sprites.values())s.visible=false;
-  if(!group.visible)return;
-  const plan=globalThis.DynamotEnergy.plan(state);lastPlan=plan;
-  const colors={electrical:'#65b9ff',thermal:'#f27770',light:'#ffe45d',potential:'#bc97eb',kinetic:'#6cd1a0'};
-  // Scale is global for this frame, preserving area ratios at every split.
-  plan.visualScale=Math.max(.12,...plan.devices.map(d=>positive(d.electricalIn)+positive(d.mechanicalIn)+positive(d.electricalOut)));
-  for(const d of plan.devices){
-   const model=models.get(d.id),raw=state.devices.find(v=>v.id===d.id);if(!model||!raw)continue;
-   const center=point(model,raw.type==='lamp'?V(0,1.08,0):V(0,.2,0));
-   const incoming=plan.wires.some(w=>w.to===d.id&&w.power>.0001);
-   const cycle=Math.floor(clock/3),previous=arrivals.get(d.id);
-   const arrived=incoming&&previous?.incoming&&cycle>previous.cycle;
-   const received=incoming&&(arrived||previous?.incoming&&previous.received);
-   arrivals.set(d.id,{cycle,incoming,received});
-   if(raw.type==='lamp'){
-    // Both outputs start at the same filament: a visible split into unequal areas.
-    stream('light:'+d.id,line(center,center.clone().add(V(-1.4,1.7,-.35))),d.light,colors.light,{kind:'light',device:d.id});
-    stream('heat:'+d.id,line(center,center.clone().add(V(1.3,2,-.15))),d.heat,colors.thermal,{kind:'heat',device:d.id});
-   }else{
-    const shaft=point(model,V(0,0,1.85));
-    const grip=model.parts.grip.getWorldPosition(new THREE.Vector3());
-    if(raw.crank){
-     stream('hand:'+d.id,joined(line(grip,shaft),line(shaft,center)),d.mechanicalIn,colors.kinetic,{kind:'mechanical-in',device:d.id});
-     const output=grip.clone().add(V(-.4,.65,.3));
-     stream('crank:'+d.id,joined(line(center,shaft),line(shaft,output)),Math.max(d.mechanicalOut,!raw.hand?positive(d.electromagneticPower):0),colors.kinetic,{kind:'mechanical-out',device:d.id});
-    }
-    if(raw.weight){
+  if(group.visible){
+   // Combine same-form parts visually while keeping separate wire routes in flight.
+   const stationary=new Map();
+   for(const p of frame.packets){
+    if(p.store)continue;
+    if(p.stage==='travel')draw('travel:'+p.id,transport(p,state),p.form,p.joules,p);
+    else{const key=[p.station,p.stage,p.form,p.waiting?'waiting':'active'].join(':');const existing=stationary.get(key);if(existing)existing.joules+=p.joules;else stationary.set(key,{...p});}
+   }
+   for(const [key,p]of stationary){const at=anchor(p.device,p.station,p.stage,p.form);if(at&&p.waiting)at.add(V(-.15,.45,0));draw(key,at,p.form,p.joules,p);}
+   for(const stock of frame.stocks){
+    const model=models.get(stock.device);if(!model)continue;
+    if(stock.kind==='potential-stock'){
      const weight=model.parts.weightRig.children[1].getWorldPosition(new THREE.Vector3());
-     const pulley=point(model,V(-.4,0,1.85));
-     const transfer=weightTracker.update(d,raw.mass,time,state.running!==false,incoming?!!arrived:null);
-     for(const stock of transfer.stock){
-      // Packets surround the weight, offset radially from the vertical rope.
-      const ring=Math.floor(stock.index/5),angle=2*Math.PI*(stock.index%5)/5;
-      const pos=weight.clone().add(V(Math.cos(angle)*(.43+.04*(ring%2)),-.35+ring*.2,Math.sin(angle)*(.43+.04*(ring%2))));
-      packet('stock:'+d.id+':'+stock.index,pos,colors.potential,.065*stock.joules,
-       {kind:'potential-stock',device:d.id,index:stock.index,joules:stock.joules,stockJ:transfer.stockJ});
-     }
-     for(const moving of transfer.transit){
-      if(moving.direction==='lift'&&moving.partial)continue;
-      // Falling: a lilac stock packet becomes green at the weight and climbs
-      // the rope. Lifting: green arrives from the motor; lilac appears only on arrival.
-      const path=moving.direction==='fall'?joined(line(weight,pulley),line(pulley,center)):
-       joined(line(center,pulley),line(pulley,weight));
-      packet('weight-transfer:'+d.id+':'+moving.id,path.getPointAt(moving.progress),colors.kinetic,moving.electricalArrival?.34*(moving.joules/3)/(plan.visualScale||1):.065*moving.joules,
-       {kind:moving.direction,device:d.id,joules:moving.joules,progress:moving.progress,partial:moving.partial===true,electricalArrival:moving.electricalArrival===true});
-     }
-    }
-    // The receiving weight motor splits only when the blue packet reaches its center.
-    if(!raw.weight||!incoming||received)stream('motor-heat:'+d.id,line(center,center.clone().add(V(1.2,1.65,.25))),d.heat,colors.thermal,{kind:'heat',device:d.id});
+     draw('stock:'+stock.device,weight.clone().add(V(.55,.05,.15)),'potential',stock.joules,{kind:'potential-stock',device:stock.device,stockJ:stock.joules,stage:'stored'});
+    }else draw('rotation:'+stock.device,anchor(stock.device,'rotor:'+stock.device,'output','kinetic'),'kinetic',stock.joules,{kind:'kinetic-stock',device:stock.device,stage:'stored'});
    }
   }
-  for(const w of plan.wires){
-   if(!(w.power>.0001))continue;const raw=state.wires[w.index],curve=wireCurves.get(raw);if(!curve)continue;
-   const forward=w.from===raw.a,source=models.get(w.from),sink=models.get(w.to);if(!source||!sink)continue;
-   // Follow the actual cable and meet the device's conversion point at either end.
-   const a=curve.getPointAt(forward?0:1),b=curve.getPointAt(forward?1:0);
-   const center=m=>point(m,m.bulb?V(0,1.08,0):V(0,.2,0));
-   const start=center(source),end=center(sink);
-   // The cable already owns an arc-length cache. Avoid rebuilding/sampling it
-   // hundreds of times per frame just to add the two short device leads.
-   const path={getPointAt(t){if(t<.15)return start.clone().lerp(a,t/.15);if(t>.85)return b.clone().lerp(end,(t-.85)/.15);const f=(t-.15)/.7;return curve.getPointAt(forward?f:1-f);}};
-   stream('wire:'+w.index,path,w.power,colors.electrical,{kind:'electrical',wire:w.index,from:w.from,to:w.to});
-  }
+  // Finished symbols are removed instead of accumulating invisible sprites forever.
+  for(const [key,sprite]of sprites)if(!sprite.visible){group.remove(sprite);sprites.delete(key);}
  }
- return {update,reset(){for(const s of sprites.values())group.remove(s);sprites.clear();weightTracker.reset();arrivals.clear();lastPlan=null;lastTime=null;clock=0;},samples(){return [...sprites.values()].filter(s=>s.visible&&group.visible).map(s=>({...s.userData,position:s.position.toArray(),size:s.scale.x}));},plan(){return lastPlan;},dispose(){for(const m of materials.values()){m.map.dispose();m.dispose();}materials.clear();sprites.clear();weightTracker.reset();group.clear();}};
+ return {update,reset,samples(){return [...sprites.values()].filter(s=>s.visible&&group.visible).map(s=>({...s.userData,position:s.position.toArray(),size:s.scale.x}));},plan(){return lastPlan;},dispose(){reset();for(const m of materials.values()){m.map.dispose();m.dispose();}materials.clear();group.clear();}};
 }
 
 exports.createEnergyView=createEnergyView;return exports;})();
@@ -79899,7 +80160,7 @@ function createLabScene(container,{onPick,onHover,onViewChange}={}){
  for(const a of [0,2.1,4.2]){mesh(new THREE.CylinderGeometry(.075,.075,.025,12),metal,g,.34*Math.cos(a),.355,.34*Math.sin(a));mesh(new THREE.BoxGeometry(.1,.015,.017),dark,g,.34*Math.cos(a),.371,.34*Math.sin(a));}const ports=[];for(const [pin,x]of [[0,-1],[1,1]]){const stem=mesh(new THREE.CylinderGeometry(.13,.13,.24,18),dark,g,x,.3,.25);const group=new THREE.Group();group.position.set(x,.43,.25);group.rotation.x=-Math.PI/2;g.add(group);ports.push(terminal(group,[0,0,0],d.id,pin));}const glowCanvas=document.createElement('canvas');glowCanvas.width=glowCanvas.height=128;const gc=glowCanvas.getContext('2d'),gradient=gc.createRadialGradient(64,64,4,64,64,64);gradient.addColorStop(0,'rgba(255,249,171,1)');gradient.addColorStop(.28,'rgba(255,220,61,.8)');gradient.addColorStop(1,'rgba(255,183,20,0)');gc.fillStyle=gradient;gc.fillRect(0,0,128,128);gc.strokeStyle='rgba(255,185,10,.95)';gc.lineWidth=5;gc.lineCap='round';for(let i=0;i<8;i++){const a=i*Math.PI/4;gc.beginPath();gc.moveTo(64+38*Math.cos(a),64+38*Math.sin(a));gc.lineTo(64+54*Math.cos(a),64+54*Math.sin(a));gc.stroke();}const glowTexture=new THREE.CanvasTexture(glowCanvas),halo=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexture,transparent:true,opacity:0,depthWrite:false,blending:THREE.NormalBlending}));halo.position.set(0,1.04,0);halo.scale.set(1.65,1.65,1);g.add(halo);return {group:g,ports,bulb,filament,halo,chargePath,conductor,electrons};}
  function disposeTree(group){const materials=new Set(),geometries=new Set();group.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])materials.add(m);}});geometries.forEach(g=>g.dispose());materials.forEach(m=>{m.map?.dispose();m.dispose();});}
  function worldPort(id,pin){const p=models.get(id)?.ports[pin];return p?p.parent.localToWorld(p.pos.clone()):null;}
- function rebuild(state){current=state;energyView.reset();for(const [id,m]of models){devicesGroup.remove(m.group);disposeTree(m.group);}models.clear();targets.splice(LAB_SLOTS.length); // slots are the initial raycast targets
+ function rebuild(state){current=state;for(const [id,m]of models){devicesGroup.remove(m.group);disposeTree(m.group);}models.clear();targets.splice(LAB_SLOTS.length); // slots are the initial raycast targets
  for(const d of state.devices){const slot=LAB_SLOTS.find(s=>s.id===d.slot);if(!slot)continue;let m;if(d.type==='motor'){const model=createDynamotModel();model.parts.clamp.rotation.y=-Math.PI/2;model.parts.clamp.position.z=1.0;model.group.scale.setScalar(.72);model.group.rotation.y=0;model.group.position.set(slot.x,1.55,slot.z);model.setAccessory(d.crank?'crank':d.weight?'pulley':'none');m={...model,ports:[]};m.ports[0]=terminal(model.group,[.68,.32,-1.68],d.id,0);m.ports[1]=terminal(model.group,[-.68,.32,-1.68],d.id,1);}else{m=lampModel(d);m.group.position.set(slot.x,0,slot.z);}if(d.type==='motor'){const accessory=d.crank?m.parts.crank:d.weight?m.parts.weightRig.children[1]:null;accessory?.traverse(o=>{if(o.isMesh)o.userData.pick={kind:'accessory',id:d.id};});}m.group.traverse(o=>{if(o.isMesh){if(!o.userData.pick)o.userData.pick={kind:'device',id:d.id};if(!targets.includes(o))targets.push(o);}});devicesGroup.add(m.group);models.set(d.id,m);label(d.slot,m.group,0,d.type==='motor'?1.4:1.6,0);}
  for(const slot of LAB_SLOTS){const occupied=state.devices.some(d=>d.slot===slot.id);const enabled=!state.allowedSlots||state.allowedSlots.includes(slot.id);slotMarks.get(slot.id).plane.visible=enabled;slotMarks.get(slot.id).text.visible=enabled&&!occupied;slotMarks.get(slot.id).plane.material.opacity=occupied?.12:.6;}
  rebuildWires();update(state);}
@@ -80183,11 +80444,11 @@ function renderSocketTargets(){q('.stage').querySelectorAll('.socket-target,.acc
 function positionSocketTargets(){const r=q('.stage').getBoundingClientRect();const anchor=selected&&view?.projectDevice(selected);if(anchor){const panel=q('.device-panel'),left=anchor.x>r.left+r.width/2;panel.style.left=left?'10px':'auto';panel.style.right=left?'auto':'10px';}q('.stage').querySelectorAll('.device-target').forEach(b=>{const p=view?.projectDevice(+b.dataset.deviceTarget);b.hidden=!p||p.x<r.left||p.x>r.right||p.y<r.top||p.y>r.bottom;if(p){b.style.left=(p.x-r.left)+'px';b.style.top=(p.y-r.top-20)+'px';}});q('.stage').querySelectorAll('.slot-target').forEach(b=>{const p=view?.projectSlot(b.dataset.slot);b.hidden=!p||p.x<r.left||p.x>r.right||p.y<r.top||p.y>r.bottom||state.devices.some(d=>d.slot===b.dataset.slot);if(p){b.style.left=(p.x-r.left)+'px';b.style.top=(p.y-r.top)+'px';}});q('.stage').querySelectorAll('.socket-target').forEach(b=>{const p=view?.projectPort(+b.dataset.socketDevice,+b.dataset.socketPin);b.hidden=!p||p.x<r.left||p.x>r.right||p.y<r.top||p.y>r.bottom;if(p){b.style.left=(p.x-r.left)+'px';b.style.top=(p.y-r.top)+'px';}});q('.stage').querySelectorAll('.accessory-target').forEach(b=>{const p=view?.projectAccessory(+b.dataset.accessoryDevice);b.hidden=!p||p.x<r.left||p.x>r.right||p.y<r.top||p.y>r.bottom;if(p){const x=Math.max(65,Math.min(r.width-65,p.x-r.left));let y=Math.max(150,Math.min(r.height-60,p.y-r.top-24));for(const pin of [0,1]){const port=view?.projectPort(+b.dataset.accessoryDevice,pin);if(port&&Math.abs(port.x-r.left-x)<b.offsetWidth/2+18&&port.y-r.top>y-b.offsetHeight-18&&port.y-r.top<y+18)y=Math.max(150,Math.min(y,port.y-r.top-22));}b.style.left=x+'px';b.style.top=y+'px';}});const portRects=[...q('.stage').querySelectorAll('.socket-target')].filter(b=>!b.hidden).map(b=>b.getBoundingClientRect());for(const marker of q('.stage').querySelectorAll('.accessory-target,.device-target')){if(marker.hidden)continue;for(let pass=0;pass<6;pass++){const m=marker.getBoundingClientRect(),overlap=portRects.filter(p=>m.left<p.right+4&&m.right>p.left-4&&m.top<p.bottom+4&&m.bottom>p.top-4);if(!overlap.length)break;marker.style.top=Math.max(150,Math.min(...overlap.map(p=>p.top))-r.top-6)+'px';}}
 }
 
-function inspect(){const d=state.devices.find(d=>d.id===selected);q('.device-panel').hidden=!d;if(!d){q('.inspector').innerHTML='';updateBuildControls();return;}q('.inspector').innerHTML=`<strong>${d.type==='motor'?'DynaMot':'Lampe'} ${d.id}</strong>${d.type==='motor'?`${d.crank?`<label><input type="checkbox" data-control="hand" ${d.hand?'checked':''}> Antreiben</label><label>Tempo: <output data-out="rate">${d.rate}</output></label><input type="range" aria-label="Kurbelgeschwindigkeit" data-control="rate" min="-30" max="30" value="${d.rate}"><p class="sub">← rückwärts · 0 · vorwärts →</p>`:d.weight?`<label>Masse: <output data-out="mass">${d.mass.toFixed(2)}</output> kg</label><input type="range" aria-label="Gewicht" data-control="mass" min=".05" max="2" step=".05" value="${d.mass}"><p data-height></p><button data-action="raise">Gewicht hochsetzen</button>`:'<p>Was möchtest du anbringen?</p><button data-action="attach-crank">Kurbel</button><button data-action="attach-weight">Seilrolle + Gewicht</button>'}`:`<label>Lampenart <select data-control="lampR" aria-label="Lampenart">${[[8,'Standard · 6 V / 4,5 W'],[24,'6 V / 1,5 W'],[4,'6 V / 9 W']].map(([r,label])=>`<option value="${r}" ${(d.lampR||8)===r?'selected':''}>${label}</option>`).join('')}</select></label><p class="sub">Vereinfachte Modelllampen</p>`}<details><summary>Weitere Einstellungen</summary>${d.type==='motor'&&(d.crank||d.weight)?`${!d.crank?'<button data-action="attach-crank">Kurbel anbringen</button>':''}${!d.weight?'<button data-action="attach-weight">Seilrolle + Gewicht anbringen</button>':''}<button data-action="detach">Zubehör abnehmen</button>`:''}<button data-action="move">Umsetzen</button>${d.type==='motor'?'<button class="remove" data-action="remove">Gerät entfernen</button>':''}<p data-status></p><p class="sub" data-live></p><p class="sub" data-effort></p><p class="sub">Modellwerte, keine Messwerte. Tempo in rad/s.${d.type==='lamp'?' Nennleistung gilt bei 6 V; die tatsächliche Leistung hängt von der Spannung ab. Konstanter Modellwiderstand.':''}</p></details>${d.type==='lamp'?'<button class="remove" data-action="remove">Lampe entfernen</button>':''}`;updateBuildControls();update();}
+function inspect(){const d=state.devices.find(d=>d.id===selected);q('.device-panel').hidden=!d;if(!d){q('.inspector').innerHTML='';updateBuildControls();return;}q('.inspector').innerHTML=`<strong>${d.type==='motor'?'DynaMot':'Lampe'} ${d.id}</strong>${d.type==='motor'?`${d.crank?`<label><input type="checkbox" data-control="hand" ${d.hand?'checked':''}> Antreiben</label><label>Tempo: <output data-out="rate">${d.rate}</output></label><input type="range" aria-label="Kurbelgeschwindigkeit" data-control="rate" min="-30" max="30" value="${d.rate}"><p class="sub">← rückwärts · 0 · vorwärts →</p>`:d.weight?`<label>Masse: <output data-out="mass">${d.mass.toFixed(2)}</output> kg</label><input type="range" aria-label="Gewicht" data-control="mass" min=".05" max="2" step=".05" value="${d.mass}"><p data-height></p><div class="weight-height-actions"><button data-action="raise">Gewicht hochsetzen</button><button data-action="lower">Gewicht heruntersetzen</button></div>`:'<p>Was möchtest du anbringen?</p><button data-action="attach-crank">Kurbel</button><button data-action="attach-weight">Seilrolle + Gewicht</button>'}`:`<label>Lampenart <select data-control="lampR" aria-label="Lampenart">${[[8,'Standard · 6 V / 4,5 W'],[24,'6 V / 1,5 W'],[4,'6 V / 9 W']].map(([r,label])=>`<option value="${r}" ${(d.lampR||8)===r?'selected':''}>${label}</option>`).join('')}</select></label><p class="sub">Vereinfachte Modelllampen</p>`}<details><summary>Weitere Einstellungen</summary>${d.type==='motor'&&(d.crank||d.weight)?`${!d.crank?'<button data-action="attach-crank">Kurbel anbringen</button>':''}${!d.weight?'<button data-action="attach-weight">Seilrolle + Gewicht anbringen</button>':''}<button data-action="detach">Zubehör abnehmen</button>`:''}<button data-action="move">Umsetzen</button>${d.type==='motor'?'<button class="remove" data-action="remove">Gerät entfernen</button>':''}<p data-status></p><p class="sub" data-live></p><p class="sub" data-effort></p><p class="sub">Modellwerte, keine Messwerte. Tempo in rad/s.${d.type==='lamp'?' Nennleistung gilt bei 6 V; die tatsächliche Leistung hängt von der Spannung ab. Konstanter Modellwiderstand.':''}</p></details>${d.type==='lamp'?'<button class="remove" data-action="remove">Lampe entfernen</button>':''}`;updateBuildControls();update();}
 function update(){view?.update(state);const d=state.devices.find(d=>d.id===selected);if(!d)return;if(q('[data-status]'))q('[data-status]').textContent=d.type==='lamp'?((d.power||0)<.003?'Lampe aus':`Licht · ${Math.round(Math.min(1,d.power/3)*100)} %`):Math.abs(d.omega)<.02?'Stillstand':(d.current*d.omega<-.002?'Generator':d.current*d.omega>.002?'Motor':'Freie Drehung')+` · ${Math.abs(d.omega).toFixed(1)} rad/s`;if(q('[data-live]'))q('[data-live]').textContent=`${(d.voltage||0).toFixed(2)} V · ${Math.abs(d.current||0).toFixed(2)} A · ${Math.abs(d.power||0).toFixed(2)} W`;if(q('[data-effort]'))q('[data-effort]').textContent=d.crank&&d.hand?`Die Hand hält die Drehzahl. Nötiges Handmoment: ${Math.abs(d.handTorque||0).toFixed(2)} Nm.`:'';if(q('[data-height]'))q('[data-height]').textContent=`Höhe: ${d.height.toFixed(2)} m${d.height===0?' · unten':d.height===1.5?' · oben':''}`;}
 root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!ready)return;if(b.dataset.action==='invert-polarity'){e.preventDefault();e.stopImmediatePropagation();if(state.activeMode!=='v2'||!state.buildLocked||state.wires.length!==2)return;const receiver=state.devices.find(d=>d.slot==='M2');if(!receiver||state.wires.some(w=>w.a!==receiver.id&&w.b!==receiver.id))return;for(const w of state.wires){if(w.a===receiver.id)w.ap=1-w.ap;else w.bp=1-w.bp;}render();save();notice('Die beiden Kabel sind am zweiten DynaMot vertauscht.');return;}const action=b.dataset.action;const forbidden=state.buildLocked&&(b.dataset.tool||b.dataset.addSlot||['reset-build','undo-build','attach-crank','attach-weight','remove-wire','remove','move','detach'].includes(action));const d=state.devices.find(v=>v.id===selected);const wrongAccessory=action?.startsWith('attach-')&&d&&!accessoryAllowed(d,action.slice(7));if(forbidden||wrongAccessory){e.preventDefault();e.stopImmediatePropagation();notice(forbidden?'Dieser geprüfte Aufbau bleibt erhalten. Du kannst ihn weiter untersuchen.':'Dieses Zubehör gehört in diesem Versuch an einen anderen Platz.');}},true);
 root.addEventListener('pointerdown',e=>{if(state.buildLocked&&e.target.closest('[data-tool]')){e.preventDefault();e.stopImmediatePropagation();}},true);
-root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!ready)return;if(b.dataset.tool){q('.device-panel').hidden=true;selectedWire=null;if(b.dataset.tool==='wire'&&tool==='wire'){cancelWire();return;}tool=b.dataset.tool;pending=null;setMode();notice(tool==='motor'||tool==='lamp'?'Wähle einen freien passenden Platz.':tool==='wire'?'Tippe direkt auf zwei Anschlussbuchsen.':'Tippe auf einen DynaMot.');return;}if(b.dataset.addSlot){const slot=slots.find(s=>s.id===b.dataset.addSlot);if(slot&&!state.devices.some(d=>d.slot===slot.id)){tool=slot.type;place(slot.id);}return;}if(b.dataset.slot){place(b.dataset.slot);return;}if(b.dataset.view){view?.setView(b.dataset.view);return;}if(b.dataset.wire!==undefined){selectWire(+b.dataset.wire);return;}const d=state.devices.find(d=>d.id===selected);switch(b.dataset.action){case 'reset-build':undoBuild=structuredClone({devices:state.devices,wires:state.wires});state.devices=[];state.wires=[];running=false;selected=null;selectedWire=null;pending=null;tool=null;q('[data-action=run]').textContent='▶ Start';q('[data-action=undo-build]').hidden=false;render();save();notice('Nur der Aufbau wurde geleert. Aufgaben und Punkte bleiben erhalten. Rückgängig ist möglich.');break;case 'undo-build':if(undoBuild){state.devices=undoBuild.devices;state.wires=undoBuild.wires;undoBuild=null;selected=null;pending=null;selectedWire=null;tool=null;q('[data-action=undo-build]').hidden=true;render();save();notice('Vorheriger Aufbau wiederhergestellt. Aufgaben und Punkte bleiben erhalten.');}break;case 'close-device':selected=null;q('.device-panel').hidden=true;setMode();break;case 'attach-crank':case 'attach-weight':if(d?.type==='motor'){d.crank=b.dataset.action==='attach-crank';d.weight=!d.crank;d.hand=false;d.omega=0;render();save();}break;case 'run':running=!running;b.textContent=running?'Ⅱ Pause':'▶ Start';save();break;case 'remove-wire':removeWire(state.wires.indexOf(selectedWire));break;case 'cancel-wire':cancelWire();break;case 'cancel':selectedWire=null;tool=null;pending=null;setMode();notice('Auswahl aufgehoben.');break;case 'remove':if(d){state.devices=state.devices.filter(v=>v!==d);state.wires=state.wires.filter(w=>w.a!==d.id&&w.b!==d.id);selected=null;pending=null;render();save();}break;case 'move':q('.device-panel').hidden=true;tool='move';pending=null;setMode();notice('Wähle einen freien passenden Platz für dieses Gerät.');break;case 'detach':d.crank=d.weight=d.hand=false;d.omega=0;render();save();break;case 'raise':d.height=1.2;d.omega=0;render();save();notice('Gewicht von Hand hochgesetzt: Lageenergie zugeführt.');break;case 'zoom-in':view?.zoom(.8);break;case 'zoom-out':view?.zoom(1.25);break;case 'retry':if(blocked)init();else{host=getHost();save();}break;}});
+root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!ready)return;if(b.dataset.tool){q('.device-panel').hidden=true;selectedWire=null;if(b.dataset.tool==='wire'&&tool==='wire'){cancelWire();return;}tool=b.dataset.tool;pending=null;setMode();notice(tool==='motor'||tool==='lamp'?'Wähle einen freien passenden Platz.':tool==='wire'?'Tippe direkt auf zwei Anschlussbuchsen.':'Tippe auf einen DynaMot.');return;}if(b.dataset.addSlot){const slot=slots.find(s=>s.id===b.dataset.addSlot);if(slot&&!state.devices.some(d=>d.slot===slot.id)){tool=slot.type;place(slot.id);}return;}if(b.dataset.slot){place(b.dataset.slot);return;}if(b.dataset.view){view?.setView(b.dataset.view);return;}if(b.dataset.wire!==undefined){selectWire(+b.dataset.wire);return;}const d=state.devices.find(d=>d.id===selected);switch(b.dataset.action){case 'reset-build':undoBuild=structuredClone({devices:state.devices,wires:state.wires});state.devices=[];state.wires=[];running=false;selected=null;selectedWire=null;pending=null;tool=null;q('[data-action=run]').textContent='▶ Start';q('[data-action=undo-build]').hidden=false;render();save();notice('Nur der Aufbau wurde geleert. Aufgaben und Punkte bleiben erhalten. Rückgängig ist möglich.');break;case 'undo-build':if(undoBuild){state.devices=undoBuild.devices;state.wires=undoBuild.wires;undoBuild=null;selected=null;pending=null;selectedWire=null;tool=null;q('[data-action=undo-build]').hidden=true;render();save();notice('Vorheriger Aufbau wiederhergestellt. Aufgaben und Punkte bleiben erhalten.');}break;case 'close-device':selected=null;q('.device-panel').hidden=true;setMode();break;case 'attach-crank':case 'attach-weight':if(d?.type==='motor'){d.crank=b.dataset.action==='attach-crank';d.weight=!d.crank;d.hand=false;d.omega=0;render();save();}break;case 'run':running=!running;b.textContent=running?'Ⅱ Pause':'▶ Start';save();break;case 'remove-wire':removeWire(state.wires.indexOf(selectedWire));break;case 'cancel-wire':cancelWire();break;case 'cancel':selectedWire=null;tool=null;pending=null;setMode();notice('Auswahl aufgehoben.');break;case 'remove':if(d){state.devices=state.devices.filter(v=>v!==d);state.wires=state.wires.filter(w=>w.a!==d.id&&w.b!==d.id);selected=null;pending=null;render();save();}break;case 'move':q('.device-panel').hidden=true;tool='move';pending=null;setMode();notice('Wähle einen freien passenden Platz für dieses Gerät.');break;case 'detach':d.crank=d.weight=d.hand=false;d.omega=0;render();save();break;case 'raise':case 'lower':if(d?.type==='motor'&&d.weight){d.height=b.dataset.action==='raise'?1.2:0;d.omega=0;render();save();notice(b.dataset.action==='raise'?'Gewicht von Hand hochgesetzt: Lageenergie zugeführt.':'Gewicht von Hand heruntergesetzt: Lageenergie entnommen.');}break;case 'zoom-in':view?.zoom(.8);break;case 'zoom-out':view?.zoom(1.25);break;case 'retry':if(blocked)init();else{host=getHost();save();}break;}});
 root.addEventListener('input',e=>{if(e.target.hasAttribute('data-energy-packets')){state.energyPackets=e.target.checked;q('.energy-legend').hidden=!state.energyPackets;view?.update(state);save();return;}if(e.target.hasAttribute('data-electron-flow')){state.electronFlow=e.target.checked;view?.update(state);save();return;}const k=e.target.dataset.control,d=state.devices.find(d=>d.id===selected);if(!d||!k)return;d[k]=k==='hand'?e.target.checked:Number(e.target.value);const out=q(`[data-out="${k}"]`);if(out)out.textContent=k==='mass'?d.mass.toFixed(2):d.rate;if(k==='lampR'){render();}save();});
 let drag=null,suppress=false;root.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-tool]');if(b&&ready){drag={b,x:e.clientX,y:e.clientY};b.setPointerCapture(e.pointerId);}});root.addEventListener('pointerup',e=>{if(!drag)return;const d=drag;drag=null;if(Math.hypot(e.clientX-d.x,e.clientY-d.y)<7)return;suppress=true;setTimeout(()=>suppress=false,0);tool=d.b.dataset.tool;pending=null;const hit=view?.pickAt(e.clientX,e.clientY);if(hit)pick(hit);setMode();});root.addEventListener('click',e=>{if(suppress){e.preventDefault();e.stopImmediatePropagation();}},true);root.addEventListener('pointercancel',()=>drag=null);root.addEventListener('keydown',e=>{if(e.key==='Escape'){selectedWire=null;tool=null;pending=null;setMode();}});
 async function init(){editor=isEditor();blocked=false;try{if(!editor){if(edulo){for(let i=0;i<25;i++){host=getHost();if(host)break;await new Promise(r=>setTimeout(r,200));}if(!host)throw Error('Edulo-Textfeld E1 fehlt');if(host.value.trim())state=parse(host.value);}else{const raw=localStorage.getItem(localKey);if(raw)state=parse(raw);}}validateModes();installLegacyModes();state.activeMode??='free';state.mode=state.activeMode;state.allowedSlots=modeSlots[state.activeMode];ready=true;undoBuild=state.undoBuild||null;q('[data-action=undo-build]').hidden=!undoBuild;if(state.camera)view?.restoreView(state.camera);running=false;state.running=false;q('[data-action=run]').textContent='▶ Start';const ui=state.ui;render();if(ui){q(':scope > details').open=ui.helpOpen===true;selected=state.devices.some(d=>d.id===ui.selected)?ui.selected:null;selectedWire=state.wires[ui.selectedWire]||null;pending=ui.pending&&state.devices.some(d=>d.id===ui.pending.a)?ui.pending:null;tool=['move','wire','crank','weight','motor','lamp'].includes(ui.tool)?ui.tool:null;inspect();if(ui.panelOpen===false)q('.device-panel').hidden=true;setMode();const slot=slots.find(s=>s.id===ui.slotPopup);if(slot&&!state.devices.some(d=>d.slot===slot.id))openSlot(slot);}save();}catch(e){blocked=true;ready=true;render();q('.storage').textContent='Speichern gesperrt: '+e.message+'. Originaldaten bleiben unverändert. Freies Ausprobieren wird nicht gespeichert.';q('[data-action=retry]').hidden=false;}publish('init');}
