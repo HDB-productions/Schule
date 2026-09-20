@@ -200,3 +200,23 @@ test('a stopped midair weight clears transfer without consuming its remaining st
   assert.equal(view.transit.length, 0);
   near(view.stockJ, fullJ - 0.3, 1e-10);
 });
+
+test('electrical arrival releases one lift packet without a growing green placeholder', () => {
+  const tracker=energy.createWeightPacketTracker(),mass=.5;
+  const device=(potentialJ)=>({id:2,potentialJ,gravityPower:-.2});
+  tracker.update(device(1),mass,0,true,false);
+  let transfer=tracker.update(device(1.2),mass,1,true,false);
+  assert.equal(transfer.transit.length,0);
+  near(transfer.stockJ,1);near(transfer.pendingJ,.2);
+  transfer=tracker.update(device(1.6),mass,3,true,true);
+  assert.equal(transfer.transit.length,1);assert.equal(transfer.transit[0].partial,undefined);
+  assert.equal(transfer.transit[0].electricalArrival,true);near(transfer.transit[0].joules,.6);
+  near(transfer.stockJ+transfer.pendingJ+transfer.inFlightJ,1.6);
+  const paused=tracker.update(device(1.6),mass,3,false,false);
+  assert.deepEqual(paused,transfer);
+  transfer=tracker.update(device(1.7),mass,4,true,false);
+  near(transfer.stockJ,1.6);assert.equal(transfer.transit.length,0);
+  near(transfer.pendingJ,.1);
+  tracker.reset();transfer=tracker.update(device(1.7),mass,0,false,false);
+  near(transfer.stockJ,1.7);assert.equal(transfer.transit.length,0);
+});

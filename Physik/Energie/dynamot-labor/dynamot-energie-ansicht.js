@@ -2,7 +2,7 @@ import * as THREE from './dynamot-3d-vendor/three.module.js';
 
 // Energy symbols are a separate, deliberately schematic overlay, not charge carriers.
 export function createEnergyView(group,{models,wireCurves,worldPort}){
- const sprites=new Map(),materials=new Map(),weightTracker=globalThis.DynamotEnergy.createWeightPacketTracker();let lastPlan=null,lastTime=null,clock=0;
+ const arrivals=new Map(),sprites=new Map(),materials=new Map(),weightTracker=globalThis.DynamotEnergy.createWeightPacketTracker();let lastPlan=null,lastTime=null,clock=0;
  const V=(x,y,z)=>new THREE.Vector3(x,y,z),positive=x=>Math.max(0,Number.isFinite(x)?x:0);
  function material(color){
   if(materials.has(color))return materials.get(color);
@@ -41,6 +41,11 @@ export function createEnergyView(group,{models,wireCurves,worldPort}){
   for(const d of plan.devices){
    const model=models.get(d.id),raw=state.devices.find(v=>v.id===d.id);if(!model||!raw)continue;
    const center=point(model,raw.type==='lamp'?V(0,1.08,0):V(0,.2,0));
+   const incoming=plan.wires.some(w=>w.to===d.id&&w.power>.0001);
+   const cycle=Math.floor(clock/3),previous=arrivals.get(d.id);
+   const arrived=incoming&&previous?.incoming&&cycle>previous.cycle;
+   const received=incoming&&(arrived||previous?.incoming&&previous.received);
+   arrivals.set(d.id,{cycle,incoming,received});
    if(raw.type==='lamp'){
     // Both outputs start at the same filament: a visible split into unequal areas.
     stream('light:'+d.id,line(center,center.clone().add(V(-1.4,1.7,-.35))),d.light,colors.light,{kind:'light',device:d.id});
@@ -56,7 +61,7 @@ export function createEnergyView(group,{models,wireCurves,worldPort}){
     if(raw.weight){
      const weight=model.parts.weightRig.children[1].getWorldPosition(new THREE.Vector3());
      const pulley=point(model,V(-.4,0,1.85));
-     const transfer=weightTracker.update(d,raw.mass,time,state.running!==false);
+     const transfer=weightTracker.update(d,raw.mass,time,state.running!==false,incoming?!!arrived:null);
      for(const stock of transfer.stock){
       // Packets surround the weight, offset radially from the vertical rope.
       const ring=Math.floor(stock.index/5),angle=2*Math.PI*(stock.index%5)/5;
@@ -65,15 +70,17 @@ export function createEnergyView(group,{models,wireCurves,worldPort}){
        {kind:'potential-stock',device:d.id,index:stock.index,joules:stock.joules,stockJ:transfer.stockJ});
      }
      for(const moving of transfer.transit){
+      if(moving.direction==='lift'&&moving.partial)continue;
       // Falling: a lilac stock packet becomes green at the weight and climbs
       // the rope. Lifting: green arrives from the motor; lilac appears only on arrival.
       const path=moving.direction==='fall'?joined(line(weight,pulley),line(pulley,center)):
        joined(line(center,pulley),line(pulley,weight));
-      packet('weight-transfer:'+d.id+':'+moving.id,path.getPointAt(moving.progress),colors.kinetic,.065*moving.joules,
-       {kind:moving.direction,device:d.id,joules:moving.joules,progress:moving.progress,partial:moving.partial===true});
+      packet('weight-transfer:'+d.id+':'+moving.id,path.getPointAt(moving.progress),colors.kinetic,moving.electricalArrival?.34*(moving.joules/3)/(plan.visualScale||1):.065*moving.joules,
+       {kind:moving.direction,device:d.id,joules:moving.joules,progress:moving.progress,partial:moving.partial===true,electricalArrival:moving.electricalArrival===true});
      }
     }
-    stream('motor-heat:'+d.id,line(center,center.clone().add(V(1.2,1.65,.25))),d.heat,colors.thermal,{kind:'heat',device:d.id});
+    // The receiving weight motor splits only when the blue packet reaches its center.
+    if(!raw.weight||!incoming||received)stream('motor-heat:'+d.id,line(center,center.clone().add(V(1.2,1.65,.25))),d.heat,colors.thermal,{kind:'heat',device:d.id});
    }
   }
   for(const w of plan.wires){
@@ -89,5 +96,5 @@ export function createEnergyView(group,{models,wireCurves,worldPort}){
    stream('wire:'+w.index,path,w.power,colors.electrical,{kind:'electrical',wire:w.index,from:w.from,to:w.to});
   }
  }
- return {update,reset(){for(const s of sprites.values())group.remove(s);sprites.clear();weightTracker.reset();lastPlan=null;},samples(){return [...sprites.values()].filter(s=>s.visible&&group.visible).map(s=>({...s.userData,position:s.position.toArray(),size:s.scale.x}));},plan(){return lastPlan;},dispose(){for(const m of materials.values()){m.map.dispose();m.dispose();}materials.clear();sprites.clear();weightTracker.reset();group.clear();}};
+ return {update,reset(){for(const s of sprites.values())group.remove(s);sprites.clear();weightTracker.reset();arrivals.clear();lastPlan=null;lastTime=null;clock=0;},samples(){return [...sprites.values()].filter(s=>s.visible&&group.visible).map(s=>({...s.userData,position:s.position.toArray(),size:s.scale.x}));},plan(){return lastPlan;},dispose(){for(const m of materials.values()){m.map.dispose();m.dispose();}materials.clear();sprites.clear();weightTracker.reset();group.clear();}};
 }

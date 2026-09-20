@@ -31,7 +31,7 @@
 
   function createWeightPacketTracker() {
     const tracks = new Map();
-    function update(device, mass, time, running = true) {
+    function update(device, mass, time, running = true, releaseLift = null) {
       const id = device.id, joules = positive(device.potentialJ), m = positive(mass);
       const now = positive(time), quantumJ = m * MODEL.g * 1.5 / WEIGHT_STOCK_SLICES;
       let track = tracks.get(id);
@@ -65,7 +65,12 @@
           if (track.direction === 'fall') track.deliveredJ += arrived.reduce((sum, p) => sum + p.joules, 0);
           track.inFlight = track.inFlight.filter(p => p.progress < 1);
           track.pendingJ += Math.abs(delta);
-          while (quantumJ > EPS && track.pendingJ >= quantumJ - EPS) {
+          if (track.direction === 'lift' && releaseLift !== null) {
+            if (releaseLift && track.pendingJ > EPS) {
+              track.inFlight.push({ id: track.nextId++, direction: track.direction, joules: track.pendingJ, progress: 0, electricalArrival: true });
+              track.pendingJ = 0;
+            }
+          } else while (quantumJ > EPS && track.pendingJ >= quantumJ - EPS) {
             track.inFlight.push({ id: track.nextId++, direction: track.direction, joules: quantumJ, progress: 0 });
             track.pendingJ = Math.max(0, track.pendingJ - quantumJ);
           }
@@ -76,7 +81,7 @@
       const inFlightJ = track.inFlight.reduce((sum, p) => sum + p.joules, 0);
       const stockJ = track.direction === 'lift' ? Math.max(0, joules - track.pendingJ - inFlightJ) : joules;
       const transit = track.inFlight.map(p => ({ ...p }));
-      if (track.pendingJ > EPS && track.direction) transit.push({ id: 'pending', direction: track.direction, joules: track.pendingJ, progress: 0, partial: true });
+      if (track.pendingJ > EPS && track.direction && !(track.direction === 'lift' && releaseLift !== null)) transit.push({ id: 'pending', direction: track.direction, joules: track.pendingJ, progress: 0, partial: true });
       return { stockJ, stock: weightStockPackets(stockJ, m), transit, pendingJ: track.pendingJ, inFlightJ, deliveredJ: track.deliveredJ, quantumJ, direction: track.direction };
     }
     return { update, reset() { tracks.clear(); } };

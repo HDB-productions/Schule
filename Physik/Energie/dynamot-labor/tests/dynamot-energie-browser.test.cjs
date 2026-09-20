@@ -32,7 +32,11 @@ const fixture=v=>{
    assert.deepEqual(joins[0],joins[3],'wire joins red lamp terminal');assert.deepEqual(joins[1],joins[2],'wire joins black lamp terminal');
   }
   if(v==='v2')assert(data.packets.some(p=>p.kind==='mechanical-out'&&p.device===2),'driven crank kinetic energy');
-  if(v==='v3')assert(data.packets.some(p=>p.kind==='lift'),'rising weight receives energy');
+  if(v==='v3'){
+   assert(!data.packets.some(p=>p.kind==='lift'),'no green growing at motor before electrical arrival');
+   const split=await page.evaluate(()=>{for(let i=0;i<650;i++){labTest.advance(1);const samples=labTest.view.getEnergySamples(),lift=samples.filter(p=>p.kind==='lift');if(lift.length)return {lift,heat:samples.find(p=>p.kind==='heat'&&p.device===2),blue:samples.filter(p=>p.kind==='electrical')};}return null;});
+   assert(split,'electrical arrival releases green');assert.equal(split.lift.length,1,'two cables produce one combined conversion');assert(split.lift[0].electricalArrival&&!split.lift[0].partial);assert.equal(split.lift[0].progress,0);assert(split.heat,'thermal output co-emerges');assert(Math.hypot(...split.lift[0].position.map((v,i)=>v-split.heat.position[i]))<.03,'green and red emerge at same motor conversion point');assert(split.blue.every(p=>p.t<.003),'split occurs exactly as blue arrival completes');
+  }
   if(v==='v4'){
    const stock=data.packets.filter(p=>p.kind==='potential-stock'),stockJ=stock.reduce((sum,p)=>sum+p.joules,0);
    assert(stock.length>1,'several lilac reserve packets surround the weight');
