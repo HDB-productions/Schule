@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Edulo: mehr Platz</title></head><body>
+<main class="edulo-footer-probe">
+<style>
+.edulo-footer-probe{box-sizing:border-box;width:100%;max-width:920px;margin:0 auto;padding:20px;font:17px/1.5 system-ui,sans-serif;color:#20324a;background:#f3f7fb;border-radius:16px}
+.edulo-footer-probe *{box-sizing:border-box}.edulo-footer-probe h1{font-size:26px;margin:0 0 12px}.edulo-footer-probe p{margin:12px 0}.edulo-footer-probe button{min-height:48px;padding:12px 20px;border:0;border-radius:10px;font:inherit;cursor:pointer;background:#1556a4;color:white}.edulo-footer-probe button:disabled{opacity:.5;cursor:wait}.edulo-footer-probe [data-export]{background:#e1e9f3;color:#20324a;margin-top:12px}.edulo-footer-probe [data-result]{padding:14px;background:white;border-radius:10px}.edulo-footer-probe [data-hint]{font-size:14px}.edulo-footer-probe [hidden]{display:none!important}
+</style>
+<h1>Mehr Platz ohne Edulo-Fußleiste</h1>
+<p data-instruction>Einmal drücken. Dann unten nachsehen, ob „Überprüfen“ und „Lösungen“ verschwunden sind.</p>
+<button type="button" data-toggle disabled>Verbinde mit Edulo …</button>
+<p data-result role="status">Suche die Fußleiste …</p>
+<p data-hint>Vorhandene E1-/E2-Felder werden ausgeblendet. Antworten und Punkte werden nicht verändert.</p>
+<button type="button" data-export hidden>Ergebnis herunterladen</button>
+<script>
+(() => {
+  const root = document.currentScript?.closest('.edulo-footer-probe') || [...document.querySelectorAll('.edulo-footer-probe')].reverse().find(r => !r.dataset.started);
+  if (!root || root.dataset.started) return; root.dataset.started = '1';
+  const q = s => root.querySelector(s), button = q('[data-toggle]');
+  /* EDULO_FOOTER */
+  let helper, active = false, stopped = false;
+  const log = [], hidden = new Map();
+  function surfaces() {
+    const out = [];
+    for (const w of [window, parent, top]) try { if (!out.some(s => s.doc === w.document)) out.push({win:w,doc:w.document}); } catch {}
+    return out;
+  }
+  function hideFields(doc) {
+    const fields = [...doc.querySelectorAll('input,textarea')].filter(el => !root.contains(el) && /^(e1(_input|_text_input|_cloze_text_input_1)?|e2_cloze_text_input_\d+)$/.test(el.id || el.name));
+    const allowed = new Set(fields);
+    for (const field of fields) {
+      const block = doc.getElementById((field.id || field.name).startsWith('e1') ? 'e1' : 'e2');
+      const safe = block && block.contains(field) && !block.contains(root) && !block.querySelector('iframe') && [...block.querySelectorAll('input,textarea,select')].every(el => allowed.has(el));
+      const el = safe ? block : field;
+      if (!hidden.has(el)) hidden.set(el, {hidden:el.hidden,display:el.style.getPropertyValue('display'),priority:el.style.getPropertyPriority('display')});
+      el.hidden = true; el.style.setProperty('display','none','important');
+    }
+  }
+  function cleanup() {
+    stopped = true; helper?.restore(); observer.disconnect(); window.removeEventListener('pagehide', cleanup);
+    for (const [el,old] of hidden) { el.hidden=old.hidden; if(old.display) el.style.setProperty('display',old.display,old.priority); else el.style.removeProperty('display'); }
+  }
+  const observer = new MutationObserver(() => {if (!root.isConnected) cleanup();});
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+  window.addEventListener('pagehide',cleanup);
+  button.addEventListener('click',async () => {
+    button.disabled = true;
+    try {
+      if (!active) {
+        const measurement = await helper.hide(); active = true;
+        log.push({action:'hide',time:new Date().toISOString(),...measurement});
+        const gain = Math.round(measurement.gainedHeight);
+        q('[data-result]').textContent = 'Fußleiste ausgeblendet. Inhaltsbereich: '+Math.round(measurement.before.wrapper.height)+' → '+Math.round(measurement.after.wrapper.height)+' px. '+(gain > 0 ? gain+' px mehr Höhe.' : 'Noch kein zusätzlicher Platz messbar.');
+        q('[data-instruction]').textContent = 'Sind die Edulo-Buttons unten weg? Mit dem nächsten Klick stellst du alles wieder her.';
+        button.textContent = 'Fußleiste wiederherstellen';
+      } else {
+        helper.restore(); active = false;
+        log.push({action:'restore',time:new Date().toISOString(),measurement:helper.measure()});
+        q('[data-result]').textContent = 'Fußleiste und ursprünglicher Abstand wiederhergestellt.';
+        q('[data-instruction]').textContent = 'Du kannst das Ergebnis herunterladen und mir zusammen mit deiner Beobachtung schicken.';
+        button.textContent = 'Fußleiste erneut ausblenden';
+      }
+      q('[data-export]').hidden = false;
+    } catch(e) { helper?.restore(); active=false; button.textContent='Erneut versuchen'; q('[data-result]').textContent=e.message; }
+    finally { button.disabled=false; }
+  });
+  q('[data-export]').addEventListener('click', () => {
+    const url = URL.createObjectURL(new Blob([JSON.stringify({test:'edulo-footer-v1',measurements:log},null,2)],{type:'application/json'}));
+    const link = document.createElement('a'); link.href=url; link.download='Edulo-Footer-Ergebnis.json'; root.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
+  });
+  (async () => {
+    let reason = 'In Edulo einfügen und in der Lernansicht öffnen. Im normalen Browser ist keine Edulo-Fußleiste vorhanden.';
+    for(let i=0;i<50&&!stopped;i++) {
+      for(const s of surfaces()) if(s.win.widget) {
+        try { helper=createEduloFooter({root,widget:s.win.widget});hideFields(s.doc); }
+        catch(e) { reason=e.message;continue; }
+        if(stopped)return;
+        q('[data-result]').textContent='Bereit. Inhaltsbereich derzeit '+Math.round(helper.measure().wrapper.height)+' px hoch.';
+        button.textContent='Fußleiste ausblenden';button.disabled=false;return;
+      }
+      await new Promise(r=>setTimeout(r,200));
+    }
+    if(!stopped){q('[data-result]').textContent=reason;button.textContent='Keine Verbindung';}
+  })();
+})();
+</script>
+</main></body></html>

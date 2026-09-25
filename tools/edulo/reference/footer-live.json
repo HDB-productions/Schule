@@ -1,0 +1,121 @@
+{
+  "test": "edulo-footer-v1",
+  "measurements": [
+    {
+      "action": "hide",
+      "time": "2026-09-19T19:26:15.304Z",
+      "before": {
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "wrapper": {
+          "width": 973.9967041015625,
+          "height": 643.013427734375,
+          "top": 39.99331283569336,
+          "bottom": 683.0067405700684
+        },
+        "footer": {
+          "width": 924.2207641601562,
+          "height": 85.3344497680664,
+          "top": 682.6655883789062,
+          "bottom": 768.0000381469727
+        },
+        "footerDisplay": "block",
+        "wrapperBottom": "85px"
+      },
+      "after": {
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "wrapper": {
+          "width": 973.9967041015625,
+          "height": 728.0067138671875,
+          "top": 39.99331283569336,
+          "bottom": 768.0000267028809
+        },
+        "footer": {
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        "footerDisplay": "none",
+        "wrapperBottom": "0px"
+      },
+      "gainedHeight": 84.9932861328125,
+      "note": "Actual measured wrapper height; not a server or scoring test"
+    },
+    {
+      "action": "restore",
+      "time": "2026-09-19T19:26:21.534Z",
+      "measurement": {
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "wrapper": {
+          "width": 973.9967041015625,
+          "height": 643.013427734375,
+          "top": 39.99331283569336,
+          "bottom": 683.0067405700684
+        },
+        "footer": {
+          "width": 924.2207641601562,
+          "height": 85.3344497680664,
+          "top": 682.6655883789062,
+          "bottom": 768.0000381469727
+        },
+        "footerDisplay": "block",
+        "wrapperBottom": "85px"
+      }
+    },
+    {
+      "action": "hide",
+      "time": "2026-09-19T19:26:23.983Z",
+      "before": {
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "wrapper": {
+          "width": 973.9967041015625,
+          "height": 643.013427734375,
+          "top": 39.99331283569336,
+          "bottom": 683.0067405700684
+        },
+        "footer": {
+          "width": 924.2207641601562,
+          "height": 85.3344497680664,
+          "top": 682.6655883789062,
+          "bottom": 768.0000381469727
+        },
+        "footerDisplay": "block",
+        "wrapperBottom": "85px"
+      },
+      "after": {
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        },
+        "wrapper": {
+          "width": 973.9967041015625,
+          "height": 728.0067138671875,
+          "top": 39.99331283569336,
+          "bottom": 768.0000267028809
+        },
+        "footer": {
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        "footerDisplay": "none",
+        "wrapperBottom": "0px"
+      },
+      "gainedHeight": 84.9932861328125,
+      "note": "Actual measured wrapper height; not a server or scoring test"
+    }
+  ]
+}

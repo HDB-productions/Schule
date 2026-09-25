@@ -1,0 +1,17 @@
+/* All selectors stay under the widget root: Edulo may insert HTML into its own document. */
+.edulo-widget{box-sizing:border-box;font:16px/1.45 system-ui,sans-serif;color:#18384a;background:#f4f7fa;border:1px solid #ccd8e2;border-radius:16px;width:100%;max-width:920px;height:var(--edulo-height,640px);margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.edulo-widget *{box-sizing:border-box}
+.edulo-widget [hidden]{display:none!important}
+.edulo-widget h1{font-size:24px;line-height:1.2;margin:0}
+.edulo-widget p{margin:8px 0}
+.edulo-widget header,.edulo-widget footer{flex:0 0 auto}
+.edulo-widget .edulo-work{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:4px}
+.edulo-widget fieldset{border:0;margin:0;padding:0;min-width:0}
+.edulo-widget button,.edulo-widget input{font:inherit;min-height:44px;border:1px solid #93aabc;border-radius:8px;padding:10px;max-width:100%}
+.edulo-widget button{background:#21679b;color:white;cursor:pointer}
+.edulo-widget button:disabled{opacity:.5;cursor:default}
+.edulo-widget input{background:white;color:inherit}
+.edulo-widget label{display:block;margin:12px 0}
+.edulo-widget footer{font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.edulo-widget :focus-visible{outline:3px solid #d58310;outline-offset:2px}
+@media(max-width:600px){.edulo-widget{padding:12px;gap:8px}.edulo-widget h1{font-size:21px}}

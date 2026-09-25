@@ -1,0 +1,56 @@
+[data-edulo-id="flaschenrakete"]{--ink:#183b47;--muted:#526b75;--accent:#136f73;box-sizing:border-box;display:flex;flex-direction:column;width:100%;max-width:980px;height:var(--edulo-height,calc(100dvh - 16px));min-height:240px;margin:0 auto;color:var(--ink);background:#f2f6f5;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;border-radius:18px;overflow:hidden}
+[data-edulo-id="flaschenrakete"] *{box-sizing:border-box}
+[data-edulo-id="flaschenrakete"] [hidden]{display:none!important}
+[data-edulo-id="flaschenrakete"] .rocket-header{padding:18px 24px 12px;background:#163e49;color:#fff}
+[data-edulo-id="flaschenrakete"] .rocket-header p{margin:3px 0;color:#d5e8e8}
+[data-edulo-id="flaschenrakete"] .rocket-eyebrow{font-size:11px;letter-spacing:.16em;font-weight:750}
+[data-edulo-id="flaschenrakete"] h1{font-size:clamp(23px,4vw,32px);line-height:1.2;margin:5px 0}
+[data-edulo-id="flaschenrakete"] h2{margin:0;font-size:21px;line-height:1.3}
+[data-edulo-id="flaschenrakete"] .edulo-work{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:18px;scrollbar-gutter:stable}
+[data-edulo-id="flaschenrakete"] fieldset{border:0;margin:0;padding:0;min-width:0}
+[data-edulo-id="flaschenrakete"] .experiment-card{background:white;border:1px solid #d9e5e5;border-radius:16px;padding:18px;margin-bottom:18px}
+[data-edulo-id="flaschenrakete"] .section-heading{display:flex;gap:12px;align-items:flex-start}
+[data-edulo-id="flaschenrakete"] .section-heading p{margin:6px 0 12px;color:var(--muted);font-size:14px}
+[data-edulo-id="flaschenrakete"] .step-number{display:grid;place-items:center;flex:none;border-radius:50%;width:32px;height:32px;background:#d8eeea;color:#165d60;font-weight:750}
+[data-edulo-id="flaschenrakete"] .model-note{font-size:13px;color:var(--muted);margin:12px 0 0;border-left:3px solid #96c8c1;padding-left:12px}
+[data-edulo-id="flaschenrakete"] button,[data-edulo-id="flaschenrakete"] select{font:inherit;min-height:44px}
+[data-edulo-id="flaschenrakete"] button{cursor:pointer}
+[data-edulo-id="flaschenrakete"] button:disabled{cursor:default;opacity:.6}
+[data-edulo-id="flaschenrakete"] :focus-visible{outline:3px solid #cd7400;outline-offset:3px}
+[data-edulo-id="flaschenrakete"] .rocket-footer{padding:8px 18px;border-top:1px solid #d5e2e1;font-size:12px;background:#f7faf9;display:flex;gap:10px;align-items:center;justify-content:space-between}
+[data-edulo-id="flaschenrakete"] .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:500px){[data-edulo-id="flaschenrakete"] .rocket-header{padding:14px 15px 10px}[data-edulo-id="flaschenrakete"] .rocket-header>p:last-child{font-size:13px}[data-edulo-id="flaschenrakete"] .edulo-work{padding:10px;scrollbar-gutter:auto}[data-edulo-id="flaschenrakete"] .experiment-card{padding:12px}[data-edulo-id="flaschenrakete"] h2{font-size:18px}}
+
+[data-edulo-id="flaschenrakete"] .model-details{margin:12px 18px 18px;padding:12px;border:1px solid #d9e5e5;border-radius:10px;font-size:13px}
+[data-edulo-id="flaschenrakete"] .model-details summary{cursor:pointer;min-height:32px}
+
+[data-edulo-id="flaschenrakete"]{min-height:0}
+[data-edulo-id="flaschenrakete"] .edulo-work{padding:12px}
+[data-edulo-id="flaschenrakete"] .experiment-card{margin:0;padding:14px}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:4px 0 12px}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button{display:flex;gap:8px;align-items:center;justify-content:space-between;text-align:left;border:1px solid #87b9bd;border-radius:10px;background:#e7f4f3;color:#154f55;padding:10px 12px;font-weight:650}
+[data-edulo-id="flaschenrakete"] .rocket-back-nav{position:sticky;top:-12px;z-index:5;background:#f2f6f5;padding:0 0 7px}
+[data-edulo-id="flaschenrakete"] .rocket-back-nav button{border:1px solid #a8c4c8;border-radius:8px;background:white;color:#154f55;padding:6px 12px}
+[data-edulo-id="flaschenrakete"] .rocket-learning-inner{padding:0}
+[data-edulo-id="flaschenrakete"] .rocket-learning-head{padding:5px 4px 12px}
+[data-learning-view="cloze"] [data-diagram-card], [data-learning-view="diagram"] [data-cloze-card]{display:none}
+
+[data-edulo-id="flaschenrakete"] .rocket-learning-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+[data-edulo-id="flaschenrakete"] .rocket-learning-head .rocket-progress{margin-top:0;font-size:14px}
+[data-edulo-id="flaschenrakete"] .rocket-learning .rocket-card-head{display:none}
+[data-edulo-id="flaschenrakete"] [data-diagram-card] .rocket-diagram-instruction{min-height:0;margin-bottom:8px}
+[data-edulo-id="flaschenrakete"] [data-diagram-card] .rocket-palette-group:last-child>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+
+[data-edulo-id="flaschenrakete"] .section-heading{align-items:center;margin-bottom:10px}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button strong{font-size:15px;line-height:1.3;display:block}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button small{font-size:13px;font-weight:500;display:block;margin-top:3px;color:#365d63}
+[data-edulo-id="flaschenrakete"] [data-page="learning"]{padding:14px;border:1px solid #d9e5e5;border-radius:16px;background:white}
+[data-edulo-id="flaschenrakete"] .rocket-learning .rocket-card{box-shadow:none;border:0;padding:4px 0 0;margin:0;border-radius:0}
+[data-edulo-id="flaschenrakete"] .rocket-task-nav{position:sticky;top:-12px;z-index:5;background:white;padding:5px 0;margin-bottom:8px}
+
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button>span:first-child{min-width:0;flex:1}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button>span[aria-hidden]{flex:none}
+
+[data-edulo-id="flaschenrakete"] .rocket-home-logo{display:inline-flex;flex:0 0 52px;margin-left:auto;border-radius:12px}
+[data-edulo-id="flaschenrakete"] .rocket-home-logo img{display:block;width:52px;height:52px;object-fit:cover;border-radius:12px}
+[data-edulo-id="flaschenrakete"] .section-heading>div{min-width:0}

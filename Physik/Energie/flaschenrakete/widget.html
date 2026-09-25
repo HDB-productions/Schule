@@ -1,0 +1,1123 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flaschenrakete – Energie auf Reisen</title></head><body>
+<!-- EDULO_WIDGET_KEY:flaschenrakete -->
+<main class="edulo-widget" data-edulo-id="flaschenrakete">
+<style>[data-edulo-id="flaschenrakete"]{--ink:#183b47;--muted:#526b75;--accent:#136f73;box-sizing:border-box;display:flex;flex-direction:column;width:100%;max-width:980px;height:var(--edulo-height,calc(100dvh - 16px));min-height:240px;margin:0 auto;color:var(--ink);background:#f2f6f5;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;border-radius:18px;overflow:hidden}
+[data-edulo-id="flaschenrakete"] *{box-sizing:border-box}
+[data-edulo-id="flaschenrakete"] [hidden]{display:none!important}
+[data-edulo-id="flaschenrakete"] .rocket-header{padding:18px 24px 12px;background:#163e49;color:#fff}
+[data-edulo-id="flaschenrakete"] .rocket-header p{margin:3px 0;color:#d5e8e8}
+[data-edulo-id="flaschenrakete"] .rocket-eyebrow{font-size:11px;letter-spacing:.16em;font-weight:750}
+[data-edulo-id="flaschenrakete"] h1{font-size:clamp(23px,4vw,32px);line-height:1.2;margin:5px 0}
+[data-edulo-id="flaschenrakete"] h2{margin:0;font-size:21px;line-height:1.3}
+[data-edulo-id="flaschenrakete"] .edulo-work{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:18px;scrollbar-gutter:stable}
+[data-edulo-id="flaschenrakete"] fieldset{border:0;margin:0;padding:0;min-width:0}
+[data-edulo-id="flaschenrakete"] .experiment-card{background:white;border:1px solid #d9e5e5;border-radius:16px;padding:18px;margin-bottom:18px}
+[data-edulo-id="flaschenrakete"] .section-heading{display:flex;gap:12px;align-items:flex-start}
+[data-edulo-id="flaschenrakete"] .section-heading p{margin:6px 0 12px;color:var(--muted);font-size:14px}
+[data-edulo-id="flaschenrakete"] .step-number{display:grid;place-items:center;flex:none;border-radius:50%;width:32px;height:32px;background:#d8eeea;color:#165d60;font-weight:750}
+[data-edulo-id="flaschenrakete"] .model-note{font-size:13px;color:var(--muted);margin:12px 0 0;border-left:3px solid #96c8c1;padding-left:12px}
+[data-edulo-id="flaschenrakete"] button,[data-edulo-id="flaschenrakete"] select{font:inherit;min-height:44px}
+[data-edulo-id="flaschenrakete"] button{cursor:pointer}
+[data-edulo-id="flaschenrakete"] button:disabled{cursor:default;opacity:.6}
+[data-edulo-id="flaschenrakete"] :focus-visible{outline:3px solid #cd7400;outline-offset:3px}
+[data-edulo-id="flaschenrakete"] .rocket-footer{padding:8px 18px;border-top:1px solid #d5e2e1;font-size:12px;background:#f7faf9;display:flex;gap:10px;align-items:center;justify-content:space-between}
+[data-edulo-id="flaschenrakete"] .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:500px){[data-edulo-id="flaschenrakete"] .rocket-header{padding:14px 15px 10px}[data-edulo-id="flaschenrakete"] .rocket-header>p:last-child{font-size:13px}[data-edulo-id="flaschenrakete"] .edulo-work{padding:10px;scrollbar-gutter:auto}[data-edulo-id="flaschenrakete"] .experiment-card{padding:12px}[data-edulo-id="flaschenrakete"] h2{font-size:18px}}
+
+[data-edulo-id="flaschenrakete"] .model-details{margin:12px 18px 18px;padding:12px;border:1px solid #d9e5e5;border-radius:10px;font-size:13px}
+[data-edulo-id="flaschenrakete"] .model-details summary{cursor:pointer;min-height:32px}
+
+[data-edulo-id="flaschenrakete"]{min-height:0}
+[data-edulo-id="flaschenrakete"] .edulo-work{padding:12px}
+[data-edulo-id="flaschenrakete"] .experiment-card{margin:0;padding:14px}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:4px 0 12px}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button{display:flex;gap:8px;align-items:center;justify-content:space-between;text-align:left;border:1px solid #87b9bd;border-radius:10px;background:#e7f4f3;color:#154f55;padding:10px 12px;font-weight:650}
+[data-edulo-id="flaschenrakete"] .rocket-back-nav{position:sticky;top:-12px;z-index:5;background:#f2f6f5;padding:0 0 7px}
+[data-edulo-id="flaschenrakete"] .rocket-back-nav button{border:1px solid #a8c4c8;border-radius:8px;background:white;color:#154f55;padding:6px 12px}
+[data-edulo-id="flaschenrakete"] .rocket-learning-inner{padding:0}
+[data-edulo-id="flaschenrakete"] .rocket-learning-head{padding:5px 4px 12px}
+[data-learning-view="cloze"] [data-diagram-card], [data-learning-view="diagram"] [data-cloze-card]{display:none}
+
+[data-edulo-id="flaschenrakete"] .rocket-learning-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+[data-edulo-id="flaschenrakete"] .rocket-learning-head .rocket-progress{margin-top:0;font-size:14px}
+[data-edulo-id="flaschenrakete"] .rocket-learning .rocket-card-head{display:none}
+[data-edulo-id="flaschenrakete"] [data-diagram-card] .rocket-diagram-instruction{min-height:0;margin-bottom:8px}
+[data-edulo-id="flaschenrakete"] [data-diagram-card] .rocket-palette-group:last-child>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+
+[data-edulo-id="flaschenrakete"] .section-heading{align-items:center;margin-bottom:10px}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button strong{font-size:15px;line-height:1.3;display:block}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button small{font-size:13px;font-weight:500;display:block;margin-top:3px;color:#365d63}
+[data-edulo-id="flaschenrakete"] [data-page="learning"]{padding:14px;border:1px solid #d9e5e5;border-radius:16px;background:white}
+[data-edulo-id="flaschenrakete"] .rocket-learning .rocket-card{box-shadow:none;border:0;padding:4px 0 0;margin:0;border-radius:0}
+[data-edulo-id="flaschenrakete"] .rocket-task-nav{position:sticky;top:-12px;z-index:5;background:white;padding:5px 0;margin-bottom:8px}
+
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button>span:first-child{min-width:0;flex:1}
+[data-edulo-id="flaschenrakete"] .rocket-home-nav button>span[aria-hidden]{flex:none}
+
+[data-edulo-id="flaschenrakete"] .rocket-home-logo{display:inline-flex;flex:0 0 52px;margin-left:auto;border-radius:12px}
+[data-edulo-id="flaschenrakete"] .rocket-home-logo img{display:block;width:52px;height:52px;object-fit:cover;border-radius:12px}
+[data-edulo-id="flaschenrakete"] .section-heading>div{min-width:0}
+
+.rocket-learning {--ink:#183543;--line:#bfd2dc;--blue:#126899;color:var(--ink);font:16px/1.48 system-ui,-apple-system,"Segoe UI",sans-serif;box-sizing:border-box}
+.rocket-learning *, .rocket-learning *::before, .rocket-learning *::after {box-sizing:border-box}
+.rocket-learning .rocket-learning-inner {max-width:920px;margin:auto;padding:12px 16px 24px}
+.rocket-learning h2,.rocket-learning h3,.rocket-learning p {margin:0}
+.rocket-learning h2 {font-size:clamp(1.4rem,3vw,2rem);line-height:1.2}
+.rocket-learning .rocket-learning-head {padding:8px 4px 15px}
+.rocket-learning .rocket-learning-head p {margin-top:5px}
+.rocket-learning .rocket-progress {display:inline-block;margin-top:9px;padding:5px 12px;border-radius:99px;background:#d8eaf8;font-weight:700}
+.rocket-learning .rocket-migration {font-size:.87rem;color:#526473}
+.rocket-learning .rocket-card {margin-bottom:16px;padding:17px;border:1px solid var(--line);border-radius:16px;background:white;box-shadow:0 2px 10px #102f4210}
+.rocket-learning .rocket-card-head {display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.rocket-learning h3 {font-size:1.2rem;line-height:1.25}
+.rocket-learning .rocket-step {display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:50%;background:var(--blue);color:white;font-weight:800}
+.rocket-learning .rocket-story {line-height:2.4}
+.rocket-learning .rocket-cloze {display:inline-block;vertical-align:middle;line-height:1.2}
+.rocket-learning .rocket-cloze select {max-width:min(290px,78vw);min-height:42px;padding:6px 27px 6px 8px;border:1.5px solid #8baaba;border-radius:8px;background:white;color:var(--ink);font:inherit;font-size:.92rem}
+.rocket-learning .rocket-cloze select.is-solved,.rocket-learning .rocket-socket.is-solved {border-color:#31815a;background:#e0f5e9}
+.rocket-learning .rocket-cloze select.has-error,.rocket-learning .rocket-socket.has-error {border-color:#c17035;background:#fff3d2}
+.rocket-learning .rocket-cloze-hints,.rocket-learning .rocket-criterion-hints {display:flex;flex-wrap:wrap;gap:3px 8px;margin-top:8px}
+.rocket-learning .rocket-help {margin-top:8px;color:#526473;font-size:.93rem}
+.rocket-learning .rocket-actions {display:flex;gap:10px;margin-top:15px}
+.rocket-learning button {font:inherit;cursor:pointer}
+.rocket-learning button:focus-visible,.rocket-learning select:focus-visible {outline:3px solid #e4a92d;outline-offset:2px}
+.rocket-learning .rocket-primary {min-height:43px;padding:7px 17px;border:0;border-radius:9px;background:var(--blue);color:white;font-weight:700}
+.rocket-learning .rocket-primary:hover {background:#0b5078}
+.rocket-learning .rocket-feedback {min-height:24px;margin-top:9px;font-weight:650;color:#245570}
+.rocket-learning .rocket-hint {padding:3px 6px;border:0;background:transparent;color:var(--blue);text-decoration:underline;font-size:.8rem}
+.rocket-learning .rocket-palette {display:grid;gap:9px;margin:13px 0 8px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#f5fafc}
+.rocket-learning .rocket-palette-group strong {display:block;margin-bottom:4px;color:#39596a;font-size:.83rem}
+.rocket-learning .rocket-palette-group>div {display:flex;flex-wrap:wrap;gap:6px}
+.rocket-learning .rocket-token {min-height:40px;padding:6px 10px;border:1px solid #8baaba;border-radius:8px;background:white;color:var(--ink);touch-action:none;user-select:none;font-size:.9rem}
+.rocket-learning .rocket-token:hover,.rocket-learning .rocket-token.is-chosen {outline:2px solid var(--blue);background:#eaf5fb}
+.rocket-learning .rocket-token.is-dragging {opacity:.55;cursor:grabbing}
+.rocket-learning .rocket-token.rocket-energy {border-left:5px solid #a8cfe9}
+.rocket-learning .rocket-token.rocket-device {border-left:5px solid #deb350}
+.rocket-learning .rocket-chain-scroll {overflow-x:auto;overflow-y:hidden;margin-top:11px;padding:9px 0 14px;overscroll-behavior-x:contain}
+.rocket-learning .rocket-chain {display:flex;align-items:flex-start;min-width:max-content;padding:0 5px 100px}
+.rocket-learning .rocket-chain-cell {position:relative;flex:none;width:115px;min-width:115px;text-align:center}
+.rocket-learning .rocket-energy-cell {width:120px;min-width:120px}
+.rocket-learning .rocket-cell-title {display:block;height:25px;color:#526473;font-size:.7rem;font-weight:700}
+.rocket-learning .rocket-socket {display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:60px;padding:5px 9px;border:1px solid #8baaba;background:#d8eaf8;color:var(--ink);font-size:.8rem;line-height:1.16;text-align:center;touch-action:none;overflow-wrap:anywhere}
+.rocket-learning .rocket-socket span {pointer-events:none}
+.rocket-learning .rocket-socket small {font-size:.7rem;font-weight:800;pointer-events:none}
+.rocket-learning .rocket-arrow {position:relative;height:60px;border:0;background:transparent}
+.rocket-learning .rocket-arrow::before {content:'';position:absolute;left:0;right:0;top:calc((60px - var(--rocket-band))/2);height:var(--rocket-band);background:#d8eaf8;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%)}
+.rocket-learning .rocket-arrow>span,.rocket-learning .rocket-arrow>small {position:relative;z-index:1;text-shadow:0 1px #fff,0 -1px #fff}
+.rocket-learning .rocket-box {height:60px;border:2px solid #b48e39;background:#fff0ca;border-radius:2px}
+.rocket-learning .rocket-socket.is-drop-target {outline:3px solid #e4a92d;outline-offset:-3px}
+.rocket-learning .rocket-branch {position:absolute;top:85px;left:6px;right:6px;display:grid;justify-items:center;gap:0;z-index:2}
+.rocket-learning .rocket-branch-stem {display:block;width:var(--rocket-side);height:14px;background:#f27770}
+.rocket-learning .rocket-branch-label {font-size:.68rem;line-height:1.12;font-weight:700;color:#674d25}
+.rocket-learning .rocket-side-arrow {position:relative;min-height:44px;height:44px;padding:23px 2px 0;border:0;background:transparent;font-size:.66rem;line-height:1}
+.rocket-learning .rocket-side-band {position:absolute;top:0;left:50%;width:var(--rocket-side);height:24px;transform:translateX(-50%);background:#f27770;clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%)}
+.rocket-learning .rocket-branch-water .rocket-branch-stem,.rocket-learning .rocket-branch-water .rocket-side-band {background:#8fc5e9}
+.rocket-learning .rocket-drag-ghost {position:fixed;z-index:99999;pointer-events:none;transform:translate(12px,12px);max-width:180px;padding:7px 10px;border:2px solid var(--blue);border-radius:5px;background:#fffefa;box-shadow:0 5px 15px #17304244;font-size:.85rem}
+.rocket-learning .rocket-card.is-locked {background:#f5f7f8;color:#4e616d}
+.rocket-learning .rocket-sr {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:680px){.rocket-learning .rocket-learning-inner {padding:8px 10px 18px}.rocket-learning .rocket-card {padding:13px}.rocket-learning .rocket-story {line-height:2.2}.rocket-learning .rocket-chain-cell {width:104px;min-width:104px}.rocket-learning .rocket-energy-cell {width:110px;min-width:110px}}
+
+/* Match the DynaMot palette: energy arrows and converter boxes, not cards. */
+.rocket-learning .rocket-palette{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:6px;background:transparent;border:0}
+.rocket-learning .rocket-palette-group{min-width:0;padding:5px;border:1px solid #d4dfd8;border-radius:7px;background:#fff}
+.rocket-learning .rocket-palette-group>div{display:grid;gap:5px}
+.rocket-learning .rocket-palette-group strong{min-height:34px;line-height:1.2;font-size:12px}
+.rocket-learning .rocket-token{width:100%;min-height:44px;font-size:12px;line-height:1.18}
+.rocket-learning .rocket-token.rocket-energy{border:0;background:var(--rocket-energy-color,#b6c9d6);color:#183543;clip-path:polygon(0 0,calc(100% - 13px) 0,100% 50%,calc(100% - 13px) 100%,0 100%);padding-right:17px;font-weight:650}
+.rocket-learning .rocket-token.rocket-device{border:2px solid #b48e39;background:#fff0ca;border-radius:0;color:#5e4710}
+.rocket-learning .rocket-flow-wrap{position:relative;min-width:max-content}
+.rocket-learning .rocket-flow-svg{display:block;max-width:none}
+.rocket-learning .rocket-flow-target{position:absolute;width:120px;min-height:44px;padding:4px 6px;border:0;border-radius:0;background:transparent;line-height:1.1;font-size:12px;text-shadow:0 1px white,0 -1px white}
+.rocket-learning .rocket-flow-target.is-solved{background:transparent;box-shadow:inset 0 -2px #31815a}
+.rocket-learning .rocket-flow-target.has-error{background:#fff3d244;box-shadow:inset 0 -3px #c17035}
+.rocket-learning .rocket-flow-branch-target{position:absolute;width:126px;min-height:55px;padding:4px;border:1px dashed #8baaba;border-radius:5px;background:#ffffffed;font-size:11px;line-height:1.15}
+@media(max-width:700px){.rocket-learning .rocket-palette{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.rocket-learning .rocket-chain{min-width:770px;padding:0 0 18px;gap:0}
+.rocket-learning .rocket-chain-cell,.rocket-learning .rocket-energy-cell{flex:1 0 70px;width:auto;min-width:70px}
+.rocket-learning .rocket-socket{overflow-wrap:normal;hyphens:none}
+.rocket-learning .rocket-chain .rocket-socket{font-size:11px;padding:3px}
+.rocket-learning .rocket-flow-target{font-size:11px;padding:3px}
+.rocket-learning .rocket-flow-branch-target{font-size:11px}
+
+.rocket-learning .rocket-diagram-instruction{min-height:100px;display:grid}
+.rocket-learning .rocket-diagram-instruction strong{display:block;margin:3px 0 8px}
+.rocket-learning .rocket-diagram-actions{min-height:50px;display:flex;align-items:center}
+.rocket-learning .rocket-flow-dock{position:absolute;width:44px;height:44px;min-height:44px;border:2px dashed #b88124;border-radius:50%;padding:0;background:#fff8dc;color:#805713;font-size:24px;z-index:3}
+.rocket-learning .rocket-flow-branch-label{position:absolute;width:126px;min-height:48px;text-align:center;font-size:11px;line-height:1.25;display:grid;gap:3px;align-content:start}
+.rocket-learning .rocket-flow-target[aria-disabled=true]{cursor:default}
+
+.rocket-learning .rocket-flow-dock{width:110px;height:48px;min-height:48px;border:2px dashed #b88124;border-radius:7px;padding:4px;font-size:12px;background:#fff8dc}
+.rocket-learning .rocket-flow-branch-label{width:110px}
+
+.rocket-learning .rocket-cloze-help{display:inline-flex;vertical-align:middle;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;background:transparent;cursor:pointer}
+.rocket-learning .rocket-cloze-help span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#247bc2;color:white;font-size:15px;font-weight:700;line-height:1}
+.rocket-learning .rocket-cloze-help:focus-visible{outline:2px solid #247bc2;border-radius:6px}
+.rocket-learning .rocket-hint-dialog{box-sizing:border-box;position:fixed;inset:0;margin:auto;width:min(540px,calc(100% - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:20px;border:1px solid #8eb9d8;border-radius:14px;color:#183647;background:#fff;box-shadow:0 12px 40px #0004;font:16px/1.5 system-ui,sans-serif;overscroll-behavior:contain}
+.rocket-learning .rocket-hint-dialog::backdrop{background:#17364766}
+.rocket-learning .rocket-hint-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rocket-learning .rocket-hint-dialog h3{margin:0;font-size:20px}
+.rocket-learning .rocket-hint-dialog button{min-width:44px;min-height:44px;border-radius:8px;border:1px solid #8eb9d8;background:#edf6fc;color:#183647;font:inherit;cursor:pointer;padding:8px 12px}
+.rocket-learning .rocket-hint-dialog .rocket-primary{background:#247bc2;color:white}
+.rocket-learning .rocket-hint-stage{color:#4c6676;font-size:14px}
+.rocket-learning .rocket-hint-steps p{padding-left:12px;border-left:3px solid #b9d9ed}
+.rocket-learning .rocket-hint-dialog-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.rocket-learning .rocket-hint-dialog-actions p{flex-basis:100%;font-size:14px;margin:5px 0}
+@media(max-width:500px){.rocket-learning .rocket-hint-dialog{padding:14px;font-size:15px}}
+
+.rocket-learning .rocket-diagram-instruction>div{grid-area:1/1}
+
+/* Compact side flows retain full-size touch targets and main-chain text. */
+.rocket-learning .rocket-flow-dock,.rocket-learning .rocket-flow-branch-label{width:100px}
+
+.rocket-learning .rocket-hint-steps{display:grid;gap:10px;margin:10px 0}
+
+.rocket-learning .rocket-story{display:grid;gap:20px;margin:14px 0}
+.rocket-learning .rocket-story-part{padding-left:14px;border-left:3px solid #c8dde5}
+.rocket-learning .rocket-story-part h4{margin:0 0 6px;font-size:1rem;line-height:1.35;color:#176576}
+.rocket-learning .rocket-story-part p{margin:0;line-height:2.1}
+@media(max-width:680px){.rocket-learning .rocket-story{gap:18px}.rocket-learning .rocket-story-part{padding-left:10px}}
+
+.rocket-learning .rocket-cloze-pair{display:inline-flex;align-items:center;vertical-align:middle;max-width:100%;line-height:1.2}
+.rocket-learning .rocket-cloze-pair .rocket-cloze{min-width:0;max-width:calc(100% - 44px)}
+.rocket-learning .rocket-cloze-pair select{max-width:100%}
+.rocket-learning .rocket-cloze-pair .rocket-cloze-help{flex:0 0 44px}
+</style>
+
+<div class="edulo-work"><fieldset data-controls disabled><legend class="sr-only">Experiment und Aufgaben</legend>
+<section data-page="experiment" class="experiment-card" aria-labelledby="experiment-title"><div class="section-heading"><span class="step-number">1</span><div><h2 id="experiment-title">Simulation der Wasserrakete</h2></div><a class="rocket-home-logo" data-home-logo href="../../../index.html" aria-label="Zur Schul-Startseite" title="Zur Schul-Startseite" hidden><img data-home-image alt="HDB" width="52" height="52"></a></div><nav class="rocket-home-nav" aria-label="Aufgaben öffnen"><button type="button" data-navigate="cloze"><span><strong>Lückentext öffnen</strong><small data-section-score="cloze">Punkte werden geladen</small></span><span aria-hidden="true">→</span></button><button type="button" data-navigate="diagram"><span><strong>Energiefluss<wbr>diagramm öffnen</strong><small data-section-score="diagram">Punkte werden geladen</small></span><span aria-hidden="true">→</span></button></nav><div data-simulation></div></section>
+<section data-page="learning" hidden><div class="section-heading"><span class="step-number" data-page-number>2</span><h2 id="learning-page-title" tabindex="-1">Lückentext</h2><a class="rocket-home-logo" data-home-logo href="../../../index.html" aria-label="Zur Schul-Startseite" title="Zur Schul-Startseite" hidden><img data-home-image alt="HDB" width="52" height="52"></a></div><nav class="rocket-home-nav rocket-task-nav" aria-label="Ansicht wechseln"><button type="button" data-navigate="experiment"><strong>Simulation</strong><span aria-hidden="true">→</span></button><button type="button" data-task-link></button></nav><div data-learning></div></section>
+</fieldset></div>
+<footer class="rocket-footer"><span data-storage role="status">Speicher wird verbunden …</span><button type="button" data-retry hidden>Erneut verbinden</button></footer>
+<script>(()=>{'use strict';
+const scriptRoot=document.currentScript?.closest('[data-edulo-id="flaschenrakete"]');
+const root=scriptRoot||[...document.querySelectorAll('[data-edulo-id="flaschenrakete"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+// Included by build.cjs. Changes only the widget's own task layout.
+function createEduloFooter({root, widget}) {
+  const wrapper = widget?.contentWrapper?.[0];
+  const doc = wrapper?.ownerDocument;
+  const footer = doc?.getElementById('footerButtons');
+  let frame = null; try { frame = root.ownerDocument.defaultView.frameElement; } catch {}
+  if (!wrapper || !footer || !(wrapper.contains(root) || (frame && wrapper.contains(frame))) || footer.contains(root)) throw Error('Footer nicht eindeutig der eigenen Aufgabe zugeordnet.');
+  if (widget.isEditor || widget.JSON?.asTest === '1' || widget.JSON?.remoteUserData) throw Error('Footer im Editor, Prüfungsmodus oder in fremden Antworten nicht verändern.');
+  const win = doc.defaultView;
+  const original = {hidden: footer.hidden, display: footer.style.getPropertyValue('display'), dp: footer.style.getPropertyPriority('display'), bottom: wrapper.style.getPropertyValue('bottom'), bp: wrapper.style.getPropertyPriority('bottom')};
+  const restoreProperty = (el, key, value, priority) => value ? el.style.setProperty(key, value, priority) : el.style.removeProperty(key);
+  function measure() {
+    const rect = el => { const r = el.getBoundingClientRect(); return {width: r.width, height: r.height, top: r.top, bottom: r.bottom}; };
+    return {viewport: {width: win.innerWidth, height: win.innerHeight}, wrapper: rect(wrapper), footer: rect(footer), footerDisplay: win.getComputedStyle(footer).display, wrapperBottom: win.getComputedStyle(wrapper).bottom};
+  }
+  function refresh() {
+    // refreshAll() would rebuild content and can re-evaluate answers: deliberately not used.
+    try { if (widget.contentWrapper.data?.('jsp') && typeof widget.refreshScrollbars === 'function') widget.refreshScrollbars(); } catch {}
+    win.dispatchEvent(new win.Event('resize'));
+    if (root.ownerDocument.defaultView !== win) root.ownerDocument.defaultView.dispatchEvent(new root.ownerDocument.defaultView.Event('resize'));
+  }
+  function restore() {
+    footer.hidden = original.hidden;
+    restoreProperty(footer, 'display', original.display, original.dp);
+    restoreProperty(wrapper, 'bottom', original.bottom, original.bp);
+    refresh();
+  }
+  function setHidden() {
+    if (!footer.isConnected || !wrapper.isConnected) throw Error('Edulo hat den Footer ersetzt. Neu verbinden.');
+    const position = win.getComputedStyle(wrapper).position;
+    if (footer.hidden && footer.style.getPropertyValue('display') === 'none' && (!['absolute','fixed'].includes(position) || wrapper.style.bottom === '0px')) return;
+    footer.hidden = true; footer.style.setProperty('display', 'none', 'important');
+    if (position === 'absolute' || position === 'fixed') wrapper.style.setProperty('bottom', '0px', 'important');
+    refresh();
+  }
+  async function hide() {
+    const before = measure();
+    setHidden(); await new Promise(r => setTimeout(r, 200));
+    const after = measure();
+    return {before, after, gainedHeight: after.wrapper.height - before.wrapper.height, note: 'Actual measured wrapper height; not a server or scoring test'};
+  }
+  return {hide, setHidden, restore, measure, isCurrent: () => footer.isConnected && wrapper.isConnected && doc.getElementById('footerButtons') === footer && widget.contentWrapper?.[0] === wrapper};
+}
+
+// Inlined by build.cjs. No global variables, network requests or generated messages.
+const createEduloBridge = (() => {
+  const PREFIX = 'EDULO2:';
+  const COLORS = ['gray', 'green', 'yellow', 'red'];
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  function encode(value) {
+    const bytes = new TextEncoder().encode(JSON.stringify(value));
+    let binary = '';
+    for (let i = 0; i < bytes.length; i += 8192) binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+    return PREFIX + btoa(binary);
+  }
+  function decode(raw) {
+    if (!raw.startsWith(PREFIX)) throw Error('Unbekannter Speicherstand. Originaldaten bleiben erhalten.');
+    return JSON.parse(new TextDecoder('utf-8', {fatal: true}).decode(Uint8Array.from(atob(raw.slice(PREFIX.length)), c => c.charCodeAt(0))));
+  }
+  return function create(options) {
+    const {root, widgetId, fresh, validate, onStatus = () => {}} = options;
+    if (!root || !/^[a-z][a-z0-9-]+$/.test(widgetId) || typeof fresh !== 'function' || typeof validate !== 'function') throw Error('Ungültige Bridge-Konfiguration.');
+    const version = options.stateVersion || 1;
+    const query = new URLSearchParams(location.search);
+    const count = options.scoreCount ?? 20;
+    if (!Number.isInteger(count) || count < 1 || count > 100) throw Error('Ungültige Punktezahl.');
+    const stateId = options.stateId || query.get('STATE_ID') || '';
+    const prefix = options.scorePrefix || query.get('SCORE_PREFIX') || 'e2_cloze_text_input_';
+    const show = options.showFields ?? (query.get('SHOW_FIELDS') === '1');
+    const localKey = 'schule-edulo:' + widgetId;
+    const hidden = new Map(), listeners = [];
+    let mode = '', host = null, fields = [], moduleLink = null, lastRaw = '', current = null;
+    let ready = false, disposed = false, pending = null, timer = null, removal = null;
+    let hideFooter = options.hideFooter ?? true, footer = null, footerObserver = null, footerError = '';
+    function restoreFooter() {
+      footerObserver?.disconnect(); footerObserver = null;
+      footer?.restore(); footer = null; footerError = '';
+    }
+    function syncFooter() {
+      if (!ready || disposed || !root.isConnected || !hideFooter || mode !== 'edulo' || editor() || moduleLink?.w.JSON?.asTest === '1' || moduleLink?.w.JSON?.remoteUserData) { restoreFooter(); return; }
+      const w = moduleLink?.w, doc = w?.contentWrapper?.[0]?.ownerDocument;
+      if (!doc) { footerError = 'Edulo-Inhaltsbereich fehlt.'; return; }
+      if (!footerObserver) {
+        footerObserver = new MutationObserver(syncFooter);
+        footerObserver.observe(doc.documentElement, {childList: true, subtree: true});
+      }
+      try {
+        if (footer && !footer.isCurrent()) { footer.restore(); footer = null; }
+        if (!footer) footer = createEduloFooter({root, widget: w});
+        footer.setHidden(); footerError = '';
+      } catch (e) { footerError = e.message; }
+    }
+    function setFooterHidden(value) {
+      if (typeof value !== 'boolean') throw Error('hideFooter erwartet true oder false.');
+      hideFooter = value; syncFooter();
+    }
+    const status = (text, error = false) => onStatus({text, error, mode});
+    function docs() {
+      const out = [];
+      for (const win of [window, window.parent, window.top]) try {
+        if (!out.some(x => x.doc === win.document)) out.push({win, doc: win.document});
+      } catch {} // A blocked parent is never replaced by localStorage in Edulo mode.
+      return out;
+    }
+    function editor() {
+      return docs().some(({win, doc}) => win.widget?.isEditor === true || doc.body?.classList.contains('editor') || new URLSearchParams(win.location.search).get('editor') === '1');
+    }
+    function matches(id) {
+      return docs().flatMap(({doc}) => [...doc.querySelectorAll('input,textarea')].filter(el => !root.contains(el) && (el.id === id || el.name === id) && (el.tagName === 'TEXTAREA' || ['text', 'hidden', 'number'].includes(el.type))));
+    }
+    function one(id) {
+      const found = [...new Set(matches(id))];
+      if (found.length > 1) throw Error('Mehrdeutige Edulo-Feldzuordnung: ' + id);
+      return found[0] || null;
+    }
+    function resolve() {
+      const candidates = stateId ? [one(stateId)].filter(Boolean) : [...new Set(['e1_input', 'e1_text_input', 'e1_cloze_text_input_1', 'e1'].flatMap(matches))];
+      if (candidates.length > 1) throw Error('Mehrere E1-Felder. STATE_ID festlegen.');
+      const h = candidates[0] || null, f = Array.from({length: count}, (_, i) => one(prefix + (i + 1)));
+      if (h && f.includes(h)) throw Error('Speicher und Punkte dürfen nicht dasselbe Feld sein.');
+      return {h, f};
+    }
+    function bridge() {
+      const links = [], seen = new Set();
+      for (const {win} of docs()) {
+        const w = win.widget;
+        if (!w || seen.has(w) || typeof w.findModule !== 'function' || typeof w.forEachContent !== 'function') continue;
+        seen.add(w);
+        const mod = w.findModule('cloze_text'), storage = w.findModule('save_load');
+        if (!mod || !storage || !['loadUserInput', 'saveUserInput', 'checkSingleClozeInput'].every(k => typeof mod[k] === 'function') || typeof storage.save !== 'function') continue;
+        if (storage.JSON?.active === 'false' || w.JSON?.remoteUserData || (w.JSON?.asTest === '1' && w.testData?.d && w.testData?.ds)) throw Error('Diese Edulo-Ansicht erlaubt keine normale Speicherung.');
+        w.forEachContent(content => {
+          if (content.module !== mod || !Array.isArray(content.clozeInputs)) return true;
+          const groups = fields.map(field => content.clozeInputs.filter(item => item.inputElement?.[0] === field));
+          if (groups.every(g => g.length === 1)) {
+            const items = groups.map(g => g[0]);
+            if (content.JSON?.nocheck === 'true' || items.some(i => i.JSON.predefined === 'true' || i.JSON.connected === 'true' || i.JSON.unchecked === 'true')) throw Error('E2 braucht normale, unabhängige Lücken mit Lösung 1.');
+            if (new Set(items.map(i => i.JSON.id)).size !== count || items.some(i => !Array.isArray(i.JSON.values) || !i.JSON.values.some(v => String(v.value) === '1'))) throw Error('E2-ID oder richtige Lösung stimmt nicht.');
+            links.push({w, mod, storage, content, items});
+          }
+          return true;
+        });
+      }
+      if (links.length > 1) throw Error('Mehrdeutiges Edulo-Lückenmodul.');
+      return links[0] || null;
+    }
+    function hide() {
+      if (mode !== 'edulo' || editor()) { restore(); return; }
+      syncFooter();
+      if (show) { restoreFields(); return; }
+      const allowed = new Set([host, ...fields]);
+      for (const field of allowed) {
+        if (!field) continue;
+        const moduleId = field === host ? (options.stateModuleId || 'e1') : (options.scoreModuleId || prefix.split('_')[0]);
+        const safe = el => el && el !== el.ownerDocument.body && el !== el.ownerDocument.documentElement && el.contains(field) && !el.contains(root) && !el.querySelector('iframe') && [...el.querySelectorAll('input,textarea,select')].every(f => allowed.has(f));
+        const mod = field.ownerDocument.getElementById(moduleId), container = field.closest('.inputcontainer');
+        const target = safe(mod) ? mod : safe(container) ? container : field;
+        if (!hidden.has(target)) hidden.set(target, {hidden: target.hidden, display: target.style.getPropertyValue('display'), priority: target.style.getPropertyPriority('display')});
+        target.hidden = true; target.style.setProperty('display', 'none', 'important');
+      }
+    }
+    function restore() {
+      restoreFooter(); restoreFields();
+    }
+    function restoreFields() {
+      for (const [el, old] of hidden) {
+        el.hidden = old.hidden;
+        if (old.display) el.style.setProperty('display', old.display, old.priority); else el.style.removeProperty('display');
+      }
+      hidden.clear();
+    }
+    function nativeWrite(el, value, force = false) {
+      if (!el?.isConnected || el.disabled || el.readOnly) throw Error('Edulo-Feld fehlt oder ist gesperrt.');
+      if (!force && String(el.value) === value) return;
+      const win = el.ownerDocument.defaultView;
+      const proto = el.tagName === 'TEXTAREA' ? win.HTMLTextAreaElement.prototype : win.HTMLInputElement.prototype;
+      const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+      if (!setter) throw Error('Nativer Feldzugriff fehlt.');
+      setter.call(el, value);
+      for (const type of ['input', 'change']) el.dispatchEvent(new win.Event(type, {bubbles: true}));
+      if (String(el.value) !== value) throw Error('Edulo hat den Speicherwert verändert.');
+    }
+    function row(item) { return {id: item.JSON.id, v: String(item.inputElement.val()), l: item.last || '', c: item.correct, h: item.helped}; }
+    function target(item, color) { return {id: item.JSON.id, v: color === 'gray' ? '' : color === 'red' ? '0' : '1', l: '', c: ['green', 'yellow'].includes(color) ? 'true' : 'false', h: color === 'yellow' ? 'true' : 'false'}; }
+    function checked(data, scores) {
+      if (!validate(data) || !Array.isArray(scores) || scores.length !== count || scores.some(s => !COLORS.includes(s))) throw Error('Ungültiger Lern- oder Punktestand. Originalstand bleibt erhalten.');
+      return {widget: widgetId, version, data: clone(data), scores: [...scores]};
+    }
+    function parse(raw) {
+      const value = decode(raw);
+      if (value.widget !== widgetId || value.version !== version) throw Error('Fremder oder älterer Lernstand. Migration erforderlich.');
+      return checked(value.data, value.scores);
+    }
+    function ensure() {
+      if (!ready || disposed) throw Error('Speicher noch nicht verbunden.');
+      if (editor()) { restore(); throw Error('Editor-Vorschau: Speicherung gesperrt.'); }
+      if (!root.isConnected) throw Error('Widget wurde entfernt.');
+      if (mode === 'edulo') {
+        const r = resolve();
+        if (!r.h || !r.f.every(Boolean)) throw Error('Edulo-Felder fehlen. Kein lokaler Ersatzspeicher.');
+        if (String(r.h.value) !== lastRaw) throw Error('E1 wurde extern geändert. Neu laden statt überschreiben.');
+        host = r.h; fields = r.f; moduleLink = bridge();
+        if (!moduleLink) throw Error('Edulo-Statusschnittstelle fehlt. Keine vereinfachte 0/1-Ersatzbewertung.');
+        hide();
+      } else if (localStorage.getItem(localKey) !== (lastRaw || null)) throw Error('Ein anderer Tab hat den Lernstand geändert. Bitte neu laden.');
+    }
+    async function load() {
+      if (disposed) throw Error('Bridge wurde beendet.');
+      ready = false;
+      if (editor()) {
+        mode = 'editor'; restore(); current = checked(fresh(), Array(count).fill('gray'));
+        ready = true; status('Editor-Vorschau · keine Speicherung'); return clone(current);
+      }
+      const embedded = window.parent !== window || query.get('edulo') === '1' || query.has('data') || docs().some(({win}) => !!win.widget) || !!resolve().h;
+      mode = options.mode || (embedded ? 'edulo' : 'standalone');
+      if (!['edulo', 'standalone'].includes(mode)) throw Error('Unbekannter Betriebsmodus.');
+      try {
+        if (mode === 'edulo') {
+          for (let n = 0; n < (options.attempts ?? 50); n++) {
+            if (disposed) throw Error('Widget wurde entfernt.');
+            const r = resolve(); host = r.h; fields = r.f;
+            if (host && fields.every(Boolean)) { moduleLink = bridge(); if (moduleLink) break; }
+            await new Promise(r => setTimeout(r, options.retryMs ?? 200));
+          }
+          if (!host || !fields.every(Boolean) || !moduleLink) throw Error('E1, E2 oder Edulo-Statusschnittstelle nicht erreichbar.');
+          lastRaw = String(host.value);
+          if (!lastRaw.trim() && moduleLink.items.some(i => String(i.inputElement.val()) !== '')) throw Error('E1 leer, aber E2 enthält Antworten. Zuordnung prüfen.');
+        } else lastRaw = localStorage.getItem(localKey) || '';
+        current = lastRaw.trim() ? parse(lastRaw) : checked(fresh(), Array(count).fill('gray'));
+        ready = true; hide(); status(mode === 'edulo' ? 'Mit Edulo verbunden.' : 'Speicherung in diesem Browser.');
+        return clone(current); // Deliberately no E1/E2 writes and no score synchronization on load.
+      } catch (e) { ready = false; restore(); status(e.message, true); throw e; }
+    }
+    function save(data, scores = current?.scores) {
+      clearTimeout(timer); pending = null;
+      let stateWritten = false;
+      try {
+        ensure(); const next = checked(data, scores), raw = encode(next);
+        if (mode === 'standalone') { localStorage.setItem(localKey, raw); lastRaw = raw; current = next; status('In diesem Browser gespeichert.'); return clone(next); }
+        if (host.disabled || host.readOnly || (host.maxLength >= 0 && raw.length > host.maxLength)) throw Error('E1 ist gesperrt oder zu kurz.');
+        const {mod, content, items} = moduleLink;
+        const old = items.map(row), desired = items.map((item, i) => target(item, scores[i]));
+        const changed = items.map((item, i) => i).filter(i => !equal(old[i], desired[i]));
+        if (changed.some(i => fields[i].disabled || fields[i].readOnly)) throw Error('Ein Punktefeld ist gesperrt.');
+        // Preflight the entire batch before dispatching any event that can save it.
+        try {
+          mod.loadUserInput(content, changed.map(i => desired[i]));
+          for (const i of changed) {
+            if (mod.checkSingleClozeInput(items[i], content) !== (desired[i].c === 'true') || !equal(row(items[i]), desired[i])) throw Error('Edulo bewertet einen Zielwert anders.');
+          }
+          const serialized = {input: [], counter: {total: 0, correct: 0, helped: 0, wrong: 0}};
+          mod.saveUserInput(content, serialized);
+          if (changed.some(i => !equal(serialized.input.find(r => r.id === desired[i].id), desired[i]))) throw Error('Edulo-Speicherformat hat sich geändert.');
+        } catch (e) { mod.loadUserInput(content, old); throw e; }
+        // E1 is authoritative; after an interrupted commit, an explicit save retries E2.
+        try { nativeWrite(host, raw); lastRaw = raw; current = next; stateWritten = true; }
+        catch (e) { mod.loadUserInput(content, old); throw e; }
+        for (const i of changed) nativeWrite(fields[i], desired[i].v, true);
+        if (changed.some(i => !equal(row(items[i]), desired[i]))) throw Error('Punktestatus wurde nachträglich verändert.');
+        status('Lernstand an Edulo übergeben.'); return clone(next);
+      } catch (e) { status((stateWritten ? 'E1 gespeichert, Punkteabgleich unvollständig: ' : 'Nicht gespeichert: ') + e.message, true); throw e; }
+    }
+    function queueSave(data, scores = current?.scores) {
+      pending = {data: clone(data), scores: clone(scores)}; clearTimeout(timer);
+      timer = setTimeout(flush, options.debounceMs ?? 300);
+    }
+    function flush() { if (pending) { const p = pending; try { save(p.data, p.scores); } catch {} } }
+    function dispose() {
+      if (disposed) return;
+      if (root.isConnected) flush();
+      clearTimeout(timer); disposed = true; ready = false; restore(); removal?.disconnect();
+      for (const [target, type, fn] of listeners) target.removeEventListener(type, fn);
+    }
+    function listen(target, type, fn) { target.addEventListener(type, fn); listeners.push([target, type, fn]); }
+    listen(window, 'pagehide', () => { flush(); restore(); });
+    listen(window, 'pageshow', () => { if (ready) hide(); });
+    listen(document, 'visibilitychange', () => { if (document.hidden) flush(); });
+    listen(root, 'focusout', flush);
+    removal = new MutationObserver(() => { if (!root.isConnected) dispose(); else if (editor()) restore(); });
+    removal.observe(document.documentElement, {childList: true, subtree: true});
+    return {load, save, queueSave, flush, dispose, setFooterHidden, getStatus: () => ({mode, ready, disposed, hideFooter, footerHidden: !!footer && !footerError, footerError}), getSnapshot: () => current ? clone(current) : null};
+  };
+})();
+
+/* Self-contained 2-D bottle rocket scene. Embedded by app.js during the widget build. */
+function createRocketSimulation(host, options = {}) {
+  if (!host || typeof host.querySelector !== 'function') throw new Error('Simulationsbereich fehlt.');
+  const COLORS = {chemical:'#f6ae58', kinetic:'#6cd1a0', thermal:'#f27770', potential:'#bc97eb'};
+  const LEGEND_FORMS = [['chemical','chemische Energie'],['kinetic','kinetische Energie'],['thermal','thermische Energie'],['potential','Lageenergie']];
+  const legendNames = Object.fromEntries(LEGEND_FORMS.map(([form])=>[form,options.legendNames?.[form] ?? !!options.legendLabelsVisible]));
+  const MAX_STROKES = 5;
+  let phase = 'ready', strokes = 0, queued = 0, energyVisible = !!options.energyVisible, efficiencyVisible = !!options.efficiencyVisible, legendLabelsVisible=Object.values(legendNames).every(Boolean);
+  let frame = 0, strokeStart = 0, flightStart = 0, destroyed = false;
+  const strokeTimes=Array(MAX_STROKES).fill(null);
+  const doc = host.ownerDocument;
+  const style = doc.createElement('style');
+  style.textContent = `
+    .rocket-scene{background:#eaf4fb;border:1px solid #b8d3e4;border-radius:15px;padding:9px;color:#18384a}
+    .rocket-scene *{box-sizing:border-box}
+    .rocket-scene__viewport{width:100%;max-width:850px;margin:auto;position:relative}
+    .rocket-scene svg{display:block;width:100%;height:auto;max-height:410px;border-radius:10px;background:#dff1fc;touch-action:manipulation}
+    .rocket-scene [data-person]{cursor:pointer}
+    .rocket-scene [data-person]:focus-visible{outline:none;filter:drop-shadow(0 0 5px #b77900)}
+    .rocket-scene__controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 3px 0}
+    .rocket-scene__controls button{min-height:44px;padding:8px 14px;border-radius:9px;border:1px solid #185277;background:#21679b;color:#fff;font:600 15px system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+    .rocket-scene__controls button[aria-pressed=true]{background:#145573}
+    .rocket-scene__controls button:disabled{opacity:.55;cursor:default}
+    .rocket-scene__controls button:focus-visible{outline:3px solid #d58310;outline-offset:2px}
+    .rocket-scene__status{font:600 14px/1.35 system-ui,sans-serif;flex:1 1 220px;margin:0}
+    .rocket-scene__caption{font:13px/1.35 system-ui,sans-serif;margin:5px 4px 0;color:#36586a}
+    .rocket-scene [data-energy-group][hidden]{display:none}
+    .rocket-scene [data-efficiency-button][hidden]{display:none}
+    .rocket-scene [data-energy-group]{pointer-events:none}
+    .rocket-scene__legend{position:absolute;right:1%;top:23%;width:18%;padding:8px;background:#ffffffeb;border:1px solid #b8d3e4;border-radius:8px;font:14px/1.3 system-ui,sans-serif;color:#18384a}
+    .rocket-scene__legend strong{display:block;margin-bottom:6px;font-size:15px}
+    .rocket-scene__legend-list{display:grid;gap:7px}
+    .rocket-scene__legend-item{display:grid;grid-template-columns:19px minmax(0,1fr) 32px;align-items:center;gap:4px;min-width:0;overflow-wrap:normal}
+    .rocket-scene__legend-e{display:grid;place-items:center;flex:none;width:19px;height:19px;border:1px solid #315165;border-radius:2px;font-size:12px;font-weight:800}
+    .rocket-scene [data-energy-legend][hidden]{display:none}
+    .rocket-scene [data-legend-labels][hidden]{visibility:hidden;display:block}
+    .rocket-scene [data-legend-labels-button]{display:flex;align-items:center;justify-content:center;gap:5px;width:32px;min-height:40px;margin:0;padding:2px;border:1px solid #185277;border-radius:6px;background:#edf7fc;color:#164a69;font:700 13px system-ui,sans-serif;cursor:pointer}
+    .rocket-scene [data-legend-labels-button]:focus-visible{outline:3px solid #d58310;outline-offset:2px}
+    .rocket-scene [data-legend-labels-button][aria-pressed=true]{background:#d4ebf7}
+    @media(max-width:700px){.rocket-scene__legend{position:static;width:auto;margin:8px 3px 0;font-size:14px}.rocket-scene__legend-list{grid-template-columns:1fr;gap:8px}.rocket-scene__legend-e{width:20px;height:20px}}
+    @media(max-width:600px){.rocket-scene{padding:5px}.rocket-scene__controls{gap:6px}.rocket-scene__controls button{padding:7px 9px;font-size:14px}.rocket-scene__status{flex-basis:100%}}
+  `;
+  host.classList.add('rocket-scene');
+  host.append(style);
+  const PACKET_SIDE=28;
+  // Visible teaching-model fractions, deliberately not measured efficiencies.
+  const LOSS={muscle:.20,pump:.20,start:.20,ascent:.20,fall:.20};
+  const LOSS_STAGES=Object.keys(LOSS);
+  const packetsMarkup = Array.from({length:MAX_STROKES},(_,i)=>`<g data-packet-id="${i}" data-form="chemical" transform="translate(149 220)"><rect x="-9" y="-9" width="18" height="18" rx="2" fill="${COLORS.chemical}" stroke="#315165" stroke-width="1.2"/><text text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="800" fill="#18384a">E</text></g>`).join('');
+  const lossesMarkup=Array.from({length:MAX_STROKES},(_,i)=>LOSS_STAGES.map(stage=>`<g data-loss-id="${i}:${stage}" data-form="thermal" style="opacity:0"><rect fill="${COLORS.thermal}" stroke="#315165" stroke-width=".8" rx="1"/><text text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="800" fill="#18384a">E</text></g>`).join('')).join('');
+  host.insertAdjacentHTML('beforeend', `
+    <div class="rocket-scene__viewport">
+      <svg viewBox="0 0 850 400" role="img" aria-labelledby="rocket-scene-title rocket-scene-desc" preserveAspectRatio="xMidYMid meet">
+        <title id="rocket-scene-title">Flaschenrakete mit Standpumpe</title>
+        <desc id="rocket-scene-desc">Eine Person pumpt durch einen Schlauch und eine Ballpumpennadel Luft in eine kopfüber stehende, zu einem Drittel mit Wasser gefüllte Flasche. Nach fünf Hüben startet sie nach oben und fällt wieder.</desc>
+        <defs>
+          <linearGradient id="rocket-sky" x2="0" y2="1"><stop stop-color="#bde6fd"/><stop offset="1" stop-color="#effaff"/></linearGradient>
+          <clipPath id="rocket-bottle-clip"><path d="M-34 -100 L-38 -94 L-38 38 Q-37 50 -18 61 L-10 69 L-10 78 L10 78 L10 69 L18 61 Q37 50 38 38 L38 -94 L34 -100 Z"/></clipPath>
+        </defs>
+        <rect width="850" height="400" fill="url(#rocket-sky)"/>
+        <circle cx="754" cy="55" r="27" fill="#fff6c0" opacity=".8"/>
+        <path d="M0 337 Q220 325 420 337 T850 337 V400 H0Z" fill="#85c49e"/>
+        <path d="M0 351 H850" stroke="#50866d" stroke-width="4"/>
+        <text x="15" y="29" font-size="19" font-weight="700" fill="#205069">Luft hinein · Wasser hinaus · Rakete hinauf</text>
+        <g data-person tabindex="0" role="button" aria-label="Einmal pumpen" aria-disabled="false">
+          <path d="M111 270 L99 335 M137 272 L155 335" stroke="#34495c" stroke-width="16" stroke-linecap="round"/>
+          <path d="M85 337 Q94 331 107 337 M145 337 Q156 331 168 337" stroke="#343e49" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M108 213 Q122 206 140 216 L142 269 Q124 279 106 268 Z" fill="#e35d55" stroke="#8e4740" stroke-width="2"/>
+          <path d="M108 267 Q123 272 142 267" fill="none" stroke="#ffd181" stroke-width="5"/>
+          <circle cx="118" cy="189" r="21" fill="#f4b887" stroke="#8e6550" stroke-width="2"/>
+          <circle cx="98" cy="190" r="5" fill="#f4b887" stroke="#8e6550" stroke-width="1.5"/>
+          <path d="M96 187 Q95 157 117 160 Q139 159 141 184 Q132 177 124 177 Q110 174 98 185 Z" fill="#694b3e"/>
+          <circle cx="126" cy="187" r="1.8" fill="#352d2b"/><path d="M136 191 L139 195 L135 196" stroke="#9f6555" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M127 201 Q133 205 139 200" fill="none" stroke="#934e51" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M108 218 Q95 233 103 255 Q106 259 112 259" stroke="#f4b887" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path data-arm d="M139 219 Q157 215 174 232 Q193 219 219 194" stroke="#f4b887" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <ellipse data-muscle cx="159" cy="225" rx="22" ry="13" fill="#f4b887" stroke="#ad7460" stroke-width="1.5"/>
+          <circle data-hand cx="219" cy="194" r="7" fill="#f4b887" stroke="#a86f5b" stroke-width="1"/>
+          <text x="68" y="375" font-size="17" fill="#234b5f">Pumpe antippen</text>
+        </g>
+        <g data-pump>
+          <rect x="204" y="327" width="78" height="13" rx="5" fill="#42536a"/>
+          <rect x="236" y="215" width="14" height="114" rx="5" fill="#778da1" stroke="#405973" stroke-width="2"/>
+          <rect x="238" y="194" width="10" height="87" fill="#c7d7e2" stroke="#405973" stroke-width="2"/>
+          <g data-pump-handle><path d="M210 193 H276" stroke="#334b63" stroke-width="10" stroke-linecap="round"/><path d="M243 196 V224" stroke="#334b63" stroke-width="6"/></g>
+          <text x="215" y="375" font-size="17" fill="#234b5f">Standpumpe</text>
+        </g>
+        <path data-hose-path d="M250 308 Q328 329 394 308 Q478 270 568 328" fill="none" stroke="#23526c" stroke-width="9" stroke-linecap="round"/>
+        <path d="M250 308 Q328 329 394 308 Q478 270 568 328" fill="none" stroke="#b9e4ee" stroke-width="3" stroke-linecap="round"/>
+        <path d="M568 329 V308" stroke="#596675" stroke-width="5"/>
+        <text x="410" y="286" font-size="17" fill="#234b5f">Schlauch</text>
+        <g data-launcher>
+          <path d="M525 338 L541 302 M611 338 L595 302 M525 338 H611" fill="none" stroke="#586e7d" stroke-width="7" stroke-linecap="round"/>
+          <path d="M553 311 H583" stroke="#586e7d" stroke-width="6"/>
+          <text x="590" y="371" font-size="17" fill="#234b5f">Startplatz</text>
+        </g>
+        <g data-bottle-position transform="translate(568 227)">
+          <g data-bottle-rotate>
+            <path d="M-34 -100 L-38 -94 L-38 38 Q-37 50 -18 61 L-10 69 L-10 78 L10 78 L10 69 L18 61 Q37 50 38 38 L38 -94 L34 -100 Z" fill="#effbff" fill-opacity=".72" stroke="#3e758a" stroke-width="4"/>
+            <g clip-path="url(#rocket-bottle-clip)">
+              <path data-water-shape d="M-43 17 Q-15 11 0 17 T43 17 V81 H-43 Z" fill="#43b6e1" opacity=".8"/>
+              <path data-water-surface d="M-40 18 Q-17 11 0 17 T40 17" fill="none" stroke="#d8f9ff" stroke-width="4"/>
+              <g data-bubbles></g>
+            </g>
+            <path d="M-36 -91 H36" stroke="#6e9aaa" stroke-width="4"/>
+            <path d="M-10 67 H10" stroke="#317a95" stroke-width="3"/>
+            <text x="-30" y="-28" font-size="17" font-weight="700" fill="#1b607b">LUFT</text>
+            <text data-water-label x="-31" y="47" font-size="14" font-weight="700" fill="#125d83">WASSER</text>
+          </g>
+        </g>
+        <g data-cork><path d="M558 306 L578 306 L581 321 L555 321 Z" fill="#c99a5e" stroke="#805e3f" stroke-width="2"/><path d="M568 328 V282" stroke="#5c7180" stroke-width="3" stroke-linecap="round"/><path d="M566 283 L568 278 L570 283" fill="#5c7180"/></g>
+        <text data-needle-label x="612" y="315" font-size="15" fill="#234b5f">Ballpumpennadel</text>
+        <g data-exhaust style="display:none"><path data-water-jet d="M568 301 Q548 326 536 342 M568 302 Q572 327 578 347 M569 304 Q584 322 604 336" fill="none" stroke="#38aee2" stroke-width="8" stroke-linecap="round"/><circle cx="532" cy="344" r="4" fill="#38aee2"/><circle cx="586" cy="351" r="4" fill="#38aee2"/></g>
+        <g data-energy-group aria-label="Fünf bewegliche Energiequadrate">${lossesMarkup}${packetsMarkup}</g>
+      </svg>
+      <aside class="rocket-scene__legend" data-energy-legend ${energyVisible?'':'hidden'} aria-label="Legende zu den Energiequadraten"><strong>Legende</strong><div class="rocket-scene__legend-list">${LEGEND_FORMS.map(([form,label],index)=>`<div class="rocket-scene__legend-item" data-legend-form="${form}"><span class="rocket-scene__legend-e" style="background:${COLORS[form]}">E</span><span data-legend-labels ${legendNames[form]?'':'hidden'}>${label}</span><button type="button" data-legend-labels-button="${form}" aria-pressed="${legendNames[form]}" aria-label="Name der Energieform ${index+1} ${legendNames[form]?'verbergen':'anzeigen'}"><span aria-hidden="true">👁</span></button></div>`).join('')}</div></aside>
+    </div>
+    <div class="rocket-scene__controls">
+      <button type="button" data-pump-button>Einmal pumpen</button>
+      <button type="button" data-reset-button>Neustart</button>
+      <button type="button" data-energy-button aria-pressed="${energyVisible}">Energiequadrate ${energyVisible?'ausblenden':'einblenden'}</button>
+      <button type="button" data-efficiency-button aria-pressed="${efficiencyVisible}" ${energyVisible?'':'hidden'}>Wirkungsgrade einblenden</button>
+      <p class="rocket-scene__status" data-sim-status role="status" aria-live="polite"></p>
+    </div>
+    <p class="rocket-scene__caption">Schematisches Unterrichtsmodell: Ein Klick löst einen vollständigen Pumphub aus. Nach fünf Hüben startet die Flasche.</p>
+  `);
+  const find = selector => host.querySelector(selector);
+  const person = find('[data-person]'), button = find('[data-pump-button]'), resetButton = find('[data-reset-button]'), energyButton = find('[data-energy-button]'), efficiencyButton=find('[data-efficiency-button]'), legendLabelsButtons=[...host.querySelectorAll('[data-legend-labels-button]')];
+  const bottle = find('[data-bottle-position]'), rotate = find('[data-bottle-rotate]'), cork = find('[data-cork]'), exhaust = find('[data-exhaust]');
+  const water = find('[data-water-shape]'), waterSurface = find('[data-water-surface]'), waterLabel = find('[data-water-label]'), needleLabel = find('[data-needle-label]');
+  const bubbles = find('[data-bubbles]'), handle = find('[data-pump-handle]'), arm = find('[data-arm]'), hand = find('[data-hand]'), muscle = find('[data-muscle]');
+  const hose = find('[data-hose-path]'), packetNodes = [...host.querySelectorAll('[data-packet-id]')];
+  const lossNodes = Object.fromEntries([...host.querySelectorAll('[data-loss-id]')].map(node=>[node.dataset.lossId,node]));
+  const packetStates = Array.from({length:MAX_STROKES},(_,id)=>({id,form:'chemical',x:0,y:0,visible:true,amount:1}));
+  const lossStates = Object.fromEntries(Object.keys(lossNodes).map(id=>[id,{id,amount:0,visible:false,emitted:false}]));
+  let sceneLift=0, sceneTilt=0, sceneDrop=0;
+  const status = find('[data-sim-status]');
+  const raf = callback => (doc.defaultView || window).requestAnimationFrame(callback);
+  const caf = id => (doc.defaultView || window).cancelAnimationFrame(id);
+  const now = () => (doc.defaultView || window).performance.now();
+  const clamp = (v,min,max) => Math.max(min,Math.min(max,v));
+  const ease = t => t*t*(3-2*t);
+  function ascendingLift(elapsed){
+    if(elapsed<650){const t=clamp(elapsed/650,0,1);return 44*t*t;}
+    const coast=clamp(elapsed-650,0,1050), initialSpeed=88/650;
+    return 44+initialSpeed*coast*(1-coast/2100);
+  }
+  const lerp=(a,b,t)=>a+(b-a)*clamp(t,0,1);
+  const musclePosition=(i,down=0)=>({x:140+(i%3)*24,y:216+Math.floor(i/3)*26+down*8});
+  const airPosition=i=>({x:544+(i%3)*24,y:160+Math.floor(i/3)*26});
+  function rocketPosition(localX,localY){
+    const angle=sceneTilt*Math.PI/180;
+    return {x:568+localX*Math.cos(angle)-localY*Math.sin(angle),
+      y:227-sceneLift+sceneDrop+localX*Math.sin(angle)+localY*Math.cos(angle)};
+  }
+  function drawPacket(id,x,y,form,visible=true,amount=1){
+    const node=packetNodes[id],state=packetStates[id];
+    state.x=+x.toFixed(1);state.y=+y.toFixed(1);state.form=form;state.visible=visible;state.amount=amount;
+    node.setAttribute('transform',`translate(${state.x} ${state.y})`);
+    node.dataset.x=String(state.x);node.dataset.y=String(state.y);node.dataset.form=form;node.dataset.amount=String(amount);
+    node.style.opacity=visible?'1':'0';
+    const side=PACKET_SIDE*Math.sqrt(amount),rect=node.querySelector('rect'),label=node.querySelector('text');
+    rect.setAttribute('x',String(-side/2));rect.setAttribute('y',String(-side/2));rect.setAttribute('width',String(side));rect.setAttribute('height',String(side));rect.setAttribute('fill',COLORS[form]);
+    label.setAttribute('font-size',String(Math.max(8,side*.65)));
+  }
+  function flightPose(elapsed){
+    if(elapsed<1700)return {lift:ascendingLift(elapsed),tilt:0,drop:0};
+    if(elapsed<2050)return {lift:115,tilt:0,drop:0};
+    if(elapsed<3700){const t=clamp((elapsed-2050)/1650,0,1);return {lift:115*(1-t*t),tilt:170*ease(clamp(t*2,0,1)),drop:24*t*t};}
+    return {lift:0,tilt:170,drop:24};
+  }
+  function rocketPositionAt(elapsed,localX,localY){
+    const {lift,tilt,drop}=flightPose(elapsed),angle=tilt*Math.PI/180;
+    return {x:568+localX*Math.cos(angle)-localY*Math.sin(angle),y:227-lift+drop+localX*Math.sin(angle)+localY*Math.cos(angle)};
+  }
+  function waterPositionAt(elapsed){
+    const start=rocketPositionAt(elapsed,airPosition(4).x-568,airPosition(4).y-227);
+    const nozzle=rocketPositionAt(elapsed,0,76);
+    const t=clamp((elapsed-100)/550,0,1);
+    return {x:lerp(start.x,nozzle.x+9,t),y:lerp(start.y,350,t)};
+  }
+  function waterCrossing(){
+    let low=100,high=650;
+    for(let n=0;n<24;n++){
+      const mid=(low+high)/2;
+      if(waterPositionAt(mid).y>=rocketPositionAt(mid,0,76).y)high=mid;else low=mid;
+    }
+    return high;
+  }
+  const waterExitAt=waterCrossing();
+  // Continuous deterministic dispersion, with no collection point. Coordinates may
+  // leave the SVG; the energy amount remains in the balance outside the viewport.
+  const HEAT_DRIFT_MS=60000;
+  function heatPosition(source,age,seed){
+    const t=Math.max(0,age)/1000,phase=seed*2.399963;
+    const vx=Math.sin(phase)*18,vy=9+(Math.cos(phase*1.7)+1)*4;
+    const envelope=1-Math.exp(-t/1.5);
+    let dx=vx*t+5*(Math.sin(t*.9+phase)-Math.sin(phase))*envelope;
+    if(dx>0){const room=Math.max(1,680-source.x);dx=room*Math.tanh(dx/room);}
+    return {x:source.x+dx,y:source.y-vy*t+4*(Math.sin(t*.7+phase)-Math.sin(phase))*envelope};
+  }
+  function drawLoss(id,stage,source,age,amount){
+    const key=`${id}:${stage}`,node=lossNodes[key],state=lossStates[key];
+    state.amount=amount;state.emitted=amount>0;state.visible=age>=0&&amount>0;
+    node.dataset.amount=String(amount);
+    if(!state.visible){node.style.opacity='0';return;}
+    const side=PACKET_SIDE*Math.sqrt(amount),position=heatPosition(source,age,1+id*5+LOSS_STAGES.indexOf(stage));
+    node.setAttribute('transform',`translate(${position.x.toFixed(1)} ${position.y.toFixed(1)})`);
+    node.style.opacity='1';
+    node.querySelector('text').setAttribute('font-size',String(side*.65));
+    const rect=node.querySelector('rect');rect.setAttribute('x',String(-side/2));rect.setAttribute('y',String(-side/2));rect.setAttribute('width',String(side));rect.setAttribute('height',String(side));
+  }
+  function energyAmount(id,events){
+    let amount=1;
+    for(const stage of LOSS_STAGES){
+      const event=events[stage],active=!!event&&event.age>=0&&efficiencyVisible;
+      const loss=active?amount*LOSS[stage]:0;
+      drawLoss(id,stage,event?.source||{x:0,y:0},event?.age??-1,loss);
+      amount-=loss;
+    }
+    return amount;
+  }
+  function renderPackets(time=now()){
+    const elapsed=phase==='ready'||phase==='pumping'?0:Math.max(0,time-flightStart);
+    const strokeProgress=phase==='pumping'?clamp((time-strokeStart)/1200,0,1):0;
+    const down=phase==='pumping'?(1-Math.cos(strokeProgress*Math.PI*2))/2:0;
+    for(let i=0;i<MAX_STROKES;i++){
+      const muscle=musclePosition(i,down),air=airPosition(i);
+      if(phase==='ready'||phase==='pumping'){
+        const p=strokeProgress;
+        const eventTime=strokeTimes[i];
+        const events=eventTime===null?{}:{muscle:{age:time-eventTime-1200*.06,source:{x:170,y:226}},pump:{age:time-eventTime-1200*.43,source:{x:250,y:285}}};
+        const amount=energyAmount(i,events);
+        if(i<strokes){drawPacket(i,air.x,air.y,'thermal',true,amount);continue;}
+        if(i>strokes||phase==='ready'){drawPacket(i,muscle.x,muscle.y,'chemical',true,amount);continue;}
+        const wristY=194+down*45;
+        if(p<.22){const t=p/.22;drawPacket(i,lerp(muscle.x,219,t),lerp(muscle.y,wristY,t),p<.06?'chemical':'kinetic',true,amount);}
+        else if(p<.35){const t=(p-.22)/.13;drawPacket(i,lerp(219,243,t),lerp(wristY,240,t),'kinetic',true,amount);}
+        else if(p<.48){const t=(p-.35)/.13;drawPacket(i,lerp(243,250,t),lerp(240,308,t),p<.43?'kinetic':'thermal',true,amount);}
+        else if(p<.80){const t=(p-.48)/.32,length=hose.getTotalLength();const point=hose.getPointAtLength(length*t);drawPacket(i,point.x,point.y,'thermal',true,amount);}
+        else if(p<.91){const t=(p-.80)/.11;drawPacket(i,568,lerp(328,278,t),'thermal',true,amount);}
+        else{const t=(p-.91)/.09;drawPacket(i,lerp(568,air.x,t),lerp(278,air.y,t),'thermal',true,amount);}
+        continue;
+      }
+      const startAt=i===4?waterExitAt:i*90+30;
+      const airLocal={x:air.x-568,y:air.y-227};
+      const endLocal={x:-25+i*17,y:-32+(i%2)*24};
+      const events={
+        muscle:{age:time-strokeTimes[i]-1200*.06,source:{x:170,y:226}},
+        pump:{age:time-strokeTimes[i]-1200*.43,source:{x:250,y:285}},
+        start:{age:elapsed-startAt,source:i===4?waterPositionAt(waterExitAt):rocketPositionAt(startAt,lerp(airLocal.x,endLocal.x,clamp((startAt-i*90)/450,0,1)),lerp(airLocal.y,endLocal.y,clamp((startAt-i*90)/450,0,1)))},
+        ascent:i===4?null:{age:elapsed-(700+i*230),source:rocketPositionAt(700+i*230,endLocal.x,endLocal.y)},
+        fall:i===4?null:{age:elapsed-(2150+i*320),source:rocketPositionAt(2150+i*320,endLocal.x,endLocal.y)}
+      };
+      const amount=energyAmount(i,events);
+      if(i===4){
+        const start=rocketPosition(air.x-568,air.y-227);
+        if(elapsed<100){drawPacket(i,start.x,start.y,'thermal',true,amount);continue;}
+        const t=clamp((elapsed-100)/550,0,1);
+        const nozzle=rocketPosition(0,76);
+        const x=elapsed>=650?577:lerp(start.x,nozzle.x+9,t), y=lerp(start.y,350,t);
+        // At the nozzle the water carries kinetic energy; after ground contact its energy spreads into the surroundings.
+        const impact=heatPosition({x:577,y:350},elapsed-650,31);
+        drawPacket(i,elapsed>=650?impact.x:x,elapsed>=650?impact.y:y,elapsed>=650?'thermal':y>=nozzle.y?'kinetic':'thermal',true,amount);
+        continue;
+      }
+      const localStart={x:air.x-568,y:air.y-227};
+      const localEnd={x:-25+i*17,y:-32+(i%2)*24};
+      const move=clamp((elapsed-i*90)/450,0,1);
+      const position=rocketPosition(lerp(localStart.x,localEnd.x,move),lerp(localStart.y,localEnd.y,move));
+      let form='thermal';
+      if(elapsed>i*90+30)form='kinetic';
+      if(elapsed>=700+i*230&&phase!=='falling'&&phase!=='landed')form='potential';
+      if(phase==='falling'&&elapsed<2150+i*320)form='potential';
+      if(phase==='falling'&&elapsed>=2150+i*320)form='kinetic';
+      if(phase==='landed')form='thermal';
+      const release=heatPosition(position,elapsed-3700,36+i);
+      drawPacket(i,phase==='landed'?release.x:position.x,phase==='landed'?release.y:position.y,form,true,amount);
+    }
+  }
+  function hasPendingStrokeHeat(time){
+    return efficiencyVisible&&strokeTimes.some(start=>start!==null&&time<start+1200*.43+HEAT_DRIFT_MS);
+  }
+  function getState(){return {phase,strokes,queued,energyVisible,efficiencyVisible,legendLabelsVisible,legendNames:{...legendNames},animationActive:!!frame,flightElapsed:['launching','apex','falling','landed'].includes(phase)?Math.max(0,now()-flightStart):null,waterExitAt,packets:packetStates.map(packet=>({...packet})),losses:Object.values(lossStates).map(loss=>({...loss}))};}
+  function setEnergyVisible(value){
+    energyVisible = !!value;
+    if(energyVisible)find('[data-energy-group]').removeAttribute('hidden');
+    else find('[data-energy-group]').setAttribute('hidden','');
+    find('[data-energy-legend]').hidden=!energyVisible;
+    efficiencyButton.hidden=!energyVisible;
+    energyButton.setAttribute('aria-pressed',String(energyVisible));
+    energyButton.textContent = `Energiequadrate ${energyVisible?'ausblenden':'einblenden'}`;
+    if(typeof options.onEnergyChange === 'function') options.onEnergyChange(energyVisible);
+    renderPackets();
+  }
+  function setEfficiencyVisible(value){
+    efficiencyVisible=!!value;
+    efficiencyButton.setAttribute('aria-pressed',String(efficiencyVisible));
+    efficiencyButton.textContent='Wirkungsgrade einblenden';
+    if(typeof options.onEfficiencyChange==='function')options.onEfficiencyChange(efficiencyVisible);
+    renderPackets();
+    if(!frame&&phase==='ready'&&hasPendingStrokeHeat(now()))frame=raf(tick);
+  }
+  function setLegendLabelsVisible(value,form){
+    const forms=form?[form]:LEGEND_FORMS.map(([key])=>key);
+    for(const key of forms){
+      if(!(key in legendNames))continue;
+      legendNames[key]=!!value;
+      const row=find(`[data-legend-form="${key}"]`),button=row.querySelector('button');
+      row.querySelector('[data-legend-labels]').hidden=!value;
+      button.setAttribute('aria-pressed',String(!!value));
+      button.setAttribute('aria-label',`Name der Energieform ${LEGEND_FORMS.findIndex(([id])=>id===key)+1} ${value?'verbergen':'anzeigen'}`);
+    }
+    legendLabelsVisible=Object.values(legendNames).every(Boolean);
+    if(typeof options.onLegendLabelsChange==='function')options.onLegendLabelsChange(legendLabelsVisible,{...legendNames});
+  }
+  function updateStatus(){
+    let message = `${strokes} von ${MAX_STROKES} Pumphüben`;
+    if(phase==='pumping') message += queued?` · ${queued} weiterer ${queued===1?'Hub':'Hübe'} vorgemerkt`:' · ein Hub läuft';
+    if(phase==='launching') message = 'Der Korken löst sich. Wasser strömt nach unten und die Rakete steigt.';
+    if(phase==='apex') message = 'Die Flasche erreicht den höchsten Punkt.';
+    if(phase==='falling') message = 'Die Flasche fällt wieder.';
+    if(phase==='landed') message = 'Flug beendet. Mit „Neustart“ kannst du erneut pumpen.';
+    status.textContent = message;
+    button.disabled = strokes + queued + (phase==='pumping'?1:0) >= MAX_STROKES || !['ready','pumping'].includes(phase);
+    person.setAttribute('aria-disabled',String(button.disabled));
+    host.dataset.phase = phase;
+    host.dataset.strokes = String(strokes);
+    host.dataset.queued = String(queued);
+    renderPackets();
+  }
+  function setBubbles(progress){
+    if(progress<0){bubbles.innerHTML='';return;}
+    const count = 4 + Math.min(strokes,4);
+    bubbles.innerHTML = Array.from({length:count},(_,i)=>{
+      const x = -24+(i*17)%49;
+      const y = 61-((progress*90+i*17)%65);
+      const r = 2+(i%3);
+      return `<circle cx="${x}" cy="${y.toFixed(1)}" r="${r}" fill="#eafcff" fill-opacity=".85" stroke="#54a9cf" stroke-width="1"/>`;
+    }).join('');
+  }
+  function startStroke(time){
+    phase='pumping';strokeStart=time;strokeTimes[strokes]=time;updateStatus();
+    if(!frame) frame=raf(tick);
+  }
+  function pump(){
+    if(destroyed || strokes+queued+(phase==='pumping'?1:0)>=MAX_STROKES || !['ready','pumping'].includes(phase))return false;
+    queued++;
+    if(phase==='ready'){queued--;startStroke(now());}
+    updateStatus();
+    return true;
+  }
+  function tick(time){
+    frame=0;
+    if(destroyed)return;
+    if(phase==='pumping'){
+      const progress=clamp((time-strokeStart)/1200,0,1);
+      const down=(1-Math.cos(progress*Math.PI*2))/2;
+      handle.setAttribute('transform',`translate(0 ${Math.round(down*45)})`);
+      const wristY=Math.round(194+down*45),elbowY=Math.round(232+down*8);
+      arm.setAttribute('d',`M139 219 Q157 215 174 ${elbowY} Q193 ${elbowY-13} 219 ${wristY}`);
+      hand.setAttribute('cy',String(wristY));
+      muscle.setAttribute('cy',String(Math.round(225+down*8)));
+      setBubbles(progress);
+      if(progress>=1){
+        strokes++;
+        handle.removeAttribute('transform');
+        arm.setAttribute('d','M139 219 Q157 215 174 232 Q193 219 219 194');hand.setAttribute('cy','194');muscle.setAttribute('cy','225');
+        if(strokes===MAX_STROKES){queued=0;phase='launching';flightStart=time;exhaust.style.display='';}
+        else if(queued>0){queued--;strokeStart=time;strokeTimes[strokes]=time;}
+        else {phase='ready';setBubbles(-1);}
+        updateStatus();
+      }
+    }
+    if(['launching','apex','falling'].includes(phase)){
+      const elapsed=time-flightStart;
+      let lift=0,tilt=0;
+      if(elapsed<1700){phase='launching';lift=ascendingLift(elapsed);tilt=0;exhaust.style.display=elapsed<650?'':'none';}
+      else if(elapsed<2050){phase='apex';lift=115;tilt=0;exhaust.style.display='none';}
+      else if(elapsed<3700){phase='falling';const t=clamp((elapsed-2050)/1650,0,1);lift=115*(1-t*t);tilt=170*ease(clamp(t*2,0,1));}
+      else {phase='landed';lift=0;tilt=170;exhaust.style.display='none';setBubbles(-1);}
+      const landingDrop=phase==='falling'?24*Math.pow(clamp((elapsed-2050)/1650,0,1),2):phase==='landed'?24:0;
+      sceneLift=lift;sceneTilt=tilt;sceneDrop=landingDrop;
+      bottle.setAttribute('transform',`translate(568 ${Math.round(227-lift+landingDrop)})`);
+      rotate.setAttribute('transform',`rotate(${Math.round(tilt)})`);
+      const waterLeft=clamp(1-elapsed/650,0,1), waterTop=81-64*waterLeft;
+      water.setAttribute('d',`M-43 ${waterTop.toFixed(1)} Q-15 ${(waterTop-6).toFixed(1)} 0 ${waterTop.toFixed(1)} T43 ${waterTop.toFixed(1)} V81 H-43 Z`);
+      waterSurface.style.display=waterLeft>.02?'':'none';
+      waterLabel.style.display=waterLeft>.55?'':'none';
+      waterSurface.setAttribute('transform',`translate(0 ${(waterTop-17).toFixed(1)})`);
+      exhaust.setAttribute('transform',`translate(0 ${Math.round(-lift)})`);
+      cork.setAttribute('transform',`translate(${Math.round(elapsed/25)} ${Math.round(Math.min(elapsed/5,60))}) rotate(${Math.round(elapsed/3)} 568 310)`);
+      cork.style.display=elapsed<450?'':'none';
+      needleLabel.style.display=elapsed<450?'':'none';
+      updateStatus();
+    }
+    renderPackets(time);
+    if(phase==='pumping'||['launching','apex','falling'].includes(phase)||(phase==='landed'&&time-flightStart<3700+HEAT_DRIFT_MS)||(phase==='ready'&&hasPendingStrokeHeat(time)))frame=raf(tick);
+  }
+  function reset(){
+    if(frame){caf(frame);frame=0;}
+    phase='ready';strokes=0;queued=0;strokeStart=0;flightStart=0;strokeTimes.fill(null);
+    handle.removeAttribute('transform');arm.setAttribute('d','M139 219 Q157 215 174 232 Q193 219 219 194');hand.setAttribute('cy','194');muscle.setAttribute('cy','225');
+    sceneLift=0;sceneTilt=0;sceneDrop=0;
+    bottle.setAttribute('transform','translate(568 227)');rotate.removeAttribute('transform');
+    water.setAttribute('d','M-43 17 Q-15 11 0 17 T43 17 V81 H-43 Z');waterSurface.style.display='';waterSurface.removeAttribute('transform');waterLabel.style.display='';
+    cork.style.display='';cork.removeAttribute('transform');needleLabel.style.display='';exhaust.style.display='none';exhaust.removeAttribute('transform');setBubbles(-1);updateStatus();
+  }
+  function onPersonKey(e){if((e.key==='Enter'||e.key===' ')&&!button.disabled){e.preventDefault();pump();}}
+  function onEnergy(){setEnergyVisible(!energyVisible);}
+  function onEfficiency(){setEfficiencyVisible(!efficiencyVisible);}
+  function onLegendLabels(event){const form=event.currentTarget.dataset.legendLabelsButton;setLegendLabelsVisible(!legendNames[form],form);}
+  person.addEventListener('click',pump);person.addEventListener('keydown',onPersonKey);
+  button.addEventListener('click',pump);resetButton.addEventListener('click',reset);energyButton.addEventListener('click',onEnergy);efficiencyButton.addEventListener('click',onEfficiency);legendLabelsButtons.forEach(button=>button.addEventListener('click',onLegendLabels));
+  function destroy(){
+    if(destroyed)return;destroyed=true;
+    if(frame)caf(frame);
+    person.removeEventListener('click',pump);person.removeEventListener('keydown',onPersonKey);
+    button.removeEventListener('click',pump);resetButton.removeEventListener('click',reset);energyButton.removeEventListener('click',onEnergy);efficiencyButton.removeEventListener('click',onEfficiency);legendLabelsButtons.forEach(button=>button.removeEventListener('click',onLegendLabels));
+    host.replaceChildren();host.classList.remove('rocket-scene');delete host.dataset.phase;delete host.dataset.strokes;delete host.dataset.queued;
+  }
+  if(!energyVisible)find('[data-energy-group]').setAttribute('hidden','');
+  updateStatus();
+  return {reset,setEnergyVisible,setEfficiencyVisible,setLegendLabelsVisible,destroy,getState};
+}
+
+const ROCKET_HINT_LEVELS=[
+  [
+    "Welche Energieform ist in deinen Muskeln gespeichert?",
+    "Es handelt sich um eine der inneren Energieformen.",
+    "Die inneren Energieformen sind chemische Energie, thermische Energie und Kernenergie.",
+    "In deinen Muskeln wird Zucker mit Sauerstoff in andere Stoffe umgewandelt. Welche der drei Energieformen passt zu dieser Stoffumwandlung?"
+  ],
+  [
+    "Mit deinen Muskeln kannst du Dinge bewegen, anheben oder verformen.",
+    "Die drei mechanischen Energieformen sind kinetische Energie, Lageenergie und elastische Energie.",
+    "Deine Arme bewegen den Griff der Pumpe. Welche Energieform passt dazu?"
+  ],
+  [
+    "Beim Pumpen gelangt zusätzliche Luft in die Flasche, sodass der Druck steigt. Welche Energieform gehört zum Druck?",
+    "Suche bei den inneren Energieformen.",
+    "Die inneren Energieformen sind chemische Energie, thermische Energie und Kernenergie."
+  ],
+  [
+    "Wenn die Rakete startet, wird sie schneller. Welche Energie gehört zur Geschwindigkeit?",
+    "Suche bei den mechanischen Energieformen.",
+    "Die mechanischen Energieformen sind kinetische Energie, Lageenergie und elastische Energie."
+  ],
+  [
+    "Beim Steigen kommt die Rakete immer höher. Welche Energie gehört zur Höhe?",
+    "Suche bei den mechanischen Energieformen.",
+    "Die mechanischen Energieformen sind kinetische Energie, Lageenergie und elastische Energie."
+  ],
+  [
+    "Die Rakete fällt wieder herunter. Was geschieht dabei mit ihrer Geschwindigkeit?",
+    "Suche bei den mechanischen Energieformen. Achte darauf, welche Energie beim Fallen zunimmt.",
+    "Die mechanischen Energieformen sind kinetische Energie, Lageenergie und elastische Energie.",
+    "Die Rakete verliert Höhe und wird gleichzeitig schneller. Welche der beiden Formen nimmt wegen der größeren Geschwindigkeit zu?"
+  ]
+];
+/* Flaschenrakete learning component. Persistence is handled by its host. */
+const ROCKET_ENERGIES = ['kinetische Energie','Lageenergie','elastische Energie','thermische Energie','chemische Energie','Kernenergie','Licht','elektrische Energie','magnetische Energie'];
+const ROCKET_DEVICES = ['Muskel','Luftpumpe','Flasche'];
+const ROCKET_RETIRED_DEVICES = ['Solarzelle','Elektromotor']; // Valid saved drafts, no longer offered.
+const ROCKET_ENERGY_COLORS = Object.freeze({
+  'kinetische Energie':'#6cd1a0','Lageenergie':'#bc97eb','elastische Energie':'#72c9bf',
+  'thermische Energie':'#f27770','chemische Energie':'#f6ae58','Kernenergie':'#ed9ac0',
+  'Licht':'#f5cf50','elektrische Energie':'#80b8f2','magnetische Energie':'#92a8c3'
+});
+const ROCKET_UNSET_COLOR='#b6c9d6';
+// Keep already saved V2 diagrams readable; changing labels does not change points.
+const ROCKET_DEVICE_ALIASES = Object.freeze({'Muskeln':'Muskel','Pumpe':'Luftpumpe','Druckluft und Düse':'Flasche','Rakete und Erde (Steigen)':'Flasche','Rakete und Erde (Fallen)':'Flasche'});
+const ROCKET_GROUPS = [['Mechanische Energieformen',ROCKET_ENERGIES.slice(0,3)],['Innere Energieformen',ROCKET_ENERGIES.slice(3,6)],['Elektromagnetische Energieformen',ROCKET_ENERGIES.slice(6)],['Energiewandler',ROCKET_DEVICES]];
+const ROCKET_CLOZE = ['chemische Energie','kinetische Energie','thermische Energie','kinetische Energie','Lageenergie','kinetische Energie'];
+const ROCKET_CHAIN = ['chemische Energie','Muskel','kinetische Energie','Luftpumpe','thermische Energie','Flasche','kinetische Energie','Flasche','Lageenergie','Flasche','kinetische Energie'];
+const ROCKET_BRANCHES = ['thermische Energie','thermische Energie','thermische Energie','kinetische Energie','thermische Energie','thermische Energie'];
+const ROCKET_EXTRAS=[{from:1,context:'Umgebung'},{from:3,context:'Umgebung'},{from:5,context:'Umgebung'},{from:5,context:'Wasser'},{from:7,context:'Umgebung'},{from:9,context:'Umgebung'}];
+const ROCKET_HINTS = ['Welche Energie steckt in der Nahrung?','Was bewegt sich an der Pumpe?','Welche Energieform ordnen wir der Druckluft hier zu?','Was bewegen Wasserstrahl und Rakete?','Welche Energie hat die Rakete wegen ihrer Höhe?','Welche Energie nimmt beim Fallen zu?'];
+const rocketCopy = x => JSON.parse(JSON.stringify(x));
+const rocketEsc = x => String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rocketObj = x => x !== null && typeof x === 'object' && !Array.isArray(x);
+const rocketDraft = (a,n,values) => Array.isArray(a)&&a.length===n&&a.every(x=>x===''||values.includes(x));
+
+const rocketEarned=s=>s.solved.map((yes,i)=>s.carryScores20?.[i]&&s.carryScores20[i]!=='gray'?s.carryScores20[i]:yes?(s.attempts[i]||s.hints[i]?'yellow':'green'):'gray');
+function rocketLearningFresh(){return {version:3,hintLevels:Array(6).fill(0),drafts:{cloze:Array(6).fill(''),basic:{main:Array(11).fill('')},losses:{branches:Array(6).fill('')}},attempts:Array(20).fill(0),hints:Array(20).fill(false),errors:Array(20).fill(false),solved:Array(20).fill(false),carryScores20:Array(20).fill('gray'),feedback:{cloze:'',basic:'',losses:''}};}
+function rocketLearningValidate(s){
+  if(!rocketObj(s)||!rocketObj(s.drafts)||!rocketDraft(s.drafts.cloze,6,ROCKET_ENERGIES)||!Array.isArray(s.attempts)||s.attempts.length!==20||!s.attempts.every(x=>Number.isSafeInteger(x)&&x>=0)||!['hints','errors','solved'].every(k=>Array.isArray(s[k])&&s[k].length===20&&s[k].every(x=>typeof x==='boolean'))||!rocketObj(s.feedback)||!['cloze','basic','losses'].every(k=>typeof s.feedback[k]==='string'&&s.feedback[k].length<500))return false;
+  if(s.hintLevels!==undefined&&(!Array.isArray(s.hintLevels)||s.hintLevels.length!==6||!s.hintLevels.every(x=>Number.isInteger(x)&&x>=0&&x<=4)))return false;
+  if(s.version===1)return rocketDraft(s.drafts.basic,6,ROCKET_ENERGIES)&&rocketDraft(s.drafts.losses,8,ROCKET_ENERGIES);
+  const labels=[...ROCKET_ENERGIES,...ROCKET_DEVICES,...ROCKET_RETIRED_DEVICES,...Object.keys(ROCKET_DEVICE_ALIASES)];
+  return [2,3].includes(s.version)&&rocketObj(s.drafts.basic)&&rocketObj(s.drafts.losses)&&rocketDraft(s.drafts.basic.main,11,labels)&&(s.version===3||rocketDraft(s.drafts.losses.main,11,labels))&&rocketDraft(s.drafts.losses.branches,s.version===3&&s.drafts.losses.branches?.length===6?6:2,ROCKET_ENERGIES)&&Array.isArray(s.carryScores20)&&s.carryScores20.length===20&&s.carryScores20.every(x=>['gray','green','yellow'].includes(x));
+}
+function rocketLearningMigrate(old){
+  if(!rocketLearningValidate(old))throw Error('Invalid rocket learning state');
+  if(old.version===3&&old.drafts.losses.branches.length===6){const copy=rocketCopy(old);copy.hintLevels=old.hintLevels?.slice()||old.hints.slice(0,6).map(x=>x?1:0);return copy;}
+  const s=rocketLearningFresh();s.carryScores20=rocketEarned(old);s.hintLevels=old.hintLevels?.slice()||old.hints.slice(0,6).map(x=>x?1:0);s.drafts.cloze=old.drafts.cloze.slice();s.feedback.cloze=old.feedback.cloze;
+  // Preserve every old field, including the retired duplicate main-chain exercise.
+  if(old.version===1){s.legacyV1=rocketCopy(old);for(let i=0;i<6;i++)s.drafts.basic.main[2*i]=old.drafts.basic[i];}
+  else{s[old.version===2?'legacyV2':'legacyTwoBranches']=rocketCopy(old);if(old.legacyV1)s.legacyV1=rocketCopy(old.legacyV1);s.drafts.basic.main=old.drafts.basic.main.map(label=>ROCKET_DEVICE_ALIASES[label]||label);}
+  for(let i=0;i<(old.version===1?6:12);i++){s.solved[i]=old.solved[i];s.attempts[i]=old.attempts[i];s.hints[i]=old.hints[i];s.errors[i]=old.errors[i];}
+  const previous=old.version===1?old.drafts.losses.slice(6):old.drafts.losses.branches;
+  for(const [before,after] of [[0,1],[1,3]]){const n=12+after;s.drafts.losses.branches[after]=previous[before];s.attempts[n]=old.attempts[18+before];s.hints[n]=old.hints[18+before];s.errors[n]=old.errors[18+before];if(s.solved.slice(6,12).every(Boolean))s.solved[n]=previous[before]===ROCKET_BRANCHES[after];}
+  return s;
+}
+function createRocketLearning(host,{state:initialState,onChange}={}){
+  if(!(host instanceof Element))throw TypeError('host must be an Element');
+  if(initialState!==undefined&&!rocketLearningValidate(initialState))throw Error('Invalid rocket learning state');
+  if(onChange!==undefined&&typeof onChange!=='function')throw TypeError('onChange must be a function');
+  let state=initialState?rocketLearningMigrate(initialState):rocketLearningFresh(),chosen=null,pointer=null,ghost=null,hover=null,destroyed=false,suppressClick=false,timer=null;
+  const getState=()=>rocketCopy(state);
+  const getScores=()=>rocketEarned(state);
+  const getProgress=()=>{const scores=getScores(),count=(start,end)=>scores.slice(start,end).filter(x=>x==='green'||x==='yellow').length;return {cloze:{earned:count(0,ROCKET_CLOZE.length),total:ROCKET_CLOZE.length},diagram:{earned:count(ROCKET_CLOZE.length,ROCKET_CLOZE.length+Math.ceil(ROCKET_CHAIN.length/2)+ROCKET_EXTRAS.length),total:Math.ceil(ROCKET_CHAIN.length/2)+ROCKET_EXTRAS.length}};};
+  const emit=()=>{if(!destroyed)onChange?.(getState(),getScores());};
+  const basicDone=()=>state.solved.slice(6,12).every(Boolean);
+  const palette=()=>`<div class="rocket-palette">${ROCKET_GROUPS.map(([title,items])=>`<div class="rocket-palette-group"><strong>${rocketEsc(title)}</strong><div>${items.map(label=>{const kind=title==='Energiewandler'?'device':'energy';return `<button type="button" class="rocket-token rocket-${kind}${chosen?.label===label?' is-chosen':''}" data-token="${rocketEsc(label)}" data-kind="${kind}" aria-pressed="${chosen?.label===label}" ${kind==='energy'?`style="--rocket-energy-color:${ROCKET_ENERGY_COLORS[label]}"`:''}>${rocketEsc(label)}</button>`;}).join('')}</div></div>`).join('')}</div>`;
+  const select=i=>`<span class="rocket-cloze-pair"><label class="rocket-cloze"><span class="rocket-sr">Energieform in Lücke ${i+1}</span><select data-cloze="${i}" ${state.solved[i]?'disabled':''} class="${state.solved[i]?'is-solved':state.errors[i]?'has-error':''}"><option value="">Energieform wählen</option>${ROCKET_GROUPS.slice(0,3).map(([name,items])=>`<optgroup label="${rocketEsc(name)}">${items.map(x=>`<option value="${rocketEsc(x)}" ${state.drafts.cloze[i]===x?'selected':''}>${rocketEsc(x)}</option>`).join('')}</optgroup>`).join('')}</select></label><button type="button" class="rocket-cloze-help" data-cloze-help="${i}" aria-label="Hilfe zu Lücke ${i+1}" aria-haspopup="dialog"><span aria-hidden="true">?</span></button></span>`;
+  function sharedDiagram(){
+    const cell=Math.max(64,Math.floor((host.clientWidth-138)/11)),base=66,top=26,width=11*cell+70;
+    const active=i=>basicDone()&&state.solved[12+i]&&state.drafts.losses.branches[i]===ROCKET_BRANCHES[i];
+    const branchWidth=i=>i===3?10:6;
+    const thickness=i=>!basicDone()?base:base-ROCKET_EXTRAS.reduce((sum,s,j)=>sum+(i>s.from?branchWidth(j):0),0);
+    const arrow=(x,h)=>`M${x} ${top} H${x+cell-13} L${x+cell} ${top+h/2} L${x+cell-13} ${top+h} H${x} Z`;
+    const main=ROCKET_CHAIN.map((_,i)=>i%2?`<rect data-converter-index="${i}" x="${i*cell}" y="${top}" width="${cell}" height="${base}" fill="#fff0ca" stroke="#b48e39" stroke-width="2"/>`:`<path data-flow-index="${i}" data-band-height="${thickness(i)}" d="${arrow(i*cell,thickness(i))}" fill="${ROCKET_ENERGY_COLORS[state.drafts.basic.main[i]]||ROCKET_UNSET_COLOR}"/>`).join('');
+    const branches=ROCKET_EXTRAS.map((s,i)=>{const x=(s.from+1)*cell,w=branchWidth(i),y=top+thickness(s.from+1)+(i===2?branchWidth(3):0),cx=x+10,r=16,ry=16,inner=r-w,turn=y+ry,end=110;
+      if(i===3)return `<path data-flow-branch="${i}" data-source-slot="basic:${s.from}" d="M${x} ${y} H${x+10} C${x+40} ${y} ${x+40} 106 ${x+66} 111 Q${x+94} 118 ${x+94} 140 V162 L${x+89} 174 L${x+84} 162 V140 Q${x+84} 126 ${x+62} 121 C${x+30} 116 ${x+34} ${y+w} ${x+10} ${y+w} H${x} Z" fill="${active(i)?ROCKET_ENERGY_COLORS[ROCKET_BRANCHES[i]]:ROCKET_UNSET_COLOR}"/>`;
+      return `<path data-flow-branch="${i}" data-source-slot="basic:${s.from}" d="M${x} ${y} H${cx} A${r} ${ry} 0 0 1 ${cx+r} ${turn} V${end} L${cx+(r+inner)/2} ${end+10} L${cx+inner} ${end} V${turn} A${inner} ${ry-w} 0 0 0 ${cx} ${y+w} H${x} Z" fill="${active(i)?ROCKET_ENERGY_COLORS[ROCKET_BRANCHES[i]]:ROCKET_UNSET_COLOR}"/>`;
+    }).join('');
+    const targets=ROCKET_CHAIN.map((_,i)=>{const n=6+Math.ceil(i/2),value=state.drafts.basic.main[i];return `<button type="button" class="rocket-socket rocket-flow-target ${state.solved[n]?'is-solved':state.errors[n]?'has-error':''}" data-slot="basic:${i}" data-kind="${i%2?'device':'energy'}" aria-disabled="${state.solved[n]}" style="left:${i*cell}px;width:${cell}px;top:${top}px;height:${i%2?base:Math.max(44,thickness(i))}px" aria-label="${i%2?'Wandler':'Energiepfeil'} ${i+1}: ${rocketEsc(value||'leer')}"><span>${rocketEsc(value||'Ablegen')}</span></button>`;}).join('');
+    const sideTargets=ROCKET_EXTRAS.map((s,i)=>{const style=`left:${(s.from+1)*cell+(i===3?39:-26)}px;top:${i===3?180:124}px`;return active(i)?`<div class="rocket-flow-branch-label" data-branch-label="${i}" style="${style}"><strong>${rocketEsc(ROCKET_BRANCHES[i])}</strong><span>${s.context==='Wasser'?'mit dem Wasser':'an die Umgebung'}</span></div>`:`<button type="button" class="rocket-socket rocket-flow-dock ${state.errors[12+i]?'has-error':''}" data-branch="${i}" data-kind="energy" aria-disabled="${!basicDone()}" style="${style}" aria-label="Zusätzliche Energie am Ausgang von Wandlerplatz ${s.from+1}: ${s.context}"><span>＋ ${s.context}</span></button>`;}).join('');
+    return `<div class="rocket-chain-scroll" data-shared-diagram><div class="rocket-flow-wrap" style="width:${width}px;height:240px"><svg class="rocket-flow-svg" width="${width}" height="240" aria-hidden="true">${main}${basicDone()?branches:''}</svg>${targets}${basicDone()?sideTargets:''}</div></div>`;
+  }
+  const feedback=group=>`<p class="rocket-feedback" role="status" aria-live="polite">${rocketEsc(state.feedback[group])}</p>`;
+  function render(){
+    if(destroyed)return;const focused=host.contains(document.activeElement)?document.activeElement:null,focusAttr=focused&&['data-token','data-slot','data-branch','data-cloze','data-check','data-hint'].find(k=>focused.hasAttribute(k)),focusValue=focusAttr?focused.getAttribute(focusAttr):null,scrolls=[...host.querySelectorAll('.rocket-chain-scroll')].map(x=>x.scrollLeft),oldDiagram=host.querySelector('[data-shared-diagram]');
+    host.classList.add('rocket-learning');host.innerHTML=`<div class="rocket-learning-inner">${state.legacyV1?'<p class="rocket-migration">Bisherige Punkte bleiben erhalten. Neue Wandlerplätze kannst du zusätzlich lösen.</p>':''}
+    <section class="rocket-card" data-cloze-card><div class="rocket-card-head"><span class="rocket-step">1</span><h3>Die Geschichte als Lückentext</h3></div><div class="rocket-story"><section class="rocket-story-part"><h4>Energie aus der Nahrung</h4><p>Über die Nahrung nimmt der Mensch Energie auf. Ein Teil ist in seinen Muskeln als ${select(0)} gespeichert.</p></section> <section class="rocket-story-part"><h4>Pumpen</h4><p>Beim Pumpen wandeln die Muskeln diese Energie in ${select(1)} um. Durch die Bewegung drückt die Pumpe zusätzliche Luft durch den Schlauch in die Flasche, sodass der Druck dort steigt. Dabei wandelt die Pumpe die zugeführte Energie in ${select(2)} der Luft um. Mit jedem Pumpstoß nimmt diese Energie in der Flasche insgesamt zu.</p></section> <section class="rocket-story-part"><h4>Start</h4><p>Schließlich löst sich der Korken. Die unter Druck stehende Luft drückt das Wasser nach unten aus der Flasche. Dabei wird die Rakete beschleunigt und erhält ${select(3)}.</p></section> <section class="rocket-story-part"><h4>Aufstieg</h4><p>Durch die Bewegung der Rakete steigt sie immer höher und wird dabei jedoch immer langsamer. Während die Rakete steigt, wird also ein Teil ihrer Energie in ${select(4)} umgewandelt.</p></section> <section class="rocket-story-part"><h4>Fallen</h4><p>Am höchsten Punkt kehrt die Rakete um. Sie fällt nach unten und wird dabei immer schneller. Beim Fallen wird diese Energie wieder in ${select(5)} umgewandelt.</p></section> </div><div class="rocket-actions"><button type="button" class="rocket-primary" data-check="cloze">Lückentext prüfen</button></div>${feedback('cloze')}</section>
+    <section class="rocket-card" data-diagram-card><div class="rocket-card-head"><span class="rocket-step">2</span><h3>Der Energiefluss</h3></div>
+    <div class="rocket-diagram-instruction">${[['Schritt 1 · Der Hauptweg','Baue den Hauptweg aus Energiepfeilen und Wandlern auf. Du kannst die Flasche mehrfach verwenden.'],['Schritt 2 · Weitere Energieabgaben','Bei jedem Wandler wird auch Energie an die Umgebung abgegeben. Beim Start nimmt außerdem das Wasser Energie mit. Ordne die passenden Energiepfeile zu.']].map(([title,text],i)=>`<div style="visibility:${i===(basicDone()?1:0)?'visible':'hidden'}" aria-hidden="${i!==(basicDone()?1:0)}"><strong>${title}</strong><p>${text}</p></div>`).join('')}</div>
+    <p class="rocket-help">Baustein und passenden Platz antippen oder ziehen. Auf schmalen Bildschirmen kannst du die Kette seitlich verschieben.</p>${palette()}${sharedDiagram()}
+    <div class="rocket-diagram-actions">${basicDone()?'<span>✓ Der Hauptweg ist richtig.</span>':'<button type="button" class="rocket-primary" data-check="basic">Hauptweg prüfen</button>'}</div>
+    <div class="rocket-criterion-hints">${basicDone()?[12,13,14,15,16,17].map((n,i)=>state.solved[n]?'':`<button type="button" class="rocket-hint" data-hint="${n}">Hinweis ${i+1}</button>`).join(''):Array.from({length:6},(_,i)=>state.solved[6+i]?'':`<button type="button" class="rocket-hint" data-hint="${6+i}">Hinweis zu Abschnitt ${i+1}</button>`).join('')}</div>${feedback(basicDone()?'losses':'basic')}</section></div>`;
+    if(oldDiagram){const replacement=host.querySelector('[data-shared-diagram]');for(const oldSlot of oldDiagram.querySelectorAll('[data-slot],[data-flow-index],[data-converter-index]')){const key=['data-slot','data-flow-index','data-converter-index'].find(attr=>oldSlot.hasAttribute(attr));const next=replacement.querySelector('['+key+'="'+oldSlot.getAttribute(key)+'"]');if(next){for(const attr of [...oldSlot.attributes])oldSlot.removeAttribute(attr.name);for(const attr of next.attributes)oldSlot.setAttribute(attr.name,attr.value);oldSlot.innerHTML=next.innerHTML;next.replaceWith(oldSlot);}}oldDiagram.replaceChildren(...replacement.childNodes);replacement.replaceWith(oldDiagram);}
+    [...host.querySelectorAll('.rocket-chain-scroll')].forEach((x,i)=>x.scrollLeft=scrolls[i]||0);
+    if(focusAttr)[...host.querySelectorAll('['+focusAttr+']')].find(x=>x.getAttribute(focusAttr)===focusValue)?.focus({preventScroll:true});
+  }
+  const commit=()=>{render();emit();};
+  function targetFrom(el){const b=el?.closest('[data-slot],[data-branch]');if(!b||!host.contains(b))return null;if(b.dataset.branch!==undefined)return {group:'losses',branch:Number(b.dataset.branch),kind:'energy',element:b};const [group,index]=b.dataset.slot.split(':');return {group,index:Number(index),kind:b.dataset.kind,element:b};}
+  function put(t,label=chosen?.label,kind=chosen?.kind){
+    if(!t||!label||!kind)return;
+    if(t.branch!==undefined){
+      if(!basicDone()||state.solved[12+t.branch])return;const n=12+t.branch;
+      if(kind==='energy'&&label===ROCKET_BRANCHES[t.branch]){state.drafts.losses.branches[t.branch]=label;state.solved[n]=true;state.errors[n]=false;state.feedback.losses=state.solved.slice(12,18).every(Boolean)?'Alles richtig! Der Energiefluss ist vollständig.':'Richtig! Ergänze die weiteren Energieabgaben.';}
+      else{if(kind==='energy')state.drafts.losses.branches[t.branch]=label;state.attempts[n]++;state.errors[n]=true;state.feedback.losses='Das passt an diesem Ausgang noch nicht. Beobachte, was dort geschieht, und versuche es erneut.';}
+    }else{if(t.group!=='basic'||kind!==t.kind)return;const n=6+Math.ceil(t.index/2);if(state.solved[n])return;state.drafts.basic.main[t.index]=label;state.errors[n]=false;state.feedback.basic='';}
+    chosen=null;commit();
+  }
+  function check(group){
+    if(!['cloze','basic'].includes(group))return;const offset=group==='cloze'?0:6;let right=0;
+    for(let i=0;i<6;i++){const n=offset+i;if(state.solved[n]){right++;continue;}const main=state.drafts.basic.main;const correct=group==='cloze'?state.drafts.cloze[i]===ROCKET_CLOZE[i]:i===0?main[0]===ROCKET_CHAIN[0]:main[2*i-1]===ROCKET_CHAIN[2*i-1]&&main[2*i]===ROCKET_CHAIN[2*i];
+      if(correct){state.solved[n]=true;state.errors[n]=false;right++;}else{state.attempts[n]++;state.errors[n]=true;}
+    }
+    state.feedback[group]=right===6?'Alles richtig!':`${right} von 6 Kriterien richtig. Prüfe die markierten Abschnitte.`;commit();
+  }
+  function openHint(i){
+    if(host.querySelector('.rocket-hint-dialog'))return;
+    state.hints[i]=true;state.hintLevels[i]=Math.min(ROCKET_HINT_LEVELS[i].length,Math.max(1,state.hintLevels[i]));emit();
+    const dialog=document.createElement('dialog');dialog.className='rocket-hint-dialog';dialog.setAttribute('aria-labelledby','rocket-hint-title');
+    const draw=()=>{const level=state.hintLevels[i];dialog.innerHTML=`<div class="rocket-hint-dialog-head"><h3 id="rocket-hint-title">Hilfe zu Lücke ${i+1}</h3><button type="button" data-close-help aria-label="Hilfe schließen">×</button></div><p class="rocket-hint-stage">Hinweis ${level} von ${ROCKET_HINT_LEVELS[i].length}</p><div class="rocket-hint-steps">${ROCKET_HINT_LEVELS[i].slice(0,level).map(text=>`<p>${rocketEsc(text)}</p>`).join('')}</div><div class="rocket-hint-dialog-actions">${level<ROCKET_HINT_LEVELS[i].length?'<button type="button" class="rocket-primary" data-more-help>Mehr Hinweise</button>':'<p>Alle Hinweise sind geöffnet. Du entscheidest, welcher Begriff passt.</p>'}<button type="button" data-close-help>Zurück zur Lücke</button></div>`;};
+    draw();host.append(dialog);
+    dialog.addEventListener('click',e=>{if(e.target.closest('[data-close-help]'))dialog.close();else if(e.target.closest('[data-more-help]')){state.hintLevels[i]=Math.min(ROCKET_HINT_LEVELS[i].length,state.hintLevels[i]+1);emit();draw();(dialog.querySelector('[data-more-help]')||dialog.querySelector('.rocket-hint-dialog-actions [data-close-help]')).focus({preventScroll:true});}else if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
+    dialog.addEventListener('close',()=>{dialog.remove();host.querySelector('[data-cloze-help="'+i+'"]')?.focus({preventScroll:true});},{once:true});
+    dialog.showModal();dialog.querySelector('[data-close-help]').focus({preventScroll:true});
+  }
+  function click(e){if(suppressClick){suppressClick=false;return;}const b=e.target.closest('button');if(!b||!host.contains(b))return;
+    if(b.dataset.clozeHelp!==undefined){openHint(Number(b.dataset.clozeHelp));return;}
+    if(b.dataset.token){chosen={label:b.dataset.token,kind:b.dataset.kind};render();return;}
+    if(b.dataset.slot||b.dataset.branch!==undefined){put(targetFrom(b));return;}
+    if(b.dataset.check){check(b.dataset.check);return;}
+    if(b.dataset.hint!==undefined){const n=Number(b.dataset.hint),group=n<6?'cloze':n<12?'basic':'losses';state.hints[n]=true;state.feedback[group]=n<6?ROCKET_HINTS[n]:n<12?'Prüfe den Wandler und den Energiepfeil direkt danach.':n===15?'Das Wasser strömt beim Start aus der Flasche.':n>=16?'Beim Flug reibt die Flasche an der Luft.':'Der Wandler und seine Umgebung werden warm.';commit();}
+  }
+  function change(e){if(!e.target.matches('[data-cloze]'))return;const i=Number(e.target.dataset.cloze);if(state.solved[i])return;state.drafts.cloze[i]=e.target.value;state.errors[i]=false;state.feedback.cloze='';commit();}
+  function clearDrag(){hover?.classList.remove('is-drop-target');hover=null;ghost?.remove();ghost=null;pointer?.token?.classList.remove('is-dragging');}
+  function down(e){suppressClick=false;const token=e.target.closest('[data-token]');if(!token||!host.contains(token)||e.button>0||pointer||e.isPrimary===false)return;pointer={id:e.pointerId,x:e.clientX,y:e.clientY,label:token.dataset.token,kind:token.dataset.kind,token,moved:false};try{token.setPointerCapture?.(e.pointerId);}catch{cancel();}}
+  function move(e){if(!pointer||pointer.id!==e.pointerId)return;if(!pointer.moved&&Math.hypot(e.clientX-pointer.x,e.clientY-pointer.y)<7)return;pointer.moved=true;e.preventDefault();pointer.token.classList.add('is-dragging');if(!ghost){ghost=document.createElement('div');ghost.className='rocket-drag-ghost';ghost.textContent=pointer.label;host.append(ghost);}ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';const t=targetFrom(document.elementFromPoint(e.clientX,e.clientY));hover?.classList.remove('is-drop-target');hover=t?.kind===pointer.kind?t.element:null;hover?.classList.add('is-drop-target');const scroll=document.elementFromPoint(e.clientX,e.clientY)?.closest('.rocket-chain-scroll');if(scroll&&host.contains(scroll)){const r=scroll.getBoundingClientRect();if(e.clientX>r.right-25)scroll.scrollLeft+=12;else if(e.clientX<r.left+25)scroll.scrollLeft-=12;}}
+  function up(e){if(!pointer||pointer.id!==e.pointerId)return;const p=pointer,t=targetFrom(document.elementFromPoint(e.clientX,e.clientY));clearDrag();pointer=null;try{if(p.token.hasPointerCapture?.(e.pointerId))p.token.releasePointerCapture(e.pointerId);}catch{}if(!p.moved)return;e.preventDefault();suppressClick=true;clearTimeout(timer);timer=setTimeout(()=>suppressClick=false,250);if(t?.kind===p.kind)put(t,p.label,p.kind);}
+  function cancel(){clearDrag();const p=pointer;pointer=null;try{if(p?.token?.hasPointerCapture?.(p.id))p.token.releasePointerCapture(p.id);}catch{}if(chosen){chosen=null;render();}}
+  function lost(e){if(pointer?.id===e.pointerId)cancel();}
+  function key(e){if(e.key==='Escape')cancel();}
+  function nativeDrag(e){e.preventDefault();}
+  host.addEventListener('click',click);host.addEventListener('change',change);host.addEventListener('pointerdown',down);host.addEventListener('pointermove',move);host.addEventListener('pointerup',up);host.addEventListener('pointercancel',cancel);host.addEventListener('lostpointercapture',lost);host.addEventListener('dragstart',nativeDrag);window.addEventListener('keydown',key);window.addEventListener('blur',cancel);render();
+  return {getState,getScores,getProgress,setView(view){host.dataset.learningView=view;render();},refresh:render,destroy(){destroyed=true;cancel();clearTimeout(timer);host.removeEventListener('click',click);host.removeEventListener('change',change);host.removeEventListener('pointerdown',down);host.removeEventListener('pointermove',move);host.removeEventListener('pointerup',up);host.removeEventListener('pointercancel',cancel);host.removeEventListener('lostpointercapture',lost);host.removeEventListener('dragstart',nativeDrag);window.removeEventListener('keydown',key);window.removeEventListener('blur',cancel);host.innerHTML='';host.classList.remove('rocket-learning');}};
+}
+if(typeof module!=='undefined'&&module.exports)module.exports={createRocketLearning,rocketLearningFresh,rocketLearningValidate,rocketLearningMigrate};
+
+const bridge = createEduloBridge({root,widgetId:'flaschenrakete',stateVersion:1,hideFooter:true,
+  fresh:()=>({energyVisible:false,efficiencyVisible:false,legendLabelsVisible:false,legendNames:{chemical:false,kinetic:false,thermal:false,potential:false},learning:rocketLearningFresh()}),
+  validate:s=>!!s&&typeof s.energyVisible==='boolean'&&(s.efficiencyVisible===undefined||typeof s.efficiencyVisible==='boolean')&&(s.legendLabelsVisible===undefined||typeof s.legendLabelsVisible==='boolean')&&(s.legendNames===undefined||(s.legendNames&&['chemical','kinetic','thermal','potential'].every(key=>typeof s.legendNames[key]==='boolean')))&&rocketLearningValidate(s.learning),
+  onStatus:({text,error})=>{q('[data-storage]').textContent=text;q('[data-retry]').hidden=!error;}
+});
+let state,scores,simulation,learning,currentView='experiment';
+const viewScroll={};
+function updateNavigation(){
+ const progress=learning?.getProgress?.();
+ const target=currentView==='diagram'?'cloze':'diagram';
+ const taskLink=q('[data-task-link]');taskLink.dataset.navigate=target;
+ taskLink.innerHTML=`<span><strong>${target==='cloze'?'Lückentext öffnen':'Energiefluss<wbr>diagramm öffnen'}</strong><small data-section-score="${target}"></small></span><span aria-hidden="true">→</span>`;
+ q('[data-page-number]').textContent=currentView==='diagram'?'3':'2';
+ q('#learning-page-title').textContent=currentView==='diagram'?'Energieflussdiagramm':'Lückentext';
+ if(progress)for(const node of root.querySelectorAll('[data-section-score]')){const part=progress[node.dataset.sectionScore];node.textContent=`${part.earned} von ${part.total} Punkte`;}
+}
+function showView(view,{focus=true}={}){
+ if(!['experiment','cloze','diagram'].includes(view))return;
+ viewScroll[currentView]=q('.edulo-work').scrollTop;currentView=view;root.dataset.view=view;
+ q('[data-page=experiment]').hidden=view!=='experiment';q('[data-page=learning]').hidden=view==='experiment';
+ if(view!=='experiment')learning?.setView(view);updateNavigation();fit();q('.edulo-work').scrollTop=viewScroll[view]||0;
+ if(focus){const heading=view==='experiment'?q('#experiment-title'):q('#learning-page-title');heading?.setAttribute('tabindex','-1');heading?.focus({preventScroll:true});}
+}
+function navigate(e){const button=e.target.closest('[data-navigate]');if(button&&root.contains(button))showView(button.dataset.navigate);}
+root.addEventListener('click',navigate);
+function save(){try{bridge.queueSave(state,scores);}catch{}}
+async function start(){
+ q('[data-controls]').disabled=true;
+ try{
+  const loaded=await bridge.load();state=loaded.data;scores=loaded.scores;
+  root.querySelectorAll("[data-home-logo]").forEach(link=>{const standalone=bridge.getStatus().mode==='standalone';link.hidden=!standalone;if(standalone)link.querySelector("img").src="../../../assets/hdb-youtube-avatar.jpg";});
+  state.efficiencyVisible=state.efficiencyVisible??false;state.legendLabelsVisible=state.legendLabelsVisible??false;
+  state.learning=rocketLearningMigrate(state.learning); // Read-only migration; first learner edit persists it.
+  simulation?.destroy();learning?.destroy();
+  simulation=createRocketSimulation(q('[data-simulation]'),{energyVisible:state.energyVisible,efficiencyVisible:state.efficiencyVisible,legendLabelsVisible:state.legendLabelsVisible,legendNames:state.legendNames,onLegendLabelsChange:(visible,names)=>{state.legendLabelsVisible=visible;state.legendNames=names;save();},onEfficiencyChange:visible=>{state.efficiencyVisible=visible;save();},onEnergyChange:visible=>{state.energyVisible=visible;save();}});
+  learning=createRocketLearning(q('[data-learning]'),{state:state.learning,onChange:(next,nextScores)=>{state.learning=next;scores=nextScores;updateNavigation();save();}});
+  q('[data-controls]').disabled=bridge.getStatus().mode==='editor';showView(currentView,{focus:false});
+ }catch(error){if(q('[data-retry]').hidden){q('[data-storage]').textContent='Die Seite konnte nicht geladen werden: '+error.message;q('[data-retry]').hidden=false;}} // Never overwrite an unread state.
+}
+q('[data-retry]').addEventListener('click',start);
+function fit(){let bottom=window.innerHeight,top=Math.max(0,root.getBoundingClientRect().top);for(let p=root.parentElement;p&&p!==document.documentElement;p=p.parentElement){if(/hidden|clip|auto|scroll/.test(getComputedStyle(p).overflowY))bottom=Math.min(bottom,p.getBoundingClientRect().bottom);}const height=Math.max(120,bottom-top-8)+'px';if(root.style.getPropertyValue('--edulo-height')!==height)root.style.setProperty('--edulo-height',height);}
+fit();window.addEventListener('resize',fit);
+let previousWidth=0;const layoutObserver=new ResizeObserver(()=>{fit();const width=root.clientWidth;if(width!==previousWidth){previousWidth=width;if(currentView==='diagram')learning?.refresh();}});
+for(let p=root;p&&p!==document.documentElement;p=p.parentElement)layoutObserver.observe(p);
+const cleanup=new MutationObserver(()=>{if(!root.isConnected){simulation?.destroy();learning?.destroy();bridge.dispose();window.removeEventListener('resize',fit);root.removeEventListener('click',navigate);layoutObserver.disconnect();cleanup.disconnect();}});
+cleanup.observe(document.documentElement,{childList:true,subtree:true});start();
+
+})();</script></main></body></html>

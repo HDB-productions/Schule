@@ -1,0 +1,16 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>__TITLE__</title></head><body>
+<!-- EDULO_WIDGET_KEY:__WIDGET_ID__ -->
+<main class="edulo-widget" data-edulo-id="__WIDGET_ID__">
+<style>/* APP_CSS */</style>
+<header><h1>__TITLE__</h1><p data-progress></p></header>
+<section class="edulo-work"><fieldset data-controls disabled><legend>Beispielaufgabe · durch Lerninhalt ersetzen</legend><p>Wie viel ist 2 + 3?</p><label>Deine Antwort <input data-answer inputmode="numeric" autocomplete="off"></label><button type="button" data-check>Antwort prüfen</button><p data-feedback role="status"></p></fieldset></section>
+<footer><span data-storage role="status">Speicher wird verbunden …</span><button type="button" data-retry hidden>Erneut verbinden</button></footer>
+<script>(()=>{'use strict';
+const scriptRoot=document.currentScript?.closest('[data-edulo-id="__WIDGET_ID__"]');
+const root=scriptRoot||[...document.querySelectorAll('[data-edulo-id="__WIDGET_ID__"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+/* EDULO_BRIDGE */
+/* APP_JS */
+})();</script>
+</main></body></html>
