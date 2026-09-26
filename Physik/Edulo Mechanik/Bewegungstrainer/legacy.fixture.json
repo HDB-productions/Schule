@@ -1,0 +1,63 @@
+{
+  "task": {
+    "type": "distance_duration",
+    "title": "Strecke und Dauer",
+    "context": "Ein Zug startet bei der Marke 3 km. Dieser Start ist t = 0. In 30 Minuten werden 40 km zurückgelegt. Die Strecke hat Kilometerangaben. Die Marke 0 km ist der feste Bezugspunkt. Die positive Richtung führt zu größeren Kilometerangaben. Die Bewegung verläuft ohne Pause mit gleichbleibender Geschwindigkeit in positiver Richtung.",
+    "v": 80,
+    "s0": 3,
+    "targetT": 1,
+    "answer": 83,
+    "prompts": [
+      "Bestimme die Geschwindigkeit v. Gib die Einheit km/h an.",
+      "Bestimme den Anfangsort s₀ bei t = 0. Gib die Einheit km an.",
+      "Stelle die Ortsfunktion s(t) auf. In dieser Formel steht t für den Zahlenwert der Zeit in Stunden und s für den Zahlenwert des Ortes in Kilometern. Schreibe deshalb die Formel ohne Einheiten.",
+      "An welcher Kilometermarke befindet sich die Person oder das Fahrzeug 60 Minuten nach t = 0? Gib den Ort mit der Einheit km an."
+    ],
+    "data": {
+      "actor": 1,
+      "v": 80,
+      "s0": 3,
+      "elapsed": 0.5,
+      "firstT": 0.25,
+      "targetT": 1,
+      "clockStart": 495
+    }
+  },
+  "index": 0,
+  "steps": [
+    {
+      "input": "80 km/h",
+      "cursor": 7,
+      "errors": 0,
+      "hint": 0,
+      "solved": true,
+      "feedback": ""
+    },
+    {
+      "input": "3 km",
+      "cursor": 4,
+      "errors": 0,
+      "hint": 0,
+      "solved": true,
+      "feedback": ""
+    },
+    {
+      "input": "80*t+3",
+      "cursor": 3,
+      "errors": 0,
+      "hint": 1,
+      "solved": false,
+      "feedback": ""
+    },
+    {
+      "input": "",
+      "cursor": 0,
+      "errors": 0,
+      "hint": 0,
+      "solved": false,
+      "feedback": ""
+    }
+  ],
+  "total": 2,
+  "independent": 2
+}
