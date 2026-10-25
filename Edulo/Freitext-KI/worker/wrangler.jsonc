@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "edulomodularai",
+  "main": "worker.mjs",
+  "preview_urls": false,
+  "compatibility_date": "2026-10-25",
+  "vars": {
+    // Add the exact browser/iframe origin(s), comma-separated. No wildcard or trailing slash.
+    "ALLOWED_ORIGINS": "null,ionic://localhost,https://hdb-productions.github.io,http://127.0.0.1:8791"
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "FEEDBACK_BUDGET", "class_name": "FeedbackBudget" }]
+  },
+  "migrations": [{ "tag": "v1-feedback-budget", "new_sqlite_classes": ["FeedbackBudget"] }],
+  "ratelimits": [
+    {
+      "name": "FEEDBACK_LIMITER",
+      // Choose a positive integer namespace unique within your Cloudflare account.
+      "namespace_id": "10012501",
+      "simple": { "limit": 30, "period": 60 }
+    }
+  ],
+  "observability": { "enabled": false }
+}

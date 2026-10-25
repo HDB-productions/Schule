@@ -1,0 +1,31 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Freitext mit KI-Feedback</title></head><body>
+<!-- EDULO_WIDGET_KEY:edulo-freitext-ki-v1 -->
+<main class="edulo-widget freitext-ki" data-edulo-id="edulo-freitext-ki-v1">
+<style>/* APP_CSS */</style>
+<section class="edulo-work"><fieldset data-controls disabled>
+<legend>Bewegung erklären</legend><p data-prompt></p>
+<label for="freitext-ki-answer">Deine Antwort</label>
+<textarea id="freitext-ki-answer" data-answer rows="7" maxlength="4000" aria-describedby="freitext-ki-notice freitext-ki-count" placeholder="Erkläre mit deinen eigenen Worten …"></textarea>
+<p id="freitext-ki-count" data-count class="muted">0 / 4000 Zeichen</p>
+<p id="freitext-ki-notice" class="muted">Mit „Feedback anfordern“ werden deine Antwort und die Aufgabe an OpenAI übermittelt. Schreibe keine Namen oder persönlichen Angaben in deine Antwort. KI-Feedback kann Fehler enthalten.</p>
+<label for="freitext-ki-code">Zugangscode der Lehrkraft</label>
+<input id="freitext-ki-code" data-code type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Zugangscode eingeben">
+<p class="muted">Der Zugangscode wird nicht im Lernstand gespeichert.</p>
+<button type="button" data-check>Feedback anfordern</button>
+<p data-message role="status" aria-live="polite"></p>
+</fieldset></section>
+<section data-result class="result" hidden aria-label="Dein Feedback">
+<h2>Dein Feedback</h2><p data-stale class="stale" hidden>Du hast deinen Text geändert. Dieses Feedback gehört noch zur vorherigen Antwort.</p>
+<p data-summary></p><ul data-criteria class="criteria"></ul>
+<div data-next><h3>Dein nächster Schritt</h3><ul data-steps></ul></div>
+</section>
+<footer><span data-storage role="status">Speicher wird verbunden …</span><button type="button" data-retry hidden>Erneut verbinden</button></footer>
+<script>(()=>{'use strict';
+const scriptRoot=document.currentScript?.closest('[data-edulo-id="edulo-freitext-ki-v1"]');
+const root=scriptRoot||[...document.querySelectorAll('[data-edulo-id="edulo-freitext-ki-v1"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+/* EDULO_BRIDGE */
+/* APP_JS */
+})();</script></main></body></html>
+

@@ -1,0 +1,26 @@
+.freitext-ki{box-sizing:border-box;font:17px/1.55 system-ui,sans-serif;color:#18384a;background:#f4f7fa;border:1px solid #ccd8e2;border-radius:16px;width:100%;padding:24px;margin:0;overflow-wrap:anywhere}
+.freitext-ki *{box-sizing:border-box}
+.freitext-ki [hidden]{display:none!important}
+.freitext-ki fieldset{border:0;padding:0;margin:0;min-width:0}
+.freitext-ki legend{font-size:1.15em;font-weight:700;padding:0}
+.freitext-ki p{margin:10px 0}
+.freitext-ki label{display:block;font-weight:650;margin:20px 0 6px}
+.freitext-ki textarea,.freitext-ki input,.freitext-ki button{font:inherit;border:1px solid #93aabc;border-radius:10px;padding:12px;min-height:46px;max-width:100%}
+.freitext-ki textarea{display:block;resize:vertical;width:100%;background:#fff;color:inherit;line-height:1.6}
+.freitext-ki input{display:block;width:100%;background:#fff;color:inherit}
+.freitext-ki button{background:#21679b;color:white;font-weight:650;cursor:pointer;margin-top:12px}
+.freitext-ki button:disabled{opacity:.55;cursor:default}
+.freitext-ki .muted,.freitext-ki footer{font-size:.83em;color:#465f70}
+.freitext-ki footer{border-top:1px solid #ccd8e2;margin-top:18px;padding-top:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.freitext-ki footer button{margin:0}
+.freitext-ki .result{margin-top:24px;padding:20px;background:white;border-radius:12px;border:1px solid #ccd8e2}
+.freitext-ki h2,.freitext-ki h3{font-size:1.1em;margin:0 0 12px}
+.freitext-ki h3{margin-top:20px}
+.freitext-ki .criteria{list-style:none;padding:0;margin:16px 0}
+.freitext-ki .criteria li{padding:12px 16px;border-left:5px solid #6b8190;background:#f4f7fa;border-radius:6px;margin:10px 0}
+.freitext-ki .criteria li[data-status=met]{border-color:#2c7958}
+.freitext-ki .criteria li[data-status=partial]{border-color:#b98217}
+.freitext-ki .stale{background:#fff4d6;padding:12px;border-radius:8px}
+.freitext-ki :focus-visible{outline:3px solid #d58310;outline-offset:3px}
+@media(max-width:600px){.freitext-ki{padding:14px}.freitext-ki .result{padding:12px}.freitext-ki button{width:100%}}
+

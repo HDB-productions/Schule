@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Komma → Punkt · Tabellen für GeoGebra</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #183346; background: #f0f5f7; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { max-width: 1120px; margin: auto; padding: 40px 24px; }
+    .eyebrow { color: #24766f; font-weight: 700; letter-spacing: .09em; font-size: .8rem; text-transform: uppercase; }
+    h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin: 8px 0 12px; letter-spacing: -.04em; }
+    p { line-height: 1.6; }
+    .intro { color: #4e6473; max-width: 750px; margin-bottom: 28px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .card { background: white; border: 1px solid #d6e2e6; border-radius: 18px; padding: 24px; min-width: 0; box-shadow: 0 8px 24px #17384705; }
+    h2 { font-size: 1.15rem; margin: 0 0 8px; }
+    .hint { color: #526773; font-size: .9rem; margin: 0 0 16px; }
+    textarea { display: block; width: 100%; min-height: 280px; resize: vertical; padding: 14px; border: 1px solid #b5c9d0; border-radius: 10px; background: #fcfefe; color: #16364a; font: .95rem/1.65 Consolas, monospace; tab-size: 9; white-space: pre; }
+    textarea:focus, button:focus-visible, select:focus { outline: 3px solid #7dcac4; outline-offset: 2px; }
+    button, select { font: inherit; border: 1px solid #b5c9d0; border-radius: 8px; padding: 10px 14px; background: white; color: #183346; min-height: 44px; }
+    button { cursor: pointer; font-weight: 600; }
+    button:hover { background: #eaf4f3; }
+    button.primary { background: #146c63; color: white; border-color: #146c63; }
+    button.primary:hover { background: #0f554f; }
+    button:disabled { opacity: .5; cursor: default; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
+    .options { display: flex; flex-wrap: wrap; gap: 18px; margin: 22px 0; align-items: center; }
+    .options label { display: flex; gap: 9px; align-items: center; font-size: .9rem; }
+    input[type=checkbox] { width: 19px; height: 19px; accent-color: #146c63; }
+    #status { min-height: 1.6em; color: #226b64; margin: 16px 0 0; }
+    #status.warning { color: #8c490b; }
+    .preview { margin-top: 20px; }
+    .scroll { overflow: auto; max-height: 440px; }
+    table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+    td, th { text-align: right; padding: 10px 16px; border-bottom: 1px solid #e0e9ec; white-space: nowrap; }
+    th { background: #eaf3f3; font-weight: 600; color: #3e6368; position: sticky; top: 0; }
+    td:first-child, th:first-child { text-align: left; }
+    tr:nth-child(even) td { background: #f8fbfc; }
+    .footnote { color: #59707d; font-size: .85rem; margin-top: 22px; }
+    @media (max-width: 740px) { main { padding: 24px 14px; } .grid { grid-template-columns: 1fr; } .card { padding: 18px; } textarea { min-height: 220px; } }
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">OneNote → GeoGebra</div>
+  <h1>Komma rein. Punkt raus.</h1>
+  <p class="intro">Tabelle aus OneNote kopieren und links einfügen. Dezimalkommas werden zu Punkten – Zeilen und Spalten bleiben erhalten. Anschließend das Ergebnis in die Tabellenansicht von GeoGebra einfügen.</p>
+  <div class="grid">
+    <section class="card">
+      <h2><label for="input">1. Tabelle einfügen</label></h2>
+      <p class="hint">Hier klicken und mit Strg + V einfügen.</p>
+      <textarea id="input" spellcheck="false" placeholder="1&#9;0,72&#9;0,91&#10;2&#9;1,34&#9;1,22" aria-describedby="input-note"></textarea>
+      <div class="actions"><button id="example">Versuch C laden</button><button id="clear">Leeren</button></div>
+      <p class="footnote" id="input-note">Unterstützt kopierte Tabellen, Tabulatoren, Semikolons und Markdown-Tabellen.</p>
+    </section>
+    <section class="card">
+      <h2><label for="output">2. Für GeoGebra kopieren</label></h2>
+      <p class="hint">In GeoGebra die erste Zielzelle wählen und einfügen.</p>
+      <textarea id="output" readonly spellcheck="false" placeholder="Hier erscheint deine Tabelle mit Dezimalpunkten."></textarea>
+      <div class="actions"><button id="copy" class="primary" disabled>Tabelle kopieren</button><button id="select" disabled>Alles markieren</button></div>
+      <p id="status" role="status" aria-live="polite">Bereit zum Einfügen.</p>
+    </section>
+  </div>
+  <div class="options">
+    <label><input type="checkbox" id="numbersOnly" checked>Nur Zahlenzeilen (ohne Überschriften)</label>
+    <label for="columns">Werte stehen alle untereinander?
+      <select id="columns"><option value="0">Struktur beibehalten</option><option value="2">2 Spalten</option><option value="3">3 Spalten</option><option value="4">4 Spalten</option><option value="5">5 Spalten</option><option value="6">6 Spalten (Versuch C)</option><option value="7">7 Spalten</option><option value="8">8 Spalten</option><option value="9">9 Spalten</option><option value="10">10 Spalten</option></select>
+    </label>
+  </div>
+  <section class="card preview">
+    <h2>Tabellenvorschau</h2>
+    <p class="hint" id="dimensions">Noch keine Daten.</p>
+    <div class="scroll" id="preview"></div>
+  </section>
+  <p class="footnote">Alles wird lokal in deinem Browser umgewandelt. Es werden keine Daten hochgeladen oder gespeichert. Kopiert wird Text mit Tabulatoren zwischen den Spalten.</p>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const example = 't in s\ts in m – Durchlauf 1\ts in m – Durchlauf 2\ts in m – Durchlauf 3\ts in m – Durchlauf 4\ts in m – Durchlauf 5\n1\t0,72\t0,91\t0,73\t0,68\t0,79\n2\t1,34\t1,22\t1,01\t1,19\t1,19\n3\t1,52\t1,69\t1,73\t1,82\t1,76\n4\t2,21\t2,44\t2,21\t2,21\t2,37\n5\t3,13\t3,04\t3,01\t3,23\t3,20\n6\t3,91\t4,15\t4,05\t4,17\t3,86\n7\t5,06\t5,03\t5,12\t4,99\t4,91\n8\t6,41\t6,28\t6,39\t6,28\t6,32\n9\t7,59\t7,54\t7,78\t7,59\t7,57\n10\t9,18\t9,23\t9,25\t8,98\t9,21';
+const numeric = /^[+\-−]?(?:(?:\d{1,3}(?:\.\d{3})+|\d+)(?:,\d+)?|\d+(?:\.\d+)?|[.,]\d+)(?:[eE][+\-−]?\d+)?$/;
+function clean(value) { return value.replace(/\u00a0/g, ' ').replace(/[\u200b\ufeff]/g, '').trim(); }
+function isNumber(value) { return numeric.test(clean(value)); }
+function convertCell(value) {
+  const cell = clean(value);
+  if (!isNumber(cell)) return cell;
+  // Dots are removed as grouping separators only when a decimal comma is present.
+  return (cell.includes(',') ? cell.replace(/\./g, '').replace(',', '.') : cell).replace(/−/g, '-');
+}
+function parseText(text) {
+  const lines = text.replace(/\r\n?/g, '\n').split('\n');
+  const delimiter = lines.some(line => line.includes('\t')) ? '\t' : lines.some(line => line.includes(';')) ? ';' : null;
+  return lines.map(line => {
+    // Ignore empty one-cell Markdown tables from exported OneNote content.
+    line = line.replace(/&#(?:x20|32);|&nbsp;/gi, ' ');
+    if (/^\s*\|?\s*:?-{3,}/.test(line) && /^[\s|:\-]+$/.test(line)) return [];
+    if (delimiter) return line.split(delimiter).map(clean);
+    if (line.includes('|')) return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(cell => clean(cell).replace(/^\*\*(.*?)\*\*$/, '$1'));
+    const trimmed = clean(line).replace(/^\*\*(.*?)\*\*$/, '$1');
+    if (!trimmed) return [];
+    const tokens = trimmed.split(/\s+/);
+    if (tokens.length > 1 && tokens.every(isNumber)) return tokens;
+    return trimmed.split(/ {2,}/).map(clean);
+  }).filter(row => row.some(cell => cell !== ''));
+}
+function parseHTML(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const tables = Array.from(doc.querySelectorAll('table')).filter(table => !table.querySelector('table'));
+  if (!tables.length) return null;
+  const candidates = tables.map(table => {
+    const rows = [];
+    Array.from(table.rows).forEach((tr, r) => {
+      rows[r] ||= [];
+      let c = 0;
+      for (const cell of tr.cells) {
+        while (rows[r][c] !== undefined) c++;
+        const value = clean(cell.textContent.replace(/\s+/g, ' '));
+        const height = Math.min(cell.rowSpan || table.rows.length - r, table.rows.length - r);
+        const width = Math.min(cell.colSpan || 1, 1000);
+        for (let dr = 0; dr < height; dr++) {
+          rows[r + dr] ||= [];
+          for (let dc = 0; dc < width; dc++) rows[r + dr][c + dc] = dr === 0 && dc === 0 ? value : '';
+        }
+        c += width;
+      }
+    });
+    return rows.map(row => Array.from(row, cell => cell || '')).filter(row => row.some(Boolean));
+  });
+  // OneNote can put the actual table inside a layout table.
+  return candidates.sort((a, b) => b.flat().filter(isNumber).length - a.flat().filter(isNumber).length)[0];
+}
+function setStatus(message, warning = false) { $('status').textContent = message; $('status').classList.toggle('warning', warning); }
+function update() {
+  let rows = parseText($('input').value);
+  const removed = rows.filter(row => !row.some(isNumber) || row.some(cell => cell && !isNumber(cell))).length;
+  if ($('numbersOnly').checked) rows = rows.filter(row => row.some(isNumber) && row.every(cell => !cell || isNumber(cell)));
+  const columns = Number($('columns').value);
+  if (columns && rows.length && rows.every(row => row.length === 1)) {
+    const values = rows.flat();
+    rows = [];
+    for (let i = 0; i < values.length; i += columns) rows.push(values.slice(i, i + columns));
+  }
+  rows = rows.map(row => row.map(convertCell));
+  const width = Math.max(0, ...rows.map(row => row.length));
+  const uneven = rows.some(row => row.length !== width);
+  const result = rows.map(row => Array.from({length: width}, (_, i) => row[i] || '').join('\t')).join('\n');
+  $('output').value = result;
+  $('copy').disabled = $('select').disabled = !result;
+  $('dimensions').textContent = rows.length ? `${rows.length} Zeilen · ${width} Spalten` : 'Noch keine Daten.';
+  $('preview').replaceChildren();
+  if (rows.length) {
+    const table = document.createElement('table');
+    const head = table.createTHead().insertRow();
+    for (let i = 0; i < width; i++) { const th = document.createElement('th'); th.scope = 'col'; th.textContent = `Spalte ${i + 1}`; head.append(th); }
+    const body = table.createTBody();
+    rows.slice(0, 200).forEach(row => { const tr = body.insertRow(); for (let i = 0; i < width; i++) tr.insertCell().textContent = row[i] || ''; });
+    $('preview').append(table);
+    if (rows.length > 200) $('dimensions').textContent += ' · Vorschau: erste 200 Zeilen; kopiert werden alle.';
+  }
+  const omitted = $('numbersOnly').checked && removed ? ` ${removed} Text-/Überschriftenzeilen ausgelassen.` : '';
+  if (uneven) setStatus('Unterschiedliche Zeilenlängen: Bitte die Vorschau prüfen.' + omitted, true);
+  else if (rows.length && width === 1) setStatus('Eine Spalte erkannt. Falls nötig, unten die gewünschte Spaltenzahl wählen.' + omitted, true);
+  else setStatus((result ? 'Umgewandelt – bereit zum Kopieren.' : $('input').value.trim() ? 'Keine passenden Zahlenzeilen. Prüfe die Eingabe oder deaktiviere den Zahlenfilter.' : 'Bereit zum Einfügen.') + omitted, !result && !!$('input').value.trim());
+}
+$('input').addEventListener('paste', event => {
+  const html = event.clipboardData?.getData('text/html');
+  const rows = html ? parseHTML(html) : null;
+  if (rows?.length && rows.some(row => row.length > 1)) {
+    event.preventDefault();
+    $('input').setRangeText(rows.map(row => row.join('\t')).join('\n'), $('input').selectionStart, $('input').selectionEnd, 'end');
+    update();
+  }
+});
+$('input').addEventListener('input', update);
+$('numbersOnly').addEventListener('change', update);
+$('columns').addEventListener('change', update);
+$('example').addEventListener('click', () => { $('input').value = example; $('columns').value = '0'; update(); });
+$('clear').addEventListener('click', () => { $('input').value = ''; $('columns').value = '0'; update(); $('input').focus(); });
+$('select').addEventListener('click', () => { $('output').focus(); $('output').select(); setStatus('Alles markiert. Jetzt Strg + C drücken.'); });
+$('copy').addEventListener('click', async () => {
+  try {
+    if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable');
+    await navigator.clipboard.writeText($('output').value);
+    setStatus('Kopiert! Jetzt in GeoGebra eine Tabellenzelle wählen und Strg + V drücken.');
+  } catch {
+    $('output').focus(); $('output').select();
+    let copied = false;
+    try { copied = document.execCommand('copy'); } catch { /* Manual copying remains available. */ }
+    setStatus(copied ? 'Kopiert! Jetzt in GeoGebra einfügen.' : 'Bitte Strg + C drücken – die gesamte Tabelle ist bereits markiert.', !copied);
+  }
+});
+</script>
+</body>
+</html>

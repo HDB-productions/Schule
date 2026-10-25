@@ -1,0 +1,20 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Edulo-Konto-Diagnose</title></head><body>
+<!-- EDULO_WIDGET_KEY:edulo-konto-diagnose -->
+<main class="edulo-account-probe" data-edulo-id="edulo-konto-diagnose">
+<style>/* APP_CSS */</style>
+<h1>Edulo-Konto testen</h1>
+<p>Öffne dieses Testwidget in Edulo in deiner normalen Aufgabenansicht. Warte kurz und kopiere dann den Bericht hier in unseren Chat.</p>
+<p>Der Bericht enthält erreichbare Kontofelder mit ihren Feldnamen. Er bleibt hier im Widget; Passwort- und Sitzungsfelder werden maskiert. Es werden keine Lernstände verändert.</p>
+<div class="probe-actions"><button type="button" data-refresh>Neu auslesen</button><button type="button" data-copy>JSON kopieren</button></div>
+<p data-status role="status" aria-live="polite">Kontodaten werden gesucht …</p>
+<label for="edulo-account-report">Diagnosebericht als JSON</label>
+<textarea id="edulo-account-report" data-report readonly spellcheck="false" autocomplete="off" aria-describedby="edulo-account-report-hint"></textarea>
+<p id="edulo-account-report-hint">Falls Kopieren gesperrt ist: in den Bericht klicken, alles markieren und kopieren. Die Kontodaten im Bericht gehören zu dem Konto, mit dem du diesen Test öffnest.</p>
+<script>(()=>{'use strict';
+const root=document.currentScript?.closest('[data-edulo-id="edulo-konto-diagnose"]')||[...document.querySelectorAll('[data-edulo-id="edulo-konto-diagnose"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+/* EDULO_BRIDGE */
+/* APP_JS */
+})();</script>
+</main></body></html>

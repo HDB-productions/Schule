@@ -1,0 +1,13 @@
+.edulo-account-probe { max-width:920px; margin:0 auto; padding:20px; box-sizing:border-box; font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; color:#193347; }
+.edulo-account-probe * { box-sizing:border-box; }
+.edulo-account-probe h1 { font-size:26px; line-height:1.2; margin:0 0 16px; }
+.edulo-account-probe p { margin:12px 0; }
+.edulo-account-probe .probe-actions { display:flex; gap:12px; flex-wrap:wrap; margin:20px 0 12px; }
+.edulo-account-probe button { background:#176a62; color:white; border:0; border-radius:10px; min-height:48px; padding:12px 18px; font:700 16px/1.4 system-ui,sans-serif; cursor:pointer; }
+.edulo-account-probe button[data-refresh] { background:#e6eff3; color:#193347; }
+.edulo-account-probe label { display:block; font-weight:700; margin:16px 0 8px; }
+.edulo-account-probe textarea { display:block; width:100%; min-height:260px; height:40vh; resize:vertical; padding:12px; border:1px solid #9fb8c2; border-radius:10px; background:#f5f9fa; color:#173c4e; font:13px/1.5 ui-monospace,Consolas,monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
+.edulo-account-probe [data-status] { min-height:24px; font-weight:600; color:#275c59; }
+.edulo-account-probe :is(button,textarea):focus-visible { outline:3px solid #d58b17; outline-offset:3px; }
+.edulo-account-probe #edulo-account-report-hint { font-size:14px; color:#526b79; }
+@media(max-width:480px) { .edulo-account-probe { padding:12px; } .edulo-account-probe .probe-actions button { width:100%; } }

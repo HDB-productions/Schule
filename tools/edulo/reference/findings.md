@@ -52,4 +52,6 @@ E1 als UTF-8/Base64 verhindert Quote-Ersetzungen in JSON. E1 erhält vollständi
 
 ## Grenzen
 
+Kontodiagnose, echter Nutzerbericht und ausdrückliche Bestätigung 25.10.2026: **`widget.user.uid` ist die gesuchte Anmelde-ID** im Format `xx-xxxxxx-xxxxxx-xxxxxx`; **`widget.user.name` ist der gesuchte Benutzername**. Schreibweise aus dem aktuellen Konto übernehmen. `widget.user.ID` und `.id` sind interne Nummern. Historische `activations[].UID`/`.Username` sowie die früher angenommenen Felder `username`/`Username`/`userName` nicht als Ersatz verwenden. Das korrigierte Anzeige-Widget `Edulo/Meine-Zugangsdaten/widget.html` nutzt nur die bestätigten Felder und prüft das ID-Format. `Edulo/Konto-Diagnose/widget.html` bleibt ein separates Diagnosewerkzeug. Bericht nicht als Rohdatei mit persönlichen Kontodaten ins Repo kopieren. Erneuter Live-Test des korrigierten Anzeige-Widgets steht aus.
+
 Bestätigt ist der konkrete Desktop-Edulo-Testaufbau, nicht jede Edulo-Version, Remote-/Prüfungsansicht oder Cloud-Synchronisierung über unabhängige Geräte. Excel-Befund ist echter Nutzertest, keine hier analysierte XLSX-Datei. Keine offizielle API-Zusage. Sichtbare Symbole, persistenter Status, Scorezähler und pädagogische Bewertung bewusst getrennt halten.

@@ -88,9 +88,22 @@ let browser;
   // Template: real 920px width and host viewport; no dependency on a full-page root.
   await page.goto(base+'/?mode=normal');await page.evaluate(html=>{const mount=document.getElementById('mount');mount.style.width='920px';mount.innerHTML=html;for(const old of [...mount.querySelectorAll('script')]){const script=document.createElement('script');script.textContent=old.textContent;old.replaceWith(script);}},built);
   await page.waitForFunction(()=>!document.querySelector('[data-controls]').disabled);assert((await page.locator('.edulo-widget').boundingBox()).width<=920);await page.locator('[data-answer]').fill('5');await page.locator('[data-check]').click();assert.equal(await page.evaluate(()=>saved.input[0].c),'true');
-  // Built template includes footer management and uses the extra space.
+  // Edulo supplies the page title; the template uses natural height and the host's full width.
   assert.equal(await page.locator('#footerButtons').isVisible(),false);
-  assert((await page.locator('.edulo-widget').boundingBox()).height>640);
+  assert.equal(await page.locator('.edulo-widget h1').count(),0);
+  const templateRoot=page.locator('.edulo-widget'),templateWork=page.locator('.edulo-work');
+  const compactHeight=(await templateRoot.boundingBox()).height;
+  await page.setViewportSize({width:1440,height:1000});
+  assert.equal((await templateRoot.boundingBox()).height,compactHeight);
+  await page.locator('#mount').evaluate(el=>el.style.width='100%');
+  assert.equal((await templateRoot.boundingBox()).width,await page.locator('#mount').evaluate(el=>el.clientWidth));
+  assert((await templateRoot.boundingBox()).width>920);
+  await templateWork.evaluate(el=>{const p=document.createElement('p');p.textContent='Langer Aufgabeninhalt '.repeat(1000);el.append(p);});
+  assert((await templateRoot.boundingBox()).height>compactHeight+640);
+  for(const area of [templateRoot,templateWork]) {
+    assert.equal(await area.evaluate(el=>getComputedStyle(el).overflowY),'visible');
+    assert.equal(await area.evaluate(el=>el.scrollHeight<=el.clientHeight),true);
+  }
   await page.setViewportSize({width:390,height:844});await page.locator('#mount').evaluate(el=>el.style.width='100%');assert((await page.locator('.edulo-widget').boundingBox()).width<=390);assert.equal(await page.locator('.edulo-widget').evaluate(el=>el.scrollWidth<=el.clientWidth),true);
   await page.setViewportSize({width:1024,height:768});await page.goto(base+'/?mode=normal');
   await page.evaluate(html=>{const mount=document.getElementById('mount');mount.innerHTML=html;for(const old of [...mount.querySelectorAll('script')]){const script=document.createElement('script');script.textContent=old.textContent;old.replaceWith(script);}},footerHtml);

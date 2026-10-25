@@ -1,0 +1,6 @@
+[data-edulo-id="edulo-kontodaten-speichern"] { font:16px/1.5 system-ui,sans-serif; overflow-wrap:anywhere; }
+[data-edulo-id="edulo-kontodaten-speichern"] [data-status] { font-size:14px; }
+[data-edulo-id="edulo-kontodaten-speichern"] [data-qr-section] { margin:18px 0; }
+[data-edulo-id="edulo-kontodaten-speichern"] [data-qr] { display:block; width:264px; max-width:100%; height:auto; background:#fff; image-rendering:pixelated; }
+[data-edulo-id="edulo-kontodaten-speichern"] figcaption { margin-top:8px; font-size:14px; }
+[data-edulo-id="edulo-kontodaten-speichern"] [hidden] { display:none !important; }

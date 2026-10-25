@@ -13,7 +13,7 @@ function render() {
 }
 async function start() {
   q('[data-controls]').disabled = true;
-  try { const loaded = await bridge.load(); state = loaded.data; scores = loaded.scores; render(); fit(); q('[data-controls]').disabled = bridge.getStatus().mode === 'editor'; }
+  try { const loaded = await bridge.load(); state = loaded.data; scores = loaded.scores; render(); q('[data-controls]').disabled = bridge.getStatus().mode === 'editor'; }
   catch {} // Bridge reports the actionable error; no silent fresh state.
 }
 q('[data-answer]').addEventListener('input', () => { state.answer = q('[data-answer]').value; bridge.queueSave(state, scores); });
@@ -28,16 +28,5 @@ q('[data-check]').addEventListener('click', () => {
   render(); if (!correct) q('[data-feedback]').textContent = 'Versuche es noch einmal.';
 });
 q('[data-retry]').addEventListener('click', start);
-// Measured host: iframe 1024x768, content width 920, clipping wrapper height 728.
-// Use the available height, including the room reclaimed from Edulo's footer.
-function fit() {
-  let bottom = window.innerHeight, top = Math.max(0, root.getBoundingClientRect().top);
-  for (let p = root.parentElement; p && p !== document.documentElement; p = p.parentElement) {
-    if (/hidden|clip|auto|scroll/.test(getComputedStyle(p).overflowY)) bottom = Math.min(bottom, p.getBoundingClientRect().bottom);
-  }
-  root.style.setProperty('--edulo-height', Math.max(180, bottom - top - 16) + 'px');
-}
-fit(); window.addEventListener('resize', fit);
-const cleanup = new MutationObserver(() => { if (!root.isConnected) { window.removeEventListener('resize', fit); cleanup.disconnect(); } });
-cleanup.observe(document.documentElement, {childList: true, subtree: true});
+// Natural content height: Edulo scrolls the whole page.
 start();

@@ -1,0 +1,458 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Edulo-Konto-Diagnose</title></head><body>
+<!-- EDULO_WIDGET_KEY:edulo-konto-diagnose -->
+<main class="edulo-account-probe" data-edulo-id="edulo-konto-diagnose">
+<style>.edulo-account-probe { max-width:920px; margin:0 auto; padding:20px; box-sizing:border-box; font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; color:#193347; }
+.edulo-account-probe * { box-sizing:border-box; }
+.edulo-account-probe h1 { font-size:26px; line-height:1.2; margin:0 0 16px; }
+.edulo-account-probe p { margin:12px 0; }
+.edulo-account-probe .probe-actions { display:flex; gap:12px; flex-wrap:wrap; margin:20px 0 12px; }
+.edulo-account-probe button { background:#176a62; color:white; border:0; border-radius:10px; min-height:48px; padding:12px 18px; font:700 16px/1.4 system-ui,sans-serif; cursor:pointer; }
+.edulo-account-probe button[data-refresh] { background:#e6eff3; color:#193347; }
+.edulo-account-probe label { display:block; font-weight:700; margin:16px 0 8px; }
+.edulo-account-probe textarea { display:block; width:100%; min-height:260px; height:40vh; resize:vertical; padding:12px; border:1px solid #9fb8c2; border-radius:10px; background:#f5f9fa; color:#173c4e; font:13px/1.5 ui-monospace,Consolas,monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
+.edulo-account-probe [data-status] { min-height:24px; font-weight:600; color:#275c59; }
+.edulo-account-probe :is(button,textarea):focus-visible { outline:3px solid #d58b17; outline-offset:3px; }
+.edulo-account-probe #edulo-account-report-hint { font-size:14px; color:#526b79; }
+@media(max-width:480px) { .edulo-account-probe { padding:12px; } .edulo-account-probe .probe-actions button { width:100%; } }
+</style>
+<h1>Edulo-Konto testen</h1>
+<p>Öffne dieses Testwidget in Edulo in deiner normalen Aufgabenansicht. Warte kurz und kopiere dann den Bericht hier in unseren Chat.</p>
+<p>Der Bericht enthält erreichbare Kontofelder mit ihren Feldnamen. Er bleibt hier im Widget; Passwort- und Sitzungsfelder werden maskiert. Es werden keine Lernstände verändert.</p>
+<div class="probe-actions"><button type="button" data-refresh>Neu auslesen</button><button type="button" data-copy>JSON kopieren</button></div>
+<p data-status role="status" aria-live="polite">Kontodaten werden gesucht …</p>
+<label for="edulo-account-report">Diagnosebericht als JSON</label>
+<textarea id="edulo-account-report" data-report readonly spellcheck="false" autocomplete="off" aria-describedby="edulo-account-report-hint"></textarea>
+<p id="edulo-account-report-hint">Falls Kopieren gesperrt ist: in den Bericht klicken, alles markieren und kopieren. Die Kontodaten im Bericht gehören zu dem Konto, mit dem du diesen Test öffnest.</p>
+<script>(()=>{'use strict';
+const root=document.currentScript?.closest('[data-edulo-id="edulo-konto-diagnose"]')||[...document.querySelectorAll('[data-edulo-id="edulo-konto-diagnose"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+// Included by build.cjs. Changes only the widget's own task layout.
+function createEduloFooter({root, widget}) {
+  const wrapper = widget?.contentWrapper?.[0];
+  const doc = wrapper?.ownerDocument;
+  const footer = doc?.getElementById('footerButtons');
+  let frame = null; try { frame = root.ownerDocument.defaultView.frameElement; } catch {}
+  if (!wrapper || !footer || !(wrapper.contains(root) || (frame && wrapper.contains(frame))) || footer.contains(root)) throw Error('Footer nicht eindeutig der eigenen Aufgabe zugeordnet.');
+  if (widget.isEditor || widget.JSON?.asTest === '1' || widget.JSON?.remoteUserData) throw Error('Footer im Editor, Prüfungsmodus oder in fremden Antworten nicht verändern.');
+  const win = doc.defaultView;
+  const original = {hidden: footer.hidden, display: footer.style.getPropertyValue('display'), dp: footer.style.getPropertyPriority('display'), bottom: wrapper.style.getPropertyValue('bottom'), bp: wrapper.style.getPropertyPriority('bottom')};
+  const restoreProperty = (el, key, value, priority) => value ? el.style.setProperty(key, value, priority) : el.style.removeProperty(key);
+  function measure() {
+    const rect = el => { const r = el.getBoundingClientRect(); return {width: r.width, height: r.height, top: r.top, bottom: r.bottom}; };
+    return {viewport: {width: win.innerWidth, height: win.innerHeight}, wrapper: rect(wrapper), footer: rect(footer), footerDisplay: win.getComputedStyle(footer).display, wrapperBottom: win.getComputedStyle(wrapper).bottom};
+  }
+  function refresh() {
+    // refreshAll() would rebuild content and can re-evaluate answers: deliberately not used.
+    try { if (widget.contentWrapper.data?.('jsp') && typeof widget.refreshScrollbars === 'function') widget.refreshScrollbars(); } catch {}
+    win.dispatchEvent(new win.Event('resize'));
+    if (root.ownerDocument.defaultView !== win) root.ownerDocument.defaultView.dispatchEvent(new root.ownerDocument.defaultView.Event('resize'));
+  }
+  function restore() {
+    footer.hidden = original.hidden;
+    restoreProperty(footer, 'display', original.display, original.dp);
+    restoreProperty(wrapper, 'bottom', original.bottom, original.bp);
+    refresh();
+  }
+  function setHidden() {
+    if (!footer.isConnected || !wrapper.isConnected) throw Error('Edulo hat den Footer ersetzt. Neu verbinden.');
+    const position = win.getComputedStyle(wrapper).position;
+    if (footer.hidden && footer.style.getPropertyValue('display') === 'none' && (!['absolute','fixed'].includes(position) || wrapper.style.bottom === '0px')) return;
+    footer.hidden = true; footer.style.setProperty('display', 'none', 'important');
+    if (position === 'absolute' || position === 'fixed') wrapper.style.setProperty('bottom', '0px', 'important');
+    refresh();
+  }
+  async function hide() {
+    const before = measure();
+    setHidden(); await new Promise(r => setTimeout(r, 200));
+    const after = measure();
+    return {before, after, gainedHeight: after.wrapper.height - before.wrapper.height, note: 'Actual measured wrapper height; not a server or scoring test'};
+  }
+  return {hide, setHidden, restore, measure, isCurrent: () => footer.isConnected && wrapper.isConnected && doc.getElementById('footerButtons') === footer && widget.contentWrapper?.[0] === wrapper};
+}
+
+// Inlined by build.cjs. No global variables, network requests or generated messages.
+const createEduloBridge = (() => {
+  const PREFIX = 'EDULO2:';
+  const COLORS = ['gray', 'green', 'yellow', 'red'];
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  function encode(value) {
+    const bytes = new TextEncoder().encode(JSON.stringify(value));
+    let binary = '';
+    for (let i = 0; i < bytes.length; i += 8192) binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+    return PREFIX + btoa(binary);
+  }
+  function decode(raw) {
+    if (!raw.startsWith(PREFIX)) throw Error('Unbekannter Speicherstand. Originaldaten bleiben erhalten.');
+    return JSON.parse(new TextDecoder('utf-8', {fatal: true}).decode(Uint8Array.from(atob(raw.slice(PREFIX.length)), c => c.charCodeAt(0))));
+  }
+  return function create(options) {
+    const {root, widgetId, fresh, validate, onStatus = () => {}} = options;
+    if (!root || !/^[a-z][a-z0-9-]+$/.test(widgetId) || typeof fresh !== 'function' || typeof validate !== 'function') throw Error('Ungültige Bridge-Konfiguration.');
+    const version = options.stateVersion || 1;
+    const query = new URLSearchParams(location.search);
+    const count = options.scoreCount ?? 20;
+    if (!Number.isInteger(count) || count < 1 || count > 100) throw Error('Ungültige Punktezahl.');
+    const stateId = options.stateId || query.get('STATE_ID') || '';
+    const prefix = options.scorePrefix || query.get('SCORE_PREFIX') || 'e2_cloze_text_input_';
+    const show = options.showFields ?? (query.get('SHOW_FIELDS') === '1');
+    const localKey = 'schule-edulo:' + widgetId;
+    const hidden = new Map(), listeners = [];
+    let mode = '', host = null, fields = [], moduleLink = null, lastRaw = '', current = null;
+    let ready = false, disposed = false, pending = null, timer = null, removal = null;
+    let hideFooter = options.hideFooter ?? true, footer = null, footerObserver = null, footerError = '';
+    function restoreFooter() {
+      footerObserver?.disconnect(); footerObserver = null;
+      footer?.restore(); footer = null; footerError = '';
+    }
+    function syncFooter() {
+      if (!ready || disposed || !root.isConnected || !hideFooter || mode !== 'edulo' || editor() || moduleLink?.w.JSON?.asTest === '1' || moduleLink?.w.JSON?.remoteUserData) { restoreFooter(); return; }
+      const w = moduleLink?.w, doc = w?.contentWrapper?.[0]?.ownerDocument;
+      if (!doc) { footerError = 'Edulo-Inhaltsbereich fehlt.'; return; }
+      if (!footerObserver) {
+        footerObserver = new MutationObserver(syncFooter);
+        footerObserver.observe(doc.documentElement, {childList: true, subtree: true});
+      }
+      try {
+        if (footer && !footer.isCurrent()) { footer.restore(); footer = null; }
+        if (!footer) footer = createEduloFooter({root, widget: w});
+        footer.setHidden(); footerError = '';
+      } catch (e) { footerError = e.message; }
+    }
+    function setFooterHidden(value) {
+      if (typeof value !== 'boolean') throw Error('hideFooter erwartet true oder false.');
+      hideFooter = value; syncFooter();
+    }
+    const status = (text, error = false) => onStatus({text, error, mode});
+    function docs() {
+      const out = [];
+      for (const win of [window, window.parent, window.top]) try {
+        if (!out.some(x => x.doc === win.document)) out.push({win, doc: win.document});
+      } catch {} // A blocked parent is never replaced by localStorage in Edulo mode.
+      return out;
+    }
+    function editor() {
+      return docs().some(({win, doc}) => win.widget?.isEditor === true || doc.body?.classList.contains('editor') || new URLSearchParams(win.location.search).get('editor') === '1');
+    }
+    function matches(id) {
+      return docs().flatMap(({doc}) => [...doc.querySelectorAll('input,textarea')].filter(el => !root.contains(el) && (el.id === id || el.name === id) && (el.tagName === 'TEXTAREA' || ['text', 'hidden', 'number'].includes(el.type))));
+    }
+    function one(id) {
+      const found = [...new Set(matches(id))];
+      if (found.length > 1) throw Error('Mehrdeutige Edulo-Feldzuordnung: ' + id);
+      return found[0] || null;
+    }
+    function resolve() {
+      const candidates = stateId ? [one(stateId)].filter(Boolean) : [...new Set(['e1_input', 'e1_text_input', 'e1_cloze_text_input_1', 'e1'].flatMap(matches))];
+      if (candidates.length > 1) throw Error('Mehrere E1-Felder. STATE_ID festlegen.');
+      const h = candidates[0] || null, f = Array.from({length: count}, (_, i) => one(prefix + (i + 1)));
+      if (h && f.includes(h)) throw Error('Speicher und Punkte dürfen nicht dasselbe Feld sein.');
+      return {h, f};
+    }
+    function bridge() {
+      const links = [], seen = new Set();
+      for (const {win} of docs()) {
+        const w = win.widget;
+        if (!w || seen.has(w) || typeof w.findModule !== 'function' || typeof w.forEachContent !== 'function') continue;
+        seen.add(w);
+        const mod = w.findModule('cloze_text'), storage = w.findModule('save_load');
+        if (!mod || !storage || !['loadUserInput', 'saveUserInput', 'checkSingleClozeInput'].every(k => typeof mod[k] === 'function') || typeof storage.save !== 'function') continue;
+        if (storage.JSON?.active === 'false' || w.JSON?.remoteUserData || (w.JSON?.asTest === '1' && w.testData?.d && w.testData?.ds)) throw Error('Diese Edulo-Ansicht erlaubt keine normale Speicherung.');
+        w.forEachContent(content => {
+          if (content.module !== mod || !Array.isArray(content.clozeInputs)) return true;
+          const groups = fields.map(field => content.clozeInputs.filter(item => item.inputElement?.[0] === field));
+          if (groups.every(g => g.length === 1)) {
+            const items = groups.map(g => g[0]);
+            if (content.JSON?.nocheck === 'true' || items.some(i => i.JSON.predefined === 'true' || i.JSON.connected === 'true' || i.JSON.unchecked === 'true')) throw Error('E2 braucht normale, unabhängige Lücken mit Lösung 1.');
+            if (new Set(items.map(i => i.JSON.id)).size !== count || items.some(i => !Array.isArray(i.JSON.values) || !i.JSON.values.some(v => String(v.value) === '1'))) throw Error('E2-ID oder richtige Lösung stimmt nicht.');
+            links.push({w, mod, storage, content, items});
+          }
+          return true;
+        });
+      }
+      if (links.length > 1) throw Error('Mehrdeutiges Edulo-Lückenmodul.');
+      return links[0] || null;
+    }
+    function hide() {
+      if (mode !== 'edulo' || editor()) { restore(); return; }
+      syncFooter();
+      if (show) { restoreFields(); return; }
+      const allowed = new Set([host, ...fields]);
+      for (const field of allowed) {
+        if (!field) continue;
+        const moduleId = field === host ? (options.stateModuleId || 'e1') : (options.scoreModuleId || prefix.split('_')[0]);
+        const safe = el => el && el !== el.ownerDocument.body && el !== el.ownerDocument.documentElement && el.contains(field) && !el.contains(root) && !el.querySelector('iframe') && [...el.querySelectorAll('input,textarea,select')].every(f => allowed.has(f));
+        const mod = field.ownerDocument.getElementById(moduleId), container = field.closest('.inputcontainer');
+        const target = safe(mod) ? mod : safe(container) ? container : field;
+        if (!hidden.has(target)) hidden.set(target, {hidden: target.hidden, display: target.style.getPropertyValue('display'), priority: target.style.getPropertyPriority('display')});
+        target.hidden = true; target.style.setProperty('display', 'none', 'important');
+      }
+    }
+    function restore() {
+      restoreFooter(); restoreFields();
+    }
+    function restoreFields() {
+      for (const [el, old] of hidden) {
+        el.hidden = old.hidden;
+        if (old.display) el.style.setProperty('display', old.display, old.priority); else el.style.removeProperty('display');
+      }
+      hidden.clear();
+    }
+    function nativeWrite(el, value, force = false) {
+      if (!el?.isConnected || el.disabled || el.readOnly) throw Error('Edulo-Feld fehlt oder ist gesperrt.');
+      if (!force && String(el.value) === value) return;
+      const win = el.ownerDocument.defaultView;
+      const proto = el.tagName === 'TEXTAREA' ? win.HTMLTextAreaElement.prototype : win.HTMLInputElement.prototype;
+      const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+      if (!setter) throw Error('Nativer Feldzugriff fehlt.');
+      setter.call(el, value);
+      for (const type of ['input', 'change']) el.dispatchEvent(new win.Event(type, {bubbles: true}));
+      if (String(el.value) !== value) throw Error('Edulo hat den Speicherwert verändert.');
+    }
+    function row(item) { return {id: item.JSON.id, v: String(item.inputElement.val()), l: item.last || '', c: item.correct, h: item.helped}; }
+    function target(item, color) { return {id: item.JSON.id, v: color === 'gray' ? '' : color === 'red' ? '0' : '1', l: '', c: ['green', 'yellow'].includes(color) ? 'true' : 'false', h: color === 'yellow' ? 'true' : 'false'}; }
+    function checked(data, scores) {
+      if (!validate(data) || !Array.isArray(scores) || scores.length !== count || scores.some(s => !COLORS.includes(s))) throw Error('Ungültiger Lern- oder Punktestand. Originalstand bleibt erhalten.');
+      return {widget: widgetId, version, data: clone(data), scores: [...scores]};
+    }
+    function parse(raw) {
+      const value = decode(raw);
+      if (value.widget !== widgetId || value.version !== version) throw Error('Fremder oder älterer Lernstand. Migration erforderlich.');
+      return checked(value.data, value.scores);
+    }
+    function ensure() {
+      if (!ready || disposed) throw Error('Speicher noch nicht verbunden.');
+      if (editor()) { restore(); throw Error('Editor-Vorschau: Speicherung gesperrt.'); }
+      if (!root.isConnected) throw Error('Widget wurde entfernt.');
+      if (mode === 'edulo') {
+        const r = resolve();
+        if (!r.h || !r.f.every(Boolean)) throw Error('Edulo-Felder fehlen. Kein lokaler Ersatzspeicher.');
+        if (String(r.h.value) !== lastRaw) throw Error('E1 wurde extern geändert. Neu laden statt überschreiben.');
+        host = r.h; fields = r.f; moduleLink = bridge();
+        if (!moduleLink) throw Error('Edulo-Statusschnittstelle fehlt. Keine vereinfachte 0/1-Ersatzbewertung.');
+        hide();
+      } else if (localStorage.getItem(localKey) !== (lastRaw || null)) throw Error('Ein anderer Tab hat den Lernstand geändert. Bitte neu laden.');
+    }
+    async function load() {
+      if (disposed) throw Error('Bridge wurde beendet.');
+      ready = false;
+      if (editor()) {
+        mode = 'editor'; restore(); current = checked(fresh(), Array(count).fill('gray'));
+        ready = true; status('Editor-Vorschau · keine Speicherung'); return clone(current);
+      }
+      const embedded = window.parent !== window || query.get('edulo') === '1' || query.has('data') || docs().some(({win}) => !!win.widget) || !!resolve().h;
+      mode = options.mode || (embedded ? 'edulo' : 'standalone');
+      if (!['edulo', 'standalone'].includes(mode)) throw Error('Unbekannter Betriebsmodus.');
+      try {
+        if (mode === 'edulo') {
+          for (let n = 0; n < (options.attempts ?? 50); n++) {
+            if (disposed) throw Error('Widget wurde entfernt.');
+            const r = resolve(); host = r.h; fields = r.f;
+            if (host && fields.every(Boolean)) { moduleLink = bridge(); if (moduleLink) break; }
+            await new Promise(r => setTimeout(r, options.retryMs ?? 200));
+          }
+          if (!host || !fields.every(Boolean) || !moduleLink) throw Error('E1, E2 oder Edulo-Statusschnittstelle nicht erreichbar.');
+          lastRaw = String(host.value);
+          if (!lastRaw.trim() && moduleLink.items.some(i => String(i.inputElement.val()) !== '')) throw Error('E1 leer, aber E2 enthält Antworten. Zuordnung prüfen.');
+        } else lastRaw = localStorage.getItem(localKey) || '';
+        current = lastRaw.trim() ? parse(lastRaw) : checked(fresh(), Array(count).fill('gray'));
+        ready = true; hide(); status(mode === 'edulo' ? 'Mit Edulo verbunden.' : 'Speicherung in diesem Browser.');
+        return clone(current); // Deliberately no E1/E2 writes and no score synchronization on load.
+      } catch (e) { ready = false; restore(); status(e.message, true); throw e; }
+    }
+    function save(data, scores = current?.scores) {
+      clearTimeout(timer); pending = null;
+      let stateWritten = false;
+      try {
+        ensure(); const next = checked(data, scores), raw = encode(next);
+        if (mode === 'standalone') { localStorage.setItem(localKey, raw); lastRaw = raw; current = next; status('In diesem Browser gespeichert.'); return clone(next); }
+        if (host.disabled || host.readOnly || (host.maxLength >= 0 && raw.length > host.maxLength)) throw Error('E1 ist gesperrt oder zu kurz.');
+        const {mod, content, items} = moduleLink;
+        const old = items.map(row), desired = items.map((item, i) => target(item, scores[i]));
+        const changed = items.map((item, i) => i).filter(i => !equal(old[i], desired[i]));
+        if (changed.some(i => fields[i].disabled || fields[i].readOnly)) throw Error('Ein Punktefeld ist gesperrt.');
+        // Preflight the entire batch before dispatching any event that can save it.
+        try {
+          mod.loadUserInput(content, changed.map(i => desired[i]));
+          for (const i of changed) {
+            if (mod.checkSingleClozeInput(items[i], content) !== (desired[i].c === 'true') || !equal(row(items[i]), desired[i])) throw Error('Edulo bewertet einen Zielwert anders.');
+          }
+          const serialized = {input: [], counter: {total: 0, correct: 0, helped: 0, wrong: 0}};
+          mod.saveUserInput(content, serialized);
+          if (changed.some(i => !equal(serialized.input.find(r => r.id === desired[i].id), desired[i]))) throw Error('Edulo-Speicherformat hat sich geändert.');
+        } catch (e) { mod.loadUserInput(content, old); throw e; }
+        // E1 is authoritative; after an interrupted commit, an explicit save retries E2.
+        try { nativeWrite(host, raw); lastRaw = raw; current = next; stateWritten = true; }
+        catch (e) { mod.loadUserInput(content, old); throw e; }
+        for (const i of changed) nativeWrite(fields[i], desired[i].v, true);
+        if (changed.some(i => !equal(row(items[i]), desired[i]))) throw Error('Punktestatus wurde nachträglich verändert.');
+        status('Lernstand an Edulo übergeben.'); return clone(next);
+      } catch (e) { status((stateWritten ? 'E1 gespeichert, Punkteabgleich unvollständig: ' : 'Nicht gespeichert: ') + e.message, true); throw e; }
+    }
+    function queueSave(data, scores = current?.scores) {
+      pending = {data: clone(data), scores: clone(scores)}; clearTimeout(timer);
+      timer = setTimeout(flush, options.debounceMs ?? 300);
+    }
+    function flush() { if (pending) { const p = pending; try { save(p.data, p.scores); } catch {} } }
+    function dispose() {
+      if (disposed) return;
+      if (root.isConnected) flush();
+      clearTimeout(timer); disposed = true; ready = false; restore(); removal?.disconnect();
+      for (const [target, type, fn] of listeners) target.removeEventListener(type, fn);
+    }
+    function listen(target, type, fn) { target.addEventListener(type, fn); listeners.push([target, type, fn]); }
+    listen(window, 'pagehide', () => { flush(); restore(); });
+    listen(window, 'pageshow', () => { if (ready) hide(); });
+    listen(document, 'visibilitychange', () => { if (document.hidden) flush(); });
+    listen(root, 'focusout', flush);
+    removal = new MutationObserver(() => { if (!root.isConnected) dispose(); else if (editor()) restore(); });
+    removal.observe(document.documentElement, {childList: true, subtree: true});
+    return {load, save, queueSave, flush, dispose, setFooterHidden, getStatus: () => ({mode, ready, disposed, hideFooter, footerHidden: !!footer && !footerError, footerError}), getSnapshot: () => current ? clone(current) : null};
+  };
+})();
+
+// Diagnostic only: no network, storage, save/check calls, or arbitrary object crawling.
+// Values come only from explicit user/account roots and selected widget fields.
+const VERSION='2.0.0';
+const PUBLIC_ID=/^[a-z0-9]{2}(?:-[a-z0-9]{6}){3}$/i;
+const SECRET=/(?:passw|passwd|pwd|secret|token|session|cookie|auth|credential|api.?key|private.?key|recovery|reset.?code|hash|salt|^pin$|^key$)/i;
+const FOREIGN=/(?:students|pupils|classmates|members|contacts|classes|groups|remoteUserData|remoteClassData)/i;
+const LIMITS={depth:5,keys:100,array:12,string:600,messages:30,nodes:1200,totalString:36000};
+let budget={nodes:LIMITS.nodes,chars:LIMITS.totalString};
+let watched=new Map(), captured=[], messageKinds=new Map(), lastFingerprint='', stopped=false, timer=null;
+let accountEpoch=0, previousAccount=null;
+function own(object,key) { try {const d=Object.getOwnPropertyDescriptor(object,key);return d&&'value' in d?d.value:undefined;}catch{return undefined;} }
+function shape(value) {
+  const type=value===null?'null':Array.isArray(value)?'array':typeof value;
+  const out={type};
+  if(type==='string') {out.length=value.length;out.matchesRequestedIdFormat=PUBLIC_ID.test(value.trim());if(value.includes('-'))out.segmentLengths=value.split('-').slice(0,10).map(s=>s.length);}
+  if(type==='array')out.length=value.length;
+  return out;
+}
+function clean(value,key='',depth=0,seen=new Set()) {
+  if(--budget.nodes<0)return '[report budget reached]';
+  if(SECRET.test(key)||FOREIGN.test(key))return {masked:true,...shape(value)};
+  if(value===null||typeof value==='boolean')return value;
+  if(typeof value==='number')return Number.isFinite(value)?value:String(value);
+  if(typeof value==='string') {
+    // URL query/fragment data may contain credentials even in harmlessly named fields.
+    if(/^(?:https?:|file:)/i.test(value))return {url:locationInfo(value),...shape(value)};
+    if(/(?:bearer\s+|eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.)/i.test(value))return {masked:true,...shape(value)};
+    const length=Math.min(LIMITS.string,Math.max(0,budget.chars));budget.chars-=Math.min(value.length,length);
+    return value.length>length?{prefix:value.slice(0,length),truncated:true,...shape(value)}:value;
+  }
+  if(typeof value!=='object')return {type:typeof value};
+  if(seen.has(value))return '[circular]';
+  if(depth>=LIMITS.depth)return {truncated:true,...shape(value)};
+  seen.add(value);
+  let out;
+  if(Array.isArray(value))out=value.slice(0,Math.min(LIMITS.array,Math.max(0,budget.nodes))).map(v=>clean(v,key,depth+1,seen));
+  else {
+    out=Object.create(null);
+    try {for(const name of Object.keys(value).slice(0,LIMITS.keys)){
+      if(budget.nodes<=0){out['[truncated]']='Report budget reached';break;}
+      const descriptor=Object.getOwnPropertyDescriptor(value,name);
+      out[name]=descriptor&&'value' in descriptor?clean(descriptor.value,name,depth+1,seen):'[accessor not read]';
+    }}catch {out.error='Object not readable';}
+  }
+  seen.delete(value);return out;
+}
+function keyTypes(object) {
+  if(!object||typeof object!=='object')return shape(object);
+  try{return Object.keys(object).slice(0,LIMITS.keys).map(key=>({key,...shape(own(object,key))}));}catch{return {error:'not readable'};}
+}
+function locationInfo(value) {
+  try {const url=new URL(value);return {origin:url.origin,path:url.pathname,queryKeys:[...new Set(url.searchParams.keys())],hasFragment:!!url.hash};}catch{return {unavailable:true};}
+}
+function windows() {
+  const out=[],seen=new Set();let win=window;
+  for(let depth=0;depth<8&&!seen.has(win);depth++) {
+    seen.add(win);
+    try {void win.document;out.push({win,label:depth===0?'self':'parent['+depth+']'});if(win.parent===win)break;win=win.parent;}
+    catch {out.push({label:'parent['+depth+']',blocked:true});break;}
+  }
+  return out;
+}
+function identityStamp(list) {
+  // Detect account object replacement/logout before reusing captured user messages.
+  for(const {win} of list)if(win){const w=own(win,'widget');if(w&&typeof w==='object')return own(w,'user');}
+  return undefined;
+}
+function inspect({win,label,blocked}) {
+  if(blocked)return {frame:label,accessible:false};
+  const out={frame:label,accessible:true,location:locationInfo(win.location.href),widgetPresent:false};
+  const w=own(win,'widget');
+  if(w&&typeof w==='object') {
+    out.widgetPresent=true;out.widgetKeys=keyTypes(w);
+    out.widgetUser=clean(own(w,'user'));out.widgetUserFields=keyTypes(own(w,'user'));
+    out.widgetIdentityFields=Object.create(null);
+    for(const key of ['userID','userId','GUID','guid','username','userName','Username','isTeacher','isEditor','isFromEditor']) {
+      const value=own(w,key);if(value!==undefined)out.widgetIdentityFields[key]=clean(value,key);
+    }
+    const config=own(w,'JSON');out.widgetConfigKeys=keyTypes(config);
+    out.view={isEditor:own(w,'isEditor')===true,isFromEditor:own(w,'isFromEditor')===true,hasRemoteUserData:!!own(config,'remoteUserData'),hasRemoteClassData:!!own(config,'remoteClassData')};
+  }
+  out.accountGlobals=Object.create(null);
+  for(const key of ['user','currentUser','loggedInUser','account']) {
+    const value=own(win,key);if(value&&typeof value==='object')out.accountGlobals[key]=clean(value,key);
+  }
+  return out;
+}
+function record(event,label,win) {
+  if(!root.isConnected)return;
+  // Store metadata for general messages, values only for the known user| protocol.
+  let kind=typeof event.data;
+  if(typeof event.data==='string') {
+    if(event.data.startsWith('user|'))kind='user|';
+    else if(event.data.startsWith('server|'))kind='server|';
+    else if(/^(?:WIDGET[A-Z_]+)(?:\s|\||$)/.test(event.data))kind=event.data.match(/^WIDGET[A-Z_]+/)[0].slice(0,48);
+    else if(['init','init&check','check_solution','finish_test'].includes(event.data))kind=event.data;
+    else kind='other string (content omitted)';
+  }
+  if(messageKinds.size<30||messageKinds.has(kind))messageKinds.set(kind,(messageKinds.get(kind)||0)+1);
+  if(typeof event.data==='string'&&event.data.startsWith('user|')) {
+    const source=event.source===win.parent?'parent':event.source===win?'self':event.source===null?'native-or-unknown':'other';
+    if(source==='other')return;
+    try {
+      const raw=JSON.parse(event.data.slice(5));
+      budget={nodes:LIMITS.nodes,chars:LIMITS.totalString};
+      const user=clean(raw);
+      const entry={frame:label,source,accountEpoch,user,fields:keyTypes(raw)};
+      // Only keep current, bounded observations. Never retain raw messages.
+      if(!captured.some(x=>JSON.stringify(x)===JSON.stringify(entry)))captured.push(entry);
+      captured=captured.slice(-LIMITS.messages);
+    }catch {captured.push({frame:label,error:'user| payload was not valid JSON',accountEpoch});}
+  }
+}
+function refresh(force=false) {
+  if(!root.isConnected){stop();return;}
+  const list=windows(), active=new Set(list.filter(x=>x.win).map(x=>x.win));
+  const stamp=identityStamp(list);
+  if(previousAccount!==stamp){captured=[];accountEpoch++;previousAccount=stamp;}
+  for(const [win,handler] of watched)if(!active.has(win)){win.removeEventListener('message',handler);watched.delete(win);}
+  for(const {win,label} of list)if(win&&!watched.has(win)){const fn=e=>record(e,label,win);win.addEventListener('message',fn);watched.set(win,fn);}
+  budget={nodes:LIMITS.nodes,chars:LIMITS.totalString};
+  const frames=list.map(inspect);
+  const report={probe:'edulo-account-identity',version:VERSION,scope:'Own reachable account objects and user| messages; no cookies, browser storage, network, class lists or saved answers.',requestedIdFormat:'xx-xxxxxx-xxxxxx-xxxxxx',warning:'widget.user.ID may be an internal number, not the requested login ID.',frames,userMessages:captured,messageTypes:[...messageKinds].map(([type,count])=>({type,count})),limits:LIMITS};
+  const encoded=JSON.stringify(report,null,2);
+  // Keep the selection stable while the user selects/copies the report.
+  if((force||document.activeElement!==q('[data-report]'))&&lastFingerprint!==encoded){q('[data-report]').value=encoded;lastFingerprint=encoded;}
+  if(force||!q('[data-status]').dataset.copied)q('[data-status]').textContent=frames.some(f=>f.widgetPresent)?'Edulo-Objekt gefunden. Du kannst den JSON-Bericht kopieren.':'Noch kein Edulo-Objekt erreichbar. Bitte in Edulo öffnen; der Bericht aktualisiert sich automatisch.';
+}
+q('[data-refresh]').addEventListener('click',()=>{q('[data-status]').dataset.copied='';refresh(true);});
+q('[data-copy]').addEventListener('click',async()=>{
+  refresh(true);const area=q('[data-report]'),text=area.value;let copied=false;
+  function fallback(){area.focus();area.select();area.setSelectionRange(0,area.value.length);try{return document.execCommand('copy');}catch{return false;}}
+  if(navigator.clipboard?.writeText&&window.isSecureContext){try{await navigator.clipboard.writeText(text);copied=true;}catch{copied=fallback();}}else copied=fallback();
+  q('[data-status]').dataset.copied='1';
+  q('[data-status]').textContent=copied?'JSON kopiert. Füge ihn jetzt in unseren Chat ein.':'Der Bericht ist markiert. Bitte manuell kopieren: Strg+C oder gedrückt halten → Kopieren.';
+});
+function suspend(){clearInterval(timer);for(const [win,handler] of watched)try{win.removeEventListener('message',handler);}catch{}watched.clear();}
+function resume(){if(stopped)return;refresh();clearInterval(timer);timer=setInterval(refresh,750);}
+function stop(){stopped=true;suspend();captured=[];window.removeEventListener('pagehide',suspend);window.removeEventListener('pageshow',resume);}
+window.addEventListener('pagehide',suspend);window.addEventListener('pageshow',resume);
+refresh();timer=setInterval(refresh,750);
+
+})();</script>
+</main></body></html>

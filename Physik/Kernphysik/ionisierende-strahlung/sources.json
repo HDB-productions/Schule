@@ -1,0 +1,28 @@
+{
+  "video": {
+    "url": "https://www.youtube.com/watch?v=PN3aSorc2mc",
+    "title": "3.1 Ionisierende Strahlung",
+    "channel": "HDB@AES",
+    "durationSeconds": 855,
+    "checkedOn": "2026-10-25",
+    "method": "YouTube-Seite und exportiertes automatisch erzeugtes deutsches Transkript inhaltlich geprüft; Zeitmarken aus Transkript.",
+    "segments": [
+      {"start":14,"end":53,"topic":"Ionisation, Elektronenentzug und Ladungen"},
+      {"start":54,"end":127,"topic":"Nachweiswirkung und Bewegung von Ladungsträgern zwischen Platten"},
+      {"start":195,"end":257,"topic":"Schäden an Bindungen und Molekülen"},
+      {"start":261,"end":389,"topic":"DNA, Krebs, Reparatur und Risiko"},
+      {"start":392,"end":490,"topic":"Fehlende unmittelbare Wahrnehmbarkeit durch menschliche Sinne"}
+    ]
+  },
+  "scientificChecks": [
+    {"url":"https://d3.desy.de/fuer_die_oeffentlichkeit/ionisierende_strahlung/index_ger.html","topic":"Ionisation und biologische Schäden"},
+    {"url":"https://lp.uni-goettingen.de/get/text/4734","topic":"Elektrischer Nachweis im Geiger-Müller-Zählrohr"},
+    {"url":"https://www.bag.admin.ch/de/wirkung-von-strahlung-auf-die-gesundheit","topic":"DNA-Schäden, Reparatur und langfristiges Risiko"}
+  ],
+  "editorialNotes": [
+    "Der Gerätename Ionisationskammer und die ausdrückliche Strommessung sind fachliche Ergänzungen, keine behaupteten Videozitate.",
+    "Alternative fachlich richtige Nachweismethoden werden akzeptiert; eine bloße Gerätenennung ersetzt die Erklärung nicht.",
+    "Spätere pauschale Videoaussagen über die Unmöglichkeit nachträglicher Mutationen werden nicht übernommen. Somatische Mutationen sind möglich.",
+    "Kein vollständiges Transkript im Widget. Quellen werden nicht zur Laufzeit abgerufen."
+  ]
+}

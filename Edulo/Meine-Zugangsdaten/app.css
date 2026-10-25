@@ -1,0 +1,19 @@
+.edulo-identity { color:#193347; font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; margin:0 auto; padding:24px 16px; max-width:920px; box-sizing:border-box; }
+.edulo-identity * { box-sizing:border-box; }
+.edulo-identity .identity-card { max-width:650px; margin:0 auto; padding:30px; border:1px solid #cbdce1; border-radius:22px; background:#fff; box-shadow:0 8px 28px #163a4b0a; }
+.edulo-identity .eyebrow { color:#26716c; font-size:12px; font-weight:800; letter-spacing:.13em; }
+.edulo-identity h1 { margin:8px 0 12px; font-size:clamp(25px,5vw,32px); line-height:1.2; }
+.edulo-identity .intro { color:#4a6270; margin:0 0 26px; }
+.edulo-identity .identity-field { margin-top:20px; }
+.edulo-identity label { display:block; font-size:15px; font-weight:700; margin-bottom:8px; }
+.edulo-identity .value-row { display:flex; gap:10px; }
+.edulo-identity input { min-width:0; width:100%; padding:13px; border:1px solid #b9ced4; border-radius:10px; background:#f3f8fa; color:#163b50; font:600 19px/1.4 ui-monospace,Consolas,monospace; }
+.edulo-identity input::placeholder { font:400 15px/1.4 system-ui,sans-serif; color:#647984; opacity:1; }
+.edulo-identity button { flex-shrink:0; min-height:48px; padding:12px 18px; border:0; border-radius:10px; color:#fff; background:#176a62; font:700 15px/1.4 system-ui,sans-serif; cursor:pointer; }
+.edulo-identity button:hover:enabled { background:#10564f; }
+.edulo-identity button:disabled { background:#d9e3e6; color:#536972; cursor:default; }
+.edulo-identity :is(button,input):focus-visible { outline:3px solid #d58b17; outline-offset:3px; }
+.edulo-identity .identity-status { color:#526b79; font-size:14px; margin:20px 0 0; }
+.edulo-identity .copy-status { color:#175e43; font-size:15px; font-weight:600; min-height:24px; margin:8px 0; }
+.edulo-identity .hint { border-top:1px solid #dce7e9; padding-top:18px; margin:16px 0 0; color:#526b79; font-size:14px; }
+@media(max-width:480px) { .edulo-identity { padding:12px 6px; } .edulo-identity .identity-card { padding:22px 16px; border-radius:16px; } .edulo-identity .value-row { flex-wrap:wrap; } .edulo-identity button { width:100%; } }

@@ -12,9 +12,17 @@ E1-Format: `EDULO2:` + UTF-8-Base64-JSON `{widget,version,data,scores}`. Das Pr�
 
 `load()` liest nur. Ein später expliziter `save(data,scores)` gleicht die gewünschten Farben ab; E1 ist die fachliche Quelle. `queueSave` bündelt Entwürfe, `flush` schreibt ausstehende Entwürfe, `dispose` beendet die Bridge. Fehlerstatus sichtbar lassen. `load()` erneut aufrufen bedeutet bewusstes Wiederherstellen aus dem Host, nicht Speichern ungesicherter In-Memory-Änderungen.
 
+Optional kann `migrateSnapshot(snapshot)` einen erkannten älteren Snapshot derselben Widget-ID bei abweichender `stateVersion` in die aktuelle Version überführen. Der Rückgabewert muss wieder `{widget,version,data,scores}` enthalten und alle aktuellen Validierungen bestehen. Der Callback muss das alte Format selbst streng prüfen; unbekannte Daten ablehnen. Fremde Widget-IDs werden nicht migriert. Beim Laden erfolgen weiterhin keine Schreib- oder Punkteänderungen. Beispiel: die 12→13-Aspekte-Migration unter `Physik/Kernphysik/ionisierende-strahlung/domain.js`.
+
 Beim regulären Verlassen, Fokusverlust und Verbergen werden ausstehende Änderungen gesichert. Bei bereits entfernter Root wird nicht mehr geschrieben (Schutz vor veralteten Instanzen); explizites `flush` vor selbst gesteuertem Entfernen. Keine Garantie für Speicherung bei Prozessabbruch.
 
-## Punkte
+## Lesbare Antwortfelder, ohne Lernstands-/Punktevertrag
+
+Für das gezielt beauftragte automatische Hinterlegen von Kontodaten gibt es den separaten optionalen Adapter `runtime/answer.js` (`createEduloAnswerBridge({root, fieldIds})`). Er nutzt ein explizit zugeordnetes E1-Text-Antwortfeld, Klartext und den etablierten nativen `input`/`change`-Weg; er verwendet weder `EDULO2:` noch E2-Felder oder lokalen Ersatzspeicher. Edulos vorhandenes `media_input`-Modul verarbeitet `change` und ruft `save_load.save()` auf. Sichtbares Beispiel und eigener Build: `Edulo/Kontodaten-Speichern/README.md`. Vor fremden Antworten/Editor/Lehreransicht und dem Überschreiben vorhandener anderer Inhalte wird blockiert. Dieser Adapter ersetzt den Standard für Lernwidgets nicht. Lokale Simulation und echter Edulo-Wiederöffnungstest bleiben getrennt.
+
+Die Kontodaten-Variante nutzt zusätzlich E3 als separates Text-Antwortfeld für `user.email` (`emailFieldIds`). Eine ausdrücklich leere Adresse bleibt im Feld leer bzw. leert den zum selben Konto gehörenden alten Wert; kein Platzhalter wird gespeichert. Das Text-Antwortmodul muss für E3 an der normalen Korrektur teilnehmen, damit dessen ausgefüllt/leer-Zustand im Fortschritt berücksichtigt wird. E1 und E3 werden für SuS ausgeblendet und in geschützten Ansichten wiederhergestellt. Fremde Bearbeitungen zeigen die dort gespeicherte Adresse. Dieser Fortschrittsweg ist lokal simuliert, noch kein bestätigter E3-Nutzertest.
+
+## Punkte im Standardvertrag
 
 Die Bridge identifiziert das echte `cloze_text`-Contentobjekt über die DOM-Referenzen der 20 Felder. Interne `JSON.id` nicht aus DOM-Suffixen erraten. Vorab werden Zielzustände geladen, durch Edulo bewertet und serialisiert. Erst dann folgen E1-Schreiben und native input/change-Events für geänderte Punktfelder (auch bei gleichem Wert und geändertem Hilfe-Flag).
 

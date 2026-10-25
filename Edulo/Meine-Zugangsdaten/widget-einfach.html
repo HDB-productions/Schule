@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="de">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Edulo-Kontodaten einfach</title></head>
+<body>
+<div id="edulo-kontodaten-einfach">
+  <p>UserID: <span data-userid>Wird geladen …</span></p>
+  <p>Benutzername: <span data-username>Wird geladen …</span></p>
+</div>
+<script>
+(function () {
+  var box = document.getElementById('edulo-kontodaten-einfach');
+  if (!box) return;
+  function anzeigen() {
+    if (!box.isConnected) { clearInterval(timer); return; }
+    var user = null;
+    var win = window;
+    for (var i = 0; i < 8; i++) {
+      try {
+        if (win.widget) { user = win.widget.user; break; }
+        if (win.parent === win) break;
+        win = win.parent;
+      } catch (e) { break; }
+    }
+    box.querySelector('[data-userid]').textContent = user && user.uid != null ? String(user.uid) : 'Nicht verfügbar';
+    box.querySelector('[data-username]').textContent = user && user.name != null ? String(user.name) : 'Nicht verfügbar';
+  }
+  var timer = setInterval(anzeigen, 500);
+  anzeigen();
+})();
+</script>
+</body>
+</html>

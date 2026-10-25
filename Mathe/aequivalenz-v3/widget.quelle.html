@@ -1,0 +1,40 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Äquivalenzumformungen üben – Version 3</title></head><body>
+<!-- EDULO_WIDGET_KEY:aequivalenz-v3 -->
+<main class="edulo-widget" data-edulo-id="aequivalenz-v3">
+<style>/* APP_CSS */</style>
+<header><div class="eyebrow">ÄQUIVALENZUMFORMUNGEN · VERSION 3</div><h1>Gleichungen schrittweise lösen</h1><p class="intro">Klammern, gleiche Terme und drei Arten von Lösungsmengen.</p></header>
+<section class="edulo-work">
+<fieldset data-controls disabled>
+<legend class="sr-only">Deine Gleichungsaufgabe</legend>
+<section class="exercise" data-exercise hidden>
+<div class="task-heading"><strong data-task-label></strong><span class="mode">Freies Umformen</span></div>
+<p class="instruction" data-instruction id="aequivalenz-v3-instruction"></p>
+<div class="work-scroll" data-work tabindex="-1" aria-label="Dein Lösungsweg"></div>
+<div data-input-home hidden><input data-answer id="aequivalenz-v3-answer" form="aequivalenz-v3-form" inputmode="none" autocomplete="off" spellcheck="false" maxlength="160" aria-describedby="aequivalenz-v3-instruction"></div>
+<p class="advisory" data-advisory hidden><button type="button" data-advisory-button aria-label="Hinweis zu dieser Operation">?</button> <span data-advisory-text></span> <button type="button" data-change>Operation ändern</button></p>
+<div class="advisory" data-advisory-details hidden><p data-advisory-reasons></p><p>Die Operation ist richtig. Du kannst damit weiterrechnen oder sie selbst ändern. Eine konkrete Hilfe für einen anderen Weg zählt als Hilfe und macht die Aufgabe gelb.</p><button type="button" data-alternative-help>Hilfe für einen anderen Schritt</button></div>
+<div class="solution" data-solution hidden><span>L = </span><span data-open-brace>{</span><span data-solution-input></span><span data-close-brace>}</span></div>
+<p class="feedback" data-feedback role="status" hidden></p>
+<aside class="help-box" data-help-box hidden aria-label="Hilfe zum aktuellen Schritt"><strong data-help-level></strong><p data-help-text></p><div class="help-visual" data-help-visual hidden></div></aside>
+<div class="keyboard" data-keyboard role="group" aria-label="Mathematische Bildschirmtastatur"></div>
+<form id="aequivalenz-v3-form" class="actions" data-form>
+<button type="submit" class="primary" data-check>Schritt prüfen</button><button type="button" data-help>Hilfe</button>
+<button type="button" data-simplify hidden>Terme vereinfachen</button><button type="button" data-skip hidden>Stattdessen umformen</button>
+</form>
+<button type="button" data-next class="primary next" hidden>Nächste Aufgabe</button>
+</section>
+</fieldset>
+<section class="scores" aria-label="Deine zwanzig Punkte"><div class="score-heading"><strong data-progress>0 von 20 Punkten belegt</strong><span data-count></span></div><div class="dots" data-dots></div><p class="legend"><span class="green-dot"></span> ohne Fehler <span class="yellow-dot"></span> mit Fehler/Hilfe <span class="red-dot"></span> Schritt gelöst</p><p class="muted" data-task-status></p></section>
+<details class="info"><summary>So funktioniert’s</summary><p>Du wählst die Operation selbst und führst sie auf beiden Seiten aus. Danach berechnest du die linke und rechte Seite einzeln. Mit „Terme vereinfachen“ kannst du Klammern ausmultiplizieren und gleiche Terme zusammenfassen, ohne eine neue Operation einzutragen.</p><p>Rechne, bis x allein steht oder alle x-Terme verschwunden und die Zahlen ausgerechnet sind. Trage dann die Lösungsmenge ein: eine Zahl, ein leeres Feld für keine Lösung oder ℝ für alle reellen Zahlen. Für ℝ erscheint die übliche Schreibweise L = ℝ.</p><p>Eine falsche Eingabe oder „Hilfe“ öffnet die nächste von drei Hilfestufen. Ab Stufe 2 werden passende Stellen im Lösungsweg markiert. Danach heißt die Taste „Lösen“ und übernimmt nur das aktive Eingabefeld. Übernommene Einträge bleiben rot. Eine richtige, noch nicht vereinfachte Eingabe darfst du weiter zusammenfassen.</p><p>Jede Aufgabe zählt einmal. Ohne Fehler und Hilfe: grün. Mit Fehler oder Hilfe: gelb. Sobald du „Lösen“ nutzt, wird sofort ein roter Punkt vergeben; dieselbe Aufgabe gibt später keinen weiteren Punkt. Ein freiwilliges ? zu einer möglicherweise aufwendigen Operation kostet keinen Punkt. Erst das Anfordern einer konkreten Hilfe macht die Aufgabe gelb.</p><p>Die 20 Punkte füllen sich von links mit Grün/Gelb und von rechts mit Rot. Bei voller Leiste ersetzen Grün/Gelb zuerst Rot. Ohne Rot ersetzt Grün einen gelben, Gelb einen grünen Punkt. Rot ersetzt zuerst Gelb; ohne Gelb wird ein grüner Punkt gelb.</p><p>Die drei Aufgabentypen kommen in zufällig gemischten Dreiergruppen jeweils einmal vor. Der Verlauf enthält höchstens die letzten 50 Aufgaben im Detail; ältere Aufgaben bleiben in den Gesamtzahlen erhalten.</p></details>
+<details class="history-panel" data-history-panel><summary data-history-title>Dein Verlauf</summary><p class="muted" data-archive></p><div data-history-list></div></details>
+</section>
+<footer><span data-storage role="status">Speicher wird verbunden …</span><button type="button" data-retry hidden>Erneut versuchen</button></footer>
+<script>(()=>{'use strict';
+const scriptRoot=document.currentScript?.closest('[data-edulo-id="aequivalenz-v3"]');
+const root=scriptRoot||[...document.querySelectorAll('[data-edulo-id="aequivalenz-v3"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+/* EDULO_BRIDGE */
+/* APP_JS */
+})();</script>
+</main></body></html>

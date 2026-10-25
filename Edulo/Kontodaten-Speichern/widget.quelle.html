@@ -1,0 +1,21 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Edulo-Kontodaten speichern</title></head><body>
+<!-- EDULO_WIDGET_KEY:edulo-kontodaten-speichern -->
+<main data-edulo-id="edulo-kontodaten-speichern">
+<style>/* APP_CSS */</style>
+<p>UserID: <span data-userid>Wird geladen …</span></p>
+<p>Benutzername: <span data-username>Wird geladen …</span></p>
+<p>E-Mail-Adresse: <span data-email>Wird geladen …</span></p>
+<figure data-qr-section hidden>
+  <canvas data-qr role="img" aria-label="QR-Code der angezeigten UserID"></canvas>
+  <figcaption>QR-Code mit Edulo scannen.</figcaption>
+</figure>
+<p data-qr-status role="status" hidden></p>
+<p data-status role="status" aria-live="polite">Antwortfeld wird verbunden …</p>
+<script>(()=>{'use strict';
+const root=document.currentScript?.closest('[data-edulo-id="edulo-kontodaten-speichern"]')||[...document.querySelectorAll('[data-edulo-id="edulo-kontodaten-speichern"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+/* EDULO_ANSWER_BRIDGE */
+/* QR_ENCODER */
+/* APP_JS */
+})();</script>
+</main></body></html>

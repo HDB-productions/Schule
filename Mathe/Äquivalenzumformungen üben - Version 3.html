@@ -1,0 +1,1026 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Äquivalenzumformungen üben – Version 3</title></head><body>
+<!-- EDULO_WIDGET_KEY:aequivalenz-v3 -->
+<main class="edulo-widget" data-edulo-id="aequivalenz-v3">
+<style>[data-edulo-id="aequivalenz-v3"]{--ink:#193447;--teal:#087c79;box-sizing:border-box;font:16px/1.45 system-ui,sans-serif;color:var(--ink);background:#f3f6f8;width:100%;max-width:920px;height:var(--edulo-height,728px);margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:12px;overflow:hidden;border:1px solid #d5e2e7;border-radius:16px}
+[data-edulo-id="aequivalenz-v3"] *{box-sizing:border-box}
+[data-edulo-id="aequivalenz-v3"] [hidden]{display:none!important}
+[data-edulo-id="aequivalenz-v3"] h1{font-size:clamp(21px,3vw,29px);line-height:1.2;margin:4px 0}
+[data-edulo-id="aequivalenz-v3"] p{margin:8px 0}
+[data-edulo-id="aequivalenz-v3"] .eyebrow{color:var(--teal);font-size:12px;letter-spacing:.08em;font-weight:700}
+[data-edulo-id="aequivalenz-v3"] .intro{font-size:14px;color:#496273}
+[data-edulo-id="aequivalenz-v3"] header,[data-edulo-id="aequivalenz-v3"] footer{flex:0 0 auto}
+[data-edulo-id="aequivalenz-v3"] .edulo-work{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:2px}
+[data-edulo-id="aequivalenz-v3"] fieldset{border:0;margin:0;padding:0;min-width:0}
+[data-edulo-id="aequivalenz-v3"] .exercise,[data-edulo-id="aequivalenz-v3"] .scores,[data-edulo-id="aequivalenz-v3"] .info,[data-edulo-id="aequivalenz-v3"] .history-panel{background:#fff;border:1px solid #d5e2e7;border-radius:12px;padding:14px;margin:0 0 12px}
+[data-edulo-id="aequivalenz-v3"] .task-heading,[data-edulo-id="aequivalenz-v3"] .score-heading{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:14px}
+[data-edulo-id="aequivalenz-v3"] .mode{color:var(--teal)}
+[data-edulo-id="aequivalenz-v3"] .instruction{font-weight:600;min-height:24px}
+[data-edulo-id="aequivalenz-v3"] .work-scroll{max-height:220px;overflow:auto;border:1px solid #c8dbe1;border-radius:8px;background:#f7fafb}
+[data-edulo-id="aequivalenz-v3"] table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:19px;line-height:1.4}
+[data-edulo-id="aequivalenz-v3"] col.eq-left,[data-edulo-id="aequivalenz-v3"] col.eq-right{width:30%}
+[data-edulo-id="aequivalenz-v3"] col.eq-sign,[data-edulo-id="aequivalenz-v3"] col.eq-pipe{width:4%}
+[data-edulo-id="aequivalenz-v3"] col.eq-operation{width:32%}
+[data-edulo-id="aequivalenz-v3"] td{padding:8px 5px;vertical-align:middle;overflow-wrap:anywhere;border-bottom:1px solid #dfe8ed}
+[data-edulo-id="aequivalenz-v3"] td.left{text-align:right}
+[data-edulo-id="aequivalenz-v3"] td.sign{text-align:center;padding-left:0;padding-right:0}
+[data-edulo-id="aequivalenz-v3"] .green-entry{background:#e5f4ef}
+[data-edulo-id="aequivalenz-v3"] .yellow-entry{background:#fff1c4;color:#765200}
+[data-edulo-id="aequivalenz-v3"] .red-entry{color:#b72132!important;background:#fff0f1!important}
+[data-edulo-id="aequivalenz-v3"] input{font:inherit;display:block;width:100%;min-width:0;min-height:46px;border:2px solid #7397a5;border-radius:7px;background:white;color:inherit;padding:6px 5px}
+[data-edulo-id="aequivalenz-v3"] td.left input{text-align:right}
+[data-edulo-id="aequivalenz-v3"] .solution{display:flex;justify-content:center;align-items:center;gap:7px;font-size:23px;padding:12px}
+[data-edulo-id="aequivalenz-v3"] [data-solution-input]{width:150px;max-width:55%}
+[data-edulo-id="aequivalenz-v3"] button{font:inherit;min-height:44px;border:1px solid #a9c3cc;border-radius:8px;padding:8px 12px;color:var(--ink);background:#fff;cursor:pointer;touch-action:manipulation}
+[data-edulo-id="aequivalenz-v3"] button:disabled{opacity:.5;cursor:default}
+[data-edulo-id="aequivalenz-v3"] button.primary{background:var(--teal);border-color:var(--teal);color:white}
+[data-edulo-id="aequivalenz-v3"] button.solve{border-color:#b72132;color:#b72132;background:#fff0f1}
+[data-edulo-id="aequivalenz-v3"] .keyboard{width:100%;max-width:750px;margin:12px auto}
+[data-edulo-id="aequivalenz-v3"] .key-grid-wrap{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 2px 5px}
+[data-edulo-id="aequivalenz-v3"] .key-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;min-width:400px}
+[data-edulo-id="aequivalenz-v3"] .key-grid button{font-size:20px;padding:5px;min-width:0;min-height:44px;background:#f2f5f7;border-color:#cbd6dc;box-shadow:0 2px 0 #d5e2e7}
+[data-edulo-id="aequivalenz-v3"] .key-grid button.number{background:#f2f5f7;border-color:#cbd6dc;color:#263c49}
+[data-edulo-id="aequivalenz-v3"] .key-grid button.op{background:#fff1d7;border-color:#e2bd72;color:#664513}
+[data-edulo-id="aequivalenz-v3"] .key-grid button.symbol{background:#dff3f0;border-color:#77bdb4;color:#075e5b}
+[data-edulo-id="aequivalenz-v3"] .key-grid button.nav{font-size:18px;background:#eee6fb;border-color:#b49ad8;color:#533677}
+[data-edulo-id="aequivalenz-v3"] .key-grid .key-spacer{visibility:hidden;pointer-events:none}
+[data-edulo-id="aequivalenz-v3"] .keyboard button:active{filter:brightness(.93);transform:translateY(1px)}
+[data-edulo-id="aequivalenz-v3"] .actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+[data-edulo-id="aequivalenz-v3"] .next{display:block;margin:14px auto 0}
+[data-edulo-id="aequivalenz-v3"] .feedback{padding:8px 10px;border-radius:7px;background:#e5f4ef}
+[data-edulo-id="aequivalenz-v3"] .feedback.bad{background:#fff1de;color:#774c16}
+[data-edulo-id="aequivalenz-v3"] .help-box{border:1px solid #d5b75e;background:#fff9e9;border-radius:8px;padding:10px;margin-top:10px}
+[data-edulo-id="aequivalenz-v3"] .help-visual{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:3px;padding:9px;border:1px dashed #c39e36;border-radius:6px;font-size:18px;overflow-wrap:anywhere;background:#fff}
+[data-edulo-id="aequivalenz-v3"] .rule-equation{display:inline-block;white-space:nowrap;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:middle}
+[data-edulo-id="aequivalenz-v3"] mark{background:#ffe49b;color:#392e18;border-radius:3px;padding:0 2px;border-bottom:2px solid #c98910}
+[data-edulo-id="aequivalenz-v3"] mark.constant{background:#d9eafc;border-color:#5692c7}
+[data-edulo-id="aequivalenz-v3"] mark.role-a{background:#eee6fb;color:#533677;border-color:#8b68bd}
+[data-edulo-id="aequivalenz-v3"] mark.role-b{background:#fff1d7;color:#664513;border-color:#d29a32}
+[data-edulo-id="aequivalenz-v3"] mark.role-c{background:#dceeff;color:#174e78;border-color:#5c9bc9}
+[data-edulo-id="aequivalenz-v3"] .advisory{font-size:14px;color:#685015;background:#fff9e9;padding:7px;border-radius:7px}
+[data-edulo-id="aequivalenz-v3"] .advisory button{min-height:36px;font-size:14px;padding:5px 9px}
+[data-edulo-id="aequivalenz-v3"] .dots{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:5px;margin:12px 0}
+[data-edulo-id="aequivalenz-v3"] .dot{aspect-ratio:1;border-radius:50%;background:#e1e7eb;border:1px solid #becbd3;display:block}
+[data-edulo-id="aequivalenz-v3"] .dot.green,[data-edulo-id="aequivalenz-v3"] .green-dot{background:#43986d;border-color:#2b7351}
+[data-edulo-id="aequivalenz-v3"] .dot.yellow,[data-edulo-id="aequivalenz-v3"] .yellow-dot{background:#f2c94c;border-color:#b88a12}
+[data-edulo-id="aequivalenz-v3"] .dot.red,[data-edulo-id="aequivalenz-v3"] .red-dot{background:#d85060;border-color:#a32d3b}
+[data-edulo-id="aequivalenz-v3"] .legend{font-size:12px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+[data-edulo-id="aequivalenz-v3"] .legend span{width:12px;height:12px;border-radius:50%;border:1px solid;display:inline-block;margin-left:6px}
+[data-edulo-id="aequivalenz-v3"] .muted{font-size:13px;color:#496273}
+[data-edulo-id="aequivalenz-v3"] summary{cursor:pointer;font-weight:600;padding:4px 0}
+[data-edulo-id="aequivalenz-v3"] .history-item{border-top:1px solid #d5e2e7;padding-top:8px;margin-top:8px}
+[data-edulo-id="aequivalenz-v3"] .history-item table{font-size:16px}
+[data-edulo-id="aequivalenz-v3"] .history-item ol{font-size:14px;padding-left:23px}
+[data-edulo-id="aequivalenz-v3"] .history-item li{overflow-wrap:anywhere;margin:4px 0}
+[data-edulo-id="aequivalenz-v3"] footer{font-size:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+[data-edulo-id="aequivalenz-v3"] footer button{min-height:36px;font-size:12px}
+[data-edulo-id="aequivalenz-v3"] :focus-visible{outline:3px solid #c67814;outline-offset:2px}
+[data-edulo-id="aequivalenz-v3"] .sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:480px){[data-edulo-id="aequivalenz-v3"]{padding:10px;gap:8px;font-size:15px}[data-edulo-id="aequivalenz-v3"] .exercise,[data-edulo-id="aequivalenz-v3"] .scores{padding:10px}[data-edulo-id="aequivalenz-v3"] table{font-size:16px}[data-edulo-id="aequivalenz-v3"] td{padding:7px 2px}[data-edulo-id="aequivalenz-v3"] .key-grid{gap:5px}[data-edulo-id="aequivalenz-v3"] .dots{gap:3px}[data-edulo-id="aequivalenz-v3"] input{font-size:16px}}
+@media(min-width:601px) and (max-height:800px){[data-edulo-id="aequivalenz-v3"] .intro{display:none}}
+</style>
+<header><div class="eyebrow">ÄQUIVALENZUMFORMUNGEN · VERSION 3</div><h1>Gleichungen schrittweise lösen</h1><p class="intro">Klammern, gleiche Terme und drei Arten von Lösungsmengen.</p></header>
+<section class="edulo-work">
+<fieldset data-controls disabled>
+<legend class="sr-only">Deine Gleichungsaufgabe</legend>
+<section class="exercise" data-exercise hidden>
+<div class="task-heading"><strong data-task-label></strong><span class="mode">Freies Umformen</span></div>
+<p class="instruction" data-instruction id="aequivalenz-v3-instruction"></p>
+<div class="work-scroll" data-work tabindex="-1" aria-label="Dein Lösungsweg"></div>
+<div data-input-home hidden><input data-answer id="aequivalenz-v3-answer" form="aequivalenz-v3-form" inputmode="none" autocomplete="off" spellcheck="false" maxlength="160" aria-describedby="aequivalenz-v3-instruction"></div>
+<p class="advisory" data-advisory hidden><button type="button" data-advisory-button aria-label="Hinweis zu dieser Operation">?</button> <span data-advisory-text></span> <button type="button" data-change>Operation ändern</button></p>
+<div class="advisory" data-advisory-details hidden><p data-advisory-reasons></p><p>Die Operation ist richtig. Du kannst damit weiterrechnen oder sie selbst ändern. Eine konkrete Hilfe für einen anderen Weg zählt als Hilfe und macht die Aufgabe gelb.</p><button type="button" data-alternative-help>Hilfe für einen anderen Schritt</button></div>
+<div class="solution" data-solution hidden><span>L = </span><span data-open-brace>{</span><span data-solution-input></span><span data-close-brace>}</span></div>
+<p class="feedback" data-feedback role="status" hidden></p>
+<aside class="help-box" data-help-box hidden aria-label="Hilfe zum aktuellen Schritt"><strong data-help-level></strong><p data-help-text></p><div class="help-visual" data-help-visual hidden></div></aside>
+<div class="keyboard" data-keyboard role="group" aria-label="Mathematische Bildschirmtastatur"></div>
+<form id="aequivalenz-v3-form" class="actions" data-form>
+<button type="submit" class="primary" data-check>Schritt prüfen</button><button type="button" data-help>Hilfe</button>
+<button type="button" data-simplify hidden>Terme vereinfachen</button><button type="button" data-skip hidden>Stattdessen umformen</button>
+</form>
+<button type="button" data-next class="primary next" hidden>Nächste Aufgabe</button>
+</section>
+</fieldset>
+<section class="scores" aria-label="Deine zwanzig Punkte"><div class="score-heading"><strong data-progress>0 von 20 Punkten belegt</strong><span data-count></span></div><div class="dots" data-dots></div><p class="legend"><span class="green-dot"></span> ohne Fehler <span class="yellow-dot"></span> mit Fehler/Hilfe <span class="red-dot"></span> Schritt gelöst</p><p class="muted" data-task-status></p></section>
+<details class="info"><summary>So funktioniert’s</summary><p>Du wählst die Operation selbst und führst sie auf beiden Seiten aus. Danach berechnest du die linke und rechte Seite einzeln. Mit „Terme vereinfachen“ kannst du Klammern ausmultiplizieren und gleiche Terme zusammenfassen, ohne eine neue Operation einzutragen.</p><p>Rechne, bis x allein steht oder alle x-Terme verschwunden und die Zahlen ausgerechnet sind. Trage dann die Lösungsmenge ein: eine Zahl, ein leeres Feld für keine Lösung oder ℝ für alle reellen Zahlen. Für ℝ erscheint die übliche Schreibweise L = ℝ.</p><p>Eine falsche Eingabe oder „Hilfe“ öffnet die nächste von drei Hilfestufen. Ab Stufe 2 werden passende Stellen im Lösungsweg markiert. Danach heißt die Taste „Lösen“ und übernimmt nur das aktive Eingabefeld. Übernommene Einträge bleiben rot. Eine richtige, noch nicht vereinfachte Eingabe darfst du weiter zusammenfassen.</p><p>Jede Aufgabe zählt einmal. Ohne Fehler und Hilfe: grün. Mit Fehler oder Hilfe: gelb. Sobald du „Lösen“ nutzt, wird sofort ein roter Punkt vergeben; dieselbe Aufgabe gibt später keinen weiteren Punkt. Ein freiwilliges ? zu einer möglicherweise aufwendigen Operation kostet keinen Punkt. Erst das Anfordern einer konkreten Hilfe macht die Aufgabe gelb.</p><p>Die 20 Punkte füllen sich von links mit Grün/Gelb und von rechts mit Rot. Bei voller Leiste ersetzen Grün/Gelb zuerst Rot. Ohne Rot ersetzt Grün einen gelben, Gelb einen grünen Punkt. Rot ersetzt zuerst Gelb; ohne Gelb wird ein grüner Punkt gelb.</p><p>Die drei Aufgabentypen kommen in zufällig gemischten Dreiergruppen jeweils einmal vor. Der Verlauf enthält höchstens die letzten 50 Aufgaben im Detail; ältere Aufgaben bleiben in den Gesamtzahlen erhalten.</p></details>
+<details class="history-panel" data-history-panel><summary data-history-title>Dein Verlauf</summary><p class="muted" data-archive></p><div data-history-list></div></details>
+</section>
+<footer><span data-storage role="status">Speicher wird verbunden …</span><button type="button" data-retry hidden>Erneut versuchen</button></footer>
+<script>(()=>{'use strict';
+const scriptRoot=document.currentScript?.closest('[data-edulo-id="aequivalenz-v3"]');
+const root=scriptRoot||[...document.querySelectorAll('[data-edulo-id="aequivalenz-v3"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+// Included by build.cjs. Changes only the widget's own task layout.
+function createEduloFooter({root, widget}) {
+  const wrapper = widget?.contentWrapper?.[0];
+  const doc = wrapper?.ownerDocument;
+  const footer = doc?.getElementById('footerButtons');
+  let frame = null; try { frame = root.ownerDocument.defaultView.frameElement; } catch {}
+  if (!wrapper || !footer || !(wrapper.contains(root) || (frame && wrapper.contains(frame))) || footer.contains(root)) throw Error('Footer nicht eindeutig der eigenen Aufgabe zugeordnet.');
+  if (widget.isEditor || widget.JSON?.asTest === '1' || widget.JSON?.remoteUserData) throw Error('Footer im Editor, Prüfungsmodus oder in fremden Antworten nicht verändern.');
+  const win = doc.defaultView;
+  const original = {hidden: footer.hidden, display: footer.style.getPropertyValue('display'), dp: footer.style.getPropertyPriority('display'), bottom: wrapper.style.getPropertyValue('bottom'), bp: wrapper.style.getPropertyPriority('bottom')};
+  const restoreProperty = (el, key, value, priority) => value ? el.style.setProperty(key, value, priority) : el.style.removeProperty(key);
+  function measure() {
+    const rect = el => { const r = el.getBoundingClientRect(); return {width: r.width, height: r.height, top: r.top, bottom: r.bottom}; };
+    return {viewport: {width: win.innerWidth, height: win.innerHeight}, wrapper: rect(wrapper), footer: rect(footer), footerDisplay: win.getComputedStyle(footer).display, wrapperBottom: win.getComputedStyle(wrapper).bottom};
+  }
+  function refresh() {
+    // refreshAll() would rebuild content and can re-evaluate answers: deliberately not used.
+    try { if (widget.contentWrapper.data?.('jsp') && typeof widget.refreshScrollbars === 'function') widget.refreshScrollbars(); } catch {}
+    win.dispatchEvent(new win.Event('resize'));
+    if (root.ownerDocument.defaultView !== win) root.ownerDocument.defaultView.dispatchEvent(new root.ownerDocument.defaultView.Event('resize'));
+  }
+  function restore() {
+    footer.hidden = original.hidden;
+    restoreProperty(footer, 'display', original.display, original.dp);
+    restoreProperty(wrapper, 'bottom', original.bottom, original.bp);
+    refresh();
+  }
+  function setHidden() {
+    if (!footer.isConnected || !wrapper.isConnected) throw Error('Edulo hat den Footer ersetzt. Neu verbinden.');
+    const position = win.getComputedStyle(wrapper).position;
+    if (footer.hidden && footer.style.getPropertyValue('display') === 'none' && (!['absolute','fixed'].includes(position) || wrapper.style.bottom === '0px')) return;
+    footer.hidden = true; footer.style.setProperty('display', 'none', 'important');
+    if (position === 'absolute' || position === 'fixed') wrapper.style.setProperty('bottom', '0px', 'important');
+    refresh();
+  }
+  async function hide() {
+    const before = measure();
+    setHidden(); await new Promise(r => setTimeout(r, 200));
+    const after = measure();
+    return {before, after, gainedHeight: after.wrapper.height - before.wrapper.height, note: 'Actual measured wrapper height; not a server or scoring test'};
+  }
+  return {hide, setHidden, restore, measure, isCurrent: () => footer.isConnected && wrapper.isConnected && doc.getElementById('footerButtons') === footer && widget.contentWrapper?.[0] === wrapper};
+}
+
+// Inlined by build.cjs. No global variables, network requests or generated messages.
+const createEduloBridge = (() => {
+  const PREFIX = 'EDULO2:';
+  const COLORS = ['gray', 'green', 'yellow', 'red'];
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  function encode(value) {
+    const bytes = new TextEncoder().encode(JSON.stringify(value));
+    let binary = '';
+    for (let i = 0; i < bytes.length; i += 8192) binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+    return PREFIX + btoa(binary);
+  }
+  function decode(raw) {
+    if (!raw.startsWith(PREFIX)) throw Error('Unbekannter Speicherstand. Originaldaten bleiben erhalten.');
+    return JSON.parse(new TextDecoder('utf-8', {fatal: true}).decode(Uint8Array.from(atob(raw.slice(PREFIX.length)), c => c.charCodeAt(0))));
+  }
+  return function create(options) {
+    const {root, widgetId, fresh, validate, onStatus = () => {}} = options;
+    if (!root || !/^[a-z][a-z0-9-]+$/.test(widgetId) || typeof fresh !== 'function' || typeof validate !== 'function') throw Error('Ungültige Bridge-Konfiguration.');
+    const version = options.stateVersion || 1;
+    const query = new URLSearchParams(location.search);
+    const count = options.scoreCount ?? 20;
+    if (!Number.isInteger(count) || count < 1 || count > 100) throw Error('Ungültige Punktezahl.');
+    const stateId = options.stateId || query.get('STATE_ID') || '';
+    const prefix = options.scorePrefix || query.get('SCORE_PREFIX') || 'e2_cloze_text_input_';
+    const show = options.showFields ?? (query.get('SHOW_FIELDS') === '1');
+    const localKey = 'schule-edulo:' + widgetId;
+    const hidden = new Map(), listeners = [];
+    let mode = '', host = null, fields = [], moduleLink = null, lastRaw = '', current = null;
+    let ready = false, disposed = false, pending = null, timer = null, removal = null;
+    let hideFooter = options.hideFooter ?? true, footer = null, footerObserver = null, footerError = '';
+    function restoreFooter() {
+      footerObserver?.disconnect(); footerObserver = null;
+      footer?.restore(); footer = null; footerError = '';
+    }
+    function syncFooter() {
+      if (!ready || disposed || !root.isConnected || !hideFooter || mode !== 'edulo' || editor() || moduleLink?.w.JSON?.asTest === '1' || moduleLink?.w.JSON?.remoteUserData) { restoreFooter(); return; }
+      const w = moduleLink?.w, doc = w?.contentWrapper?.[0]?.ownerDocument;
+      if (!doc) { footerError = 'Edulo-Inhaltsbereich fehlt.'; return; }
+      if (!footerObserver) {
+        footerObserver = new MutationObserver(syncFooter);
+        footerObserver.observe(doc.documentElement, {childList: true, subtree: true});
+      }
+      try {
+        if (footer && !footer.isCurrent()) { footer.restore(); footer = null; }
+        if (!footer) footer = createEduloFooter({root, widget: w});
+        footer.setHidden(); footerError = '';
+      } catch (e) { footerError = e.message; }
+    }
+    function setFooterHidden(value) {
+      if (typeof value !== 'boolean') throw Error('hideFooter erwartet true oder false.');
+      hideFooter = value; syncFooter();
+    }
+    const status = (text, error = false) => onStatus({text, error, mode});
+    function docs() {
+      const out = [];
+      for (const win of [window, window.parent, window.top]) try {
+        if (!out.some(x => x.doc === win.document)) out.push({win, doc: win.document});
+      } catch {} // A blocked parent is never replaced by localStorage in Edulo mode.
+      return out;
+    }
+    function editor() {
+      return docs().some(({win, doc}) => win.widget?.isEditor === true || doc.body?.classList.contains('editor') || new URLSearchParams(win.location.search).get('editor') === '1');
+    }
+    function matches(id) {
+      return docs().flatMap(({doc}) => [...doc.querySelectorAll('input,textarea')].filter(el => !root.contains(el) && (el.id === id || el.name === id) && (el.tagName === 'TEXTAREA' || ['text', 'hidden', 'number'].includes(el.type))));
+    }
+    function one(id) {
+      const found = [...new Set(matches(id))];
+      if (found.length > 1) throw Error('Mehrdeutige Edulo-Feldzuordnung: ' + id);
+      return found[0] || null;
+    }
+    function resolve() {
+      const candidates = stateId ? [one(stateId)].filter(Boolean) : [...new Set(['e1_input', 'e1_text_input', 'e1_cloze_text_input_1', 'e1'].flatMap(matches))];
+      if (candidates.length > 1) throw Error('Mehrere E1-Felder. STATE_ID festlegen.');
+      const h = candidates[0] || null, f = Array.from({length: count}, (_, i) => one(prefix + (i + 1)));
+      if (h && f.includes(h)) throw Error('Speicher und Punkte dürfen nicht dasselbe Feld sein.');
+      return {h, f};
+    }
+    function bridge() {
+      const links = [], seen = new Set();
+      for (const {win} of docs()) {
+        const w = win.widget;
+        if (!w || seen.has(w) || typeof w.findModule !== 'function' || typeof w.forEachContent !== 'function') continue;
+        seen.add(w);
+        const mod = w.findModule('cloze_text'), storage = w.findModule('save_load');
+        if (!mod || !storage || !['loadUserInput', 'saveUserInput', 'checkSingleClozeInput'].every(k => typeof mod[k] === 'function') || typeof storage.save !== 'function') continue;
+        if (storage.JSON?.active === 'false' || w.JSON?.remoteUserData || (w.JSON?.asTest === '1' && w.testData?.d && w.testData?.ds)) throw Error('Diese Edulo-Ansicht erlaubt keine normale Speicherung.');
+        w.forEachContent(content => {
+          if (content.module !== mod || !Array.isArray(content.clozeInputs)) return true;
+          const groups = fields.map(field => content.clozeInputs.filter(item => item.inputElement?.[0] === field));
+          if (groups.every(g => g.length === 1)) {
+            const items = groups.map(g => g[0]);
+            if (content.JSON?.nocheck === 'true' || items.some(i => i.JSON.predefined === 'true' || i.JSON.connected === 'true' || i.JSON.unchecked === 'true')) throw Error('E2 braucht normale, unabhängige Lücken mit Lösung 1.');
+            if (new Set(items.map(i => i.JSON.id)).size !== count || items.some(i => !Array.isArray(i.JSON.values) || !i.JSON.values.some(v => String(v.value) === '1'))) throw Error('E2-ID oder richtige Lösung stimmt nicht.');
+            links.push({w, mod, storage, content, items});
+          }
+          return true;
+        });
+      }
+      if (links.length > 1) throw Error('Mehrdeutiges Edulo-Lückenmodul.');
+      return links[0] || null;
+    }
+    function hide() {
+      if (mode !== 'edulo' || editor()) { restore(); return; }
+      syncFooter();
+      if (show) { restoreFields(); return; }
+      const allowed = new Set([host, ...fields]);
+      for (const field of allowed) {
+        if (!field) continue;
+        const moduleId = field === host ? (options.stateModuleId || 'e1') : (options.scoreModuleId || prefix.split('_')[0]);
+        const safe = el => el && el !== el.ownerDocument.body && el !== el.ownerDocument.documentElement && el.contains(field) && !el.contains(root) && !el.querySelector('iframe') && [...el.querySelectorAll('input,textarea,select')].every(f => allowed.has(f));
+        const mod = field.ownerDocument.getElementById(moduleId), container = field.closest('.inputcontainer');
+        const target = safe(mod) ? mod : safe(container) ? container : field;
+        if (!hidden.has(target)) hidden.set(target, {hidden: target.hidden, display: target.style.getPropertyValue('display'), priority: target.style.getPropertyPriority('display')});
+        target.hidden = true; target.style.setProperty('display', 'none', 'important');
+      }
+    }
+    function restore() {
+      restoreFooter(); restoreFields();
+    }
+    function restoreFields() {
+      for (const [el, old] of hidden) {
+        el.hidden = old.hidden;
+        if (old.display) el.style.setProperty('display', old.display, old.priority); else el.style.removeProperty('display');
+      }
+      hidden.clear();
+    }
+    function nativeWrite(el, value, force = false) {
+      if (!el?.isConnected || el.disabled || el.readOnly) throw Error('Edulo-Feld fehlt oder ist gesperrt.');
+      if (!force && String(el.value) === value) return;
+      const win = el.ownerDocument.defaultView;
+      const proto = el.tagName === 'TEXTAREA' ? win.HTMLTextAreaElement.prototype : win.HTMLInputElement.prototype;
+      const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+      if (!setter) throw Error('Nativer Feldzugriff fehlt.');
+      setter.call(el, value);
+      for (const type of ['input', 'change']) el.dispatchEvent(new win.Event(type, {bubbles: true}));
+      if (String(el.value) !== value) throw Error('Edulo hat den Speicherwert verändert.');
+    }
+    function row(item) { return {id: item.JSON.id, v: String(item.inputElement.val()), l: item.last || '', c: item.correct, h: item.helped}; }
+    function target(item, color) { return {id: item.JSON.id, v: color === 'gray' ? '' : color === 'red' ? '0' : '1', l: '', c: ['green', 'yellow'].includes(color) ? 'true' : 'false', h: color === 'yellow' ? 'true' : 'false'}; }
+    function checked(data, scores) {
+      if (!validate(data) || !Array.isArray(scores) || scores.length !== count || scores.some(s => !COLORS.includes(s))) throw Error('Ungültiger Lern- oder Punktestand. Originalstand bleibt erhalten.');
+      return {widget: widgetId, version, data: clone(data), scores: [...scores]};
+    }
+    function parse(raw) {
+      const value = decode(raw);
+      if (value.widget !== widgetId || value.version !== version) throw Error('Fremder oder älterer Lernstand. Migration erforderlich.');
+      return checked(value.data, value.scores);
+    }
+    function ensure() {
+      if (!ready || disposed) throw Error('Speicher noch nicht verbunden.');
+      if (editor()) { restore(); throw Error('Editor-Vorschau: Speicherung gesperrt.'); }
+      if (!root.isConnected) throw Error('Widget wurde entfernt.');
+      if (mode === 'edulo') {
+        const r = resolve();
+        if (!r.h || !r.f.every(Boolean)) throw Error('Edulo-Felder fehlen. Kein lokaler Ersatzspeicher.');
+        if (String(r.h.value) !== lastRaw) throw Error('E1 wurde extern geändert. Neu laden statt überschreiben.');
+        host = r.h; fields = r.f; moduleLink = bridge();
+        if (!moduleLink) throw Error('Edulo-Statusschnittstelle fehlt. Keine vereinfachte 0/1-Ersatzbewertung.');
+        hide();
+      } else if (localStorage.getItem(localKey) !== (lastRaw || null)) throw Error('Ein anderer Tab hat den Lernstand geändert. Bitte neu laden.');
+    }
+    async function load() {
+      if (disposed) throw Error('Bridge wurde beendet.');
+      ready = false;
+      if (editor()) {
+        mode = 'editor'; restore(); current = checked(fresh(), Array(count).fill('gray'));
+        ready = true; status('Editor-Vorschau · keine Speicherung'); return clone(current);
+      }
+      const embedded = window.parent !== window || query.get('edulo') === '1' || query.has('data') || docs().some(({win}) => !!win.widget) || !!resolve().h;
+      mode = options.mode || (embedded ? 'edulo' : 'standalone');
+      if (!['edulo', 'standalone'].includes(mode)) throw Error('Unbekannter Betriebsmodus.');
+      try {
+        if (mode === 'edulo') {
+          for (let n = 0; n < (options.attempts ?? 50); n++) {
+            if (disposed) throw Error('Widget wurde entfernt.');
+            const r = resolve(); host = r.h; fields = r.f;
+            if (host && fields.every(Boolean)) { moduleLink = bridge(); if (moduleLink) break; }
+            await new Promise(r => setTimeout(r, options.retryMs ?? 200));
+          }
+          if (!host || !fields.every(Boolean) || !moduleLink) throw Error('E1, E2 oder Edulo-Statusschnittstelle nicht erreichbar.');
+          lastRaw = String(host.value);
+          if (!lastRaw.trim() && moduleLink.items.some(i => String(i.inputElement.val()) !== '')) throw Error('E1 leer, aber E2 enthält Antworten. Zuordnung prüfen.');
+        } else lastRaw = localStorage.getItem(localKey) || '';
+        current = lastRaw.trim() ? parse(lastRaw) : checked(fresh(), Array(count).fill('gray'));
+        ready = true; hide(); status(mode === 'edulo' ? 'Mit Edulo verbunden.' : 'Speicherung in diesem Browser.');
+        return clone(current); // Deliberately no E1/E2 writes and no score synchronization on load.
+      } catch (e) { ready = false; restore(); status(e.message, true); throw e; }
+    }
+    function save(data, scores = current?.scores) {
+      clearTimeout(timer); pending = null;
+      let stateWritten = false;
+      try {
+        ensure(); const next = checked(data, scores), raw = encode(next);
+        if (mode === 'standalone') { localStorage.setItem(localKey, raw); lastRaw = raw; current = next; status('In diesem Browser gespeichert.'); return clone(next); }
+        if (host.disabled || host.readOnly || (host.maxLength >= 0 && raw.length > host.maxLength)) throw Error('E1 ist gesperrt oder zu kurz.');
+        const {mod, content, items} = moduleLink;
+        const old = items.map(row), desired = items.map((item, i) => target(item, scores[i]));
+        const changed = items.map((item, i) => i).filter(i => !equal(old[i], desired[i]));
+        if (changed.some(i => fields[i].disabled || fields[i].readOnly)) throw Error('Ein Punktefeld ist gesperrt.');
+        // Preflight the entire batch before dispatching any event that can save it.
+        try {
+          mod.loadUserInput(content, changed.map(i => desired[i]));
+          for (const i of changed) {
+            if (mod.checkSingleClozeInput(items[i], content) !== (desired[i].c === 'true') || !equal(row(items[i]), desired[i])) throw Error('Edulo bewertet einen Zielwert anders.');
+          }
+          const serialized = {input: [], counter: {total: 0, correct: 0, helped: 0, wrong: 0}};
+          mod.saveUserInput(content, serialized);
+          if (changed.some(i => !equal(serialized.input.find(r => r.id === desired[i].id), desired[i]))) throw Error('Edulo-Speicherformat hat sich geändert.');
+        } catch (e) { mod.loadUserInput(content, old); throw e; }
+        // E1 is authoritative; after an interrupted commit, an explicit save retries E2.
+        try { nativeWrite(host, raw); lastRaw = raw; current = next; stateWritten = true; }
+        catch (e) { mod.loadUserInput(content, old); throw e; }
+        for (const i of changed) nativeWrite(fields[i], desired[i].v, true);
+        if (changed.some(i => !equal(row(items[i]), desired[i]))) throw Error('Punktestatus wurde nachträglich verändert.');
+        status('Lernstand an Edulo übergeben.'); return clone(next);
+      } catch (e) { status((stateWritten ? 'E1 gespeichert, Punkteabgleich unvollständig: ' : 'Nicht gespeichert: ') + e.message, true); throw e; }
+    }
+    function queueSave(data, scores = current?.scores) {
+      pending = {data: clone(data), scores: clone(scores)}; clearTimeout(timer);
+      timer = setTimeout(flush, options.debounceMs ?? 300);
+    }
+    function flush() { if (pending) { const p = pending; try { save(p.data, p.scores); } catch {} } }
+    function dispose() {
+      if (disposed) return;
+      if (root.isConnected) flush();
+      clearTimeout(timer); disposed = true; ready = false; restore(); removal?.disconnect();
+      for (const [target, type, fn] of listeners) target.removeEventListener(type, fn);
+    }
+    function listen(target, type, fn) { target.addEventListener(type, fn); listeners.push([target, type, fn]); }
+    listen(window, 'pagehide', () => { flush(); restore(); });
+    listen(window, 'pageshow', () => { if (ready) hide(); });
+    listen(document, 'visibilitychange', () => { if (document.hidden) flush(); });
+    listen(root, 'focusout', flush);
+    removal = new MutationObserver(() => { if (!root.isConnected) dispose(); else if (editor()) restore(); });
+    removal.observe(document.documentElement, {childList: true, subtree: true});
+    return {load, save, queueSave, flush, dispose, setFooterHidden, getStatus: () => ({mode, ready, disposed, hideFooter, footerHidden: !!footer && !footerError, footerError}), getSnapshot: () => current ? clone(current) : null};
+  };
+})();
+
+// Generated by build.cjs from algebra.js, engine.js, ui.js
+const Algebra = (() => {
+  'use strict';
+  // Exact rational arithmetic and term analysis are carried over from version 2.
+  function q(n,d=1n){n=BigInt(n);d=BigInt(d);if(!d)throw Error('Durch null darfst du nicht teilen.');if(d<0n){n=-n;d=-d;}let a=n<0n?-n:n,b=d;while(b){[a,b]=[b,a%b];}return [n/a,d/a];}
+  const add=(a,b)=>q(a[0]*b[1]+b[0]*a[1],a[1]*b[1]),neg=a=>[-a[0],a[1]],mul=(a,b)=>q(a[0]*b[0],a[1]*b[1]),div=(a,b)=>q(a[0]*b[1],a[1]*b[0]),eq=(a,b)=>a[0]===b[0]&&a[1]===b[1],zero=a=>a[0]===0n,one=q(1),z=q(0);
+  const plus=(a,b)=>[add(a[0],b[0]),add(a[1],b[1])],scale=(a,b)=>a.map(v=>mul(v,b)),same=(a,b)=>eq(a[0],b[0])&&eq(a[1],b[1]);
+  function unsupported(message){const e=Error(message);e.name='UnsupportedInput';return e;}
+  function analyze(raw,maxLength=160){
+   const text=String(raw).toLowerCase().replace(/[−–]/g,'-').replace(/[·×]/g,'*').replace(/[÷:]/g,'/').replace(/,/g,'.').replace(/\s/g,'');
+   if(!text||text.length>maxLength)throw Error('Gib einen Term mit höchstens 160 Zeichen ein.');
+   const tokens=text.match(/\d+(?:\.\d+)?|[x()+*/-]/g)||[];
+   if(tokens.join('')!==text)throw unsupported('Diese Schreibweise wird hier nicht unterstützt. Erlaubt sind rationale Zahlen, x, Rechenzeichen und runde Klammern; pi, π und weitere Buchstaben gehören nicht zur Eingabesprache.');
+   let i=0;
+   function atom(){const t=tokens[i++];if(t==='+')return atom();if(t==='-'){const a=atom();return {k:'neg',a,v:scale(a.v,q(-1))};}if(t==='('){const a=sum();if(tokens[i++]!==')')throw Error('Prüfe deine Klammern.');return a;}if(t==='x')return {k:'x',v:[one,z]};if(t&&/^\d/.test(t)){const [a,b='']=t.split('.');return {k:'num',v:[z,q(BigInt(a+b),10n**BigInt(b.length))]};}throw Error('Hier fehlt eine Zahl, x oder eine Klammer.');}
+   function product(){let a=atom();while(i<tokens.length){const t=tokens[i],implicit=t==='x'||t==='('||/^\d/.test(t);if(!implicit&&t!=='*'&&t!=='/')break;if(!implicit)i++;const b=atom();let v,k=t==='/'&&!implicit?'div':'mul';if(k==='div'){if(!zero(b.v[0]))throw unsupported('x im Nenner wird in dieser Übung nicht unterstützt.');v=scale(a.v,div(one,b.v[1]));}else{if(!zero(a.v[0])&&!zero(b.v[0]))throw unsupported('Nichtlineare Terme werden in dieser Übung nicht unterstützt.');v=zero(b.v[0])?scale(a.v,b.v[1]):scale(b.v,a.v[1]);}a={k,a,b,v};}return a;}
+   function sum(){let a=product();while(tokens[i]==='+'||tokens[i]==='-'){const t=tokens[i++],b=product();a={k:t==='+'?'add':'sub',a,b,v:plus(a.v,t==='-'?scale(b.v,q(-1)):b.v)};}return a;}
+   const tree=sum();if(i!==tokens.length)throw Error('Prüfe die Reihenfolge deiner Zeichen und Klammern.');
+   const un=n=>n.k==='neg'?un(n.a):n;
+   const hasSum=n=>n.k==='add'||n.k==='sub'||!!n.a&&hasSum(n.a)||!!n.b&&hasSum(n.b);
+   const expansion=n=>n.k==='neg'&&hasSum(n)?'minusBracket':n.k==='mul'&&hasSum(n)?'brackets':n.k==='div'&&hasSum(n)?'divideBracket':n.a&&expansion(n.a)||n.b&&expansion(n.b)||null;
+   function scalar(n){n=un(n);if(n.k==='num')return true;if(n.k!=='div'||un(n.a).k!=='num'||un(n.b).k!=='num')return false;const a=n.a.v[1],b=n.b.v[1];return a[1]===1n&&b[1]===1n&&b[0]>1n&&n.v[1][1]===b[0];}
+   function simple(n){n=un(n);if(n.k==='x'||scalar(n))return true;if(n.k==='div'&&simple(n.a)&&scalar(n.b)&&!zero(n.a.v[0])){const denominator=n.b.v[1];return denominator[1]===1n&&denominator[0]>1n&&n.v[0][1]===denominator[0];}if(n.k!=='mul')return false;const a=un(n.a),b=un(n.b),c=a.k==='x'?n.b:b.k==='x'?n.a:null;return !!c&&scalar(c)&&!zero(c.v[1])&&!eq(c.v[1],one)&&!eq(c.v[1],q(-1));}
+   const terms=[];function flatten(n){if(n.k==='add'||n.k==='sub'){flatten(n.a);flatten(n.b);}else terms.push(n);}flatten(tree);
+   let issue=null;
+   if(expansion(tree))issue=expansion(tree);
+   else if(terms.filter(n=>!zero(n.v[0])).length>1)issue='x';
+   else if(terms.filter(n=>zero(n.v[0])).length>1||terms.length>1&&terms.some(n=>zero(n.v[0])&&zero(n.v[1])))issue='numbers';
+   else if(terms.some(n=>!simple(n)))issue='calculate';
+   return {value:tree.v,issue};
+  }
+  function parse(raw){return analyze(raw).value;}
+  function equation(s){let p=s.split('=');if(p.length!==2)throw Error('Schreibe beide Seiten der Gleichung mit genau einem =.');return p.map(parse);}
+  const qt=a=>a[1]===1n?String(a[0]):a[0]+'/'+a[1];
+  function term(a){let x=zero(a[0])?'':eq(a[0],one)?'x':eq(a[0],q(-1))?'-x':qt(a[0])+'x';return x+(zero(a[1])?(x?'':'0'):x?(a[1][0]<0n?' − ':' + ')+qt(q(a[1][0]<0n?-a[1][0]:a[1][0],a[1][1])):qt(a[1]));}
+  const et=e=>e.map(term).join(' = ');
+
+  function operate(e,text,legacy=false){
+    const s=String(text).trim().replace(/^\|\s*/,'').replace(/[−–]/g,'-'),sign=s[0];
+    if(!['+','-',':','/','÷','*','·','×'].includes(sign))throw Error('Beginne mit +, −, : oder ·.');
+    // A signed sum applies each written sign: -2x-8 adds the term -2x-8.
+    // Only explicit parentheses, as in -(2x-8), negate the whole remainder.
+    // Two extra characters allow explicit grouping when upgrading an old save.
+    if(sign==='+'||sign==='-'){
+      const v=analyze(legacy?s.slice(1):s,162).value;
+      return e.map(a=>plus(a,legacy&&sign==='-'?scale(v,q(-1)):v));
+    }
+    const v=parse(s.slice(1));
+    if(!zero(v[0]))throw Error('Zum Multiplizieren oder Dividieren brauchst du eine Zahl ohne x.');
+    if(zero(v[1]))throw Error('Multiplizieren oder Dividieren mit null ist keine zulässige Äquivalenzumformung.');
+    const factor=[':', '/', '÷'].includes(sign)?div(one,v[1]):v[1];
+    return e.map(a=>scale(a,factor));
+  }
+  function classify(e){const dx=add(e[0][0],neg(e[1][0]));if(!zero(dx))return 'unique';return eq(e[0][1],e[1][1])?'all':'none';}
+  function solution(e){return classify(e)==='unique'?div(add(e[1][1],neg(e[0][1])),add(e[0][0],neg(e[1][0]))):null;}
+  function isTerminal(e){
+    if(zero(e[0][0])&&zero(e[1][0]))return true;
+    return same(e[0],[one,z])&&zero(e[1][0])||same(e[1],[one,z])&&zero(e[0][0]);
+  }
+  function suggestOperation(e){
+    if(isTerminal(e))return null;
+    const left=e[0],right=e[1];
+    if(!zero(left[0])&&!zero(right[0])){const n=neg(right[0]);return (n[0]<0n?'':'+')+qt(n)+'x';}
+    const active=zero(left[0])?right:left;
+    if(!zero(active[1]))return (active[1][0]<0n?'+':'-')+qt(q(active[1][0]<0n?-active[1][0]:active[1][0],active[1][1]));
+    return ':('+qt(active[0])+')';
+  }
+  function advisory(before,op){
+    let after;
+    try{after=operate(before,op);}catch{return [];}
+    const abs=a=>a[0]<0n?neg(a):a;
+    const greater=(a,b)=>a[0]*b[1]>b[0]*a[1];
+    const values=e=>e.flat(),terms=e=>values(e).filter(v=>!zero(v)).length;
+    const fractions=e=>values(e).filter(v=>!zero(v)&&v[1]!==1n).length;
+    // Removing a term or clearing a fraction is useful even if another number grows.
+    if(terms(after)<terms(before)||fractions(after)<fractions(before)||isTerminal(after)&&!isTerminal(before))return [];
+    if(terms(after)>terms(before))return ['Es kommt ein weiterer Term hinzu, ohne dass ein anderer verschwindet.'];
+    if(fractions(after)>fractions(before))return ['Es entstehen zusätzliche Brüche, ohne dass ein Term verschwindet.'];
+    const max=e=>values(e).reduce((m,v)=>greater(abs(v),m)?abs(v):m,z);
+    if(greater(max(after),mul(max(before),q(10))))
+      return ['Die Zahlen oder Faktoren werden deutlich größer, ohne dass ein Term verschwindet.'];
+    return [];
+  }
+
+  const draw=(rng,min,max)=>min+Math.floor(rng()*(max-min+1));
+  function nonzero(rng,min=-5,max=5){let n;do{n=draw(rng,min,max);}while(!n);return n;}
+  function xpart(n){return n===1?'x':n===-1?'-x':`${n}x`;}
+  function joined(...parts){return parts.reduce((s,p,i)=>i===0?p:s+(p.startsWith('-')?' - '+p.slice(1):' + '+p),'');}
+  function bracket(k,t){return joined(xpart(k),String(t));}
+  function productBracket(k,t){return `${k}(${bracket(1,t)})`;}
+  function side(A,B,shape,rng){
+    let p=nonzero(rng),u=nonzero(rng);
+    const t=nonzero(rng),v=nonzero(rng);
+    if([0,2,5].includes(shape)&&p===A||[1,3].includes(shape)&&p===-A)p+=p===-1?-1:1;
+    if(shape===4&&A-p+u===0)u+=u===-1?-1:1;
+    switch(shape){
+      case 0:return joined(productBracket(p,t),xpart(A-p),String(B-p*t));
+      case 1:return joined(xpart(A+p),`(${joined(xpart(p),String(t))})`.replace(/^/,'-'),String(B+t));
+      case 2:return joined(xpart(p),xpart(A-p),String(t),String(B-t));
+      case 3:return joined(`-(${joined(xpart(p),String(t))})`,xpart(A+p),String(B+t));
+      case 4:return joined(productBracket(p,t),`-(${joined(xpart(u),String(v))})`,xpart(A-p+u),String(B-p*t+v));
+      default:return joined(`(${joined(xpart(p),String(t))})`,xpart(A-p),String(B-t));
+    }
+  }
+  function generate(kind,rng=Math.random){
+    if(!['unique','all','none'].includes(kind))throw Error('Unbekannter Gleichungstyp.');
+    const A=nonzero(rng,-6,6);
+    let C=kind==='unique'?nonzero(rng,-6,6):A;
+    if(kind==='unique'&&A===C)C=C===6?5:C+1;
+    const B=draw(rng,-8,8),D=kind==='all'?B:kind==='none'?B+nonzero(rng,-6,6):draw(rng,-8,8);
+    const shape=draw(rng,0,5);
+    const left=side(A,B,shape,rng),right=side(C,D,(shape+1+draw(rng,0,3))%6,rng);
+    return `${left} = ${right}`;
+  }
+  return {q,add,neg,mul,div,eq,zero,one,z,same,plus,scale,analyze,parse,equation,qt,term,et,operate,classify,solution,isTerminal,suggestOperation,advisory,generate};
+})();
+if(typeof module!=='undefined'&&module.exports)module.exports=Algebra;
+
+// Serializable learning state. UI and Edulo never contain the mathematical rules.
+const Engine = (() => {
+  const A = typeof Algebra === 'undefined' ? require('./algebra.js') : Algebra;
+  const COLORS = ['gray', 'green', 'yellow', 'red'], KINDS = ['unique', 'all', 'none'];
+  const LIMIT = 50, HELP_COUNT = 3;
+  const copy = value => JSON.parse(JSON.stringify(value));
+  const counts = () => ({total: 0, green: 0, yellow: 0, red: 0, unique: 0, all: 0, none: 0});
+  function fresh() { return {schema: 2, nextId: 1, tasks: [], bag: [], board: Array(20).fill('gray'), totals: counts(), archive: counts()}; }
+  function current(t) { const l = t.lines.at(-1); return [A.parse(l.left), A.parse(l.right)]; }
+  function issues(t) { const l = t.lines.at(-1); return [A.analyze(l.left).issue, A.analyze(l.right).issue]; }
+  function phase(t) { return t.done ? 'done' : t.pending ? (t.pending.left === null ? 'left' : 'right') : A.isTerminal(current(t)) ? 'solution' : 'operation'; }
+  function continueTask(t) {
+    const issue = issues(t), l = t.lines.at(-1);
+    t.pending = issue.some(Boolean) ? {operation: null, left: issue[0] ? null : l.left, right: issue[1] ? null : l.right, redLeft: false, redRight: false} : null;
+  }
+  function makeTask(initial, id = 1) {
+    const sides = initial.split('=').map(s => s.trim());
+    if (sides.length !== 2) throw Error('Ungültige Gleichung.');
+    const t = {id, initial, kind: A.classify(A.equation(initial)), lines: [{left: sides[0], right: sides[1], operation: null, redLeft: false, redRight: false, redOp: false}], pending: null, input: '', level: 0, tainted: false, usedSolve: false, done: false, solution: null, solutionRed: false, award: null, events: []};
+    continueTask(t); return t;
+  }
+  function expected(t) { return t.pending?.operation !== null && t.pending ? A.operate(current(t), t.pending.operation, !!t._legacyOperations) : current(t); }
+  function nextAnswer(t) {
+    const p = phase(t), e = current(t);
+    if (p === 'operation') return A.suggestOperation(e);
+    if (p === 'left' || p === 'right') return A.term(expected(t)[p === 'left' ? 0 : 1]);
+    if (p === 'solution') return t.kind === 'all' ? 'ℝ' : t.kind === 'none' ? '' : A.qt(A.solution(e));
+    throw Error('Die Aufgabe ist bereits abgeschlossen.');
+  }
+  function accept(t, input, auto = false) {
+    const p = phase(t);
+    if (p === 'operation') {
+      A.operate(current(t), input, !!t._legacyOperations);
+      t.lines.at(-1).operation = input; t.lines.at(-1).redOp = auto;
+      t.pending = {operation: input, left: null, right: null, redLeft: false, redRight: false};
+    } else if (p === 'left' || p === 'right') {
+      const side = p === 'left' ? 0 : 1;
+      if (!A.same(A.parse(input), expected(t)[side])) throw Error('Diese Seite hat nach dem Schritt noch nicht den richtigen Wert.');
+      t.pending[p] = input; t.pending[p === 'left' ? 'redLeft' : 'redRight'] = auto;
+      if (t.pending.left !== null && t.pending.right !== null) {
+        const pending = t.pending;
+        t.lines.push({left: pending.left, right: pending.right, operation: null, redLeft: pending.redLeft, redRight: pending.redRight, redOp: false});
+        continueTask(t);
+      }
+    } else if (p === 'solution') {
+      const s = input.trim(); let ok = false;
+      if (t.kind === 'all') ok = s === 'ℝ' || s === 'R';
+      else if (t.kind === 'none') ok = s === '';
+      else { const v = A.parse(s); ok = A.zero(v[0]) && A.eq(v[1], A.solution(current(t))); }
+      if (!ok) throw Error('Prüfe noch einmal, welche Lösungsmenge zur letzten Gleichung gehört.');
+      t.solution = s; t.solutionRed = auto; t.done = true;
+    } else throw Error('Die Aufgabe ist bereits abgeschlossen.');
+    t.input = ''; t.level = 0;
+    if (auto) { t.usedSolve = true; t.tainted = true; }
+  }
+  function apply(t, input, auto = false, stored = false) {
+    if (typeof input !== 'string' || input.length > (stored ? 162 : 160)) throw Error('Höchstens 160 Zeichen pro Eingabe.');
+    if (t.done) return {ok: false, error: 'Die Aufgabe ist bereits abgeschlossen.'};
+    const kind = phase(t); let error = '';
+    try { accept(t, input, auto); }
+    catch (e) { error = e.message; t.tainted = true; t.level = Math.min(HELP_COUNT, t.level + 1); t.input = input; }
+    t.events.push({type: 'answer', kind, input, ok: !error, auto});
+    return {ok: !error, error};
+  }
+  function requestHelp(t) {
+    if (t.done || t.level >= HELP_COUNT) return false;
+    t.tainted = true; t.level++; t.events.push({type: 'help', kind: phase(t), level: t.level}); return true;
+  }
+  function canSkip(t) { return !!t.pending && t.pending.operation === null && !A.isTerminal(current(t)); }
+  function skipSimplification(t) {
+    if (!canSkip(t)) return false;
+    const p = t.pending, old = t.lines.at(-1);
+    if (p.left !== null && p.left !== old.left || p.right !== null && p.right !== old.right) {
+      t.lines.push({left: p.left ?? old.left, right: p.right ?? old.right, operation: null, redLeft: p.redLeft, redRight: p.redRight, redOp: false});
+    }
+    t.pending = null; t.input = ''; t.level = 0; t.events.push({type: 'skip'}); return true;
+  }
+  function simplify(t) {
+    if (phase(t) !== 'operation' || !issues(t).some(Boolean)) return false;
+    continueTask(t); t.input = ''; t.level = 0; t.events.push({type: 'simplify'}); return true;
+  }
+  function changeOperation(t) {
+    if (!t.pending || t.pending.operation === null || t.pending.left !== null || t.pending.right !== null) return false;
+    const l = t.lines.at(-1); t.input = l.operation; l.operation = null; l.redOp = false; t.pending = null; t.level = 0;
+    t.events.push({type: 'change'}); return true;
+  }
+  function scoreAdd(board, color) {
+    let g = board.filter(c => c === 'green').length, y = board.filter(c => c === 'yellow').length, r = board.filter(c => c === 'red').length;
+    if (g + y + r < 20) { if (color === 'green') g++; else if (color === 'yellow') y++; else r++; }
+    else if (color === 'red') { if (y) { y--; r++; } else if (g) { g--; y++; } }
+    else {
+      if (r) { r--; if (color === 'green') g++; else y++; }
+      else if (color === 'green' && y) { y--; g++; }
+      else if (color === 'yellow' && g) { g--; y++; }
+    }
+    return [...Array(g).fill('green'), ...Array(y).fill('yellow'), ...Array(20 - g - y - r).fill('gray'), ...Array(r).fill('red')];
+  }
+  function account(s, t) {
+    // Red is awarded immediately on the first solved input, once per task.
+    if (!t.award && (t.usedSolve || t.done)) { t.award = t.usedSolve ? 'red' : t.tainted ? 'yellow' : 'green'; s.board = scoreAdd(s.board, t.award); }
+    if (t.done && !t.counted) { t.counted = true; s.totals.total++; s.totals[t.award]++; s.totals[t.kind]++; }
+  }
+  function newTask(s, rng = Math.random) {
+    if (s.tasks.length && !s.tasks.at(-1).done) return false;
+    if (!s.bag.length) { s.bag = [...KINDS]; for (let i = 2; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [s.bag[i], s.bag[j]] = [s.bag[j], s.bag[i]]; } }
+    const kind = s.bag.shift(); s.tasks.push(makeTask(A.generate(kind, rng), s.nextId++));
+    if (s.tasks.length > LIMIT) { const old = s.tasks.shift(); s.archive.total++; s.archive[old.award]++; s.archive[old.kind]++; }
+    return true;
+  }
+  const issueInstructions = {brackets: 'Multipliziere die Klammer aus', minusBracket: 'Löse die Minusklammer auf', divideBracket: 'Teile jeden Term in der Klammer', x: 'Fasse gleiche x-Terme zusammen', numbers: 'Fasse die Zahlen zusammen', calculate: 'Vereinfache den Rechenausdruck'};
+  function instruction(t) {
+    const p = phase(t);
+    if (p === 'operation') return 'Operation auf beiden Seiten';
+    if (p === 'solution') return 'Gib die Lösungsmenge an.';
+    if (p === 'done') return 'Aufgabe abgeschlossen';
+    const side = p === 'left' ? 0 : 1, where = side ? 'rechts' : 'links';
+    return t.pending.operation === null ? (issueInstructions[issues(t)[side]] || 'Vereinfache den Term') + ' – ' + where : 'Berechne die ' + (side ? 'rechte' : 'linke') + ' Seite.';
+  }
+  function hint(t) {
+    const p = phase(t), e = current(t), level = t.level;
+    if (!level || p === 'done') return null;
+    let texts, visual = '', focus = '';
+    if (p === 'operation') {
+      const target = !A.zero(e[0][0]) && !A.zero(e[1][0]) ? 'right-x' : !A.zero(e[0][0]) && !A.zero(e[0][1]) ? 'left-number' : A.zero(e[0][0]) && !A.zero(e[1][1]) ? 'right-number' : 'coefficient';
+      if (target === 'right-x') { texts = ['Sammle die x-Terme auf einer Seite. Du kannst zum Beispiel den x-Term rechts entfernen.', 'Betrachte den x-Term rechts. Welche Gegenoperation hebt sein Addieren oder Subtrahieren auf?', 'Wende die Gegenoperation auf beide Seiten an. Gib ein Rechenzeichen und den passenden x-Term ein.']; visual = '+ … ↔ − …'; }
+      else if (target === 'left-number' || target === 'right-number') { const where = target === 'left-number' ? 'links' : 'rechts'; texts = ['Versuche, den Zahlenterm neben dem x-Term zu entfernen.', 'Auf der ' + (where === 'links' ? 'linken' : 'rechten') + ' Seite steht neben dem x-Term eine Zahl. Welche Gegenoperation hebt diesen Zahlenterm auf?', 'Der Zahlenterm soll ' + where + ' verschwinden. Führe die Gegenoperation auf beiden Seiten aus.']; visual = '+ … ↔ − …'; }
+      else { texts = ['Versuche, x allein auf einer Seite zu erhalten.', 'Vor x steht ein Faktor. Mit welcher Gegenoperation kannst du den Faktor entfernen?', 'Teile beide Seiten durch den Faktor vor x oder multipliziere mit seinem Kehrwert. Achte auf das Vorzeichen.']; visual = '· … ↔ : …'; }
+      focus = target;
+    } else if (p === 'solution') {
+      texts = ['Betrachte die letzte Gleichung: Gibt es genau eine Lösung, alle reellen Zahlen oder keine Lösung?', 'Ist x allein, lies die Zahl auf der anderen Seite ab. Ohne x: Prüfe, ob die beiden Zahlen gleich sind.', 'Trage eine einzelne Lösung ein, lass das Feld für die leere Menge leer oder wähle ℝ für alle reellen Zahlen. Entscheide anhand der letzten Gleichung.'];
+      visual = 'eine Zahl   ·   keine Zahl   ·   alle Zahlen'; focus = 'both';
+    } else {
+      const side = p === 'left' ? 0 : 1, issue = issues(t)[side]; focus = side ? 'right' : 'left';
+      if (t.pending.operation !== null) { texts = ['Wende die gewählte Operation auf die gefragte Seite an.', 'Beachte die Operation hinter dem Strich. x-Terme und reine Zahlen musst du getrennt behandeln.', 'Bei + oder − verrechnest du gleiche Terme. Bei · oder : wendest du die Operation auf jeden Summanden an. Prüfe auch die Vorzeichen.']; visual = 'x-Terme ↔ x-Terme   ·   Zahlen ↔ Zahlen'; }
+      else if (['brackets', 'minusBracket', 'divideBracket'].includes(issue)) {
+        texts = ['Die Klammer enthält eine Summe oder Differenz. Bearbeite jeden Term in der Klammer.', issue === 'minusBracket' ? 'Ein Minus vor der Klammer ändert jedes Vorzeichen in der Klammer.' : issue === 'divideBracket' ? 'Teile jeden Term in der Klammer einzeln durch die Zahl im Nenner.' : 'Multipliziere den Faktor vor der Klammer mit jedem Term in der Klammer.', 'Bearbeite zuerst den x-Term und dann den Zahlenterm. Schreibe die Teilrechnungen auf und fasse anschließend gleiche Terme zusammen.'];
+        visual = issue === 'minusBracket' ? '−(a + b) → −a −b' : issue === 'divideBracket' ? '(a + b) : c → a : c + b : c' : 'a · (b + c) → a · b + a · c';
+      } else if (issue === 'calculate') {
+        const raw = t.lines.at(-1)[p], division = /[/:÷]/.test(raw);
+        texts = ['Führe die noch offenen Rechnungen aus. Beachte Punktrechnung vor Strichrechnung.', division ? 'Bei einer Division prüfst du Zähler, Nenner und ihre Vorzeichen. Kürze einen Bruch, wenn es möglich ist.' : 'Berechne zuerst die Zahlenfaktoren. Falls x vorkommt, bleibt x beim Berechnen seines Faktors erhalten.', 'Gleiche Vorzeichen ergeben bei Multiplikation und Division ein Plus, verschiedene ein Minus. Rechne den Zahlenanteil aus und schreibe den vereinfachten Term.'];
+        visual = 'gleiches Vorzeichen → +   ·   verschiedenes → −';
+      } else { texts = ['Fasse gleichartige Terme zusammen. x-Terme und Zahlen bleiben getrennt.', issue === 'x' ? 'Betrachte die Zahlen vor x einschließlich ihrer Vorzeichen. Bei x ist der Faktor 1, bei −x ist er −1.' : 'Achte bei den Zahlen auf jedes Plus- und Minuszeichen. Berechne ihre Summe.', 'Ordne zuerst die x-Terme und die reinen Zahlen. Verrechne jede Gruppe für sich; prüfe negative Vorzeichen.']; visual = 'x-Terme ↔ x-Terme   ·   Zahlen ↔ Zahlen'; }
+    }
+    return {text: texts[level - 1], visual: level >= 2 ? visual : '', focus: level >= 2 ? focus : '', level};
+  }
+  // Entry colors are derived from the existing log, so older saves need no migration.
+  // Process only newly appended events; typing and repeated renders do not replay the log.
+  const entryCache = new WeakMap();
+  function entryColors(t) {
+    let c = entryCache.get(t);
+    if (!c || c.events !== t.events || c.initial !== t.initial || c.processed > t.events.length) {
+      const replay = makeTask(t.initial, t.id);
+      c = {events: t.events, initial: t.initial, processed: 0, replay,
+        colors: {lines: [{left: null, right: null, operation: null}], pending: null, solution: null}};
+      entryCache.set(t, c);
+    }
+    const r = c.replay, colors = c.colors;
+    const syncPending = () => {
+      const last = colors.lines.at(-1);
+      colors.pending = r.pending ? {left: r.pending.left === null ? null : last.left,
+        right: r.pending.right === null ? null : last.right, operation: null} : null;
+    };
+    if (!c.processed) syncPending();
+    while (c.processed < t.events.length) {
+      const v = t.events[c.processed++], before = r.lines.length;
+      if (v.type === 'answer') {
+        const kind = phase(r), color = v.auto ? 'red' : r.level ? 'yellow' : 'green';
+        const pending = colors.pending;
+        if (apply(r, v.input, v.auto, true).ok) {
+          if (kind === 'operation') { colors.lines.at(-1).operation = color; syncPending(); }
+          else if (kind === 'solution') colors.solution = color;
+          else {
+            pending[kind] = color;
+            if (r.lines.length > before) { colors.lines.push({...pending, operation: null}); syncPending(); }
+          }
+        }
+      } else if (v.type === 'help') requestHelp(r);
+      else if (v.type === 'skip') {
+        const last = colors.lines.at(-1), p = r.pending, pending = colors.pending;
+        skipSimplification(r);
+        if (r.lines.length > before) colors.lines.push({left: p.left === null ? last.left : pending.left,
+          right: p.right === null ? last.right : pending.right, operation: null});
+        syncPending();
+      } else if (v.type === 'simplify') { simplify(r); syncPending(); }
+      else if (v.type === 'change') { changeOperation(r); colors.lines.at(-1).operation = null; syncPending(); }
+    }
+    return colors;
+  }
+  // Validation caches mathematical replay by complete task content, never merely by task ID.
+  const cache = new Map();
+  function validateTask(t, legacy = false) {
+    const signature = JSON.stringify([legacy,t]); if (cache.get(t.id) === signature) return true;
+    if (!Number.isInteger(t.id) || t.id < 1 || typeof t.initial !== 'string' || typeof t.input !== 'string' || t.input.length > 160 || !Array.isArray(t.events) || t.events.length > 10000 || !Number.isInteger(t.level) || t.level < 0 || t.level > HELP_COUNT) return false;
+    const replay = makeTask(t.initial, t.id);
+    replay._legacyOperations = legacy;
+    for (const v of t.events) {
+      if (v.type === 'answer') {
+        if (v.kind !== phase(replay) || typeof v.input !== 'string' || typeof v.ok !== 'boolean' || typeof v.auto !== 'boolean' || (v.auto && (replay.level !== HELP_COUNT || v.input !== nextAnswer(replay)))) return false;
+        if (v.input.length > 160 && (!v.originalInput || v.originalInput.length > 160 || v.input !== legacyGrouping(v.originalInput))) return false;
+        if (apply(replay, v.input, v.auto, true).ok !== v.ok) return false;
+      } else if (v.type === 'help') { if (v.kind !== phase(replay) || !requestHelp(replay) || v.level !== replay.level) return false; }
+      else if (v.type === 'skip') { if (!skipSimplification(replay)) return false; }
+      else if (v.type === 'simplify') { if (!simplify(replay)) return false; }
+      else if (v.type === 'change') { if (!changeOperation(replay)) return false; }
+      else return false;
+    }
+    for (const key of ['kind', 'lines', 'pending', 'level', 'tainted', 'usedSolve', 'done', 'solution', 'solutionRed']) if (JSON.stringify(replay[key]) !== JSON.stringify(t[key])) return false;
+    const award = replay.usedSolve ? 'red' : replay.done ? replay.tainted ? 'yellow' : 'green' : null;
+    if (t.award !== award || !!t.counted !== replay.done) return false;
+    cache.set(t.id, signature); if (cache.size > LIMIT + 2) cache.delete(cache.keys().next().value); return true;
+  }
+  function validate(s) {
+    try {
+      if (!s || ![1,2].includes(s.schema) || !Number.isInteger(s.nextId) || s.nextId < 1 || !Array.isArray(s.tasks) || s.tasks.length > LIMIT || !Array.isArray(s.bag) || s.bag.length > 2 || new Set(s.bag).size !== s.bag.length || s.bag.some(k => !KINDS.includes(k)) || !Array.isArray(s.board) || s.board.length !== 20 || s.board.some(c => !COLORS.includes(c))) return false;
+      for (const c of [s.totals, s.archive]) { if (!c || Object.keys(counts()).some(k => !Number.isInteger(c[k]) || c[k] < 0) || c.green + c.yellow + c.red !== c.total || c.unique + c.all + c.none !== c.total) return false; }
+      let previous = 0; const retained = counts();
+      for (const t of s.tasks) { if (t.id <= previous || t.id >= s.nextId || !validateTask(t, s.schema === 1)) return false; previous = t.id; if (t.done) { retained.total++; retained[t.award]++; retained[t.kind]++; } else if (t !== s.tasks.at(-1)) return false; }
+      if (Object.keys(retained).some(k => retained[k] + s.archive[k] !== s.totals[k])) return false;
+      if (s.nextId - 1 !== s.totals.total + (s.tasks.length && !s.tasks.at(-1).done ? 1 : 0)) return false;
+      return true;
+    } catch { return false; }
+  }
+  function legacyGrouping(input) {
+    const s = input.trim().replace(/^\|\s*/, '').replace(/[−–]/g, '-');
+    return '-(' + s.slice(1).replace(/\s/g, '') + ')';
+  }
+  function upgrade(s) {
+    if (s.schema === 2) return s;
+    if (!validate(s)) throw Error('Der vorhandene Lernstand konnte nicht geprüft werden. Originalstand bleibt erhalten.');
+    const result = copy(s); result.schema = 2;
+    result.tasks = s.tasks.map(old => {
+      const t = makeTask(old.initial, old.id);
+      for (const v of old.events) {
+        if (v.type === 'answer') {
+          let input = v.input;
+          if (v.ok && v.kind === 'operation' && !v.auto) {
+            const e = current(t), before = A.operate(e, input, true), after = A.operate(e, input);
+            if (!before.every((side, i) => A.same(side, after[i]))) input = legacyGrouping(input);
+          }
+          if (apply(t, input, v.auto, true).ok !== v.ok) throw Error('Der alte Lösungsweg konnte nicht wiederhergestellt werden. Originalstand bleibt erhalten.');
+          if (input !== v.input) t.events.at(-1).originalInput = v.input;
+        } else if (v.type === 'help') requestHelp(t);
+        else if (v.type === 'skip') skipSimplification(t);
+        else if (v.type === 'simplify') simplify(t);
+        else if (v.type === 'change') changeOperation(t);
+      }
+      t.input = old.input; t.award = old.award;
+      if (old.counted) t.counted = true;
+      return t;
+    });
+    if (!validate(result)) throw Error('Der aktualisierte Lernstand konnte nicht geprüft werden. Originalstand bleibt erhalten.');
+    return result;
+  }
+  return {fresh, makeTask, current, issues, phase, expected, nextAnswer, apply, requestHelp, canSkip, skipSimplification, simplify, changeOperation, scoreAdd, account, newTask, instruction, hint, entryColors, validate, upgrade, LIMIT, HELP_COUNT, copy};
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = Engine;
+
+const A = Algebra, E = Engine;
+let state, ready = false, draftTimer = null, historyDirty = true, lastFeedback = '', feedbackBad = false;
+const answer = q('[data-answer]');
+const bridge = createEduloBridge({root, widgetId: 'aequivalenz-v3', stateVersion: 1, hideFooter: true, fresh: E.fresh, validate: E.validate,
+  onStatus: ({text, error}) => { q('[data-storage]').textContent = text; q('[data-retry]').hidden = !error; }
+});
+const task = () => state.tasks.at(-1);
+const node = (tag, text = '', cls = '') => { const el = document.createElement(tag); el.textContent = text; if (cls) el.className = cls; return el; };
+function persist() {
+  clearTimeout(draftTimer); draftTimer = null;
+  if (!ready || !root.isConnected || bridge.getStatus().mode === 'editor') return;
+  try { bridge.save(state, state.board); } catch {} // The bridge keeps its detailed error visible.
+}
+function draftChanged() {
+  if (!ready || task().done) return;
+  task().input = answer.value; updateBraces();
+  // No copying, replay or serialization on individual key presses.
+  clearTimeout(draftTimer); draftTimer = setTimeout(persist, 400);
+}
+function showFeedback(text = '', bad = false) { lastFeedback = text; feedbackBad = bad; const el = q('[data-feedback]'); el.hidden = !text; el.textContent = text; el.classList.toggle('bad', bad); }
+function updateBraces() {
+  const t = task(), isReals = ['ℝ', 'R'].includes((t.done ? t.solution : answer.value)?.trim());
+  q('[data-open-brace]').hidden = isReals; q('[data-close-brace]').hidden = isReals;
+}
+// Source ranges keep the highlighted parts tied to the same roles in the rule.
+function bracketHelp(text, issue) {
+  const pairs = [], stack = [];
+  for (let i = 0; i < text.length; i++) { if (text[i] === '(') stack.push(i); else if (text[i] === ')' && stack.length) pairs.push({open: stack.pop(), close: i}); }
+  const span = (start, end, role) => { while (/\s/.test(text[start] || '') && start < end) start++; while (/\s/.test(text[end - 1] || '') && end > start) end--; return {start, end, role}; };
+  for (const {open, close} of pairs) {
+    let depth = 0, separator = -1;
+    for (let i = open + 1; i < close; i++) {
+      if (text[i] === '(') depth++; else if (text[i] === ')') depth--;
+      else if (!depth && ['+', '-', '−'].includes(text[i]) && text.slice(open + 1, i).trim() && !/[+\-−*/·:÷(]$/.test(text.slice(open + 1, i).trim())) { separator = i; break; }
+    }
+    if (separator < 0) continue;
+    const sign = text[separator] === '+' ? '+' : '−';
+    if (issue === 'brackets') {
+      const before = text.slice(0, open), after = text.slice(close + 1);
+      const left = before.match(/([+\-−]?\s*\d+(?:[.,]\d+)?(?:\s*\/\s*\d+)?)\s*[*·×]?\s*$/), right = after.match(/^\s*[*·×]\s*([+\-−]?\s*\d+(?:[.,]\d+)?)/);
+      let factor;
+      if (left) factor = span(left.index, left.index + left[1].length, 'a');
+      else if (right) { const start = close + 1 + right[0].indexOf(right[1]); factor = span(start, start + right[1].length, 'a'); }
+      if (!factor) continue;
+      return {ranges: [factor, span(open + 1, separator, 'b'), span(separator + 1, close, 'c')], rule: 'a · (b ' + sign + ' c) → a · b ' + sign + ' a · c'};
+    }
+    if (issue === 'minusBracket' && /[\-−]\s*$/.test(text.slice(0, open))) return {ranges: [span(open + 1, separator, 'a'), span(separator + 1, close, 'b')], rule: '−(a ' + sign + ' b) → −a ' + (sign === '+' ? '−' : '+') + ' b'};
+    if (issue === 'divideBracket') {
+      const divisor = text.slice(close + 1).match(/^\s*[/:÷]\s*(\(\s*[+\-−]?\s*\d+(?:[.,]\d+)?\s*\)|[+\-−]?\s*\d+(?:[.,]\d+)?)/);
+      if (!divisor) continue;
+      const start = close + 1 + divisor[0].indexOf(divisor[1]);
+      return {ranges: [span(open + 1, separator, 'a'), span(separator + 1, close, 'b'), span(start, start + divisor[1].length, 'c')], rule: '(a ' + sign + ' b) : c → a : c ' + sign + ' b : c'};
+    }
+  }
+  return null;
+}
+function focusedBracket(t, h) {
+  const p = E.phase(t);
+  if (!h?.focus || !['left', 'right'].includes(p) || t.pending.operation !== null) return null;
+  const issue = E.issues(t)[p === 'left' ? 0 : 1];
+  return ['brackets', 'minusBracket', 'divideBracket'].includes(issue) ? bracketHelp(t.lines.at(-1)[p], issue) : null;
+}
+function markedText(el, text, focus, column, bracket) {
+  if (!focus || !['left', 'right'].includes(column)) { el.textContent = text; return; }
+  const use = focus === 'both' || focus === column || focus === 'right-x' && column === 'right' || focus === 'left-number' && column === 'left' || focus === 'right-number' && column === 'right' || focus === 'coefficient';
+  if (!use) { el.textContent = text; return; }
+  if (bracket !== undefined) {
+    let offset = 0;
+    for (const r of [...(bracket?.ranges || [])].sort((a, b) => a.start - b.start)) { el.append(document.createTextNode(text.slice(offset, r.start))); el.append(node('mark', text.slice(r.start, r.end), 'role-' + r.role)); offset = r.end; }
+    el.append(document.createTextNode(text.slice(offset))); return;
+  }
+  const parts = String(text).split(/((?:\d+(?:[.,]\d+)?(?:\/\d+)?\s*\*?\s*)?x|\d+(?:[.,]\d+)?)/g);
+  for (const part of parts) {
+    if (!part) continue;
+    const isX = part.includes('x'), numeric = /\d/.test(part);
+    if ((focus === 'right-x' && isX) || (['left-number', 'right-number'].includes(focus) && numeric && !isX) || (!['right-x', 'left-number', 'right-number'].includes(focus) && (numeric || isX))) el.append(node('mark', part, isX ? '' : 'constant'));
+    else el.append(document.createTextNode(part));
+  }
+}
+function renderWork(parent, t, interactive = false) {
+  const colors = E.entryColors(t);
+  const p = E.phase(t), h = interactive ? E.hint(t) : null, bracket = focusedBracket(t, h), bracketIssue = ['left', 'right'].includes(p) && t.pending.operation === null && ['brackets', 'minusBracket', 'divideBracket'].includes(E.issues(t)[p === 'left' ? 0 : 1]), table = node('table'); table.setAttribute('aria-label', 'Linke Seite gleich rechte Seite mit Operation');
+  const cols = node('colgroup'); for (const name of ['eq-left', 'eq-sign', 'eq-right', 'eq-pipe', 'eq-operation']) cols.append(node('col', '', name)); table.append(cols);
+  const body = node('tbody'); table.append(body);
+  function row(left, right, op, entries, active, focused = false) {
+    const tr = node('tr'), texts = [left, '=', right, op !== null ? '|' : '', op ?? ''];
+    texts.forEach((text, i) => {
+      const column = ['left', 'equals', 'right', 'pipe', 'operation'][i], td = node('td', '', i === 0 ? 'left' : i === 1 || i === 3 ? 'sign' : ''); td.dataset.column = column;
+      if (entries?.[column]) td.classList.add(entries[column] + '-entry');
+      if (active === i) { td.append(answer); td.classList.add('active-cell'); }
+      else markedText(td, text ?? '', focused ? h?.focus : '', column, bracketIssue ? bracket : undefined);
+      tr.append(td);
+    }); body.append(tr);
+  }
+  t.lines.forEach((l, i) => {
+    const active = interactive && i === t.lines.length - 1 && p === 'operation' ? 4 : null;
+    row(l.left, l.right, active === 4 ? '' : l.operation, colors.lines[i], active, i === t.lines.length - 1);
+  });
+  if (t.pending) row(t.pending.left, t.pending.right, null, colors.pending, interactive ? p === 'left' ? 0 : 2 : null);
+  parent.replaceChildren(table);
+}
+function renderScores() {
+  const counts = Object.fromEntries(['green', 'yellow', 'red', 'gray'].map(c => [c, state.board.filter(v => v === c).length]));
+  q('[data-progress]').textContent = (20 - counts.gray) + ' von 20 Punkten belegt';
+  q('[data-count]').textContent = state.totals.total + ' Aufgaben abgeschlossen';
+  const dots = q('[data-dots]'); dots.replaceChildren();
+  const names = {green: 'grün, ohne Fehler', yellow: 'gelb, mit Fehler oder Hilfe', red: 'rot, Schritt gelöst', gray: 'noch frei'};
+  state.board.forEach((c, i) => { const dot = node('span', '', 'dot ' + c); dot.title = 'Punkt ' + (i + 1) + ': ' + names[c]; dot.setAttribute('role', 'img'); dot.setAttribute('aria-label', dot.title); dots.append(dot); });
+  const t = task(); q('[data-task-status]').textContent = t.usedSolve ? 'Diese Aufgabe zählt rot. Der Punkt wurde bereits vergeben.' : t.tainted ? 'Diese Aufgabe zählt bei Abschluss gelb.' : t.done ? 'Diese Aufgabe zählt grün.' : 'Auf Anhieb richtig und ohne Hilfe: Diese Aufgabe kann grün werden.';
+}
+function renderHelp() {
+  const h = E.hint(task()); q('[data-help-box]').hidden = !h;
+  if (!h) return;
+  q('[data-help-level]').textContent = 'Hilfe ' + h.level + ' von ' + E.HELP_COUNT;
+  q('[data-help-text]').textContent = h.text;
+  const bracket = focusedBracket(task(), h), visual = bracket?.rule || h.visual, el = q('[data-help-visual]'); el.replaceChildren();
+  const equation = node('span', '', 'rule-equation');
+  if (bracket) for (const part of visual.split(/([abc])/g)) equation.append(/^[abc]$/.test(part) ? node('mark', part, 'role-' + part) : document.createTextNode(part));
+  else equation.textContent = visual;
+  el.append(equation); el.hidden = !visual;
+}
+function renderAdvisory() {
+  const t = task(), p = t.pending;
+  let reasons = [];
+  if (p && p.operation !== null && p.left === null && p.right === null) { try { reasons = A.advisory(E.current(t), p.operation); } catch {} }
+  q('[data-advisory]').hidden = !reasons.length;
+  q('[data-advisory-details]').hidden = true;
+  q('[data-advisory-button]').setAttribute('aria-expanded', 'false');
+  q('[data-advisory-text]').textContent = reasons.length ? 'Dieser Schritt könnte den Lösungsweg verlängern. Du kannst trotzdem weiterrechnen.' : '';
+  q('[data-advisory-reasons]').textContent = reasons.join(' ');
+}
+function render() {
+  if (!ready) return;
+  const t = task(), p = E.phase(t), editing = p !== 'done';
+  q('[data-exercise]').hidden = false; q('[data-task-label]').textContent = 'Aufgabe ' + t.id;
+  q('[data-instruction]').textContent = E.instruction(t);
+  q('[data-input-home]').append(answer); answer.value = t.input;
+  answer.setAttribute('aria-label', E.instruction(t)); answer.placeholder = p === 'solution' ? 'Zahl, ℝ oder leer' : p === 'operation' ? '+ …, − …, · …, : …' : 'Dein Term';
+  renderWork(q('[data-work]'), t, editing);
+  q('[data-solution]').hidden = p !== 'solution' && p !== 'done';
+  for (const color of ['green', 'yellow', 'red']) q('[data-solution]').classList.toggle(color + '-entry', E.entryColors(t).solution === color);
+  q('[data-solution-input]').replaceChildren();
+  if (p === 'solution') q('[data-solution-input]').append(answer);
+  else if (p === 'done') q('[data-solution-input]').textContent = t.solution === 'R' ? 'ℝ' : t.solution;
+  updateBraces();
+  q('[data-keyboard]').hidden = !editing; q('[data-form]').hidden = !editing; q('[data-next]').hidden = editing;
+  const solve = t.level === E.HELP_COUNT; q('[data-help]').textContent = solve ? 'Lösen' : 'Hilfe'; q('[data-help]').classList.toggle('solve', solve);
+  q('[data-help]').setAttribute('aria-label', solve ? 'Aktuelle Eingabe lösen; Aufgabe zählt rot' : 'Nächste Hilfe zum aktuellen Schritt');
+  q('[data-skip]').hidden = !E.canSkip(t);
+  q('[data-simplify]').hidden = p !== 'operation' || !E.issues(t).some(Boolean);
+  renderHelp(); renderAdvisory(); renderScores();
+  q('[data-history-title]').textContent = 'Dein Verlauf · ' + state.totals.total + ' abgeschlossene Aufgaben';
+  if (q('[data-history-panel]').open && historyDirty) renderHistory();
+  if (editing) { const work = q('[data-work]'); work.scrollTop = work.scrollHeight; }
+  showFeedback(lastFeedback, feedbackBad);
+}
+function renderHistory() {
+  const list = q('[data-history-list]'); list.replaceChildren();
+  const arc = state.archive;
+  q('[data-archive]').textContent = arc.total ? arc.total + ' ältere Aufgaben zusammengefasst: ' + arc.green + ' grün, ' + arc.yellow + ' gelb, ' + arc.red + ' rot. ' + arc.unique + ' eindeutig, ' + arc.all + ' allgemeingültig, ' + arc.none + ' nicht lösbar.' : 'Die letzten höchstens 50 Aufgaben bleiben im Detail erhalten. Details werden erst beim Öffnen geladen.';
+  for (const t of [...state.tasks].reverse()) {
+    const d = node('details', '', 'history-item'); d.dataset.taskId = t.id;
+    const status = t.done ? {green: 'ohne Fehler', yellow: 'mit Fehler/Hilfe', red: 'mit Lösen'}[t.award] : 'in Bearbeitung';
+    d.append(node('summary', 'Aufgabe ' + t.id + ' · ' + t.initial + ' · ' + status));
+    d.addEventListener('toggle', () => { if (!d.open || d.dataset.loaded) return; d.dataset.loaded = '1'; const w = node('div', '', 'work-scroll'); renderWork(w, t); d.append(w);
+      if (t.done) d.append(node('p', ['ℝ', 'R'].includes(t.solution) ? 'L = ℝ' : 'L = {' + t.solution + '}', E.entryColors(t).solution + '-entry'));
+      const ol = node('ol');
+      for (const v of t.events) { let text;
+        if (v.type === 'answer') text = {operation: 'Operation', left: 'Linke Seite', right: 'Rechte Seite', solution: 'Lösungsmenge'}[v.kind] + ': ' + (v.input || '(leer)') + ' · ' + (v.auto ? 'mit Lösen übernommen' : v.ok ? 'richtig' : 'noch nicht richtig');
+        else if (v.type === 'help') text = 'Hilfe ' + v.level + ' angefordert';
+        else text = {skip: 'Weiter frei umformen', simplify: 'Terme vereinfachen', change: 'Operation geändert'}[v.type];
+        if (v.originalInput) text += ' · frühere Eingabe ' + v.originalInput + ', damalige Berechnung durch Klammern verdeutlicht';
+        ol.append(node('li', text, v.auto ? 'red-entry' : ''));
+      } d.append(ol);
+    }); list.append(d);
+  } historyDirty = false;
+}
+function checked(input = answer.value, auto = false) {
+  if (!ready || task().done) return;
+  const t = task(), result = E.apply(t, input, auto); E.account(state, t); historyDirty = true;
+  showFeedback(result.ok ? t.done ? 'Richtig. Deine Lösungsmenge ist bestätigt.' : auto ? 'Diese Eingabe wurde gelöst und rot markiert. Rechne jetzt selbst weiter.' : 'Richtig. Weiter mit dem nächsten Schritt.' : result.error, !result.ok);
+  render(); persist();
+  if (!t.done) answer.focus({preventScroll: true});
+}
+function help() {
+  if (!ready || task().done) return;
+  if (task().level === E.HELP_COUNT) { checked(E.nextAnswer(task()), true); return; }
+  E.requestHelp(task()); historyDirty = true; showFeedback(); render(); persist(); answer.focus({preventScroll: true});
+}
+function keyboardAction(key) {
+  if (!ready || task().done) return;
+  answer.focus({preventScroll: true});
+  let start = answer.selectionStart ?? answer.value.length, end = answer.selectionEnd ?? start;
+  if (key === 'left') { const pos = start !== end ? start : Math.max(0, start - 1); answer.setSelectionRange(pos, pos); return; }
+  if (key === 'right') { const pos = start !== end ? end : Math.min(answer.value.length, end + 1); answer.setSelectionRange(pos, pos); return; }
+  if (key === 'home' || key === 'end') { const pos = key === 'home' ? 0 : answer.value.length; answer.setSelectionRange(pos, pos); return; }
+  if (key === 'backspace') { if (start === end) start = Math.max(0, start - 1); answer.setRangeText('', start, end, 'end'); }
+  else if (key === 'delete') { if (start === end) end = Math.min(answer.value.length, end + 1); answer.setRangeText('', start, end, 'end'); }
+  else { if (answer.value.length - (end - start) + key.length > 160) return; answer.setRangeText(key, start, end, 'end'); }
+  draftChanged();
+}
+const keys = [['7','7'],['8','8'],['9','9'],['+','+'],['−','−'],['x','x'],['⌫','backspace'],['Entf','delete'],['4','4'],['5','5'],['6','6'],['·','·'],[':',':'],['ℝ','ℝ'],['←','left'],['→','right'],['1','1'],['2','2'],['3','3'],['(','('],[')',')'],['',''],['↤','home'],['↦','end'],['0','0'],[',',','],['',''],['',''],['',''],['',''],['',''],['','']];
+const keyNames = {backspace: 'Zeichen vor dem Cursor löschen', delete: 'Zeichen nach dem Cursor löschen', left: 'Cursor nach links', right: 'Cursor nach rechts', home: 'Cursor zum Anfang', end: 'Cursor zum Ende', 'ℝ': 'Alle reellen Zahlen', ',': 'Dezimalkomma'};
+function keyButton(label, key) { const family = key.length > 1 ? 'nav' : ['x', 'ℝ'].includes(key) ? 'symbol' : /^\d$/.test(key) || key === ',' ? 'number' : 'op'; const b = node('button', label, family); b.type = 'button'; b.dataset.key = key; b.setAttribute('aria-label', keyNames[key] || label); b.addEventListener('pointerdown', e => e.preventDefault()); b.addEventListener('click', () => keyboardAction(key)); return b; }
+const keyWrap = node('div', '', 'key-grid-wrap'), keyGrid = node('div', '', 'key-grid'); keyWrap.append(keyGrid); q('[data-keyboard]').append(keyWrap);
+keys.forEach(([label, key], i) => { const el = key ? keyButton(label, key) : node('span', '', 'key-spacer'); el.dataset.row = Math.floor(i / 8) + 1; el.dataset.col = i % 8 + 1; if (!key) el.setAttribute('aria-hidden', 'true'); keyGrid.append(el); });
+q('[data-form]').addEventListener('submit', e => { e.preventDefault(); checked(); });
+answer.addEventListener('input', draftChanged);
+answer.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); checked(); } });
+q('[data-help]').addEventListener('click', help);
+q('[data-advisory-button]').addEventListener('click', () => {
+  if (!ready || !task().pending?.operation) return;
+  const open = q('[data-advisory-details]').hidden;
+  q('[data-advisory-details]').hidden = !open;
+  q('[data-advisory-button]').setAttribute('aria-expanded', String(open));
+});
+q('[data-alternative-help]').addEventListener('click', () => {
+  if (!ready || !task().pending?.operation) return;
+  E.changeOperation(task()); help();
+});
+q('[data-change]').addEventListener('click', () => { if (E.changeOperation(task())) { historyDirty = true; showFeedback(); render(); persist(); answer.focus({preventScroll: true}); } });
+q('[data-skip]').addEventListener('click', () => { if (E.skipSimplification(task())) { historyDirty = true; showFeedback(); render(); persist(); answer.focus({preventScroll: true}); } });
+q('[data-simplify]').addEventListener('click', () => { if (E.simplify(task())) { historyDirty = true; showFeedback(); render(); persist(); answer.focus({preventScroll: true}); } });
+q('[data-next]').addEventListener('click', () => { if (E.newTask(state)) { historyDirty = true; showFeedback(); render(); persist(); q('.edulo-work').scrollTop = 0; } });
+q('[data-history-panel]').addEventListener('toggle', () => { if (ready && q('[data-history-panel]').open && historyDirty) renderHistory(); });
+q('[data-retry]').addEventListener('click', () => ready ? persist() : start());
+function fit() {
+  let bottom = window.innerHeight, top = Math.max(0, root.getBoundingClientRect().top);
+  for (let p = root.parentElement; p && p !== document.documentElement; p = p.parentElement) if (/hidden|clip|auto|scroll/.test(getComputedStyle(p).overflowY)) bottom = Math.min(bottom, p.getBoundingClientRect().bottom);
+  root.style.setProperty('--edulo-height', Math.max(180, bottom - top - 12) + 'px');
+}
+function flushDraft() { if (draftTimer) persist(); }
+window.addEventListener('resize', fit); window.addEventListener('pagehide', flushDraft); window.addEventListener('blur', flushDraft);
+const onVisibility = () => { if (document.hidden) flushDraft(); }; document.addEventListener('visibilitychange', onVisibility);
+const cleanup = new MutationObserver(() => { if (!root.isConnected) { clearTimeout(draftTimer); window.removeEventListener('resize', fit); window.removeEventListener('pagehide', flushDraft); window.removeEventListener('blur', flushDraft); document.removeEventListener('visibilitychange', onVisibility); cleanup.disconnect(); } });
+cleanup.observe(document.documentElement, {childList: true, subtree: true});
+async function start() {
+  q('[data-controls]').disabled = true;
+  try {
+    const loaded = await bridge.load();
+    state = E.upgrade(loaded.data);
+    if (JSON.stringify(loaded.scores) !== JSON.stringify(state.board)) throw Error('Punktestand und Aufgabenstand passen nicht zusammen. Originalstand bleibt erhalten.');
+    ready = true; const isNew = !state.tasks.length; if (isNew) E.newTask(state);
+    historyDirty = true; render(); fit(); q('[data-controls]').disabled = bridge.getStatus().mode === 'editor';
+    if (isNew) persist();
+  } catch (e) { ready = false; q('[data-storage]').textContent = e.message; q('[data-retry]').hidden = false; }
+}
+fit();
+// Test builds inject their read-only harness at this stable marker.
+/* TEST_HOOK */
+start();
+
+})();</script>
+</main></body></html>

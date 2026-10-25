@@ -12,7 +12,7 @@ Befehlsschema: Die Platzhalter in spitzen Klammern durch passende Werte ersetzen
 node tools/edulo/new-widget.cjs "<Zielordner>" "<Widget-ID>" "<Titel>"
 ```
 
-`<Zielordner>`: neuer Ordner im passenden Fachbereich; `<Widget-ID>`: eindeutige, dauerhafte Kennung; `<Titel>`: sichtbare Überschrift.
+`<Zielordner>`: neuer Ordner im passenden Fachbereich; `<Widget-ID>`: eindeutige, dauerhafte Kennung; `<Titel>`: Dokumenttitel/Metadatum, keine sichtbare Seitenüberschrift.
 
 Im Zielordner entstehen `widget.quelle.html`, `app.js`, `app.css` und die uploadfähige `widget.html`.
 
@@ -39,11 +39,13 @@ Fehleranzeige der Vorlage erhalten; fehlgeschlagenes Laden nicht durch einen lee
 
 ## Layout und Prüfung
 
-Standard: Edulos gesamte Fußleiste mit Prüfen/Lösungen ist ausgeblendet (`hideFooter: true` in der Bridge-Konfiguration); mit `false` bleibt sie sichtbar. Die Vorlage nutzt den verfügbaren Platz.
+Standard: Edulos gesamte Fußleiste mit Prüfen/Lösungen ist ausgeblendet (`hideFooter: true` in der Bridge-Konfiguration); mit `false` bleibt sie sichtbar.
 
-Layoutbasis: iframe 1024 × 768 CSS-px, Widgetbreite 920 px, Inhaltsbereich ohne Fußleiste etwa 728 px hoch. Tatsächlichen Platz und interne Scrollbereiche beachten. CSS/Selektoren auf den Widget-Root begrenzen; kein zusätzliches eigenes iframe voraussetzen. Deutsche, touchfreundliche Oberfläche.
+Widgets erhalten **nie eine eigene Seitenüberschrift**: Den Seitentitel setzt Edulo. Fachlich nötige Aufgabenüberschriften und die Gliederung eines Lückentextes dürfen bleiben; sie benennen konkrete Inhalte, nicht die gesamte Seite.
 
-Fachlogik und Wiederherstellung gezielt testen; Ansicht bei 920 und 390 px Breite prüfen. Neue Integration einmal in Edulo bearbeiten und wiederöffnen. Kit-Suite bei Änderungen an der Anbindung ausführen.
+Widgets nutzen **die volle verfügbare Breite und ihre natürliche Inhaltshöhe**. Keine feste oder aus dem Viewport berechnete Höhe, kein zusätzlicher vertikaler Scrollcontainer: Edulo scrollt die Gesamtseite. Das ersetzt den früheren Standard mit 920 px Breite und berechneter Resthöhe. Historische Messwerte stehen nur als Kontext in `reference/layout.md`. Horizontales Scrollen nur lokal für unvermeidbar breite Inhalte wie ein Diagramm vorsehen. CSS/Selektoren auf den Widget-Root begrenzen; kein zusätzliches eigenes iframe voraussetzen. Deutsche, touchfreundliche Oberfläche.
+
+Fachlogik und Wiederherstellung gezielt testen; Ansicht bei 920 und 390 px Breite sowie auf breiten Seiten ohne künstliche Breitenbegrenzung prüfen. Lange Inhalte müssen im normalen Seitenfluss bleiben. Neue Integration einmal in Edulo bearbeiten und wiederöffnen. Kit-Suite bei Änderungen an der Anbindung ausführen.
 
 ## Nachschlagen – nur bei Bedarf
 

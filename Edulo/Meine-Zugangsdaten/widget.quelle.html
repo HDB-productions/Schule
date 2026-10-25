@@ -1,0 +1,24 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Meine Edulo-Zugangsdaten</title></head><body>
+<!-- EDULO_WIDGET_KEY:meine-edulo-zugangsdaten -->
+<main class="edulo-identity" data-edulo-id="meine-edulo-zugangsdaten">
+<style>/* APP_CSS */</style>
+<div class="identity-card">
+  <div class="eyebrow">DEIN EDULO-KONTO</div>
+  <h1>Deine Zugangsdaten</h1>
+  <p class="intro">Hier findest du deinen Benutzernamen und deine ID. Mit „Kopieren“ kannst du sie direkt übernehmen.</p>
+  <section aria-label="Deine Kontodaten">
+    <div class="identity-field"><label for="edulo-own-username">Benutzername</label><div class="value-row"><input id="edulo-own-username" data-value="username" readonly autocomplete="off" spellcheck="false" placeholder="Wird geladen …"><button type="button" data-copy="username" aria-label="Benutzername kopieren" disabled>Kopieren</button></div></div>
+    <div class="identity-field"><label for="edulo-own-id">Deine ID</label><div class="value-row"><input id="edulo-own-id" data-value="id" readonly autocomplete="off" spellcheck="false" placeholder="Wird geladen …"><button type="button" data-copy="id" aria-label="ID kopieren" disabled>Kopieren</button></div></div>
+  </section>
+  <p class="identity-status" data-status role="status" aria-live="polite">Dein Edulo-Konto wird geladen …</p>
+  <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
+  <p class="hint">Bewahre deine Zugangsdaten gut auf, zum Beispiel in deinen persönlichen Notizen.</p>
+</div>
+<script>(()=>{'use strict';
+const root=document.currentScript?.closest('[data-edulo-id="meine-edulo-zugangsdaten"]')||[...document.querySelectorAll('[data-edulo-id="meine-edulo-zugangsdaten"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+/* EDULO_BRIDGE */
+/* APP_JS */
+})();</script>
+</main></body></html>

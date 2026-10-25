@@ -144,7 +144,8 @@ const createEduloBridge = (() => {
       return {widget: widgetId, version, data: clone(data), scores: [...scores]};
     }
     function parse(raw) {
-      const value = decode(raw);
+      let value = decode(raw);
+      if (value.widget === widgetId && value.version !== version && typeof options.migrateSnapshot === 'function') value = options.migrateSnapshot(clone(value));
       if (value.widget !== widgetId || value.version !== version) throw Error('Fremder oder älterer Lernstand. Migration erforderlich.');
       return checked(value.data, value.scores);
     }
