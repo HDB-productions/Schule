@@ -1,0 +1,119 @@
+.fraction-workshop{font:17px system-ui,sans-serif;color:#193c43;background:#eff6f4;padding:18px;--accent:#087f72;--line:#ccded9}
+.fraction-workshop,.fraction-workshop *{box-sizing:border-box}
+.fraction-workshop [hidden]{display:none!important}
+.fraction-workshop fieldset{border:0;margin:0;padding:0;min-width:0}
+.fraction-workshop .toolbar,.fraction-workshop .actions,.fraction-workshop .entries,.fraction-workshop .task{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.fraction-workshop .toolbar{justify-content:space-between;margin-bottom:18px}
+.fraction-workshop .card{border:1px solid var(--line);background:white;border-radius:20px;padding:24px;margin-top:16px;box-shadow:0 6px 22px #123e3910}
+.fraction-workshop .workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;margin-top:22px;background:linear-gradient(135deg,#fbfaf4,#edf7f2);border-radius:16px;padding:20px}
+.fraction-workshop .workspace>*{min-width:0}
+.fraction-workshop h2{font-size:1.2rem;line-height:1.4;margin:8px 0}
+.fraction-workshop p{line-height:1.5}
+.fraction-workshop .eyebrow,.fraction-workshop .step{color:var(--accent);font-size:.8rem;font-weight:750;letter-spacing:.04em}
+.fraction-workshop .task{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:750}
+.fraction-workshop .frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;min-width:1.6em;line-height:1.25}
+.fraction-workshop .frac>span{padding:3px 8px}
+.fraction-workshop .frac>span+span{border-top:2px solid currentColor}
+.fraction-workshop .muted,.fraction-workshop small,.fraction-workshop footer{color:#516a70;font-size:.87rem}
+.fraction-workshop input,.fraction-workshop button,.fraction-workshop select{font:inherit;border:1px solid #9cbab3;border-radius:10px;padding:11px 14px;color:inherit;background:white;min-height:46px;max-width:100%}
+.fraction-workshop button,.fraction-workshop select{cursor:pointer}
+.fraction-workshop button.primary{background:var(--accent);border-color:var(--accent);color:white;font-weight:650}
+.fraction-workshop button[aria-pressed=true]{background:#d1eee4;border:2px solid var(--accent)}
+.fraction-workshop button:disabled{opacity:.55;cursor:default}
+.fraction-workshop :focus-visible{outline:3px solid #c47917;outline-offset:3px}
+.fraction-workshop .entries{margin:20px 0;align-items:flex-end}
+.fraction-workshop .entry{display:grid;gap:6px;font-size:.9rem;max-width:100%}
+.fraction-workshop input{font-size:1.4rem;text-align:center;width:110px;border-width:2px}
+.fraction-workshop .fraction-input{display:grid;gap:7px;text-align:center}
+.fraction-workshop .fraction-input .entry:nth-child(2){border-top:2px solid #193c43;padding-top:7px}
+.fraction-workshop .notice{padding:12px 16px;border-radius:10px;background:#e1f3ea;overflow-wrap:anywhere}
+.fraction-workshop .notice.bad,.fraction-workshop .hint{background:#fff1dd;color:#784204}
+.fraction-workshop .confirmed{padding-left:24px;line-height:1.65}
+.fraction-workshop .confirmed li{padding:5px 0}
+.fraction-workshop .model{margin:0 0 20px}
+.fraction-workshop .model-label{font-size:.9rem;font-weight:650;margin:6px 0}
+.fraction-workshop .bar-svg{display:block;width:100%;height:auto;max-height:82px}
+.fraction-workshop .whole-label{font-size:.75rem;color:#516a70;margin:2px 0}
+.fraction-workshop .milestones{display:flex;gap:4px;margin:12px 0}
+.fraction-workshop .dot{flex:1;height:10px;border-radius:8px;background:#d9e6e2}
+.fraction-workshop .dot.green{background:#087f72}.fraction-workshop .dot.yellow{background:#e2b242}
+.fraction-workshop .stats{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+.fraction-workshop .stat{background:#eff6f4;border-radius:12px;padding:12px;flex:1;min-width:130px}
+.fraction-workshop .stat b{display:block;font-size:1.5rem}
+.fraction-workshop summary{cursor:pointer;font-weight:650;min-height:44px;padding:8px 0}
+.fraction-workshop [data-history]{padding-left:24px}.fraction-workshop [data-history]>li{border-bottom:1px solid var(--line);padding:12px 0}
+.fraction-workshop footer{margin-top:20px;overflow-wrap:anywhere}
+@media(max-width:700px){.fraction-workshop{padding:12px}.fraction-workshop .card{padding:16px}.fraction-workshop .workspace{grid-template-columns:minmax(0,1fr);padding:12px;gap:12px}.fraction-workshop .toolbar{align-items:flex-start}.fraction-workshop .toolbar label{display:grid;gap:8px}.fraction-workshop .bar-svg{max-height:none}}
+/* Compact learning surface: the current question, numbers, pictures and actions
+   stay together. The whole document retains natural height and page scrolling. */
+.fraction-workshop{padding:10px;font-size:16px}
+.fraction-workshop .toolbar{margin-bottom:8px;gap:8px}
+.fraction-workshop .card{padding:12px;margin-top:8px;border-radius:14px}
+.fraction-workshop .eyebrow{display:none}
+.fraction-workshop .step{margin:0 0 4px}
+.fraction-workshop h2{font-size:1.12rem;margin:4px 0}
+.fraction-workshop p{line-height:1.35;margin:8px 0}
+.fraction-workshop [data-instruction]{margin:6px 0 8px}
+.fraction-workshop button,.fraction-workshop select{min-height:44px;padding:9px 12px}
+.fraction-workshop .notice{padding:9px 12px;margin:8px 0}
+.fraction-workshop .entries{margin:10px 0}
+.fraction-workshop .actions{gap:8px}
+.fraction-workshop .progress-card{font-size:.88rem;padding:10px 12px}
+.fraction-workshop .milestones{margin:7px 0}
+.fraction-workshop footer{margin-top:8px;font-size:.8rem}
+.fraction-workshop .prior-steps{margin:6px 0;font-size:.9rem}
+.fraction-workshop .prior-steps>summary{padding:6px 0;min-height:32px;color:#516a70}
+.fraction-workshop [data-rating]{display:none}
+.fraction-workshop .fraction-model-image{display:flex!important;width:164px;max-width:100%!important;min-width:0!important;gap:4px!important;align-items:flex-start!important;margin:0!important;padding:0!important;opacity:1!important;filter:none!important;background:none!important;border:0!important}
+.fraction-workshop .fraction-model-image[data-wholes="2"]{width:332px}
+.fraction-workshop .fraction-grid-whole{display:grid!important;flex:1 1 0!important;min-width:0!important;aspect-ratio:164/116!important;grid-auto-flow:column!important;grid-template-columns:repeat(var(--fraction-columns),minmax(0,1fr))!important;grid-template-rows:repeat(var(--fraction-rows),minmax(0,1fr))!important;box-sizing:border-box!important;border:2px solid #193c43!important;background:#fff!important;gap:0!important;padding:0!important;margin:0!important;position:relative!important;overflow:hidden!important}
+.fraction-workshop .fraction-grid-cell{display:block!important;min-width:0!important;min-height:0!important;width:auto!important;height:auto!important;box-sizing:border-box!important;padding:0!important;margin:0!important;border-top:0!important;border-right:0!important;border-radius:0!important;opacity:1!important}
+.fraction-workshop .fraction-grid-solid{display:block!important}
+.fraction-workshop .fraction-grid-fill{display:block!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;margin:0!important;padding:0!important;border:0!important}
+.fraction-workshop .build-release{font-size:.75rem;color:#516a70;margin-left:10px}
+@media(max-width:480px){.fraction-workshop{padding:6px}.fraction-workshop .card{padding:10px}.fraction-workshop .toolbar{align-items:center}.fraction-workshop .toolbar label{font-size:.85rem;gap:3px}.fraction-workshop .toolbar select{max-width:210px}.fraction-workshop .toolbar>[data-intro]{padding:8px;font-size:.85rem}}
+
+.operate-workshop .operate-scene{background:linear-gradient(135deg,#fbfaf4,#edf7f2);border:1px solid var(--line);border-radius:16px;padding:18px 14px;margin:20px 0}
+.operate-workshop .operate-chain{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr);gap:12px;align-items:start}
+.operate-workshop .operate-chain.initial{grid-template-columns:minmax(0,1fr)}
+.operate-workshop .source-pictures-inline{display:contents}
+.operate-workshop .source-pictures-mobile{display:none}
+.operate-workshop .operate-pair{display:grid;grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);gap:8px;min-width:0;align-items:start}
+.operate-workshop .operate-number{min-height:128px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:750;min-width:0}
+.operate-workshop .operate-number .frac{min-width:60px;height:110px;justify-content:center;max-width:100%;font-size:clamp(1rem,2.2vw,1.8rem)}
+.operate-workshop .operate-number .frac>span{height:55px;display:flex;align-items:center;justify-content:center;overflow-wrap:anywhere;word-break:break-all;line-height:1.05}
+.operate-workshop .math-sign,.operate-workshop .chain-equals{font-size:1.8rem;font-weight:750;min-height:128px;display:flex;align-items:center;justify-content:center}
+.operate-workshop .operate-figure{display:flex;flex-direction:column;align-items:center;min-width:0;margin:0;grid-row:2}
+.operate-workshop .operate-figure.left{grid-column:1}.operate-workshop .operate-figure.right{grid-column:3}
+.operate-workshop .operate-figure svg{display:block;width:76px;height:212px;max-width:100%}
+.operate-workshop .operate-figure figcaption{font-size:.8rem;line-height:1.4;margin-top:6px;overflow-wrap:anywhere;text-align:center}
+.operate-workshop .numerator-entry{display:grid;grid-template-rows:49px 2px 49px;gap:4px;justify-items:center;align-items:center;width:100%;min-width:0}
+.operate-workshop .numerator-entry input{width:80px;max-width:100%;min-height:49px;padding:6px;font-size:1.35rem}
+.operate-workshop .numerator-entry .denominator{font-size:1.5rem;line-height:1.05;word-break:break-all;max-width:100%;text-align:center}
+.operate-workshop .operate-input-rule{height:2px;background:#193c43;display:block;width:80px;max-width:100%}
+.operate-workshop input[aria-invalid=true]{border-color:#b43d2d;background:#ffe7df;color:#8c241a}
+.operate-workshop .result-line{display:grid;grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);gap:12px;margin-top:20px;padding-top:12px;border-top:1px solid var(--line)}
+.operate-workshop .result-source{min-width:0;display:flex;flex-direction:column;align-items:center}
+.operate-workshop .result-source .operate-number{gap:6px;flex-wrap:wrap}
+.operate-workshop .result-source .operate-number,.operate-workshop .result-target .operate-number{width:100%}
+.operate-workshop .result-line>.math-sign{align-self:start}
+.operate-workshop .result-source p{overflow-wrap:anywhere;text-align:center;line-height:1.5}
+.operate-workshop .result-target{min-width:0;display:flex;flex-direction:column;align-items:center}
+.operate-workshop .result-target .operate-figure{width:100%}
+.operate-workshop input[data-key=common]{width:150px}
+.operate-workshop dialog{color:inherit;background:white;border:1px solid var(--line);border-radius:18px;padding:22px;max-width:min(620px,calc(100% - 24px));max-height:90%;overflow:auto}
+.operate-workshop dialog::backdrop{background:#122f3870}
+.operate-workshop [data-history]{overflow-wrap:anywhere}
+.operate-workshop .long-value{overflow-x:auto;white-space:nowrap!important;word-break:normal!important;font-size:.8rem!important;max-width:100%;justify-content:initial!important}
+@media(max-width:800px){.operate-workshop .operate-chain{grid-template-columns:minmax(0,1fr);gap:8px}.operate-workshop .chain-equals{min-height:36px}.operate-workshop .operate-scene{padding:12px 8px}.operate-workshop .operate-number .frac{font-size:1.65rem}}
+@media(max-width:480px){.operate-workshop .operate-pair{grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);gap:6px}.operate-workshop .numerator-entry input,.operate-workshop .operate-input-rule{width:68px}.operate-workshop .numerator-entry .denominator{font-size:1.15rem}}
+.operate-workshop .operate-scene{padding:8px;margin:8px 0}
+.operate-workshop .operate-chain{gap:6px}
+.operate-workshop .operate-pair{gap:4px}
+.operate-workshop .operate-number,.operate-workshop .math-sign,.operate-workshop .chain-equals{min-height:110px}
+.operate-workshop .result-line{margin-top:8px;padding-top:6px;gap:6px}
+.operate-workshop .result-line:first-child{margin-top:0;border:0;padding-top:0}
+.operate-workshop .operate-figure figcaption{margin-top:4px;line-height:1.25}
+@media(max-width:800px){.operate-workshop .chain-equals{min-height:26px}.operate-workshop .operate-chain{gap:2px}.operate-workshop .operate-figure .fraction-model-image{width:136px}.operate-workshop .operate-pair .operate-number,.operate-workshop .operate-pair .math-sign{min-height:106px}.operate-workshop .operate-pair .operate-number .frac{height:106px}.operate-workshop .operate-pair .operate-number .frac>span{height:53px}}
+@media(max-width:480px){.operate-workshop .operate-chain.has-preview .original>.source-pictures-inline{display:none}.operate-workshop .operate-chain.has-preview .original>.source-pictures-mobile{display:block;grid-column:1/-1;grid-row:2;margin:0}.operate-workshop .source-pictures-mobile>summary{font-size:.85rem;min-height:32px;padding:6px 0}.operate-workshop .operate-chain.has-preview .original>.operate-number,.operate-workshop .operate-chain.has-preview .original>.math-sign{min-height:76px}.operate-workshop .operate-chain.has-preview .original>.operate-number .frac{height:76px}.operate-workshop .operate-chain.has-preview .original>.operate-number .frac>span{height:38px}}
+@media(max-width:480px){.operate-workshop .operate-scene{margin:6px 0;padding:6px}}

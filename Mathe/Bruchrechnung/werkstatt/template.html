@@ -1,0 +1,28 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>__TITLE__</title></head><body>
+<!-- EDULO_WIDGET_KEY:__ID__ -->
+<main class="edulo-widget fraction-workshop" data-edulo-id="__ID__">
+<style>/* APP_CSS */</style>
+<fieldset data-controls disabled>
+<div class="toolbar"><label>Schwierigkeitsstufe <select data-level><option value="1">1 · Einfach beginnen</option><option value="2">2 · Weiterdenken</option></select></label><button type="button" data-intro aria-expanded="false">So funktioniert’s</button></div>
+<div data-introduction class="notice" hidden></div>
+<section class="card" aria-label="Aktuelle Aufgabe">
+<p class="eyebrow" data-category></p><div class="task" data-task></div>
+<div class="workspace"><div class="visual-panel"><div data-visual></div><p class="muted" data-visual-caption></p></div>
+<div class="calculation"><p class="step" data-step></p><h2 data-heading tabindex="-1"></h2><p data-instruction></p>
+<div data-fields class="entries"></div><div class="actions"><button type="button" data-check class="primary">✓ Prüfen</button><button type="button" data-hint>Tipp</button></div>
+<p data-hint-text class="notice hint" hidden></p><p data-feedback class="notice" role="status" hidden></p>
+<button type="button" data-next class="primary" hidden>Nächste Aufgabe →</button></div></div>
+<ol class="confirmed" data-confirmed aria-label="Bestätigte Rechenschritte"></ol>
+</section>
+<section class="card progress-card" aria-label="Fortschritt"><b data-progress></b><div class="milestones" data-milestones aria-hidden="true"></div><small>Je vollständig gelöster Aufgabe ein Punkt, höchstens 20. Grün: ohne Fehler und Hilfe. Gelb: nach Fehler oder Tipp. Danach kannst du weiterüben.</small></section>
+<details class="card" data-history-panel><summary>Historie und Lernstand</summary><div class="stats" data-stats></div><ol data-history></ol></details>
+</fieldset>
+<footer><span data-storage role="status">Speicher wird verbunden …</span><button type="button" data-retry hidden>Erneut verbinden</button></footer>
+<script>(()=>{'use strict';
+const scriptRoot=document.currentScript?.closest('[data-edulo-id="__ID__"]');
+const root=scriptRoot||[...document.querySelectorAll('[data-edulo-id="__ID__"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+/* EDULO_BRIDGE */
+/* APP_JS */
+})();</script></main></body></html>

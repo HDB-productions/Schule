@@ -1,0 +1,44 @@
+.operate-workshop .operate-scene{background:linear-gradient(135deg,#fbfaf4,#edf7f2);border:1px solid var(--line);border-radius:16px;padding:18px 14px;margin:20px 0}
+.operate-workshop .operate-chain{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr);gap:12px;align-items:start}
+.operate-workshop .operate-chain.initial{grid-template-columns:minmax(0,1fr)}
+.operate-workshop .source-pictures-inline{display:contents}
+.operate-workshop .source-pictures-mobile{display:none}
+.operate-workshop .operate-pair{display:grid;grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);gap:8px;min-width:0;align-items:start}
+.operate-workshop .operate-number{min-height:128px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:750;min-width:0}
+.operate-workshop .operate-number .frac{min-width:60px;height:110px;justify-content:center;max-width:100%;font-size:clamp(1rem,2.2vw,1.8rem)}
+.operate-workshop .operate-number .frac>span{height:55px;display:flex;align-items:center;justify-content:center;overflow-wrap:anywhere;word-break:break-all;line-height:1.05}
+.operate-workshop .math-sign,.operate-workshop .chain-equals{font-size:1.8rem;font-weight:750;min-height:128px;display:flex;align-items:center;justify-content:center}
+.operate-workshop .operate-figure{display:flex;flex-direction:column;align-items:center;min-width:0;margin:0;grid-row:2}
+.operate-workshop .operate-figure.left{grid-column:1}.operate-workshop .operate-figure.right{grid-column:3}
+.operate-workshop .operate-figure svg{display:block;width:76px;height:212px;max-width:100%}
+.operate-workshop .operate-figure figcaption{font-size:.8rem;line-height:1.4;margin-top:6px;overflow-wrap:anywhere;text-align:center}
+.operate-workshop .numerator-entry{display:grid;grid-template-rows:49px 2px 49px;gap:4px;justify-items:center;align-items:center;width:100%;min-width:0}
+.operate-workshop .numerator-entry input{width:80px;max-width:100%;min-height:49px;padding:6px;font-size:1.35rem}
+.operate-workshop .numerator-entry .denominator{font-size:1.5rem;line-height:1.05;word-break:break-all;max-width:100%;text-align:center}
+.operate-workshop .operate-input-rule{height:2px;background:#193c43;display:block;width:80px;max-width:100%}
+.operate-workshop input[aria-invalid=true]{border-color:#b43d2d;background:#ffe7df;color:#8c241a}
+.operate-workshop .result-line{display:grid;grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);gap:12px;margin-top:20px;padding-top:12px;border-top:1px solid var(--line)}
+.operate-workshop .result-source{min-width:0;display:flex;flex-direction:column;align-items:center}
+.operate-workshop .result-source .operate-number{gap:6px;flex-wrap:wrap}
+.operate-workshop .result-source .operate-number,.operate-workshop .result-target .operate-number{width:100%}
+.operate-workshop .result-line>.math-sign{align-self:start}
+.operate-workshop .result-source p{overflow-wrap:anywhere;text-align:center;line-height:1.5}
+.operate-workshop .result-target{min-width:0;display:flex;flex-direction:column;align-items:center}
+.operate-workshop .result-target .operate-figure{width:100%}
+.operate-workshop input[data-key=common]{width:150px}
+.operate-workshop dialog{color:inherit;background:white;border:1px solid var(--line);border-radius:18px;padding:22px;max-width:min(620px,calc(100% - 24px));max-height:90%;overflow:auto}
+.operate-workshop dialog::backdrop{background:#122f3870}
+.operate-workshop [data-history]{overflow-wrap:anywhere}
+.operate-workshop .long-value{overflow-x:auto;white-space:nowrap!important;word-break:normal!important;font-size:.8rem!important;max-width:100%;justify-content:initial!important}
+@media(max-width:800px){.operate-workshop .operate-chain{grid-template-columns:minmax(0,1fr);gap:8px}.operate-workshop .chain-equals{min-height:36px}.operate-workshop .operate-scene{padding:12px 8px}.operate-workshop .operate-number .frac{font-size:1.65rem}}
+@media(max-width:480px){.operate-workshop .operate-pair{grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);gap:6px}.operate-workshop .numerator-entry input,.operate-workshop .operate-input-rule{width:68px}.operate-workshop .numerator-entry .denominator{font-size:1.15rem}}
+.operate-workshop .operate-scene{padding:8px;margin:8px 0}
+.operate-workshop .operate-chain{gap:6px}
+.operate-workshop .operate-pair{gap:4px}
+.operate-workshop .operate-number,.operate-workshop .math-sign,.operate-workshop .chain-equals{min-height:110px}
+.operate-workshop .result-line{margin-top:8px;padding-top:6px;gap:6px}
+.operate-workshop .result-line:first-child{margin-top:0;border:0;padding-top:0}
+.operate-workshop .operate-figure figcaption{margin-top:4px;line-height:1.25}
+@media(max-width:800px){.operate-workshop .chain-equals{min-height:26px}.operate-workshop .operate-chain{gap:2px}.operate-workshop .operate-figure .fraction-model-image{width:136px}.operate-workshop .operate-pair .operate-number,.operate-workshop .operate-pair .math-sign{min-height:106px}.operate-workshop .operate-pair .operate-number .frac{height:106px}.operate-workshop .operate-pair .operate-number .frac>span{height:53px}}
+@media(max-width:480px){.operate-workshop .operate-chain.has-preview .original>.source-pictures-inline{display:none}.operate-workshop .operate-chain.has-preview .original>.source-pictures-mobile{display:block;grid-column:1/-1;grid-row:2;margin:0}.operate-workshop .source-pictures-mobile>summary{font-size:.85rem;min-height:32px;padding:6px 0}.operate-workshop .operate-chain.has-preview .original>.operate-number,.operate-workshop .operate-chain.has-preview .original>.math-sign{min-height:76px}.operate-workshop .operate-chain.has-preview .original>.operate-number .frac{height:76px}.operate-workshop .operate-chain.has-preview .original>.operate-number .frac>span{height:38px}}
+@media(max-width:480px){.operate-workshop .operate-scene{margin:6px 0;padding:6px}}

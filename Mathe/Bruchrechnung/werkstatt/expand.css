@@ -1,0 +1,32 @@
+.expand-workshop .expand-equations{margin:20px 0}
+.expand-workshop .expand-round{padding:18px 12px;border:1px solid var(--line);background:linear-gradient(135deg,#fbfaf4,#edf7f2);border-radius:16px}
+.expand-workshop .expand-target{margin:0 0 14px;color:var(--accent);font-size:.9rem;font-weight:650}
+.expand-workshop .expand-equation{display:grid;grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr);gap:12px;align-items:start}
+.expand-workshop .expand-number{display:flex;justify-content:center;align-items:center;min-height:128px;font-size:2rem;font-weight:750;min-width:0}
+.expand-workshop .expand-number .frac{min-width:70px;height:110px;justify-content:center}
+.expand-workshop .expand-number .frac>span{height:55px;display:flex;align-items:center;justify-content:center}
+.expand-workshop .expand-sign{display:grid;grid-template-rows:48px 32px 48px;justify-items:center;align-items:center;min-width:0}
+.expand-workshop .equals{font-size:2rem;font-weight:750;line-height:32px;grid-row:2}
+.expand-workshop .factor-input{display:block;width:100%;text-align:center}
+.expand-workshop .factor-input input{width:76px;font-size:1.2rem;min-height:44px;padding:5px}
+.expand-workshop .expand-factor{font-size:1.1rem;min-height:44px;display:flex;align-items:center;justify-content:center}
+.expand-workshop .expand-fraction-input{display:grid;grid-template-rows:49px 2px 49px;gap:4px;width:90px}
+.expand-workshop .expand-fraction-input input{width:90px;font-size:1.55rem;padding:7px;min-height:49px}
+.expand-workshop .expand-input-rule{height:2px;background:#193c43;display:block}
+.expand-workshop .fixed-denominator{display:flex;align-items:center;justify-content:center;min-height:49px;font-size:1.55rem}
+.expand-workshop input[aria-invalid=true]{border-color:#b43d2d;background:#ffe7df;color:#8c241a}
+.expand-workshop .expand-diagram{display:flex;align-items:center;flex-direction:column;grid-row:2;min-width:0;margin:0}
+.expand-workshop .expand-diagram.original{grid-column:1}
+.expand-workshop .expand-diagram.result{grid-column:3}
+.expand-workshop .expand-diagram svg{display:block;width:92px;height:254px;max-width:100%}
+.expand-workshop .expand-diagram figcaption{font-size:.8rem;text-align:center;line-height:1.4;max-width:230px;margin-top:8px}
+.expand-workshop .expand-actions{margin-top:20px}
+.expand-workshop .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.expand-workshop [data-history] li{overflow-wrap:anywhere}
+@media(max-width:480px){.expand-workshop .expand-equation{grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);gap:6px}.expand-workshop .expand-round{padding:14px 8px}.expand-workshop .factor-input input{width:58px}.expand-workshop .expand-fraction-input,.expand-workshop .expand-fraction-input input{width:68px}.expand-workshop .expand-number{font-size:1.7rem}.expand-workshop .expand-diagram svg{height:222px}}
+.expand-workshop .expand-equations{margin:8px 0}
+.expand-workshop .expand-round{padding:8px}
+.expand-workshop .expand-target{margin:0 0 3px}
+.expand-workshop .expand-equation{gap:6px}
+.expand-workshop .expand-actions{margin-top:8px}
+.expand-workshop .expand-diagram figcaption{margin-top:4px;line-height:1.25}
