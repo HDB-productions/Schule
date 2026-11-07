@@ -6,13 +6,14 @@
   "sampleRate": 48000,
   "notes": [
     "Schnittgrenzen liegen in gemessenen Sprechpausen des Originaltons (−40 dBFS, mindestens 80 ms). Keine eigene Hörprüfung durch den Agenten.",
-    "Alle vier Ersatzaufnahmen werden ausdrücklich über Dateipfade angegeben. Keine Sprachsynthese und keine automatische Suche nach Aufnahmen.",
+    "Alle fünf Ersatzaufnahmen werden ausdrücklich über Dateipfade angegeben. Keine Sprachsynthese und keine automatische Suche nach Aufnahmen.",
     "Die Ersatzaufnahmen bleiben in ihrer eigenen Sprechgeschwindigkeit. Ihre tatsächlichen Samplezahlen bestimmen die neue Zeitachse.",
     "Dateipfade im Plan sind relativ zu diesem Plan; CLI-Dateipfade sind relativ zum aktuellen Arbeitsordner.",
     "Die Montage bestätigt weder passende Wortgrenzen noch endgültige Bild-Ton-Synchronität. Originaldateien werden niemals überschrieben."
   ],
   "replacements": [
     { "id": "aufbau", "sourceStart": 17.325193, "sourceEnd": 49.339762, "file": null },
+    { "id": "zaehlelektronik", "sourceStart": 49.339762, "sourceEnd": 57.370352, "file": null },
     { "id": "ionisation", "sourceStart": 72.938741, "sourceEnd": 87.002982, "file": null },
     { "id": "zaehlimpuls", "sourceStart": 113.045873, "sourceEnd": 117.801202, "file": null },
     { "id": "totzeit", "sourceStart": 170.484558, "sourceEnd": 188.72636, "file": null }

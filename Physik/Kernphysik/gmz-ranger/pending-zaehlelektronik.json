@@ -1,0 +1,41 @@
+{
+  "status": "recording-integrated-film-locally-validated",
+  "id": "zaehlelektronik",
+  "sourceStart": 49.339762,
+  "sourceEnd": 57.370352,
+  "boundaryEvidence": "Originalaudio: Stille von 48.575533 bis 50.103991 und von 56.462948 bis 58.277755; silencedetect -40 dB, mindestens 80 ms. Keine eigene Hörprüfung.",
+  "replacementFile": "outputs/gmz-ranger-source/replacements/cleaned/zaehlelektronik-cleaned.wav",
+  "approvedText": "Im Gerät befindet sich außerdem die Zählelektronik. Sie registriert und zählt die elektrischen Impulse aus dem Zählrohr. Das Ergebnis wird auf dem Display angezeigt. Zusätzlich kann jeder registrierte Impuls als Klick hörbar gemacht werden.",
+  "shortText": "Im Gerät befindet sich außerdem die Zählelektronik. Sie registriert und zählt die elektrischen Impulse aus dem Zählrohr. Das Ergebnis wird auf dem Display angezeigt.",
+  "optionalClickSentence": "Zusätzlich kann jeder registrierte Impuls als Klick hörbar gemacht werden.",
+  "actualAsrText": "Im Gerät befindet sich außerdem die Zählelektronik. Sie registriert und zählt die elektrischen Impulse aus dem Zählrohr. Das Ergebnis wird dann auf dem Display angezeigt. Zusätzlich kann jeder registrierte Impuls auch als Klick hörbar gemacht werden.",
+  "asrDifferences": [
+    "Zusatz dann vor auf dem Display",
+    "Zusatz auch vor als Klick"
+  ],
+  "asrStatus": "Lokale ASR-Hypothese; keine eigene Hörbestätigung. Alle erkannten Wörter bleiben erhalten.",
+  "auditoryReviewByAgent": false,
+  "finalSync": false,
+  "rawDuration": 18.5813125,
+  "retainedRawRange": {
+    "start": 0.8,
+    "end": 17.205
+  },
+  "cleanedDuration": 16.405,
+  "constantGainDb": 3.18,
+  "measuredIntegratedLufs": -24.5,
+  "montageFile": "outputs/gmz-ranger-source/gmz-montage-elektronik.m4a",
+  "montageDuration": 240.55314583333333,
+  "montageRange": {
+    "start": 53.2461875,
+    "end": 69.6511875
+  },
+  "animation": "Geöffnete Platine bleibt ortsfest und unverändert ausgerichtet; Kamera fährt zur Zählelektronik und hält die offene Ansicht bis zum Ende der Passage. Erst danach zurückfahren und zusammenbauen. Verbesserte LCD-Segmente mit Batteriesymbol und mattem Rahmen.",
+  "integration": "Als fünften Ersatzabschnitt in die Montage integriert. CLI-Option --electronics ergänzt die unveränderten Bedeutungen von --replacement1 bis --replacement4. Wortmarken und spätere Zeiten werden aus der neuen Montagezeitkarte übernommen. Keine Sprachsynthese und keine Zeitdehnung.",
+  "filmStatus": "Gesamtfilm gerendert; Einzelbilder, vollständiges Decodieren, Browserwiedergabe, Seek und AAC-Paketvergleich mit der neuen Montage geprüft. Eigene Hörprüfung weiterhin offen.",
+  "filmValidation": {
+    "fullDecode": true,
+    "browserPlaybackAndSeek": true,
+    "unchangedMontageAacPackets": true
+  }
+}

@@ -17,9 +17,12 @@
       shot(34.06,112,null,2.85,1,0,'anode'),shot(36.5,112,null,2.85,1,0,'anode'),
       // Keep the open sensor, source and both connected cables in one view.
       shot(39.38,220,[24,12,-3],2.85,1),shot(49.48,220,[24,12,-3],2.85,1),
-      shot(52,155,null,.45,.40,0,'counter'),shot(56.2,155,null,.45,.40,0,'counter'),
+      // Keep the board's orientation fixed throughout its explanation. Move
+      // only the camera; returning the reveal slider here made the board fold
+      // back while the camera simultaneously crossed to its opposite side.
+      shot(52,155,null,2.85,1,0,'counter'),shot(56.2,155,null,2.85,1,0,'counter'),
       // Pull back before reassembly. Only then reveal the interior and zoom.
-      shot(58.2,240,[0,15,0],2.85,.40),shot(60.2,145,[0,30,-6.9],2.85,0),
+      shot(58.2,240,[0,15,0],2.85,1),shot(60.2,145,[0,30,-6.9],2.85,0),
       // Establish the real window first. The recorded-time follow pass then
       // crosses the window and magnifies the actual collision without a cut.
       shot(62.2,90,[3,30,-6.9],2.65,0,.18),shot(65.4,74,[3,30,-6.9],2.65,0,.18),

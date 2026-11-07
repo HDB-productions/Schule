@@ -35,7 +35,7 @@ function buildMap(originalDuration, replacements, { sampleRate = SAMPLE_RATE } =
 
 function parseArgs(argv) {
   const args = {}, flags = new Set(['help', 'overwrite']);
-  const options = new Set(['source', 'replacement1', 'replacement2', 'replacement3', 'replacement4', 'output', 'map', 'plan', 'ffmpeg']);
+  const options = new Set(['source', 'replacement1', 'replacement2', 'replacement3', 'replacement4', 'electronics', 'output', 'map', 'plan', 'ffmpeg']);
   for (let i = 0; i < argv.length; i++) {
     const name = argv[i].startsWith('--') ? argv[i].slice(2) : '';
     if ((!flags.has(name) && !options.has(name)) || Object.hasOwn(args, name)) throw Error('Unbekanntes oder doppeltes Argument: ' + argv[i]);
@@ -104,17 +104,24 @@ function buildFilter(map, replacements) {
   return filters.join(';');
 }
 
+function recordingOption(id) {
+  return { aufbau: 'replacement1', ionisation: 'replacement2', zaehlimpuls: 'replacement3', totzeit: 'replacement4', zaehlelektronik: 'electronics' }[id];
+}
+
 async function assemble(args) {
   if (!args.source || !args.output) throw Error('--source und --output sind erforderlich.');
   const planFile = path.resolve(args.plan || path.join(__dirname, 'audio-edit-plan.json'));
   const plan = JSON.parse(fs.readFileSync(planFile, 'utf8'));
-  if (!Array.isArray(plan.replacements) || plan.replacements.length !== 4 || plan.sampleRate !== SAMPLE_RATE) throw Error('Plan muss vier Ersatzbereiche und sampleRate 48000 enthalten.');
+  if (!Array.isArray(plan.replacements) || !plan.replacements.length || plan.sampleRate !== SAMPLE_RATE) throw Error('Plan muss Ersatzbereiche und sampleRate 48000 enthalten.');
   const source = path.resolve(args.source), output = path.resolve(args.output), mapFile = path.resolve(args.map || output + '.map.json');
   if (!['.m4a', '.aac'].includes(path.extname(output).toLowerCase())) throw Error('Ausgabe muss eine neue .m4a- oder .aac-Datei sein.');
   const replacements = plan.replacements.map((item, index) => {
-    const value = args['replacement' + (index + 1)];
+    // CLI slots retain their original meaning when a new chronological cut is inserted.
+    const option = recordingOption(item.id);
+    if (!option) throw Error('Unbekannte Ersatzaufnahme: ' + item.id);
+    const value = args[option];
     const file = value ? path.resolve(value) : typeof item.file === 'string' && item.file.trim() ? path.resolve(path.dirname(planFile), item.file) : null;
-    if (!file) throw Error('Ersatzaufnahme ' + (index + 1) + ' fehlt; alle vier ausdrücklich angeben.');
+    if (!file) throw Error('Ersatzaufnahme ' + (index + 1) + ' fehlt (' + item.id + '); --' + option + ' oder Plan-Dateipfad angeben.');
     return { ...item, file };
   });
   const inputs = [source, ...replacements.map(item => item.file), planFile];
@@ -152,8 +159,8 @@ async function assemble(args) {
 }
 
 const HELP = `node audio-montage.cjs --source ORIGINAL.m4a --replacement1 01-aufbau.wav --replacement2 02-ionisation.wav --replacement3 03-zaehlimpuls.wav --replacement4 04-totzeit.wav --output ranger-audio-draft.m4a
-  [--plan audio-edit-plan.json] [--map ranger-audio-draft.map.json] [--ffmpeg PATH] [--overwrite]
-Alle vier Dateipfade sind erforderlich (CLI oder Plan). Keine Sprachsynthese/Zeitdehnung.
+  [--electronics 05-zaehlelektronik.wav] [--plan audio-edit-plan.json] [--map ranger-audio-draft.map.json] [--ffmpeg PATH] [--overwrite]
+Alle im Plan enthaltenen Aufnahmen sind erforderlich (CLI oder Plan). replacement1–4 behalten ihre Bedeutung; electronics ergänzt die Zählelektronik. Keine Sprachsynthese/Zeitdehnung.
 Die Ausgabe bleibt eine Arbeitsfassung. Vorläufige Schnittgrenzen und konkrete Sprachereignisse hörprüfen.
 Sidecar: segments enthalten neue start/end und ursprüngliche sourceStart/sourceEnd in Sekunden.
 Bei replacement beschreibt der source-Bereich die entfernte Originalstelle; start/end die vollständige neue Aufnahme.
@@ -167,4 +174,4 @@ if (require.main === module) {
     return assemble(args).then(report => console.log(JSON.stringify(report, null, 2)));
   }).catch(error => { console.error(error.message); process.exitCode = 1; });
 }
-module.exports = { SAMPLE_RATE, buildMap, parseArgs, assertSafeOutputs, inspectAudio, buildFilter, assemble };
+module.exports = { SAMPLE_RATE, buildMap, parseArgs, assertSafeOutputs, inspectAudio, buildFilter, assemble, recordingOption };

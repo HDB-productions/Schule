@@ -125,14 +125,38 @@
     // Front controls follow the photographed six-sector yellow membrane keypad.
     const display = group('display', V(0, 0, 0), V(-38, 12, 88)); front.add(display);
     movable.pop(); // display travels with the front half, with a separate selectable ID.
-    rounded(display, 53, 39, 1.6, 3.5, navy(), 0, 42, 16, .3);
-    rounded(display, 47.5, 33.5, .45, 1.6, mat(0xb6c7a6, { roughness: .45 }), 0, 42, 17.1);
-    label(display, 46, 31.5, 0, 42, 17.45, (c,w,h) => {
-      c.fillStyle = '#b9c8aa'; c.fillRect(0,0,w,h); c.fillStyle = '#30453c';
-      c.font = 'bold 47px Arial'; c.fillText('▰▰▰', 34, 70); c.font = 'bold 300px monospace'; c.fillText('0.017', 25, h*.65);
-      c.font = 'bold 65px Arial'; c.textAlign='right'; c.fillText('mR/h', w-35, h-50); c.textAlign='left';
-      c.strokeStyle='#4e6353'; c.lineWidth=3; c.beginPath(); c.moveTo(w*.5,h-45); c.lineTo(w*.5,h-13); c.moveTo(w*.5-16,h-29); c.lineTo(w*.5+16,h-29); c.stroke();
+    rounded(display, 53, 39, 1.6, 3.5, mat(0x122b3c,{roughness:.77}), 0, 42, 16, .3);
+    rounded(display, 47.5, 33.5, .45, 1.6, mat(0x99a58d, { roughness: .92 }), 0, 42, 17.1);
+    const lcdFace=label(display, 46, 31.5, 0, 42, 17.45, (c,w,h) => {
+      // Fixed example reading, drawn from geometry rather than a substitute
+      // font: flat-ended LCD segments remain compact and crisp at any scale.
+      const lcd='#a0ad93',ink='#263a30';
+      c.fillStyle='#435447';c.fillRect(0,0,w,h);
+      c.fillStyle='#7e8f77';c.fillRect(11,11,w-22,h-22);
+      c.fillStyle=lcd;c.fillRect(22,22,w-44,h-44);
+      c.fillStyle='rgba(30,48,37,.16)';c.fillRect(22,22,w-44,10);c.fillRect(22,22,8,h-44);
+      // A small battery outline, terminal and four separate charge bars.
+      c.fillStyle=ink;c.fillRect(56,71,124,51);c.fillRect(180,85,10,23);
+      c.fillStyle=lcd;c.fillRect(63,78,110,37);
+      c.fillStyle=ink;for(let i=0;i<4;i++)c.fillRect(69+i*25,83,17,27);
+      const polygon=points=>{c.beginPath();points.forEach((p,i)=>{if(i)c.lineTo(p[0],p[1]);else c.moveTo(p[0],p[1]);});c.closePath();c.fill();};
+      function digit(character,x,y){
+        const dw=183,dh=286,t=31,bevel=11,mid=dh/2;
+        const horizontal=sy=>polygon([[x+t,sy],[x+dw-t,sy],[x+dw-t+bevel,sy+t/2],[x+dw-t,sy+t],[x+t,sy+t],[x+t-bevel,sy+t/2]]);
+        const vertical=(sx,sy,length)=>polygon([[sx+t/2,sy],[sx+t,sy+bevel],[sx+t,sy+length-bevel],[sx+t/2,sy+length],[sx,sy+length-bevel],[sx,sy+bevel]]);
+        const segments={'0':'abcdef','1':'bc','7':'abc'}[character];
+        for(const segment of segments){
+          if(segment==='a')horizontal(y);else if(segment==='g')horizontal(y+mid-t/2);else if(segment==='d')horizontal(y+dh-t);
+          else if(segment==='b')vertical(x+dw-t,y+t/2,mid-t/2-3);else if(segment==='c')vertical(x+dw-t,y+mid+3,mid-t/2-3);
+          else if(segment==='f')vertical(x,y+t/2,mid-t/2-3);else if(segment==='e')vertical(x,y+mid+3,mid-t/2-3);
+        }
+      }
+      c.fillStyle=ink;digit('0',52,192);c.fillRect(260,445,31,31);digit('0',308,192);digit('1',526,192);digit('7',744,192);
+      c.font='bold 76px Arial';c.textAlign='right';c.textBaseline='alphabetic';c.fillText('mR/h',w-64,h-103);c.textAlign='left';
+      // Broad, very weak glass sheen; no glossy phone-like hotspot.
+      c.fillStyle='rgba(240,247,235,.055)';polygon([[24,24],[w-24,24],[w-24,62],[24,102]]);
     });
+    lcdFace.material.roughness=.9;lcdFace.material.metalness=0;
     cylinder(front, 1.4, .8, mat(0x830d18, { emissive: 0x5f0c09, emissiveIntensity: .6 }), 0, 66, 16.5, 20);
     label(front, 52, 15, 0, 8, 16.05, (c,w,h) => {
       c.fillStyle='#f3e947'; c.font='bold 70px Arial'; c.fillText('RADIATION ALERT', 190, h*.30);
@@ -264,7 +288,7 @@
       updateElectricalConnections();
       return electricalConnections.map(c=>({id:c.id,polarity:c.id,source:{part:c.source.part,local:c.source.local.slice(),world:endpointWorld(c.source).toArray()},target:{part:c.target.part,local:c.target.local.slice(),world:endpointWorld(c.target).toArray()},points:c.points.map(p=>p.slice()),cableStart:c.points[0].slice(),cableEnd:c.points[c.points.length-1].slice()}));
     }
-    const partAnchorLocal={cathode:[0,23.3,-12],gas:[-6,8,-.3],anode:[13.8,0,0],voltage:[0,3,8],counter:[-3,6,3],battery:[-12,0,8.5],window:[0,0,-.2],display:[0,42,17.5],shell:[-24,0,15],rear:[-26,0,-16]};
+    const partAnchorLocal={cathode:[0,23.3,-12],gas:[-6,8,-.3],anode:[13.8,0,0],voltage:[0,3,8],counter:[-3,0,3],battery:[-12,0,8.5],window:[0,0,-.2],display:[0,42,17.5],shell:[-24,0,15],rear:[-26,0,-16]};
     function getPartAnchor(id){if(!parts[id])return null;model.updateMatrixWorld(true);return parts[id].localToWorld(V(...(partAnchorLocal[id]||[0,0,0]))).toArray();}
     function setPolarityHighlight(value){
       value=value||{};const clamp=n=>Math.max(0,Math.min(1,Number(n)||0));

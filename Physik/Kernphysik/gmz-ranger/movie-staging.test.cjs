@@ -1,5 +1,26 @@
 const test=require('node:test'),assert=require('node:assert/strict'),S=require('./movie-staging.js');
 const route=S.movieRoute(()=>[0,30,-6.9]);
+
+test('new electronics recording holds the rigid closeup for the complete spoken passage',()=>{
+  const T=require('./movie-timing.js'),timeline=T.validate(require('./video-timeline.json'));
+  const section=timeline.timeMap.find(s=>s.id==='zaehlelektronik');
+  assert.ok(section,'fifth recording is present');
+  assert.ok(Math.abs(section.end-section.start-16.405)<1e-8);
+  const endOfSpeech=section.start+16.9-.8;
+  for(let t=section.start;t<=endOfSpeech;t+=1/24){
+    const pose=S.sample(route,T.sceneTime(t,timeline));
+    assert.equal(pose.explosion,1);
+    assert.ok(Math.abs(pose.yaw-2.85)<1e-12);
+    if(t>=section.start+4.36-.8)assert.equal(pose.distance,155);
+  }
+  assert.ok(T.sceneTime(endOfSpeech,timeline)<=56.2+1e-8);
+});
+
+test('counting electronics remain rigidly open until the explanation and pullback finish',()=>{
+  for(let t=49.48;t<=58.2;t+=.01){const pose=S.sample(route,t);assert.equal(pose.explosion,1);assert.ok(Math.abs(pose.yaw-2.85)<1e-12);}
+  assert.ok(S.sample(route,59).explosion<1,'reassembly follows the explanatory closeup');
+  assert.equal(S.sample(route,60.2).explosion,0);
+});
 test('camera and reveal remain continuous across every caption and route boundary',()=>{
   const captionTimes=require('./video-timeline.json').beats.map(b=>b.start);
   for(const t of [...captionTimes,...route.map(r=>r.time)]){

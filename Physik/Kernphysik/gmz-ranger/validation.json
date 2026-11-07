@@ -1,17 +1,19 @@
 {
   "date": "2026-11-07",
   "audio": {
-    "pcmDuration": 232.17872916666667,
+    "pcmDuration": 240.55314583333333,
     "originalFilesChanged": false,
     "syntheticVoice": false,
     "timeStretch": false,
-    "integratedLufs": -24.5,
-    "truePeakDbfs": -2.5,
-    "cutBoundaryMaximumPeakDbfs": -42.87,
+    "integratedLufs": -24.6,
+    "truePeakDbfs": -2.2,
+    "cutBoundaryMaximumPeakDbfs": -40.159586596862056,
     "boundaryWindowMillisecondsEachSide": 10,
     "wordTiming": "local ASR, explicitly mapped to retained recording segments",
     "userConfirmedTotzeitElektronen": true,
-    "agentAuditoryReview": false
+    "agentAuditoryReview": false,
+    "totalSamples": 11546551,
+    "replacementRecordings": 5
   },
   "animation": {
     "continuousCamera": true,
@@ -19,10 +21,10 @@
     "primaryContactChecked": true,
     "secondaryContactsChecked": 15,
     "movingGasAtoms": 52,
-    "pulseSignalTime": 118.2500625,
-    "pulseCountTime": 120.0500625,
-    "ionisationTime": 80.79516666666667,
-    "readyTime": 212.74241666666668,
+    "pulseSignalTime": 126.62447916666666,
+    "pulseCountTime": 128.42447916666669,
+    "ionisationTime": 89.16958333333334,
+    "readyTime": 221.11683333333335,
     "directedElectronPaths": true,
     "electronPathSamples": 13675,
     "maxWireDistanceIncrease": 0,
@@ -30,7 +32,7 @@
     "neutralizationTransitionsChecked": 112,
     "maxNeutralizationPositionError": 0,
     "continuousNeutralizationAppearance": true,
-    "windowCrossingAt": 78.39516666666667,
+    "windowCrossingAt": 86.76958333333333,
     "followCameraRangeMm": [
       8,
       12
@@ -39,7 +41,9 @@
     "connectedHvLeads": true,
     "closedLeadsWithinCase": true,
     "polarityMatchesSpokenCues": true,
-    "distinctPartAnchors": true
+    "distinctPartAnchors": true,
+    "rigidElectronicsExplanation": true,
+    "electronicsCameraHeldThroughLastWord": true
   },
   "widget": {
     "localEdge": true,
@@ -121,12 +125,12 @@
     },
     "browserErrors": [],
     "blockedExternalRequests": [
-      "https://hdb-productions.github.io/Schule/Physik/Kernphysik/gmz-ranger/media/poster.jpg",
-      "https://hdb-productions.github.io/Schule/Physik/Kernphysik/gmz-ranger/media/gmz-ranger.mp4"
+      "https://hdb-productions.github.io/Schule/Physik/Kernphysik/gmz-ranger/media/poster.jpg?v=20261107-motion2",
+      "https://hdb-productions.github.io/Schule/Physik/Kernphysik/gmz-ranger/media/gmz-ranger.mp4?v=20261107-motion2"
     ],
     "files": {
-      "jsonBytes": 9658069,
-      "glbBytes": 3138940
+      "jsonBytes": 9636107,
+      "glbBytes": 3123124
     }
   },
   "limits": [
@@ -135,43 +139,60 @@
     "Internal geometry, particle sizes and durations are didactically simplified."
   ],
   "media": {
-    "duration": 232.20833333333334,
+    "duration": 240.58333333333334,
     "fps": 24,
     "width": 1280,
     "height": 720,
-    "frames": 5573,
-    "bytes": 21277943,
+    "frames": 5774,
+    "bytes": 21873072,
     "draft": false,
     "deterministicFrame83": true,
     "streams": [
       {
         "type": "video",
         "codec": "h264",
-        "frames": 5573,
-        "duration": 232.20833333333334
+        "frames": 5774,
+        "duration": 240.58333333333334
       },
       {
         "type": "audio",
         "codec": "aac",
-        "frames": 10879,
-        "duration": 232.2100625
+        "frames": 11273,
+        "duration": 240.60410416666667
       }
     ],
     "faststart": true,
     "fullDecodeWithoutErrors": true,
     "unchangedMontageAacPackets": true,
-    "sameAudioAsPreviousVideo": true,
+    "electronicsRecordingIncluded": true,
     "audioPacketSelection": "Original packets with 0 <= PTS < video duration; no re-encoding",
     "audioPacketEvidence": {
-      "packets": 10879,
-      "sha256": "6e1da4cac4390452e2115d14f9481479c9a0985e71dc098ca29e5e7074807896"
+      "packets": 11273,
+      "sha256": "87ec97628470c18cfad4394a8f735957857f32560f18b2f1c705afb5bdd378ca"
     },
-    "sha256": "0c10631e4cf21ab1b62746321529028b80737271e38758fd7d512c111e04f4ee",
+    "sha256": "2b4aeab843ab2372949adcf04b2e6bde98ae4f89f65ea38f5f2425e95e43daa4",
     "auditoryReviewByAgent": false,
     "browserPlaybackAndSeek": true
   },
   "navigation": {
     "legacyStartToResponsiveGmz": true,
     "width390WithoutOverflow": true
+  },
+  "electronicsRevision": {
+    "status": "rendered-and-locally-validated",
+    "displayUpdated": true,
+    "recordingIntegrated": true,
+    "montageRange": {
+      "kind": "replacement",
+      "id": "zaehlelektronik",
+      "start": 53.2461875,
+      "end": 69.6511875,
+      "sourceStart": 49.33977083333333,
+      "sourceEnd": 57.370354166666665
+    },
+    "cameraTestsPassed": 6,
+    "audioMontageTestsPassed": 8,
+    "hardlinkTestSkipped": true,
+    "fullMovieStillPreviousRevision": false
   }
 }

@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { spawnSync } = require('node:child_process');
-const { SAMPLE_RATE, buildMap, parseArgs, assertSafeOutputs, assemble } = require('./audio-montage.cjs');
+const { SAMPLE_RATE, buildMap, parseArgs, assertSafeOutputs, assemble, recordingOption, buildFilter } = require('./audio-montage.cjs');
 const root = path.resolve(__dirname, '../../..');
 const ffmpeg = process.env.FFMPEG_PATH || path.join(root, 'outputs/gmz-ranger-source/python-deps/imageio_ffmpeg/binaries/ffmpeg-win-x86_64-v9.0.2.exe');
 const fixture = [
@@ -20,6 +20,18 @@ function temp() {
   return fs.mkdtempSync(path.join(base, 'case-'));
 }
 function clean(dir) { fs.rmSync(dir, { recursive: true, force: true }); }
+
+test('fifth adjacent recording retains the original CLI slots and selects distinct audio inputs', () => {
+  const cuts = [fixture[0], { id: 'zaehlelektronik', sourceStart: 3, sourceEnd: 4, duration: 2 }, ...fixture.slice(1)];
+  assert.deepEqual(cuts.map(c => recordingOption(c.id)), ['replacement1', 'electronics', 'replacement2', 'replacement3', 'replacement4']);
+  assert.equal(parseArgs(['--electronics', 'new.m4a']).electronics, 'new.m4a');
+  const map = buildMap(12, cuts);
+  assert.equal(map.duration, 11.5);
+  assert.deepEqual(map.segments.filter(s => s.kind === 'replacement').map(s => s.id), cuts.map(c => c.id));
+  for (let i = 1; i < map.segments.length; i++) assert.equal(map.segments[i].start, map.segments[i - 1].end);
+  const filters = buildFilter(map, cuts).split(';');
+  map.segments.forEach((s, i) => assert.ok(filters[i].startsWith(`[${s.kind === 'original' ? 0 : cuts.findIndex(c => c.id === s.id) + 1}:a:0]`)));
+});
 
 test('unequal replacement lengths preserve every original gap and form one continuous map', () => {
   const map = buildMap(12, fixture);

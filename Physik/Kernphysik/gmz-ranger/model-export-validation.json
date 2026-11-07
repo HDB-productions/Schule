@@ -62,11 +62,11 @@
   },
   "browserErrors": [],
   "blockedExternalRequests": [
-    "https://hdb-productions.github.io/Schule/Physik/Kernphysik/gmz-ranger/media/poster.jpg",
-    "https://hdb-productions.github.io/Schule/Physik/Kernphysik/gmz-ranger/media/gmz-ranger.mp4"
+    "https://hdb-productions.github.io/Schule/Physik/Kernphysik/gmz-ranger/media/poster.jpg?v=20261107-motion2",
+    "https://hdb-productions.github.io/Schule/Physik/Kernphysik/gmz-ranger/media/gmz-ranger.mp4?v=20261107-motion2"
   ],
   "files": {
-    "jsonBytes": 9658069,
-    "glbBytes": 3138940
+    "jsonBytes": 9636107,
+    "glbBytes": 3123124
   }
 }

@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "duration": 232.17872916666667,
+  "duration": 240.55314583333333,
   "width": 1280,
   "height": 720,
-  "audioStatus": "Originalton mit vier Eigenaufnahmen montiert. Aufbau-Fehlansatz entfernt; Pegel angeglichen, keine Sprachsynthese oder Zeitdehnung. Elektronen in der Totzeitaufnahme von der Lehrkraft bestätigt.",
+  "audioStatus": "Originalton mit fünf Eigenaufnahmen montiert, einschließlich Zählelektronik und Klickton-Erklärung. Aufbau-Fehlansatz entfernt; Pegel angeglichen, keine Sprachsynthese oder Zeitdehnung. Elektronen in der Totzeitaufnahme von der Lehrkraft bestätigt.",
   "sync": {
     "mode": "recording-cues",
     "finalSync": false,
@@ -27,35 +27,35 @@
   "eventCues": [
     {
       "id": "atom_detail",
-      "time": 68.04641666666667,
+      "time": 76.42083333333333,
       "sourceTime": 64.14,
       "word": "Edelgasatome",
       "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung"
     },
     {
       "id": "protons_named",
-      "time": 71.12641666666667,
+      "time": 79.50083333333333,
       "sourceTime": 67.22,
       "word": "Protonen",
       "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung"
     },
     {
       "id": "neutrons_named",
-      "time": 71.92641666666667,
+      "time": 80.30083333333333,
       "sourceTime": 68.02,
       "word": "Neutronen",
       "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung"
     },
     {
       "id": "shell_electrons_named",
-      "time": 74.48641666666667,
+      "time": 82.86083333333333,
       "sourceTime": 70.58,
       "word": "Elektronen",
       "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung"
     },
     {
       "id": "atom_ejected",
-      "time": 80.79516666666667,
+      "time": 89.16958333333334,
       "sourceTime": 82.88,
       "word": "herausschlagen",
       "phase": "ionization",
@@ -68,7 +68,7 @@
     },
     {
       "id": "pair_formed",
-      "time": 85.13516666666668,
+      "time": 93.50958333333334,
       "sourceTime": 87.76,
       "word": "positives Ion",
       "phase": "ionization",
@@ -81,7 +81,7 @@
     },
     {
       "id": "electron_drift",
-      "time": 92.4141875,
+      "time": 100.78860416666666,
       "sourceTime": 90.96,
       "word": "angezogen",
       "phase": "drift",
@@ -93,7 +93,7 @@
     },
     {
       "id": "ion_drift",
-      "time": 96.6741875,
+      "time": 105.04860416666666,
       "sourceTime": 95.22,
       "word": "angezogen",
       "phase": "drift",
@@ -105,7 +105,7 @@
     },
     {
       "id": "avalanche_onset",
-      "time": 105.1141875,
+      "time": 113.48860416666666,
       "sourceTime": 103.66,
       "word": "Sekundärionisationen",
       "phase": "avalanche",
@@ -116,7 +116,7 @@
     },
     {
       "id": "pulse_count",
-      "time": 120.0500625,
+      "time": 128.42447916666669,
       "sourceTime": 122.19,
       "word": "registriert",
       "phase": "pulse",
@@ -141,7 +141,7 @@
     },
     {
       "id": "deadtime_start",
-      "time": 173.78241666666668,
+      "time": 182.15683333333334,
       "sourceTime": null,
       "word": "Nach einem Zählimpuls",
       "phase": "deadtime",
@@ -154,7 +154,7 @@
     },
     {
       "id": "deadtime_end",
-      "time": 212.74241666666668,
+      "time": 221.11683333333335,
       "sourceTime": null,
       "word": "erneut zählen",
       "phase": "off",
@@ -167,7 +167,7 @@
     },
     {
       "id": "pulse_signal",
-      "time": 118.2500625,
+      "time": 126.62447916666666,
       "word": "Impuls",
       "recording": "zaehlimpuls",
       "rawTime": 4.64,
@@ -348,7 +348,7 @@
     },
     {
       "start": 49.48,
-      "title": "Impulse statt einzelner Elektronen",
+      "title": "Die Zählelektronik",
       "text": "Die Zählelektronik verarbeitet die elektrischen Impulse des Sensors.",
       "tag": "Zählelektronik",
       "mode": "part",
@@ -573,54 +573,62 @@
       "sourceEnd": 49.33977083333333
     },
     {
-      "kind": "original",
+      "kind": "replacement",
+      "id": "zaehlelektronik",
       "start": 53.2461875,
-      "end": 76.84516666666667,
+      "end": 69.6511875,
       "sourceStart": 49.33977083333333,
+      "sourceEnd": 57.370354166666665
+    },
+    {
+      "kind": "original",
+      "start": 69.6511875,
+      "end": 85.21958333333333,
+      "sourceStart": 57.370354166666665,
       "sourceEnd": 72.93875
     },
     {
       "kind": "replacement",
       "id": "ionisation",
-      "start": 76.84516666666667,
-      "end": 88.45716666666667,
+      "start": 85.21958333333333,
+      "end": 96.83158333333333,
       "sourceStart": 72.93875,
       "sourceEnd": 87.00297916666666
     },
     {
       "kind": "original",
-      "start": 88.45716666666667,
-      "end": 114.5000625,
+      "start": 96.83158333333333,
+      "end": 122.87447916666666,
       "sourceStart": 87.00297916666666,
       "sourceEnd": 113.045875
     },
     {
       "kind": "replacement",
       "id": "zaehlimpuls",
-      "start": 114.5000625,
-      "end": 121.0990625,
+      "start": 122.87447916666666,
+      "end": 129.47347916666666,
       "sourceStart": 113.045875,
       "sourceEnd": 117.80120833333334
     },
     {
       "kind": "original",
-      "start": 121.0990625,
-      "end": 173.78241666666668,
+      "start": 129.47347916666666,
+      "end": 182.15683333333334,
       "sourceStart": 117.80120833333334,
       "sourceEnd": 170.4845625
     },
     {
       "kind": "replacement",
       "id": "totzeit",
-      "start": 173.78241666666668,
-      "end": 213.92241666666666,
+      "start": 182.15683333333334,
+      "end": 222.29683333333332,
       "sourceStart": 170.4845625,
       "sourceEnd": 188.72635416666665
     },
     {
       "kind": "original",
-      "start": 213.92241666666666,
-      "end": 232.17872916666667,
+      "start": 222.29683333333332,
+      "end": 240.55314583333333,
       "sourceStart": 188.72635416666665,
       "sourceEnd": 206.98266666666666
     }
@@ -679,68 +687,84 @@
       "time": 53.2461875
     },
     {
+      "source": 49.48,
+      "time": 53.5461875
+    },
+    {
+      "source": 52,
+      "time": 56.8061875
+    },
+    {
+      "source": 56.2,
+      "time": 69.3461875
+    },
+    {
+      "source": 57.370354166666665,
+      "time": 69.6511875
+    },
+    {
       "source": 72.93875,
-      "time": 76.84516666666667
+      "time": 85.21958333333333
     },
     {
       "source": 73.04,
-      "time": 77.09516666666667
+      "time": 85.46958333333333
     },
     {
       "source": 82.88,
-      "time": 80.79516666666667
+      "time": 89.16958333333334
     },
     {
       "source": 84.06,
-      "time": 85.13516666666668
+      "time": 93.50958333333334
     },
     {
       "source": 87.00297916666666,
-      "time": 88.45716666666667
+      "time": 96.83158333333333
     },
     {
       "source": 113.045875,
-      "time": 114.5000625
+      "time": 122.87447916666666
     },
     {
       "source": 113.08,
-      "time": 114.7500625
+      "time": 123.12447916666666
     },
     {
       "source": 116.5,
-      "time": 118.2500625
+      "time": 126.62447916666666
     },
     {
       "source": 117.80120833333334,
-      "time": 121.0990625
+      "time": 129.47347916666666
     },
     {
       "source": 170.4845625,
-      "time": 173.78241666666668
+      "time": 182.15683333333334
     },
     {
       "source": 175,
-      "time": 187.68241666666668
+      "time": 196.05683333333334
     },
     {
       "source": 180,
-      "time": 198.42241666666666
+      "time": 206.79683333333332
     },
     {
       "source": 185,
-      "time": 206.04241666666667
+      "time": 214.41683333333333
     },
     {
       "source": 188.4,
-      "time": 213.16241666666667
+      "time": 221.53683333333333
     },
     {
       "source": 188.72635416666665,
-      "time": 213.92241666666666
+      "time": 222.29683333333332
     },
     {
       "source": 206.98266666666666,
-      "time": 232.17872916666667
+      "time": 240.55314583333333
     }
   ]
 }

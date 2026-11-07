@@ -1,7 +1,7 @@
 GMZ-VIDEO – ERSATZPASSAGEN ZUM EINSPRECHEN
-Stand: 7. November 2026. Alle vier Passagen sind freigegeben. Passage 4 übernimmt die ausführlichere Formulierung des Nutzers unverändert. Löschung bleibt ausgelassen. Die vier Ersatzaufnahmen wurden vom Nutzer selbst eingesprochen und geliefert; keine Sprachsynthese.
-Diese vier Texte entsprechen der aktuell im Chat vorgelegten Auswahl. Die übrigen Originalaufnahmen bleiben erhalten.
-Die ungefähren Zeitmarken unten beziehen sich auf das Originalvideo. Gemessene Schnittgrenzen stehen in audio-edit-plan.json; die neue Tonzeit und ASR-Wortmarken in video-timeline.json. Eine eigene Hörprüfung des Agenten war technisch nicht möglich.
+Stand: 7. November 2026. Alle fünf Passagen sind freigegeben und als Eigenaufnahmen geliefert. Passage 4 übernimmt die ausführlichere Formulierung des Nutzers unverändert. Löschung bleibt ausgelassen. Keine Sprachsynthese und keine Zeitdehnung. Die fünfte Aufnahme ist in die Tonmontage und den fertigen Gesamtfilm integriert. Der Film dauert ungefähr 4:01 Minuten; vollständiges Decodieren, Browserwiedergabe, Seek und AAC-Paketvergleich mit der Montage sind bestanden. Ausgewählte Einzelbilder wurden visuell geprüft.
+Diese fünf Texte dokumentieren die freigegebene Auswahl; der lokale ASR-Wortlaut der fünften Aufnahme steht zusätzlich unter Passage 5. Die übrigen Originalaufnahmen bleiben erhalten. Die Nummern 1–4 behalten ihre bisherige Zuordnung; Passage 5 folgt im Film unmittelbar auf den Aufbau.
+Die ungefähren Zeitmarken unten beziehen sich auf das Originalvideo. Gemessene Schnittgrenzen stehen in audio-edit-plan.json; die neue Tonzeit und ASR-Wortmarken in outputs/gmz-ranger-source/recorded-timeline.json, die Quellenbasis in video-timeline.json. Eine eigene Hörprüfung des Agenten war technisch nicht möglich.
 
 1. AUFBAU (ersetzt ca. 0:17–0:48)
 Empfohlener Dateiname einer Ersatzaufnahme: 01-aufbau.wav
@@ -25,7 +25,19 @@ Nach einem Zählimpuls kann das Zählrohr für einen ganz kurzen Moment keine ne
 
 Wenn die Ionen weit genug zur Außenwand gewandert sind, ist das Feld am Draht wieder stark genug. Das Zählrohr kann erneut zählen.
 
+5. ZÄHLELEKTRONIK (ersetzt Original 49,339762–57,370352 s)
+Empfohlener Dateiname einer Ersatzaufnahme: 05-zaehlelektronik.wav
+
+Im Gerät befindet sich außerdem die Zählelektronik. Sie registriert und zählt die elektrischen Impulse aus dem Zählrohr. Das Ergebnis wird auf dem Display angezeigt. Zusätzlich kann jeder registrierte Impuls als Klick hörbar gemacht werden.
+
+Gelieferte Eigenaufnahme integriert: Bereinigte Dauer 16,405 s; neue Montagezeit 53,2461875–69,6511875 s. Nur äußere Pausen entfernt, alle internen Wörter und Pausen erhalten. Konstanter Gain +3,18 dB auf gemessene −24,5 LUFS.
+
+Vollständiger erkannter Wortlaut (lokale ASR, keine eigene Hörbestätigung):
+Im Gerät befindet sich außerdem die Zählelektronik. Sie registriert und zählt die elektrischen Impulse aus dem Zählrohr. Das Ergebnis wird dann auf dem Display angezeigt. Zusätzlich kann jeder registrierte Impuls auch als Klick hörbar gemacht werden.
+
+ASR erkennt gegenüber dem freigegebenen Text die Zusätze „dann“ und „auch“. Beide bleiben in der Aufnahme erhalten. Dies sind ASR-Hypothesen, keine bestätigten Versprecher. Die geöffnete Platine bleibt während der Passage unverändert ausgerichtet; die Kamera hält bis zum Passagenende. Der neue Gesamtfilm mit verbessertem LCD ist fertig, technisch geprüft und anhand ausgewählter Einzelbilder visuell kontrolliert. Eine eigene Hörprüfung des Agenten fand nicht statt.
+
 AUFNAHME
 Jede Passage möglichst als eigene Datei, im gleichen Erklärstil wie das Original, ohne Musik. WAV ist gut geeignet; M4A oder MP3 sind ebenfalls verwendbar. Die Sprechdauer darf vom Original abweichen: Die neue Animation wird an die freigegebenen Aufnahmen angepasst.
 
-Die Animation wird an die fertig eingesprochenen Passagen angepasst. Bei Sätzen wie „ein freies Elektron entsteht“ muss das zugehörige Bildereignis genau an der gesprochenen Stelle liegen. Auch die erhaltenen Originalpassagen werden nach ihren konkreten Sprachereignissen synchronisiert. Die bisherige Animationsvorschau ist noch kein endgültiger Tonschnitt.
+Die Animation ist über lokale ASR-Wortmarken an die fertig eingesprochenen Passagen angepasst. Auch die erhaltenen Originalpassagen besitzen zugeordnete Sprachereignisse. Die technische Filmprüfung und die Sichtkontrolle ausgewählter Einzelbilder bestätigen keine eigene akustische Abnahme; finalSync bleibt false.

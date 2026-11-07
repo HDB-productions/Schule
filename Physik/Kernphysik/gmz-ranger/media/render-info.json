@@ -1,36 +1,36 @@
 {
-  "duration": 232.20833333333334,
+  "duration": 240.58333333333334,
   "fps": 24,
   "width": 1280,
   "height": 720,
-  "frames": 5573,
-  "bytes": 21277943,
+  "frames": 5774,
+  "bytes": 21873072,
   "draft": false,
   "deterministicFrame83": true,
   "streams": [
     {
       "type": "video",
       "codec": "h264",
-      "frames": 5573,
-      "duration": 232.20833333333334
+      "frames": 5774,
+      "duration": 240.58333333333334
     },
     {
       "type": "audio",
       "codec": "aac",
-      "frames": 10879,
-      "duration": 232.2100625
+      "frames": 11273,
+      "duration": 240.60410416666667
     }
   ],
   "faststart": true,
   "fullDecodeWithoutErrors": true,
   "unchangedMontageAacPackets": true,
-  "sameAudioAsPreviousVideo": true,
+  "electronicsRecordingIncluded": true,
   "audioPacketSelection": "Original packets with 0 <= PTS < video duration; no re-encoding",
   "audioPacketEvidence": {
-    "packets": 10879,
-    "sha256": "6e1da4cac4390452e2115d14f9481479c9a0985e71dc098ca29e5e7074807896"
+    "packets": 11273,
+    "sha256": "87ec97628470c18cfad4394a8f735957857f32560f18b2f1c705afb5bdd378ca"
   },
-  "sha256": "0c10631e4cf21ab1b62746321529028b80737271e38758fd7d512c111e04f4ee",
+  "sha256": "2b4aeab843ab2372949adcf04b2e6bde98ae4f89f65ea38f5f2425e95e43daa4",
   "auditoryReviewByAgent": false,
   "browserPlaybackAndSeek": true
 }
