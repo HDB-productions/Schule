@@ -1,0 +1,29 @@
+{
+  "duration": 232.20833333333334,
+  "fps": 24,
+  "width": 1280,
+  "height": 720,
+  "frames": 5573,
+  "bytes": 21362025,
+  "draft": false,
+  "deterministicFrame83": true,
+  "sha256": "b0fae6a24b8f593e5b97d33e33517aea3086c0e88c7bc2784624290e202b2e3a",
+  "streams": [
+    {
+      "type": "video",
+      "codec": "h264",
+      "frames": 5573,
+      "duration": 232.20833333333334
+    },
+    {
+      "type": "audio",
+      "codec": "aac",
+      "frames": 10879,
+      "duration": 232.2100625
+    }
+  ],
+  "faststart": true,
+  "fullDecodeWithoutErrors": true,
+  "browserPlaybackAndSeek": true,
+  "auditoryReviewByAgent": false
+}

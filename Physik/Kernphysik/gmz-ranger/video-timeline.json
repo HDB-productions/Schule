@@ -1,0 +1,705 @@
+{
+  "version": 1,
+  "duration": 232.17872916666667,
+  "width": 1280,
+  "height": 720,
+  "audioStatus": "Originalton mit vier Eigenaufnahmen montiert. Aufbau-Fehlansatz entfernt; Pegel angeglichen, keine Sprachsynthese oder Zeitdehnung. Elektronen in der Totzeitaufnahme von der Lehrkraft bestätigt.",
+  "sync": {
+    "mode": "recording-cues",
+    "finalSync": false,
+    "status": "Wortzeiten aus lokaler ASR auf die samplegenaue Montage übertragen. Bildereignisse technisch prüfbar; keine eigene Hörprüfung durch den Agenten.",
+    "sourceTimeMeaning": "Szenenkoordinate des ursprünglichen Films. presentationMap ordnet Kamera und Bildtexte neu zu; timeMap beschreibt ausschließlich die Tonmontage.",
+    "requiredEvents": [
+      "atom_ejected",
+      "pair_formed",
+      "electron_drift",
+      "ion_drift",
+      "avalanche_onset",
+      "pulse_count",
+      "deadtime_start",
+      "deadtime_end",
+      "pulse_signal"
+    ],
+    "wordTimingMethod": "local-ASR-with-explicit-word-anchors",
+    "auditoryReviewByAgent": false,
+    "userConfirmedTotzeitElectronWord": true
+  },
+  "eventCues": [
+    {
+      "id": "atom_detail",
+      "time": 68.04641666666667,
+      "sourceTime": 64.14,
+      "word": "Edelgasatome",
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung"
+    },
+    {
+      "id": "protons_named",
+      "time": 71.12641666666667,
+      "sourceTime": 67.22,
+      "word": "Protonen",
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung"
+    },
+    {
+      "id": "neutrons_named",
+      "time": 71.92641666666667,
+      "sourceTime": 68.02,
+      "word": "Neutronen",
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung"
+    },
+    {
+      "id": "shell_electrons_named",
+      "time": 74.48641666666667,
+      "sourceTime": 70.58,
+      "word": "Elektronen",
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung"
+    },
+    {
+      "id": "atom_ejected",
+      "time": 80.79516666666667,
+      "sourceTime": 82.88,
+      "word": "herausschlagen",
+      "phase": "ionization",
+      "from": 0,
+      "to": 1,
+      "duration": 0.25,
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung",
+      "recording": "ionisation",
+      "rawTime": 5.22
+    },
+    {
+      "id": "pair_formed",
+      "time": 85.13516666666668,
+      "sourceTime": 87.76,
+      "word": "positives Ion",
+      "phase": "ionization",
+      "from": 1,
+      "to": 1,
+      "duration": 0,
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung",
+      "recording": "ionisation",
+      "rawTime": 9.56
+    },
+    {
+      "id": "electron_drift",
+      "time": 92.4141875,
+      "sourceTime": 90.96,
+      "word": "angezogen",
+      "phase": "drift",
+      "from": 0,
+      "to": 1,
+      "duration": 0.78,
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung",
+      "channel": "electron"
+    },
+    {
+      "id": "ion_drift",
+      "time": 96.6741875,
+      "sourceTime": 95.22,
+      "word": "angezogen",
+      "phase": "drift",
+      "from": 0,
+      "to": 0.12,
+      "duration": 6.36,
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung",
+      "channel": "ion"
+    },
+    {
+      "id": "avalanche_onset",
+      "time": 105.1141875,
+      "sourceTime": 103.66,
+      "word": "Sekundärionisationen",
+      "phase": "avalanche",
+      "from": 0,
+      "to": 1,
+      "duration": 8.7,
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung"
+    },
+    {
+      "id": "pulse_count",
+      "time": 120.0500625,
+      "sourceTime": 122.19,
+      "word": "registriert",
+      "phase": "pulse",
+      "from": 0,
+      "to": 1,
+      "duration": 1.2,
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung",
+      "recording": "zaehlimpuls",
+      "rawTime": 6.44
+    },
+    {
+      "id": "quench_end",
+      "time": null,
+      "sourceTime": null,
+      "word": null,
+      "kind": "internal",
+      "phase": "quench",
+      "from": 0,
+      "to": 1,
+      "duration": 1.2,
+      "status": "Interner Zustand ohne Sprecherbegriff"
+    },
+    {
+      "id": "deadtime_start",
+      "time": 173.78241666666668,
+      "sourceTime": null,
+      "word": "Nach einem Zählimpuls",
+      "phase": "deadtime",
+      "from": 0,
+      "to": 0,
+      "duration": 0,
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung",
+      "recording": "totzeit",
+      "rawTime": 0
+    },
+    {
+      "id": "deadtime_end",
+      "time": 212.74241666666668,
+      "sourceTime": null,
+      "word": "erneut zählen",
+      "phase": "off",
+      "from": 0,
+      "to": 0,
+      "duration": 0,
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke; keine eigene Hörprüfung",
+      "recording": "totzeit",
+      "rawTime": 38.96
+    },
+    {
+      "id": "pulse_signal",
+      "time": 118.2500625,
+      "word": "Impuls",
+      "recording": "zaehlimpuls",
+      "rawTime": 4.64,
+      "phase": "pulse",
+      "from": 0,
+      "to": 1,
+      "duration": 1.8,
+      "status": "Auf Montagezeit übertragene ASR-Wortmarke"
+    }
+  ],
+  "chapters": [
+    {
+      "start": 0,
+      "title": "Das Messgerät"
+    },
+    {
+      "start": 17.03,
+      "title": "Aufbau des Sensors"
+    },
+    {
+      "start": 57.327,
+      "title": "Ionisation im Gas"
+    },
+    {
+      "start": 102.407,
+      "title": "Vom Elektron zum Impuls"
+    },
+    {
+      "start": 151.21,
+      "title": "Wieder messbereit"
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "title": "Strahlung wird zählbar",
+      "text": "Wie wird aus einer unsichtbaren Wechselwirkung ein messbarer Impuls? Ein Blick in unseren Geiger-Müller-Zähler.",
+      "tag": "Geiger-Müller-Zähler",
+      "mode": "exterior",
+      "part": null,
+      "phase": "off",
+      "points": [
+        "Handmessgerät mit flachem Pancake-Sensor",
+        "Anzeige und Klickton machen Zählereignisse sichtbar und hörbar."
+      ]
+    },
+    {
+      "start": 13.72,
+      "title": "Vom Gerät zum Sensor",
+      "text": "Das Gehäuse öffnet sich. Im Inneren wird die Funktion der Bauteile sichtbar.",
+      "tag": "Explosionsansicht",
+      "mode": "open",
+      "part": null,
+      "phase": "off",
+      "points": [
+        "Außenform nach Herstellerreferenz",
+        "Innenaufbau als Unterrichtsmodell"
+      ]
+    },
+    {
+      "start": 17.54,
+      "title": "Ein flaches, rundes Zählrohr",
+      "text": "Wir betrachten die Bauform eines tragbaren Strahlungsmessgerätes. Im runden Sensor befindet sich der gasgefüllte Raum.",
+      "tag": "Flaches Geiger-Müller-Zählrohr",
+      "mode": "part",
+      "part": "gas",
+      "phase": "off",
+      "points": [
+        "Wiedererkennbare Bauform unseres Messgerätes",
+        "Innenaufbau als vereinfachtes Unterrichtsmodell"
+      ]
+    },
+    {
+      "start": 21.7,
+      "title": "Die Gasfüllung",
+      "text": "Das Gasgemisch besteht hauptsächlich aus Edelgas. In diesem Gas kann Strahlung Ladungsträger erzeugen.",
+      "tag": "Gasgemisch · hauptsächlich Edelgas",
+      "mode": "part",
+      "part": "gas",
+      "phase": "off",
+      "points": [
+        "Gasfüllung im geschlossenen Sensor",
+        "Das Gas wird später stark vergrößert gezeigt."
+      ]
+    },
+    {
+      "start": 22,
+      "title": "Die äußere Elektrode",
+      "text": "Das leitfähige Metallgehäuse des Zählrohrs bildet die Kathode.",
+      "tag": "Kathode · Metallgehäuse",
+      "mode": "part",
+      "part": "cathode",
+      "phase": "off",
+      "points": [
+        "Die Kathode begrenzt den Gasraum.",
+        "Sie liegt gegenüber der Anode am negativen Pol."
+      ]
+    },
+    {
+      "start": 23.2,
+      "title": "Das dünne Eintrittsfenster",
+      "text": "Das Glimmerfenster schließt den Gasraum ab. Strahlung kann durch das empfindliche Fenster eindringen.",
+      "tag": "Glimmerfenster",
+      "mode": "part",
+      "part": "window",
+      "phase": "off",
+      "points": [
+        "Sehr dünne, gasdichte Fensterebene",
+        "Das äußere Gitter schützt das Fenster."
+      ]
+    },
+    {
+      "start": 34.06,
+      "title": "Der positive Leiter",
+      "text": "Im Gasraum liegt der dünne Anodenleiter. Er zieht freie Elektronen an.",
+      "tag": "Anode · positiver Leiter",
+      "mode": "part",
+      "part": "anode",
+      "phase": "off",
+      "points": [
+        "Das Feld ist nahe dem dünnen Leiter besonders stark.",
+        "Die gezeigte Drahtform ist schematisch."
+      ]
+    },
+    {
+      "start": 39.38,
+      "title": "Spannung erzeugt ein Feld",
+      "text": "Die Hochspannungsversorgung hält eine Spannung zwischen Anode und Kathode aufrecht.",
+      "tag": "Hochspannungsversorgung",
+      "mode": "part",
+      "part": "voltage",
+      "phase": "off",
+      "points": [
+        "Anode: positives Potential",
+        "Kathode: negatives Potential gegenüber der Anode"
+      ]
+    },
+    {
+      "start": 49.48,
+      "title": "Impulse statt einzelner Elektronen",
+      "text": "Die Zählelektronik verarbeitet die elektrischen Impulse des Sensors.",
+      "tag": "Zählelektronik",
+      "mode": "part",
+      "part": "counter",
+      "phase": "off",
+      "points": [
+        "Ein Impuls wird als ein Ereignis gezählt.",
+        "Die Elektronik steuert Anzeige und Klickton."
+      ]
+    },
+    {
+      "start": 57.72,
+      "title": "Wir schauen in das Gas",
+      "text": "Die Bauteile rücken wieder zusammen. Die Lupe richtet sich auf den gasgefüllten Raum des Sensors.",
+      "tag": "Gasraum · Vergrößerung",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "off",
+      "points": [
+        "Gas und Teilchen stark vergrößert",
+        "Arbeitsposition des zusammengebauten Sensors"
+      ]
+    },
+    {
+      "start": 63.24,
+      "title": "Zunächst elektrisch neutral",
+      "text": "Gasatome besitzen positive Kerne und negative Elektronen. Insgesamt ist ein Atom zunächst neutral.",
+      "tag": "Neutrale Gasatome",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "off",
+      "points": [
+        "Protonen (+) und Neutronen (0) im Kern",
+        "Elektronen (−) in der Atomhülle"
+      ]
+    },
+    {
+      "start": 73.04,
+      "title": "Strahlung trifft auf das Gas",
+      "text": "Eine Wechselwirkung kann ein Elektron aus einem Atom lösen. Das Atom wird ionisiert.",
+      "tag": "Eintritt und Ionisation",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "entryIon",
+      "points": [
+        "Ein freies Elektron entsteht.",
+        "Ein positiv geladenes Ion bleibt zurück."
+      ]
+    },
+    {
+      "start": 84.06,
+      "title": "Aus einem Atom werden Ladungsträger",
+      "text": "Ionisation erzeugt ein Paar aus negativem Elektron und positivem Ion.",
+      "tag": "Ionisation",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "ionization",
+      "points": [
+        "Elektron: negativ",
+        "Ion: positiv"
+      ]
+    },
+    {
+      "start": 87.34,
+      "title": "Das Feld trennt die Ladungen",
+      "text": "Elektronen bewegen sich zur Anode. Positive Ionen wandern zur Kathode.",
+      "tag": "Bewegung im elektrischen Feld",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "drift",
+      "points": [
+        "Elektronen → Anode (+)",
+        "Positive Ionen → Kathode (−)"
+      ]
+    },
+    {
+      "start": 96.9,
+      "title": "Elektronen sind viel schneller",
+      "text": "Die leichten Elektronen erreichen den Anodenbereich wesentlich schneller als die schweren positiven Ionen.",
+      "tag": "Unterschiedliche Beweglichkeit",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "driftEnd",
+      "points": [
+        "Die Ionen bewegen sich ebenfalls.",
+        "Alle Vorgänge sind stark verlangsamt dargestellt."
+      ]
+    },
+    {
+      "start": 102.24,
+      "title": "Weitere Ionisationen",
+      "text": "Im starken Feld nahe der Anode werden Elektronen beschleunigt. Sie können weitere Elektronen freisetzen.",
+      "tag": "Sekundärionisation",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "avalanche",
+      "points": [
+        "Aus wenigen Elektronen werden viele.",
+        "Die Vermehrung findet nahe der Anode statt."
+      ]
+    },
+    {
+      "start": 113.08,
+      "title": "Eine Elektronenlawine",
+      "text": "Die kurze Entladung erzeugt ein elektrisches Signal. Die vielen Elektronen gehören zu demselben Nachweisereignis.",
+      "tag": "Elektronenlawine → Impuls",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "avalancheEnd",
+      "points": [
+        "Verstärkung im Gas",
+        "Ein äußeres Signal für die Elektronik"
+      ]
+    },
+    {
+      "start": 118.49,
+      "title": "Ein Impuls wird gezählt",
+      "text": "Die Elektronik registriert den Impuls. Ein weiteres Zählereignis erscheint in der Anzeige.",
+      "tag": "Ein Impuls · ein Ereignis",
+      "mode": "pulse",
+      "part": "gas",
+      "phase": "pulse",
+      "points": [
+        "Nicht jedes Elektron wird einzeln gezählt.",
+        "Der Impuls steht für eine registrierte Wechselwirkung."
+      ]
+    },
+    {
+      "start": 131.57,
+      "title": "Was wurde nachgewiesen?",
+      "text": "Registriert wurde eine Wechselwirkung im Detektor. Ein einzelner Impuls verrät nicht die Strahlungsart oder ihre Energie.",
+      "tag": "Grenzen eines Zählimpulses",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "off",
+      "points": [
+        "Nachweis durch Ionisation",
+        "Keine Energie- oder Teilchenbestimmung aus einem Einzelimpuls"
+      ]
+    },
+    {
+      "start": 136.05,
+      "title": "Strahlung kann unbemerkt passieren",
+      "text": "Ohne geeignete Wechselwirkung entsteht kein registrierbarer Impuls.",
+      "tag": "Kein Impuls ohne Wechselwirkung",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "miss",
+      "points": [
+        "Nicht jedes einfallende Teilchen wird erfasst.",
+        "Ein Durchgang kann ungezählt bleiben."
+      ]
+    },
+    {
+      "start": 151.21,
+      "title": "Positive Ionen bleiben zurück",
+      "text": "Nach der schnellen Elektronenbewegung sind noch langsame positive Ionen im Gas vorhanden.",
+      "tag": "Ionenwolke",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "quenchStart",
+      "points": [
+        "Positive Ionen wandern zur Kathode.",
+        "Ihre Ladung verändert das elektrische Feld."
+      ]
+    },
+    {
+      "start": 169.99,
+      "title": "Eine kurze Totzeit",
+      "text": "Positive Ionen schwächen das Feld nahe der Anode. Kurzzeitig entsteht keine neue Elektronenlawine und damit kein weiterer Zählimpuls.",
+      "tag": "Totzeit",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "deadtime",
+      "points": [
+        "Diese kurze Zeit heißt Totzeit.",
+        "Während die Ionen zur Kathode wandern, wird das Feld wieder stärker."
+      ]
+    },
+    {
+      "start": 188.72,
+      "title": "Schneller als man denkt",
+      "text": "Die Ionen bewegen sich langsamer als die Elektronen. Trotzdem laufen die Vorgänge im Zählrohr sehr schnell ab.",
+      "tag": "Eine sehr kurze Zeit",
+      "mode": "gas",
+      "part": "gas",
+      "phase": "deadtimeRecovery",
+      "points": [
+        "Langsamer heißt: im Vergleich zu den Elektronen.",
+        "Unsere Animation zeigt die Vorgänge stark verlangsamt."
+      ]
+    },
+    {
+      "start": 198.36,
+      "title": "Schnell wieder messbereit",
+      "text": "Im Gerät laufen diese Vorgänge sehr schnell ab. Unsere Darstellung dehnt die Zeit, damit wir sie verfolgen können.",
+      "tag": "Stark verlangsamt dargestellt",
+      "mode": "ending",
+      "part": null,
+      "phase": "off",
+      "points": [
+        "Ionisation → Verstärkung → Impuls",
+        "Kurze Totzeit → nächster Nachweis"
+      ]
+    }
+  ],
+  "sourceDuration": 206.98266666666666,
+  "timeMap": [
+    {
+      "kind": "original",
+      "start": 0,
+      "end": 17.3251875,
+      "sourceStart": 0,
+      "sourceEnd": 17.3251875
+    },
+    {
+      "kind": "replacement",
+      "id": "aufbau",
+      "start": 17.3251875,
+      "end": 53.2461875,
+      "sourceStart": 17.3251875,
+      "sourceEnd": 49.33977083333333
+    },
+    {
+      "kind": "original",
+      "start": 53.2461875,
+      "end": 76.84516666666667,
+      "sourceStart": 49.33977083333333,
+      "sourceEnd": 72.93875
+    },
+    {
+      "kind": "replacement",
+      "id": "ionisation",
+      "start": 76.84516666666667,
+      "end": 88.45716666666667,
+      "sourceStart": 72.93875,
+      "sourceEnd": 87.00297916666666
+    },
+    {
+      "kind": "original",
+      "start": 88.45716666666667,
+      "end": 114.5000625,
+      "sourceStart": 87.00297916666666,
+      "sourceEnd": 113.045875
+    },
+    {
+      "kind": "replacement",
+      "id": "zaehlimpuls",
+      "start": 114.5000625,
+      "end": 121.0990625,
+      "sourceStart": 113.045875,
+      "sourceEnd": 117.80120833333334
+    },
+    {
+      "kind": "original",
+      "start": 121.0990625,
+      "end": 173.78241666666668,
+      "sourceStart": 117.80120833333334,
+      "sourceEnd": 170.4845625
+    },
+    {
+      "kind": "replacement",
+      "id": "totzeit",
+      "start": 173.78241666666668,
+      "end": 213.92241666666666,
+      "sourceStart": 170.4845625,
+      "sourceEnd": 188.72635416666665
+    },
+    {
+      "kind": "original",
+      "start": 213.92241666666666,
+      "end": 232.17872916666667,
+      "sourceStart": 188.72635416666665,
+      "sourceEnd": 206.98266666666666
+    }
+  ],
+  "presentationMap": [
+    {
+      "source": 0,
+      "time": 0
+    },
+    {
+      "source": 17.3251875,
+      "time": 17.3251875
+    },
+    {
+      "source": 17.54,
+      "time": 17.5751875
+    },
+    {
+      "source": 21.5,
+      "time": 21.565187499999997
+    },
+    {
+      "source": 21.7,
+      "time": 25.115187499999998
+    },
+    {
+      "source": 22,
+      "time": 30.0551875
+    },
+    {
+      "source": 22.4,
+      "time": 31.8751875
+    },
+    {
+      "source": 23.2,
+      "time": 33.795187500000004
+    },
+    {
+      "source": 32,
+      "time": 38.4951875
+    },
+    {
+      "source": 34.06,
+      "time": 41.9251875
+    },
+    {
+      "source": 36.5,
+      "time": 44.94518750000001
+    },
+    {
+      "source": 39.38,
+      "time": 46.7851875
+    },
+    {
+      "source": 49.33977083333333,
+      "time": 53.2461875
+    },
+    {
+      "source": 72.93875,
+      "time": 76.84516666666667
+    },
+    {
+      "source": 73.04,
+      "time": 77.09516666666667
+    },
+    {
+      "source": 82.88,
+      "time": 80.79516666666667
+    },
+    {
+      "source": 84.06,
+      "time": 85.13516666666668
+    },
+    {
+      "source": 87.00297916666666,
+      "time": 88.45716666666667
+    },
+    {
+      "source": 113.045875,
+      "time": 114.5000625
+    },
+    {
+      "source": 113.08,
+      "time": 114.7500625
+    },
+    {
+      "source": 116.5,
+      "time": 118.2500625
+    },
+    {
+      "source": 117.80120833333334,
+      "time": 121.0990625
+    },
+    {
+      "source": 170.4845625,
+      "time": 173.78241666666668
+    },
+    {
+      "source": 175,
+      "time": 187.68241666666668
+    },
+    {
+      "source": 180,
+      "time": 198.42241666666666
+    },
+    {
+      "source": 185,
+      "time": 206.04241666666667
+    },
+    {
+      "source": 188.4,
+      "time": 213.16241666666667
+    },
+    {
+      "source": 188.72635416666665,
+      "time": 213.92241666666666
+    },
+    {
+      "source": 206.98266666666666,
+      "time": 232.17872916666667
+    }
+  ]
+}

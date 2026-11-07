@@ -1,0 +1,31 @@
+GMZ-VIDEO – ERSATZPASSAGEN ZUM EINSPRECHEN
+Stand: 7. November 2026. Alle vier Passagen sind freigegeben. Passage 4 übernimmt die ausführlichere Formulierung des Nutzers unverändert. Löschung bleibt ausgelassen. Die vier Ersatzaufnahmen wurden vom Nutzer selbst eingesprochen und geliefert; keine Sprachsynthese.
+Diese vier Texte entsprechen der aktuell im Chat vorgelegten Auswahl. Die übrigen Originalaufnahmen bleiben erhalten.
+Die ungefähren Zeitmarken unten beziehen sich auf das Originalvideo. Gemessene Schnittgrenzen stehen in audio-edit-plan.json; die neue Tonzeit und ASR-Wortmarken in video-timeline.json. Eine eigene Hörprüfung des Agenten war technisch nicht möglich.
+
+1. AUFBAU (ersetzt ca. 0:17–0:48)
+Empfohlener Dateiname einer Ersatzaufnahme: 01-aufbau.wav
+
+Wir betrachten hier ein flaches, rundes Geiger-Müller-Zählrohr, wie es in tragbaren Strahlungsmessgeräten verwendet wird. Es ist mit einem Gasgemisch gefüllt, das hauptsächlich aus Edelgas besteht. Sein Metallgehäuse bildet die Kathode. Ein dünnes Glimmerfenster lässt Strahlung hinein und hält das Gas im Zählrohr. Im Inneren befindet sich eine dünne Drahtelektrode, die Anode. Eine Hochspannungsquelle verbindet die Kathode mit dem negativen und die Anode mit dem positiven Pol.
+
+2. IONISATION (ersetzt ca. 1:13–1:26)
+Empfohlener Dateiname einer Ersatzaufnahme: 02-ionisation.wav
+
+Ionisierende Strahlung kann ein Elektron aus einem Gasatom herausschlagen. Das Atom wird dadurch ionisiert: Es bleiben ein positives Ion und ein freies Elektron zurück.
+
+3. ZÄHLIMPULS (ersetzt ca. 1:53–1:57)
+Empfohlener Dateiname einer Ersatzaufnahme: 03-zaehlimpuls.wav
+
+Die Elektronenlawine erzeugt einen kurzen elektrischen Impuls, den die Elektronik registriert.
+
+4. TOTZEIT (ersetzt ca. 2:50–3:08)
+Empfohlener Dateiname einer Ersatzaufnahme: 04-totzeit.wav
+
+Nach einem Zählimpuls kann das Zählrohr für einen ganz kurzen Moment keine neue Strahlung zählen, weil die Ionen sich nicht so schnell zur Außenwand bewegen. Deshalb bleibt zunächst eine positive Ionenwolke um den Draht zurück. Diese Wolke schwächt das elektrische Feld in der Nähe des Drahtes. Neue Elektronen werden dort nicht mehr stark genug beschleunigt, um eine weitere Elektronenlawine auszulösen. Das Zählrohr kann deshalb kurzzeitig kein weiteres Ereignis zählen. Diese Zeit nennt man Totzeit.
+
+Wenn die Ionen weit genug zur Außenwand gewandert sind, ist das Feld am Draht wieder stark genug. Das Zählrohr kann erneut zählen.
+
+AUFNAHME
+Jede Passage möglichst als eigene Datei, im gleichen Erklärstil wie das Original, ohne Musik. WAV ist gut geeignet; M4A oder MP3 sind ebenfalls verwendbar. Die Sprechdauer darf vom Original abweichen: Die neue Animation wird an die freigegebenen Aufnahmen angepasst.
+
+Die Animation wird an die fertig eingesprochenen Passagen angepasst. Bei Sätzen wie „ein freies Elektron entsteht“ muss das zugehörige Bildereignis genau an der gesprochenen Stelle liegen. Auch die erhaltenen Originalpassagen werden nach ihren konkreten Sprachereignissen synchronisiert. Die bisherige Animationsvorschau ist noch kein endgültiger Tonschnitt.
