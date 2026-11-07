@@ -12,7 +12,8 @@
   fit();addEventListener('resize',fit);
   function atomicClock(t){
     const cue=(id,fallback)=>timeline.sync?.mode==='recording-cues'?timeline.eventCues.find(c=>c.id===id)?.time:timing.outputTime(fallback,timeline.timeMap);
-    return {time:t,collisionAt:cue('atom_ejected',82.88),electronAt:cue('electron_drift',90.96),ionAt:cue('ion_drift',95.22),avalancheAt:cue('avalanche_onset',103.66),pulseAt:cue('pulse_signal',122.19)??cue('pulse_count',122.19),readyAt:cue('deadtime_end',198.36)};
+    const collisionAt=cue('atom_ejected',82.88);
+    return {time:t,collisionAt,electronAt:cue('electron_drift',90.96),ionAt:cue('ion_drift',95.22),avalancheAt:cue('avalanche_onset',103.66),pulseAt:cue('pulse_signal',122.19)??cue('pulse_count',122.19),readyAt:cue('deadtime_end',198.36),radiationStart:collisionAt-4.2,windowAt:collisionAt-2.4};
   }
   function phaseAt(beat,t,end){
     if(timeline.sync?.mode==='recording-cues'){
@@ -51,7 +52,9 @@
     const beat=timeline.beats[index],end=timeline.beats[index+1]?.start||timeline.sourceDuration;
     const chapterIndex=Math.max(0,timing.lastIndex(timeline.chapters,c=>c.start<=sourceT));
     updateText(beat,index,chapterIndex);
-    const pose=staging.sample(route,sourceT),e=pose.explosion;
+    const clock=atomicClock(t);viewer.setAtomicClock(clock);
+    const atomic=viewer.getAtomicState();
+    const pose=staging.followElectron(staging.sample(route,sourceT),clock,atomic),e=pose.explosion;
     if(shadowExplosion===undefined||Math.abs(e-shadowExplosion)>1e-6){viewer.renderer.shadowMap.needsUpdate=true;shadowExplosion=e;}
     viewer.setExplosion(e,{preserveView:true});
     viewer.setMicroscopic(pose.microscopic);
@@ -59,21 +62,35 @@
     const phase=phaseAt(beat,timeline.sync?.mode==='recording-cues'?t:sourceT,end);viewer.setPhase(phase[0],phase[1]);
     // Atomic motion owns actual contacts. Phase captions never reset particles.
     viewer.setChargeProgress?.(null);
-    viewer.setAtomicClock(atomicClock(t));
+    const cueTime=(id,fallback)=>timeline.eventCues.find(c=>c.id===id)?.time??fallback;
+    const envelope=(start,end)=>ease((t-start)/.28)*(1-ease((t-end)/.28));
+    const hvNegative=cueTime('hv_negative',48.645),hvPositive=cueTime('hv_positive',50.905),hvEnd=cueTime('hv_end',53.0);
+    const negative=envelope(cueTime('cathode_named',31.875),cueTime('cathode_named',31.875)+1.2)*.6+envelope(hvNegative,hvPositive-.28);
+    const positive=envelope(cueTime('anode_named',44.245),cueTime('anode_named',44.245)+1.1)*.6+envelope(hvPositive,hvEnd)+envelope(clock.electronAt-.4,clock.ionAt-.7)*.7;
+    viewer.setPolarityHighlight?.({positive:clamp(positive),negative:clamp(negative)});
     const fieldVisibility=ease((sourceT-148)/3)*(1-ease((sourceT-198.36)/3));
     viewer.setFieldVisibility(fieldVisibility);
     if(viewer.setPairCount)viewer.setPairCount(['ionization','drift'].includes(phase[0])?1:8);
     viewer.scene.children.forEach(o=>{if(o.type==='Box3Helper')o.visible=false;});
     miss.visible=beat.phase==='miss';if(miss.visible){const p=clamp((sourceT-beat.start)/8);miss.position.set(17,38,-64+p*115);miss.material.opacity=p<.1?p/.1:p>.9?(1-p)/.1:1;}
     viewer.renderAt(t);
-    const atomic=viewer.getAtomicState();
     $('field-status').style.opacity=String(fieldVisibility);
     $('field-fill').style.width=(atomic.fieldStrength*100)+'%';
     $('field-message').textContent=atomic.measurementReady?'Wieder messbereit':'Totzeit: kein neuer Zählimpuls';
     $('scene-name').textContent=sourceT>=195?'Zurück zum Messgerät':pose.microscopic>.9?'Atomare Ebene · stark vergrößert':pose.microscopic>.05?'Wir vergrößern den Gasraum':sourceT>=57.72&&sourceT<198.36?'Zusammengebauter Sensor':beat.mode==='part'||beat.mode==='open'?'Aufbau · schichtweise geöffnet':'Geiger-Müller-Zähler';
-    const anchor=beat.part==='anode'?viewer.parts.anode.localToWorld(new THREE.Vector3(0,13.8,0)):beat.part?new THREE.Box3().setFromObject(viewer.parts[beat.part]).getCenter(new THREE.Vector3()):new THREE.Vector3(0,18,0);
+    const hvView=beat.part==='voltage';
+    const activePart=hvView&&t>=hvNegative&&t<hvPositive?'cathode':hvView&&t>=hvPositive&&t<hvEnd+.28?'anode':beat.part;
+    const anchor=activePart&&viewer.getPartAnchor?new THREE.Vector3().fromArray(viewer.getPartAnchor(activePart)):activePart?new THREE.Box3().setFromObject(viewer.parts[activePart]).getCenter(new THREE.Vector3()):new THREE.Vector3(0,18,0);
     anchor.project(viewer.camera);let ax=(anchor.x*.5+.5)*832,ay=(-anchor.y*.5+.5)*516;ax=clamp(ax,60,790);ay=clamp(ay,65,440);
-    $('leader').style.display=beat.mode==='part'?'block':'none';
+    const hasLabel=beat.mode==='part'&&!!activePart&&beat.showLabel!==false;
+    $('leader').style.display=hasLabel?'block':'none';
+    $('callout').style.display=beat.showLabel===false?'none':'block';
+    $('callout').textContent=hvView&&activePart==='cathode'?'Kathode (−) · Minusleitung':hvView&&activePart==='anode'?'Anode (+) · Plusleitung':beat.tag;
+    if(t>=clock.radiationStart&&t<clock.collisionAt){
+      $('callout').style.display='block';
+      $('callout').textContent=t<(atomic.radiation?.windowCrossingAt??clock.windowAt)?'Strahlung erreicht das Glimmerfenster':'Durch das Glimmerfenster in den Gasraum';
+    }
+    $('callout').style.borderColor=hvView&&activePart==='cathode'?'#2667cc':hvView&&activePart==='anode'?'#dc3939':'#dba444';
     $('leader').querySelector('path').setAttribute('d',`M 220 390 L 265 390 L ${ax.toFixed(1)} ${ay.toFixed(1)}`);
     const dot=$('leader').querySelector('circle');dot.setAttribute('cx',ax);dot.setAttribute('cy',ay);
     const pulse=timing.pulseDisplay(timeline,t);
@@ -82,7 +99,7 @@
     $('count-number').textContent=String(pulse.count);
     const stamp=value=>`${Math.floor(value/60)}:${String(Math.floor(value%60)).padStart(2,'0')}`;
     $('progress').style.width=(t/timeline.duration*100)+'%';$('scrub').value=t;$('clock').textContent=stamp(t)+' / '+stamp(timeline.duration);
-    return {time:t,sourceTime:sourceT,beat:index,chapter:chapterIndex,phase:phase[0],explosion:e,view:pose,fieldStrength:atomic.fieldStrength,measurementReady:atomic.measurementReady,fieldVisibility,syncStatus:timeline.sync?.mode||'technical-preview',finalSync:!!timeline.sync?.finalSync};
+    return {time:t,sourceTime:sourceT,beat:index,chapter:chapterIndex,phase:phase[0],explosion:e,view:pose,activePart,hasLabel,polarity:{positive,negative},windowCrossingAt:atomic.radiation?.windowCrossingAt,fieldStrength:atomic.fieldStrength,measurementReady:atomic.measurementReady,fieldVisibility,syncStatus:timeline.sync?.mode||'technical-preview',finalSync:!!timeline.sync?.finalSync};
   };
   // The final audio montage owns the clock. Replace null cue times only after
   // the new recordings are placed, then activate recording-cues explicitly.

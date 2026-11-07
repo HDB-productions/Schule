@@ -4,10 +4,9 @@
   "width": 1280,
   "height": 720,
   "frames": 5573,
-  "bytes": 21362025,
+  "bytes": 21277943,
   "draft": false,
   "deterministicFrame83": true,
-  "sha256": "b0fae6a24b8f593e5b97d33e33517aea3086c0e88c7bc2784624290e202b2e3a",
   "streams": [
     {
       "type": "video",
@@ -24,6 +23,14 @@
   ],
   "faststart": true,
   "fullDecodeWithoutErrors": true,
-  "browserPlaybackAndSeek": true,
-  "auditoryReviewByAgent": false
+  "unchangedMontageAacPackets": true,
+  "sameAudioAsPreviousVideo": true,
+  "audioPacketSelection": "Original packets with 0 <= PTS < video duration; no re-encoding",
+  "audioPacketEvidence": {
+    "packets": 10879,
+    "sha256": "6e1da4cac4390452e2115d14f9481479c9a0985e71dc098ca29e5e7074807896"
+  },
+  "sha256": "0c10631e4cf21ab1b62746321529028b80737271e38758fd7d512c111e04f4ee",
+  "auditoryReviewByAgent": false,
+  "browserPlaybackAndSeek": true
 }

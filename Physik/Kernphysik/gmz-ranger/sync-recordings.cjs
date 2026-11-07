@@ -28,9 +28,11 @@ for(const cue of base.eventCues){
 }
 const signal={id:'pulse_signal',time:recording('zaehlimpuls',4.64),word:'Impuls',recording:'zaehlimpuls',rawTime:4.64,phase:'pulse',from:0,to:1,duration:1.8,status:'Auf Montagezeit übertragene ASR-Wortmarke'};
 base.eventCues=base.eventCues.filter(c=>c.id!=='pulse_signal');base.eventCues.push(signal);
+const constructionCues=[['cathode_named',15.31,'Kathode'],['anode_named',32.93,'Anode'],['hv_negative',37.33,'Kathode mit dem negativen Pol'],['hv_positive',39.59,'Anode mit dem positiven Pol'],['hv_end',41.43,'Pol']];
+for(const [id,rawTime,word] of constructionCues){base.eventCues=base.eventCues.filter(c=>c.id!==id);base.eventCues.push({id,time:recording('aufbau',rawTime),recording:'aufbau',rawTime,word,status:'Wortbezogene Hervorhebung'});}
 base.sync.requiredEvents=[...new Set([...base.sync.requiredEvents,'pulse_signal'])];
 const first=base.beats.find(b=>b.start===17.54);
-Object.assign(first,{title:'Ein flaches, rundes Zählrohr',text:'Wir betrachten die Bauform eines tragbaren Strahlungsmessgerätes. Im runden Sensor befindet sich der gasgefüllte Raum.',tag:'Flaches Geiger-Müller-Zählrohr',part:'gas',points:['Wiedererkennbare Bauform unseres Messgerätes','Innenaufbau als vereinfachtes Unterrichtsmodell']});
+Object.assign(first,{title:'Ein flaches, rundes Zählrohr',text:'Wir betrachten die Bauform eines tragbaren Strahlungsmessgerätes. Im runden Sensor befindet sich der gasgefüllte Raum.',tag:'',part:null,showLabel:false,points:['Wiedererkennbare Bauform unseres Messgerätes','Innenaufbau als vereinfachtes Unterrichtsmodell']});
 base.beats=base.beats.filter(b=>![21.7,22].includes(b.start));
 base.beats.push({start:21.7,title:'Die Gasfüllung',text:'Das Gasgemisch besteht hauptsächlich aus Edelgas. In diesem Gas kann Strahlung Ladungsträger erzeugen.',tag:'Gasgemisch · hauptsächlich Edelgas',mode:'part',part:'gas',phase:'off',points:['Gasfüllung im geschlossenen Sensor','Das Gas wird später stark vergrößert gezeigt.']},{start:22,title:'Die äußere Elektrode',text:'Das leitfähige Metallgehäuse des Zählrohrs bildet die Kathode.',tag:'Kathode · Metallgehäuse',mode:'part',part:'cathode',phase:'off',points:['Die Kathode begrenzt den Gasraum.','Sie liegt gegenüber der Anode am negativen Pol.']});
 base.beats.sort((a,b)=>a.start-b.start);

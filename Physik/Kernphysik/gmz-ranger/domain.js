@@ -9,9 +9,11 @@ const GMZDomain = (() => {
   const string = (value, max) => typeof value === 'string' && value.length <= max;
   const answerKey = value => value.trim().replace(/\s+/g, ' ');
   const criterionIds = lesson.criteria.map(c => c.id);
+  const legacyCriterionIds = ['entry', 'ionisation', 'charges', 'field', 'electron_motion', 'ion_motion', 'avalanche', 'pulse', 'count', 'quenching', 'deadtime', 'efficiency', 'limits'];
   const componentIds = lesson.components.map(c => c.id);
   const clone = value => JSON.parse(JSON.stringify(value));
   const signature = JSON.stringify(task());
+  const validAspect = aspect => exact(aspect, ['earned', 'assisted']) && colors.includes(aspect.earned) && typeof aspect.assisted === 'boolean' && (aspect.earned !== 'yellow' || aspect.assisted);
   function normalize(text) {
     return typeof text === 'string' ? text.normalize('NFKC').toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss').replace(/[\s\p{P}]+/gu, '').trim() : '';
   }
@@ -36,11 +38,12 @@ const GMZDomain = (() => {
       (!Object.hasOwn(f, 'misconceptions') || Array.isArray(f.misconceptions) && f.misconceptions.length <= 3 && f.misconceptions.every(m => exact(m, ['statement', 'correction']) && string(m.statement, 300) && m.statement.trim() && string(m.correction, 600) && m.correction.trim())));
   }
   function valid(s) {
-    if (!exact(s, ['lesson', 'version', 'ownerUid', 'labels', 'answer', 'aspects', 'history']) || s.lesson !== lesson.id || s.version !== lesson.version || !(s.ownerUid === null || typeof s.ownerUid === 'string' && uid.test(s.ownerUid)) || !string(s.answer, 12000)) return false;
+    const keys = ['lesson', 'version', 'ownerUid', 'labels', 'answer', 'aspects', 'history'];
+    if (!(exact(s, keys) || exact(s, [...keys, 'retiredAspects']) && exact(s.retiredAspects, ['quenching']) && validAspect(s.retiredAspects.quenching)) || s.lesson !== lesson.id || s.version !== lesson.version || !(s.ownerUid === null || typeof s.ownerUid === 'string' && uid.test(s.ownerUid)) || !string(s.answer, 12000)) return false;
     if (!exact(s.labels, componentIds) || !componentIds.every(id => {
       const label = s.labels[id];
       return exact(label, ['draft', 'earned', 'assisted', 'attempts']) && string(label.draft, 160) && colors.includes(label.earned) && typeof label.assisted === 'boolean' && Number.isSafeInteger(label.attempts) && label.attempts >= 0 && (label.earned === 'gray' || label.attempts > 0) && (label.earned !== 'yellow' || label.assisted);
-    }) || !exact(s.aspects, criterionIds) || !criterionIds.every(id => exact(s.aspects[id], ['earned', 'assisted']) && colors.includes(s.aspects[id].earned) && typeof s.aspects[id].assisted === 'boolean' && (s.aspects[id].earned !== 'yellow' || s.aspects[id].assisted))) return false;
+    }) || !exact(s.aspects, criterionIds) || !criterionIds.every(id => validAspect(s.aspects[id]))) return false;
     return Array.isArray(s.history) && s.history.length <= 1000 && new Set(s.history.map(h => h?.requestId)).size === s.history.length && s.history.filter(h => h?.status === 'pending' || h?.status === 'unknown').length <= 1 && s.history.every(h =>
       exact(h, ['requestId', 'at', 'rubricVersion', 'taskSignature', 'answer', 'assisted', 'status', 'feedback', 'message', 'applied']) && typeof h.requestId === 'string' && uuid.test(h.requestId) && string(h.at, 40) && Number.isFinite(Date.parse(h.at)) && h.rubricVersion === lesson.version && h.taskSignature === signature && string(h.answer, 12000) && !!answerKey(h.answer) && exact(h.assisted, criterionIds) && criterionIds.every(id => typeof h.assisted[id] === 'boolean') && statuses.includes(h.status) && string(h.message, 1600) && typeof h.applied === 'boolean' &&
       (h.status === 'done' ? validFeedback(h.feedback) : h.feedback === null && h.applied === false));
@@ -80,6 +83,32 @@ const GMZDomain = (() => {
   }
   function useHint(s, id) { ensure(s); const c = component(id); s.labels[id].assisted = true; return c.hint; }
   function scores(s) { return [...componentIds.map(id => s.labels[id].earned), ...criterionIds.map(id => s.aspects[id].earned), 'gray']; }
+  function migrateSnapshot(snapshot) {
+    const reject = () => { throw Error('Dieser ältere Lernstand konnte nicht sicher übernommen werden. Die Originaldaten bleiben erhalten. Bitte informiere deine Lehrkraft.'); };
+    if (!exact(snapshot, ['widget', 'version', 'data', 'scores']) || snapshot.widget !== lesson.id || snapshot.version !== 1 || lesson.version !== '1' || JSON.stringify(criterionIds) !== JSON.stringify(legacyCriterionIds.filter(id => id !== 'quenching'))) return reject();
+    const old = snapshot.data;
+    let migrated;
+    if (valid(old) && !Object.hasOwn(old, 'retiredAspects')) {
+      // The twelve-aspect format was already released with bridge version 1.
+      if (JSON.stringify(snapshot.scores) !== JSON.stringify(scores(old))) return reject();
+      migrated = clone(snapshot);
+    } else {
+      // Only this known history-free thirteen-aspect schema is unambiguous.
+      // Never discard a prior request or reinterpret feedback for another rubric.
+      if (!exact(old, ['lesson', 'version', 'ownerUid', 'labels', 'answer', 'aspects', 'history']) || !exact(old.aspects, legacyCriterionIds) || !legacyCriterionIds.every(id => validAspect(old.aspects[id])) || !Array.isArray(old.history) || old.history.length !== 0) return reject();
+      const projected = clone(old);
+      projected.aspects = Object.fromEntries(criterionIds.map(id => [id, projected.aspects[id]]));
+      if (!valid(projected)) return reject();
+      const oldScores = [...componentIds.map(id => old.labels[id].earned), ...legacyCriterionIds.map(id => old.aspects[id].earned)];
+      // Check all original twenty slots before dropping/reordering any score.
+      if (JSON.stringify(snapshot.scores) !== JSON.stringify(oldScores)) return reject();
+      projected.retiredAspects = { quenching: clone(old.aspects.quenching) };
+      migrated = { widget: snapshot.widget, version: 2, data: projected, scores: scores(projected) };
+    }
+    migrated.version = 2;
+    if (!valid(migrated.data) || JSON.stringify(migrated.scores) !== JSON.stringify(scores(migrated.data))) return reject();
+    return migrated;
+  }
   function begin(s, requestId, at) {
     ensure(s);
     if (typeof requestId !== 'string' || !uuid.test(requestId) || !string(at, 40) || !Number.isFinite(Date.parse(at))) throw Error('Ungültige Anfragekennung oder Zeitangabe.');
@@ -123,6 +152,6 @@ const GMZDomain = (() => {
     if (answerKey(s.answer) === answerKey(h.answer)) award(s, h);
     return h.applied;
   }
-  return { fresh, valid, normalize, checkLabel, submitLabel, useHint, scores, task, validFeedback, begin, finish, cached, applyCached };
+  return { fresh, valid, normalize, checkLabel, submitLabel, useHint, scores, migrateSnapshot, task, validFeedback, begin, finish, cached, applyCached };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = GMZDomain;

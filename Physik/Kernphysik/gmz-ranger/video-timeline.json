@@ -176,6 +176,46 @@
       "to": 1,
       "duration": 1.8,
       "status": "Auf Montagezeit übertragene ASR-Wortmarke"
+    },
+    {
+      "id": "cathode_named",
+      "time": 31.8751875,
+      "recording": "aufbau",
+      "rawTime": 15.31,
+      "word": "Kathode",
+      "status": "Wortbezogene Hervorhebung"
+    },
+    {
+      "id": "anode_named",
+      "time": 44.24518749999999,
+      "recording": "aufbau",
+      "rawTime": 32.93,
+      "word": "Anode",
+      "status": "Wortbezogene Hervorhebung"
+    },
+    {
+      "id": "hv_negative",
+      "time": 48.6451875,
+      "recording": "aufbau",
+      "rawTime": 37.33,
+      "word": "Kathode mit dem negativen Pol",
+      "status": "Wortbezogene Hervorhebung"
+    },
+    {
+      "id": "hv_positive",
+      "time": 50.905187500000004,
+      "recording": "aufbau",
+      "rawTime": 39.59,
+      "word": "Anode mit dem positiven Pol",
+      "status": "Wortbezogene Hervorhebung"
+    },
+    {
+      "id": "hv_end",
+      "time": 52.74518749999999,
+      "recording": "aufbau",
+      "rawTime": 41.43,
+      "word": "Pol",
+      "status": "Wortbezogene Hervorhebung"
     }
   ],
   "chapters": [
@@ -231,14 +271,15 @@
       "start": 17.54,
       "title": "Ein flaches, rundes Zählrohr",
       "text": "Wir betrachten die Bauform eines tragbaren Strahlungsmessgerätes. Im runden Sensor befindet sich der gasgefüllte Raum.",
-      "tag": "Flaches Geiger-Müller-Zählrohr",
+      "tag": "",
       "mode": "part",
-      "part": "gas",
+      "part": null,
       "phase": "off",
       "points": [
         "Wiedererkennbare Bauform unseres Messgerätes",
         "Innenaufbau als vereinfachtes Unterrichtsmodell"
-      ]
+      ],
+      "showLabel": false
     },
     {
       "start": 21.7,

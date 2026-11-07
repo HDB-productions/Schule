@@ -49,7 +49,7 @@
     floor.rotation.x = -Math.PI / 2; floor.position.y = -83; floor.receiveShadow = true; scene.add(floor);
     function mat(color, extra) {
       const m = new T.MeshStandardMaterial(Object.assign({ color: color, roughness: .47, metalness: .05 }, extra));
-      materials.push(m); m.userData.baseOpacity = m.opacity; m.userData.baseColor = m.color.getHex(); m.userData.baseEmissive = m.emissive.getHex();
+      materials.push(m); m.userData.baseOpacity = m.opacity; m.userData.baseColor = m.color.getHex(); m.userData.baseEmissive = m.emissive.getHex(); m.userData.baseEmissiveIntensity = m.emissiveIntensity;
       return m;
     }
     const blue = () => mat(0x15429b, { roughness: .36 });
@@ -162,7 +162,9 @@
     ring(cathode,23.3,.85,metal(),0,0,-12);
     ring(cathode,24,.38,mat(0x53606a,{metalness:.8}),0,0,-2);
     const gas = group('gas', V(0,30,-6.9), V(33,0,-23));
-    const gasMaterial=mat(0x56c5eb,{transparent:true,opacity:.16,roughness:.12,metalness:0,depthWrite:false,side:T.DoubleSide});
+    // A faint violet volume and separate pale particles read as gas, distinct
+    // from the opaque silver cathode. Keep the working electrodes visible.
+    const gasMaterial=mat(0xb7a5e5,{transparent:true,opacity:.11,roughness:.9,metalness:0,depthWrite:false,side:T.DoubleSide});
     cylinder(gas,22.4,9,gasMaterial,0,0,0);
     const particleGeo = new T.SphereGeometry(.46,8,6), particleMat=mat(0x79dbf4,{emissive:0x0d6888,emissiveIntensity:.25,transparent:true,opacity:.7});
     const atomicParticleGeo=new T.SphereGeometry(.46,20,14);
@@ -193,7 +195,6 @@
     rounded(voltage,10,9,7,1,mat(0x242c38),0,3,4);
     for(const x of [-7,7]){cylinder(voltage,2.1,6,mat(0x152d43),x,-7,3);cylinder(voltage,1.9,.15,metal(),x,-7,6.1);}
     for(let i=0;i<6;i++)rounded(voltage,2.4,1.1,.7,.2,mat(0xcdb589),-8+i*3.2,10,1);
-    wire(voltage,[[0,12,1],[0,20,2],[10,26,1],[13,37,-5]],.55,mat(0xc74538));
     const counter=group('counter',V(-8,18,5.5),V(25,7,42));
     rounded(counter,46,68,1.25,3,mat(0x205f4b),0,0,0);
     const traces=mat(0x4fa087,{metalness:.3,roughness:.7});
@@ -203,7 +204,6 @@
     for(let i=0;i<10;i++)rounded(counter,2.8,1.8,.9,.2,mat(i%3===0?0x3b4550:0xc3b295),-16+(i%5)*7, -15-Math.floor(i/5)*7,1.3);
     for(const x of [-18,18]) for(const y of [-29,29])cylinder(counter,1.3,1.5,metal(),x,y,1,16);
     const buzzer=cylinder(counter,6,4,mat(0x222a32),11,21,2.8);ring(counter,3,.4,mat(0x090d12),11,21,5);
-    wire(counter,[[18,15,1],[28,15,-1],[34,9,-7],[36,12,-10]],.42,mat(0xb44837));
     const battery=group('battery',V(0,-43,-1),V(6,-37,5));
     rounded(battery,48,53,2,3,mat(0x192530),0,0,-5);
     for(const x of [-12,12]){
@@ -214,6 +214,62 @@
       for(const y of [-26,26]){const contact=mesh(battery,new T.BoxGeometry(9,.6,8),metal(),x,y,1);contact.rotation.x=.2;}
       label(battery,8,25,x,0,8.7,(c,w,h)=>{c.fillStyle='#273948';c.font='bold 210px Arial';c.textAlign='center';c.fillText('AA',w/2,h*.45);c.font='130px Arial';c.fillText('1.5 V',w/2,h*.7);c.fillText('+',w/2,h*.18);});
     }
+    // Explicit high-voltage terminals and flexible teaching-model leads. The
+    // source and detector remain electrically joined through every reveal pose.
+    // This is a functional diagram, not a manufacturer's circuit layout.
+    const electricalConnections=[];
+    let polarityHighlight={positive:0,negative:0};
+    function terminal(parent,local,polarity){
+      const socket=cylinder(parent,1.25,1.4,mat(0x343e47,{metalness:.65,roughness:.35}),...local,20);
+      socket.userData.polarity=polarity;
+      const contact=cylinder(parent,.67,1.7,mat(0xc0c7cd,{metalness:.8,roughness:.25}),...local,16);
+      contact.userData.polarity=polarity;
+    }
+    function connection(id,sourceLocal,targetPart,targetLocal){
+      const positive=id==='positive',color=positive?0xa84942:0x356d9b;
+      terminal(voltage,sourceLocal,id);terminal(parts[targetPart],targetLocal,id);
+      label(voltage,3.3,3.3,sourceLocal[0],sourceLocal[1]-3,sourceLocal[2]+1.05,(c,w,h)=>{c.fillStyle=positive?'#b63832':'#2865b1';c.font='bold '+Math.round(h*.94)+'px Arial';c.textAlign='center';c.textBaseline='middle';c.fillText(positive?'+':'−',w/2,h*.52);});
+      const lead=mesh(model,new T.BufferGeometry(),mat(color,{roughness:.72,metalness:0}));
+      lead.name=positive?'HV + → Anode':'HV − → Kathodenmantel';
+      lead.userData={partId:'voltage',polarity:id,electricalLead:true};
+      electricalConnections.push({id,source:{part:'voltage',local:sourceLocal},target:{part:targetPart,local:targetLocal},lead,points:[]});
+    }
+    connection('positive',[6,12,4],'anode',[28,0,1.8]);
+    connection('negative',[-6,12,4],'cathode',[-24,0,-6.5]);
+    function endpointWorld(endpoint){return parts[endpoint.part].localToWorld(V(...endpoint.local));}
+    function updateElectricalConnections(){
+      model.updateMatrixWorld(true);
+      electricalConnections.forEach(c=>{
+        const sourceWorld=endpointWorld(c.source),targetWorld=endpointWorld(c.target),positive=c.id==='positive',unfold=stage(explosion,.30,.60);
+        const pose=sourceWorld.toArray().concat(targetWorld.toArray(),unfold,model.matrixWorld.elements).join(',');if(c.pose===pose)return;c.pose=pose;
+        const a=model.worldToLocal(sourceWorld.clone()),b=model.worldToLocal(targetWorld.clone());
+        // Side loops sit outside the circular entrance. They clear the front of
+        // the detector cup and enter only at their actual electrode terminal.
+        // Fold the slack inside the case when assembled; it unfurls continuously
+        // as the boards swing out. Routing uses model coordinates, so rotating
+        // or translating the whole device does not change its physical wiring.
+        const slack=2+12*unfold,approach=2+3*unfold;
+        const side=positive?Math.max(a.x,b.x)+slack:Math.min(a.x,b.x)-slack;
+        const z=Math.min(a.z,b.z)-5-2*unfold,sourceExit=model.worldToLocal(parts.voltage.localToWorld(V(c.source.local[0],c.source.local[1]+3,c.source.local[2]+4)));
+        const lowerY=Math.min(a.y-8,b.y-32);
+        const points=[a,sourceExit,V(sourceExit.x,lowerY,z),V(side,lowerY,z),V(side,b.y-6,z),V(b.x+(positive?approach:-approach),b.y,b.z-3),b];
+        const curve=new T.CatmullRomCurve3(points);
+        const previous=c.lead.geometry;c.lead.geometry=new T.TubeGeometry(curve,72,.62,9,false);previous.dispose();
+        c.points=points.map(p=>model.localToWorld(p.clone()).toArray());
+      });
+    }
+    function getElectricalConnections(){
+      // Re-evaluate transforms, so callers can verify connections even after
+      // transforming the model root, without relying on a rendered frame.
+      updateElectricalConnections();
+      return electricalConnections.map(c=>({id:c.id,polarity:c.id,source:{part:c.source.part,local:c.source.local.slice(),world:endpointWorld(c.source).toArray()},target:{part:c.target.part,local:c.target.local.slice(),world:endpointWorld(c.target).toArray()},points:c.points.map(p=>p.slice()),cableStart:c.points[0].slice(),cableEnd:c.points[c.points.length-1].slice()}));
+    }
+    const partAnchorLocal={cathode:[0,23.3,-12],gas:[-6,8,-.3],anode:[13.8,0,0],voltage:[0,3,8],counter:[-3,6,3],battery:[-12,0,8.5],window:[0,0,-.2],display:[0,42,17.5],shell:[-24,0,15],rear:[-26,0,-16]};
+    function getPartAnchor(id){if(!parts[id])return null;model.updateMatrixWorld(true);return parts[id].localToWorld(V(...(partAnchorLocal[id]||[0,0,0]))).toArray();}
+    function setPolarityHighlight(value){
+      value=value||{};const clamp=n=>Math.max(0,Math.min(1,Number(n)||0));
+      polarityHighlight={positive:clamp(value.positive),negative:clamp(value.negative)};refreshMaterials();return api;
+    }
     // Mechanism primitives share this scene with the lesson and the MP4 renderer.
     // Their sizes, timing, density and trajectories are illustrative, not to scale.
     const mechanism=new T.Group();mechanism.name='Schematische Vorgänge';scene.add(mechanism);
@@ -223,8 +279,9 @@
     const incident=mesh(mechanism,new T.SphereGeometry(1.15,16,10),mat(0xffdc73,{emissive:0xe79f25,emissiveIntensity:1}));
     function signMaterial(sign,color){const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d');ctx.fillStyle=color;ctx.font='bold 105px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(sign,64,68);const tex=new T.CanvasTexture(c);textures.push(tex);return new T.SpriteMaterial({map:tex,transparent:true,depthTest:false,depthWrite:false});}
     const minusSign=signMaterial('−','#082a3e'),plusSign=signMaterial('+','#54230b');
-    function chargeSign(parent,material,size){const s=new T.Sprite(material);s.scale.set(size,size,1);s.renderOrder=20;parent.add(s);}
-    const ionPairs=[];for(let i=0;i<16;i++){const pair={origin:neutralGas[i].position.clone(),e:mesh(mechanism,new T.SphereGeometry(.75,12,8),electronMat),ion:mesh(mechanism,new T.SphereGeometry(1.1,12,8),ionMat)};pair.e.userData={role:'electron',index:i};pair.ion.userData={role:'ion',index:i};chargeSign(pair.e,minusSign,1.15);chargeSign(pair.ion,plusSign,1.55);ionPairs.push(pair);}
+    function chargeSign(parent,material,size){const s=new T.Sprite(material.clone());s.scale.set(size,size,1);s.renderOrder=20;parent.add(s);}
+    const legacyIonGeometry=new T.SphereGeometry(1.1,12,8);
+    const ionPairs=[];for(let i=0;i<16;i++){const pair={origin:neutralGas[i].position.clone(),e:mesh(mechanism,new T.SphereGeometry(.75,12,8),electronMat),ion:mesh(mechanism,legacyIonGeometry,ionMat.clone())};pair.e.userData={role:'electron',index:i};pair.ion.userData={role:'ion',index:i};chargeSign(pair.e,minusSign,1.15);chargeSign(pair.ion,plusSign,1.55);ionPairs.push(pair);}
     const collisionFlashes=ionPairs.map((pair,index)=>{const flash=ring(mechanism,.8,.045,mat(0xe8b950,{emissive:0x8d4c08,emissiveIntensity:.7,transparent:true,opacity:0,depthWrite:false}),0,0,0);flash.userData={role:'collision',index};flash.visible=false;return flash;});
     const avalanche=[];for(let i=0;i<34;i++)avalanche.push(mesh(mechanism,new T.SphereGeometry(.46,8,6),electronMat));
     const pulseDot=mesh(mechanism,new T.SphereGeometry(1.45,12,8),electronMat);
@@ -253,12 +310,23 @@
     function updateAtomicMechanism(){
       atomicState=getAtomicState();const state=atomicState,phase=phaseState.phase,p=phaseState.progress;
       mechanism.visible=true;mechanism.position.copy(gas.position);
-      state.atoms.forEach((atom,i)=>{neutralGas[i].position.fromArray(atom.position);neutralGas[i].visible=atom.visible;neutralGas[i].scale.setScalar(1.3);neutralGas[i].geometry=atomicParticleGeo;});
-      ionPairs.forEach((pair,i)=>{const electron=state.electrons[i],ion=state.ions[i];pair.e.position.fromArray(electron.position);pair.ion.position.fromArray(ion.position);pair.e.visible=electron.visible;pair.ion.visible=ion.visible;pair.e.scale.setScalar(.42);pair.ion.scale.setScalar(.55);pair.e.children.forEach(s=>s.position.set(0,0,.05));pair.ion.children.forEach(s=>s.position.set(0,0,.05));});
+      state.atoms.forEach((atom,i)=>{neutralGas[i].position.fromArray(atom.position);neutralGas[i].visible=atom.visible;neutralGas[i].scale.setScalar(.22/.46);neutralGas[i].geometry=atomicParticleGeo;});
+      ionPairs.forEach((pair,i)=>{
+        const electron=state.electrons[i],ion=state.ions[i];
+        pair.e.position.fromArray(electron.position);pair.ion.position.fromArray(ion.position);pair.e.visible=electron.visible;pair.ion.visible=ion.visible;
+        pair.e.scale.setScalar(.11/.75);pair.ion.geometry=atomicParticleGeo;pair.ion.scale.setScalar(.22/.46);
+        // An ion reaches the cathode at the exact position from which its neutral
+        // atom continues. The same sphere, radius and final material avoid a
+        // visual jump as charge disappears; the plus sign fades continuously.
+        const neutralBlend=stage(state.time,ion.neutralizedAt-.45,ion.neutralizedAt),m=pair.ion.material,neutral=neutralGas[i].material;
+        m.color.copy(ionMat.color).lerp(neutral.color,neutralBlend);m.emissive.copy(ionMat.emissive).lerp(neutral.emissive,neutralBlend);
+        m.emissiveIntensity=ionMat.emissiveIntensity+(neutral.emissiveIntensity-ionMat.emissiveIntensity)*neutralBlend;m.opacity=1+(neutral.opacity-1)*neutralBlend;m.roughness=ionMat.roughness+(neutral.roughness-ionMat.roughness)*neutralBlend;m.transparent=neutralBlend>0;m.depthWrite=m.opacity>.8;
+        pair.e.children.forEach(s=>s.position.set(0,0,.05));pair.ion.children.forEach(s=>{s.position.set(0,0,.05);s.material.opacity=1-neutralBlend;});
+      });
       incident.visible=state.radiation.visible;incident.position.fromArray(state.radiation.position);incident.scale.setScalar(.4);
       trail.visible=state.radiation.visible;trail.position.set(0,0,0);trail.material.opacity=.65;
       const positions=trail.geometry.attributes.position;positions.setXYZ(0,...state.radiation.start);positions.setXYZ(1,...state.radiation.position);positions.needsUpdate=true;trail.geometry.computeBoundingSphere();trail.computeLineDistances();
-      collisionFlashes.forEach((flash,i)=>{const age=state.time-state.events[i].time;flash.visible=age>=0&&age<.45;flash.position.fromArray(state.events[i].position);flash.scale.setScalar(.9+Math.max(0,age)*2);flash.material.opacity=flash.visible?(1-age/.45)*.85:0;});
+      collisionFlashes.forEach((flash,i)=>{const age=state.time-state.events[i].time;flash.visible=age>=0&&age<.45;flash.position.fromArray(state.events[i].position);flash.scale.setScalar(.275+Math.max(0,age)*.25);flash.material.opacity=flash.visible?(1-age/.45)*.85:0;});
       avalanche.forEach(dot=>{dot.visible=false;});
       fieldArrows.forEach(a=>{const strength=state.fieldStrength,opacity=fieldVisibility*(.25+.75*strength),length=4.8*strength;a.visible=opacity>0;a.setLength(length,Math.min(1.4,length*.32),Math.min(.7,length*.18));a.userData.fieldStrength=strength;a.line.material.transparent=a.cone.material.transparent=true;a.line.material.opacity=a.cone.material.opacity=opacity;});
       glow.visible=false;
@@ -294,6 +362,7 @@
         pair.e.position.copy(origin).lerp(electronTarget,electronDrift);if(phase==='ionization')pair.e.position.x+=.8+Math.max(0,p-i/pairCount)*1.5;
         pair.ion.position.copy(origin).lerp(ionTarget,ionDrift);
         pair.e.scale.setScalar(1);pair.ion.scale.setScalar(phase==='deadtime'?Math.min(1,(1-p)*5):1);
+        pair.ion.geometry=legacyIonGeometry;pair.ion.material.copy(ionMat);pair.ion.children.forEach(s=>{s.material.opacity=1;});
         pair.e.children.forEach(s=>s.position.set(0,0,0));pair.ion.children.forEach(s=>s.position.set(0,0,0));
       });
       avalanche.forEach((dot,i)=>{
@@ -333,7 +402,13 @@
           }
           if(m.color&&m.userData.baseColor!==null)m.color.setHex(atomicClock!==null&&o.userData.neutralGas?0x8e9daa:m.userData.baseColor);
           m.transparent=m.opacity<1||!!m.map;m.depthWrite=!ghost&&m.opacity>.8;
-          if(m.emissive){m.emissive.setHex(atomicClock!==null&&o.userData.neutralGas?0x11181d:selected?0x6c3800:m.userData.baseEmissive||0);m.emissiveIntensity=selected?.36:1;}
+          if(m.emissive){m.emissive.setHex(atomicClock!==null&&o.userData.neutralGas?0x11181d:selected?0x6c3800:m.userData.baseEmissive||0);m.emissiveIntensity=selected?.36:(m.userData.baseEmissiveIntensity??1);}
+          const polarity=o.userData.polarity||(id==='anode'?'positive':id==='cathode'?'negative':null),strength=polarity?polarityHighlight[polarity]:0;
+          if(strength>0){
+            const tint=new T.Color(polarity==='positive'?0xe23c36:0x286cdd);
+            if(m.color)m.color.lerp(tint,strength);
+            if(m.emissive){m.emissive.lerp(tint,strength);m.emissiveIntensity+=(.32-m.emissiveIntensity)*strength;}
+          }
           m.needsUpdate=true;
         }
         if(!o.userData.neutralGas)o.visible=[].concat(o.material).some(m=>m.opacity>0);
@@ -347,11 +422,11 @@
     function updatePositions(){
       movable.forEach(p=>{p.group.position.copy(p.base);const id=p.group.userData.partId;
         if(id==='shell')p.group.position.addScaledVector(V(-45,12,65),stage(explosion,0,.30));
-        else if(id==='counter'||id==='voltage')p.group.position.addScaledVector(V(45,0,22),stage(explosion,.30,.60));
-        else if(id==='rear')p.group.position.addScaledVector(V(65,-18,-32),stage(explosion,.35,.65));
+        else if(id==='counter'||id==='voltage'){const opening=stage(explosion,.30,.60);p.group.position.addScaledVector(V(45,0,22),opening);p.group.rotation.y=Math.PI*opening;}
+        else if(id==='rear')p.group.position.addScaledVector(V(190,-18,-42),stage(explosion,.35,.65));
         else if(id==='window')p.group.position.addScaledVector(V(-34,0,-22),stage(explosion,.60,1));
         // Cathode, anode, gas and batteries retain their real shared location.
-      });floor.position.y=-83-15*stage(explosion,.35,.65);model.updateMatrixWorld(true);if(highlighted)selectionBox.box.setFromObject(parts[highlighted]);dirty=true;
+      });floor.position.y=-83-15*stage(explosion,.35,.65);model.updateMatrixWorld(true);updateElectricalConnections();if(highlighted)selectionBox.box.setFromObject(parts[highlighted]);dirty=true;
     }
     function setExplosion(value,settings){explosion=Math.max(0,Math.min(1,Number(value)||0));updatePositions();if(!settings?.preserveView){if(!highlighted){distanceGoal=280+explosion*75;lookGoal.set(0,-2,0);}else new T.Box3().setFromObject(parts[highlighted]).getCenter(lookGoal);if(options.manual){look.copy(lookGoal);distance=distanceGoal;}}return api;}
     function revealPart(id,settings){const levels={window:0,display:0,shell:0,rear:0,counter:.40,voltage:.40,battery:.65,cathode:1,anode:1,gas:1};const value=levels[id]===undefined?0:levels[id];if(settings?.apply)setExplosion(value,settings);return value;}
@@ -362,6 +437,7 @@
       const box=new T.Box3().setFromObject(parts[id]);box.getCenter(lookGoal);const size=box.getSize(V(0,0,0));
       distanceGoal=Math.max(internal.has(id)?205:130,Math.max(size.x,size.y,size.z)*2.8);
       yawGoal=['window','anode','cathode','gas','battery'].includes(id)?-2.85:.40;pitchGoal=id==='window'?.10:.30;
+      if(id==='voltage'||id==='counter')yawGoal=.40+2.45*stage(explosion,.30,.60);
       if(focusOptions.immediate||options.manual){yaw=yawGoal;pitch=pitchGoal;distance=distanceGoal;look.copy(lookGoal);}
       dirty=true;return api;
     }
@@ -370,7 +446,7 @@
     function renderAt(seconds){
       if(disposed)return;const t=Math.max(0,Number(seconds)||0);
       if(options.manual){yaw=yawGoal;pitch=pitchGoal;distance=distanceGoal;look.copy(lookGoal);}
-      poseCamera();updateMechanism();if(highlighted)selectionBox.box.setFromObject(parts[highlighted]);renderer.render(scene,camera);dirty=false;lastTime=t;return api;
+      poseCamera();updateMechanism();updateElectricalConnections();if(highlighted)selectionBox.box.setFromObject(parts[highlighted]);renderer.render(scene,camera);dirty=false;lastTime=t;return api;
     }
     function resize(width,height){const rect=container.getBoundingClientRect();width=width||rect.width||640;height=height||rect.height||420;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();dirty=true;if(options.manual)renderAt(lastTime||0);return api;}
     function setView(view){if(view.target){lookGoal.fromArray(view.target);look.copy(lookGoal);}if(Number.isFinite(view.yaw))yaw=yawGoal=view.yaw;if(Number.isFinite(view.pitch))pitch=pitchGoal=view.pitch;if(Number.isFinite(view.distance))distance=distanceGoal=view.distance;dirty=true;return api;}
@@ -390,7 +466,7 @@
     let observer=null;if(global.ResizeObserver){observer=new ResizeObserver(()=>resize());observer.observe(container);}
     function tick(ms){if(disposed)return;const delta=lastTime===null?.016:Math.min(.06,Math.max(.001,ms/1000-lastTime));lastTime=ms/1000;const f=1-Math.exp(-delta*10);const changing=Math.abs(yaw-yawGoal)+Math.abs(pitch-pitchGoal)+Math.abs(distance-distanceGoal)+look.distanceTo(lookGoal)>.002;
       if(changing){yaw+=(yawGoal-yaw)*f;pitch+=(pitchGoal-pitch)*f;distance+=(distanceGoal-distance)*f;look.lerp(lookGoal,f);dirty=true;}if(dirty)renderAt(ms/1000);frame=requestAnimationFrame(tick);}
-    function dispose(){disposed=true;cancelAnimationFrame(frame);if(observer)observer.disconnect();canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',up);canvas.removeEventListener('wheel',wheel);canvas.removeEventListener('keydown',key);const geos=new Set([particleGeo,atomicParticleGeo]),mats=new Set();scene.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)[].concat(o.material).forEach(m=>mats.add(m));});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer.dispose();canvas.remove();}
+    function dispose(){disposed=true;cancelAnimationFrame(frame);if(observer)observer.disconnect();canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',up);canvas.removeEventListener('wheel',wheel);canvas.removeEventListener('keydown',key);const geos=new Set([particleGeo,atomicParticleGeo,legacyIonGeometry]),mats=new Set([ionMat,minusSign,plusSign]);scene.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)[].concat(o.material).forEach(m=>mats.add(m));});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer.dispose();canvas.remove();}
     function exportModel(){
       model.updateMatrixWorld(true);
       const copy=model.clone(true),canonical=new Map();
@@ -399,7 +475,7 @@
       copy.traverse(o=>{if(o.geometry&&o.geometry.parameters){if(!canonical.has(o.geometry)){const g=new T.BufferGeometry().copy(o.geometry);g.name=o.geometry.name;g.userData=Object.assign({},o.geometry.userData,{sourceGeometryType:o.geometry.type});canonical.set(o.geometry,g);}o.geometry=canonical.get(o.geometry);}});
       const json=copy.toJSON();canonical.forEach(g=>g.dispose());return json;
     }
-    const api={scene,camera,renderer,model,parts,canvas,setExplosion,revealPart,highlightPart,focusPart,resetView,resize,renderAt,setView,getView,zoom,zoomBy:zoom,setPhase,setPairCount,setChargeProgress,setAtomicClock,getAtomicState,setMicroscopic,getMicroscopic:()=>microscopic,setFieldVisibility,getFieldVisibility:()=>fieldVisibility,dispose,exportModel,getExplosion:()=>explosion,getHighlight:()=>highlighted,sensor:{center:[0,30,-6.9],windowCenter:[0,30,-14.8],outwardNormal:[0,0,-1],anodeRadius:13.8},mechanism};
+    const api={scene,camera,renderer,model,parts,canvas,setExplosion,revealPart,highlightPart,focusPart,resetView,resize,renderAt,setView,getView,zoom,zoomBy:zoom,setPhase,setPairCount,setChargeProgress,setAtomicClock,getAtomicState,setMicroscopic,getMicroscopic:()=>microscopic,setFieldVisibility,getFieldVisibility:()=>fieldVisibility,setPolarityHighlight,getPolarityHighlight:()=>Object.assign({},polarityHighlight),getElectricalConnections,getPartAnchor,dispose,exportModel,getExplosion:()=>explosion,getHighlight:()=>highlighted,sensor:{center:[0,30,-6.9],windowCenter:[0,30,-14.8],outwardNormal:[0,0,-1],anodeRadius:13.8},mechanism};
     resize();updatePositions();renderAt(0);if(!options.manual)frame=requestAnimationFrame(tick);return api;
   };
 })(window);

@@ -1,6 +1,6 @@
 const D=GMZDomain,L=GMZ_LESSON;
 let state,loaded=false,busy=false,budgetBusy=false,currentUid=null,transport='fetch',viewer=null,step=0,selected=null,phase=0,phaseStart=0,phaseFrame=0,viewFrame=0;
-const bridge=createEduloBridge({root,widgetId:L.id,stateVersion:1,scoreCount:20,hideFooter:true,fresh:D.fresh,validate:D.valid,
+const bridge=createEduloBridge({root,widgetId:L.id,stateVersion:2,scoreCount:20,hideFooter:true,fresh:D.fresh,validate:D.valid,migrateSnapshot:D.migrateSnapshot,
  onStatus:({text,error})=>{q('[data-storage]').textContent=text;q('[data-retry]').hidden=!error;}});
 const el=(tag,text,cls)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;return node;};
 const message=text=>{q('[data-message]').textContent=text;};
@@ -23,7 +23,8 @@ function partView(id,explosion){
  const before=viewState();viewer.setExplosion(explosion,{preserveView:true});
  const box=new THREE.Box3().setFromObject(viewer.parts[id]),target=box.getCenter(new THREE.Vector3()).toArray(),size=box.getSize(new THREE.Vector3());
  viewer.setExplosion(before.explosion,{preserveView:true});viewer.setView(before);
- return {yaw:['window','anode','gas','cathode'].includes(id)?2.85:.40,pitch:.18,distance:Math.max(100,Math.max(size.x,size.y,size.z)*2.8),target,explosion,microscopic:0};
+ const sensorSide=['window','anode','gas','cathode'].includes(id),board=['voltage','counter'].includes(id);
+ return {yaw:sensorSide?2.85:board?.40+2.45*GMZStaging.ease((explosion-.30)/.30):.40,pitch:.18,distance:Math.max(100,Math.max(size.x,size.y,size.z)*2.8),target,explosion,microscopic:0};
 }
 function focus(id){
  selected=id;if(!viewer)return;stopPhase();const microscopic=viewer.getMicroscopic(),e=viewer.revealPart(id),destination=partView(id,e);
