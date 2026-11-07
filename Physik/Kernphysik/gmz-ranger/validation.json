@@ -194,5 +194,35 @@
     "audioMontageTestsPassed": 8,
     "hardlinkTestSkipped": true,
     "fullMovieStillPreviousRevision": false
+  },
+  "interactiveProcess": {
+    "modes": [
+      "aufbau",
+      "ablauf"
+    ],
+    "phases": [
+      "incoming",
+      "ionization",
+      "drift",
+      "avalanche",
+      "deadtime"
+    ],
+    "explanatoryPhaseText": false,
+    "entryShowsWindowCrossing": true,
+    "entryEndsBeforeCollision": true,
+    "windowFadesBeforeCollision": true,
+    "electronDirectionArrow": true,
+    "allParticlesFreezeAtBoundaries": true,
+    "frozenBoundaryChecks": 8,
+    "continuousAdvance": true,
+    "replayDeterministic": true,
+    "modeDraftPreservation": true,
+    "textareaAutoHeight": true,
+    "narrowWidth390": true,
+    "localEdge": true,
+    "localWebKitIntegration": true,
+    "physicalIPadSafari": false,
+    "realPaidAiCalls": 0,
+    "evidence": "outputs/gmz-ranger-qa/process/result.json"
   }
 }

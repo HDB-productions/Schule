@@ -1,5 +1,5 @@
 const D=GMZDomain,L=GMZ_LESSON;
-let state,loaded=false,busy=false,budgetBusy=false,currentUid=null,transport='fetch',viewer=null,step=0,selected=null,phase=0,phaseStart=0,phaseFrame=0,viewFrame=0;
+let state,loaded=false,busy=false,budgetBusy=false,currentUid=null,transport='fetch',viewer=null,step=0,selected=null,phase=0,phaseStart=0,phaseFrame=0,viewFrame=0,modelMode='aufbau',processStatus='idle',processTime=0;
 const bridge=createEduloBridge({root,widgetId:L.id,stateVersion:2,scoreCount:20,hideFooter:true,fresh:D.fresh,validate:D.valid,migrateSnapshot:D.migrateSnapshot,
  onStatus:({text,error})=>{q('[data-storage]').textContent=text;q('[data-retry]').hidden=!error;}});
 const el=(tag,text,cls)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;return node;};
@@ -27,7 +27,7 @@ function partView(id,explosion){
  return {yaw:sensorSide?2.85:board?.40+2.45*GMZStaging.ease((explosion-.30)/.30):.40,pitch:.18,distance:Math.max(100,Math.max(size.x,size.y,size.z)*2.8),target,explosion,microscopic:0};
 }
 function focus(id){
- selected=id;if(!viewer)return;stopPhase();const microscopic=viewer.getMicroscopic(),e=viewer.revealPart(id),destination=partView(id,e);
+ selected=id;if(!viewer)return;stopPhase();viewer.setElectronDirectionVisible(false);viewer.setWindowVisibility(1);const microscopic=viewer.getMicroscopic(),e=viewer.revealPart(id),destination=partView(id,e);
  const stops=microscopic>.01?[{time:1.8,yaw:2.85,pitch:.18,distance:160,target:[0,30,-6.9],explosion:0,microscopic:0},{time:4.2,...destination}]:[{time:2.8,...destination}];
  moveThrough(stops,()=>{viewer.setAtomicClock(null);viewer.setPhase(null,0);viewer.highlightPart(id);q('[data-model-status]').textContent='Der ausgewählte Bestandteil ist hervorgehoben. Die übrigen Teile zeigen seine Lage im Gerät.';});
  q('[data-model-status]').textContent='Das Modell öffnet sich schichtweise und zeigt den Bestandteil.';
@@ -82,7 +82,8 @@ function renderFeedback(){
   row.append(el('p',h.feedback?feedbackText(h.feedback):h.message,'preserve'));history.append(row);
  }
 }
-function render(){renderProgress();renderFeedback();controls();}
+function fitAnswer(){const node=q('[data-answer]');node.style.height='auto';const css=getComputedStyle(node);node.style.height=(node.scrollHeight+parseFloat(css.borderTopWidth)+parseFloat(css.borderBottomWidth))+'px';}
+function render(){renderProgress();renderFeedback();controls();fitAnswer();}
 async function refreshBudget(){
  if(budgetBusy||busy)return;const uid=syncIdentity();if(!uid){q('[data-budget]').textContent='Öffne diese Aufgabe in deinem eigenen Edulo-Konto, um KI-Rückmeldungen zu nutzen.';return;}
  budgetBusy=true;q('[data-refresh-budget]').disabled=true;
@@ -94,7 +95,7 @@ async function handleResult(h,r){
  if(r.status===202){h.status='unknown';h.message='Die Prüfung läuft noch. Rufe das Ergebnis später ab; es wird keine zweite Prüfung gestartet.';message(h.message);return;}
  if(r.ok){
   if(r.data.taskId!==L.id||r.data.taskVersion!==L.version||r.data.requestId!==h.requestId||!D.validFeedback(r.data.feedback))throw Error('Die Rückmeldung passt nicht zur eingereichten Aufgabe.');
-  const applied=D.finish(state,h,r.data.feedback);message(applied?'Deine Rückmeldung ist da. Überarbeite offene Aspekte und prüfe deinen Text anschließend erneut.':'Die Rückmeldung wurde in der Historie gespeichert. Du hast den Text inzwischen verändert; dafür wurden keine Punkte vergeben.');
+  const applied=D.finish(state,h,r.data.feedback);message(applied?(r.data.feedback.criteria.every(c=>c.status==='met')?'Deine Erklärung erfüllt alle fachlichen Kriterien.':'Deine Rückmeldung ist da. Überarbeite offene Aspekte und prüfe deinen Text anschließend erneut.'):'Die Rückmeldung wurde in der Historie gespeichert. Du hast den Text inzwischen verändert; dafür wurden keine Punkte vergeben.');
  }else{
   h.status=r.data.charge?.status==='reserved'?'unknown':'failed';h.message=errorMessage(r.data,r.status);message(h.message);
  }
@@ -118,39 +119,59 @@ async function recover(){
  catch(e){message('Das Ergebnis konnte noch nicht abgerufen werden. Es wurde keine neue KI-Prüfung gestartet. '+connectionMessage(e));}
  finally{busy=false;render();if(root.isConnected&&syncIdentity()===uid)await save();}
 }
-const phases=[
- {id:'incoming',title:'1 · Eintritt',text:'Strahlung kann durch das sehr dünne Glimmerfenster in das Gas gelangen. Nicht jedes einfallende Teilchen oder Photon erzeugt einen Impuls: Es muss den empfindlichen Bereich erreichen und dort eine geeignete Wechselwirkung auslösen.'},
- {id:'ionization',title:'2 · Ionisation',text:'Bei einer Wechselwirkung werden Elektronen aus Gasatomen oder Gasmolekülen gelöst. Zurück bleiben positive Ionen; die herausgelösten Elektronen sind negativ geladen.'},
- {id:'drift',title:'3 · Bewegung',text:'Zwischen Anode und Kathode liegt eine hohe Spannung. Im elektrischen Feld bewegen sich die negativen Elektronen zur positiven Anode. Die positiven Ionen bewegen sich zur negativen Kathode.'},
- {id:'avalanche',title:'4 · Lawine',text:'Nahe dem dünnen Anodenleiter ist das elektrische Feld besonders stark. Beschleunigte Elektronen ionisieren weitere Gasteilchen. Immer mehr freie Elektronen entstehen: eine Elektronenlawine.'},
- {id:'pulse',title:'5 · Zählimpuls',text:'Die kurze Gasentladung erzeugt einen elektrischen Impuls. Die Elektronik zählt ihn als ein Nachweisereignis und kann einen Klick ausgeben. Sie zählt nicht jedes Elektron der Lawine einzeln. Der einzelne Impuls verrät weder die Strahlungsart noch ihre Energie.'},
- {id:'deadtime',title:'6 · Totzeit',text:'Die positiven Ionen bleiben zunächst nahe der Anode und schwächen dort das elektrische Feld. Weitere Elektronen können kurzzeitig keine neue Elektronenlawine auslösen: Es entsteht kein weiterer Zählimpuls. Diese kurze Zeit heißt Totzeit. Während die Ionen zur Kathode wandern, wird das Feld nahe der Anode wieder stärker und das Zählrohr wieder messbereit.'}
-];
-function stopPhase(){cancelAnimationFrame(phaseFrame);phaseFrame=0;cancelAnimationFrame(viewFrame);viewFrame=0;}
+const phases=GMZProcess.phases;
+function stopPhase(){cancelAnimationFrame(phaseFrame);phaseFrame=0;cancelAnimationFrame(viewFrame);viewFrame=0;processStatus='idle';q('[data-phase-actions]').hidden=true;}
 function showField(visibility){
  viewer?.setFieldVisibility(visibility);const node=q('[data-field-status]');if(!node)return;node.style.opacity=String(visibility);
  const atomic=viewer?.getAtomicState();if(!atomic)return;
  node.querySelector('i').style.width=(atomic.fieldStrength*100)+'%';
- node.querySelector('span').textContent=atomic.measurementReady?(atomic.time>=atomic.config.readyAt?'Wieder messbereit':'Messbereit'):'Totzeit: kein neuer Zählimpuls';
+ node.querySelector('span').textContent=atomic.measurementReady?'Messbereit':'Totzeit';
+}
+function processPose(time){const atomic=RangerAtomicMotion.evaluate(time,GMZProcess.clock);return GMZProcess.pose(time,atomic);}
+function renderProcess(time,p){
+ processTime=time;const pose=processPose(time);
+ viewer.setAtomicClock({...GMZProcess.clock,time});viewer.setPhase(phases[phase].id,p);viewer.setView(pose);viewer.setMicroscopic(pose.microscopic);viewer.setWindowVisibility(pose.windowVisibility);viewer.setElectronDirectionVisible(phase===2);showField(pose.fieldVisibility);
+}
+function pauseProcess(){
+ phaseFrame=0;processStatus='paused';q('[data-phase-actions]').hidden=false;
+ q('[data-phase-play-label]').textContent=phase===phases.length-1?'Von vorn':'Weiter';
+ q('[data-phase-play]').setAttribute('aria-label',phase===phases.length-1?'Ablauf von vorn starten':'Nächste Phase abspielen');
+ q('[data-model-status]').textContent=phases[phase].title+' · angehalten';
 }
 function playPhase(index){
- phase=index;stopPhase();const item=phases[index];q('[data-phase-text]').textContent=item.text;
+ if(!viewer||modelMode!=='ablauf')return;
+ const continuous=processStatus==='paused'&&index===phase+1&&Math.abs(processTime-phases[index].start)<1e-8;
+ stopPhase();phase=index;processStatus='preparing';
  for(const b of q('[data-phases]').children)b.setAttribute('aria-pressed',String(Number(b.dataset.phase)===index));
- if(!viewer)return;
- const closeup={yaw:index===5?2.2:2.85,pitch:.18,distance:index<2?25:index===4?110:65,target:index<2?[3,30,-6.9]:[7,30,-6.9],explosion:0,microscopic:1};
- const stops=viewer.getMicroscopic()>.5?[{time:1.6,...closeup}]:[
-  {time:1.6,...viewState(),distance:240,target:[0,15,0]},
-  {time:3.6,yaw:2.85,pitch:.18,distance:145,target:[0,30,-6.9],explosion:0,microscopic:0},
-  {time:6.2,...closeup}
- ];
- q('[data-model-status]').textContent='Wir schließen das Gerät und vergrößern den Gasraum bis zur atomaren Ebene.';
- const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
- const ranges=[[0,2],[2,3],[3,9],[9,14],[14,16],[16,20]],range=ranges[index];
- const tick=now=>{if(!root.isConnected||!q('[data-process]').open){stopPhase();return;}const elapsed=(now-phaseStart)/1000,p=reduced?.65:Math.min(1,elapsed/6.5),time=range[0]+(range[1]-range[0])*p;viewer.setPhase(item.id,p);viewer.setAtomicClock({time,collisionAt:2,electronAt:3,ionAt:4,avalancheAt:9,pulseAt:14,readyAt:20,gasTime:time+Math.max(0,elapsed-6.5)});showField(index===2||index===5?(reduced?1:GMZStaging.ease(elapsed/.8)):0);if(!reduced)phaseFrame=requestAnimationFrame(tick);};
- moveThrough(stops,()=>{viewer.highlightPart(null);phaseStart=performance.now();q('[data-model-status]').textContent='Atomare Ebene · Teilchen stark vergrößert, Vorgänge verlangsamt.';phaseFrame=requestAnimationFrame(tick);});
+ const begin=()=>{
+  if(modelMode!=='ablauf')return;viewer.highlightPart(null);viewer.setExplosion(0,{preserveView:true});
+  processStatus='playing';phaseStart=performance.now();renderProcess(phases[index].start,0);
+  q('[data-model-status]').textContent=phases[index].title+' · läuft';
+  const tick=now=>{if(!root.isConnected||modelMode!=='ablauf')return;const frame=GMZProcess.frame(index,(now-phaseStart)/1000);renderProcess(frame.time,frame.progress);if(frame.finished)pauseProcess();else phaseFrame=requestAnimationFrame(tick);};
+  phaseFrame=requestAnimationFrame(tick);
+ };
+ if(continuous){begin();return;}
+ const destination=processPose(phases[index].start),current=viewState();
+ const stops=current.explosion>.01?[
+  {time:1,...current,distance:240,target:[0,15,0]},
+  {time:2,yaw:2.85,pitch:.18,distance:145,target:[0,30,-6.9],explosion:0,microscopic:0},
+  {time:3,...destination}
+ ]:[{time:1.8,...destination}];
+ q('[data-model-status]').textContent=phases[index].title;
+ moveThrough(stops,begin);
+}
+function setModelMode(mode){
+ if(mode===modelMode)return;stopPhase();modelMode=mode;
+ q('.model-layout').dataset.mode=mode;q('[data-process]').hidden=mode!=='ablauf';q('.label-panel').hidden=mode==='ablauf';q('.explode-label').hidden=mode==='ablauf';q('[data-build-copy]').hidden=mode==='ablauf';q('[data-label-progress]').hidden=mode==='ablauf';q('[data-home]').hidden=mode==='ablauf';q('[data-focus]').hidden=mode==='ablauf';
+ for(const b of root.querySelectorAll('[data-mode-select]')){const active=b.dataset.modeSelect===mode;b.setAttribute('aria-pressed',String(active));b.classList.toggle('secondary',!active);}
+ if(mode==='ablauf'){viewer?.highlightPart(null);playPhase(0);}
+ else{viewer?.setElectronDirectionVisible(false);viewer?.setWindowVisibility(1);focus(selected||L.components[Math.max(0,step)].id);}
 }
 for(const [i,p]of phases.entries()){const b=el('button',p.title,'secondary');b.type='button';b.dataset.phase=i;b.setAttribute('aria-pressed','false');b.addEventListener('click',()=>playPhase(i));q('[data-phases]').append(b);}
-q('[data-phase-replay]').addEventListener('click',()=>playPhase(phase));q('[data-process]').addEventListener('toggle',()=>{if(q('[data-process]').open)playPhase(phase);else stopPhase();});
+for(const b of root.querySelectorAll('[data-mode-select]'))b.addEventListener('click',()=>setModelMode(b.dataset.modeSelect));
+q('[data-phase-replay]').addEventListener('click',()=>playPhase(phase));
+q('[data-phase-play]').addEventListener('click',()=>playPhase((phase+1)%phases.length));
+root.gmzProcessState=()=>({mode:modelMode,phase,status:processStatus,time:processTime});
 q('[data-label-input]').addEventListener('input',()=>{if(!canEdit())return;state.labels[L.components[step].id].draft=q('[data-label-input]').value;queue();});
 function submitLabel(){if(!canEdit())return;const c=L.components[step],correct=D.submitLabel(state,c.id,q('[data-label-input]').value);renderLabel();renderProgress();if(!correct)q('[data-label-feedback]').textContent='Das passt noch nicht. Schau dir den markierten Bestandteil genauer an oder nutze einen Hinweis.';save();}
 q('[data-label-check]').addEventListener('click',submitLabel);q('[data-label-input]').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitLabel();}});
@@ -172,12 +193,13 @@ async function start(){
  loaded=false;controls();
  try{const saved=await bridge.load();if(JSON.stringify(saved.scores)!==JSON.stringify(D.scores(saved.data)))throw Error('Gespeicherte Punkte und Lernstand passen nicht zusammen. Bitte informiere deine Lehrkraft.');
   state=saved.data;loaded=bridge.getStatus().mode!=='editor';step=L.components.findIndex(c=>state.labels[c.id].earned==='gray');if(step<0)step=0;
-  q('[data-answer]').value=state.answer;syncIdentity();renderLabel();render();if(viewer&&state.labels[L.components[step].id].earned==='gray')focus(L.components[step].id);
+  q('[data-answer]').value=state.answer;syncIdentity();renderLabel();render();if(viewer&&modelMode==='aufbau'&&state.labels[L.components[step].id].earned==='gray')focus(L.components[step].id);
   if(pending())message('Eine frühere Prüfung ist noch offen. Rufe ihr Ergebnis ab, bevor du neu prüfst.');if(currentUid)refreshBudget();
  }catch(e){message(e.message);}
 }
 q('[data-retry]').addEventListener('click',start);
 try{viewer=window.createRangerViewer(q('[data-view]'),{THREE});const field=el('div',undefined,'field-status');field.dataset.fieldStatus='';field.innerHTML='<b>Feld nahe der Anode</b><small>Schematische Stärke</small><div class="field-track"><i></i></div><span></span>';q('[data-view]').append(field);q('[data-model-status]').textContent='Drehen und Zoomen möglich.';root.gmzViewer=viewer;}
 catch(e){q('[data-model-status]').textContent='Das 3D-Modell konnte nicht gestartet werden. Öffne die Seite in aktuellem Safari oder starte die App neu.';q('[data-view]').append(el('p','Die interaktive Darstellung benötigt WebGL. Video und Erklärung bleiben verfügbar.','model-error'));}
-const identityTimer=setInterval(()=>{if(!root.isConnected){clearInterval(identityTimer);stopPhase();viewer?.dispose();return;}if(loaded){syncIdentity();controls();}},1000);
+let answerWidth=0;const answerResize=new ResizeObserver(entries=>{const width=entries[0].contentRect.width;if(Math.abs(width-answerWidth)>.5){answerWidth=width;fitAnswer();}});answerResize.observe(q('[data-answer]'));
+const identityTimer=setInterval(()=>{if(!root.isConnected){clearInterval(identityTimer);answerResize.disconnect();stopPhase();viewer?.dispose();return;}if(loaded){syncIdentity();controls();}},1000);
 start();

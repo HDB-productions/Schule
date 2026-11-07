@@ -84,13 +84,13 @@ async function run() {
     await page.locator('[data-explosion]').focus(); await page.locator('[data-explosion]').press('End');
     assert.equal(await page.locator('.gmz').evaluate(root => root.gmzViewer.getExplosion()), 1);
     await page.locator('[data-home]').click(); await page.waitForFunction(() => document.querySelector('.gmz').gmzViewer.getExplosion() === 0); assert.equal(await page.locator('.gmz').evaluate(root => root.gmzViewer.getExplosion()), 0);
-    await page.locator('[data-process] summary').click(); await page.locator('[data-phase="3"]').click(); assert.match(await page.locator('[data-phase-text]').innerText(), /Elektronenlawine/);
-    await page.locator('[data-phase="5"]').click();
+    await page.locator('[data-mode-select="ablauf"]').click(); await page.locator('[data-phase="3"]').click(); assert.equal(await page.locator('[data-phase-text]').count(), 0);
+    await page.locator('[data-phase="4"]').click();
     await page.waitForFunction(() => { const v = document.querySelector('.gmz').gmzViewer; return v.getFieldVisibility() === 1 && v.getAtomicState()?.time > 16; });
     const field = await page.locator('.gmz').evaluate(root => { const v = root.gmzViewer, state = v.getAtomicState(), panel = root.querySelector('[data-field-status]'); return { strength: state.fieldStrength, ready: state.measurementReady, text: panel.innerText, opacity: Number(getComputedStyle(panel).opacity), fillWidth: panel.querySelector('i').getBoundingClientRect().width }; });
     assert.ok(field.strength > 0 && field.strength < 1, 'deadtime field is weakened, not absent');
-    assert.equal(field.ready, false); assert.match(field.text, /Totzeit: kein neuer Zählimpuls/); assert.equal(field.opacity, 1); assert.ok(field.fillWidth > 0);
-    await page.locator('[data-process] summary').click();
+    assert.equal(field.ready, false); assert.match(field.text, /Totzeit/); assert.equal(field.opacity, 1); assert.ok(field.fillWidth > 0);
+    await page.locator('[data-mode-select="aufbau"]').click();
     await submit('Strahlung kann in das Gas gelangen und dort Elektronen herauslösen. ' + malicious); await waitStatus('done');
     let saved = await state(); assert.deepEqual(saved.scores.slice(7, 10), ['green', 'green', 'gray']);
     assert.equal(await page.locator('[data-feedback]').innerText(), savedResult.feedback.taskFeedback[0].feedback);

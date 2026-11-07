@@ -1,0 +1,4 @@
+# Local narration sources and private renderer reports are not publication assets.
+*.m4a
+*.wav
+*.mp4.json

@@ -297,7 +297,7 @@
     // Mechanism primitives share this scene with the lesson and the MP4 renderer.
     // Their sizes, timing, density and trajectories are illustrative, not to scale.
     const mechanism=new T.Group();mechanism.name='Schematische Vorgänge';scene.add(mechanism);
-    let phaseState={phase:'off',progress:0},pairCount=8,chargeProgressOverride=null,atomicClock=null,atomicState=null,microscopic=0,fieldVisibility=0;
+    let phaseState={phase:'off',progress:0},pairCount=8,chargeProgressOverride=null,atomicClock=null,atomicState=null,microscopic=0,fieldVisibility=0,windowVisibility=1,electronDirectionVisible=false,electronDirection=null;
     const electronMat=mat(0x1198b3,{emissive:0x004b61,emissiveIntensity:.5,roughness:.25});
     const ionMat=mat(0xd26a17,{emissive:0x4b1703,emissiveIntensity:.3,roughness:.4});
     const incident=mesh(mechanism,new T.SphereGeometry(1.15,16,10),mat(0xffdc73,{emissive:0xe79f25,emissiveIntensity:1}));
@@ -330,6 +330,27 @@
     }
     function setMicroscopic(value){const next=value===true?1:value===false?0:Math.max(0,Math.min(1,Number(value)||0));if(next!==microscopic){microscopic=next;refreshMaterials();}dirty=true;return api;}
     function setFieldVisibility(value){const next=Math.max(0,Math.min(1,Number(value)||0));if(next!==fieldVisibility){fieldVisibility=next;refreshMaterials();}dirty=true;return api;}
+    // Optional process controls leave all standard lesson/movie defaults intact.
+    function setWindowVisibility(value){const next=Math.max(0,Math.min(1,Number(value)||0));if(next!==windowVisibility){windowVisibility=next;refreshMaterials();}dirty=true;return api;}
+    function setElectronDirectionVisible(value){electronDirectionVisible=!!value;if(!electronDirectionVisible&&electronDirection)electronDirection.visible=false;dirty=true;return api;}
+    function updateElectronDirection(position,target,visible){
+      if(electronDirection)electronDirection.visible=false;
+      if(!electronDirectionVisible||phaseState.phase!=='drift'||!visible)return;
+      const direction=target.clone().sub(position),remaining=direction.length();
+      if(remaining<.18)return;
+      direction.divideScalar(remaining);
+      // Allocate only on first use; the cue belongs to the same sensor-local
+      // scene group as the particles and is excluded from exportModel().
+      if(!electronDirection){
+        electronDirection=new T.ArrowHelper(direction,V(0,0,0),1,0x3edaff,.55,.34);
+        electronDirection.name='Flugrichtung des primären Elektrons';electronDirection.userData={role:'electronDirection',index:0};
+        [electronDirection.line,electronDirection.cone].forEach(o=>{o.material.depthTest=false;o.material.depthWrite=false;o.renderOrder=10;});
+        mechanism.add(electronDirection);
+      }
+      const offset=Math.min(.18,remaining*.15),length=Math.min(5.5,remaining-offset);
+      electronDirection.position.copy(position).addScaledVector(direction,offset);electronDirection.setDirection(direction);
+      electronDirection.setLength(length,Math.min(.55,length*.35),Math.min(.34,length*.22));electronDirection.visible=true;
+    }
     function getAtomicState(){if(atomicClock===null)return null;const state=global.RangerAtomicMotion.evaluate(Number(atomicClock.time)||0,Object.assign({},atomicClock,{chargeProgress:chargeProgressOverride}));return Object.assign(state,{sensorOrigin:gas.position.toArray()});}
     function updateAtomicMechanism(){
       atomicState=getAtomicState();const state=atomicState,phase=phaseState.phase,p=phaseState.progress;
@@ -347,6 +368,7 @@
         m.emissiveIntensity=ionMat.emissiveIntensity+(neutral.emissiveIntensity-ionMat.emissiveIntensity)*neutralBlend;m.opacity=1+(neutral.opacity-1)*neutralBlend;m.roughness=ionMat.roughness+(neutral.roughness-ionMat.roughness)*neutralBlend;m.transparent=neutralBlend>0;m.depthWrite=m.opacity>.8;
         pair.e.children.forEach(s=>s.position.set(0,0,.05));pair.ion.children.forEach(s=>{s.position.set(0,0,.05);s.material.opacity=1-neutralBlend;});
       });
+      updateElectronDirection(ionPairs[0].e.position,V(...state.electrons[0].anodeTarget),state.electrons[0].visible&&state.time>=state.config.electronAt&&state.time<=state.config.avalancheAt);
       incident.visible=state.radiation.visible;incident.position.fromArray(state.radiation.position);incident.scale.setScalar(.4);
       trail.visible=state.radiation.visible;trail.position.set(0,0,0);trail.material.opacity=.65;
       const positions=trail.geometry.attributes.position;positions.setXYZ(0,...state.radiation.start);positions.setXYZ(1,...state.radiation.position);positions.needsUpdate=true;trail.geometry.computeBoundingSphere();trail.computeLineDistances();
@@ -360,6 +382,7 @@
     }
     function updateMechanism(){
       if(atomicClock!==null){updateAtomicMechanism();return;}
+      if(electronDirection)electronDirection.visible=false;
       collisionFlashes.forEach(flash=>{flash.visible=false;});incident.scale.setScalar(1);
       const legacyTrail=trail.geometry.attributes.position;legacyTrail.setXYZ(0,0,0,-58);legacyTrail.setXYZ(1,0,0,-5);legacyTrail.needsUpdate=true;trail.geometry.computeBoundingSphere();trail.computeLineDistances();
       const phase=phaseState.phase,p=phaseState.progress;mechanism.visible=phase!=='off'&&phase!=='none';
@@ -384,6 +407,7 @@
         const electronDrift=chargeProgressOverride?.electron??(phase==='drift'?p:0);
         const ionDrift=chargeProgressOverride?.ion??(phase==='drift'?p*.12:phase==='avalanche'?.12+p*.10:phase==='pulse'?.22+p*.08:phase==='quench'?.30+p*.35:phase==='deadtime'?.65+p*.35:0);
         pair.e.position.copy(origin).lerp(electronTarget,electronDrift);if(phase==='ionization')pair.e.position.x+=.8+Math.max(0,p-i/pairCount)*1.5;
+        if(i===0)updateElectronDirection(pair.e.position,electronTarget,pair.e.visible);
         pair.ion.position.copy(origin).lerp(ionTarget,ionDrift);
         pair.e.scale.setScalar(1);pair.ion.scale.setScalar(phase==='deadtime'?Math.min(1,(1-p)*5):1);
         pair.ion.geometry=legacyIonGeometry;pair.ion.material.copy(ionMat);pair.ion.children.forEach(s=>{s.material.opacity=1;});
@@ -424,6 +448,7 @@
             const context=id==='anode'?.10+.40*fieldVisibility:id==='cathode'?(o.userData.cathodeBacking?.12:.30)*fieldVisibility:0;
             m.opacity=m.opacity*(1-microscopic)+context*microscopic;
           }
+          if(id==='window')m.opacity*=windowVisibility;
           if(m.color&&m.userData.baseColor!==null)m.color.setHex(atomicClock!==null&&o.userData.neutralGas?0x8e9daa:m.userData.baseColor);
           m.transparent=m.opacity<1||!!m.map;m.depthWrite=!ghost&&m.opacity>.8;
           if(m.emissive){m.emissive.setHex(atomicClock!==null&&o.userData.neutralGas?0x11181d:selected?0x6c3800:m.userData.baseEmissive||0);m.emissiveIntensity=selected?.36:(m.userData.baseEmissiveIntensity??1);}
@@ -499,7 +524,7 @@
       copy.traverse(o=>{if(o.geometry&&o.geometry.parameters){if(!canonical.has(o.geometry)){const g=new T.BufferGeometry().copy(o.geometry);g.name=o.geometry.name;g.userData=Object.assign({},o.geometry.userData,{sourceGeometryType:o.geometry.type});canonical.set(o.geometry,g);}o.geometry=canonical.get(o.geometry);}});
       const json=copy.toJSON();canonical.forEach(g=>g.dispose());return json;
     }
-    const api={scene,camera,renderer,model,parts,canvas,setExplosion,revealPart,highlightPart,focusPart,resetView,resize,renderAt,setView,getView,zoom,zoomBy:zoom,setPhase,setPairCount,setChargeProgress,setAtomicClock,getAtomicState,setMicroscopic,getMicroscopic:()=>microscopic,setFieldVisibility,getFieldVisibility:()=>fieldVisibility,setPolarityHighlight,getPolarityHighlight:()=>Object.assign({},polarityHighlight),getElectricalConnections,getPartAnchor,dispose,exportModel,getExplosion:()=>explosion,getHighlight:()=>highlighted,sensor:{center:[0,30,-6.9],windowCenter:[0,30,-14.8],outwardNormal:[0,0,-1],anodeRadius:13.8},mechanism};
+    const api={scene,camera,renderer,model,parts,canvas,setExplosion,revealPart,highlightPart,focusPart,resetView,resize,renderAt,setView,getView,zoom,zoomBy:zoom,setPhase,setPairCount,setChargeProgress,setAtomicClock,getAtomicState,setMicroscopic,getMicroscopic:()=>microscopic,setFieldVisibility,getFieldVisibility:()=>fieldVisibility,setWindowVisibility,getWindowVisibility:()=>windowVisibility,setElectronDirectionVisible,getElectronDirectionVisible:()=>electronDirectionVisible,setPolarityHighlight,getPolarityHighlight:()=>Object.assign({},polarityHighlight),getElectricalConnections,getPartAnchor,dispose,exportModel,getExplosion:()=>explosion,getHighlight:()=>highlighted,sensor:{center:[0,30,-6.9],windowCenter:[0,30,-14.8],outwardNormal:[0,0,-1],anodeRadius:13.8},mechanism};
     resize();updatePositions();renderAt(0);if(!options.manual)frame=requestAnimationFrame(tick);return api;
   };
 })(window);

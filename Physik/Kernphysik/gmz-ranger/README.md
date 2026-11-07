@@ -47,6 +47,14 @@ Entwürfe, Versuche, Hilfen und KI-Historie werden ausschließlich über die Bri
 
 Die Rückmeldung besteht aus einem zusammenhängenden Absatz mit Leitfragen und gegebenenfalls gezielten Fehlvorstellungskorrekturen (`questions-v4`). Einzelkriterien bestimmen die Punkte; Antworten und Rückmeldungen erscheinen als Klartext. Der bestehende Dienst hat Bereitschaft und Herkunftsfreigaben für `ionic://localhost` sowie GitHub Pages bestätigt. Dies belegt keine echte Schülerprüfung.
 
+## Gemeinsame Ansicht für Aufbau und Ablauf
+
+Die Modusschalter im 3D-Feld wechseln zwischen Beschriftung/Schichtansicht und dem Ablauf. Im Ablauf entfallen Öffnungsregler und Beschriftungsspalte; fünf Phasen ersetzen sie: Eintritt, Ionisation, Bewegung, Lawine und Totzeit. Ausformulierte Phasenerklärungen werden dort nicht angeboten. Das Video bleibt die sprachliche Erklärung.
+
+`process-flow.js` definiert eine durchgehende Simulationszeit. Eintritt zeigt das Glimmerfenster und endet nach dem Durchtritt, vor dem Kontakt. Ionisation setzt dort an, blendet das Fenster während der Kamerafahrt aus und zeigt den restlichen Flug bis zur Paarbildung. In Bewegung weist ein cyanfarbener Pfeil vom primären Elektron zu seinem tatsächlichen Anodenziel. An jeder Phasengrenze halten Gasatome, Ionen, Elektronen und Kamera gemeinsam an. ▶ setzt die nächste Phase fort; ↻ wiederholt die aktuelle. Nach der Totzeit beginnt ▶ wieder beim Eintritt. Phasen können auch direkt angewählt werden. Zwischen den Phasen wird kein separater Zählimpuls-Schritt angeboten.
+
+Das Antwortfeld passt seine Höhe beim Schreiben, Kürzen, Laden und Ändern der verfügbaren Breite an. Es hat keinen eigenen vertikalen Scrollbereich. Der Moduswechsel verändert keine Beschriftungen, Texte oder Punkte. Die optionalen Fenster-/Pfeilhilfen sind im Modell standardmäßig deaktiviert beziehungsweise unverändert; die bereits veröffentlichte MP4 und die Modellgeometrie bleiben erhalten.
+
 ## Film und Modellweiterverwendung
 
 `movie.html`, `movie.js` und `video-timeline.json` verwenden dasselbe Modell für Filmaufnahmen. `movie-timing.js` trennt Tonzeit und Szenenkoordinaten. `audio-montage.cjs` montiert ausdrücklich benannte lokale Aufnahmen; `sync-recordings.cjs` erzeugt den aktuellen Aufnahmezeitplan. `render-video.cjs` rendert Bilder und codiert H.264/MP4 mit FFmpeg. Reproduzierbare Aufrufe und Prüfgrenzen stehen in [movie-notes.md](movie-notes.md).
@@ -66,10 +74,11 @@ node --test domain.test.cjs
 node widget.test.cjs
 node widget-migration.test.cjs
 node model-ui.test.cjs
+node --test process-flow.test.cjs model-process-visuals.test.cjs
 node --test atomic-motion.test.cjs model-phase.test.cjs movie-staging.test.cjs movie-timing.test.cjs audio-montage.test.cjs
 ```
 
-Die aktuelle Widget-Fassung hat die lokalen Edge-Integrationstests bei 390/920/1440 px bestanden. Die bestandenen Windows-WebKit-Prüfungen betreffen die vorige lokale Fassung. Ein zusätzlicher Browsermigrationstest übernimmt vier alte Beschriftungen ohne Schreibzugriff, ergänzt die drei übrigen und lädt den gespeicherten Version-2-Stand unverändert erneut.
+Die aktuelle Widget-Fassung hat die lokalen Edge- und Windows-WebKit-Integrationstests bei den angeforderten Breiten 390/920/1440 px bestanden. Ein zusätzlicher Browsermigrationstest übernimmt vier alte Beschriftungen ohne Schreibzugriff, ergänzt die drei übrigen und lädt den gespeicherten Version-2-Stand unverändert erneut.
 
 | Prüfung | Belegt | Noch offen |
 |---|---|---|

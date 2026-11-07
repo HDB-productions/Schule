@@ -9,3 +9,14 @@
 .gmz .field-status small{font-size:9px;color:#526678;margin:2px 0 6px}
 .gmz .field-track{height:7px;border-radius:4px;background:#dce4ec;overflow:hidden;margin-bottom:6px}
 .gmz .field-track i{display:block;height:100%;background:#c49935;border-radius:4px}
+.gmz textarea{resize:none;overflow-y:hidden;max-height:none}
+.gmz .model-modes{display:flex;gap:8px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.gmz .model-modes button{flex:1}
+.gmz [data-process]{padding:14px 16px 4px}
+.gmz [data-process] h3{font-size:17px;margin-bottom:12px}
+.gmz .model-layout[data-mode=ablauf]{grid-template-columns:minmax(0,1fr)}
+.gmz .model-layout[data-mode=ablauf] .model-view{aspect-ratio:1.8}
+.gmz .phase-actions{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:4;padding:8px;background:#fffffff0;border:1px solid var(--line);border-radius:12px;box-shadow:0 3px 15px #19334818;white-space:nowrap}
+.gmz .phase-actions button{font-size:14px}
+.gmz .model-layout[data-mode=ablauf] .field-status{top:12px;bottom:auto}
+@media(max-width:650px){.gmz .model-layout[data-mode=ablauf] .model-view{aspect-ratio:1}.gmz .process-buttons button{flex:1 1 auto;font-size:12px}.gmz .phase-actions{bottom:10px;gap:6px;padding:6px}.gmz .phase-actions button{padding:9px 12px;font-size:12px}}
