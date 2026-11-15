@@ -484,10 +484,14 @@
   }
 
   function safeSetStorage(value) {
+    if (!ensureArchiveCurrent()) return false;
     try {
       window.localStorage.setItem(STORAGE_KEY, value);
+      lastPersistedStoreRaw = value;
+      return true;
     } catch (error) {
       fallbackStorageValue = value;
+      return false;
     }
   }
 
@@ -532,7 +536,14 @@
   }
 
   function saveStore() {
-    safeSetStorage(JSON.stringify(store));
+    if (!safeSetStorage(JSON.stringify(store))) {
+      ui.notice = "Der Browser konnte den Stand nicht dauerhaft lokal speichern. Bitte das Archiv als Datei sichern und den Speicherstatus prüfen.";
+    }
+    if (cloudClient) {
+      cloudClient.changed();
+      window.clearTimeout(cloudSaveTimer);
+      cloudSaveTimer = window.setTimeout(function () { cloudClient.syncNow(); }, 800);
+    }
   }
 
   function getCurrentExam() {
@@ -1193,6 +1204,8 @@
   }
 
   var store = loadStore();
+  var lastPersistedStoreRaw = safeGetStorage();
+  var archiveLocked = false;
   var ui = {
     activeTab: store.exams.length ? "overview" : "archive",
     scoreMode: "points",
@@ -1210,6 +1223,131 @@
   };
 
   var appRoot = document.getElementById("app");
+  var cloudClient = null;
+  var cloudSaveTimer = null;
+  var cloudState = { state: "disconnected", message: "Nur auf diesem Gerät gespeichert.", connected: false };
+
+  function lockArchive() {
+    if (archiveLocked) return;
+    archiveLocked = true;
+    if (cloudClient && cloudClient.suspend) cloudClient.suspend("Eine andere Registerkarte hat das Archiv geändert. Bitte neu laden.");
+    render();
+  }
+
+  function ensureArchiveCurrent() {
+    if (archiveLocked) return false;
+    if (safeGetStorage() !== lastPersistedStoreRaw) { lockArchive(); return false; }
+    return true;
+  }
+
+  // Complete archive backups include class and task-block libraries and keep IDs.
+  function exportArchive() {
+    downloadTextFile("Klausurarchiv-" + new Date().toISOString().replace(/[:.]/g, "-") + ".json",
+      JSON.stringify(store, null, 2), "application/json");
+  }
+
+  function backupArchive(snapshot, reason) {
+    return new Promise(function (resolve, reject) {
+      if (!window.indexedDB) {
+        reject(new Error("Die lokale Sicherung ist nicht verfügbar. Bitte zuerst das Archiv als Datei sichern."));
+        return;
+      }
+      var request = window.indexedDB.open("klausurbewertung-backups-v1", 1);
+      request.onupgradeneeded = function () {
+        request.result.createObjectStore("snapshots", { keyPath: "id", autoIncrement: true });
+      };
+      request.onerror = function () { reject(new Error("Lokale Sicherung fehlgeschlagen. Der bisherige Stand bleibt erhalten.")); };
+      request.onsuccess = function () {
+        var db = request.result;
+        var tx = db.transaction("snapshots", "readwrite");
+        var snapshots = tx.objectStore("snapshots");
+        snapshots.add({ createdAt: nowIso(), reason: reason, store: deepClone(snapshot) });
+        var countRequest = snapshots.count();
+        countRequest.onsuccess = function () {
+          var excess = countRequest.result - 20;
+          if (excess <= 0) return;
+          snapshots.openCursor().onsuccess = function (event) {
+            var cursor = event.target.result;
+            if (cursor && excess > 0) { cursor.delete(); excess -= 1; cursor.continue(); }
+          };
+        };
+        tx.oncomplete = function () { db.close(); resolve(); };
+        tx.onerror = tx.onabort = function () { db.close(); reject(new Error("Lokale Sicherung fehlgeschlagen. Keine Übernahme durchgeführt.")); };
+      };
+    });
+  }
+
+  function exportLatestBackup() {
+    var request = window.indexedDB.open("klausurbewertung-backups-v1", 1);
+    request.onupgradeneeded = function () { request.result.createObjectStore("snapshots", { keyPath: "id", autoIncrement: true }); };
+    request.onerror = function () { showNotice("Sicherung konnte nicht gelesen werden."); };
+    request.onsuccess = function () {
+      var db = request.result;
+      var tx = db.transaction("snapshots", "readonly");
+      tx.objectStore("snapshots").openCursor(null, "prev").onsuccess = function (event) {
+        var cursor = event.target.result;
+        if (!cursor) { showNotice("Auf diesem Gerät ist noch keine automatische Sicherung vorhanden."); return; }
+        downloadTextFile("Klausurarchiv-Sicherung-" + cursor.value.createdAt.replace(/[:.]/g, "-") + ".json",
+          JSON.stringify(cursor.value.store, null, 2), "application/json");
+      };
+      tx.oncomplete = function () { db.close(); };
+    };
+  }
+
+  function renderCloudPanel() {
+    var choice = cloudState.state === "choose" || cloudState.state === "conflict";
+    var login = !cloudState.connected || cloudState.state === "auth";
+    return `<details class="cloud-settings no-print" ${choice ? "open" : ""}>
+      <summary>Zentraler Speicher · <span role="status">${escapeHtml(cloudState.message || "")}</span></summary>
+      <div class="cloud-body">
+        <p>PC und Tablet verwenden dasselbe geschützte Archiv. Offline bleiben Änderungen auf diesem Gerät und werden bei der nächsten Verbindung übertragen. Bei gleichzeitigen Änderungen hält die Synchronisierung an.</p>
+        ${login ? `<label class="field-group"><span>Privater Zugangsschlüssel</span><input type="password" id="cloud-access-key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Zugangsschlüssel eingeben" /></label>
+          <p class="muted-text">Der Zugang wird auf diesem Gerät gespeichert. Verbinde nur eigene Geräte.</p>
+          <button type="button" class="primary-button" data-action="cloud-connect">Verbinden</button>` : `
+          <div class="inline-actions wrap-actions"><button type="button" class="secondary-button" data-action="cloud-sync">Jetzt synchronisieren</button>
+          <button type="button" class="secondary-button" data-action="cloud-disconnect">Auf diesem Gerät abmelden</button></div>`}
+        ${choice ? `<p><strong>Stand auswählen:</strong> „Lokales Archiv übernehmen“ überträgt dieses Gerät. Bei gleichen Klausur-IDs hat dieser Stand Vorrang; nur zentral vorhandene Klausuren bleiben erhalten. „Zentralen Stand laden“ übernimmt den anderen Stand auf dieses Gerät. Vorher wird der aktuelle lokale Stand automatisch gesichert.</p>
+          <div class="inline-actions wrap-actions"><button type="button" class="primary-button" data-action="cloud-local">Lokales Archiv übernehmen</button>
+          <button type="button" class="secondary-button" data-action="cloud-remote">Zentralen Stand laden</button></div>` : ""}
+        <hr />
+        <div class="inline-actions wrap-actions"><button type="button" class="secondary-button" data-action="export-archive">Archiv als Datei sichern</button>
+        <button type="button" class="secondary-button" data-action="export-auto-backup">Letzte automatische Sicherung herunterladen</button>
+        <label class="button-like secondary-button">Archiv-Sicherung laden<input type="file" accept=".json,application/json" data-role="import-archive" hidden /></label></div>
+        <p class="muted-text">Sicherungen enthalten Schülernamen und Bewertungen. Bewahre sie privat auf. Die letzten 20 zentralen Vorstände bleiben geschützt gespeichert.</p>
+      </div></details>`;
+  }
+
+  function updateCloudStatus(status) {
+    cloudState = status;
+    var panel = document.getElementById("cloud-panel");
+    if (!panel) return;
+    var wasOpen = panel.querySelector("details") && panel.querySelector("details").open;
+    var input = panel.querySelector("#cloud-access-key");
+    if (input && document.activeElement === input) return;
+    panel.innerHTML = renderCloudPanel();
+    if (wasOpen && panel.querySelector("details")) panel.querySelector("details").open = true;
+  }
+
+  function cloudAction(action) {
+    if (!ensureArchiveCurrent()) return;
+    if (!cloudClient) { showNotice("Synchronisierung konnte nicht geladen werden. Bitte die Seite neu laden."); return; }
+    var result;
+    if (action === "connect") {
+      var keyInput = document.getElementById("cloud-access-key");
+      result = cloudClient.connect(keyInput ? keyInput.value.trim() : "");
+    } else if (action === "local") {
+      if (!window.confirm("Diesen lokalen Stand zentral übernehmen? Bei gleichen Klausuren hat er Vorrang. Vorher wird eine Sicherung erstellt.")) return;
+      exportArchive();
+      result = cloudClient.useLocal();
+    } else if (action === "remote") {
+      if (!window.confirm("Zentralen Stand auf dieses Gerät laden? Der bisherige lokale Stand wird vorher gesichert.")) return;
+      result = cloudClient.useCloud();
+    } else if (action === "disconnect") {
+      if (!window.confirm("Auf diesem Gerät abmelden? Noch nicht übertragene Änderungen bleiben lokal, müssen beim erneuten Verbinden aber ausdrücklich übernommen werden.")) return;
+      result = cloudClient.disconnect();
+    } else { result = cloudClient.syncNow(); }
+    Promise.resolve(result).catch(function () { showNotice("Aktion nicht abgeschlossen. Der lokale Stand bleibt erhalten. Bitte den Speicherstatus prüfen."); });
+  }
   function attrSelected(condition) {
     return condition ? " selected" : "";
   }
@@ -1307,10 +1445,11 @@
       <header class="topbar">
         <div>
           <h1>Klausurbewertung</h1>
-          <p class="muted-text">Lokal-first, statisch und direkt über index.html lauffähig.</p>
+          <p class="muted-text">Klassenarbeiten korrigieren · lokal und zwischen Geräten synchronisieren</p>
         </div>
         <div class="inline-actions wrap-actions">
           ${exam ? `<strong>${escapeHtml(exam.metadata.title || "Neue Klausur")}</strong>` : ""}
+          <button type="button" class="secondary-button" data-action="export-archive">Archiv sichern</button>
           <button type="button" class="secondary-button" data-action="clear-archive">Archiv leeren</button>
         </div>
       </header>
@@ -2890,7 +3029,9 @@
     captureMatrixScrollState();
     appRoot.innerHTML = `
       <main class="app-shell">
+        ${archiveLocked ? `<div class="archive-lock no-print" role="alert"><strong>Eine andere Registerkarte hat das Archiv geändert.</strong><p>Diese Ansicht ist angehalten, damit keine neueren Daten überschrieben werden. Du kannst den hier noch sichtbaren Stand vor dem Neuladen sichern.</p><div class="inline-actions"><button type="button" data-action="export-archive">Diesen Stand sichern</button><button type="button" data-action="reload-archive">Neuen Stand laden</button></div></div>` : ""}
         ${renderTopBar(exam)}
+        <div id="cloud-panel" class="no-print">${renderCloudPanel()}</div>
         ${store.exams.length ? renderTabs() : ""}
         ${ui.notice ? `<div class="notice-banner no-print"><div class="form-row"><span>${escapeHtml(ui.notice)}</span><button type="button" class="ghost-button" data-action="dismiss-notice">Schließen</button></div></div>` : ""}
         ${store.exams.length || ui.activeTab === "archive" ? renderCurrentView(exam) : renderEmptyState()}
@@ -2920,6 +3061,7 @@
   }
 
   function mutateStore(recipe) {
+    if (!ensureArchiveCurrent()) return;
     store = recipe(deepClone(store));
     saveStore();
     render();
@@ -3730,8 +3872,17 @@
       return;
     }
     eventTargetDataset = target.dataset || {};
+    if (archiveLocked && !["export-archive", "reload-archive"].includes(target.dataset.action)) return;
 
     switch (target.dataset.action) {
+      case "reload-archive": window.location.reload(); break;
+      case "cloud-connect": cloudAction("connect"); break;
+      case "cloud-local": cloudAction("local"); break;
+      case "cloud-remote": cloudAction("remote"); break;
+      case "cloud-sync": cloudAction("sync"); break;
+      case "cloud-disconnect": cloudAction("disconnect"); break;
+      case "export-archive": exportArchive(); break;
+      case "export-auto-backup": exportLatestBackup(); break;
       case "dismiss-notice":
         ui.notice = "";
         render();
@@ -3916,7 +4067,28 @@
   });
 
   appRoot.addEventListener("change", function (event) {
+    if (!ensureArchiveCurrent()) return;
     var target = event.target;
+    if (target.matches("[data-role='import-archive']") && target.files && target.files[0]) {
+      readFileAsText(target.files[0]).then(async function (text) {
+        var candidate = JSON.parse(text);
+        if (!candidate || candidate.version !== 1 || !Array.isArray(candidate.exams)
+          || !Array.isArray(candidate.taskBlockLibrary) || !Array.isArray(candidate.classListLibrary)
+          || candidate.exams.some(function (exam) { return !exam.metadata || !exam.metadata.id || !Array.isArray(exam.students) || !Array.isArray(exam.structure); })) {
+          throw new Error("Die Datei ist keine vollständige Archiv-Sicherung.");
+        }
+        if (!window.confirm("Die Archiv-Sicherung auf dieses Gerät übernehmen? Der bisherige Stand wird vorher gesichert. Bei aktiver Synchronisierung wird der importierte Stand ebenfalls zentral gespeichert.")) return;
+        await backupArchive(store, "Archiv-Sicherung importieren");
+        var imported = sanitizeStore(candidate);
+        if (!safeSetStorage(JSON.stringify(imported))) throw new Error("Nicht genug lokaler Speicher. Das bisherige Archiv bleibt geöffnet.");
+        store = imported;
+        saveStore();
+        ui.activeTab = "archive";
+        showNotice("Archiv-Sicherung übernommen: " + store.exams.length + " Klausuren.");
+      }).catch(function (error) { showNotice(error.message || "Archiv-Import fehlgeschlagen."); })
+        .finally(function () { target.value = ""; });
+      return;
+    }
 
     if (target.matches("[data-meta-field]")) {
       updateMetadataField(target.dataset.metaField, target.value);
@@ -4127,6 +4299,42 @@
   });
 
   render();
+  if (window.KlausurCloud) {
+    try {
+      cloudClient = window.KlausurCloud.createClient({
+        endpoint: "https://klausurbewertung-sync.hildebrandt.workers.dev",
+        storage: window.localStorage,
+        fetch: function (url, options) {
+          if (!ensureArchiveCurrent()) return Promise.reject(new Error("Andere Registerkarte hat den Stand geändert."));
+          return window.fetch(url, options);
+        },
+        readStore: function () { return deepClone(store); },
+        applyStore: function (nextStore) {
+          var next = sanitizeStore(deepClone(nextStore));
+          if (!safeSetStorage(JSON.stringify(next))) throw new Error("Der zentrale Stand konnte nicht dauerhaft auf diesem Gerät gespeichert werden.");
+          store = next;
+          ui.matrixFocus = null;
+          if (!store.exams.length) ui.activeTab = "archive";
+          render();
+        },
+        backup: backupArchive,
+        canApply: function () {
+          var active = document.activeElement;
+          return ensureArchiveCurrent() && !document.hidden && !(active && active.matches("input,textarea,select,[contenteditable='true']"));
+        },
+        onStatus: updateCloudStatus
+      });
+      cloudClient.start();
+      window.setInterval(function () { if (ensureArchiveCurrent()) cloudClient.syncNow(); }, 15000);
+      window.addEventListener("online", function () { if (ensureArchiveCurrent()) cloudClient.syncNow(); });
+      document.addEventListener("visibilitychange", function () { if (!document.hidden && ensureArchiveCurrent()) cloudClient.syncNow(); });
+    } catch (error) {
+      updateCloudStatus({ state: "error", connected: false, message: "Zentraler Speicher nicht verfügbar. Bitte Browserspeicher und Verbindung prüfen." });
+    }
+  }
+  window.addEventListener("storage", function (event) {
+    if ((event.key === STORAGE_KEY || event.key === null) && safeGetStorage() !== lastPersistedStoreRaw) lockArchive();
+  });
 })();
 
 
