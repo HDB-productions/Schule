@@ -1,0 +1,19 @@
+.fall-lesson .fall-worksheet{margin:1rem 0;min-width:0}
+.fall-lesson .fall-backing[hidden],.fall-lesson label[hidden],.fall-lesson [data-count][hidden]{display:none!important}
+.fall-lesson .fall-table{width:100%;table-layout:fixed;border-collapse:collapse;margin:0 0 1rem;font-variant-numeric:tabular-nums}
+.fall-lesson .fall-table th,.fall-lesson .fall-table td{padding:.5rem .4rem;border:1px solid #cbd5e1;text-align:center;vertical-align:middle;overflow-wrap:anywhere}
+.fall-lesson .fall-table thead th{background:#edf4f7;font-size:.95rem}
+.fall-lesson .fall-table tbody th{font-size:.95rem;font-weight:600;background:#f8fafc}
+.fall-lesson .fall-table input{display:block;box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:.4rem;text-align:center;border:1px solid #94a3b8;border-radius:.4rem;background:#fff;color:#142b3a;font:inherit}
+.fall-lesson .fall-explanation-label{display:block;font-weight:600}
+.fall-lesson .fall-explanation-label textarea{display:block;box-sizing:border-box;width:100%;min-width:0;margin-top:.45rem;min-height:100px;font:inherit;font-weight:400}
+.fall-lesson .fall-table input:focus-visible,.fall-lesson .fall-explanation-label textarea:focus-visible{outline:3px solid #167d97;outline-offset:2px}
+.fall-lesson .fall-table input:disabled,.fall-lesson .fall-explanation-label textarea:disabled{background:#f1f5f9;color:#526171;opacity:1}
+.fall-lesson [data-measurement-graph]{min-width:0}
+.fall-lesson .fall-graph{display:block;width:100%;height:auto;max-width:100%;background:#fff;color:#243d4d;font:15px system-ui,sans-serif}
+.fall-lesson .fall-graph text{fill:currentColor}
+.fall-lesson .fall-grid{stroke:#dbe4eb;stroke-width:1}
+.fall-lesson .fall-axis{fill:none;stroke:#334e60;stroke-width:2}
+.fall-lesson .fall-measurement-line{fill:none;stroke:#087d83;stroke-width:2;stroke-dasharray:7 5}
+.fall-lesson .fall-measurement-point{fill:#087d83;stroke:white;stroke-width:1.5}
+@media(max-width:440px){.fall-lesson .fall-table th,.fall-lesson .fall-table td{padding:.4rem .2rem}.fall-lesson .fall-table thead th,.fall-lesson .fall-table tbody th{font-size:.82rem}.fall-lesson .fall-table input{padding:.35rem .15rem;font-size:1rem}}

@@ -1,0 +1,19 @@
+# Bildgenerierung
+
+Erstellt mit dem eingebauten Bildgenerierungswerkzeug. Fotografisch wirkende, synthetische Rekonstruktionen für Unterrichtsmaterial, keine echten Messaufnahmen. Alle drei Original-PNGs bleiben hier erhalten und werden beim Build unverändert als Data-URLs eingebettet.
+
+## ball-photo.png
+
+Use case: scientific-educational. Create a photorealistic classic stroboscopic multiple-exposure photograph for a German physics learning page. Wide horizontal composition, matte black laboratory background and thin dark floor at bottom, one realistic yellow rubber basketball repeated in TWO consecutive parabolic bouncing arcs from left to right, second bounce lower. Identical ball diameter, tactile rubber pebble texture, black seams, sharp flash-lit natural shading, no stylization, no cartoon, no diagram, no dots or connecting lines, no text. Physics is crucial: each image samples the trajectory at equal time intervals, constant horizontal velocity, EXACTLY equal horizontal center spacing. First arc 17 positions with x evenly spaced from left to middle-right; height proportional to t*(T-t), second arc 13 positions, smaller height; adjacent balls near apex are closer along trajectory than near floor. Ball diameter about 2.3 percent of entire image width, horizontal spacing 3 percent of width. Complete trajectories visible, margins, all balls completely within frame. Same ball photographed repeatedly, crisp photographic texture. This is a synthetic educational reconstruction of a real strobe photo. Landscape 3:1.
+
+## uniform-photo.png
+
+Use case: scientific-educational. Photorealistic scientific stroboscopic multiple exposure photo, wide panoramic 3:1. A single real red small toy car is captured exactly SIX times in a single horizontal row, perfect orthographic side-on camera angle, all cars facing right, identical exact size, same horizontal baseline, dark matte laboratory backdrop and subtle dark tabletop. Positions of car centers at exactly 8%, 24%, 40%, 56%, 72%, 88% image width, identical spacing between each neighboring pair. Each car width 8% of image width. Same detailed realistic toy car, rubber tires, realistic metallic red body, glass windows, studio flash highlights, sharp focus. Each exposure equally bright. This illustrates equal positions at equal time intervals, no labels, no text, no graphics, no motion blur, no fading, no cartoon, no vector, no perspective convergence, no duplicates beyond six, no grid.
+
+## accelerated-photo.png
+
+Use case: scientific-educational. Photorealistic scientific stroboscopic multiple exposure photo, wide panoramic 3:1. A single real red small toy car is captured exactly SIX times in a single horizontal row, perfect orthographic side-on camera angle, all cars facing right, identical exact size, same horizontal baseline, dark matte laboratory backdrop and subtle dark tabletop. Positions of car centers at exactly 7%, 17%, 30%, 46%, 65%, 87% image width. Increasing gaps from left to right MUST be visually unambiguous, because this teaches acceleration. Each car width 7% of image width. Same detailed realistic toy car, rubber tires, realistic metallic red body, glass windows, studio flash highlights, sharp focus. Each exposure equally bright. This illustrates increasing distance at equal time intervals, no labels, no text, no graphics, no motion blur, no fading, no cartoon, no vector, no perspective convergence, no duplicates beyond six, no grid.
+
+## Sichtkontrolle
+
+Die sechs Autopositionen sind sichtbar, gleich große Abstände in Spur A und zunehmend größere Abstände in Spur B. Die Ballspur zeigt zwei Sprungbögen mit kleineren Abständen nahe den Scheiteln. Generierte Fotografien sind keine pixelgenauen Koordinatendiagramme und dienen der qualitativen Auswertung. Numerische Vorgaben oben dokumentieren den Prompt, keine vermessene Genauigkeit des Ergebnisses.

@@ -1,0 +1,16 @@
+STROBOSKOP – EINE JAVASCRIPT-ZUSATZDATEI
+
+1. Nur den vollständigen Inhalt von html-code.txt in das Feld HTML-Code kopieren (213 Byte).
+2. Alle bisherigen Zusatzdatei-Zuordnungen dieses HTML-Moduls entfernen.
+3. Als einzige Zusatzdatei stroboskop-komplett-v4.js hochladen/auswählen. Nicht ihren Inhalt in den HTML-Editor kopieren. Keine BIN-Datei erforderlich.
+4. Mit Überprüfung: nein. Mit Kursdaten: nein. Keine zusätzlichen Parameter. E1/E2 wie bisher beibehalten.
+5. Speichern und in der Lernansicht die Zeitlupe starten.
+
+Modell, Texturen und Darstellung sind gegenüber dem bisherigen Toyota bytegleich. Die Grafik wird erst beim ersten Start aufgebaut; im Editor bleibt sie ausgeschaltet. Das Modell ist bereits in der JavaScript-Datei enthalten, es wird keine weitere Modelldatei geladen.
+
+Lokal wird der Originalcode des archivierten Edulo-Moduls getestet; der reale Upload und ältere Tablets sind separat zu prüfen.
+
+HTML-CODE:
+<!-- EDULO_WIDGET_KEY:stroboskop-ki-v1 -->
+<main class="edulo-widget strobe-lesson" data-edulo-id="stroboskop-ki-v1"><p role="status">Stroboskop-Widget wird geladen …</p></main>
+<!-- widgetInit_stroboskopKI -->

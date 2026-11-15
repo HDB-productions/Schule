@@ -1,0 +1,26 @@
+# Private Klassenarbeit: Aufgaben, Messdaten und Erwartungshorizont nicht veröffentlichen.
+/Physik/Klassenarbeit-Messdaten/
+# Lokal erzeugte Dokumente und Druckprüfungen.
+/output/
+/tmp/
+
+# Lokale Hilfsdateien für die GMZ-Tonspuranalyse.
+/outputs/gmz-ranger-source/models/
+/outputs/gmz-ranger-source/python-deps/
+
+# Lokale Arbeitsstände, Prüfartefakte und verschachtelte Arbeitskopien.
+/outputs/
+/work/
+/Mathe/Bruchrechnung/Klassenarbeit/qa/
+/Mathe/Bruchrechnung/werkstatt/qa/
+/Physik/Edulo Mechanik/Stroboskop/mercedes-download-anmeldung.png
+
+# Entwicklungsabhängigkeiten, Kontocaches und private Diagnoseberichte.
+node_modules/
+.wrangler/
+.edulo-tools/
+__pycache__/
+*.py[cod]
+
+# Temporäre Office-Sperrdateien.
+~$*

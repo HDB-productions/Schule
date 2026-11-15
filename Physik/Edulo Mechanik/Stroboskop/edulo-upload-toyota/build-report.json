@@ -1,0 +1,13 @@
+{
+  "vehicle": "Toyota Corolla E180",
+  "htmlBytes": 213,
+  "scriptBytes": 860504,
+  "modelBytes": 3258821,
+  "decodedModelBytes": 4519968,
+  "decodedModelSHA256": "d787446174ea6b3d6ad56af6b30b5d7bc2b789e1770cf0c759470f2e0307718c",
+  "inlineHTMLBytes": 5228877,
+  "gzipRoundtripExact": true,
+  "textureOptimization": "Reduced to at most 512 pixels and WebP encoded; see Toyota-Corolla-optimization.json",
+  "delivery": "js-and-bin-attachments",
+  "externalModelFile": true
+}

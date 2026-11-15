@@ -71,10 +71,10 @@ export class Ledger {
     const gwKey = `global:week:${week}`;
     return { account, aw: await tx.get(awKey) ?? empty(), global: await tx.get('global') ?? empty(),
       gw: await tx.get(gwKey) ?? empty(), awKey, gwKey, weeklyLimit: granted.weeklyLimitEuroMicros,
-      limits: settings?.limits ?? config.limits };
+      limits: settings?.limits ?? config.limits, frozen: granted.frozen === true };
   }
   budget(s, week) {
-    return { remainingEuroMicros: Math.max(0, s.account.granted - s.account.spent - s.account.reserved),
+    return { remainingEuroMicros: Math.max(0, s.account.granted - (s.account.withdrawnEuroMicros ?? 0) - s.account.spent - s.account.reserved),
       weeklyRemainingEuroMicros: Math.max(0, s.weeklyLimit - s.aw.spent - s.aw.reserved),
       reservedEuroMicros: s.account.reserved, weekKey: week };
   }
@@ -100,6 +100,7 @@ export class Ledger {
         await this.save(tx, keys, s);
         return { existing: true, record: previous, budget: this.budget(s, week) };
       }
+      if (s.frozen) throw new ApiError(403, 'account_frozen', 'Dieses Konto ist für neue Anfragen gesperrt.');
       if (s.account.blocked) throw new ApiError(409, 'account_review_required', 'Ein ungeklärter API-Verbrauch muss zuerst von der Lehrkraft geprüft werden.');
       const budget = this.budget(s, week);
       if (!positive(amount) || amount > budget.remainingEuroMicros || amount > budget.weeklyRemainingEuroMicros)
@@ -154,13 +155,16 @@ export class Ledger {
     for (const uid of Object.keys(settings.accounts).sort()) {
       const keys = await this.keys(uid);
       const s = await this.state(tx, keys, config, uid, week);
-      accounts.push({ uid, name: settings.accounts[uid].name ?? '', grantedEuroMicros: s.account.granted, totalGrantedEuroMicros: s.account.granted,
+      accounts.push({ uid, name: settings.accounts[uid].name ?? '',
+        className: settings.accounts[uid].className ?? '', schoolYear: settings.accounts[uid].schoolYear ?? '',
+        frozen: settings.accounts[uid].frozen === true, legacyName: settings.accounts[uid].legacyName ?? '',
+        withdrawnEuroMicros: s.account.withdrawnEuroMicros ?? 0, grantedEuroMicros: s.account.granted, totalGrantedEuroMicros: s.account.granted,
         spentEuroMicros: s.account.spent, weeklyLimitEuroMicros: s.weeklyLimit,
         weeklySpentEuroMicros: s.aw.spent, blocked: Boolean(s.account.blocked), budget: this.budget(s, week) });
     }
     const global = await tx.get('global') ?? empty();
     const gw = await tx.get(`global:week:${week}`) ?? empty();
-    return { accounts, global: { spentEuroMicros: global.spent, reservedEuroMicros: global.reserved,
+    return { accounts, drafts: Object.values(settings.drafts ?? {}).map(({ id, name, className, schoolYear, frozen }) => ({ id, name, className, schoolYear, frozen })), global: { spentEuroMicros: global.spent, reservedEuroMicros: global.reserved,
       weeklySpentEuroMicros: gw.spent, weeklyReservedEuroMicros: gw.reserved, weekKey: week, ...settings.limits },
       limits: { ...settings.limits }, weekKey: week };
   }
@@ -168,9 +172,16 @@ export class Ledger {
     const fields = { list: ['action'], add: ['operationId', 'action', 'uid', 'amountEuroMicros', 'weeklyLimitEuroMicros'],
       topup: ['operationId', 'action', 'uid', 'amountEuroMicros'], weekly: ['operationId', 'action', 'uid', 'weeklyLimitEuroMicros'],
       rename: ['operationId', 'action', 'uid', 'name'],
+      profile: ['operationId', 'action', 'uid', 'name', 'className', 'schoolYear'],
+      draftProfile: ['operationId', 'action', 'draftId', 'name', 'className', 'schoolYear'],
+      freeze: ['operationId', 'action', 'uids', 'draftIds', 'frozen'],
+      moveClass: ['operationId', 'action', 'uids', 'draftIds', 'className', 'schoolYear'],
+      deduct: ['operationId', 'action', 'uid', 'amountEuroMicros', 'reason'],
+      import: ['operationId', 'action', 'rows', 'amountEuroMicros', 'weeklyLimitEuroMicros'],
+      assignUid: ['operationId', 'action', 'draftId', 'uid', 'amountEuroMicros', 'weeklyLimitEuroMicros'],
       limits: ['operationId', 'action', 'globalLifetimeLimitEuroMicros', 'globalWeeklyLimitEuroMicros'] };
     const expected = object(body) && Object.hasOwn(fields, body.action) ? [...fields[body.action],
-      ...(body.action === 'add' && Object.hasOwn(body, 'name') ? ['name'] : [])] : undefined;
+      ...(body.action === 'add' ? ['name', 'className', 'schoolYear'].filter(k => Object.hasOwn(body, k)) : [])] : undefined;
     if (!expected || Object.keys(body).length !== expected.length || !expected.every(key => Object.hasOwn(body, key)))
       throw new ApiError(400, 'invalid_admin_request', 'Die Verwaltungsanfrage enthält nicht die erwarteten Felder.');
     const week = weekKey(this.now());
@@ -181,11 +192,42 @@ export class Ledger {
       throw new ApiError(400, 'invalid_uid', 'Die exakte Edulo-Anmelde-ID ist ungültig.');
     if (expected.includes('name') && (typeof body.name !== 'string' || body.name.length > 120 || /[\u0000-\u001f\u007f]/.test(body.name)))
       throw new ApiError(400, 'invalid_account_name', 'Der Name darf höchstens 120 Zeichen und keine Steuerzeichen enthalten.');
-    if ((body.action === 'add' && !nonnegative(body.amountEuroMicros)) ||
-      (body.action === 'topup' && !positive(body.amountEuroMicros)) ||
+    if ((['add', 'import', 'assignUid'].includes(body.action) && !nonnegative(body.amountEuroMicros)) ||
+      (['topup', 'deduct'].includes(body.action) && !positive(body.amountEuroMicros)) ||
       (expected.includes('weeklyLimitEuroMicros') && !positive(body.weeklyLimitEuroMicros)) ||
       (body.action === 'limits' && (!positive(body.globalLifetimeLimitEuroMicros) || !positive(body.globalWeeklyLimitEuroMicros))))
       throw new ApiError(400, 'invalid_admin_amount', 'Geldbeträge müssen sichere ganze Euro-Millionstel sein; Wochen- und Globallimits müssen positiv sein.');
+    const invalid = (message = 'Die Verwaltungsdaten sind ungültig.') => { throw new ApiError(400, 'invalid_admin_request', message); };
+    const validUid = value => typeof value === 'string' && value.length === 23 && UID.test(value);
+    const validId = value => typeof value === 'string' && value.length === 36 && UUID.test(value);
+    const validText = (value, max) => typeof value === 'string' && value.length <= max && !/[\u0000-\u001f\u007f]/.test(value);
+    const validYear = value => value === '' || (typeof value === 'string' && /^(20\d{2}|21\d{2})\/\d{4}$/.test(value) && Number(value.slice(5)) === Number(value.slice(0, 4)) + 1);
+    const validateProfile = row => {
+      if (!validText(row.name, 120)) throw new ApiError(400, 'invalid_account_name', 'Der Name ist ungültig.');
+      if (!validText(row.className, 40) || !validYear(row.schoolYear)) invalid();
+    };
+    if (expected.includes('className') && (!validText(body.className, 40) || (expected.includes('schoolYear') && !validYear(body.schoolYear)))) invalid();
+    if (expected.includes('schoolYear') && !validYear(body.schoolYear)) invalid();
+    if (expected.includes('draftId') && !validId(body.draftId)) invalid();
+    if (body.action === 'deduct' && (!validText(body.reason, 300) || body.reason.trim().length < 3)) invalid();
+    if (body.action === 'freeze' && typeof body.frozen !== 'boolean') invalid();
+    if (['freeze', 'moveClass'].includes(body.action)) {
+      if (!Array.isArray(body.uids) || !Array.isArray(body.draftIds) || body.uids.length + body.draftIds.length < 1 ||
+        body.uids.length + body.draftIds.length > 250 || !body.uids.every(validUid) || !body.draftIds.every(validId) ||
+        new Set(body.uids).size !== body.uids.length || new Set(body.draftIds.map(id => id.toLowerCase())).size !== body.draftIds.length) invalid();
+    }
+    if (body.action === 'import') {
+      if (!Array.isArray(body.rows) || body.rows.length < 1 || body.rows.length > 100) invalid();
+      const seen = new Set();
+      for (const row of body.rows) {
+        if (!object(row) || Object.keys(row).length !== 4 || !['uid', 'name', 'className', 'schoolYear'].every(k => Object.hasOwn(row, k)) ||
+          !(row.uid === '' || validUid(row.uid))) invalid();
+        validateProfile(row);
+        if (!row.uid && !row.name.trim()) invalid();
+        if (row.uid && seen.has(row.uid)) invalid();
+        if (row.uid) seen.add(row.uid);
+      }
+    }
     const operationKey = `admin:operation:${body.operationId.toLowerCase()}`;
     const hash = await digest(JSON.stringify(Object.fromEntries(Object.keys(body).sort().map(key => [key, body[key]]))));
     return this.storage.transaction(async tx => {
@@ -199,13 +241,22 @@ export class Ledger {
       const settings = await tx.get('admin:settings') ?? {
         accounts: Object.fromEntries(Object.entries(config.accounts).map(([uid, account]) => [uid, { ...account }])), limits: { ...config.limits },
       };
+      settings.drafts ??= {};
+      const changeName = (target, name) => {
+        name = name.trim();
+        if ((target.name ?? '') !== name && !Object.hasOwn(target, 'legacyName')) target.legacyName = target.name ?? '';
+        target.name = name;
+      };
+      const applyProfile = (target, row) => { changeName(target, row.name); target.className = row.className.trim(); target.schoolYear = row.schoolYear; };
+      const requireAccount = uid => { if (!Object.hasOwn(settings.accounts, uid)) throw new ApiError(404, 'account_not_found', 'Das Konto ist nicht vorhanden.'); return settings.accounts[uid]; };
+      const requireDraft = id => { const draft = settings.drafts[id.toLowerCase()]; if (!draft) throw new ApiError(404, 'draft_not_found', 'Der Entwurf ist nicht vorhanden.'); return draft; };
       const exists = Object.hasOwn(settings.accounts, body.uid ?? '');
       if (body.action === 'add') {
         if (exists) throw new ApiError(409, 'account_exists', 'Diese Edulo-Anmelde-ID ist bereits vorhanden.');
-        settings.accounts[body.uid] = { name: (body.name ?? '').trim(), totalGrantedEuroMicros: body.amountEuroMicros, weeklyLimitEuroMicros: body.weeklyLimitEuroMicros };
+        settings.accounts[body.uid] = { name: (body.name ?? '').trim(), className: (body.className ?? '').trim(), schoolYear: body.schoolYear ?? '', frozen: false, totalGrantedEuroMicros: body.amountEuroMicros, weeklyLimitEuroMicros: body.weeklyLimitEuroMicros };
       } else if (body.action === 'topup' || body.action === 'weekly' || body.action === 'rename') {
         if (!exists) throw new ApiError(404, 'account_not_found', 'Diese Edulo-Anmelde-ID ist nicht vorhanden.');
-        if (body.action === 'rename') settings.accounts[body.uid].name = body.name.trim();
+        if (body.action === 'rename') changeName(settings.accounts[body.uid], body.name);
         else if (body.action === 'weekly') settings.accounts[body.uid].weeklyLimitEuroMicros = body.weeklyLimitEuroMicros;
         else {
           const keys = await this.keys(body.uid);
@@ -217,6 +268,40 @@ export class Ledger {
           account.granted = granted;
           await tx.put(keys.account, account);
         }
+      } else if (body.action === 'profile' || body.action === 'draftProfile') {
+        applyProfile(body.action === 'profile' ? requireAccount(body.uid) : requireDraft(body.draftId), body);
+      } else if (body.action === 'freeze' || body.action === 'moveClass') {
+        const targets = [...body.uids.map(requireAccount), ...body.draftIds.map(requireDraft)];
+        for (const target of targets) {
+          if (body.action === 'freeze') target.frozen = body.frozen;
+          else { target.className = body.className.trim(); target.schoolYear = body.schoolYear; }
+        }
+      } else if (body.action === 'deduct') {
+        requireAccount(body.uid);
+        const keys = await this.keys(body.uid);
+        const state = await this.state(tx, keys, config, body.uid, week);
+        if (body.amountEuroMicros > this.budget(state, week).remainingEuroMicros)
+          throw new ApiError(409, 'insufficient_available_funds', 'Der Abzug übersteigt das frei verfügbare Guthaben.');
+        state.account.withdrawnEuroMicros = safeAdd(state.account.withdrawnEuroMicros ?? 0, body.amountEuroMicros);
+        await tx.put(keys.account, state.account);
+      } else if (body.action === 'import') {
+        for (const row of body.rows) {
+          if (row.uid) {
+            if (Object.hasOwn(settings.accounts, row.uid)) applyProfile(settings.accounts[row.uid], row);
+            else settings.accounts[row.uid] = { name: row.name.trim(), className: row.className.trim(), schoolYear: row.schoolYear, frozen: false,
+              totalGrantedEuroMicros: body.amountEuroMicros, weeklyLimitEuroMicros: body.weeklyLimitEuroMicros };
+          } else if (!Object.values(settings.drafts).some(d => d.name === row.name.trim() && d.className === row.className.trim() && d.schoolYear === row.schoolYear)) {
+            const id = crypto.randomUUID();
+            settings.drafts[id] = { id, name: row.name.trim(), className: row.className.trim(), schoolYear: row.schoolYear, frozen: false };
+          }
+        }
+      } else if (body.action === 'assignUid') {
+        if (exists) throw new ApiError(409, 'account_exists', 'Diese Edulo-Anmelde-ID ist bereits vorhanden.');
+        const draft = requireDraft(body.draftId);
+        settings.accounts[body.uid] = { name: draft.name, className: draft.className, schoolYear: draft.schoolYear, frozen: draft.frozen,
+          ...(Object.hasOwn(draft, 'legacyName') ? { legacyName: draft.legacyName } : {}),
+          totalGrantedEuroMicros: body.amountEuroMicros, weeklyLimitEuroMicros: body.weeklyLimitEuroMicros };
+        delete settings.drafts[body.draftId.toLowerCase()];
       } else if (body.action === 'limits') {
         settings.limits = { globalLifetimeLimitEuroMicros: body.globalLifetimeLimitEuroMicros,
           globalWeeklyLimitEuroMicros: body.globalWeeklyLimitEuroMicros };

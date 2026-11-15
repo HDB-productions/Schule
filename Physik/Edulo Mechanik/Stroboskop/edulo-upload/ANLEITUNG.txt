@@ -1,0 +1,25 @@
+STROBOSKOP-WIDGET – KLEINE EDULO-FASSUNG
+
+1. Nur den vollständigen Inhalt von html-code.html in das Feld „HTML-Code“ kopieren.
+2. Als Zusatzdatei 1 stroboskop-3d-v2.js auswählen/hochladen.
+3. Über „+ hinzufügen“ als Zusatzdatei 2 stroboskop-mercedes-v2.bin auswählen/hochladen.
+4. E1/E2 und „mit Überprüfung: nein“ wie bisher beibehalten.
+
+Keine der großen Dateien als Text in den Editor kopieren. Die .bin-Datei nicht entpacken, umbenennen oder als HTML öffnen. Das JavaScript lädt Edulo automatisch; die Modelladresse kommt aus Edulos eigener Dateifunktion. Keine externe Hosting-Adresse nötig.
+
+Das Modell wird erst beim ersten Start einer Animation geladen. Der erste Start kann deshalb etwas dauern. Im Editor wird es nicht geladen. Beide Autospuren teilen sich die geladenen Modelldaten. Modelle, Texturen, Physik, Lernstände und Punkte bleiben erhalten.
+
+Die frühere große widget.html ist weiterhin nur die eigenständige lokale Komplettvorschau. Für Edulo ausschließlich dieses neue Dateipaket verwenden. vorschau.html lässt sich über einen lokalen HTTP-Server testen; direkt über file:// kann der Browser das Nachladen der .bin-Datei blockieren.
+
+Prüfstand: Automatisierte Prüfung gegen den Originalcode eines lokal vorhandenen Edulo-html_and_files-Moduls und simulierte Edulo-Speicherung. Die aktuelle installierte Edulo-Version und ein physisches Tablet müssen separat geprüft werden.
+
+EINSTELLUNGEN
+„mit Überprüfung“: nein. „mit Kursdaten“ kann wie bisher auf nein bleiben. Unter „Parameter“ nichts ergänzen.
+Falls die Speicherfelder noch fehlen: E1 als unbegrenztes Textfeld; E2 mit 20 unabhängigen Lücken, Lösung jeweils 1 und je ein Punkt. Die ersten 14 Punkte werden genutzt.
+
+Nach dem Speichern in die eigene Lernansicht wechseln und „Zeitlupe starten“ anklicken. Im Bearbeitungsmodus bleiben die Animationen bewusst ausgeschaltet.
+
+HTML-CODE ZUM KOPIEREN (vollständig):
+<!-- EDULO_WIDGET_KEY:stroboskop-ki-v1 -->
+<main class="edulo-widget strobe-lesson" data-edulo-id="stroboskop-ki-v1"><p role="status">Stroboskop-Widget wird geladen …</p></main>
+<!-- widgetInit_stroboskopKI -->

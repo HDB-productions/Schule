@@ -68,9 +68,10 @@ async function check(){
   const raw=await res.text();if(raw.length>48000)throw new Error('Die Feedback-Antwort ist zu groß. Bitte informiere deine Lehrkraft.');
   let data;try{data=JSON.parse(raw);}catch{throw new Error('Die Verbindung liefert kein lesbares Ergebnis. Bitte informiere deine Lehrkraft.');}
   if(!res.ok){
-   const errors={401:'Der Zugangscode ist ungültig.',403:'Die Verbindung aus dieser Lernumgebung ist noch nicht freigegeben.',429:'Zu viele Anfragen. Bitte warte kurz und versuche es erneut.',503:'Die Feedback-Verbindung ist noch nicht vollständig eingerichtet oder vorübergehend nicht verfügbar.'};
+   const errors={401:'Der Zugangscode ist ungültig.',403:'Die Verbindung aus dieser Lernumgebung ist noch nicht freigegeben.',429:'Zu viele Anfragen. Bitte warte kurz und versuche es erneut.',503:'Der KI-Dienst ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.'};
+   const serviceMessages={account_frozen:'Dieses Konto ist f\u00fcr neue KI-Anfragen gesperrt. Bitte wende dich an deine Lehrkraft.',upstream_busy:'Der KI-Dienst hat ein Anfragelimit erreicht oder sein API-Guthaben ist ausgeschöpft. Bitte versuche es später erneut. Falls das Problem bestehen bleibt, informiere deine Lehrkraft.',upstream_rate_limited:'Der KI-Dienst erhält gerade zu viele Anfragen. Bitte warte kurz und versuche es erneut.',upstream_quota:'Das API-Guthaben oder API-Limit des KI-Dienstes ist ausgeschöpft. Bitte informiere deine Lehrkraft.',not_configured:'Die KI-Verbindung ist noch nicht vollständig eingerichtet.'};
    const diagnostic=typeof data?.error?.code==='string' && /^[a-z_]{1,60}$/.test(data.error.code) ? ' Fehlercode: '+data.error.code+'.' : '';
-   throw new Error((errors[res.status]||'Die Prüfung konnte nicht abgeschlossen werden. Bitte versuche es später erneut.')+diagnostic);
+   throw new Error((Object.hasOwn(serviceMessages,data?.error?.code)?serviceMessages[data.error.code]:errors[res.status]||'Die Prüfung konnte nicht abgeschlossen werden. Bitte versuche es später erneut.')+diagnostic);
   }
   if(data.taskId!==TASK.id||data.taskVersion!==TASK.version||!validFeedback(data.feedback))throw new Error('Das Feedback passt nicht zum vereinbarten Format. Deine Antwort bleibt gespeichert.');
   if(!root.isConnected)return;

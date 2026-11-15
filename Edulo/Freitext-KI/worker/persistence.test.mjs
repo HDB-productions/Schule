@@ -21,7 +21,7 @@ test('local Cloudflare emulation: SQLite atomic reservations and settled funds p
   const gate = new Promise(r => { release = r; });
   const options = convertV4MiniflareOptions({
     name: 'feedback-persistence-test', modulesRoot: directory,
-    modules: ['worker.mjs', 'budget.mjs', 'admin-page.mjs'].map(name => ({ type: 'ESModule', path: resolve(directory, name) })),
+    modules: ['worker.mjs', 'budget.mjs', 'admin-page.mjs', 'admin-roster.mjs'].map(name => ({ type: 'ESModule', path: resolve(directory, name) })),
     compatibilityDate: '2026-10-25', resourcePersistencePath: persistence,
     durableObjects: { FEEDBACK_BUDGET: { className: 'FeedbackBudget', useSQLite: true } },
     ratelimits: { FEEDBACK_LIMITER: { namespace_id: '10012501', simple: { limit: 30, period: 60 } } },
@@ -100,6 +100,29 @@ test('local Cloudflare emulation: SQLite atomic reservations and settled funds p
     assert.equal((await post('/quota',{uid:newUid})).status,200,'managed ID works without editing the original secret');
     assert.equal((await admin(topup)).status,200,'idempotency persists across runtime restart');
     const final = await (await post('/quota',{uid:newUid})).json();assert.equal(final.budget.remainingEuroMicros,1500000);
+    // Roster migration, corrections and freezes must also survive a real SQLite restart.
+    const mutate = (action,fields={}) => admin({action,operationId:crypto.randomUUID(),...fields});
+    assert.equal((await mutate('profile',{uid:newUid,name:'Neuer Testname',className:'8G3',schoolYear:'2026/2027'})).status,200);
+    const deduction={action:'deduct',operationId:crypto.randomUUID(),uid:newUid,amountEuroMicros:100000,reason:'Synthetische Fehlbuchung korrigiert'};
+    assert.equal((await admin(deduction)).status,200);
+    const importedResponse=await mutate('import',{rows:[{uid:'',name:'Synthetischer Entwurf',className:'8G3',schoolYear:'2026/2027'}],amountEuroMicros:0,weeklyLimitEuroMicros:100000});
+    assert.equal(importedResponse.status,200);const imported=await importedResponse.json();const draftId=imported.drafts[0].id;
+    assert.equal((await mutate('moveClass',{uids:[newUid],draftIds:[draftId],className:'9G3',schoolYear:'2027/2028'})).status,200);
+    assert.equal((await mutate('freeze',{uids:[newUid],draftIds:[draftId],frozen:true})).status,200);
+    await mf.dispose();mf=undefined;mf=new Miniflare(options);await mf.ready;
+    const restoredResponse=await admin(deduction);assert.equal(restoredResponse.status,200);const restored=await restoredResponse.json();
+    assert.equal(restored.replayed,true);const corrected=restored.accounts.find(a=>a.uid===newUid);
+    assert.equal(corrected.budget.remainingEuroMicros,1400000,'deduction applied exactly once after SQLite restart');
+    assert.equal(corrected.withdrawnEuroMicros,100000);assert.equal(corrected.frozen,true);
+    assert.equal(corrected.className,'9G3');assert.equal(corrected.schoolYear,'2027/2028');
+    assert.equal(corrected.legacyName,'Testname');
+    assert.equal(restored.drafts[0].id,draftId);assert.equal(restored.drafts[0].frozen,true);assert.equal(restored.drafts[0].className,'9G3');
+    const denied=await post('/feedback',{...bodies[0],uid:newUid,requestId:crypto.randomUUID()});
+    assert.equal(denied.status,403);assert.equal((await denied.json()).error.code,'account_frozen');
+    const assignedUid='gh-123456-abcdef-789012';
+    const assignedResponse=await mutate('assignUid',{draftId,uid:assignedUid,amountEuroMicros:50000,weeklyLimitEuroMicros:100000});
+    assert.equal(assignedResponse.status,200);const assigned=await assignedResponse.json();assert.equal(assigned.drafts.length,0);
+    assert.equal(assigned.accounts.find(a=>a.uid===assignedUid).frozen,true,'frozen draft remains frozen after UID binding');
     assert.equal(calls,successful.length,'administration never calls OpenAI');
     const files = await readdir(persistence, { recursive: true });
     assert.ok(files.some(name => /sqlite|\.db$/i.test(name)), 'persistent SQLite file created on local disk');

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "corolla",
+    "name": "Toyota Corolla E180 (2014)",
+    "author": "Armored Wave",
+    "triangles": 84408,
+    "url": "https://sketchfab.com/3d-models/2014-toyota-corolla-e180-eu-with-interior-36f95efb0585464cae43a25a3b3392e8",
+    "thumbnail": "https://media.sketchfab.com/models/36f95efb0585464cae43a25a3b3392e8/thumbnails/5e5991fc41734509b2646e90b46fe779/c59ed0d371ea4f70a9127b563833e16d.jpeg",
+    "note": "Aktiv im Widget: vollständige Geometrie, vier getrennt animierte Räder, Texturen für kleine Darstellung aufbereitet; Modelldatei 3,26 MB GZIP.",
+    "license": "CC BY 4.0",
+    "downloadable": true,
+    "verified": "2026-10-26",
+    "geometryInspected": true,
+    "source": "Sketchfab public model API and model page",
+    "selected": true,
+    "integrated": true
+  },
+  {
+    "id": "mercedes",
+    "name": "Mercedes E-Klasse W212",
+    "author": "Peter_D",
+    "triangles": 362868,
+    "url": "https://sketchfab.com/3d-models/mercedes-e-class-w212-119c5e10733142b197aa53b86f6aeb04",
+    "thumbnail": "https://media.sketchfab.com/models/119c5e10733142b197aa53b86f6aeb04/thumbnails/d9de78b7990947ad889753f6c767beee/02289dcfed8c47e0a1140cefb921b790.jpeg",
+    "note": "Historische Fassung. Wegen großer Modelldatei durch den Toyota ersetzt.",
+    "license": "CC BY 4.0",
+    "downloadable": true,
+    "verified": "2026-10-26",
+    "geometryInspected": true,
+    "source": "Sketchfab public model API and model page",
+    "selected": false,
+    "integrated": false
+  },
+  {
+    "id": "bmw",
+    "name": "BMW M5 (2024)",
+    "author": "tonielpro520",
+    "triangles": 279966,
+    "url": "https://sketchfab.com/3d-models/2024-bmw-m5-3f1f1468017045bd88368a9c5c6ac8ee",
+    "thumbnail": "https://media.sketchfab.com/models/3f1f1468017045bd88368a9c5c6ac8ee/thumbnails/269ca7ccadf54f46b1b1ff2a12e34772/ab5dc3a94ddf4ffeac730318e6ca2171.jpeg",
+    "note": "Moderne Form, in der Vorschau gröbere Materialien als die E-Klasse; hohe Geometriezahl allein garantiert keinen realistischen Look.",
+    "license": "CC BY 4.0",
+    "downloadable": true,
+    "verified": "2026-10-26",
+    "geometryInspected": false,
+    "source": "Sketchfab public model API and model page",
+    "selected": false,
+    "integrated": false
+  }
+]

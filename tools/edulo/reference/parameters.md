@@ -20,3 +20,11 @@ const params = readEduloParameters(json, 'EDULO_WIDGET_KEY:meine-id');
 ```
 
 Wenn gebraucht, die kleine Funktion gezielt in app.js einfügen oder den Build um ein geprüftes Inline-Modul erweitern. Keine weltweite Netzwerkabhängigkeit und kein API-Schlüssel gehören in eine auslieferbare HTML-Datei. Werte wie worker_base/aspects_json stammen aus einem alten KI-Widget und sind keine Edulo-Standardparameter.
+
+## Zusatzdateien: lokal verifizierter Modulcode (26.10.2026)
+
+Im archivierten `Chemie/Edulo Stoffeigenschaften/Widget_224342_Aggregatzustnde.wdgt/all_modules.js` lädt `html_and_files` die in `JSON.files` eingetragenen `.js`-Dateien als Skripte und `.css`-Dateien als Stylesheets vor dem Einsetzen des HTML. Andere Dateitypen werden nicht automatisch ausgeführt. Die Medienadresse wird über `widget.getMediaURLPath(file.url)` gebildet; die ursprüngliche URL unverändert an diese Funktion geben.
+
+Das Modul sucht im HTML nach `/widgetInit_[^ (]+/` und ruft die gefundene Funktion mit `(moduleId, data, actions, callbacks, stats, parameters)` auf. Ein Marker wie `<!-- widgetInit_stroboskopKI -->` enthält das notwendige Leerzeichen nach dem Funktionsnamen. Darüber kann ein sehr kleiner HTML-Block den in einer JavaScript-Zusatzdatei liegenden Aufbau starten. Zusatzdateien anhand der eigenen Modul-ID und einer eindeutigen Widget-Kennung zuordnen, nicht pauschal die erste Datei verwenden.
+
+Anwendungsfall: `Physik/Edulo Mechanik/Stroboskop/build-edulo.cjs`, Auflösung in `edulo-files.js`, unveränderte Originalmodul-Testfixture in `edulo-host-fixture.cjs`. Die Erkenntnis belegt den archivierten Quellstand; sie ersetzt keinen Upload-/Wiederöffnungstest in der aktuellen Edulo-Version.

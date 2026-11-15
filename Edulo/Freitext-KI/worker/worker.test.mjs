@@ -87,18 +87,26 @@ test('cached input is a subset and reasoning output is never counted twice; roun
 test('grouped feedback has one prose response per task while criterion statuses remain independent',async()=>{
   const grouped={...task,criteria:[...task.criteria,{id:'beispiel',label:'Beispiel',description:'Erläutert ein Beispiel.'}],feedbackGroups:[
     {id:'erklaerung',prompt:'Erkläre die Bewegung.',criterionIds:['konstant']},{id:'anwendung',prompt:'Erläutere ein Beispiel.',criterionIds:['beispiel']}]};
-  const f={...feedback(),criteria:[{id:'konstant',status:'met',feedback:''},{id:'beispiel',status:'missing',feedback:''}],
+  const f={...feedback(),summary:'',languageFeedback:'',criteria:[{id:'konstant',status:'met',feedback:''},{id:'beispiel',status:'missing',feedback:''}],
     taskFeedback:[{id:'erklaerung',feedback:'Deine Erklärung ist verständlich.'},{id:'anwendung',feedback:'Wie würdest du deine Aussage an einem eigenen Beispiel erläutern?'}]};
   let payload;
   const s=setup({fetcher:async(_,options)=>{payload=JSON.parse(options.body);return new Response(JSON.stringify(output(f)));}});
   const response=await s.invoke(request(body({task:grouped})));assert.equal(response.status,200);
-  const result=await response.json();assert.equal(result.feedbackStyle,'questions-v3');assert.deepEqual(result.feedback,f);
+  const result=await response.json();assert.equal(result.feedbackStyle,'questions-v4');assert.deepEqual(result.feedback,f);
   assert.equal(payload.text.format.schema.properties.criteria.items.properties.feedback.maxLength,0);
   assert.equal(payload.text.format.schema.properties.taskFeedback.minItems,2);assert.equal(payload.text.format.schema.properties.nextSteps.maxItems,0);
+  assert.equal(payload.text.format.schema.properties.summary.maxLength,0);assert.equal(payload.text.format.schema.properties.languageFeedback.maxLength,0);
+  assert.equal(payload.text.format.schema.properties.misconceptions.maxItems,0);
   assert.match(payload.instructions,/höchstens zwei unterschiedliche offene Leitfragen/);
   assert.match(payload.instructions,/jeden Aspekt weiterhin unabhängig/);
+  assert.match(payload.instructions,/Fehlerkorrekturen.*direkt in taskFeedback/);
+  assert.match(payload.instructions,/Es gibt keinen allgemeinen Rückmeldungsbereich mehr/);
+  assert.match(payload.instructions, /Der ERSTE Satz/);
+  assert.match(payload.instructions, /ausdrücklich das Wort „falsch“/);
   const variants=[{...f,taskFeedback:[f.taskFeedback[0],f.taskFeedback[0]]},{...f,taskFeedback:f.taskFeedback.slice(0,1)},
-    {...f,nextSteps:['Wiederholung']},{...f,criteria:[{...f.criteria[0],feedback:'Doppelter Hinweis'},f.criteria[1]]}];
+    {...f,nextSteps:['Wiederholung']},{...f,summary:'Zusammenfassung unten'},{...f,languageFeedback:'Globaler Sprachhinweis'},
+    {...f,misconceptions:[{statement:'Falsche Aussage',correction:'Unten korrigiert'}]},
+    {...f,criteria:[{...f.criteria[0],feedback:'Doppelter Hinweis'},f.criteria[1]]}];
   for(const invalid of variants){const bad=setup({fetcher:async()=>new Response(JSON.stringify(output(invalid)))});await code(await bad.invoke(request(body({task:grouped}))),502,'invalid_feedback');}
 });
 
@@ -219,6 +227,43 @@ test('explicit nonbillable API rejection releases reservation without crediting 
     assert.equal((await quota(s)).remainingEuroMicros, 1_000_000); assert.doesNotMatch(JSON.stringify(b), /private/);
   }
 });
+test('API 429 distinguishes quota and rate limits without leaking details or retrying', async () => {
+  const cases = [
+    ...['insufficient_quota', 'credit_balance_exhausted', 'billing_hard_limit_reached', 'organization_spend_limit_exceeded',
+      'project_spend_limit_exceeded', 'organization_usage_limit_exceeded'].map(code => [{ code }, 'upstream_quota']),
+    [{ type: 'insufficient_quota', code: null }, 'upstream_quota'],
+    ...['rate_limit_exceeded', 'slow_down'].map(code => [{ code }, 'upstream_rate_limited']),
+    [{ code: 'unknown_future_limit' }, 'upstream_busy'],
+    [{}, 'upstream_busy'],
+  ];
+  for (const [error, expected] of cases) {
+    let calls = 0;
+    const s = setup({ fetcher: async () => {
+      calls++; return new Response(JSON.stringify({ error: { ...error, message: 'private upstream detail' } }), { status: 429 });
+    } });
+    const b = body(), result = await code(await s.invoke(request(b)), 503, expected);
+    assert.equal(result.charge.status, 'none'); assert.equal(result.budget.reservedEuroMicros, 0);
+    assert.doesNotMatch(JSON.stringify(result), /private|eingerichtet/);
+    s.restart();
+    assert.equal((await code(await s.invoke(request({ uid, requestId: b.requestId }, '/result')), 503, expected)).charge.status, 'none');
+    await code(await s.invoke(request(b)), 503, expected); assert.equal(calls, 1);
+  }
+});
+
+test('429 classification preserves known charges and unknown reservation holds', async () => {
+  for (const [raw, charge] of [
+    [JSON.stringify({ error: { code: 'insufficient_quota' }, usage }), 'settled'],
+    ['not JSON', 'reserved'],
+    [JSON.stringify({ error: { code: 'rate_limit_exceeded' }, output: [] }), 'reserved'],
+  ]) {
+    const s = setup({ fetcher: async () => new Response(raw, { status: 429 }) });
+    const res = await s.invoke(request(body())); assert.equal(res.status, 503);
+    const data = await res.json(); assert.equal(data.charge.status, charge);
+    if (charge === 'settled') assert.equal(data.charge.euroMicros, 35);
+    else await code(await s.invoke(request(body())), 409, 'account_review_required');
+  }
+});
+
 test('limiter fails closed before API and duplicate request never reruns limiter', async () => {
   for (const limit of [async () => ({ success: false }), async () => { throw Error(); }, async () => ({ success: 'yes' })]) {
     const s = setup({ overrides: { FEEDBACK_LIMITER: { limit } }, fetcher: () => assert.fail() }); const b = body();
@@ -254,6 +299,14 @@ test('12000 answer chars accepted and task/source injection remains untrusted da
     assert.match(b.instructions, /Eine fehlende Erklärung ist KEINE Fehlvorstellung/);
     assert.match(b.instructions, /Sonnen-UV am Erdboden/);
     assert.match(b.instructions, /Einzige eng begrenzte Ausnahme/);
+    assert.match(b.instructions, /Diese Gleichsetzung ist falsch/);
+    assert.match(b.instructions, /Ionisierende Strahlung selbst ist für uns unsichtbar/);
+    assert.match(b.instructions, /Hier nicht zusätzlich das UV-Hautkrebsrisiko bestätigen/);
+    assert.match(b.instructions, /Korrektur Vorrang vor Lob/);
+    assert.match(b.instructions, /Freiwillige technische Ergänzungen sind keine Pflichtkriterien/);
+    assert.match(b.instructions, /Welche Teile des Nachweises meinst du/);
+    assert.match(b.instructions, /Welche anderen Möglichkeiten für eine geschädigte Zelle/);
+    assert.match(b.instructions, /pauschale sprachliche Verbesserungstipps/);
     assert.deepEqual(JSON.parse(b.input[0].content[0].text), { task: injectedTask, answer: 'x'.repeat(12000) });
     assert.ok(!options.body.includes('test-secret')); return ok();
   } }); assert.equal((await s.invoke(request(body({ task: injectedTask, answer: 'x'.repeat(12000) })))).status, 200);

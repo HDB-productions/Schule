@@ -1,18 +1,19 @@
-const D=LessonDomain,TASK=D.task(LESSON);
+const D=LessonDomain;
 let state,scores,loaded=false,busy=false,budgetBusy=false,currentUid=null,historyShown=8,transport='fetch';
 const bridge=createEduloBridge({root,widgetId:'ionisierende-strahlung-ki-v1',stateVersion:2,scoreCount:D.criteria(LESSON).length,migrateSnapshot:s=>D.migrate(LESSON,s),
  hideFooter:true,fresh:()=>D.fresh(LESSON),validate:s=>D.valid(LESSON,s),
  onStatus:({text,error})=>{q('[data-storage]').textContent=text;q('[data-retry]').hidden=!error;}});
 const money=value=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:4}).format(value/1e6);
 function element(tag,text,className){const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(className)el.className=className;return el;}
-const visibleFeedback=h=>['questions-v1','questions-v2','questions-v3'].includes(h.feedbackStyle);
+const visibleFeedback=h=>['questions-v1','questions-v2','questions-v3','questions-v4'].includes(h.feedbackStyle);
 function groupedFeedback(h,question){
  const block=element('div'),text=visibleFeedback(h)?h.feedback.taskFeedback?.find(item=>item.id===question.id)?.feedback:null;
- const paragraph=element('p',text||'Diese frühere Prüfung enthält noch keine zusammenhängende Rückmeldung zu dieser Aufgabe.','task-feedback');paragraph.dataset.taskFeedback=question.id;block.append(paragraph);
+ if(h.reusedFrom?.[question.id])block.append(element('p','Unverändert · bisherige Rückmeldung','muted'));
+ const clarifications=visibleFeedback(h)?(h.feedback.misconceptions||[]).filter(item=>{if(text?.includes(item.correction))return false;const quote=item.statement.trim(),variants=[quote];if([['„','“'],['"','"'],['«','»']].some(pair=>quote.startsWith(pair[0])&&quote.endsWith(pair[1]))&&quote.length>2)variants.push(quote.slice(1,-1));const matches=LESSON.questions.filter(q=>variants.some(v=>h.answers[q.id].includes(v)));return matches.length===1&&matches[0].id===question.id;}).map(item=>'Zu deiner Aussage „'+item.statement+'“: '+item.correction):[];
+ const paragraph=element('p',[text||'Diese frühere Prüfung enthält noch keine zusammenhängende Rückmeldung zu dieser Aufgabe.',...clarifications].join(' '),'task-feedback');paragraph.dataset.taskFeedback=question.id;block.append(paragraph);
  const sources=new Set(question.criteria.filter(c=>h.feedback.criteria.find(r=>r.id===c.id)?.status!=='met').map(c=>c.source));
  for(const source of sources)block.append(videoLink(source));return block;
 }
-function misconceptionElements(items){return items.map(item=>{const entry=element('div',undefined,'misconception'),statement=element('p'),correction=element('p');statement.append(element('strong','Deine Aussage: '),document.createTextNode(item.statement));correction.append(element('strong','Klarstellung: '),document.createTextNode(item.correction));entry.append(statement,correction);return entry;});}
 function message(text){q('[data-message]').textContent=text;}
 function identity(){
  let win=window;const seen=new Set();
@@ -117,8 +118,9 @@ async function refreshBudget(){
 }
 function active(){return state?.history.find(h=>h.status==='pending'||h.status==='unknown');}
 function controls(){
- const pending=active();q('[data-check]').disabled=!loaded||busy||!!pending||!LESSON.questions.every(item=>state?.answers[item.id].trim());
- q('[data-check]').textContent=busy?'HDBs KI-Assistent überprüft deine Antworten …':'Alle Antworten prüfen';
+ const pending=active(),changed=state?D.plan(LESSON,state).checkedQuestionIds.length:LESSON.questions.length;
+ q('[data-check]').disabled=!loaded||busy||!!pending||!changed||!!(state?.ownerUid&&state.ownerUid!==currentUid)||!LESSON.questions.every(item=>state?.answers[item.id].trim());
+ q('[data-check]').textContent=busy?'HDBs KI-Assistent überprüft deine Antworten …':!changed?'Keine Änderungen zu prüfen':changed===LESSON.questions.length?'Alle Antworten prüfen':'Geänderte Antworten prüfen';
  q('[data-recover]').hidden=!pending;q('[data-recover]').disabled=!loaded||busy;
  for(const item of LESSON.questions)q('[data-count="'+item.id+'"]').textContent=(state?.answers[item.id].length||0)+' / 3000 Zeichen';
 }
@@ -140,15 +142,8 @@ function render(){
   const list=q('[data-aspects="'+question.id+'"]');list.replaceChildren();
   if(last){const li=element('li');li.append(groupedFeedback(last,question));list.append(li);}
  }
- q('[data-feedback]').hidden=!last;
- if(last){
-  q('[data-stale]').hidden=JSON.stringify(last.answers)===JSON.stringify(state.answers);
-  const current=visibleFeedback(last),misconceptions=current?(last.feedback.misconceptions||[]):[];
-  q('[data-summary]').textContent=current?last.feedback.summary:'Frühere Rückmeldung gespeichert. Die bisherigen Punkte bleiben erhalten. Offene Aspekte kannst du mithilfe der Videostellen überarbeiten.';q('[data-language]').textContent=current?last.feedback.languageFeedback:'';
-  q('[data-language-wrap]').hidden=!current||!last.feedback.languageFeedback.trim();q('[data-next-wrap]').hidden=!current||!last.feedback.nextSteps.length;
-  q('[data-next]').replaceChildren(...(current?last.feedback.nextSteps:[]).map(text=>element('li',text)));
-  q('[data-misconceptions-wrap]').hidden=!misconceptions.length;q('[data-misconceptions]').replaceChildren(...misconceptionElements(misconceptions));
- }renderHistory();controls();
+ q('[data-stale]').hidden=!last||JSON.stringify(last.answers)===JSON.stringify(state.answers);
+ renderHistory();controls();
 }
 function renderHistory(){
  q('[data-history-label]').textContent='Deine Historie · '+state.history.length+' Prüfungen';const list=q('[data-history]');list.replaceChildren();
@@ -156,46 +151,49 @@ function renderHistory(){
  for(const h of [...state.history].reverse().slice(0,historyShown)){
   const details=element('details',undefined,'history-entry'),date=new Date(h.at);
   const label=Number.isNaN(date.getTime())?h.at:date.toLocaleString('de-DE');
-  details.append(element('summary',label+' · '+({pending:'Prüfung läuft',unknown:'Ausgang noch ungeklärt',done:'Feedback erhalten',failed:'Prüfung fehlgeschlagen'})[h.status]));
+  const checked=h.checkedQuestionIds?.length;
+  details.append(element('summary',label+' · '+({pending:'Prüfung läuft',unknown:'Ausgang noch ungeklärt',done:'Feedback erhalten',failed:'Prüfung fehlgeschlagen'})[h.status]+(checked&&checked<LESSON.questions.length?' · '+checked+' Antwort'+(checked===1?'':'en')+' neu geprüft':'')));
   for(const item of LESSON.questions){details.append(element('h3',item.title),element('p',h.answers[item.id],'saved-answer'));if(h.feedback)details.append(groupedFeedback(h,item));}
-  if(h.feedback){details.append(element('h3','Rückmeldung'));
-   if(visibleFeedback(h)){
-    details.append(element('p',h.feedback.summary));
-    if(h.feedback.languageFeedback)details.append(element('h3','Formulierung'),element('p',h.feedback.languageFeedback));
-    if(h.feedback.misconceptions?.length)details.append(element('h3','Fehlvorstellungen klären'),...misconceptionElements(h.feedback.misconceptions));
-   }else details.append(element('p','Frühere Rückmeldung gespeichert. Ihr Text wird nicht mehr angezeigt, damit er keine Lösung vorwegnimmt. Die Antworten und Punkte bleiben erhalten.'));
-  }else details.append(element('p',h.message||'Noch keine Rückmeldung vorhanden.'));
+  if(!h.feedback)details.append(element('p',h.message||'Noch keine Rückmeldung vorhanden.'));
   list.append(details);
  }
  if(historyShown<state.history.length){const button=element('button','Weitere Prüfungen anzeigen','secondary');button.type='button';button.addEventListener('click',()=>{historyShown+=8;renderHistory();});list.append(button);}
 }
 function errorMessage(data,status){
- const messages={400:'Die Anfrage konnte nicht verarbeitet werden.',402:'Dein verfügbares Guthaben oder Wochenlimit reicht für diese Prüfung nicht aus.',403:'Deine ID oder diese Lernumgebung ist noch nicht freigegeben.',409:'Die Anfrage ist bereits vorhanden oder das Konto ist noch durch eine ungeklärte Prüfung gesperrt.',429:'Dein Wochenlimit oder das Guthaben ist ausgeschöpft, oder es sind gerade zu viele Anfragen.',503:'Die neue KI-Verbindung ist noch nicht vollständig eingerichtet.'};
+ const messages={400:'Die Anfrage konnte nicht verarbeitet werden.',402:'Dein verfügbares Guthaben oder Wochenlimit reicht für diese Prüfung nicht aus.',403:'Deine ID oder diese Lernumgebung ist noch nicht freigegeben.',409:'Die Anfrage ist bereits vorhanden oder das Konto ist noch durch eine ungeklärte Prüfung gesperrt.',429:'Dein Wochenlimit oder das Guthaben ist ausgeschöpft, oder es sind gerade zu viele Anfragen.',503:'Der KI-Dienst ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.'};
+ const serviceMessages={account_frozen:'Dieses Konto ist f\u00fcr neue KI-Anfragen gesperrt. Bitte wende dich an deine Lehrkraft.',upstream_busy:'Der KI-Dienst hat ein Anfragelimit erreicht oder sein API-Guthaben ist ausgeschöpft. Bitte versuche es später erneut. Falls das Problem bestehen bleibt, informiere deine Lehrkraft.',upstream_rate_limited:'Der KI-Dienst erhält gerade zu viele Anfragen. Bitte warte kurz und versuche es erneut.',upstream_quota:'Das API-Guthaben oder API-Limit des KI-Dienstes ist ausgeschöpft. Bitte informiere deine Lehrkraft.',not_configured:'Die KI-Verbindung ist noch nicht vollständig eingerichtet.'};
  const code=typeof data?.error?.code==='string'&&/^[a-z_]{1,60}$/.test(data.error.code)?' Fehlercode: '+data.error.code+'.':'';
- return (messages[status]||'Die Prüfung konnte nicht abgeschlossen werden.')+code;
+ return (Object.hasOwn(serviceMessages,data?.error?.code)?serviceMessages[data.error.code]:messages[status]||'Die Prüfung konnte nicht abgeschlossen werden.')+code;
 }
 async function handleResult(h,r){
  renderBudget(r.data.budget,r.data.charge);
  if(r.status===202){h.status='unknown';h.message='Die Prüfung läuft noch oder ihr Ausgang wird geklärt. Es wird kein zweiter KI-Aufruf gestartet.';message(h.message);return;}
  if(r.ok){
-  if(r.data.taskId!==TASK.id||r.data.taskVersion!==(h.rubricVersion||TASK.version)||r.data.requestId!==h.requestId||!D.validAttemptFeedback(LESSON,h,r.data.feedback))throw Error('Das Ergebnis passt nicht zum vereinbarten Format.');
-  D.finish(LESSON,state,h,r.data.feedback);h.feedbackStyle=['questions-v1','questions-v2','questions-v3'].includes(r.data.feedbackStyle)?r.data.feedbackStyle:'legacy';message('Rückmeldung erhalten. Überarbeite offene Aspekte und prüfe deine Antworten erneut.');
+  const submitted=D.request(LESSON,h);
+  if(r.data.taskId!==submitted.task.id||r.data.taskVersion!==submitted.task.version||r.data.requestId!==h.requestId||!D.validResponse(LESSON,h,r.data.feedback))throw Error('Das Ergebnis passt nicht zum vereinbarten Format.');
+  D.finish(LESSON,state,h,r.data.feedback);h.feedbackStyle=['questions-v1','questions-v2','questions-v3','questions-v4'].includes(r.data.feedbackStyle)?r.data.feedbackStyle:'legacy';
+  const checked=h.checkedQuestionIds?.length||LESSON.questions.length;
+  message(checked<LESSON.questions.length?checked+' Antwort'+(checked===1?' wurde':'en wurden')+' neu geprüft. Unveränderte Antworten wurden übernommen.':'Rückmeldung erhalten. Überarbeite offene Aspekte und prüfe deine Antworten erneut.');
  }else{h.status=r.data.charge?.status==='reserved'?'unknown':'failed';h.message=errorMessage(r.data,r.status);message(h.message);}
 }
 async function check(){
  if(!loaded||busy||active())return;
- let uid;try{endpoint('/feedback');uid=syncIdentity();if(!uid)throw Error('Deine eigene Edulo-Anmelde-ID ist hier noch nicht verfügbar.');}catch(error){message(error.message);return;}
+ let uid;try{endpoint('/feedback');uid=syncIdentity();if(!uid)throw Error('Deine eigene Edulo-Anmelde-ID ist hier noch nicht verfügbar.');
+  if(state.ownerUid&&state.ownerUid!==uid)throw Error('Dieser Lernstand gehört zu einem anderen Konto. Öffne die Aufgabe in deiner eigenen Ansicht neu.');
+  if(!D.plan(LESSON,state).checkedQuestionIds.length){message('Deine Antworten sind unverändert. Es wurde keine neue KI-Prüfung gestartet.');controls();return;}
+ }catch(error){message(error.message);return;}
  busy=true;controls();let h;
  try{
   h=D.begin(LESSON,state,crypto.randomUUID(),new Date().toISOString());state.ownerUid=uid;
   await bridge.save(state,D.scores(LESSON,state)); // Save exact submission in E1 BEFORE spending money.
-  message('Deine Antworten werden geprüft.');render();
+  message(h.checkedQuestionIds.length===LESSON.questions.length?'Deine Antworten werden geprüft.':'Nur deine geänderten Antworten werden geprüft.');render();
  }catch(error){
   if(h){h.status='failed';h.message='Nicht an die KI gesendet: Speicherung konnte nicht bestätigt werden.';}
   busy=false;render();message('Die Eingaben konnten nicht sicher gespeichert werden. Es wurde keine KI-Anfrage gesendet. '+error.message);return;
  }
  try{
-  const r=await api('/feedback',{uid,requestId:h.requestId,task:TASK,answer:JSON.stringify(h.answers)});
+  const submitted=D.request(LESSON,h);
+  const r=await api('/feedback',{uid,requestId:h.requestId,...submitted});
   if(!root.isConnected)return;
   if(syncIdentity()!==uid){h.status='unknown';message('Das Konto wurde während der Prüfung gewechselt. Öffne die Aufgabe neu.');return;}
   await handleResult(h,r);

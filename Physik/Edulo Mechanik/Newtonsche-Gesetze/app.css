@@ -1,0 +1,66 @@
+.newton-lesson{--ink:#253941;--muted:#687777;--line:#dce3df;--accent:#166c68;--wash:#f1f6f3;box-sizing:border-box;width:100%;margin:0;padding:34px 38px;background:#fffefb;color:var(--ink);font:17px/1.6 'Segoe UI',system-ui,sans-serif;overflow-wrap:anywhere;border-top:5px solid var(--accent)}
+.newton-lesson *{box-sizing:border-box}.newton-lesson [hidden]{display:none!important}
+.newton-lesson p{margin:0 0 15px}.newton-lesson a{color:var(--accent);text-underline-offset:4px;text-decoration-thickness:1px}
+.newton-lesson button,.newton-lesson textarea,.newton-lesson select{font:inherit}.newton-lesson button{min-height:44px;border:1px solid var(--accent);border-radius:5px;padding:10px 19px;background:var(--accent);color:white;font-size:.88em;font-weight:650;cursor:pointer;transition:background .15s}
+.newton-lesson button:hover:not(:disabled){background:#0d5552}.newton-lesson button:disabled{opacity:.48;cursor:default}.newton-lesson button.secondary{background:transparent;color:var(--accent);border-color:#b9ccc3}
+.newton-lesson .video{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(210px,1fr);gap:28px;align-items:center;padding:0 0 32px;border-bottom:1px solid var(--line)}
+.newton-lesson .video-copy{padding:5px 0}.newton-lesson .eyebrow{font-size:.69em;letter-spacing:.15em;text-transform:uppercase;font-weight:750;color:var(--accent);margin-bottom:12px}.newton-lesson .video h2{font:600 25px/1.2 Georgia,'Times New Roman',serif;margin:0 0 11px;letter-spacing:0}
+.newton-lesson .video .video-meta{font-size:.78em;color:var(--muted);margin-bottom:15px}.newton-lesson .video .video-copy>p:not(.eyebrow):not(.video-meta){font-size:.88em;line-height:1.7}
+
+.newton-lesson .video-frame{width:100%;aspect-ratio:16/9;background:#e5ebe6;overflow:hidden;border-radius:4px}.newton-lesson .video-frame iframe{display:block;width:100%;height:100%;border:0}
+.newton-lesson fieldset{border:0;padding:0;margin:0;min-width:0}.newton-lesson .question{position:relative;margin:0;padding:32px 0;border-bottom:1px solid var(--line)}
+.newton-lesson h2{font-size:.8em;line-height:1.4;letter-spacing:.11em;text-transform:uppercase;font-weight:750;color:var(--accent);margin:0 0 12px}.newton-lesson h3{font-size:1.05em;line-height:1.4;margin:0 0 12px;font-weight:650}
+.newton-lesson .question>p:first-of-type{font-size:1.05em;max-width:88ch}.newton-lesson label{display:block}.newton-lesson .muted,.newton-lesson .count,.newton-lesson footer{font-size:.76em;color:var(--muted)}
+.newton-lesson textarea{display:block;width:100%;resize:vertical;min-height:190px;line-height:30px;padding:15px 18px;color:var(--ink);border:1px solid #b6c8be;border-radius:5px;background:repeating-linear-gradient(to bottom,#fffefb 0,#fffefb 29px,#e8eee8 29px,#e8eee8 30px);background-position:0 15px;box-shadow:inset 3px 0 0 #e2ebe4}
+.newton-lesson textarea::placeholder{color:#83918a;font-size:.91em}.newton-lesson .count{margin:5px 0 0;text-align:right;font-variant-numeric:tabular-nums}
+.newton-lesson .points{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:12px 0 0}.newton-lesson .point{display:inline-block;flex:none;width:15px;height:15px;border:1.5px solid #a6b4ad;border-radius:50%;background:transparent}.newton-lesson [data-color=green]{background:#2e8662;border-color:#2e8662}.newton-lesson [data-color=yellow]{background:#e5b345;border-color:#b78c29}
+.newton-lesson .points .muted{margin-left:5px}.newton-lesson .legend{display:flex;gap:15px;flex-wrap:wrap;font-size:.7em;color:var(--muted);margin:20px 0 0}.newton-lesson .legend>span{display:inline-flex;align-items:center;gap:6px}.newton-lesson .legend .point{width:10px;height:10px;border-width:1px}
+.newton-lesson .ai-question{padding:26px 0 0;border:0}.newton-lesson .ai-question>p{font-size:.96em;max-width:86ch}.newton-lesson .answer-label{font-size:.79em;letter-spacing:.03em;font-weight:650;margin:18px 0 7px;color:var(--muted)}
+.newton-lesson .ai-tools{padding:0}.newton-lesson .ai-tools .actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:16px 0 0}.newton-lesson .ai-privacy{margin-top:12px;font-size:.72em;color:var(--muted)}.newton-lesson .ai-privacy summary{font-weight:500}.newton-lesson .ai-privacy p{max-width:90ch}
+.newton-lesson .aspects{list-style:none;margin:16px 0 0;padding:0}.newton-lesson .aspects:empty{display:none}.newton-lesson .aspects li{padding:17px 20px;background:var(--wash);border-left:3px solid var(--accent);border-radius:0 5px 5px 0}.newton-lesson .aspects p{margin:0 0 8px}.newton-lesson .aspects a,.newton-lesson .history-entry a{display:block;width:fit-content;min-height:40px;padding:7px 0;font-size:.84em}
+.newton-lesson .task-feedback{white-space:pre-wrap}.newton-lesson .notice{margin:20px 0 0;padding:13px 16px;background:#fff6df;border-left:3px solid #d8a744;font-size:.86em}
+.newton-lesson .lesson-support{margin-top:24px;padding-top:0;color:var(--muted);font-size:.83em}.newton-lesson .lesson-support>summary{border-bottom:1px solid var(--line);padding-bottom:13px}
+.newton-lesson .budget{display:flex;flex-wrap:wrap;align-items:center;gap:9px 16px;margin:14px 0;padding:17px;background:#f4f6f1;border-radius:4px}.newton-lesson .budget p{margin:0}.newton-lesson .budget>[data-budget]{flex:1;min-width:220px}.newton-lesson .budget>details{flex-basis:100%;margin:0}.newton-lesson .budget button{font-size:.85em;min-height:40px;padding:7px 13px}
+.newton-lesson details{margin:12px 0}.newton-lesson summary{cursor:pointer;min-height:40px;padding:7px 0;font-weight:600}.newton-lesson .history-entry{border-bottom:1px solid var(--line);padding:6px 0 14px}.newton-lesson .saved-answer{white-space:pre-wrap}.newton-lesson footer{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:25px;padding-top:12px;border-top:1px solid var(--line)}
+.newton-lesson [data-message]:empty{display:none}.newton-lesson [data-message]{margin:16px 0;font-size:.88em}.newton-lesson [data-identity]{margin-top:14px}
+.newton-lesson :focus-visible{outline:3px solid #d9a440;outline-offset:4px}
+@media(min-width:1250px){.newton-lesson{padding:40px 50px}.newton-lesson .video{grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:40px}.newton-lesson .video h2{font-size:32px}}
+@media(max-width:650px){.newton-lesson{padding:21px 18px;font-size:16px;border-top-width:4px}.newton-lesson .video{grid-template-columns:1fr;gap:17px;padding-bottom:24px}.newton-lesson .video-copy{padding:0}.newton-lesson .video .eyebrow{margin-bottom:7px}.newton-lesson .video h2{font-size:24px}.newton-lesson .video .video-meta{margin-bottom:9px}.newton-lesson .video-copy>p{margin-bottom:9px}.newton-lesson .question{padding:25px 0}.newton-lesson .ai-question{padding:23px 0 0}.newton-lesson .question>p:first-of-type{font-size:1em}.newton-lesson .legend{gap:7px 12px}.newton-lesson .ai-tools .actions>button:first-child{width:100%}.newton-lesson textarea{padding-left:12px;padding-right:12px}.newton-lesson .aspects li{padding:13px}.newton-lesson .budget{padding:13px}.newton-lesson .budget>[data-budget]{min-width:0;flex-basis:100%}}
+
+/* One video action; no embedded YouTube overlays or duplicate external link. */
+.newton-lesson .video{grid-template-columns:minmax(0,1fr) auto;gap:36px}
+.newton-lesson .video-copy>p:last-child{margin-bottom:0;max-width:78ch}
+.newton-lesson .video-open{display:inline-flex;align-items:center;justify-content:center;gap:14px;min-height:76px;padding:14px 24px;background:var(--accent);border:1px solid var(--accent);border-radius:5px;color:#fff;text-decoration:none;font-size:1em;font-weight:650}
+.newton-lesson .video-open:hover{background:#0d5552}.newton-lesson .video-open-note{display:block;font-size:.7em;font-weight:400;opacity:.9;margin-top:2px}.newton-lesson .play-icon{font-size:1.3em}
+@media(max-width:650px){.newton-lesson .video{grid-template-columns:1fr;gap:18px}.newton-lesson .video-open{justify-self:start;min-height:64px;padding:11px 21px}}
+
+.newton-lesson .local-choices{display:grid;gap:0;margin:16px 0 18px;border-top:1px solid var(--line)}
+.newton-lesson .condition{font-weight:650;margin:22px 0 10px;font-size:1.05em}
+.newton-lesson .local-choice{display:flex;align-items:flex-start;gap:14px;padding:15px 12px;margin:0;min-height:54px;border-bottom:1px solid var(--line);font-weight:400;cursor:pointer;transition:background .15s}
+.newton-lesson .local-choice:hover{background:#f3f6f1}.newton-lesson .local-choice:has(input:checked){background:#eef5ee}
+.newton-lesson .local-choice input{flex:none;width:21px;height:21px;margin:3px 0 0;accent-color:var(--accent);cursor:pointer}
+.newton-lesson .local-result{display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:.76em;color:var(--muted)}.newton-lesson .local-result .point{margin-top:4px;width:13px;height:13px}
+.newton-lesson .local-result .local-feedback{margin:0;flex:1;min-width:0}.newton-lesson .local-feedback[data-result=wrong]{color:#9b422b}.newton-lesson .local-feedback[data-result=right]{color:#2a7253}
+.newton-lesson .local-bus-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin:22px 0 17px}
+.newton-lesson .local-bus-card{min-width:0;margin:0;padding:0;background:transparent}.newton-lesson .local-bus-card figcaption{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px;font-size:.76em;letter-spacing:.04em;font-weight:700}
+.newton-lesson .driving-direction{font-size:.87em;font-weight:450;letter-spacing:0;color:var(--muted)}
+.newton-lesson .local-bus-drawing{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px solid #e5e7df;border-radius:4px;margin:0 0 15px;background:#f7f5ee}
+.newton-lesson .comic-image{display:block;width:200%;height:100%;max-width:none;object-fit:fill}.newton-lesson .local-bus-card:nth-child(2) .comic-image{transform:translateX(-50%)}
+.newton-lesson .local-select-label{display:flex;align-items:center;gap:13px;font-weight:500;font-size:.86em}.newton-lesson .local-select-label>span{white-space:nowrap}
+.newton-lesson .local-select-label select{flex:1;min-width:0;width:100%;min-height:43px;border:1px solid #b3c4bb;border-radius:4px;padding:8px 29px 8px 11px;color:var(--ink);background:#fffefb;cursor:pointer}
+.newton-lesson .local-select-label select:disabled{opacity:.6;cursor:default}
+.newton-lesson .local-formula-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:28px 0 22px}.newton-lesson .local-formula-card{min-width:0;padding:16px 0 14px;border-top:2px solid #b7c9bf}
+.newton-lesson .formula-equation{display:flex;align-items:center;gap:7px;white-space:nowrap;font:italic 26px/1.4 Cambria,Georgia,serif}.newton-lesson .formula-equation>.formula-symbol{flex:none;margin-right:2px}
+.newton-lesson .formula-equation select{width:54px;min-width:0;min-height:49px;border:0;border-bottom:2px solid #aabeb0;background:#f2f5ef;border-radius:3px 3px 0 0;color:var(--ink);padding:4px 0 4px 7px;font:italic 23px/1.4 Cambria,Georgia,serif;cursor:pointer}
+.newton-lesson .formula-equation select[data-slot="1"]{width:45px;font-style:normal}
+.newton-lesson .local-check{margin-top:2px}.newton-lesson .local-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.newton-lesson .task-subline{font-size:.8em;color:var(--muted);margin-top:8px}.newton-lesson .local-bus-card .local-result{min-height:21px}
+@media(min-width:1250px){.newton-lesson .local-bus-grid{gap:30px}.newton-lesson .formula-equation{font-size:32px;gap:10px}.newton-lesson .formula-equation select{width:66px;font-size:27px}}
+@media(max-width:850px) and (min-width:651px){.newton-lesson .local-formula-grid{gap:16px}.newton-lesson .formula-equation{gap:4px;font-size:22px}.newton-lesson .formula-equation select{width:42px;font-size:21px}}
+@media(max-width:650px){.newton-lesson .local-bus-grid{grid-template-columns:1fr;gap:25px}.newton-lesson .local-formula-grid{grid-template-columns:1fr;gap:0;margin:22px 0 18px}.newton-lesson .local-formula-card{padding:18px 0;border-top:1px solid var(--line)}.newton-lesson .formula-equation{gap:10px;font-size:28px}.newton-lesson .formula-equation select{width:61px}.newton-lesson .local-choice{padding:14px 4px;gap:11px}.newton-lesson .local-result{font-size:.77em}.newton-lesson .local-bus-grid{margin-top:20px}}
+.newton-lesson .skater-extension{margin:17px 0;color:var(--muted);font-size:.86em}.newton-lesson .skater-extension summary{font-weight:600;color:var(--accent);padding:6px 0}.newton-lesson .skater-extension p{padding:0 0 0 16px;border-left:2px solid #cbd8cb;max-width:82ch;margin:7px 0 14px}
+
+/* Edulo decorates native inputs with a second checkbox pseudo-element. Keep one native control. */
+.newton-lesson .local-choice input[type="checkbox"]::before,
+.newton-lesson .local-choice input[type="checkbox"]::after{content:none!important;display:none!important}
+.newton-lesson .local-choice input[type="checkbox"]{appearance:auto!important;-webkit-appearance:checkbox!important;margin:3px 0 0!important;accent-color:var(--accent)}

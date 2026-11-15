@@ -11,6 +11,11 @@ module.exports={feedback};
 test('new danger criterion has a verified video hint and remains separate from dose',()=>{
  const c=D.criteria(L).find(c=>c.id==='q3_perception');assert.equal(c.source,392);assert.match(c.description,/Sinnen/);assert.equal(L.questions[2].criteria.length,6);
 });
+test('repair uses the precise 5:57 hint while other verified hints and all four measurement IDs remain stable',()=>{
+ const criteria=D.criteria(L),repair=criteria.find(c=>c.id==='q3_repair');assert.equal(repair.source,357);assert.equal(criteria.length,13);assert.deepEqual(L.questions[1].criteria.map(c=>c.id),['q2_ionisation','q2_setup','q2_process','q2_signal']);
+ assert.deepEqual([...new Set(criteria.map(c=>c.source))],[14,54,195,261,357,392]);const s=ready();D.assist(L,s,357);assert.deepEqual(Object.entries(s.aspects).filter(([,a])=>a.assisted).map(([id])=>id),['q3_repair']);assert(D.scores(L,s).every(c=>c==='gray'));
+ const evidence=require('./sources.json');assert(evidence.video.segments.find(s=>s.start===261).subsegments.some(s=>s.start===357));assert.match(evidence.editorialNotes.join(' '),/keine Pflicht/);
+});
 test('task contract groups all 13 criteria into exactly three questions',()=>{
  const task=D.task(L);assert.deepEqual(task.feedbackGroups,L.questions.map(q=>({id:q.id,prompt:q.title,criterionIds:q.criteria.map(c=>c.id)})));assert.equal(task.feedbackGroups.length,3);assert.deepEqual(task.feedbackGroups.flatMap(g=>g.criterionIds),D.criteria(L).map(c=>c.id));
 });
@@ -36,5 +41,102 @@ test('12-point history migrates without invented feedback or lost points; outsta
  assert(D.valid(L,migrated.data));assert.equal(migrated.version,2);assert.deepEqual(migrated.scores,[...Array(12).fill('green'),'gray']);assert.deepEqual(migrated.data.history[0].feedback,original);
  D.finish(L,migrated.data,migrated.data.history[1],f);assert.equal(migrated.data.aspects.q3_perception.earned,'gray');
  assert.throws(()=>D.migrate(L,{...migrated,widget:'foreign'}));
+});
+
+function grouped(status='met'){
+ const f=feedback(status);f.summary='';f.languageFeedback='';f.nextSteps=[];f.misconceptions=[];
+ f.taskFeedback=L.questions.map(q=>({id:q.id,feedback:'Absatz für '+q.id}));return f;
+}
+function doneV4(s,id='first',f=grouped()){
+ const h=D.begin(L,s,id,'time');D.finish(L,s,h,f);h.feedbackStyle='questions-v4';return h;
+}
+function rawFor(h,status='met'){
+ const {task}=D.request(L,h);return {summary:'',languageFeedback:'',nextSteps:[],misconceptions:[],
+  criteria:task.criteria.map(c=>({id:c.id,status,feedback:'Neue Begründung.'})),taskFeedback:task.feedbackGroups.map(q=>({id:q.id,feedback:'Neu geprüft: '+q.id}))};
+}
+test('plan reuses exactly unchanged questions; all unchanged never appends a new history request',()=>{
+ const s=ready(),first=doneV4(s);
+ assert.deepEqual(D.plan(L,s),{checkedQuestionIds:[],reusedFrom:Object.fromEntries(L.questions.map(q=>[q.id,first.requestId]))});
+ const length=s.history.length;assert.throws(()=>D.begin(L,s,'unchanged','later'),/unverändert/);assert.equal(s.history.length,length);
+ s.answers.messung+=' ';
+ assert.deepEqual(D.plan(L,s),{checkedQuestionIds:['messung'],reusedFrom:{definition:'first',gefahren:'first'}});
+ const h=D.begin(L,s,'second','later');assert.deepEqual(h.checkedQuestionIds,['messung']);assert.deepEqual(h.reusedFrom,{definition:'first',gefahren:'first'});
+ assert.equal(typeof h.questionSignatures.definition,'string');assert(D.valid(L,s));
+});
+test('request projects only changed question, answer, reference and its own criteria',()=>{
+ const s=ready();doneV4(s);s.answers.messung='Exakt\nanders ä';const h=D.begin(L,s,'partial','later'),r=D.request(L,h);
+ assert.deepEqual(JSON.parse(r.answer),{messung:'Exakt\nanders ä'});assert.equal(r.task.id,L.id);assert.equal(r.task.version,L.version);
+ assert.deepEqual(r.task.criteria.map(c=>c.id),L.questions[1].criteria.map(c=>c.id));assert.deepEqual(r.task.feedbackGroups.map(g=>g.id),['messung']);
+ assert.equal(r.task.referenceAnswer,'messung: '+L.questions[1].reference);assert(!r.task.prompt.includes(L.questions[0].title));assert.match(r.task.prompt,/eingereichten Teilantworten/);
+});
+test('partial response merges every status and paragraph while only new criteria change points or assistance',()=>{
+ const s=ready(),f=grouped();for(const c of f.criteria)if(c.id.startsWith('q2_'))c.status='partial';const first=doneV4(s,'first',f);
+ assert.deepEqual(D.scores(L,s),[...Array(3).fill('green'),...Array(4).fill('gray'),...Array(6).fill('green')]);
+ const untouched=JSON.stringify(Object.fromEntries(Object.entries(s.aspects).filter(([id])=>!id.startsWith('q2_'))));
+ s.answers.messung+=' ergänzt';const h=D.begin(L,s,'partial','later'),raw=rawFor(h);raw.summary='Ignorierte Gesamtzusammenfassung';raw.languageFeedback='Ignorierter globaler Sprachhinweis';
+ assert(D.validResponse(L,h,raw));D.finish(L,s,h,raw);h.feedbackStyle='questions-v4';
+ assert.equal(h.feedback.criteria.length,13);assert.equal(h.feedback.taskFeedback.length,3);assert.deepEqual(h.feedback.criteria.filter(c=>!c.id.startsWith('q2_')),first.feedback.criteria.filter(c=>!c.id.startsWith('q2_')));
+ assert.deepEqual(h.feedback.taskFeedback.filter(g=>g.id!=='messung'),first.feedback.taskFeedback.filter(g=>g.id!=='messung'));
+ assert.equal(h.feedback.summary,'');assert.equal(h.feedback.languageFeedback,'');assert.deepEqual(h.feedback.nextSteps,[]);assert.deepEqual(h.feedback.misconceptions,[]);
+ assert.deepEqual(D.scores(L,s),[...Array(3).fill('green'),...Array(4).fill('yellow'),...Array(6).fill('green')]);
+ assert.equal(JSON.stringify(Object.fromEntries(Object.entries(s.aspects).filter(([id])=>!id.startsWith('q2_')))),untouched);
+ assert(D.valid(L,s));assert.deepEqual(D.plan(L,s).checkedQuestionIds,[]);
+});
+test('new missing results mark assistance only in checked question and retain already earned green',()=>{
+ const s=ready();doneV4(s);s.answers.definition+=' neu';const h=D.begin(L,s,'partial','later');D.finish(L,s,h,rawFor(h,'missing'));h.feedbackStyle='questions-v4';
+ assert(D.scores(L,s).every(c=>c==='green'));
+ for(const [id,a] of Object.entries(s.aspects))assert.equal(a.assisted,id.startsWith('q1_'));
+ assert.deepEqual(h.feedback.criteria.slice(0,3).map(c=>c.status),Array(3).fill('missing'));
+ assert.deepEqual(h.feedback.criteria.slice(3).map(c=>c.status),Array(10).fill('met'));
+});
+test('only newest successful complete v4 result can cache; failed attempts and older matching text are not a baseline',()=>{
+ const s=ready();const first=doneV4(s);s.answers.definition='Zwischentext';const second=D.begin(L,s,'second','later');D.finish(L,s,second,rawFor(second));second.feedbackStyle='questions-v4';
+ s.answers.definition=first.answers.definition;assert.deepEqual(D.plan(L,s).checkedQuestionIds,['definition']);
+ const failed=D.begin(L,s,'failed','later');failed.status='failed';failed.message='Kein Ergebnis';
+ assert.deepEqual(D.plan(L,s).checkedQuestionIds,['definition']);
+ s.answers.definition=second.answers.definition;assert.deepEqual(D.plan(L,s).checkedQuestionIds,[]);
+ second.feedbackStyle='questions-v3';assert.deepEqual(D.plan(L,s).checkedQuestionIds,L.questions.map(q=>q.id));
+ second.feedbackStyle='questions-v4';second.feedback.taskFeedback.pop();assert.deepEqual(D.plan(L,s).checkedQuestionIds,L.questions.map(q=>q.id));
+});
+test('current rubric signature changes invalidate just that question, version changes invalidate the whole cache',()=>{
+ const s=ready();doneV4(s);
+ const edited={...L,questions:L.questions.map((q,i)=>i===1?{...q,reference:q.reference+' Ergänzter Erwartungshorizont.'}:q)};
+ assert.deepEqual(D.plan(edited,s).checkedQuestionIds,['messung']);
+ assert(D.valid(edited,s),'historic signature stays readable although current rubric was edited');
+ const h=D.begin(edited,s,'new-rubric','later');assert.notEqual(h.questionSignatures.messung,s.history[0].questionSignatures.messung);
+ assert.deepEqual(D.request(edited,h).task.feedbackGroups.map(g=>g.id),['messung']);
+ assert.deepEqual(D.plan({...L,version:'3'},s).checkedQuestionIds,L.questions.map(q=>q.id));
+});
+test('legacy complete v4 without signatures can reuse by complete IDs; v4 missing grouped feedback cannot',()=>{
+ const s=ready(),h=doneV4(s);delete h.checkedQuestionIds;delete h.reusedFrom;delete h.questionSignatures;
+ assert(D.valid(L,s));assert.deepEqual(D.plan(L,s).checkedQuestionIds,[]);
+ delete h.feedback.taskFeedback;assert(D.valid(L,s));assert.deepEqual(D.plan(L,s).checkedQuestionIds,L.questions.map(q=>q.id));
+});
+test('partial history survives JSON reload and unresolved recovery then merges against the original owned history',()=>{
+ let s=ready();doneV4(s);s.answers.gefahren+=' überarbeitet';let h=D.begin(L,s,'recover','later');h.status='unknown';h.message='Ausgang unklar';
+ const wire=JSON.parse(JSON.stringify(s));assert(D.valid(L,wire));s=wire;h=s.history[1];const raw=rawFor(h,'partial');
+ assert(D.validResponse(L,h,raw));D.finish(L,s,h,raw);h.feedbackStyle='questions-v4';assert(D.valid(L,s));assert.equal(h.feedback.criteria.length,13);
+ assert.deepEqual(h.feedback.criteria.slice(7).map(c=>c.status),Array(6).fill('partial'));assert.deepEqual(h.feedback.criteria.slice(0,7).map(c=>c.status),Array(7).fill('met'));
+});
+test('wrong response subset, full response to partial request and missing paragraphs fail without changing points',()=>{
+ const s=ready();doneV4(s);s.answers.messung+=' neu';const h=D.begin(L,s,'partial','later'),before=JSON.stringify(s.aspects);
+ const wrong=rawFor(h);wrong.criteria[0].id='q1_electron_removal';
+ const noParagraph=rawFor(h);delete noParagraph.taskFeedback;
+ const wrongParagraph=rawFor(h);wrongParagraph.taskFeedback[0].id='gefahren';
+ for(const f of [wrong,grouped(),noParagraph,wrongParagraph]){assert.equal(D.validResponse(L,h,f),false);assert.throws(()=>D.finish(L,s,h,f));assert.equal(JSON.stringify(s.aspects),before);assert.equal(h.status,'pending');}
+});
+test('cache metadata rejects foreign, future, cyclic, answer-mismatched and incomplete signature references',()=>{
+ const initial=ready();doneV4(initial);initial.answers.messung+=' neu';D.begin(L,initial,'partial','later');
+ const variants=[h=>h.checkedQuestionIds=[],h=>h.checkedQuestionIds=['messung','messung'],h=>h.checkedQuestionIds=['foreign'],h=>delete h.questionSignatures,
+ h=>h.questionSignatures.definition='not json',h=>delete h.questionSignatures.gefahren,h=>h.reusedFrom.definition='foreign',h=>h.reusedFrom.definition='partial',
+ h=>h.reusedFrom.messung='first',h=>h.answers.definition+=' verändert',h=>h.questionSignatures.definition=h.questionSignatures.gefahren];
+ for(const mutate of variants){const s=JSON.parse(JSON.stringify(initial));mutate(s.history[1]);assert.equal(D.valid(L,s),false);assert.throws(()=>D.finish(L,s,s.history[1],rawFor(initial.history[1])));}
+ const other=ready();assert.throws(()=>D.finish(L,other,initial.history[1],rawFor(initial.history[1])));
+});
+test('historic attempts without new metadata submit all three answers; version one keeps the previous twelve criteria',()=>{
+ const s=ready(),h={requestId:'legacy',rubricVersion:'1',answers:{...s.answers}};
+ const result=D.request(L,h);assert.equal(result.task.version,'1');assert.equal(result.task.criteria.length,12);assert.equal(result.task.feedbackGroups.length,3);assert.equal(result.answer,JSON.stringify(h.answers));
+ const oldFeedback={...feedback(),criteria:feedback().criteria.filter(c=>c.id!=='q3_perception')};assert(D.validResponse(L,h,oldFeedback));
+ const latest={...h,rubricVersion:'2'};assert.equal(D.request(L,latest).task.criteria.length,13);assert(D.validResponse(L,latest,feedback()));
 });
 

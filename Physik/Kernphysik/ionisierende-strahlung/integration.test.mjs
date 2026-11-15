@@ -12,17 +12,18 @@ class Storage{
 }
 test('real lesson rubric fits generic worker and survives grading with charged usage',async()=>{
  const task=D.task(L);assert(validTask(task));assert.equal(task.criteria.length,13);assert(task.prompt.length<=3000);assert(task.referenceAnswer.length<=6000);
- const uid='ab-123456-abcdef-789012',origin='https://lesson.example';let calls=0;
+ const uid='ab-123456-abcdef-789012',origin='https://lesson.example';let calls=0,expectedTask=task;const sent=[];
  const env={OPENAI_API_KEY:'synthetic-key',ALLOWED_ORIGINS:origin,ACCOUNTS_JSON:JSON.stringify({[uid]:{totalGrantedEuroMicros:1000000,weeklyLimitEuroMicros:100000}}),
   PRICE_CONFIG_JSON:JSON.stringify({inputNanoUsdPerToken:100,cachedInputNanoUsdPerToken:10,outputNanoUsdPerToken:500,euroMicrosPerUsd:1000000,version:'synthetic-test'}),
   LIMITS_JSON:JSON.stringify({globalLifetimeLimitEuroMicros:1000000,globalWeeklyLimitEuroMicros:100000}),FEEDBACK_LIMITER:{limit:async()=>({success:true})}};
- const resultFeedback={summary:'Eine verständliche Erklärung.',misconceptions:[],languageFeedback:'Du formulierst verständlich.',nextSteps:[],taskFeedback:task.feedbackGroups.map(g=>({id:g.id,feedback:'Deine Erläuterung zu dieser Aufgabe ist verständlich und fachlich ausreichend.'})),criteria:task.criteria.map(c=>({id:c.id,status:'met',feedback:''}))};
+ const resultFeedback={summary:'',misconceptions:[],languageFeedback:'',nextSteps:[],taskFeedback:task.feedbackGroups.map(g=>({id:g.id,feedback:'Deine Erläuterung zu dieser Aufgabe ist verständlich und fachlich ausreichend.'})),criteria:task.criteria.map(c=>({id:c.id,status:'met',feedback:''}))};
  const instance=new FeedbackBudget({storage:new Storage()},env,{upstreamFetch:async(url,options)=>{
   calls++;assert.equal(url,'https://api.openai.com/v1/responses');const request=JSON.parse(options.body);
   assert(!JSON.stringify(request).includes(uid),'Edulo ID leaked to model');assert.equal(request.model,'gpt-6-luna');
-  const content=JSON.parse(request.input[0].content[0].text);assert.deepEqual(content.task,task);
+  const content=JSON.parse(request.input[0].content[0].text);assert.deepEqual(content.task,expectedTask);sent.push(content);
+  const projectedFeedback={...resultFeedback,taskFeedback:expectedTask.feedbackGroups.map(g=>({id:g.id,feedback:'Rückmeldung nur zu '+g.id})),criteria:expectedTask.criteria.map(c=>({id:c.id,status:'met',feedback:''}))};
   return new Response(JSON.stringify({status:'completed',id:'synthetic-response',usage:{input_tokens:2400,output_tokens:900,input_tokens_details:{cached_tokens:0},total_tokens:3300},
-   output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(resultFeedback)}]}]}));}});
+   output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(projectedFeedback)}]}]}));}});
  env.FEEDBACK_BUDGET={idFromName:n=>n,get:()=>({fetch:r=>instance.fetch(r)})};
  const s=D.fresh(L);for(const q of L.questions)s.answers[q.id]=q.reference;
  const h=D.begin(L,s,crypto.randomUUID(),new Date().toISOString());
@@ -30,7 +31,24 @@ test('real lesson rubric fits generic worker and survives grading with charged u
  const request=()=>new Request('https://worker.example/feedback',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify(payload)});
  const worker=createWorker(),response=await worker.fetch(request(),env);assert.equal(response.status,200);
  const result=await response.json();assert(D.validFeedback(L,result.feedback));assert.equal(result.requestId,h.requestId);assert.equal(result.charge.euroMicros,690);
- D.finish(L,s,h,result.feedback);assert(D.scores(L,s).every(c=>c==='green'));assert(D.valid(L,s));
+ D.finish(L,s,h,result.feedback);h.feedbackStyle=result.feedbackStyle;assert(D.scores(L,s).every(c=>c==='green'));assert(D.valid(L,s));
  const repeat=await worker.fetch(request(),env);assert.equal(repeat.status,200);assert.equal(calls,1);assert.equal((await repeat.json()).charge.euroMicros,690);
+ assert.deepEqual(D.plan(L,s).checkedQuestionIds,[]);
+ assert.throws(()=>D.begin(L,s,crypto.randomUUID(),new Date().toISOString()));assert.equal(s.history.length,1);
+ s.answers.messung+=' Meine überarbeitete Erläuterung.';
+ const second=D.begin(L,s,crypto.randomUUID(),new Date().toISOString()),partial=D.request(L,second);expectedTask=partial.task;
+ assert.deepEqual(second.checkedQuestionIds,['messung']);assert.equal(partial.task.criteria.length,4);
+ assert.deepEqual(Object.keys(JSON.parse(partial.answer)),['messung']);assert.equal(partial.task.feedbackGroups.length,1);
+ assert(JSON.stringify(partial).length<JSON.stringify({task,answer:JSON.stringify(h.answers)}).length);
+ const partialResponse=await worker.fetch(new Request('https://worker.example/feedback',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({uid,requestId:second.requestId,...partial})}),env);
+ assert.equal(partialResponse.status,200);const rawPartial=await partialResponse.json();assert.equal(rawPartial.feedback.criteria.length,4);
+ const restored=JSON.parse(JSON.stringify(s));assert(D.valid(L,restored));
+ const recovered=await worker.fetch(new Request('https://worker.example/result',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({uid,requestId:second.requestId})}),env);
+ assert.equal(recovered.status,200);const recoveredData=await recovered.json();const pending=restored.history.at(-1);
+ assert(D.validResponse(L,pending,recoveredData.feedback));D.finish(L,restored,pending,recoveredData.feedback);pending.feedbackStyle=recoveredData.feedbackStyle;
+ assert.equal(pending.feedback.criteria.length,13);assert.equal(pending.feedback.taskFeedback.length,3);assert(D.valid(L,restored));
+ for(const id of ['definition','gefahren'])assert.deepEqual(pending.feedback.taskFeedback.find(g=>g.id===id),h.feedback.taskFeedback.find(g=>g.id===id));
+ assert.deepEqual(D.scores(L,restored),D.scores(L,s));assert.deepEqual(D.plan(L,restored).checkedQuestionIds,[]);
+ assert.equal(calls,2,'no model call for unchanged answers, replay or result recovery');assert.equal(sent[1].task.criteria.length,4);assert.deepEqual(Object.keys(JSON.parse(sent[1].answer)),['messung']);
 });
 

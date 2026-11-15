@@ -1,0 +1,30 @@
+.newton-lesson .local-choices{display:grid;gap:0;margin:16px 0 18px;border-top:1px solid var(--line)}
+.newton-lesson .condition{font-weight:650;margin:22px 0 10px;font-size:1.05em}
+.newton-lesson .local-choice{display:flex;align-items:flex-start;gap:14px;padding:15px 12px;margin:0;min-height:54px;border-bottom:1px solid var(--line);font-weight:400;cursor:pointer;transition:background .15s}
+.newton-lesson .local-choice:hover{background:#f3f6f1}.newton-lesson .local-choice:has(input:checked){background:#eef5ee}
+.newton-lesson .local-choice input{flex:none;width:21px;height:21px;margin:3px 0 0;accent-color:var(--accent);cursor:pointer}
+.newton-lesson .local-result{display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:.76em;color:var(--muted)}.newton-lesson .local-result .point{margin-top:4px;width:13px;height:13px}
+.newton-lesson .local-result .local-feedback{margin:0;flex:1;min-width:0}.newton-lesson .local-feedback[data-result=wrong]{color:#9b422b}.newton-lesson .local-feedback[data-result=right]{color:#2a7253}
+.newton-lesson .local-bus-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin:22px 0 17px}
+.newton-lesson .local-bus-card{min-width:0;margin:0;padding:0;background:transparent}.newton-lesson .local-bus-card figcaption{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px;font-size:.76em;letter-spacing:.04em;font-weight:700}
+.newton-lesson .driving-direction{font-size:.87em;font-weight:450;letter-spacing:0;color:var(--muted)}
+.newton-lesson .local-bus-drawing{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px solid #e5e7df;border-radius:4px;margin:0 0 15px;background:#f7f5ee}
+.newton-lesson .comic-image{display:block;width:200%;height:100%;max-width:none;object-fit:fill}.newton-lesson .local-bus-card:nth-child(2) .comic-image{transform:translateX(-50%)}
+.newton-lesson .local-select-label{display:flex;align-items:center;gap:13px;font-weight:500;font-size:.86em}.newton-lesson .local-select-label>span{white-space:nowrap}
+.newton-lesson .local-select-label select{flex:1;min-width:0;width:100%;min-height:43px;border:1px solid #b3c4bb;border-radius:4px;padding:8px 29px 8px 11px;color:var(--ink);background:#fffefb;cursor:pointer}
+.newton-lesson .local-select-label select:disabled{opacity:.6;cursor:default}
+.newton-lesson .local-formula-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:28px 0 22px}.newton-lesson .local-formula-card{min-width:0;padding:16px 0 14px;border-top:2px solid #b7c9bf}
+.newton-lesson .formula-equation{display:flex;align-items:center;gap:7px;white-space:nowrap;font:italic 26px/1.4 Cambria,Georgia,serif}.newton-lesson .formula-equation>.formula-symbol{flex:none;margin-right:2px}
+.newton-lesson .formula-equation select{width:54px;min-width:0;min-height:49px;border:0;border-bottom:2px solid #aabeb0;background:#f2f5ef;border-radius:3px 3px 0 0;color:var(--ink);padding:4px 0 4px 7px;font:italic 23px/1.4 Cambria,Georgia,serif;cursor:pointer}
+.newton-lesson .formula-equation select[data-slot="1"]{width:45px;font-style:normal}
+.newton-lesson .local-check{margin-top:2px}.newton-lesson .local-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.newton-lesson .task-subline{font-size:.8em;color:var(--muted);margin-top:8px}.newton-lesson .local-bus-card .local-result{min-height:21px}
+@media(min-width:1250px){.newton-lesson .local-bus-grid{gap:30px}.newton-lesson .formula-equation{font-size:32px;gap:10px}.newton-lesson .formula-equation select{width:66px;font-size:27px}}
+@media(max-width:850px) and (min-width:651px){.newton-lesson .local-formula-grid{gap:16px}.newton-lesson .formula-equation{gap:4px;font-size:22px}.newton-lesson .formula-equation select{width:42px;font-size:21px}}
+@media(max-width:650px){.newton-lesson .local-bus-grid{grid-template-columns:1fr;gap:25px}.newton-lesson .local-formula-grid{grid-template-columns:1fr;gap:0;margin:22px 0 18px}.newton-lesson .local-formula-card{padding:18px 0;border-top:1px solid var(--line)}.newton-lesson .formula-equation{gap:10px;font-size:28px}.newton-lesson .formula-equation select{width:61px}.newton-lesson .local-choice{padding:14px 4px;gap:11px}.newton-lesson .local-result{font-size:.77em}.newton-lesson .local-bus-grid{margin-top:20px}}
+.newton-lesson .skater-extension{margin:17px 0;color:var(--muted);font-size:.86em}.newton-lesson .skater-extension summary{font-weight:600;color:var(--accent);padding:6px 0}.newton-lesson .skater-extension p{padding:0 0 0 16px;border-left:2px solid #cbd8cb;max-width:82ch;margin:7px 0 14px}
+
+/* Edulo decorates native inputs with a second checkbox pseudo-element. Keep one native control. */
+.newton-lesson .local-choice input[type="checkbox"]::before,
+.newton-lesson .local-choice input[type="checkbox"]::after{content:none!important;display:none!important}
+.newton-lesson .local-choice input[type="checkbox"]{appearance:auto!important;-webkit-appearance:checkbox!important;margin:3px 0 0!important;accent-color:var(--accent)}

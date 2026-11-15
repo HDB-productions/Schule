@@ -1,0 +1,28 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Freier Fall – Stroboskopbild auswerten</title></head><body>
+<!-- EDULO_WIDGET_KEY:freier-fall-ki-v1 -->
+<main class="edulo-widget fall-lesson" data-edulo-id="freier-fall-ki-v1">
+<style>/* APP_CSS */</style>
+<section class="intro"><p>Eine Murmel fällt neben einem Zollstock. Aus aufeinanderfolgenden Videobildern entsteht ein Stroboskopbild: Jede Position zeigt die Murmel zu einem anderen Zeitpunkt.</p><p>Die Vorlage nennt <strong>100 Bilder pro Sekunde</strong>. Für diese Auswertung gilt: Die oberste Position ist Bild 0 bei t = 0. Die Markierungen 10, 20 und 30 zählen die Zeitintervalle seit dieser Position.</p></section>
+<div class="media-grid"><figure><video data-fall-video controls playsinline preload="metadata" aria-label="Originalvideo der fallenden Murmel"></video><figcaption>Originalaufnahme · die Wiedergabedauer einer Zeitlupe ist nicht die reale Falldauer. <a data-video-link>Video separat öffnen</a></figcaption><p data-video-status role="status"></p></figure>
+<figure><a class="source-crop" data-image-link target="_blank" rel="noopener"><img data-fall-image alt="Originales Stroboskopbild: Murmelpositionen neben einer Höhenskala, darunter zunehmende Abstände" loading="lazy"></a><figcaption>Originalaufnahme mit Höhenskala · antippen für das vollständige Bild. Die Skala misst die <strong>Höhe h über dem Boden</strong>.</figcaption><p data-image-status role="status"></p></figure></div>
+<section class="reading"><h2>Vom Bild zur Bewegung</h2><p>Lies die Höhe jeweils in der Mitte der Murmel ab. Bei Überlagerungen genügen begründete Näherungen. Zwischen zwei angegebenen Messzeiten liegen fünf Bildintervalle.</p><p>Verwende h für die Höhe über dem Boden. Der zurückgelegte Fallweg nimmt zu, während h abnimmt. Gib beim Rechnen die nach unten zurückgelegte Strecke und den Geschwindigkeitsbetrag positiv an.</p><p class="muted">Die Messaufnahme und die angegebene Bildrate ergeben keine exakt ideale Fallkurve. Werte deshalb die Aufnahme aus; ersetze deine Messwerte nicht durch theoretische Werte.</p></section>
+<figure class="graph"><div data-measurement-graph></div><figcaption>Deine Messpunkte im h-t-Diagramm · erst sichtbar, wenn du Höhen in Aufgabe 2 eingetragen hast. Die Verbindung dient als Lesehilfe.</figcaption></figure>
+<p data-stale class="notice" hidden>Du hast deine Antworten geändert. Die Rückmeldungen gehören zur zuletzt geprüften Fassung in der Historie.</p>
+<fieldset data-controls disabled><div data-questions></div>
+<div class="legend" aria-label="Bedeutung der Punkte"><span><i class="point" data-color="green"></i>Auf Anhieb ausreichend erklärt</span><span><i class="point" data-color="yellow"></i>Nach Hilfe ausreichend erklärt</span><span><i class="point"></i>Noch offen</span></div>
+<p class="muted">Beim Prüfen werden deine Antworten zusammen mit einer Anweisung von HDB, wie damit umzugehen ist, an OpenAI übermittelt. Deine Edulo-ID dient dem Zugang und der Verbrauchsbegrenzung im eigenen Rückmeldedienst; sie wird nicht an die KI weitergegeben. Schreibe keine Namen oder persönlichen Angaben in die Antworten. KI-Rückmeldungen können Fehler enthalten.</p>
+<div class="actions"><button type="button" data-check>Alle Antworten prüfen</button> <button type="button" class="secondary" data-recover hidden>Ausstehende Prüfung abrufen</button></div>
+</fieldset>
+<p data-message role="status" aria-live="polite"></p><p data-identity class="muted"></p>
+<section class="budget" aria-label="Verbrauchsguthaben"><p data-budget>Verbrauchsguthaben wird nach Verbindung mit deinem Edulo-Konto angezeigt.</p><button type="button" data-refresh-budget class="secondary">Guthaben aktualisieren</button><details data-connection-help><summary>Verbindungshilfe</summary><button type="button" data-diagnose class="secondary">Verbindung prüfen (kostenfrei)</button><p data-diagnostics class="saved-answer" role="status"></p></details></section>
+<details><summary data-history-label>Deine Historie</summary><p class="muted">Hier bleiben die eingereichten Antworten und ihre Rückmeldungen erhalten. Bereits erreichte Punkte bleiben als Lernfortschritt bestehen.</p><div data-history></div></details>
+<footer><span data-storage role="status">Speicher wird verbunden …</span><button type="button" data-retry hidden>Speicher erneut verbinden</button></footer>
+<script>(()=>{'use strict';
+const scriptRoot=document.currentScript?.closest('[data-edulo-id="freier-fall-ki-v1"]');
+const root=scriptRoot||[...document.querySelectorAll('[data-edulo-id="freier-fall-ki-v1"]')].reverse().find(el=>!el.dataset.eduloInitialized);
+if(!root||root.dataset.eduloInitialized)return;root.dataset.eduloInitialized='1';
+const q=selector=>root.querySelector(selector);
+/* EDULO_BRIDGE */
+/* APP_JS */
+})();</script></main></body></html>
+

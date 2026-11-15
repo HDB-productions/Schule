@@ -5,12 +5,25 @@
     "channel": "HDB@AES",
     "durationSeconds": 855,
     "checkedOn": "2026-10-25",
-    "method": "YouTube-Seite und exportiertes automatisch erzeugtes deutsches Transkript inhaltlich geprüft; Zeitmarken aus Transkript.",
+    "method": "YouTube-Seite und damaliger Export des automatisch erzeugten deutschen Transkripts wurden inhaltlich geprüft. Die Untersegmente wurden anschließend anhand dieses früher vollständig gelesenen, im Arbeitschat dokumentierten Exports präzisiert. Die temporäre Exportdatei ist inzwischen nicht mehr vorhanden; die Präzisierung ist kein erneuter Videoabruf.",
     "segments": [
       {"start":14,"end":53,"topic":"Ionisation, Elektronenentzug und Ladungen"},
-      {"start":54,"end":127,"topic":"Nachweiswirkung und Bewegung von Ladungsträgern zwischen Platten"},
+      {"start":54,"end":127,"topic":"Nachweiswirkung und Bewegung von Ladungsträgern zwischen Platten","subsegments":[
+        {"start":54,"end":63,"topic":"Ionisationsvorgänge lassen sich leichter nachweisen als die Strahlung unmittelbar"},
+        {"start":66,"end":84,"topic":"Eine positive und eine negative Platte werden in die Nähe der entstandenen Ladungsträger gebracht"},
+        {"start":86,"end":95,"topic":"Das freie Elektron wird von der positiven Platte angezogen und bewegt sich zu ihr"},
+        {"start":97,"end":117,"topic":"Ein bewegliches positives Ion, beispielsweise in einem Gas, wandert zur negativen Platte und nimmt dort Elektronen auf"},
+        {"start":117,"end":127,"topic":"Durch die Elektronenaufnahme wird das Ion wieder neutral; eine mögliche negative Aufladung wird ebenfalls erwähnt"}
+      ]},
       {"start":195,"end":257,"topic":"Schäden an Bindungen und Molekülen"},
-      {"start":261,"end":389,"topic":"DNA, Krebs, Reparatur und Risiko"},
+      {"start":261,"end":389,"topic":"DNA, Krebs, Reparatur und Risiko","subsegments":[
+        {"start":261,"end":306,"topic":"Besondere Bedeutung von DNA-Schäden gegenüber einzelnen anderen Molekülschäden und dem Absterben einzelner Zellen"},
+        {"start":313,"end":341,"topic":"Veränderte Erbinformation kann die Kontrolle der Zellteilung beeinträchtigen und Krebs begünstigen"},
+        {"start":357,"end":361,"topic":"Beginn der Erklärung körpereigener Schutz- und Reparaturmechanismen"},
+        {"start":361,"end":368,"topic":"DNA-Schäden können erkannt und betroffene Zellen beseitigt werden"},
+        {"start":370,"end":375,"topic":"Kleine Schäden können repariert werden"},
+        {"start":378,"end":389,"topic":"Schwere Folgen sind nicht zwangsläufig; größere Strahlenbelastung erhöht ihre Wahrscheinlichkeit"}
+      ]},
       {"start":392,"end":490,"topic":"Fehlende unmittelbare Wahrnehmbarkeit durch menschliche Sinne"}
     ]
   },
@@ -21,6 +34,8 @@
   ],
   "editorialNotes": [
     "Der Gerätename Ionisationskammer und die ausdrückliche Strommessung sind fachliche Ergänzungen, keine behaupteten Videozitate.",
+    "Ein expliziter Messstrom, elektrische Impulse, ein fertiger Geräteaufbau oder eine vollständige Schaltung sind für die videobezogene Antwort keine Pflicht. Das Video zeigt die Nachweisidee über Ionisation, entgegengesetzt geladene Platten und die Bewegung der Ladungsträger.",
+    "Der gezielte Videohinweis zu Reparatur und Schutzreaktionen beginnt bei 5:57 (357 Sekunden). 4:21 (261 Sekunden) bleibt der allgemeine Einstieg in die DNA-Gefahren.",
     "Alternative fachlich richtige Nachweismethoden werden akzeptiert; eine bloße Gerätenennung ersetzt die Erklärung nicht.",
     "Spätere pauschale Videoaussagen über die Unmöglichkeit nachträglicher Mutationen werden nicht übernommen. Somatische Mutationen sind möglich.",
     "Kein vollständiges Transkript im Widget. Quellen werden nicht zur Laufzeit abgerufen."
